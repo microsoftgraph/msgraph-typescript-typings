@@ -24,7 +24,7 @@ request
             return;
         }
         let messages:[MicrosoftGraph.Message] = res.body.value;
-        for (let msg of messages) {
+        for (let msg of messages) { //iterate through the recent messages
             console.log(msg.subject);
             console.log(msg.toRecipients[0].emailAddress.address);
         }
@@ -33,6 +33,11 @@ request
 ```
 ##### Send an email as the logged in user
 ```typescript
+// Create the message object
+
+// Note that all the properties must follow the interface definitions.
+// For example, this will not compile if you try to type "xml" instead of "html" for contentType. 
+
 let mail:MicrosoftGraph.Message = {
     subject: "Microsoft Graph TypeScript Sample",
     toRecipients: [{
@@ -45,7 +50,7 @@ let mail:MicrosoftGraph.Message = {
         contentType: "html"
     }
 }
-
+// send the email by sending a POST request to the Microsoft Graph
 request
     .post('https://graph.microsoft.com/v1.0/users/me/sendMail')
     .send({message: mail})
