@@ -8,7 +8,7 @@ There are a few different ways to use the Microsoft Graph definitions in your pr
 
 ![Demo GIF](https://github.com/microsoftgraph/msgraph-typescript-typings/raw/master/typings-demo.gif)
 ## Examples
-The following examples assume that you have a valid access token.
+The following examples assume that you have a valid access token.  We used [superagent](https://github.com/visionmedia/superagent) to perform the HTTP requests, but other libraries can be substituted.
 ```typescript
 import * as request from 'superagent';
 const accessToken:string = "";
