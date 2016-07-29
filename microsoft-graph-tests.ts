@@ -1,3 +1,3 @@
 /// <reference path="microsoft-graph.d.ts" />
 
-// @todo write tests here before publishing
+// @todo write tests here before publishing to DefinitelyTyped
