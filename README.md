@@ -1,5 +1,5 @@
 # Microsoft Graph TypeScript Typings
-The graph TypeScript definitions enables editors to provide intellisense on Graph objects.
+The Microsoft Graph TypeScript definitions enables editors to provide intellisense on graph objects.
 
 There are a few different ways to use the Microsoft Graph definitions in your project.
 * Directly reference microsoft-graph.d.ts with a triple slash reference at the top of your .ts files
