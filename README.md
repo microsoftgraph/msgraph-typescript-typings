@@ -87,6 +87,7 @@ This project has adopted the [Microsoft Open Source Code of Conduct](https://ope
 
 * [Microsoft Graph overview page](https://graph.microsoft.io)
 * [Office Dev Center](http://dev.office.com/)
+* [Microsoft Graph JavaScript SDK](https://github.com/microsoftgraph/msgraph-sdk-javascript)
 
 ## Copyright
 Copyright (c) 2016 Microsoft. All rights reserved.
