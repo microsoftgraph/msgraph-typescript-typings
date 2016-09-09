@@ -79,7 +79,7 @@ We'd love to get your feedback about the TypeScript definitions project. You can
 
 
 ## Contributing
-Please see the [contribution guidelines](CONTRIBUTING.md).
+Please see the [contributing guidelines](CONTRIBUTING.md).
 
 ## Additional resources
 
