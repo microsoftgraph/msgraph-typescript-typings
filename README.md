@@ -1,19 +1,19 @@
 # Microsoft Graph TypeScript Typings
-The Microsoft Graph TypeScript definitions enables editors to provide intellisense on graph objects.
+The Microsoft Graph TypeScript definitions enable editors to provide intellisense on Microsoft Graph objects.
 
-There are a few different ways to use the Microsoft Graph definitions in your project.
-* Directly reference microsoft-graph.d.ts with a triple slash reference at the top of your .ts files
+You can use Microsoft Graph definitions in your project in a few ways:
+* Directly reference microsoft-graph.d.ts with a triple slash reference at the top of your .ts files.
 ```/// <reference path="microsoft-graph.d.ts" />```.
 * Use a [tsconfig.json](http://www.typescriptlang.org/docs/handbook/tsconfig-json.html) file so the /// reference doesn't need to be in every .ts file. By default, all files (including .d.ts) will be included in the directly where tsconfig.json resides.
 
 ![Demo GIF](https://github.com/microsoftgraph/msgraph-typescript-typings/raw/master/typings-demo.gif)
 ## Examples
-The following examples assume that you have a valid access token.  We used [superagent](https://github.com/visionmedia/superagent) to perform the HTTP requests, but you can use [our JavaScript SDK](https://github.com/microsoftgraph/msgraph-sdk-javascript) or other libraries as well.
+The following examples assume that you have a valid access token. We used [superagent](https://github.com/visionmedia/superagent) to perform the HTTP requests, but you can use [our JavaScript SDK](https://github.com/microsoftgraph/msgraph-sdk-javascript) or other libraries as well.
 ```typescript
 import * as request from 'superagent';
 const accessToken:string = "";
 ```
-##### List my recent messages
+### List my recent messages
 ```typescript
 request
     .get("https://graph.microsoft.com/v1.0/me/messages")
@@ -31,7 +31,7 @@ request
 
     })
 ```
-##### Send an email as the logged in user
+### Send an email as the logged in user
 ```typescript
 // Create the message object
 
@@ -66,7 +66,7 @@ request
 ```
 
 ## Note about date values
-All DateTimeOffset values are returned as strings from the Microsoft Graph and should be wrapped in ```new Date()``` at runtime.
+All DateTimeOffset values are returned as strings from Microsoft Graph and should be wrapped in ```new Date()``` at runtime.
 ```typescript
 let me:MicrosoftGraph.User = {}; // result from graph
 let myBirthday = new Date(me.birthday);
@@ -83,7 +83,7 @@ Please see the [contributing guidelines](CONTRIBUTING.md).
 
 ## Additional resources
 
-* [Microsoft Graph overview page](https://graph.microsoft.io)
+* [Microsoft Graph](https://graph.microsoft.io)
 * [Office Dev Center](http://dev.office.com/)
 * [Microsoft Graph JavaScript SDK](https://github.com/microsoftgraph/msgraph-sdk-javascript)
 
