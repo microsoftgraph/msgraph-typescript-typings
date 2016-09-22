@@ -1,4 +1,6 @@
 # Microsoft Graph TypeScript Typings
+![npm version badge](https://img.shields.io/npm/v/microsoft-graph-typings.svg?maxAge=2592000)
+
 The Microsoft Graph TypeScript definitions enable editors to provide intellisense on Microsoft Graph objects.
 
 You can use Microsoft Graph definitions in your project in a few ways:
