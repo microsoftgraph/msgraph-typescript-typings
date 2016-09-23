@@ -1,37 +1,38 @@
 // Type definitions for the Microsoft Graph API
 // Project: https://github.com/microsoftgraph/msgraph-typescript-typings
 // Definitions by: Microsoft Graph Team <https://github.com/microsoftgraph>
-// Definitions: https://github.com/DefinitelyTyped/DefinitelyTyped
 
 //
 // Copyright (c) Microsoft Corporation.  All Rights Reserved.  Licensed under the MIT License.  See License in the project root for license information.
 //
 
 
-declare module MicrosoftGraph {
-  type BodyType = "text" | "html"
-  type Importance = "low" | "normal" | "high"
-  type InferenceClassificationType = "focused" | "other"
-  type CalendarColor = "lightBlue" | "lightGreen" | "lightOrange" | "lightGray" | "lightYellow" | "lightTeal" | "lightPink" | "lightBrown" | "lightRed" | "maxColor" | "auto"
-  type ResponseType = "none" | "organizer" | "tentativelyAccepted" | "accepted" | "declined" | "notResponded"
-  type Sensitivity = "normal" | "personal" | "private" | "confidential"
-  type RecurrencePatternType = "daily" | "weekly" | "absoluteMonthly" | "relativeMonthly" | "absoluteYearly" | "relativeYearly"
-  type DayOfWeek = "sunday" | "monday" | "tuesday" | "wednesday" | "thursday" | "friday" | "saturday"
-  type WeekIndex = "first" | "second" | "third" | "fourth" | "last"
-  type RecurrenceRangeType = "endDate" | "noEnd" | "numbered"
-  type FreeBusyStatus = "free" | "tentative" | "busy" | "oof" | "workingElsewhere" | "unknown"
-  type EventType = "singleInstance" | "occurrence" | "exception" | "seriesMaster"
-  type AttendeeType = "required" | "optional" | "resource"
-  type MeetingMessageType = "none" | "meetingRequest" | "meetingCancelled" | "meetingAccepted" | "meetingTenativelyAccepted" | "meetingDeclined"
 
-  interface Entity {
+export type AutomaticRepliesStatus = "disabled" | "alwaysEnabled" | "scheduled"
+export type ExternalAudienceScope = "none" | "contactsOnly" | "all"
+export type BodyType = "text" | "html"
+export type Importance = "low" | "normal" | "high"
+export type InferenceClassificationType = "focused" | "other"
+export type CalendarColor = "lightBlue" | "lightGreen" | "lightOrange" | "lightGray" | "lightYellow" | "lightTeal" | "lightPink" | "lightBrown" | "lightRed" | "maxColor" | "auto"
+export type ResponseType = "none" | "organizer" | "tentativelyAccepted" | "accepted" | "declined" | "notResponded"
+export type Sensitivity = "normal" | "personal" | "private" | "confidential"
+export type RecurrencePatternType = "daily" | "weekly" | "absoluteMonthly" | "relativeMonthly" | "absoluteYearly" | "relativeYearly"
+export type DayOfWeek = "sunday" | "monday" | "tuesday" | "wednesday" | "thursday" | "friday" | "saturday"
+export type WeekIndex = "first" | "second" | "third" | "fourth" | "last"
+export type RecurrenceRangeType = "endDate" | "noEnd" | "numbered"
+export type FreeBusyStatus = "free" | "tentative" | "busy" | "oof" | "workingElsewhere" | "unknown"
+export type EventType = "singleInstance" | "occurrence" | "exception" | "seriesMaster"
+export type AttendeeType = "required" | "optional" | "resource"
+export type MeetingMessageType = "none" | "meetingRequest" | "meetingCancelled" | "meetingAccepted" | "meetingTenativelyAccepted" | "meetingDeclined"
+
+export interface Entity {
     id?: string
-  }
-    
-  interface DirectoryObject extends Entity {
-  }
-    
-  interface Device extends DirectoryObject {
+}
+
+export interface DirectoryObject extends Entity {
+}
+
+export interface Device extends DirectoryObject {
     accountEnabled?: boolean
     alternativeSecurityIds?: [AlternativeSecurityId]
     approximateLastSignInDateTime?: string
@@ -49,21 +50,21 @@ declare module MicrosoftGraph {
     trustType?: string
     registeredOwners?: [DirectoryObject]
     registeredUsers?: [DirectoryObject]
-  }
-    
-  interface DirectoryRole extends DirectoryObject {
+}
+
+export interface DirectoryRole extends DirectoryObject {
     description?: string
     displayName?: string
     roleTemplateId?: string
     members?: [DirectoryObject]
-  }
-    
-  interface DirectoryRoleTemplate extends DirectoryObject {
+}
+
+export interface DirectoryRoleTemplate extends DirectoryObject {
     description?: string
     displayName?: string
-  }
-    
-  interface Group extends DirectoryObject {
+}
+
+export interface Group extends DirectoryObject {
     description?: string
     displayName?: string
     groupTypes?: [string]
@@ -93,9 +94,9 @@ declare module MicrosoftGraph {
     acceptedSenders?: [DirectoryObject]
     rejectedSenders?: [DirectoryObject]
     drive?: Drive
-  }
-    
-  interface ConversationThread extends Entity {
+}
+
+export interface ConversationThread extends Entity {
     toRecipients?: [Recipient]
     topic?: string
     hasAttachments?: boolean
@@ -105,24 +106,26 @@ declare module MicrosoftGraph {
     preview?: string
     isLocked?: boolean
     posts?: [Post]
-  }
-    
-  interface Calendar extends Entity {
+}
+
+export interface Calendar extends Entity {
     name?: string
     color?: CalendarColor
     changeKey?: string
     events?: [Event]
     calendarView?: [Event]
-  }
-    
-  interface OutlookItem extends Entity {
+    singleValueExtendedProperties?: [SingleValueLegacyExtendedProperty]
+    multiValueExtendedProperties?: [MultiValueLegacyExtendedProperty]
+}
+
+export interface OutlookItem extends Entity {
     createdDateTime?: string
     lastModifiedDateTime?: string
     changeKey?: string
     categories?: [string]
-  }
-    
-  interface Event extends OutlookItem {
+}
+
+export interface Event extends OutlookItem {
     originalStartTimeZone?: string
     originalEndTimeZone?: string
     responseStatus?: ResponseStatus
@@ -150,36 +153,39 @@ declare module MicrosoftGraph {
     attendees?: [Attendee]
     organizer?: Recipient
     webLink?: string
+    onlineMeetingUrl?: string
     calendar?: Calendar
     instances?: [Event]
     extensions?: [Extension]
     attachments?: [Attachment]
-  }
-    
-  interface Conversation extends Entity {
+    singleValueExtendedProperties?: [SingleValueLegacyExtendedProperty]
+    multiValueExtendedProperties?: [MultiValueLegacyExtendedProperty]
+}
+
+export interface Conversation extends Entity {
     topic?: string
     hasAttachments?: boolean
     lastDeliveredDateTime?: string
     uniqueSenders?: [string]
     preview?: string
     threads?: [ConversationThread]
-  }
-    
-  interface ProfilePhoto extends Entity {
+}
+
+export interface ProfilePhoto extends Entity {
     height?: number
     width?: number
-  }
-    
-  interface Drive extends Entity {
+}
+
+export interface Drive extends Entity {
     driveType?: string
     owner?: IdentitySet
     quota?: Quota
     items?: [DriveItem]
     special?: [DriveItem]
     root?: DriveItem
-  }
-    
-  interface SubscribedSku extends Entity {
+}
+
+export interface SubscribedSku extends Entity {
     capabilityStatus?: string
     consumedUnits?: number
     prepaidUnits?: LicenseUnitsDetail
@@ -187,9 +193,9 @@ declare module MicrosoftGraph {
     skuId?: string
     skuPartNumber?: string
     appliesTo?: string
-  }
-    
-  interface Organization extends DirectoryObject {
+}
+
+export interface Organization extends DirectoryObject {
     assignedPlans?: [AssignedPlan]
     businessPhones?: [string]
     city?: string
@@ -208,9 +214,9 @@ declare module MicrosoftGraph {
     street?: string
     technicalNotificationMails?: [string]
     verifiedDomains?: [VerifiedDomain]
-  }
-    
-  interface User extends DirectoryObject {
+}
+
+export interface User extends DirectoryObject {
     accountEnabled?: boolean
     assignedLicenses?: [AssignedLicense]
     assignedPlans?: [AssignedPlan]
@@ -242,6 +248,7 @@ declare module MicrosoftGraph {
     usageLocation?: string
     userPrincipalName?: string
     userType?: string
+    mailboxSettings?: MailboxSettings
     aboutMe?: string
     birthday?: string
     hireDate?: string
@@ -271,9 +278,10 @@ declare module MicrosoftGraph {
     inferenceClassification?: InferenceClassification
     photo?: ProfilePhoto
     drive?: Drive
-  }
-    
-  interface Message extends OutlookItem {
+    drives?: [Drive]
+}
+
+export interface Message extends OutlookItem {
     receivedDateTime?: string
     sentDateTime?: string
     hasAttachments?: boolean
@@ -297,11 +305,13 @@ declare module MicrosoftGraph {
     isDraft?: boolean
     webLink?: string
     inferenceClassification?: InferenceClassificationType
-    extensions?: [Extension]
     attachments?: [Attachment]
-  }
-    
-  interface MailFolder extends Entity {
+    extensions?: [Extension]
+    singleValueExtendedProperties?: [SingleValueLegacyExtendedProperty]
+    multiValueExtendedProperties?: [MultiValueLegacyExtendedProperty]
+}
+
+export interface MailFolder extends Entity {
     displayName?: string
     parentFolderId?: string
     childFolderCount?: number
@@ -309,16 +319,18 @@ declare module MicrosoftGraph {
     totalItemCount?: number
     messages?: [Message]
     childFolders?: [MailFolder]
-  }
-    
-  interface CalendarGroup extends Entity {
+    singleValueExtendedProperties?: [SingleValueLegacyExtendedProperty]
+    multiValueExtendedProperties?: [MultiValueLegacyExtendedProperty]
+}
+
+export interface CalendarGroup extends Entity {
     name?: string
     classId?: string
     changeKey?: string
     calendars?: [Calendar]
-  }
-    
-  interface Contact extends OutlookItem {
+}
+
+export interface Contact extends OutlookItem {
     parentFolderId?: string
     birthday?: string
     fileAs?: string
@@ -353,54 +365,66 @@ declare module MicrosoftGraph {
     personalNotes?: string
     children?: [string]
     extensions?: [Extension]
+    singleValueExtendedProperties?: [SingleValueLegacyExtendedProperty]
+    multiValueExtendedProperties?: [MultiValueLegacyExtendedProperty]
     photo?: ProfilePhoto
-  }
-    
-  interface ContactFolder extends Entity {
+}
+
+export interface ContactFolder extends Entity {
     parentFolderId?: string
     displayName?: string
     contacts?: [Contact]
     childFolders?: [ContactFolder]
-  }
-    
-  interface InferenceClassification extends Entity {
+    singleValueExtendedProperties?: [SingleValueLegacyExtendedProperty]
+    multiValueExtendedProperties?: [MultiValueLegacyExtendedProperty]
+}
+
+export interface InferenceClassification extends Entity {
     overrides?: [InferenceClassificationOverride]
-  }
-    
-  interface Attachment extends Entity {
+}
+
+export interface Attachment extends Entity {
     lastModifiedDateTime?: string
     name?: string
     contentType?: string
     size?: number
     isInline?: boolean
-  }
-    
-  interface Extension extends Entity {
-  }
-    
-  interface FileAttachment extends Attachment {
+}
+
+export interface SingleValueLegacyExtendedProperty extends Entity {
+    value?: string
+}
+
+export interface MultiValueLegacyExtendedProperty extends Entity {
+    value?: [string]
+}
+
+export interface Extension extends Entity {
+}
+
+export interface FileAttachment extends Attachment {
     contentId?: string
     contentLocation?: string
     contentBytes?: number
-  }
-    
-  interface ItemAttachment extends Attachment {
+}
+
+export interface ItemAttachment extends Attachment {
     item?: OutlookItem
-  }
-    
-  interface EventMessage extends Message {
+}
+
+export interface EventMessage extends Message {
     meetingMessageType?: MeetingMessageType
     event?: Event
-  }
-    
-  interface ReferenceAttachment extends Attachment {
-  }
-    
-  interface OpenTypeExtension extends Extension {
+}
+
+export interface ReferenceAttachment extends Attachment {
+}
+
+export interface OpenTypeExtension extends Extension {
     extensionName?: string
-  }
-    
-  interface Post extends OutlookItem {
+}
+
+export interface Post extends OutlookItem {
     body?: ItemBody
     receivedDateTime?: string
     hasAttachments?: boolean
@@ -412,123 +436,435 @@ declare module MicrosoftGraph {
     extensions?: [Extension]
     inReplyTo?: Post
     attachments?: [Attachment]
-  }
-    
-  interface InferenceClassificationOverride extends Entity {
+    singleValueExtendedProperties?: [SingleValueLegacyExtendedProperty]
+    multiValueExtendedProperties?: [MultiValueLegacyExtendedProperty]
+}
+
+export interface InferenceClassificationOverride extends Entity {
     classifyAs?: InferenceClassificationType
     senderEmailAddress?: EmailAddress
-  }
-    
-  interface DriveItem extends Entity {
-    content?: any
+}
+
+export interface DriveItem extends Entity {
     createdBy?: IdentitySet
     createdDateTime?: string
-    cTag?: string
     description?: string
     eTag?: string
     lastModifiedBy?: IdentitySet
     lastModifiedDateTime?: string
     name?: string
-    parentReference?: ItemReference
-    size?: number
-    webDavUrl?: string
     webUrl?: string
     audio?: Audio
+    content?: any
+    cTag?: string
     deleted?: Deleted
     file?: File
     fileSystemInfo?: FileSystemInfo
     folder?: Folder
     image?: Image
     location?: GeoCoordinates
+    package?: Package
+    parentReference?: ItemReference
     photo?: Photo
     remoteItem?: RemoteItem
+    root?: Root
     searchResult?: SearchResult
     shared?: Shared
+    sharepointIds?: SharepointIds
+    size?: number
     specialFolder?: SpecialFolder
     video?: Video
-    package?: Package
+    webDavUrl?: string
     createdByUser?: User
+    workbook?: Workbook
     lastModifiedByUser?: User
-    permissions?: [Permission]
     children?: [DriveItem]
+    permissions?: [Permission]
     thumbnails?: [ThumbnailSet]
-  }
-    
-  interface Permission extends Entity {
+}
+
+export interface Workbook extends Entity {
+    application?: WorkbookApplication
+    names?: [WorkbookNamedItem]
+    tables?: [WorkbookTable]
+    worksheets?: [WorkbookWorksheet]
+    functions?: WorkbookFunctions
+}
+
+export interface Permission extends Entity {
     grantedTo?: IdentitySet
     invitation?: SharingInvitation
     inheritedFrom?: ItemReference
     link?: SharingLink
     roles?: [string]
     shareId?: string
-  }
-    
-  interface ThumbnailSet extends Entity {
+}
+
+export interface ThumbnailSet extends Entity {
     large?: Thumbnail
     medium?: Thumbnail
     small?: Thumbnail
     source?: Thumbnail
-  }
-    
-  interface Subscription extends Entity {
+}
+
+export interface SharedDriveItem extends Entity {
+    name?: string
+    owner?: IdentitySet
+    root?: DriveItem
+    items?: [DriveItem]
+}
+
+export interface WorkbookApplication extends Entity {
+    calculationMode?: string
+}
+
+export interface WorkbookNamedItem extends Entity {
+    name?: string
+    type?: string
+    value?: any
+    visible?: boolean
+}
+
+export interface WorkbookTable extends Entity {
+    name?: string
+    showHeaders?: boolean
+    showTotals?: boolean
+    style?: string
+    columns?: [WorkbookTableColumn]
+    rows?: [WorkbookTableRow]
+    sort?: WorkbookTableSort
+    worksheet?: WorkbookWorksheet
+}
+
+export interface WorkbookWorksheet extends Entity {
+    name?: string
+    position?: number
+    visibility?: string
+    charts?: [WorkbookChart]
+    protection?: WorkbookWorksheetProtection
+    tables?: [WorkbookTable]
+}
+
+export interface WorkbookFunctions extends Entity {
+}
+
+export interface WorkbookChart extends Entity {
+    height?: number
+    left?: number
+    name?: string
+    top?: number
+    width?: number
+    axes?: WorkbookChartAxes
+    dataLabels?: WorkbookChartDataLabels
+    format?: WorkbookChartAreaFormat
+    legend?: WorkbookChartLegend
+    series?: [WorkbookChartSeries]
+    title?: WorkbookChartTitle
+    worksheet?: WorkbookWorksheet
+}
+
+export interface WorkbookChartAxes extends Entity {
+    categoryAxis?: WorkbookChartAxis
+    seriesAxis?: WorkbookChartAxis
+    valueAxis?: WorkbookChartAxis
+}
+
+export interface WorkbookChartDataLabels extends Entity {
+    position?: string
+    separator?: string
+    showBubbleSize?: boolean
+    showCategoryName?: boolean
+    showLegendKey?: boolean
+    showPercentage?: boolean
+    showSeriesName?: boolean
+    showValue?: boolean
+    format?: WorkbookChartDataLabelFormat
+}
+
+export interface WorkbookChartAreaFormat extends Entity {
+    fill?: WorkbookChartFill
+    font?: WorkbookChartFont
+}
+
+export interface WorkbookChartLegend extends Entity {
+    overlay?: boolean
+    position?: string
+    visible?: boolean
+    format?: WorkbookChartLegendFormat
+}
+
+export interface WorkbookChartSeries extends Entity {
+    name?: string
+    format?: WorkbookChartSeriesFormat
+    points?: [WorkbookChartPoint]
+}
+
+export interface WorkbookChartTitle extends Entity {
+    overlay?: boolean
+    text?: string
+    visible?: boolean
+    format?: WorkbookChartTitleFormat
+}
+
+export interface WorkbookChartFill extends Entity {
+}
+
+export interface WorkbookChartFont extends Entity {
+    bold?: boolean
+    color?: string
+    italic?: boolean
+    name?: string
+    size?: number
+    underline?: string
+}
+
+export interface WorkbookChartAxis extends Entity {
+    majorUnit?: any
+    maximum?: any
+    minimum?: any
+    minorUnit?: any
+    format?: WorkbookChartAxisFormat
+    majorGridlines?: WorkbookChartGridlines
+    minorGridlines?: WorkbookChartGridlines
+    title?: WorkbookChartAxisTitle
+}
+
+export interface WorkbookChartAxisFormat extends Entity {
+    font?: WorkbookChartFont
+    line?: WorkbookChartLineFormat
+}
+
+export interface WorkbookChartGridlines extends Entity {
+    visible?: boolean
+    format?: WorkbookChartGridlinesFormat
+}
+
+export interface WorkbookChartAxisTitle extends Entity {
+    text?: string
+    visible?: boolean
+    format?: WorkbookChartAxisTitleFormat
+}
+
+export interface WorkbookChartLineFormat extends Entity {
+    color?: string
+}
+
+export interface WorkbookChartAxisTitleFormat extends Entity {
+    font?: WorkbookChartFont
+}
+
+export interface WorkbookChartDataLabelFormat extends Entity {
+    fill?: WorkbookChartFill
+    font?: WorkbookChartFont
+}
+
+export interface WorkbookChartGridlinesFormat extends Entity {
+    line?: WorkbookChartLineFormat
+}
+
+export interface WorkbookChartLegendFormat extends Entity {
+    fill?: WorkbookChartFill
+    font?: WorkbookChartFont
+}
+
+export interface WorkbookChartPoint extends Entity {
+    value?: any
+    format?: WorkbookChartPointFormat
+}
+
+export interface WorkbookChartPointFormat extends Entity {
+    fill?: WorkbookChartFill
+}
+
+export interface WorkbookChartSeriesFormat extends Entity {
+    fill?: WorkbookChartFill
+    line?: WorkbookChartLineFormat
+}
+
+export interface WorkbookChartTitleFormat extends Entity {
+    fill?: WorkbookChartFill
+    font?: WorkbookChartFont
+}
+
+export interface WorkbookFilter extends Entity {
+    criteria?: WorkbookFilterCriteria
+}
+
+export interface WorkbookFormatProtection extends Entity {
+    formulaHidden?: boolean
+    locked?: boolean
+}
+
+export interface WorkbookFunctionResult extends Entity {
+    error?: string
+    value?: any
+}
+
+export interface WorkbookRange extends Entity {
+    address?: string
+    addressLocal?: string
+    cellCount?: number
+    columnCount?: number
+    columnHidden?: boolean
+    columnIndex?: number
+    formulas?: any
+    formulasLocal?: any
+    formulasR1C1?: any
+    hidden?: boolean
+    numberFormat?: any
+    rowCount?: number
+    rowHidden?: boolean
+    rowIndex?: number
+    text?: any
+    valueTypes?: any
+    values?: any
+    format?: WorkbookRangeFormat
+    sort?: WorkbookRangeSort
+    worksheet?: WorkbookWorksheet
+}
+
+export interface WorkbookRangeFormat extends Entity {
+    columnWidth?: number
+    horizontalAlignment?: string
+    rowHeight?: number
+    verticalAlignment?: string
+    wrapText?: boolean
+    borders?: [WorkbookRangeBorder]
+    fill?: WorkbookRangeFill
+    font?: WorkbookRangeFont
+    protection?: WorkbookFormatProtection
+}
+
+export interface WorkbookRangeSort extends Entity {
+}
+
+export interface WorkbookRangeBorder extends Entity {
+    color?: string
+    sideIndex?: string
+    style?: string
+    weight?: string
+}
+
+export interface WorkbookRangeFill extends Entity {
+    color?: string
+}
+
+export interface WorkbookRangeFont extends Entity {
+    bold?: boolean
+    color?: string
+    italic?: boolean
+    name?: string
+    size?: number
+    underline?: string
+}
+
+export interface WorkbookTableColumn extends Entity {
+    index?: number
+    name?: string
+    values?: any
+    filter?: WorkbookFilter
+}
+
+export interface WorkbookTableRow extends Entity {
+    index?: number
+    values?: any
+}
+
+export interface WorkbookTableSort extends Entity {
+    fields?: [WorkbookSortField]
+    matchCase?: boolean
+    method?: string
+}
+
+export interface WorkbookWorksheetProtection extends Entity {
+    options?: WorkbookWorksheetProtectionOptions
+    protected?: boolean
+}
+
+export interface Subscription extends Entity {
     resource?: string
     changeType?: string
     clientState?: string
     notificationUrl?: string
     expirationDateTime?: string
-  }
-    
-  interface AlternativeSecurityId {
+}
+
+export interface AlternativeSecurityId {
       type?: number
       identityProvider?: string
       key?: number
-  }
+}
 
-  interface LicenseUnitsDetail {
+export interface LicenseUnitsDetail {
       enabled?: number
       suspended?: number
       warning?: number
-  }
+}
 
-  interface ServicePlanInfo {
+export interface ServicePlanInfo {
       servicePlanId?: string
       servicePlanName?: string
       provisioningStatus?: string
       appliesTo?: string
-  }
+}
 
-  interface AssignedPlan {
+export interface AssignedPlan {
       assignedDateTime?: string
       capabilityStatus?: string
       service?: string
       servicePlanId?: string
-  }
+}
 
-  interface ProvisionedPlan {
+export interface ProvisionedPlan {
       capabilityStatus?: string
       provisioningStatus?: string
       service?: string
-  }
+}
 
-  interface VerifiedDomain {
+export interface VerifiedDomain {
       capabilities?: string
       isDefault?: boolean
       isInitial?: boolean
       name?: string
       type?: string
-  }
+}
 
-  interface AssignedLicense {
+export interface AssignedLicense {
       disabledPlans?: [string]
       skuId?: string
-  }
+}
 
-  interface PasswordProfile {
+export interface PasswordProfile {
       password?: string
       forceChangePasswordNextSignIn?: boolean
-  }
+}
 
-  interface Reminder {
+export interface MailboxSettings {
+      automaticRepliesSetting?: AutomaticRepliesSetting
+      timeZone?: string
+      language?: LocaleInfo
+}
+
+export interface AutomaticRepliesSetting {
+      status?: AutomaticRepliesStatus
+      externalAudience?: ExternalAudienceScope
+      scheduledStartDateTime?: DateTimeTimeZone
+      scheduledEndDateTime?: DateTimeTimeZone
+      internalReplyMessage?: string
+      externalReplyMessage?: string
+}
+
+export interface DateTimeTimeZone {
+      dateTime?: string
+      timeZone?: string
+}
+
+export interface LocaleInfo {
+      locale?: string
+      displayName?: string
+}
+
+export interface Reminder {
       eventId?: string
       eventStartTime?: DateTimeTimeZone
       eventEndTime?: DateTimeTimeZone
@@ -537,51 +873,46 @@ declare module MicrosoftGraph {
       eventLocation?: Location
       eventWebLink?: string
       reminderFireTime?: DateTimeTimeZone
-  }
+}
 
-  interface DateTimeTimeZone {
-      dateTime?: string
-      timeZone?: string
-  }
-
-  interface Location {
+export interface Location {
       displayName?: string
       address?: PhysicalAddress
-  }
+}
 
-  interface PhysicalAddress {
+export interface PhysicalAddress {
       street?: string
       city?: string
       state?: string
       countryOrRegion?: string
       postalCode?: string
-  }
+}
 
-  interface ItemBody {
+export interface ItemBody {
       contentType?: BodyType
       content?: string
-  }
+}
 
-  interface Recipient {
+export interface Recipient {
       emailAddress?: EmailAddress
-  }
+}
 
-  interface EmailAddress {
+export interface EmailAddress {
       name?: string
       address?: string
-  }
+}
 
-  interface ResponseStatus {
+export interface ResponseStatus {
       response?: ResponseType
       time?: string
-  }
+}
 
-  interface PatternedRecurrence {
+export interface PatternedRecurrence {
       pattern?: RecurrencePattern
       range?: RecurrenceRange
-  }
+}
 
-  interface RecurrencePattern {
+export interface RecurrencePattern {
       type?: RecurrencePatternType
       interval?: number
       month?: number
@@ -589,47 +920,41 @@ declare module MicrosoftGraph {
       daysOfWeek?: [DayOfWeek]
       firstDayOfWeek?: DayOfWeek
       index?: WeekIndex
-  }
+}
 
-  interface RecurrenceRange {
+export interface RecurrenceRange {
       type?: RecurrenceRangeType
       startDate?: string
       endDate?: string
       recurrenceTimeZone?: string
       numberOfOccurrences?: number
-  }
+}
 
-  interface Attendee {
+export interface Attendee {
       status?: ResponseStatus
       type?: AttendeeType
-  }
+}
 
-  interface IdentitySet {
+export interface IdentitySet {
       application?: Identity
       device?: Identity
       user?: Identity
-  }
+}
 
-  interface Identity {
+export interface Identity {
       displayName?: string
       id?: string
-  }
+}
 
-  interface Quota {
+export interface Quota {
       deleted?: number
       remaining?: number
       state?: string
       total?: number
       used?: number
-  }
+}
 
-  interface ItemReference {
-      driveId?: string
-      id?: string
-      path?: string
-  }
-
-  interface Audio {
+export interface Audio {
       album?: string
       albumArtist?: string
       artist?: string
@@ -646,43 +971,57 @@ declare module MicrosoftGraph {
       track?: number
       trackCount?: number
       year?: number
-  }
+}
 
-  interface Deleted {
+export interface Deleted {
       state?: string
-  }
+}
 
-  interface File {
+export interface File {
       hashes?: Hashes
       mimeType?: string
-  }
+      processingMetadata?: boolean
+}
 
-  interface Hashes {
+export interface Hashes {
       crc32Hash?: string
       sha1Hash?: string
-  }
+      quickXorHash?: string
+}
 
-  interface FileSystemInfo {
+export interface FileSystemInfo {
       createdDateTime?: string
       lastModifiedDateTime?: string
-  }
+}
 
-  interface Folder {
+export interface Folder {
       childCount?: number
-  }
+}
 
-  interface Image {
+export interface Image {
       height?: number
       width?: number
-  }
+}
 
-  interface GeoCoordinates {
+export interface GeoCoordinates {
       altitude?: number
       latitude?: number
       longitude?: number
-  }
+}
 
-  interface Photo {
+export interface Package {
+      type?: string
+}
+
+export interface ItemReference {
+      driveId?: string
+      id?: string
+      name?: string
+      path?: string
+      shareId?: string
+}
+
+export interface Photo {
       cameraMake?: string
       cameraModel?: string
       exposureDenominator?: number
@@ -691,63 +1030,146 @@ declare module MicrosoftGraph {
       fNumber?: number
       takenDateTime?: string
       iso?: number
-  }
+}
 
-  interface RemoteItem {
+export interface RemoteItem {
+      createdBy?: IdentitySet
+      createdDateTime?: string
       file?: File
       fileSystemInfo?: FileSystemInfo
       folder?: Folder
       id?: string
+      lastModifiedBy?: IdentitySet
+      lastModifiedDateTime?: string
       name?: string
+      package?: Package
       parentReference?: ItemReference
+      sharepointIds?: SharepointIds
       size?: number
-  }
+      specialFolder?: SpecialFolder
+      webDavUrl?: string
+      webUrl?: string
+}
 
-  interface SearchResult {
+export interface SharepointIds {
+      listId?: string
+      listItemId?: string
+      listItemUniqueId?: string
+      siteId?: string
+      webId?: string
+}
+
+export interface SpecialFolder {
+      name?: string
+}
+
+export interface Root {
+}
+
+export interface SearchResult {
       onClickTelemetryUrl?: string
-  }
+}
 
-  interface Shared {
+export interface Shared {
       owner?: IdentitySet
       scope?: string
-  }
+}
 
-  interface SpecialFolder {
-      name?: string
-  }
-
-  interface Video {
+export interface Video {
       bitrate?: number
       duration?: number
       height?: number
       width?: number
-  }
+}
 
-  interface Package {
-      type?: string
-  }
-
-  interface SharingInvitation {
+export interface SharingInvitation {
       email?: string
       invitedBy?: IdentitySet
       redeemedBy?: string
       signInRequired?: boolean
-  }
+}
 
-  interface SharingLink {
+export interface SharingLink {
       application?: Identity
       type?: string
+      scope?: string
       webUrl?: string
-  }
+}
 
-  interface Thumbnail {
+export interface Thumbnail {
       content?: any
       height?: number
       url?: string
       width?: number
-  }
 }
 
-declare module "MicrosoftGraph" {
-    export = MicrosoftGraph;
+export interface DriveRecipient {
+      email?: string
+      alias?: string
+      objectId?: string
+}
+
+export interface DriveItemUploadableProperties {
+      name?: string
+      description?: string
+      fileSystemInfo?: FileSystemInfo
+}
+
+export interface UploadSession {
+      uploadUrl?: string
+      expirationDateTime?: string
+      nextExpectedRanges?: [string]
+}
+
+export interface WorkbookSessionInfo {
+      id?: string
+      persistChanges?: boolean
+}
+
+export interface WorkbookFilterCriteria {
+      color?: string
+      criterion1?: string
+      criterion2?: string
+      dynamicCriteria?: string
+      filterOn?: string
+      icon?: WorkbookIcon
+      operator?: string
+      values?: any
+}
+
+export interface WorkbookIcon {
+      index?: number
+      set?: string
+}
+
+export interface WorkbookSortField {
+      ascending?: boolean
+      color?: string
+      dataOption?: string
+      icon?: WorkbookIcon
+      key?: number
+      sortOn?: string
+}
+
+export interface WorkbookWorksheetProtectionOptions {
+      allowAutoFilter?: boolean
+      allowDeleteColumns?: boolean
+      allowDeleteRows?: boolean
+      allowFormatCells?: boolean
+      allowFormatColumns?: boolean
+      allowFormatRows?: boolean
+      allowInsertColumns?: boolean
+      allowInsertHyperlinks?: boolean
+      allowInsertRows?: boolean
+      allowPivotTables?: boolean
+      allowSort?: boolean
+}
+
+export interface WorkbookFilterDatetime {
+      date?: string
+      specificity?: string
+}
+
+export interface WorkbookRangeReference {
+      address?: string
 }

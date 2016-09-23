@@ -1,6 +1,6 @@
 {
   "name":"microsoft-graph-typings",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "typescript": {
     "definition": "microsoft-graph.d.ts"
   }
