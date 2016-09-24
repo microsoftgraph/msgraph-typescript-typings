@@ -3,15 +3,26 @@
 
 The Microsoft Graph TypeScript definitions enable editors to provide intellisense on Microsoft Graph objects.
 
-You can use Microsoft Graph definitions in your project in a few ways:
-* Directly reference microsoft-graph.d.ts with a triple slash reference at the top of your .ts files.
-```/// <reference path="microsoft-graph.d.ts" />```.
-* Use a [tsconfig.json](http://www.typescriptlang.org/docs/handbook/tsconfig-json.html) file so the /// reference doesn't need to be in every .ts file. By default, all files (including .d.ts) will be included in the directly where tsconfig.json resides.
+
+## Installation
+We recommend using [typings](https://github.com/typings/typings) to install the definitions.  If 
+
+```bash
+
+# Install typings if you don't have it already
+npm install typings --global
+
+# Download the typings and save the dependency to typings.json
+typings install common~microsoft-graph --save
+```
+
 
 ![GIF showing intellisense and autocompletion for Microsoft Graph entities in Visual Studio Code ](https://github.com/microsoftgraph/msgraph-typescript-typings/raw/master/typings-demo.gif)
 ## Examples
 The following examples assume that you have a valid access token. We used [superagent](https://github.com/visionmedia/superagent) to perform the HTTP requests, but you can use [our JavaScript SDK](https://github.com/microsoftgraph/msgraph-sdk-javascript) or other libraries as well.
 ```typescript
+import * as MicrosoftGraph from "microsoft-graph"
+
 import * as request from 'superagent';
 const accessToken:string = "";
 ```
