@@ -5,7 +5,7 @@ The Microsoft Graph TypeScript definitions enable editors to provide intellisens
 
 
 ## Installation
-We recommend using [typings](https://github.com/typings/typings) to install the definitions.  If 
+We recommend using [typings](https://github.com/typings/typings) to install the definitions.
 
 ```bash
 
