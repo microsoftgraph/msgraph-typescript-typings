@@ -97,7 +97,7 @@ Please see the [contributing guidelines](CONTRIBUTING.md).
 
 * [Microsoft Graph](https://graph.microsoft.io)
 * [Office Dev Center](http://dev.office.com/)
-* [Microsoft Graph JavaScript SDK](https://github.com/microsoftgraph/msgraph-sdk-javascript)
+* [Microsoft Graph JavaScript Client Library](https://github.com/microsoftgraph/msgraph-sdk-javascript)
 
 ## Copyright
 Copyright (c) 2016 Microsoft. All rights reserved.
