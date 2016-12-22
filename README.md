@@ -1,10 +1,11 @@
 [![npm version badge](https://img.shields.io/npm/v/microsoft-graph-typings.svg)](https://www.npmjs.com/package/microsoft-graph-typings)
 
 # Microsoft Graph TypeScript Types
-The Microsoft Graph TypeScript definitions enable editors to provide intellisense on Microsoft Graph objects.
- 
+The Microsoft Graph TypeScript definitions enable editors to provide intellisense on Microsoft Graph objects including users, messages, and groups.
+
 ## Installation
 
+We recommend including the .d.ts file by downloading this package through [npm](https://www.npmjs.com/).
 
 ```bash
 
