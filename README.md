@@ -1,7 +1,8 @@
+![npm version badge](https://img.shields.io/npm/v/microsoft-graph-typings.svg)
+
 # Microsoft Graph TypeScript Typings
 The Microsoft Graph TypeScript definitions enable editors to provide intellisense on Microsoft Graph objects.
-
-
+ 
 ## Installation
 We recommend using [typings](https://github.com/typings/typings) to install the definitions.
 
