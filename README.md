@@ -17,7 +17,7 @@ npm install microsoft-graph-typings --save-dev
 
 ![GIF showing intellisense and autocompletion for Microsoft Graph entities in Visual Studio Code ](https://github.com/microsoftgraph/msgraph-typescript-typings/raw/master/typings-demo.gif)
 ## Examples
-The following examples assume that you have a valid access token. We used [superagent](https://github.com/visionmedia/superagent) to perform the HTTP requests, but you can use [our JavaScript SDK](https://github.com/microsoftgraph/msgraph-sdk-javascript) or other libraries as well.
+The following examples assume that you have a valid access token. We used [superagent](https://github.com/visionmedia/superagent) to perform the HTTP requests, but you can use [our JavaScript client library](https://github.com/microsoftgraph/msgraph-sdk-javascript) or other libraries as well.
 ```typescript
 import * as MicrosoftGraph from "microsoft-graph"
 
