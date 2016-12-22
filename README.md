@@ -1,4 +1,4 @@
-![npm version badge](https://img.shields.io/npm/v/microsoft-graph-typings.svg)
+[![npm version badge](https://img.shields.io/npm/v/microsoft-graph-typings.svg)](https://www.npmjs.com/package/microsoft-graph-typings)
 
 # Microsoft Graph TypeScript Typings
 The Microsoft Graph TypeScript definitions enable editors to provide intellisense on Microsoft Graph objects.
