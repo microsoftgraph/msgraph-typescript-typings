@@ -1,18 +1,16 @@
 [![npm version badge](https://img.shields.io/npm/v/microsoft-graph-typings.svg)](https://www.npmjs.com/package/microsoft-graph-typings)
 
-# Microsoft Graph TypeScript Typings
+# Microsoft Graph TypeScript Types
 The Microsoft Graph TypeScript definitions enable editors to provide intellisense on Microsoft Graph objects.
  
 ## Installation
-We recommend using [typings](https://github.com/typings/typings) to install the definitions.
+
 
 ```bash
 
-# Install typings if you don't have it already
-npm install typings --global
+# Install types and save in package.json as a development dependency
+npm install microsoft-graph-typings --save-dev
 
-# Download the typings and save the dependency to typings.json
-typings install common~microsoft-graph --save
 ```
 
 
