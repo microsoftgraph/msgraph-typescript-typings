@@ -10,7 +10,7 @@ We recommend including the .d.ts file by downloading this package through [npm](
 ```bash
 
 # Install types and save in package.json as a development dependency
-npm install microsoft-graph-typings --save-dev
+npm install @microsoft/microsoft-graph-types --save-dev
 
 ```
 
