@@ -1,5 +1,5 @@
 {
-  "name":"microsoft-graph-typings",
+  "name":"@microsoft/microsoft-graph-types",
   "description": "Types for Microsoft Graph objects",
   "version": "0.3.0",
   "types": "microsoft-graph.d.ts",
