@@ -1,7 +1,7 @@
 {
   "name":"@microsoft/microsoft-graph-types",
   "description": "Types for Microsoft Graph objects",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "types": "microsoft-graph.d.ts",
   "typescript": {
     "definition": "microsoft-graph.d.ts"
