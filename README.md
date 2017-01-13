@@ -1,3 +1,5 @@
+> Important update for 1/13/2017! We're migrating this npm package to @microsoft. In the meantime, please download from https://www.npmjs.com/package/microsoft-graph-typings
+
 [![npm version badge](https://img.shields.io/npm/v/microsoft-graph-typings.svg)](https://www.npmjs.com/package/microsoft-graph-typings)
 
 # Microsoft Graph TypeScript Types
