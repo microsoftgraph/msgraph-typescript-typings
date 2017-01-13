@@ -1,5 +1,3 @@
-> Important update for 1/13/2017! We're migrating this package to the @microsoft npm account. In the meantime, please download from https://www.npmjs.com/package/microsoft-graph-typings
-
 [![npm version badge](https://img.shields.io/npm/v/microsoft-graph-typings.svg)](https://www.npmjs.com/package/microsoft-graph-typings)
 
 # Microsoft Graph TypeScript Types
@@ -21,7 +19,7 @@ npm install @microsoft/microsoft-graph-types --save-dev
 ## Examples
 The following examples assume that you have a valid access token. We used [superagent](https://github.com/visionmedia/superagent) to perform the HTTP requests, but you can use [our JavaScript client library](https://github.com/microsoftgraph/msgraph-sdk-javascript) or other libraries as well.
 ```typescript
-import * as MicrosoftGraph from "microsoft-graph"
+import * as MicrosoftGraph from "@microsoft/microsoft-graph-types"
 
 import * as request from 'superagent';
 const accessToken:string = "";
