@@ -76,7 +76,7 @@ request
 
 ```
 ## Supported editors
-Any TypeScript app can consume these types when using at least TypeScript 2.0.  We've verified this in the following editors:
+Any TypeScript project can consume these types when using at least TypeScript 2.0.  We've tested including the types as a dependency in the following editors.
 * Visual Studio Code
 * WebStorm
 * Atom with the [atom-typescript](https://atom.io/packages/atom-typescript) plugin
