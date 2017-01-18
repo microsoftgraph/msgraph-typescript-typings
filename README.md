@@ -75,6 +75,11 @@ request
     })
 
 ```
+## Supported editors
+Any TypeScript app can consume these types when using at least TypeScript 2.0.  We've verified this in the following editors:
+* Visual Studio Code
+* WebStorm
+* 
 
 ## Note about date values
 All DateTimeOffset values are returned as strings from Microsoft Graph and should be wrapped in ```new Date()``` at runtime.
