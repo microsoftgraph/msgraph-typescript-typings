@@ -75,6 +75,11 @@ request
     })
 
 ```
+## Supported editors
+Any TypeScript project can consume these types when using at least TypeScript 2.0.  We've tested including the types as a dependency in the following editors.
+* Visual Studio Code
+* WebStorm
+* Atom with the [atom-typescript](https://atom.io/packages/atom-typescript) plugin
 
 ## Note about date values
 All DateTimeOffset values are returned as strings from Microsoft Graph and should be wrapped in ```new Date()``` at runtime.
