@@ -5,11 +5,13 @@
 //
 // Copyright (c) Microsoft Corporation.  All Rights Reserved.  Licensed under the MIT License.  See License in the project root for license information.
 //
-
-
+export import Beta = require("./microsoft-graph-beta");
 
 export type AutomaticRepliesStatus = "disabled" | "alwaysEnabled" | "scheduled"
 export type ExternalAudienceScope = "none" | "contactsOnly" | "all"
+export type AttendeeType = "required" | "optional" | "resource"
+export type FreeBusyStatus = "free" | "tentative" | "busy" | "oof" | "workingElsewhere" | "unknown"
+export type ActivityDomain = "unknown" | "work" | "personal"
 export type BodyType = "text" | "html"
 export type Importance = "low" | "normal" | "high"
 export type InferenceClassificationType = "focused" | "other"
@@ -20,9 +22,7 @@ export type RecurrencePatternType = "daily" | "weekly" | "absoluteMonthly" | "re
 export type DayOfWeek = "sunday" | "monday" | "tuesday" | "wednesday" | "thursday" | "friday" | "saturday"
 export type WeekIndex = "first" | "second" | "third" | "fourth" | "last"
 export type RecurrenceRangeType = "endDate" | "noEnd" | "numbered"
-export type FreeBusyStatus = "free" | "tentative" | "busy" | "oof" | "workingElsewhere" | "unknown"
 export type EventType = "singleInstance" | "occurrence" | "exception" | "seriesMaster"
-export type AttendeeType = "required" | "optional" | "resource"
 export type MeetingMessageType = "none" | "meetingRequest" | "meetingCancelled" | "meetingAccepted" | "meetingTenativelyAccepted" | "meetingDeclined"
 
 export interface Entity {
@@ -526,7 +526,12 @@ export interface WorkbookNamedItem extends Entity {
 }
 
 export interface WorkbookTable extends Entity {
+    highlightFirstColumn?: boolean
+    highlightLastColumn?: boolean
     name?: string
+    showBandedColumns?: boolean
+    showBandedRows?: boolean
+    showFilterButton?: boolean
     showHeaders?: boolean
     showTotals?: boolean
     style?: string
@@ -541,6 +546,7 @@ export interface WorkbookWorksheet extends Entity {
     position?: number
     visibility?: string
     charts?: [WorkbookChart]
+    pivotTables?: [WorkbookPivotTable]
     protection?: WorkbookWorksheetProtection
     tables?: [WorkbookTable]
 }
@@ -700,6 +706,11 @@ export interface WorkbookFunctionResult extends Entity {
     value?: any
 }
 
+export interface WorkbookPivotTable extends Entity {
+    name?: string
+    worksheet?: WorkbookWorksheet
+}
+
 export interface WorkbookRange extends Entity {
     address?: string
     addressLocal?: string
@@ -756,6 +767,21 @@ export interface WorkbookRangeFont extends Entity {
     name?: string
     size?: number
     underline?: string
+}
+
+export interface WorkbookRangeView extends Entity {
+    cellAddresses?: any
+    columnCount?: number
+    formulas?: any
+    formulasLocal?: any
+    formulasR1C1?: any
+    index?: number
+    numberFormat?: any
+    rowCount?: number
+    text?: any
+    valueTypes?: any
+    values?: any
+    rows?: [WorkbookRangeView]
 }
 
 export interface WorkbookTableColumn extends Entity {
@@ -864,19 +890,46 @@ export interface LocaleInfo {
       displayName?: string
 }
 
-export interface Reminder {
-      eventId?: string
-      eventStartTime?: DateTimeTimeZone
-      eventEndTime?: DateTimeTimeZone
-      changeKey?: string
-      eventSubject?: string
-      eventLocation?: Location
-      eventWebLink?: string
-      reminderFireTime?: DateTimeTimeZone
+export interface Recipient {
+      emailAddress?: EmailAddress
+}
+
+export interface EmailAddress {
+      name?: string
+      address?: string
+}
+
+export interface AttendeeBase {
+      type?: AttendeeType
+}
+
+export interface MeetingTimeSuggestionsResult {
+      meetingTimeSuggestions?: [MeetingTimeSuggestion]
+      emptySuggestionsReason?: string
+}
+
+export interface MeetingTimeSuggestion {
+      meetingTimeSlot?: TimeSlot
+      confidence?: number
+      organizerAvailability?: FreeBusyStatus
+      attendeeAvailability?: [AttendeeAvailability]
+      locations?: [Location]
+      suggestionReason?: string
+}
+
+export interface TimeSlot {
+      start?: DateTimeTimeZone
+      end?: DateTimeTimeZone
+}
+
+export interface AttendeeAvailability {
+      attendee?: AttendeeBase
+      availability?: FreeBusyStatus
 }
 
 export interface Location {
       displayName?: string
+      locationEmailAddress?: string
       address?: PhysicalAddress
 }
 
@@ -888,18 +941,35 @@ export interface PhysicalAddress {
       postalCode?: string
 }
 
+export interface LocationConstraint {
+      isRequired?: boolean
+      suggestLocation?: boolean
+      locations?: [LocationConstraintItem]
+}
+
+export interface LocationConstraintItem {
+      resolveAvailability?: boolean
+}
+
+export interface TimeConstraint {
+      activityDomain?: ActivityDomain
+      timeslots?: [TimeSlot]
+}
+
+export interface Reminder {
+      eventId?: string
+      eventStartTime?: DateTimeTimeZone
+      eventEndTime?: DateTimeTimeZone
+      changeKey?: string
+      eventSubject?: string
+      eventLocation?: Location
+      eventWebLink?: string
+      reminderFireTime?: DateTimeTimeZone
+}
+
 export interface ItemBody {
       contentType?: BodyType
       content?: string
-}
-
-export interface Recipient {
-      emailAddress?: EmailAddress
-}
-
-export interface EmailAddress {
-      name?: string
-      address?: string
 }
 
 export interface ResponseStatus {
@@ -932,7 +1002,6 @@ export interface RecurrenceRange {
 
 export interface Attendee {
       status?: ResponseStatus
-      type?: AttendeeType
 }
 
 export interface IdentitySet {
