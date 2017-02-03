@@ -10,6 +10,9 @@
 
 export type AutomaticRepliesStatus = "disabled" | "alwaysEnabled" | "scheduled"
 export type ExternalAudienceScope = "none" | "contactsOnly" | "all"
+export type AttendeeType = "required" | "optional" | "resource"
+export type FreeBusyStatus = "free" | "tentative" | "busy" | "oof" | "workingElsewhere" | "unknown"
+export type ActivityDomain = "unknown" | "work" | "personal"
 export type BodyType = "text" | "html"
 export type Importance = "low" | "normal" | "high"
 export type InferenceClassificationType = "focused" | "other"
@@ -20,9 +23,7 @@ export type RecurrencePatternType = "daily" | "weekly" | "absoluteMonthly" | "re
 export type DayOfWeek = "sunday" | "monday" | "tuesday" | "wednesday" | "thursday" | "friday" | "saturday"
 export type WeekIndex = "first" | "second" | "third" | "fourth" | "last"
 export type RecurrenceRangeType = "endDate" | "noEnd" | "numbered"
-export type FreeBusyStatus = "free" | "tentative" | "busy" | "oof" | "workingElsewhere" | "unknown"
 export type EventType = "singleInstance" | "occurrence" | "exception" | "seriesMaster"
-export type AttendeeType = "required" | "optional" | "resource"
 export type MeetingMessageType = "none" | "meetingRequest" | "meetingCancelled" | "meetingAccepted" | "meetingTenativelyAccepted" | "meetingDeclined"
 
 export interface Entity {
@@ -526,7 +527,12 @@ export interface WorkbookNamedItem extends Entity {
 }
 
 export interface WorkbookTable extends Entity {
+    highlightFirstColumn?: boolean
+    highlightLastColumn?: boolean
     name?: string
+    showBandedColumns?: boolean
+    showBandedRows?: boolean
+    showFilterButton?: boolean
     showHeaders?: boolean
     showTotals?: boolean
     style?: string
@@ -541,6 +547,7 @@ export interface WorkbookWorksheet extends Entity {
     position?: number
     visibility?: string
     charts?: [WorkbookChart]
+    pivotTables?: [WorkbookPivotTable]
     protection?: WorkbookWorksheetProtection
     tables?: [WorkbookTable]
 }
@@ -700,6 +707,11 @@ export interface WorkbookFunctionResult extends Entity {
     value?: any
 }
 
+export interface WorkbookPivotTable extends Entity {
+    name?: string
+    worksheet?: WorkbookWorksheet
+}
+
 export interface WorkbookRange extends Entity {
     address?: string
     addressLocal?: string
@@ -758,6 +770,21 @@ export interface WorkbookRangeFont extends Entity {
     underline?: string
 }
 
+export interface WorkbookRangeView extends Entity {
+    cellAddresses?: any
+    columnCount?: number
+    formulas?: any
+    formulasLocal?: any
+    formulasR1C1?: any
+    index?: number
+    numberFormat?: any
+    rowCount?: number
+    text?: any
+    valueTypes?: any
+    values?: any
+    rows?: [WorkbookRangeView]
+}
+
 export interface WorkbookTableColumn extends Entity {
     index?: number
     name?: string
@@ -789,39 +816,39 @@ export interface Subscription extends Entity {
     expirationDateTime?: string
 }
 
-export interface AlternativeSecurityId {
+export interface AlternativeSecurityId  {
       type?: number
       identityProvider?: string
       key?: number
 }
 
-export interface LicenseUnitsDetail {
+export interface LicenseUnitsDetail  {
       enabled?: number
       suspended?: number
       warning?: number
 }
 
-export interface ServicePlanInfo {
+export interface ServicePlanInfo  {
       servicePlanId?: string
       servicePlanName?: string
       provisioningStatus?: string
       appliesTo?: string
 }
 
-export interface AssignedPlan {
+export interface AssignedPlan  {
       assignedDateTime?: string
       capabilityStatus?: string
       service?: string
       servicePlanId?: string
 }
 
-export interface ProvisionedPlan {
+export interface ProvisionedPlan  {
       capabilityStatus?: string
       provisioningStatus?: string
       service?: string
 }
 
-export interface VerifiedDomain {
+export interface VerifiedDomain  {
       capabilities?: string
       isDefault?: boolean
       isInitial?: boolean
@@ -829,23 +856,23 @@ export interface VerifiedDomain {
       type?: string
 }
 
-export interface AssignedLicense {
+export interface AssignedLicense  {
       disabledPlans?: [string]
       skuId?: string
 }
 
-export interface PasswordProfile {
+export interface PasswordProfile  {
       password?: string
       forceChangePasswordNextSignIn?: boolean
 }
 
-export interface MailboxSettings {
+export interface MailboxSettings  {
       automaticRepliesSetting?: AutomaticRepliesSetting
       timeZone?: string
       language?: LocaleInfo
 }
 
-export interface AutomaticRepliesSetting {
+export interface AutomaticRepliesSetting  {
       status?: AutomaticRepliesStatus
       externalAudience?: ExternalAudienceScope
       scheduledStartDateTime?: DateTimeTimeZone
@@ -854,17 +881,83 @@ export interface AutomaticRepliesSetting {
       externalReplyMessage?: string
 }
 
-export interface DateTimeTimeZone {
+export interface DateTimeTimeZone  {
       dateTime?: string
       timeZone?: string
 }
 
-export interface LocaleInfo {
+export interface LocaleInfo  {
       locale?: string
       displayName?: string
 }
 
-export interface Reminder {
+export interface Recipient  {
+      emailAddress?: EmailAddress
+}
+
+export interface EmailAddress  {
+      name?: string
+      address?: string
+}
+
+export interface AttendeeBase  extends Recipient {
+      type?: AttendeeType
+}
+
+export interface MeetingTimeSuggestionsResult  {
+      meetingTimeSuggestions?: [MeetingTimeSuggestion]
+      emptySuggestionsReason?: string
+}
+
+export interface MeetingTimeSuggestion  {
+      meetingTimeSlot?: TimeSlot
+      confidence?: number
+      organizerAvailability?: FreeBusyStatus
+      attendeeAvailability?: [AttendeeAvailability]
+      locations?: [Location]
+      suggestionReason?: string
+}
+
+export interface TimeSlot  {
+      start?: DateTimeTimeZone
+      end?: DateTimeTimeZone
+}
+
+export interface AttendeeAvailability  {
+      attendee?: AttendeeBase
+      availability?: FreeBusyStatus
+}
+
+export interface Location  {
+      displayName?: string
+      locationEmailAddress?: string
+      address?: PhysicalAddress
+}
+
+export interface PhysicalAddress  {
+      street?: string
+      city?: string
+      state?: string
+      countryOrRegion?: string
+      postalCode?: string
+}
+
+export interface LocationConstraint  {
+      isRequired?: boolean
+      suggestLocation?: boolean
+      locations?: [LocationConstraintItem]
+}
+
+export interface LocationConstraintItem  extends Location {
+      resolveAvailability?: boolean
+}
+
+export interface TimeConstraint  {
+      activityDomain?: ActivityDomain
+      timeslots?: [TimeSlot]
+}
+
+export interface Reminder  {
       eventId?: string
       eventStartTime?: DateTimeTimeZone
       eventEndTime?: DateTimeTimeZone
@@ -875,44 +968,22 @@ export interface Reminder {
       reminderFireTime?: DateTimeTimeZone
 }
 
-export interface Location {
-      displayName?: string
-      address?: PhysicalAddress
-}
-
-export interface PhysicalAddress {
-      street?: string
-      city?: string
-      state?: string
-      countryOrRegion?: string
-      postalCode?: string
-}
-
-export interface ItemBody {
+export interface ItemBody  {
       contentType?: BodyType
       content?: string
 }
 
-export interface Recipient {
-      emailAddress?: EmailAddress
-}
-
-export interface EmailAddress {
-      name?: string
-      address?: string
-}
-
-export interface ResponseStatus {
+export interface ResponseStatus  {
       response?: ResponseType
       time?: string
 }
 
-export interface PatternedRecurrence {
+export interface PatternedRecurrence  {
       pattern?: RecurrencePattern
       range?: RecurrenceRange
 }
 
-export interface RecurrencePattern {
+export interface RecurrencePattern  {
       type?: RecurrencePatternType
       interval?: number
       month?: number
@@ -922,7 +993,7 @@ export interface RecurrencePattern {
       index?: WeekIndex
 }
 
-export interface RecurrenceRange {
+export interface RecurrenceRange  {
       type?: RecurrenceRangeType
       startDate?: string
       endDate?: string
@@ -930,23 +1001,22 @@ export interface RecurrenceRange {
       numberOfOccurrences?: number
 }
 
-export interface Attendee {
+export interface Attendee  extends AttendeeBase {
       status?: ResponseStatus
-      type?: AttendeeType
 }
 
-export interface IdentitySet {
+export interface IdentitySet  {
       application?: Identity
       device?: Identity
       user?: Identity
 }
 
-export interface Identity {
+export interface Identity  {
       displayName?: string
       id?: string
 }
 
-export interface Quota {
+export interface Quota  {
       deleted?: number
       remaining?: number
       state?: string
@@ -954,7 +1024,7 @@ export interface Quota {
       used?: number
 }
 
-export interface Audio {
+export interface Audio  {
       album?: string
       albumArtist?: string
       artist?: string
@@ -973,47 +1043,47 @@ export interface Audio {
       year?: number
 }
 
-export interface Deleted {
+export interface Deleted  {
       state?: string
 }
 
-export interface File {
+export interface File  {
       hashes?: Hashes
       mimeType?: string
       processingMetadata?: boolean
 }
 
-export interface Hashes {
+export interface Hashes  {
       crc32Hash?: string
       sha1Hash?: string
       quickXorHash?: string
 }
 
-export interface FileSystemInfo {
+export interface FileSystemInfo  {
       createdDateTime?: string
       lastModifiedDateTime?: string
 }
 
-export interface Folder {
+export interface Folder  {
       childCount?: number
 }
 
-export interface Image {
+export interface Image  {
       height?: number
       width?: number
 }
 
-export interface GeoCoordinates {
+export interface GeoCoordinates  {
       altitude?: number
       latitude?: number
       longitude?: number
 }
 
-export interface Package {
+export interface Package  {
       type?: string
 }
 
-export interface ItemReference {
+export interface ItemReference  {
       driveId?: string
       id?: string
       name?: string
@@ -1021,7 +1091,7 @@ export interface ItemReference {
       shareId?: string
 }
 
-export interface Photo {
+export interface Photo  {
       cameraMake?: string
       cameraModel?: string
       exposureDenominator?: number
@@ -1032,7 +1102,7 @@ export interface Photo {
       iso?: number
 }
 
-export interface RemoteItem {
+export interface RemoteItem  {
       createdBy?: IdentitySet
       createdDateTime?: string
       file?: File
@@ -1051,7 +1121,7 @@ export interface RemoteItem {
       webUrl?: string
 }
 
-export interface SharepointIds {
+export interface SharepointIds  {
       listId?: string
       listItemId?: string
       listItemUniqueId?: string
@@ -1059,74 +1129,74 @@ export interface SharepointIds {
       webId?: string
 }
 
-export interface SpecialFolder {
+export interface SpecialFolder  {
       name?: string
 }
 
-export interface Root {
+export interface Root  {
 }
 
-export interface SearchResult {
+export interface SearchResult  {
       onClickTelemetryUrl?: string
 }
 
-export interface Shared {
+export interface Shared  {
       owner?: IdentitySet
       scope?: string
 }
 
-export interface Video {
+export interface Video  {
       bitrate?: number
       duration?: number
       height?: number
       width?: number
 }
 
-export interface SharingInvitation {
+export interface SharingInvitation  {
       email?: string
       invitedBy?: IdentitySet
       redeemedBy?: string
       signInRequired?: boolean
 }
 
-export interface SharingLink {
+export interface SharingLink  {
       application?: Identity
       type?: string
       scope?: string
       webUrl?: string
 }
 
-export interface Thumbnail {
+export interface Thumbnail  {
       content?: any
       height?: number
       url?: string
       width?: number
 }
 
-export interface DriveRecipient {
+export interface DriveRecipient  {
       email?: string
       alias?: string
       objectId?: string
 }
 
-export interface DriveItemUploadableProperties {
+export interface DriveItemUploadableProperties  {
       name?: string
       description?: string
       fileSystemInfo?: FileSystemInfo
 }
 
-export interface UploadSession {
+export interface UploadSession  {
       uploadUrl?: string
       expirationDateTime?: string
       nextExpectedRanges?: [string]
 }
 
-export interface WorkbookSessionInfo {
+export interface WorkbookSessionInfo  {
       id?: string
       persistChanges?: boolean
 }
 
-export interface WorkbookFilterCriteria {
+export interface WorkbookFilterCriteria  {
       color?: string
       criterion1?: string
       criterion2?: string
@@ -1137,12 +1207,12 @@ export interface WorkbookFilterCriteria {
       values?: any
 }
 
-export interface WorkbookIcon {
+export interface WorkbookIcon  {
       index?: number
       set?: string
 }
 
-export interface WorkbookSortField {
+export interface WorkbookSortField  {
       ascending?: boolean
       color?: string
       dataOption?: string
@@ -1151,7 +1221,7 @@ export interface WorkbookSortField {
       sortOn?: string
 }
 
-export interface WorkbookWorksheetProtectionOptions {
+export interface WorkbookWorksheetProtectionOptions  {
       allowAutoFilter?: boolean
       allowDeleteColumns?: boolean
       allowDeleteRows?: boolean
@@ -1165,11 +1235,11 @@ export interface WorkbookWorksheetProtectionOptions {
       allowSort?: boolean
 }
 
-export interface WorkbookFilterDatetime {
+export interface WorkbookFilterDatetime  {
       date?: string
       specificity?: string
 }
 
-export interface WorkbookRangeReference {
+export interface WorkbookRangeReference  {
       address?: string
 }
