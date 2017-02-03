@@ -66,28 +66,42 @@ request
     .post('https://graph.microsoft.com/v1.0/users/me/sendMail')
     .send({message: mail})
     .set('Authorization', 'Bearer ' + accessToken)
-    .end((err, res) => {
-        if (err) {
-            console.error(err)
-            return;
-        }
+    .end((err, res) => 
         console.log(res)
     })
 
 ```
+## Microsoft Graph beta support
+If you want to test the Microsoft Graph beta endpoints, you can use those types simultaneously with the v1.0 types.
+
+Update your package.json file with the following:
+
+```javascript
+  "devDependencies": {
+    // import published v1.0 types with a version from NPM
+    "@microsoft/microsoft-graph-types": "^0.4.0",
+
+    // import beta types from the beta branch on the GitHub repo
+    "@microsoft/microsoft-graph-types-beta": "microsoftgraph/msgraph-typescript-typings#beta"
+  }
+}
+```
+
+Import the beta types from `@microsoft/microsoft-graph-types-beta`
+```typescript
+// import individual entities
+import {User as BetaUser} from "@microsoft/microsoft-graph-types-beta"
+
+// or import everything under MicrosoftGraphBeta
+
+import * as MicrosoftGraphBeta from "@microsoft/microsoft-graph-types-beta"
+```
+
 ## Supported editors
 Any TypeScript project can consume these types when using at least TypeScript 2.0.  We've tested including the types as a dependency in the following editors.
 * Visual Studio Code
 * WebStorm
 * Atom with the [atom-typescript](https://atom.io/packages/atom-typescript) plugin
-
-## Note about date values
-All DateTimeOffset values are returned as strings from Microsoft Graph and should be wrapped in ```new Date()``` at runtime.
-```typescript
-let me:MicrosoftGraph.User = {}; // result from graph
-let myBirthday = new Date(me.birthday);
-console.log(myBirthday.toDateString());
-```
 
 ## Questions and comments
 
