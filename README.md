@@ -93,7 +93,6 @@ Import the beta types from `@microsoft/microsoft-graph-types-beta`
 import {User as BetaUser} from "@microsoft/microsoft-graph-types-beta"
 
 // or import everything under MicrosoftGraphBeta
-
 import * as MicrosoftGraphBeta from "@microsoft/microsoft-graph-types-beta"
 ```
 
