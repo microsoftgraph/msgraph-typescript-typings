@@ -7,6 +7,7 @@
 //
 
 
+export as namespace microsoftgraph;
 
 export type AutomaticRepliesStatus = "disabled" | "alwaysEnabled" | "scheduled"
 export type ExternalAudienceScope = "none" | "contactsOnly" | "all"
