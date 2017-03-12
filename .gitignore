@@ -9,3 +9,5 @@ npm-debug.log
 
 # Only keep microsoft-graph-tests.ts in the repo
 microsoft-graph-tests.js
+
+spec/secrets.*

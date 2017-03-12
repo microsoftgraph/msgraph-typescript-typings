@@ -1,12 +1,22 @@
 {
-  "name":"@microsoft/microsoft-graph-types",
+  "name": "@microsoft/microsoft-graph-types",
   "description": "Types for Microsoft Graph objects",
   "version": "0.4.1",
   "types": "microsoft-graph.d.ts",
+  "scripts": {
+    "test": "tsc && mocha spec/"
+  },
   "typescript": {
     "definition": "microsoft-graph.d.ts"
-  }, "repository": {
+  },
+  "repository": {
     "type": "git",
     "url": "https://github.com/microsoftgraph/msgraph-typescript-typings.git"
+  },
+  "devDependencies": {
+    "@types/chai": "^3.4.35",
+    "chai": "^3.5.0",
+    "mocha": "^3.2.0",
+    "@microsoft/microsoft-graph-client": "^0.3.2"
   }
 }
