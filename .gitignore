@@ -11,3 +11,6 @@ npm-debug.log
 microsoft-graph-tests.js
 
 spec/secrets.*
+spec/*.js.map
+spec/*.js
+spec/*.d.ts
