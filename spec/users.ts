@@ -5,17 +5,17 @@ import {User} from '../microsoft-graph'
 
 declare const describe, it;
 
-describe('User entity tests', function() {
+describe('Users', function() {
   this.timeout(10*1000);
-  it('should have values for basic properties that match type definitions', function() {
+  it('Fetch the authenticated user and access entity properties', function() {
     return getClient().api("https://graph.microsoft.com/v1.0/me/").get().then((res) => {
         const user = res as User;
-        assert.isNotNull(user.displayName);
-        assert.isNotNull(user.mail);
-        assert.isNotNull(user.id);
+        assert.isDefined(user.displayName);
+        assert.isDefined(user.mail);
+        assert.isDefined(user.id);
         
-        assert.isNotNull(user.surname);
-        assert.isNotNull(user.userPrincipalName);
+        assert.isDefined(user.surname);
+        assert.isDefined(user.userPrincipalName);
         
         assert.isArray(user.businessPhones);
 
@@ -23,7 +23,7 @@ describe('User entity tests', function() {
       });
   });
 
-  it('should be able to modify officeLocation property value', function() {
+  it('Modify and verify officeLocation property', function() {
     const officeLocation = randomString();
 
     return getClient().api("https://graph.microsoft.com/v1.0/me/").patch({officeLocation}).then(() => {
@@ -36,7 +36,7 @@ describe('User entity tests', function() {
   });
 
 
-  it('should be able to modify givenName property value', function() {
+  it('Modify and verify givenName property', function() {
     const givenName = randomString();
 
     return getClient().api("https://graph.microsoft.com/v1.0/me/").patch({givenName}).then(() => {
@@ -48,12 +48,12 @@ describe('User entity tests', function() {
     });
   });
 
-  it('[collection] types should match user entity returned in collection', function() {
+  it('Fetch a list of users and access properties on a collection item', function() {
     return getClient().api("https://graph.microsoft.com/v1.0/users/").get().then((collection) => {
       const users:User[] = collection.value;
-      assert.isNotNull(users[0].displayName);
-      assert.isNotNull(users[0].id);
-      assert.isNotNull(users[0].mail);
+      assert.isDefined(users[0].displayName);
+      assert.isDefined(users[0].id);
+      assert.isDefined(users[0].mail);
     });
   })
 });

@@ -5,21 +5,21 @@ import {Group} from '../microsoft-graph'
 
 declare const describe, it;
 
-describe('Group entity tests', function() {
+describe('Groups', function() {
   this.timeout(10*1000);
-  it('should have values for basic properties that match type definitions', function() {
+  it('Fetch a list of groups and access properties on a collection item', function() {
     return getClient().api("https://graph.microsoft.com/v1.0/groups/").get().then((json) => {
-        const group = json as Group;
-        assert.isNotNull(group.displayName);
-        assert.isNotNull(group.mail);
-        assert.isNotNull(group.id);
+        const group = json.value[0] as Group;
+        assert.isDefined(group.displayName);
+        assert.isDefined(group.mail);
+        assert.isDefined(group.id);
 
         assert.isUndefined(group['invalidPropertyName']);
         return Promise.resolve();
       });
   });
 
-  it('should create a group and validate entity properties were set', function() {
+  it('Create a group and validate properties were set', function() {
     const group:Group = {
         displayName: "Sample test group",
         description: randomString(),
