@@ -66,7 +66,7 @@ request
     .post('https://graph.microsoft.com/v1.0/users/me/sendMail')
     .send({message: mail})
     .set('Authorization', 'Bearer ' + accessToken)
-    .end((err, res) => 
+    .end((err, res) => {
         console.log(res)
     })
 
