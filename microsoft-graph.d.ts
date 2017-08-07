@@ -256,6 +256,8 @@ export interface LicenseDetails extends Entity {
 
 export interface Group extends DirectoryObject {
 
+	    classification?: string
+
 	    /** An optional description for the group. */
 	    description?: string
 
@@ -316,6 +318,8 @@ export interface Group extends DirectoryObject {
 	    /** The owners of the group. The owners are a set of non-admin users who are allowed to modify this object. Limited to 10 owners. HTTP Methods: GET (supported for all groups), POST (supported for Office 365 groups, security groups and mail-enabled security groups), DELETE (supported for Office 365 groups and security groups). Nullable. */
 	    owners?: DirectoryObject[]
 
+	    settings?: GroupSetting[]
+
 	    /** The collection of open extensions defined for the group. Read-only. Nullable. */
 	    extensions?: Extension[]
 
@@ -337,6 +341,7 @@ export interface Group extends DirectoryObject {
 	    /** The group's profile photo */
 	    photo?: ProfilePhoto
 
+	    /** The profile photos owned by the group. Read-only. Nullable. */
 	    photos?: ProfilePhoto[]
 
 	    /** The list of users or groups that are allowed to create post's or calendar events in this group. If this list is non-empty then only users or groups listed here are allowed to post. */
@@ -353,10 +358,21 @@ export interface Group extends DirectoryObject {
 	    /** The list of SharePoint sites in this group. Access the default site with /sites/root. */
 	    sites?: Site[]
 
+	    /** Entry-point to Planner resource that might exist for a Unified Group. */
 	    planner?: PlannerGroup
 
 	    /** Read-only. */
 	    onenote?: Onenote
+
+}
+
+export interface GroupSetting extends Entity {
+
+	    displayName?: string
+
+	    templateId?: string
+
+	    values?: SettingValue[]
 
 }
 
@@ -401,6 +417,14 @@ export interface Calendar extends Entity {
 
 	    /** Identifies the version of the calendar object. Every time the calendar is changed, ChangeKey  changes as well. This allows Exchange to apply changes to the correct version of the object. Read-only. */
 	    changeKey?: string
+
+	    canShare?: boolean
+
+	    canViewPrivateItems?: boolean
+
+	    canEdit?: boolean
+
+	    owner?: EmailAddress
 
 	    /** The events in the calendar. Navigation property. Read-only. */
 	    events?: Event[]
@@ -647,6 +671,8 @@ export interface Site extends BaseItem {
 	    /** The collection of the sub-sites under this site. */
 	    sites?: Site[]
 
+	    onenote?: Onenote
+
 }
 
 export interface PlannerGroup extends Entity {
@@ -775,6 +801,7 @@ export interface User extends DirectoryObject {
 	    /** The city in which the user is located. Supports $filter. */
 	    city?: string
 
+	    /** The company name which the user is associated. */
 	    companyName?: string
 
 	    /** The country/region in which the user is located; for example, “US” or “UK”. Supports $filter. */
@@ -969,7 +996,7 @@ export interface Message extends OutlookItem {
 	    /** The date and time the message was sent. */
 	    sentDateTime?: string
 
-	    /** Indicates whether the message has attachments. */
+	    /** Indicates whether the message has attachments. This property doesn't include inline attachments, so if a message contains only inline attachments, this property is false. To verify the existence of inline attachments, parse the body property to look for a src attribute, such as <IMG src="cid:image001.jpg@01D26CD8.6C05F070">. */
 	    hasAttachments?: boolean
 
 	    /** The message ID in the format specified by RFC2822. */
@@ -1247,6 +1274,16 @@ export interface PlannerUser extends Entity {
 
 }
 
+export interface GroupSettingTemplate extends DirectoryObject {
+
+	    displayName?: string
+
+	    description?: string
+
+	    values?: SettingTemplateValue[]
+
+}
+
 export interface SchemaExtension extends Entity {
 
 	    /** Description for the schema extension. */
@@ -1514,9 +1551,6 @@ export interface Workbook extends Entity {
 }
 
 export interface SharedDriveItem extends BaseItem {
-
-	    /** The display name of the shared item. */
-	    name?: string
 
 	    /** Information about the owner of the shared item being referenced. */
 	    owner?: IdentitySet
@@ -2444,6 +2478,24 @@ export interface OnenoteOperation extends Operation {
 
 	    /** The operation percent complete if the operation is still in running status */
 	    percentComplete?: string
+
+}
+export interface SettingValue {
+
+	    name?: string
+
+	    value?: string
+
+}
+export interface SettingTemplateValue {
+
+	    name?: string
+
+	    type?: string
+
+	    defaultValue?: string
+
+	    description?: string
 
 }
 export interface AlternativeSecurityId {
