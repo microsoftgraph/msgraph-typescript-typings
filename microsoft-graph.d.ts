@@ -318,6 +318,7 @@ export interface Group extends DirectoryObject {
 	    /** The owners of the group. The owners are a set of non-admin users who are allowed to modify this object. Limited to 10 owners. HTTP Methods: GET (supported for all groups), POST (supported for Office 365 groups, security groups and mail-enabled security groups), DELETE (supported for Office 365 groups and security groups). Nullable. */
 	    owners?: DirectoryObject[]
 
+	    /** Read-only. Nullable. */
 	    settings?: GroupSetting[]
 
 	    /** The collection of open extensions defined for the group. Read-only. Nullable. */
@@ -368,10 +369,13 @@ export interface Group extends DirectoryObject {
 
 export interface GroupSetting extends Entity {
 
+	    /** Display name of this group of settings, which comes from the associated template. */
 	    displayName?: string
 
+	    /** Unique identifier for the template used to create this group of settings. Read-only. */
 	    templateId?: string
 
+	    /** Collection of name value pairs. Must contain and set all the settings defined in the template. */
 	    values?: SettingValue[]
 
 }
@@ -415,15 +419,19 @@ export interface Calendar extends Entity {
 	    /** Specifies the color theme to distinguish the calendar from other calendars in a UI. The property values are: LightBlue=0, LightGreen=1, LightOrange=2, LightGray=3, LightYellow=4, LightTeal=5, LightPink=6, LightBrown=7, LightRed=8, MaxColor=9, Auto=-1 */
 	    color?: CalendarColor
 
-	    /** Identifies the version of the calendar object. Every time the calendar is changed, ChangeKey  changes as well. This allows Exchange to apply changes to the correct version of the object. Read-only. */
+	    /** Identifies the version of the calendar object. Every time the calendar is changed, changeKey changes as well. This allows Exchange to apply changes to the correct version of the object. Read-only. */
 	    changeKey?: string
 
+	    /** True if the user has the permission to share the calendar, false otherwise. Only the user who created the calendar can share it. */
 	    canShare?: boolean
 
+	    /** True if the user can read calendar items that have been marked private, false otherwise. */
 	    canViewPrivateItems?: boolean
 
+	    /** True if the user can write to the calendar, false otherwise. This property is true for the user who created the calendar. This property is also true for a user who has been shared a calendar and granted write access. */
 	    canEdit?: boolean
 
+	    /** If set, this represents the user who created or added the calendar. For a calendar that the user created or added, the owner property is set to the user. For a calendar shared with the user, the owner property is set to the person who shared that calendar with the user. */
 	    owner?: EmailAddress
 
 	    /** The events in the calendar. Navigation property. Read-only. */
@@ -671,6 +679,7 @@ export interface Site extends BaseItem {
 	    /** The collection of the sub-sites under this site. */
 	    sites?: Site[]
 
+	    /** Calls the OneNote service for notebook related operations. */
 	    onenote?: Onenote
 
 }
@@ -1276,10 +1285,13 @@ export interface PlannerUser extends Entity {
 
 export interface GroupSettingTemplate extends DirectoryObject {
 
+	    /** Display name of the template. */
 	    displayName?: string
 
+	    /** Description of the template. */
 	    description?: string
 
+	    /** Collection of settingTemplateValues that list the set of available settings, defaults and types that make up this template. */
 	    values?: SettingTemplateValue[]
 
 }
@@ -2219,7 +2231,7 @@ export interface PlannerTask extends Entity {
 
 export interface PlannerPlan extends Entity {
 
-	    /** Read-only. The user that created the Plan */
+	    /** Read-only. The user who created the plan. */
 	    createdBy?: IdentitySet
 
 	    /** Read-only. Date and time at which the plan is created. The Timestamp type represents date and time information using ISO 8601 format and is always in UTC time. For example, midnight UTC on Jan 1, 2014 would look like this: '2014-01-01T00:00:00Z' */
@@ -2480,24 +2492,6 @@ export interface OnenoteOperation extends Operation {
 	    percentComplete?: string
 
 }
-export interface SettingValue {
-
-	    name?: string
-
-	    value?: string
-
-}
-export interface SettingTemplateValue {
-
-	    name?: string
-
-	    type?: string
-
-	    defaultValue?: string
-
-	    description?: string
-
-}
 export interface AlternativeSecurityId {
 
 	    type?: number
@@ -2527,9 +2521,10 @@ export interface ServicePlanInfo {
 	    /** The name of the service plan. */
 	    servicePlanName?: string
 
-	    /** The provisioning status of the service plan. */
+	    /** The provisioning status of the service plan. Possible values:"Success" - Service is fully provisioned."Disabled" - Service has been disabled."PendingInput" - Service is not yet provisioned; awaiting service confirmation."PendingActivation" - Service is provisioned but requires explicit activation by administrator (for example, Intune_O365 service plan)"PendingProvisioning" - Microsoft has added a new service to the product SKU and it has not been activated in the tenant, yet. */
 	    provisioningStatus?: string
 
+	    /** The object the service plan can be assigned to. Possible values:"User" - service plan can be assigned to individual users."Company" - service plan can be assigned to the entire tenant. */
 	    appliesTo?: string
 
 }
@@ -2647,6 +2642,30 @@ export interface LocaleInfo {
 
 	    /** A name representing the user's locale in natural language, for example, "English (United States)". */
 	    displayName?: string
+
+}
+export interface SettingValue {
+
+	    /** Name of the setting (as defined by the groupSettingTemplate). */
+	    name?: string
+
+	    /** Value of the setting. */
+	    value?: string
+
+}
+export interface SettingTemplateValue {
+
+	    /** Name of the setting. */
+	    name?: string
+
+	    /** Type of the setting. */
+	    type?: string
+
+	    /** Default value for the setting. */
+	    defaultValue?: string
+
+	    /** Description of the setting. */
+	    description?: string
 
 }
 export interface ComplexExtensionValue {
