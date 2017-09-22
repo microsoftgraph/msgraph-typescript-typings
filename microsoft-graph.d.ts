@@ -26,6 +26,8 @@ export type WeekIndex = "first" | "second" | "third" | "fourth" | "last"
 export type RecurrenceRangeType = "endDate" | "noEnd" | "numbered"
 export type EventType = "singleInstance" | "occurrence" | "exception" | "seriesMaster"
 export type MeetingMessageType = "none" | "meetingRequest" | "meetingCancelled" | "meetingAccepted" | "meetingTenativelyAccepted" | "meetingDeclined"
+export type PhoneType = "home" | "business" | "mobile" | "other" | "assistant" | "homeFax" | "businessFax" | "otherFax" | "pager" | "radio"
+export type WebsiteType = "other" | "home" | "work" | "blog" | "profile"
 export type PlannerPreviewType = "automatic" | "noPreview" | "checklist" | "description" | "reference"
 export type OperationStatus = "NotStarted" | "Running" | "Completed" | "Failed"
 export type OnenotePatchInsertPosition = "After" | "Before"
@@ -645,8 +647,12 @@ export interface Drive extends BaseItem {
 
 	    sharePointIds?: SharepointIds
 
+	    system?: SystemFacet
+
 	    /** All items contained in the drive. Read-only. Nullable. */
 	    items?: DriveItem[]
+
+	    list?: List
 
 	    /** The root folder of the drive. Read-only. */
 	    root?: DriveItem
@@ -670,11 +676,20 @@ export interface Site extends BaseItem {
 	    /** Provides details about the site's site collection. Available only on the root site. Read-only. */
 	    siteCollection?: SiteCollection
 
+	    columns?: ColumnDefinition[]
+
+	    contentTypes?: ContentType[]
+
 	    /** The default drive (document library) for this site. */
 	    drive?: Drive
 
 	    /** The collection of drives (document libraries) under this site. */
 	    drives?: Drive[]
+
+	    /** Used to address any item contained in this site. This collection cannot be enumerated. */
+	    items?: BaseItem[]
+
+	    lists?: List[]
 
 	    /** The collection of the sub-sites under this site. */
 	    sites?: Site[]
@@ -970,6 +985,8 @@ export interface User extends DirectoryObject {
 	    /** The user's events. Default is to show Events under the Default Calendar. Read-only. Nullable. */
 	    events?: Event[]
 
+	    people?: Person[]
+
 	    /** The user's contacts. Read-only. Nullable. */
 	    contacts?: Contact[]
 
@@ -1126,6 +1143,66 @@ export interface CalendarGroup extends Entity {
 
 	    /** The calendars in the calendar group. Navigation property. Read-only. Nullable. */
 	    calendars?: Calendar[]
+
+}
+
+export interface Person extends Entity {
+
+	    /** The person's display name. */
+	    displayName?: string
+
+	    /** The person's given name. */
+	    givenName?: string
+
+	    /** The person's surname. */
+	    surname?: string
+
+	    /** The person's birthday. */
+	    birthday?: string
+
+	    /** Free-form notes that the the user has taken about this person. */
+	    personNotes?: string
+
+	    /** true if the user has flagged this person as a favorite. */
+	    isFavorite?: boolean
+
+	    /** The person's email addresses. */
+	    scoredEmailAddresses?: ScoredEmailAddress[]
+
+	    /** The person's phone numbers. */
+	    phones?: Phone[]
+
+	    /** The person's addresses. */
+	    postalAddresses?: Location[]
+
+	    /** The person's websites. */
+	    websites?: Website[]
+
+	    /** The person's job title. */
+	    jobTitle?: string
+
+	    /** The name of the person's company. */
+	    companyName?: string
+
+	    /** The phonetic Japanese name of the person's company. */
+	    yomiCompany?: string
+
+	    /** The person's department. */
+	    department?: string
+
+	    /** The location of the person's office. */
+	    officeLocation?: string
+
+	    /** The person's profession. */
+	    profession?: string
+
+	    /** The type of person. */
+	    personType?: PersonType
+
+	    /** The user principal name (UPN) of the person. The UPN is an Internet-style login name for the person based on the Internet standard RFC 822. By convention, this should map to the person's email name. The general format is alias@domain. */
+	    userPrincipalName?: string
+
+	    imAddress?: string
 
 }
 
@@ -1437,6 +1514,78 @@ export interface InferenceClassificationOverride extends Entity {
 
 }
 
+export interface ColumnDefinition extends Entity {
+
+	    boolean?: BooleanColumn
+
+	    calculated?: CalculatedColumn
+
+	    choice?: ChoiceColumn
+
+	    columnGroup?: string
+
+	    currency?: CurrencyColumn
+
+	    dateTime?: DateTimeColumn
+
+	    defaultValue?: DefaultColumnValue
+
+	    description?: string
+
+	    displayName?: string
+
+	    enforceUniqueValues?: boolean
+
+	    hidden?: boolean
+
+	    indexed?: boolean
+
+	    lookup?: LookupColumn
+
+	    name?: string
+
+	    number?: NumberColumn
+
+	    personOrGroup?: PersonOrGroupColumn
+
+	    readOnly?: boolean
+
+	    required?: boolean
+
+	    text?: TextColumn
+
+}
+
+export interface ColumnLink extends Entity {
+
+	    name?: string
+
+}
+
+export interface ContentType extends Entity {
+
+	    description?: string
+
+	    group?: string
+
+	    hidden?: boolean
+
+	    inheritedFrom?: ItemReference
+
+	    name?: string
+
+	    order?: ContentTypeOrder
+
+	    parentId?: string
+
+	    readOnly?: boolean
+
+	    sealed?: boolean
+
+	    columnLinks?: ColumnLink[]
+
+}
+
 export interface DriveItem extends BaseItem {
 
 	    /** Audio metadata, if the item is an audio file. Read-only. */
@@ -1501,6 +1650,8 @@ export interface DriveItem extends BaseItem {
 	    /** Collection containing Item objects for the immediate children of Item. Only items representing folders have children. Read-only. Nullable. */
 	    children?: DriveItem[]
 
+	    listItem?: ListItem
+
 	    /** The set of permissions for the item. Read-only. Nullable. */
 	    permissions?: Permission[]
 
@@ -1508,6 +1659,38 @@ export interface DriveItem extends BaseItem {
 	    thumbnails?: ThumbnailSet[]
 
 	    workbook?: Workbook
+
+}
+
+export interface List extends BaseItem {
+
+	    displayName?: string
+
+	    list?: ListInfo
+
+	    sharepointIds?: SharepointIds
+
+	    system?: SystemFacet
+
+	    columns?: ColumnDefinition[]
+
+	    contentTypes?: ContentType[]
+
+	    drive?: Drive
+
+	    items?: ListItem[]
+
+}
+
+export interface ListItem extends BaseItem {
+
+	    contentType?: ContentTypeInfo
+
+	    sharepointIds?: SharepointIds
+
+	    driveItem?: DriveItem
+
+	    fields?: FieldValueSet
 
 }
 
@@ -1562,6 +1745,10 @@ export interface Workbook extends Entity {
 
 }
 
+export interface FieldValueSet extends Entity {
+
+}
+
 export interface SharedDriveItem extends BaseItem {
 
 	    /** Information about the owner of the shared item being referenced. */
@@ -1573,19 +1760,15 @@ export interface SharedDriveItem extends BaseItem {
 	    /** A collection of shared driveItem resources. This collection cannot be enumerated, but items can be accessed by their unique ID. */
 	    items?: DriveItem[]
 
+	    list?: List
+
+	    listItem?: ListItem
+
 	    /** The top level shared driveItem. If a single file is shared, this item is the file. If a folder is shared, this item will be the folder. You can use the item's facets to determine which case applies. */
 	    root?: DriveItem
 
 	    /** A site resource that contains the item that was shared. */
 	    site?: Site
-
-}
-
-export interface SharePoint extends Entity {
-
-}
-
-export interface List extends Entity {
 
 }
 
@@ -2889,6 +3072,47 @@ export interface Attendee extends AttendeeBase {
 	    status?: ResponseStatus
 
 }
+export interface ScoredEmailAddress {
+
+	    /** The email address. */
+	    address?: string
+
+	    /** The relevance score of the email address. A relevance score is used as a sort key, in relation to the other returned results. A higher relevance score value corresponds to a more relevant result. Relevance is determined by the user’s communication and collaboration patterns and business relationships. */
+	    relevanceScore?: number
+
+}
+export interface Phone {
+
+	    /** The type of phone number. Possible values are: home, business, mobile, other, assistant, homeFax, businessFax, otherFax, pager, radio. */
+	    type?: PhoneType
+
+	    /** The phone number. */
+	    number?: string
+
+	    region?: string
+
+	    language?: string
+
+}
+export interface Website {
+
+	    /** Possible values are: other, home, work, blog, profile. */
+	    type?: WebsiteType
+
+	    /** The URL of the website. */
+	    address?: string
+
+	    /** The display name of the web site. */
+	    displayName?: string
+
+}
+export interface PersonType {
+
+	    class?: string
+
+	    subclass?: string
+
+}
 export interface IdentitySet {
 
 	    /** Optional. The application associated with this action. */
@@ -2914,6 +3138,8 @@ export interface ItemReference {
 
 	    /** Unique identifier of the drive instance that contains the item. Read-only. */
 	    driveId?: string
+
+	    driveType?: string
 
 	    /** Unique identifier of the item in the drive. Read-only. */
 	    id?: string
@@ -2952,6 +3178,99 @@ export interface SharepointIds {
 	    webId?: string
 
 }
+export interface BooleanColumn {
+
+}
+export interface CalculatedColumn {
+
+	    format?: string
+
+	    formula?: string
+
+	    outputType?: string
+
+}
+export interface ChoiceColumn {
+
+	    allowTextEntry?: boolean
+
+	    choices?: string[]
+
+	    displayAs?: string
+
+}
+export interface CurrencyColumn {
+
+	    locale?: string
+
+}
+export interface DateTimeColumn {
+
+	    displayAs?: string
+
+	    format?: string
+
+}
+export interface DefaultColumnValue {
+
+	    formula?: string
+
+	    value?: string
+
+}
+export interface LookupColumn {
+
+	    allowMultipleValues?: boolean
+
+	    allowUnlimitedLength?: boolean
+
+	    columnName?: string
+
+	    listId?: string
+
+	    primaryLookupColumnId?: string
+
+}
+export interface NumberColumn {
+
+	    decimalPlaces?: string
+
+	    displayAs?: string
+
+	    maximum?: number
+
+	    minimum?: number
+
+}
+export interface PersonOrGroupColumn {
+
+	    allowMultipleSelection?: boolean
+
+	    displayAs?: string
+
+	    chooseFromType?: string
+
+}
+export interface TextColumn {
+
+	    allowMultipleLines?: boolean
+
+	    appendChangesToExistingText?: boolean
+
+	    linesForEditing?: number
+
+	    maxLength?: number
+
+	    textType?: string
+
+}
+export interface ContentTypeOrder {
+
+	    default?: boolean
+
+	    position?: number
+
+}
 export interface Quota {
 
 	    /** Total space consumed by files in the recycle bin, in bytes. Read-only. */
@@ -2968,6 +3287,9 @@ export interface Quota {
 
 	    /** Total space used, in bytes. Read-only. */
 	    used?: number
+
+}
+export interface SystemFacet {
 
 }
 export interface Audio {
@@ -3065,6 +3387,17 @@ export interface Folder {
 
 	    /** Number of children contained immediately within this container. */
 	    childCount?: number
+
+	    view?: FolderView
+
+}
+export interface FolderView {
+
+	    sortBy?: string
+
+	    sortOrder?: string
+
+	    viewType?: string
 
 }
 export interface Image {
@@ -3206,17 +3539,43 @@ export interface SearchResult {
 }
 export interface Video {
 
+	    audioBitsPerSample?: number
+
+	    audioChannels?: number
+
+	    audioFormat?: string
+
+	    audioSamplesPerSecond?: number
+
 	    /** Bit rate of the video in bits per second. */
 	    bitrate?: number
 
 	    /** Duration of the file in milliseconds. */
 	    duration?: number
 
+	    fourCC?: string
+
+	    frameRate?: number
+
 	    /** Height of the video, in pixels. */
 	    height?: number
 
 	    /** Width of the video, in pixels. */
 	    width?: number
+
+}
+export interface ListInfo {
+
+	    contentTypesEnabled?: boolean
+
+	    hidden?: boolean
+
+	    template?: string
+
+}
+export interface ContentTypeInfo {
+
+	    id?: string
 
 }
 export interface SharingInvitation {
@@ -3568,17 +3927,22 @@ export interface RecentNotebook {
 
 	    displayName?: string
 
+	    /** The date and time when the notebook was last modified. The timestamp represents date and time information using ISO 8601 format and is always in UTC time. For example, midnight UTC on Jan 1, 2014 would look like this: '2014-01-01T00:00:00Z'. Read-only. */
 	    lastAccessedTime?: string
 
+	    /** Links for opening the notebook. The oneNoteClientURL link opens the notebook in the OneNote client, if it's installed. The oneNoteWebURL link opens the notebook in OneNote Online. */
 	    links?: RecentNotebookLinks
 
+	    /** The backend store where the Notebook resides, either OneDriveForBusiness or OneDrive. */
 	    sourceService?: OnenoteSourceService
 
 }
 export interface RecentNotebookLinks {
 
+	    /** Opens the notebook in the OneNote native client if it's installed. */
 	    oneNoteClientUrl?: ExternalLink
 
+	    /** Opens the notebook in OneNote Online. */
 	    oneNoteWebUrl?: ExternalLink
 
 }

@@ -1,7 +1,7 @@
 {
   "name": "@microsoft/microsoft-graph-types",
   "description": "Types for Microsoft Graph objects",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "types": "microsoft-graph.d.ts",
   "scripts": {
     "test": "tsc && mocha spec/"
