@@ -34,6 +34,113 @@ export type OnenotePatchInsertPosition = "After" | "Before"
 export type OnenotePatchActionType = "Replace" | "Append" | "Delete" | "Insert" | "Prepend"
 export type OnenoteSourceService = "Unknown" | "OneDrive" | "OneDriveForBusiness" | "OnPremOneDriveForBusiness"
 export type OnenoteUserRole = "Owner" | "Contributor" | "Reader" | "None"
+export type EducationUserRole = "student" | "teacher" | "none" | "unknownFutureValue"
+export type EducationExternalSource = "sis" | "manual" | "unknownFutureValue"
+export type EducationGender = "female" | "male" | "other" | "unknownFutureValue"
+export type EducationContactRelationship = "parent" | "relative" | "aide" | "doctor" | "guardian" | "child" | "other" | "unknownFutureValue"
+export type InstallIntent = "available" | "required" | "uninstall" | "availableWithoutEnrollment"
+export type MobileAppPublishingState = "notPublished" | "processing" | "published"
+export type WindowsArchitecture = "none" | "x86" | "x64" | "arm" | "neutral"
+export type ManagedAppAvailability = "global" | "lineOfBusiness"
+export type MobileAppContentFileUploadState = "success" | "transientError" | "error" | "unknown" | "azureStorageUriRequestSuccess" | "azureStorageUriRequestPending" | "azureStorageUriRequestFailed" | "azureStorageUriRequestTimedOut" | "azureStorageUriRenewalSuccess" | "azureStorageUriRenewalPending" | "azureStorageUriRenewalFailed" | "azureStorageUriRenewalTimedOut" | "commitFileSuccess" | "commitFilePending" | "commitFileFailed" | "commitFileTimedOut"
+export type WindowsDeviceType = "none" | "desktop" | "mobile" | "holographic" | "team"
+export type MicrosoftStoreForBusinessLicenseType = "offline" | "online"
+export type VppTokenAccountType = "business" | "education"
+export type ComplianceStatus = "unknown" | "notApplicable" | "compliant" | "remediated" | "nonCompliant" | "error" | "conflict"
+export type ActionState = "none" | "pending" | "canceled" | "active" | "done" | "failed" | "notSupported"
+export type ComplianceState = "unknown" | "compliant" | "noncompliant" | "conflict" | "error" | "inGracePeriod" | "configManager"
+export type ManagementAgentType = "eas" | "mdm" | "easMdm" | "intuneClient" | "easIntuneClient" | "configurationManagerClient" | "configurationManagerClientMdm" | "configurationManagerClientMdmEas" | "unknown" | "jamf" | "googleCloudDevicePolicyController"
+export type DeviceEnrollmentType = "unknown" | "userEnrollment" | "deviceEnrollmentManager" | "appleBulkWithUser" | "appleBulkWithoutUser" | "windowsAzureADJoin" | "windowsBulkUserless" | "windowsAutoEnrollment" | "windowsBulkAzureDomainJoin" | "windowsCoManagement"
+export type DeviceRegistrationState = "notRegistered" | "registered" | "revoked" | "keyConflict" | "approvalPending" | "certificateReset" | "notRegisteredPendingEnrollment" | "unknown"
+export type DeviceManagementExchangeAccessState = "none" | "unknown" | "allowed" | "blocked" | "quarantined"
+export type DeviceManagementExchangeAccessStateReason = "none" | "unknown" | "exchangeGlobalRule" | "exchangeIndividualRule" | "exchangeDeviceRule" | "exchangeUpgrade" | "exchangeMailboxPolicy" | "other" | "compliant" | "notCompliant" | "notEnrolled" | "unknownLocation" | "mfaRequired" | "azureADBlockDueToAccessPolicy" | "compromisedPassword" | "deviceNotKnownWithManagedApp"
+export type ManagedDevicePartnerReportedHealthState = "unknown" | "activated" | "deactivated" | "secured" | "lowSeverity" | "mediumSeverity" | "highSeverity" | "unresponsive"
+export type DeviceManagementSubscriptionState = "pending" | "active" | "warning" | "disabled" | "deleted" | "blocked" | "lockedOut"
+export type AppListType = "none" | "appsInListCompliant" | "appsNotInListCompliant"
+export type AndroidRequiredPasswordType = "deviceDefault" | "alphabetic" | "alphanumeric" | "alphanumericWithSymbols" | "lowSecurityBiometric" | "numeric" | "numericComplex" | "any"
+export type WebBrowserCookieSettings = "browserDefault" | "blockAlways" | "allowCurrentWebSite" | "allowFromWebsitesVisited" | "allowAlways"
+export type RatingAustraliaMoviesType = "allAllowed" | "allBlocked" | "general" | "parentalGuidance" | "mature" | "agesAbove15" | "agesAbove18"
+export type RatingAustraliaTelevisionType = "allAllowed" | "allBlocked" | "preschoolers" | "children" | "general" | "parentalGuidance" | "mature" | "agesAbove15" | "agesAbove15AdultViolence"
+export type RatingCanadaMoviesType = "allAllowed" | "allBlocked" | "general" | "parentalGuidance" | "agesAbove14" | "agesAbove18" | "restricted"
+export type RatingCanadaTelevisionType = "allAllowed" | "allBlocked" | "children" | "childrenAbove8" | "general" | "parentalGuidance" | "agesAbove14" | "agesAbove18"
+export type RatingFranceMoviesType = "allAllowed" | "allBlocked" | "agesAbove10" | "agesAbove12" | "agesAbove16" | "agesAbove18"
+export type RatingFranceTelevisionType = "allAllowed" | "allBlocked" | "agesAbove10" | "agesAbove12" | "agesAbove16" | "agesAbove18"
+export type RatingGermanyMoviesType = "allAllowed" | "allBlocked" | "general" | "agesAbove6" | "agesAbove12" | "agesAbove16" | "adults"
+export type RatingGermanyTelevisionType = "allAllowed" | "allBlocked" | "general" | "agesAbove6" | "agesAbove12" | "agesAbove16" | "adults"
+export type RatingIrelandMoviesType = "allAllowed" | "allBlocked" | "general" | "parentalGuidance" | "agesAbove12" | "agesAbove15" | "agesAbove16" | "adults"
+export type RatingIrelandTelevisionType = "allAllowed" | "allBlocked" | "general" | "children" | "youngAdults" | "parentalSupervision" | "mature"
+export type RatingJapanMoviesType = "allAllowed" | "allBlocked" | "general" | "parentalGuidance" | "agesAbove15" | "agesAbove18"
+export type RatingJapanTelevisionType = "allAllowed" | "allBlocked" | "explicitAllowed"
+export type RatingNewZealandMoviesType = "allAllowed" | "allBlocked" | "general" | "parentalGuidance" | "mature" | "agesAbove13" | "agesAbove15" | "agesAbove16" | "agesAbove18" | "restricted" | "agesAbove16Restricted"
+export type RatingNewZealandTelevisionType = "allAllowed" | "allBlocked" | "general" | "parentalGuidance" | "adults"
+export type RatingUnitedKingdomMoviesType = "allAllowed" | "allBlocked" | "general" | "universalChildren" | "parentalGuidance" | "agesAbove12Video" | "agesAbove12Cinema" | "agesAbove15" | "adults"
+export type RatingUnitedKingdomTelevisionType = "allAllowed" | "allBlocked" | "caution"
+export type RatingUnitedStatesMoviesType = "allAllowed" | "allBlocked" | "general" | "parentalGuidance" | "parentalGuidance13" | "restricted" | "adults"
+export type RatingUnitedStatesTelevisionType = "allAllowed" | "allBlocked" | "childrenAll" | "childrenAbove7" | "general" | "parentalGuidance" | "childrenAbove14" | "adults"
+export type RatingAppsType = "allAllowed" | "allBlocked" | "agesAbove4" | "agesAbove9" | "agesAbove12" | "agesAbove17"
+export type RequiredPasswordType = "deviceDefault" | "alphanumeric" | "numeric"
+export type IosNotificationAlertType = "deviceDefault" | "banner" | "modal" | "none"
+export type FirewallPreSharedKeyEncodingMethodType = "deviceDefault" | "none" | "utF8"
+export type FirewallCertificateRevocationListCheckMethodType = "deviceDefault" | "none" | "attempt" | "require"
+export type FirewallPacketQueueingMethodType = "deviceDefault" | "disabled" | "queueInbound" | "queueOutbound" | "queueBoth"
+export type StateManagementSetting = "notConfigured" | "blocked" | "allowed"
+export type AppLockerApplicationControlType = "notConfigured" | "enforceComponentsAndStoreApps" | "auditComponentsAndStoreApps" | "enforceComponentsStoreAppsAndSmartlocker" | "auditComponentsStoreAppsAndSmartlocker"
+export type ApplicationGuardBlockFileTransferType = "notConfigured" | "blockImageAndTextFile" | "blockImageFile" | "blockNone" | "blockTextFile"
+export type ApplicationGuardBlockClipboardSharingType = "notConfigured" | "blockBoth" | "blockHostToContainer" | "blockContainerToHost" | "blockNone"
+export type BitLockerEncryptionMethod = "aesCbc128" | "aesCbc256" | "xtsAes128" | "xtsAes256"
+export type DiagnosticDataSubmissionMode = "userDefined" | "none" | "basic" | "enhanced" | "full"
+export type EdgeCookiePolicy = "userDefined" | "allow" | "blockThirdParty" | "blockAll"
+export type DefenderThreatAction = "deviceDefault" | "clean" | "quarantine" | "remove" | "allow" | "userDefined" | "block"
+export type WeeklySchedule = "userDefined" | "everyday" | "sunday" | "monday" | "tuesday" | "wednesday" | "thursday" | "friday" | "saturday"
+export type DefenderMonitorFileActivity = "userDefined" | "disable" | "monitorAllFiles" | "monitorIncomingFilesOnly" | "monitorOutgoingFilesOnly"
+export type DefenderPromptForSampleSubmission = "userDefined" | "alwaysPrompt" | "promptBeforeSendingPersonalData" | "neverSendData" | "sendAllDataWithoutPrompting"
+export type DefenderScanType = "userDefined" | "disabled" | "quick" | "full"
+export type DefenderCloudBlockLevelType = "notConfigured" | "high" | "highPlus" | "zeroTolerance"
+export type WindowsStartMenuAppListVisibilityType = "userDefined" | "collapse" | "remove" | "disableSettingsApp"
+export type WindowsStartMenuModeType = "userDefined" | "fullScreen" | "nonFullScreen"
+export type VisibilitySetting = "notConfigured" | "hide" | "show"
+export type WindowsSpotlightEnablementSettings = "notConfigured" | "disabled" | "enabled"
+export type AutomaticUpdateMode = "userDefined" | "notifyDownload" | "autoInstallAtMaintenanceTime" | "autoInstallAndRebootAtMaintenanceTime" | "autoInstallAndRebootAtScheduledTime" | "autoInstallAndRebootWithoutEndUserControl"
+export type SafeSearchFilterType = "userDefined" | "strict" | "moderate"
+export type EdgeSearchEngineType = "default" | "bing"
+export type PrereleaseFeatures = "userDefined" | "settingsOnly" | "settingsAndExperimentations" | "notAllowed"
+export type SharedPCAccountDeletionPolicyType = "immediate" | "diskSpaceThreshold" | "diskSpaceThresholdOrInactiveThreshold"
+export type SharedPCAllowedAccountType = "guest" | "domain"
+export type WindowsDeliveryOptimizationMode = "userDefined" | "httpOnly" | "httpWithPeeringNat" | "httpWithPeeringPrivateGroup" | "httpWithInternetPeering" | "simpleDownload" | "bypassMode"
+export type WindowsUpdateType = "userDefined" | "all" | "businessReadyOnly"
+export type InternetSiteSecurityLevel = "userDefined" | "medium" | "mediumHigh" | "high"
+export type SiteSecurityLevel = "userDefined" | "low" | "mediumLow" | "medium" | "mediumHigh" | "high"
+export type WindowsUserAccountControlSettings = "userDefined" | "alwaysNotify" | "notifyOnAppChanges" | "notifyOnAppChangesWithoutDimming" | "neverNotify"
+export type MiracastChannel = "userDefined" | "one" | "two" | "three" | "four" | "five" | "six" | "seven" | "eight" | "nine" | "ten" | "eleven" | "thirtySix" | "forty" | "fortyFour" | "fortyEight" | "oneHundredFortyNine" | "oneHundredFiftyThree" | "oneHundredFiftySeven" | "oneHundredSixtyOne" | "oneHundredSixtyFive"
+export type WelcomeScreenMeetingInformation = "userDefined" | "showOrganizerAndTimeOnly" | "showOrganizerAndTimeAndSubject"
+export type EditionUpgradeLicenseType = "productKey" | "licenseFile"
+export type Windows10EditionType = "windows10Enterprise" | "windows10EnterpriseN" | "windows10Education" | "windows10EducationN" | "windows10MobileEnterprise" | "windows10HolographicEnterprise" | "windows10Professional" | "windows10ProfessionalN" | "windows10ProfessionalEducation" | "windows10ProfessionalEducationN" | "windows10ProfessionalWorkstation" | "windows10ProfessionalWorkstationN"
+export type DeviceComplianceActionType = "noAction" | "notification" | "block" | "retire" | "wipe" | "removeResourceAccessProfiles"
+export type DeviceThreatProtectionLevel = "unavailable" | "secured" | "low" | "medium" | "high" | "notSet"
+export type PolicyPlatformType = "android" | "iOS" | "macOS" | "windowsPhone81" | "windows81AndLater" | "windows10AndLater" | "all"
+export type IosUpdatesInstallStatus = "success" | "available" | "idle" | "downloading" | "downloadFailed" | "downloadRequiresComputer" | "downloadInsufficientSpace" | "downloadInsufficientPower" | "downloadInsufficientNetwork" | "installing" | "installInsufficientSpace" | "installInsufficientPower" | "installPhoneCallInProgress" | "installFailed" | "notSupportedOperation" | "sharedDeviceUserLoggedInError"
+export type DeviceManagementExchangeConnectorSyncType = "fullSync" | "deltaSync"
+export type MdmAuthority = "unknown" | "intune" | "sccm" | "office365"
+export type WindowsHelloForBusinessPinUsage = "allowed" | "required" | "disallowed"
+export type Enablement = "notConfigured" | "enabled" | "disabled"
+export type DeviceManagementExchangeConnectorStatus = "none" | "connectionPending" | "connected" | "disconnected"
+export type DeviceManagementExchangeConnectorType = "onPremises" | "hosted" | "serviceToService" | "dedicated"
+export type MobileThreatPartnerTenantState = "unavailable" | "available" | "enabled" | "unresponsive"
+export type DeviceManagementPartnerTenantState = "unknown" | "unavailable" | "enabled" | "terminated" | "rejected" | "unresponsive"
+export type DeviceManagementPartnerAppType = "unknown" | "singleTenantApp" | "multiTenantApp"
+export type ManagedAppDataTransferLevel = "allApps" | "managedApps" | "none"
+export type ManagedAppClipboardSharingLevel = "allApps" | "managedAppsWithPasteIn" | "managedApps" | "blocked"
+export type ManagedAppPinCharacterSet = "numeric" | "alphanumericAndSymbol"
+export type ManagedAppDataStorageLocation = "oneDriveForBusiness" | "sharePoint" | "localStorage"
+export type ManagedAppDataEncryptionType = "useDeviceSettings" | "afterDeviceRestart" | "whenDeviceLockedExceptOpenFiles" | "whenDeviceLocked"
+export type WindowsInformationProtectionEnforcementLevel = "noProtection" | "encryptAndAuditOnly" | "encryptAuditAndPrompt" | "encryptAuditAndBlock"
+export type WindowsInformationProtectionPinCharacterRequirements = "notAllow" | "requireAtLeastOne" | "allow"
+export type ManagedAppFlaggedReason = "none" | "rootedDevice"
+export type NotificationTemplateBrandingOptions = "none" | "includeCompanyLogo" | "includeCompanyName" | "includeContactInformation"
+export type InstallState = "notApplicable" | "installed" | "failed" | "notInstalled" | "uninstallFailed" | "unknown"
+export type RemoteAssistanceOnboardingStatus = "notOnboarded" | "onboarding" | "onboarded"
+export type ApplicationType = "universal" | "desktop"
+export type DeviceEnrollmentFailureReason = "unknown" | "authentication" | "authorization" | "accountValidation" | "userValidation" | "deviceNotSupported" | "inMaintenance" | "badRequest" | "featureNotSupported" | "enrollmentRestrictionsEnforced" | "clientDisconnected"
 
 export interface Entity {
 
@@ -51,32 +158,33 @@ export interface Device extends DirectoryObject {
 	    /** true if the account is enabled; otherwise, false. Required. */
 	    accountEnabled?: boolean
 
-	    /** The any operator is required for filter expressions on multi-valued properties. Not nullable. Required. */
 	    alternativeSecurityIds?: AlternativeSecurityId[]
 
-	    /** The Timestamp type represents date and time information using ISO 8601 format and is always in UTC time. For example, midnight UTC on Jan 1, 2014 would look like this: '2014-01-01T00:00:00Z' */
+	    /** The Timestamp type represents date and time information using ISO 8601 format and is always in UTC time. For example, midnight UTC on Jan 1, 2014 would look like this: '2014-01-01T00:00:00Z' Read-only. */
 	    approximateLastSignInDateTime?: string
 
-	    /** Unique client specified GUID to represent the device. Required. */
+	    /** Unique identifier set by Azure Device Registration Service at the time of registration. */
 	    deviceId?: string
 
+	    /** For interal use only. Set to null. */
 	    deviceMetadata?: string
 
+	    /** For interal use only. */
 	    deviceVersion?: number
 
 	    /** The display name for the device. Required. */
 	    displayName?: string
 
-	    /** true if the device complies with Mobile Device Management (MDM) policies; otherwise, false. */
+	    /** true if the device complies with Mobile Device Management (MDM) policies; otherwise, false. Read-only. */
 	    isCompliant?: boolean
 
-	    /** true if the device is managed by a Mobile Device Management (MDM) app such as Intune; otherwise, false. */
+	    /** true if the device is managed by a Mobile Device Management (MDM) app; otherwise, false. */
 	    isManaged?: boolean
 
-	    /** The last time at which the object was synced with the on-premises directory.The Timestamp type represents date and time information using ISO 8601 format and is always in UTC time. For example, midnight UTC on Jan 1, 2014 would look like this: '2014-01-01T00:00:00Z' */
+	    /** The last time at which the object was synced with the on-premises directory.The Timestamp type represents date and time information using ISO 8601 format and is always in UTC time. For example, midnight UTC on Jan 1, 2014 would look like this: '2014-01-01T00:00:00Z' Read-only. */
 	    onPremisesLastSyncDateTime?: string
 
-	    /** true if this object is synced from an on-premises directory; false if this object was originally synced from an on-premises directory but is no longer synced; null if this object has never been synced from an on-premises directory (default). */
+	    /** true if this object is synced from an on-premises directory; false if this object was originally synced from an on-premises directory but is no longer synced; null if this object has never been synced from an on-premises directory (default). Read-only. */
 	    onPremisesSyncEnabled?: boolean
 
 	    /** The type of operating system on the device. Required. */
@@ -85,15 +193,16 @@ export interface Device extends DirectoryObject {
 	    /** The version of the operating system on the device. Required. */
 	    operatingSystemVersion?: string
 
-	    /** Not nullable. */
+	    /** For interal use only. Not nullable. */
 	    physicalIds?: string[]
 
+	    /** Type of trust for the joined device. Read-only. Possible values: Workplace - indicates bring your own personal devicesAzureAd - Cloud only joined devicesServerAd - on-premises domain joined devices joined to Azure AD. For more details, see Introduction to device management in Azure Active Directory */
 	    trustType?: string
 
-	    /** Users that are registered owners of the device. Read-only. Nullable. */
+	    /** The user that cloud joined the device or registered their personal device. The registered owner is set at the time of registration. Currently, there can be only one owner. Read-only. Nullable. */
 	    registeredOwners?: DirectoryObject[]
 
-	    /** Users that are registered users of the device. Read-only. Nullable. */
+	    /** Collection of registered users of the device. For cloud joined devices and registered personal devices, registered users are set to the same value as registered owners at the time of registration. Read-only. Nullable. */
 	    registeredUsers?: DirectoryObject[]
 
 	    /** The collection of open extensions defined for the device. Read-only. Nullable. */
@@ -260,6 +369,9 @@ export interface Group extends DirectoryObject {
 
 	    classification?: string
 
+	    /** The date and time the group was created. */
+	    createdDateTime?: string
+
 	    /** An optional description for the group. */
 	    description?: string
 
@@ -289,6 +401,8 @@ export interface Group extends DirectoryObject {
 
 	    /** The any operator is required for filter expressions on multi-valued properties. Read-only. Not nullable. Supports $filter. */
 	    proxyAddresses?: string[]
+
+	    renewedDateTime?: string
 
 	    /** Specifies whether the group is a security group. If the mailEnabled property is also true, the group is a mail-enabled security group; otherwise it is a security group. Must be false for Office 365 groups. Supports $filter. */
 	    securityEnabled?: boolean
@@ -366,6 +480,8 @@ export interface Group extends DirectoryObject {
 
 	    /** Read-only. */
 	    onenote?: Onenote
+
+	    groupLifecyclePolicies?: GroupLifecyclePolicy[]
 
 }
 
@@ -494,7 +610,7 @@ export interface Event extends OutlookItem {
 	    /** The preview of the message associated with the event. It is in text format. */
 	    bodyPreview?: string
 
-	    /** The importance of the event: Low = 0, Normal = 1, High = 2. Possible values are: Low, Normal, High. */
+	    /** The importance of the event. Possible values are: Low, Normal, High. */
 	    importance?: Importance
 
 	    /** Possible values are: Normal, Personal, Private, Confidential. */
@@ -530,10 +646,10 @@ export interface Event extends OutlookItem {
 	    /** The categories assigned to the item. */
 	    seriesMasterId?: string
 
-	    /** The status to show: Free = 0, Tentative = 1, Busy = 2, Oof = 3, WorkingElsewhere = 4, Unknown = -1. Possible values are: Free, Tentative, Busy, Oof, WorkingElsewhere, Unknown. */
+	    /** The status to show. Possible values are: Free, Tentative, Busy, Oof, WorkingElsewhere, Unknown. */
 	    showAs?: FreeBusyStatus
 
-	    /** The event type: SingleInstance = 0, Occurrence = 1, Exception = 2, SeriesMaster = 3. Possible values are: SingleInstance, Occurrence, Exception, SeriesMaster. */
+	    /** The event type. Possible values are: SingleInstance, Occurrence, Exception, SeriesMaster. Read-only. */
 	    type?: EventType
 
 	    /** The collection of attendees for the event. */
@@ -647,6 +763,7 @@ export interface Drive extends BaseItem {
 
 	    sharePointIds?: SharepointIds
 
+	    /** If present, indicates that this is a system-managed drive. Read-only. */
 	    system?: SystemFacet
 
 	    /** All items contained in the drive. Read-only. Nullable. */
@@ -676,8 +793,10 @@ export interface Site extends BaseItem {
 	    /** Provides details about the site's site collection. Available only on the root site. Read-only. */
 	    siteCollection?: SiteCollection
 
+	    /** The collection of column definitions reusable across lists under this site. */
 	    columns?: ColumnDefinition[]
 
+	    /** The collection of content types defined for this site. */
 	    contentTypes?: ContentType[]
 
 	    /** The default drive (document library) for this site. */
@@ -689,6 +808,7 @@ export interface Site extends BaseItem {
 	    /** Used to address any item contained in this site. This collection cannot be enumerated. */
 	    items?: BaseItem[]
 
+	    /** The collection of lists under this site. */
 	    lists?: List[]
 
 	    /** The collection of the sub-sites under this site. */
@@ -719,6 +839,16 @@ export interface Onenote extends Entity {
 	    resources?: OnenoteResource[]
 
 	    operations?: OnenoteOperation[]
+
+}
+
+export interface GroupLifecyclePolicy extends Entity {
+
+	    groupLifetimeInDays?: number
+
+	    managedGroupTypes?: string
+
+	    alternateNotificationEmails?: string
 
 }
 
@@ -766,10 +896,13 @@ export interface Organization extends DirectoryObject {
 
 	    businessPhones?: string[]
 
+	    /** City name of the address for the organization */
 	    city?: string
 
+	    /** Country/region name of the address for the organization */
 	    country?: string
 
+	    /** Country/region abbreviation for the organization */
 	    countryLetterCode?: string
 
 	    /** The display name for the tenant. */
@@ -782,8 +915,10 @@ export interface Organization extends DirectoryObject {
 
 	    onPremisesSyncEnabled?: boolean
 
+	    /** Postal code of the address for the organization */
 	    postalCode?: string
 
+	    /** The preferred language for the organization. Should follow ISO 639-1 Code; for example "en". */
 	    preferredLanguage?: string
 
 	    /** Not nullable. */
@@ -793,8 +928,10 @@ export interface Organization extends DirectoryObject {
 
 	    securityComplianceNotificationPhones?: string[]
 
+	    /** State name of the address for the organization */
 	    state?: string
 
+	    /** Street name of the address for organization */
 	    street?: string
 
 	    /** Not nullable. */
@@ -802,6 +939,9 @@ export interface Organization extends DirectoryObject {
 
 	    /** The collection of domains associated with this tenant. Not nullable. */
 	    verifiedDomains?: VerifiedDomain[]
+
+	    /** Mobile device management authority. Possible values are: unknown, intune, sccm, office365. */
+	    mobileDeviceManagementAuthority?: MdmAuthority
 
 	    /** The collection of open extensions defined for the organization. Read-only. Nullable. */
 	    extensions?: Extension[]
@@ -825,10 +965,10 @@ export interface User extends DirectoryObject {
 	    /** The city in which the user is located. Supports $filter. */
 	    city?: string
 
-	    /** The company name which the user is associated. */
+	    /** The company name which the user is associated. Read-only. */
 	    companyName?: string
 
-	    /** The country/region in which the user is located; for example, “US” or “UK”. Supports $filter. */
+	    /** The country/region in which the user is located; for example, "US" or "UK". Supports $filter. */
 	    country?: string
 
 	    /** The name for the department in which the user works. Supports $filter. */
@@ -842,7 +982,7 @@ export interface User extends DirectoryObject {
 
 	    imAddresses?: string[]
 
-	    /** The user’s job title. Supports $filter. */
+	    /** The user's job title. Supports $filter. */
 	    jobTitle?: string
 
 	    /** The SMTP address for the user, for example, "jeff@contoso.onmicrosoft.com". Read-Only. Supports $filter. */
@@ -854,7 +994,7 @@ export interface User extends DirectoryObject {
 	    /** The primary cellular telephone number for the user. */
 	    mobilePhone?: string
 
-	    /** This property is used to associate an on-premises Active Directory user account to their Azure AD user object. This property must be specified when creating a new user account in the Graph if you are using a federated domain for the user’s userPrincipalName (UPN) property. Important: The $ and  characters cannot be used when specifying this property. Supports $filter. */
+	    /** This property is used to associate an on-premises Active Directory user account to their Azure AD user object. This property must be specified when creating a new user account in the Graph if you are using a federated domain for the user's userPrincipalName (UPN) property. Important: The $ and  characters cannot be used when specifying this property. Supports $filter. */
 	    onPremisesImmutableId?: string
 
 	    /** Indicates the last time at which the object was synced with the on-premises directory; for example: "2013-02-16T03:04:54Z". The Timestamp type represents date and time information using ISO 8601 format and is always in UTC time. For example, midnight UTC on Jan 1, 2014 would look like this: '2014-01-01T00:00:00Z'. Read-only. */
@@ -866,10 +1006,10 @@ export interface User extends DirectoryObject {
 	    /** true if this object is synced from an on-premises directory; false if this object was originally synced from an on-premises directory but is no longer synced; null if this object has never been synced from an on-premises directory (default). Read-only */
 	    onPremisesSyncEnabled?: boolean
 
-	    /** Specifies password policies for the user. This value is an enumeration with one possible value being “DisableStrongPassword”, which allows weaker passwords than the default policy to be specified. “DisablePasswordExpiration” can also be specified. The two may be specified together; for example: "DisablePasswordExpiration, DisableStrongPassword". */
+	    /** Specifies password policies for the user. This value is an enumeration with one possible value being "DisableStrongPassword", which allows weaker passwords than the default policy to be specified. "DisablePasswordExpiration" can also be specified. The two may be specified together; for example: "DisablePasswordExpiration, DisableStrongPassword". */
 	    passwordPolicies?: string
 
-	    /** Specifies the password profile for the user. The profile contains the user’s password. This property is required when a user is created. The password in the profile must satisfy minimum requirements as specified by the passwordPolicies property. By default, a strong password is required. */
+	    /** Specifies the password profile for the user. The profile contains the user's password. This property is required when a user is created. The password in the profile must satisfy minimum requirements as specified by the passwordPolicies property. By default, a strong password is required. */
 	    passwordProfile?: PasswordProfile
 
 	    /** The office location in the user's place of business. */
@@ -899,10 +1039,10 @@ export interface User extends DirectoryObject {
 	    /** A two letter country code (ISO standard 3166). Required for users that will be assigned licenses due to legal requirement to check for availability of services in countries.  Examples include: "US", "JP", and "GB". Not nullable. Supports $filter. */
 	    usageLocation?: string
 
-	    /** The user principal name (UPN) of the user. The UPN is an Internet-style login name for the user based on the Internet standard RFC 822. By convention, this should map to the user's email name. The general format is alias@domain, where domain must be present in the tenant’s collection of verified domains. This property is required when a user is created. The verified domains for the tenant can be accessed from the verifiedDomains property of organization. Supports $filter and $orderby. */
+	    /** The user principal name (UPN) of the user. The UPN is an Internet-style login name for the user based on the Internet standard RFC 822. By convention, this should map to the user's email name. The general format is alias@domain, where domain must be present in the tenant's collection of verified domains. This property is required when a user is created. The verified domains for the tenant can be accessed from the verifiedDomains property of organization. Supports $filter and $orderby. */
 	    userPrincipalName?: string
 
-	    /** A string value that can be used to classify user types in your directory, such as “Member” and “Guest”. Supports $filter. */
+	    /** A string value that can be used to classify user types in your directory, such as "Member" and "Guest". Supports $filter. */
 	    userType?: string
 
 	    /** Settings for the primary mailbox of the signed-in user. You can get or update settings for sending automatic replies to incoming messages, locale and time zone. */
@@ -938,13 +1078,16 @@ export interface User extends DirectoryObject {
 	    /** A list for the user to enumerate their skills. */
 	    skills?: string[]
 
+	    /** The limit on the maximum number of devices that the user is permitted to enroll. Allowed values are 5 or 1000. */
+	    deviceEnrollmentLimit?: number
+
 	    /** Devices that are owned by the user. Read-only. Nullable. */
 	    ownedDevices?: DirectoryObject[]
 
 	    /** Devices that are registered for the user. Read-only. Nullable. */
 	    registeredDevices?: DirectoryObject[]
 
-	    /** The user or contact that is this user’s manager. Read-only. (HTTP Methods: GET, PUT, DELETE.) */
+	    /** The user or contact that is this user's manager. Read-only. (HTTP Methods: GET, PUT, DELETE.) */
 	    manager?: DirectoryObject
 
 	    /** The users and contacts that report to the user. (The users and contacts that have their manager property set to this user.) Read-only. Nullable. */
@@ -1011,6 +1154,15 @@ export interface User extends DirectoryObject {
 
 	    /** Read-only. */
 	    onenote?: Onenote
+
+	    /** The managed devices associated with the user. */
+	    managedDevices?: ManagedDevice[]
+
+	    /** Zero or more managed app registrations that belong to the user. */
+	    managedAppRegistrations?: ManagedAppRegistration[]
+
+	    /** The list of troubleshooting events for this user. */
+	    deviceManagementTroubleshootingEvents?: DeviceManagementTroubleshootingEvent[]
 
 }
 
@@ -1160,7 +1312,7 @@ export interface Person extends Entity {
 	    /** The person's birthday. */
 	    birthday?: string
 
-	    /** Free-form notes that the the user has taken about this person. */
+	    /** Free-form notes that the user has taken about this person. */
 	    personNotes?: string
 
 	    /** true if the user has flagged this person as a favorite. */
@@ -1202,6 +1354,7 @@ export interface Person extends Entity {
 	    /** The user principal name (UPN) of the person. The UPN is an Internet-style login name for the person based on the Internet standard RFC 822. By convention, this should map to the person's email name. The general format is alias@domain. */
 	    userPrincipalName?: string
 
+	    /** The instant message voice over IP (VOIP) session initiation protocol (SIP) address for the user. Read-only. */
 	    imAddress?: string
 
 }
@@ -1256,7 +1409,7 @@ export interface Contact extends OutlookItem {
 	    /** The contact's instant messaging (IM) addresses. */
 	    imAddresses?: string[]
 
-	    /** The contact’s job title. */
+	    /** The contact's job title. */
 	    jobTitle?: string
 
 	    /** The name of the contact's company. */
@@ -1298,7 +1451,7 @@ export interface Contact extends OutlookItem {
 	    /** Other addresses for the contact. */
 	    otherAddress?: PhysicalAddress
 
-	    /** The name of the contact's spouse. */
+	    /** The name of the contact's spouse/partner. */
 	    spouseName?: string
 
 	    /** The user's notes about the contact. */
@@ -1360,6 +1513,213 @@ export interface PlannerUser extends Entity {
 
 }
 
+export interface ManagedDevice extends Entity {
+
+	    /** Unique Identifier for the user associated with the device */
+	    userId?: string
+
+	    /** Name of the device */
+	    deviceName?: string
+
+	    /** List of ComplexType deviceActionResult objects. */
+	    deviceActionResults?: DeviceActionResult[]
+
+	    /** Enrollment time of the device. */
+	    enrolledDateTime?: string
+
+	    /** The date and time that the device last completed a successful sync with Intune. */
+	    lastSyncDateTime?: string
+
+	    /** Operating system of the device. Windows, iOS, etc. */
+	    operatingSystem?: string
+
+	    /** Compliance state of the device. Possible values are: unknown, compliant, noncompliant, conflict, error, inGracePeriod, configManager. */
+	    complianceState?: ComplianceState
+
+	    /** whether the device is jail broken or rooted. */
+	    jailBroken?: string
+
+	    /** Management channel of the device. Intune, EAS, etc. Possible values are: eas, mdm, easMdm, intuneClient, easIntuneClient, configurationManagerClient, configurationManagerClientMdm, configurationManagerClientMdmEas, unknown, jamf, googleCloudDevicePolicyController. */
+	    managementAgent?: ManagementAgentType
+
+	    /** Operating system version of the device. */
+	    osVersion?: string
+
+	    /** Whether the device is Exchange ActiveSync activated. */
+	    easActivated?: boolean
+
+	    /** Exchange ActiveSync Id of the device. */
+	    easDeviceId?: string
+
+	    /** Exchange ActivationSync activation time of the device. */
+	    easActivationDateTime?: string
+
+	    /** Whether the device is Azure Active Directory registered. */
+	    azureADRegistered?: boolean
+
+	    /** Enrollment type of the device. Possible values are: unknown, userEnrollment, deviceEnrollmentManager, appleBulkWithUser, appleBulkWithoutUser, windowsAzureADJoin, windowsBulkUserless, windowsAutoEnrollment, windowsBulkAzureDomainJoin, windowsCoManagement. */
+	    deviceEnrollmentType?: DeviceEnrollmentType
+
+	    /** Code that allows the Activation Lock on a device to be bypassed. */
+	    activationLockBypassCode?: string
+
+	    /** Email(s) for the user associated with the device */
+	    emailAddress?: string
+
+	    /** The unique identifier for the Azure Active Directory device. Read only. */
+	    azureADDeviceId?: string
+
+	    /** Device registration state. Possible values are: notRegistered, registered, revoked, keyConflict, approvalPending, certificateReset, notRegisteredPendingEnrollment, unknown. */
+	    deviceRegistrationState?: DeviceRegistrationState
+
+	    /** Device category display name */
+	    deviceCategoryDisplayName?: string
+
+	    /** Device supervised status */
+	    isSupervised?: boolean
+
+	    /** Last time the device contacted Exchange. */
+	    exchangeLastSuccessfulSyncDateTime?: string
+
+	    /** The Access State of the device in Exchange. Possible values are: none, unknown, allowed, blocked, quarantined. */
+	    exchangeAccessState?: DeviceManagementExchangeAccessState
+
+	    /** The reason for the device's access state in Exchange. Possible values are: none, unknown, exchangeGlobalRule, exchangeIndividualRule, exchangeDeviceRule, exchangeUpgrade, exchangeMailboxPolicy, other, compliant, notCompliant, notEnrolled, unknownLocation, mfaRequired, azureADBlockDueToAccessPolicy, compromisedPassword, deviceNotKnownWithManagedApp. */
+	    exchangeAccessStateReason?: DeviceManagementExchangeAccessStateReason
+
+	    /** Url that allows a Remote Assistance session to be established with the device. */
+	    remoteAssistanceSessionUrl?: string
+
+	    /** An error string that identifies issues when creating Remote Assistance session objects. */
+	    remoteAssistanceSessionErrorDetails?: string
+
+	    /** Device encryption status */
+	    isEncrypted?: boolean
+
+	    /** Device user principal name */
+	    userPrincipalName?: string
+
+	    /** Model of the device */
+	    model?: string
+
+	    /** Manufacturer of the device */
+	    manufacturer?: string
+
+	    /** IMEI */
+	    imei?: string
+
+	    /** The DateTime when device compliance grace period expires */
+	    complianceGracePeriodExpirationDateTime?: string
+
+	    /** SerialNumber */
+	    serialNumber?: string
+
+	    /** Phone number of the device */
+	    phoneNumber?: string
+
+	    /** Android security patch level */
+	    androidSecurityPatchLevel?: string
+
+	    /** User display name */
+	    userDisplayName?: string
+
+	    /** ConfigrMgr client enabled features */
+	    configurationManagerClientEnabledFeatures?: ConfigurationManagerClientEnabledFeatures
+
+	    /** Wi-Fi MAC */
+	    wiFiMacAddress?: string
+
+	    /** The device health attestation state. */
+	    deviceHealthAttestationState?: DeviceHealthAttestationState
+
+	    /** Subscriber Carrier */
+	    subscriberCarrier?: string
+
+	    /** MEID */
+	    meid?: string
+
+	    /** Total Storage in Bytes */
+	    totalStorageSpaceInBytes?: number
+
+	    /** Free Storage in Bytes */
+	    freeStorageSpaceInBytes?: number
+
+	    /** Automatically generated name to identify a device. Can be overwritten to a user friendly name. */
+	    managedDeviceName?: string
+
+	    /** Indicates the threat state of a device when a Mobile Threat Defense partner is in use by the account and device. Read Only. Possible values are: unknown, activated, deactivated, secured, lowSeverity, mediumSeverity, highSeverity, unresponsive. */
+	    partnerReportedThreatState?: ManagedDevicePartnerReportedHealthState
+
+	    /** Device configuration states for this device. */
+	    deviceConfigurationStates?: DeviceConfigurationState[]
+
+	    /** Device category */
+	    deviceCategory?: DeviceCategory
+
+	    /** Device compliance policy states for this device. */
+	    deviceCompliancePolicyStates?: DeviceCompliancePolicyState[]
+
+}
+
+export interface ManagedAppRegistration extends Entity {
+
+	    /** Date and time of creation */
+	    createdDateTime?: string
+
+	    /** Date and time of last the app synced with management service. */
+	    lastSyncDateTime?: string
+
+	    /** App version */
+	    applicationVersion?: string
+
+	    /** App management SDK version */
+	    managementSdkVersion?: string
+
+	    /** Operating System version */
+	    platformVersion?: string
+
+	    /** Host device type */
+	    deviceType?: string
+
+	    /** App management SDK generated tag, which helps relate apps hosted on the same device. Not guaranteed to relate apps in all conditions. */
+	    deviceTag?: string
+
+	    /** Host device name */
+	    deviceName?: string
+
+	    /** Zero or more reasons an app registration is flagged. E.g. app running on rooted device */
+	    flaggedReasons?: ManagedAppFlaggedReason[]
+
+	    /** The user Id to who this app registration belongs. */
+	    userId?: string
+
+	    /** The app package Identifier */
+	    appIdentifier?: MobileAppIdentifier
+
+	    /** Version of the entity. */
+	    version?: string
+
+	    /** Zero or more policys already applied on the registered app when it last synchronized with managment service. */
+	    appliedPolicies?: ManagedAppPolicy[]
+
+	    /** Zero or more policies admin intended for the app as of now. */
+	    intendedPolicies?: ManagedAppPolicy[]
+
+	    /** Zero or more long running operations triggered on the app registration. */
+	    operations?: ManagedAppOperation[]
+
+}
+
+export interface DeviceManagementTroubleshootingEvent extends Entity {
+
+	    /** Time when the event occurred . */
+	    eventDateTime?: string
+
+	    /** Id used for tracing the failure in the service. */
+	    correlationId?: string
+
+}
+
 export interface GroupSettingTemplate extends DirectoryObject {
 
 	    /** Display name of the template. */
@@ -1387,7 +1747,7 @@ export interface SchemaExtension extends Entity {
 	    /** The lifecycle state of the schema extension. Possible states are InDevelopment, Available, and Deprecated. Automatically set to InDevelopment on creation. Schema extensions provides more information on the possible state transitions and behaviors. */
 	    status?: string
 
-	    /** The appId of the application that created the schema extension. Read-only. */
+	    /** The appId of the application that is the owner of the schema extension. This property can be supplied on creation, to set the owner.  If not supplied, then the calling application's appId will be set as the owner. In either case, the signed-in user must be the owner of the application. Once set, this property is read-only and cannot be changed. */
 	    owner?: string
 
 }
@@ -1413,6 +1773,7 @@ export interface Attachment extends Entity {
 
 export interface SingleValueLegacyExtendedProperty extends Entity {
 
+	    /** A property value. */
 	    value?: string
 
 }
@@ -1431,7 +1792,7 @@ export interface FileAttachment extends Attachment {
 	    /** The Uniform Resource Identifier (URI) that corresponds to the location of the content of the attachment. */
 	    contentLocation?: string
 
-	    /** The binary contents of the file. */
+	    /** The base64-encoded contents of the file. */
 	    contentBytes?: number
 
 }
@@ -1445,8 +1806,10 @@ export interface ItemAttachment extends Attachment {
 
 export interface EventMessage extends Message {
 
+	    /** The type of event message: none, meetingRequest, meetingCancelled, meetingAccepted, meetingTenativelyAccepted, meetingDeclined. */
 	    meetingMessageType?: MeetingMessageType
 
+	    /** The event associated with the event message. The assumption for attendees or room resources is that the Calendar Attendant is set to automatically update the calendar with an event when meeting request event messages arrive. Navigation property.  Read-only. */
 	    event?: Event
 
 }
@@ -1516,72 +1879,102 @@ export interface InferenceClassificationOverride extends Entity {
 
 export interface ColumnDefinition extends Entity {
 
+	    /** This column stores boolean values. */
 	    boolean?: BooleanColumn
 
+	    /** This column's data is calculated based on other columns. */
 	    calculated?: CalculatedColumn
 
+	    /** This column stores data from a list of choices. */
 	    choice?: ChoiceColumn
 
+	    /** For site columns, the name of the group this column belongs to. Helps organize related columns. */
 	    columnGroup?: string
 
+	    /** This column stores currency values. */
 	    currency?: CurrencyColumn
 
+	    /** This column stores DateTime values. */
 	    dateTime?: DateTimeColumn
 
+	    /** The default value for this column. */
 	    defaultValue?: DefaultColumnValue
 
+	    /** The user-facing description of the column. */
 	    description?: string
 
+	    /** The user-facing name of the column. */
 	    displayName?: string
 
+	    /** If true, no two list items may have the same value for this column. */
 	    enforceUniqueValues?: boolean
 
+	    /** Specifies whether the column is displayed in the user interface. */
 	    hidden?: boolean
 
+	    /** Specifies whether the column values can used for sorting and searching. */
 	    indexed?: boolean
 
+	    /** This column's data is looked up from another source in the site. */
 	    lookup?: LookupColumn
 
+	    /** The API-facing name of the column as it appears in the [fields][] on a [listItem][]. For the user-facing name, see displayName. */
 	    name?: string
 
+	    /** This column stores number values. */
 	    number?: NumberColumn
 
+	    /** This column stores Person or Group values. */
 	    personOrGroup?: PersonOrGroupColumn
 
+	    /** Specifies whether the column values can be modified. */
 	    readOnly?: boolean
 
+	    /** Specifies whether the column value is not optional. */
 	    required?: boolean
 
+	    /** This column stores text values. */
 	    text?: TextColumn
 
 }
 
 export interface ColumnLink extends Entity {
 
+	    /** The name of the column  in this content type. */
 	    name?: string
 
 }
 
 export interface ContentType extends Entity {
 
+	    /** The descriptive text for the item. */
 	    description?: string
 
+	    /** The name of the group this content type belongs to. Helps organize related content types. */
 	    group?: string
 
+	    /** Indicates whether the content type is hidden in the list's 'New' menu. */
 	    hidden?: boolean
 
+	    /** If this content type is inherited from another scope (like a site), provides a reference to the item where the content type is defined. */
 	    inheritedFrom?: ItemReference
 
+	    /** The name of the content type. */
 	    name?: string
 
+	    /** Specifies the order in which the content type appears in the selection UI. */
 	    order?: ContentTypeOrder
 
+	    /** The unique identifier of the content type. */
 	    parentId?: string
 
+	    /** If true, the content type cannot be modified unless this value is first set to false. */
 	    readOnly?: boolean
 
+	    /** If true, the content type cannot be modified by users or through push-down operations. Only site collection administrators can seal or unseal content types. */
 	    sealed?: boolean
 
+	    /** The collection of columns that are required by this content type */
 	    columnLinks?: ColumnLink[]
 
 }
@@ -1655,7 +2048,7 @@ export interface DriveItem extends BaseItem {
 	    /** The set of permissions for the item. Read-only. Nullable. */
 	    permissions?: Permission[]
 
-	    /** Collection containing ThumbnailSet objects associated with the item. For more info, see getting thumbnails. Read-only. Nullable. */
+	    /** Collection containing [ThumbnailSet][] objects associated with the item. For more info, see [getting thumbnails][]. Read-only. Nullable. */
 	    thumbnails?: ThumbnailSet[]
 
 	    workbook?: Workbook
@@ -1664,30 +2057,37 @@ export interface DriveItem extends BaseItem {
 
 export interface List extends BaseItem {
 
+	    /** The displayable title of the list. */
 	    displayName?: string
 
+	    /** Provides additional details about the list. */
 	    list?: ListInfo
 
 	    sharepointIds?: SharepointIds
 
+	    /** If present, indicates that this is a system-managed list. Read-only. */
 	    system?: SystemFacet
 
 	    columns?: ColumnDefinition[]
 
 	    contentTypes?: ContentType[]
 
+	    /** Only present on document libraries. Allows access to the list as a [drive][] resource with [driveItems][driveItem]. */
 	    drive?: Drive
 
+	    /** All items contained in the list. */
 	    items?: ListItem[]
 
 }
 
 export interface ListItem extends BaseItem {
 
+	    /** The content type of this list item */
 	    contentType?: ContentTypeInfo
 
 	    sharepointIds?: SharepointIds
 
+	    /** For document libraries, the driveItem relationship exposes the listItem as a [driveItem][] */
 	    driveItem?: DriveItem
 
 	    fields?: FieldValueSet
@@ -1754,20 +2154,21 @@ export interface SharedDriveItem extends BaseItem {
 	    /** Information about the owner of the shared item being referenced. */
 	    owner?: IdentitySet
 
-	    /** A driveItem for the resource that was shared.  This is identical to the root property. */
+	    /** Used to access the underlying driveItem */
 	    driveItem?: DriveItem
 
-	    /** A collection of shared driveItem resources. This collection cannot be enumerated, but items can be accessed by their unique ID. */
+	    /** All driveItems contained in the sharing root. This collection cannot be enumerated. */
 	    items?: DriveItem[]
 
+	    /** Used to access the underlying list */
 	    list?: List
 
+	    /** Used to access the underlying listItem */
 	    listItem?: ListItem
 
-	    /** The top level shared driveItem. If a single file is shared, this item is the file. If a folder is shared, this item will be the folder. You can use the item's facets to determine which case applies. */
 	    root?: DriveItem
 
-	    /** A site resource that contains the item that was shared. */
+	    /** Used to access the underlying site */
 	    site?: Site
 
 }
@@ -2309,7 +2710,7 @@ export interface Subscription extends Entity {
 	    /** The URL of the endpoint that will receive the notifications. This URL has to make use of the HTTPS protocol. */
 	    notificationUrl?: string
 
-	    /** Specifies the date and time when the webhook subscription expires. The time is in UTC, and can be an amount of time from subscription creation that varies for the resource subscribed to.  See the table below for maximum values. */
+	    /** Specifies the date and time when the webhook subscription expires. The time is in UTC, and can be an amount of time from subscription creation that varies for the resource subscribed to.  See the table below for maximum supported subscription length of time. */
 	    expirationDateTime?: string
 
 }
@@ -2675,6 +3076,4690 @@ export interface OnenoteOperation extends Operation {
 	    percentComplete?: string
 
 }
+
+export interface ReportRoot extends Entity {
+
+}
+
+export interface AdministrativeUnit extends DirectoryObject {
+
+}
+
+export interface EducationRoot extends Entity {
+
+	    classes?: EducationClass[]
+
+	    schools?: EducationSchool[]
+
+	    users?: EducationUser[]
+
+	    me?: EducationUser
+
+}
+
+export interface EducationClass extends Entity {
+
+	    /** Name of the class. */
+	    displayName?: string
+
+	    /** Mail name for sending email to all members, if this is enabled. */
+	    mailNickname?: string
+
+	    /** Description of the class. */
+	    description?: string
+
+	    /** Entity who created the class */
+	    createdBy?: IdentitySet
+
+	    /** Class code used by the school to identify the class. */
+	    classCode?: string
+
+	    /** Name of the class in the syncing system. */
+	    externalName?: string
+
+	    /** ID of the class from the syncing system. */
+	    externalId?: string
+
+	    /** How this class was created. Possible values are: sis, manual, unknownFutureValue. */
+	    externalSource?: EducationExternalSource
+
+	    /** Term for this class. */
+	    term?: EducationTerm
+
+	    /** All schools that this class is associated with. Nullable. */
+	    schools?: EducationSchool[]
+
+	    /** All users in the class. Nullable. */
+	    members?: EducationUser[]
+
+	    /** All teachers in the class. Nullable. */
+	    teachers?: EducationUser[]
+
+	    group?: Group
+
+}
+
+export interface EducationOrganization extends Entity {
+
+	    displayName?: string
+
+	    description?: string
+
+	    externalSource?: EducationExternalSource
+
+}
+
+export interface EducationSchool extends EducationOrganization {
+
+	    /** Email address of the principal. */
+	    principalEmail?: string
+
+	    /** Name of the principal. */
+	    principalName?: string
+
+	    /** ID of principal in syncing system. */
+	    externalPrincipalId?: string
+
+	    /** Lowest grade taught. */
+	    lowestGrade?: string
+
+	    /** Highest grade taught. */
+	    highestGrade?: string
+
+	    /** School Number. */
+	    schoolNumber?: string
+
+	    /** ID of school in syncing system. */
+	    externalId?: string
+
+	    /** Phone number of school. */
+	    phone?: string
+
+	    /** Fax number of school. */
+	    fax?: string
+
+	    /** Entity who created the school. */
+	    createdBy?: IdentitySet
+
+	    /** Address of the school. */
+	    address?: PhysicalAddress
+
+	    /** Classes taught at the school. Nullable. */
+	    classes?: EducationClass[]
+
+	    /** Users in the school. Nullable. */
+	    users?: EducationUser[]
+
+	    administrativeUnit?: AdministrativeUnit
+
+}
+
+export interface EducationUser extends Entity {
+
+	    /** Default role for a user. The user's role might be different in an individual class. Possible values are: student, teacher, enum_sentinel. Supports $filter. */
+	    primaryRole?: EducationUserRole
+
+	    /** The middle name of user. */
+	    middleName?: string
+
+	    /** Where this user was created from. Possible values are: sis, manual, unkownFutureValue. */
+	    externalSource?: EducationExternalSource
+
+	    /** Address where user lives. */
+	    residenceAddress?: PhysicalAddress
+
+	    /** Mail address of user. */
+	    mailingAddress?: PhysicalAddress
+
+	    /** If the primary role is student, this block will contain student specific data. */
+	    student?: EducationStudent
+
+	    /** If the primary role is teacher, this block will conatin teacher specific data. */
+	    teacher?: EducationTeacher
+
+	    /** Entity who created the user. */
+	    createdBy?: IdentitySet
+
+	    relatedContacts?: EducationRelatedContact[]
+
+	    accountEnabled?: boolean
+
+	    assignedLicenses?: AssignedLicense[]
+
+	    assignedPlans?: AssignedPlan[]
+
+	    businessPhones?: string[]
+
+	    department?: string
+
+	    /** The name displayed in the address book for the user. This is usually the combination of the user's first name, middle initial, and last name. This property is required when a user is created and it cannot be cleared during updates. Supports $filter and $orderby. */
+	    displayName?: string
+
+	    /** The given name (first name) of the user. Supports $filter. */
+	    givenName?: string
+
+	    /** The SMTP address for the user; for example, "jeff@contoso.onmicrosoft.com". Read-Only. Supports $filter. */
+	    mail?: string
+
+	    mailNickname?: string
+
+	    /** The primary cellular telephone number for the user. */
+	    mobilePhone?: string
+
+	    passwordPolicies?: string
+
+	    passwordProfile?: PasswordProfile
+
+	    officeLocation?: string
+
+	    preferredLanguage?: string
+
+	    provisionedPlans?: ProvisionedPlan[]
+
+	    refreshTokensValidFromDateTime?: string
+
+	    showInAddressList?: boolean
+
+	    /** The user's surname (family name or last name). Supports $filter. */
+	    surname?: string
+
+	    usageLocation?: string
+
+	    userPrincipalName?: string
+
+	    userType?: string
+
+	    /** Schools to which the user belongs. Nullable. */
+	    schools?: EducationSchool[]
+
+	    /** Classes to which the user belongs. Nullable. */
+	    classes?: EducationClass[]
+
+	    user?: User
+
+}
+
+export interface DeviceAppManagement extends Entity {
+
+	    /** The last time the apps from the Microsoft Store for Business were synced successfully for the account. */
+	    microsoftStoreForBusinessLastSuccessfulSyncDateTime?: string
+
+	    /** Whether the account is enabled for syncing applications from the Microsoft Store for Business. */
+	    isEnabledForMicrosoftStoreForBusiness?: boolean
+
+	    /** The locale information used to sync applications from the Microsoft Store for Business. Cultures that are specific to a country/region. The names of these cultures follow RFC 4646 (Windows Vista and later). The format is -<country/regioncode2>, where  is a lowercase two-letter code derived from ISO 639-1 and <country/regioncode2> is an uppercase two-letter code derived from ISO 3166. For example, en-US for English (United States) is a specific culture. */
+	    microsoftStoreForBusinessLanguage?: string
+
+	    /** The last time an application sync from the Microsoft Store for Business was completed. */
+	    microsoftStoreForBusinessLastCompletedApplicationSyncTime?: string
+
+	    /** The mobile apps. */
+	    mobileApps?: MobileApp[]
+
+	    /** The mobile app categories. */
+	    mobileAppCategories?: MobileAppCategory[]
+
+	    /** The Managed Device Mobile Application Configurations. */
+	    mobileAppConfigurations?: ManagedDeviceMobileAppConfiguration[]
+
+	    /** Managed app policies. */
+	    managedAppPolicies?: ManagedAppPolicy[]
+
+	    /** iOS managed app policies. */
+	    iosManagedAppProtections?: IosManagedAppProtection[]
+
+	    /** Android managed app policies. */
+	    androidManagedAppProtections?: AndroidManagedAppProtection[]
+
+	    /** Default managed app policies. */
+	    defaultManagedAppProtections?: DefaultManagedAppProtection[]
+
+	    /** Targeted managed app configurations. */
+	    targetedManagedAppConfigurations?: TargetedManagedAppConfiguration[]
+
+	    /** Windows information protection for apps running on devices which are MDM enrolled. */
+	    mdmWindowsInformationProtectionPolicies?: MdmWindowsInformationProtectionPolicy[]
+
+	    /** Windows information protection for apps running on devices which are not MDM enrolled. */
+	    windowsInformationProtectionPolicies?: WindowsInformationProtectionPolicy[]
+
+	    /** The managed app registrations. */
+	    managedAppRegistrations?: ManagedAppRegistration[]
+
+	    /** The managed app statuses. */
+	    managedAppStatuses?: ManagedAppStatus[]
+
+	    /** The Managed eBook. */
+	    managedEBooks?: ManagedEBook[]
+
+}
+
+export interface MobileApp extends Entity {
+
+	    /** The admin provided or imported title of the app. */
+	    displayName?: string
+
+	    /** The description of the app. */
+	    description?: string
+
+	    /** The publisher of the app. */
+	    publisher?: string
+
+	    /** The large icon, to be displayed in the app details and used for upload of the icon. */
+	    largeIcon?: MimeContent
+
+	    /** The date and time the app was created. */
+	    createdDateTime?: string
+
+	    /** The date and time the app was last modified. */
+	    lastModifiedDateTime?: string
+
+	    /** The value indicating whether the app is marked as featured by the admin. */
+	    isFeatured?: boolean
+
+	    /** The privacy statement Url. */
+	    privacyInformationUrl?: string
+
+	    /** The more information Url. */
+	    informationUrl?: string
+
+	    /** The owner of the app. */
+	    owner?: string
+
+	    /** The developer of the app. */
+	    developer?: string
+
+	    /** Notes for the app. */
+	    notes?: string
+
+	    /** The publishing state for the app. The app cannot be assigned unless the app is published. Possible values are: notPublished, processing, published. */
+	    publishingState?: MobileAppPublishingState
+
+	    /** The list of categories for this app. */
+	    categories?: MobileAppCategory[]
+
+	    /** The list of group assignments for this mobile app. */
+	    assignments?: MobileAppAssignment[]
+
+}
+
+export interface MobileAppCategory extends Entity {
+
+	    /** The name of the app category. */
+	    displayName?: string
+
+	    /** The date and time the mobileAppCategory was last modified. */
+	    lastModifiedDateTime?: string
+
+}
+
+export interface ManagedDeviceMobileAppConfiguration extends Entity {
+
+	    /** the associated app. */
+	    targetedMobileApps?: string[]
+
+	    /** DateTime the object was created. */
+	    createdDateTime?: string
+
+	    /** Admin provided description of the Device Configuration. */
+	    description?: string
+
+	    /** DateTime the object was last modified. */
+	    lastModifiedDateTime?: string
+
+	    /** Admin provided name of the device configuration. */
+	    displayName?: string
+
+	    /** Version of the device configuration. */
+	    version?: number
+
+	    /** The list of group assignemenets for app configration. */
+	    assignments?: ManagedDeviceMobileAppConfigurationAssignment[]
+
+	    /** List of ManagedDeviceMobileAppConfigurationUserStatus. */
+	    userStatuses?: ManagedDeviceMobileAppConfigurationUserStatus[]
+
+	    /** App configuration device status summary. */
+	    deviceStatusSummary?: ManagedDeviceMobileAppConfigurationDeviceSummary
+
+	    /** App configuration user status summary. */
+	    userStatusSummary?: ManagedDeviceMobileAppConfigurationUserSummary
+
+}
+
+export interface ManagedAppPolicy extends Entity {
+
+	    /** Policy display name. */
+	    displayName?: string
+
+	    /** The policy's description. */
+	    description?: string
+
+	    /** The date and time the policy was created. */
+	    createdDateTime?: string
+
+	    /** Last time the policy was modified. */
+	    lastModifiedDateTime?: string
+
+	    /** Version of the entity. */
+	    version?: string
+
+}
+
+export interface ManagedAppProtection extends ManagedAppPolicy {
+
+	    /** The period after which access is checked when the device is not connected to the internet. */
+	    periodOfflineBeforeAccessCheck?: string
+
+	    /** The period after which access is checked when the device is connected to the internet. */
+	    periodOnlineBeforeAccessCheck?: string
+
+	    /** Sources from which data is allowed to be transferred. Possible values are: allApps, managedApps, none. */
+	    allowedInboundDataTransferSources?: ManagedAppDataTransferLevel
+
+	    /** Destinations to which data is allowed to be transferred. Possible values are: allApps, managedApps, none. */
+	    allowedOutboundDataTransferDestinations?: ManagedAppDataTransferLevel
+
+	    /** Indicates whether organizational credentials are required for app use. */
+	    organizationalCredentialsRequired?: boolean
+
+	    /** The level to which the clipboard may be shared between apps on the managed device. Possible values are: allApps, managedAppsWithPasteIn, managedApps, blocked. */
+	    allowedOutboundClipboardSharingLevel?: ManagedAppClipboardSharingLevel
+
+	    /** Indicates whether the backup of a managed app's data is blocked. */
+	    dataBackupBlocked?: boolean
+
+	    /** Indicates whether device compliance is required. */
+	    deviceComplianceRequired?: boolean
+
+	    /** Indicates whether internet links should be opened in the managed browser app. */
+	    managedBrowserToOpenLinksRequired?: boolean
+
+	    /** Indicates whether users may use the "Save As" menu item to save a copy of protected files. */
+	    saveAsBlocked?: boolean
+
+	    /** The amount of time an app is allowed to remain disconnected from the internet before all managed data it is wiped. */
+	    periodOfflineBeforeWipeIsEnforced?: string
+
+	    /** Indicates whether an app-level pin is required. */
+	    pinRequired?: boolean
+
+	    /** Maximum number of incorrect pin retry attempts before the managed app is wiped. */
+	    maximumPinRetries?: number
+
+	    /** Indicates whether simplePin is blocked. */
+	    simplePinBlocked?: boolean
+
+	    /** Minimum pin length required for an app-level pin if PinRequired is set to True */
+	    minimumPinLength?: number
+
+	    /** Character set which may be used for an app-level pin if PinRequired is set to True. Possible values are: numeric, alphanumericAndSymbol. */
+	    pinCharacterSet?: ManagedAppPinCharacterSet
+
+	    /** TimePeriod before the all-level pin must be reset if PinRequired is set to True. */
+	    periodBeforePinReset?: string
+
+	    /** Data storage locations where a user may store managed data. */
+	    allowedDataStorageLocations?: ManagedAppDataStorageLocation[]
+
+	    /** Indicates whether contacts can be synced to the user's device. */
+	    contactSyncBlocked?: boolean
+
+	    /** Indicates whether printing is allowed from managed apps. */
+	    printBlocked?: boolean
+
+	    /** Indicates whether use of the fingerprint reader is allowed in place of a pin if PinRequired is set to True. */
+	    fingerprintBlocked?: boolean
+
+	    /** Indicates whether use of the app pin is required if the device pin is set. */
+	    disableAppPinIfDevicePinIsSet?: boolean
+
+	    /** Versions less than the specified version will block the managed app from accessing company data. */
+	    minimumRequiredOsVersion?: string
+
+	    /** Versions less than the specified version will result in warning message on the managed app from accessing company data. */
+	    minimumWarningOsVersion?: string
+
+	    /** Versions less than the specified version will block the managed app from accessing company data. */
+	    minimumRequiredAppVersion?: string
+
+	    /** Versions less than the specified version will result in warning message on the managed app. */
+	    minimumWarningAppVersion?: string
+
+}
+
+export interface TargetedManagedAppProtection extends ManagedAppProtection {
+
+	    /** Indicates if the policy is deployed to any inclusion groups or not. */
+	    isAssigned?: boolean
+
+	    /** Navigation property to list of inclusion and exclusion groups to which the policy is deployed. */
+	    assignments?: TargetedManagedAppPolicyAssignment[]
+
+}
+
+export interface IosManagedAppProtection extends TargetedManagedAppProtection {
+
+	    /** Type of encryption which should be used for data in a managed app. Possible values are: useDeviceSettings, afterDeviceRestart, whenDeviceLockedExceptOpenFiles, whenDeviceLocked. */
+	    appDataEncryptionType?: ManagedAppDataEncryptionType
+
+	    /** Versions less than the specified version will block the managed app from accessing company data. */
+	    minimumRequiredSdkVersion?: string
+
+	    /** Count of apps to which the current policy is deployed. */
+	    deployedAppCount?: number
+
+	    /** Indicates whether use of the FaceID is allowed in place of a pin if PinRequired is set to True. */
+	    faceIdBlocked?: boolean
+
+	    /** List of apps to which the policy is deployed. */
+	    apps?: ManagedMobileApp[]
+
+	    /** Navigation property to deployment summary of the configuration. */
+	    deploymentSummary?: ManagedAppPolicyDeploymentSummary
+
+}
+
+export interface AndroidManagedAppProtection extends TargetedManagedAppProtection {
+
+	    /** Indicates whether a managed user can take screen captures of managed apps */
+	    screenCaptureBlocked?: boolean
+
+	    /** When this setting is enabled, app level encryption is disabled if device level encryption is enabled */
+	    disableAppEncryptionIfDeviceEncryptionIsEnabled?: boolean
+
+	    /** Indicates whether application data for managed apps should be encrypted */
+	    encryptAppData?: boolean
+
+	    /** Count of apps to which the current policy is deployed. */
+	    deployedAppCount?: number
+
+	    /** Define the oldest required Android security patch level a user can have to gain secure access to the app. */
+	    minimumRequiredPatchVersion?: string
+
+	    /** Define the oldest recommended Android security patch level a user can have for secure access to the app. */
+	    minimumWarningPatchVersion?: string
+
+	    /** List of apps to which the policy is deployed. */
+	    apps?: ManagedMobileApp[]
+
+	    /** Navigation property to deployment summary of the configuration. */
+	    deploymentSummary?: ManagedAppPolicyDeploymentSummary
+
+}
+
+export interface DefaultManagedAppProtection extends ManagedAppProtection {
+
+	    /** Type of encryption which should be used for data in a managed app. (iOS Only) Possible values are: useDeviceSettings, afterDeviceRestart, whenDeviceLockedExceptOpenFiles, whenDeviceLocked. */
+	    appDataEncryptionType?: ManagedAppDataEncryptionType
+
+	    /** Indicates whether screen capture is blocked. */
+	    screenCaptureBlocked?: boolean
+
+	    /** Indicates whether managed-app data should be encrypted. (Android only) */
+	    encryptAppData?: boolean
+
+	    /** When this setting is enabled, app level encryption is disabled if device level encryption is enabled */
+	    disableAppEncryptionIfDeviceEncryptionIsEnabled?: boolean
+
+	    /** Versions less than the specified version will block the managed app from accessing company data. */
+	    minimumRequiredSdkVersion?: string
+
+	    /** A set of string key and string value pairs to be sent to the affected users, unalterned by this service */
+	    customSettings?: KeyValuePair[]
+
+	    /** Count of apps to which the current policy is deployed. */
+	    deployedAppCount?: number
+
+	    /** Define the oldest required Android security patch level a user can have to gain secure access to the app. */
+	    minimumRequiredPatchVersion?: string
+
+	    /** Define the oldest recommended Android security patch level a user can have for secure access to the app. */
+	    minimumWarningPatchVersion?: string
+
+	    /** Indicates whether use of the FaceID is allowed in place of a pin if PinRequired is set to True. */
+	    faceIdBlocked?: boolean
+
+	    /** List of apps to which the policy is deployed. */
+	    apps?: ManagedMobileApp[]
+
+	    /** Navigation property to deployment summary of the configuration. */
+	    deploymentSummary?: ManagedAppPolicyDeploymentSummary
+
+}
+
+export interface ManagedAppConfiguration extends ManagedAppPolicy {
+
+	    /** A set of string key and string value pairs to be sent to apps for users to whom the configuration is scoped, unalterned by this service */
+	    customSettings?: KeyValuePair[]
+
+}
+
+export interface TargetedManagedAppConfiguration extends ManagedAppConfiguration {
+
+	    /** Count of apps to which the current policy is deployed. */
+	    deployedAppCount?: number
+
+	    /** Indicates if the policy is deployed to any inclusion groups or not. */
+	    isAssigned?: boolean
+
+	    /** List of apps to which the policy is deployed. */
+	    apps?: ManagedMobileApp[]
+
+	    /** Navigation property to deployment summary of the configuration. */
+	    deploymentSummary?: ManagedAppPolicyDeploymentSummary
+
+	    /** Navigation property to list of inclusion and exclusion groups to which the policy is deployed. */
+	    assignments?: TargetedManagedAppPolicyAssignment[]
+
+}
+
+export interface WindowsInformationProtection extends ManagedAppPolicy {
+
+	    /** WIP enforcement level.See the Enum definition for supported values Possible values are: noProtection, encryptAndAuditOnly, encryptAuditAndPrompt, encryptAuditAndBlock. */
+	    enforcementLevel?: WindowsInformationProtectionEnforcementLevel
+
+	    /** Primary enterprise domain */
+	    enterpriseDomain?: string
+
+	    /** List of enterprise domains to be protected */
+	    enterpriseProtectedDomainNames?: WindowsInformationProtectionResourceCollection[]
+
+	    /** Specifies whether the protection under lock feature (also known as encrypt under pin) should be configured */
+	    protectionUnderLockConfigRequired?: boolean
+
+	    /** Specifies a recovery certificate that can be used for data recovery of encrypted files. This is the same as the data recovery agent(DRA) certificate for encrypting file system(EFS) */
+	    dataRecoveryCertificate?: WindowsInformationProtectionDataRecoveryCertificate
+
+	    /** This policy controls whether to revoke the WIP keys when a device unenrolls from the management service. If set to 1 (Don't revoke keys), the keys will not be revoked and the user will continue to have access to protected files after unenrollment. If the keys are not revoked, there will be no revoked file cleanup subsequently. */
+	    revokeOnUnenrollDisabled?: boolean
+
+	    /** TemplateID GUID to use for RMS encryption. The RMS template allows the IT admin to configure the details about who has access to RMS-protected file and how long they have access */
+	    rightsManagementServicesTemplateId?: string
+
+	    /** Specifies whether to allow Azure RMS encryption for WIP */
+	    azureRightsManagementServicesAllowed?: boolean
+
+	    /** Determines whether overlays are added to icons for WIP protected files in Explorer and enterprise only app tiles in the Start menu. Starting in Windows 10, version 1703 this setting also configures the visibility of the WIP icon in the title bar of a WIP-protected app */
+	    iconsVisible?: boolean
+
+	    /** Protected applications can access enterprise data and the data handled by those applications are protected with encryption */
+	    protectedApps?: WindowsInformationProtectionApp[]
+
+	    /** Exempt applications can also access enterprise data, but the data handled by those applications are not protected. This is because some critical enterprise applications may have compatibility problems with encrypted data. */
+	    exemptApps?: WindowsInformationProtectionApp[]
+
+	    /** This is the list of domains that comprise the boundaries of the enterprise. Data from one of these domains that is sent to a device will be considered enterprise data and protected These locations will be considered a safe destination for enterprise data to be shared to */
+	    enterpriseNetworkDomainNames?: WindowsInformationProtectionResourceCollection[]
+
+	    /** Contains a list of Enterprise resource domains hosted in the cloud that need to be protected. Connections to these resources are considered enterprise data. If a proxy is paired with a cloud resource, traffic to the cloud resource will be routed through the enterprise network via the denoted proxy server (on Port 80). A proxy server used for this purpose must also be configured using the EnterpriseInternalProxyServers policy */
+	    enterpriseProxiedDomains?: WindowsInformationProtectionProxiedDomainCollection[]
+
+	    /** Sets the enterprise IP ranges that define the computers in the enterprise network. Data that comes from those computers will be considered part of the enterprise and protected. These locations will be considered a safe destination for enterprise data to be shared to */
+	    enterpriseIPRanges?: WindowsInformationProtectionIPRangeCollection[]
+
+	    /** Boolean value that tells the client to accept the configured list and not to use heuristics to attempt to find other subnets. Default is false */
+	    enterpriseIPRangesAreAuthoritative?: boolean
+
+	    /** This is a list of proxy servers. Any server not on this list is considered non-enterprise */
+	    enterpriseProxyServers?: WindowsInformationProtectionResourceCollection[]
+
+	    /** This is the comma-separated list of internal proxy servers. For example, "157.54.14.28, 157.54.11.118, 10.202.14.167, 157.53.14.163, 157.69.210.59". These proxies have been configured by the admin to connect to specific resources on the Internet. They are considered to be enterprise network locations. The proxies are only leveraged in configuring the EnterpriseProxiedDomains policy to force traffic to the matched domains through these proxies */
+	    enterpriseInternalProxyServers?: WindowsInformationProtectionResourceCollection[]
+
+	    /** Boolean value that tells the client to accept the configured list of proxies and not try to detect other work proxies. Default is false */
+	    enterpriseProxyServersAreAuthoritative?: boolean
+
+	    /** List of domain names that can used for work or personal resource */
+	    neutralDomainResources?: WindowsInformationProtectionResourceCollection[]
+
+	    /** This switch is for the Windows Search Indexer, to allow or disallow indexing of items */
+	    indexingEncryptedStoresOrItemsBlocked?: boolean
+
+	    /** Specifies a list of file extensions, so that files with these extensions are encrypted when copying from an SMB share within the corporate boundary */
+	    smbAutoEncryptedFileExtensions?: WindowsInformationProtectionResourceCollection[]
+
+	    /** Indicates if the policy is deployed to any inclusion groups or not. */
+	    isAssigned?: boolean
+
+	    /** Another way to input protected apps through xml files */
+	    protectedAppLockerFiles?: WindowsInformationProtectionAppLockerFile[]
+
+	    /** Another way to input exempt apps through xml files */
+	    exemptAppLockerFiles?: WindowsInformationProtectionAppLockerFile[]
+
+	    /** Navigation property to list of security groups targeted for policy. */
+	    assignments?: TargetedManagedAppPolicyAssignment[]
+
+}
+
+export interface MdmWindowsInformationProtectionPolicy extends WindowsInformationProtection {
+
+}
+
+export interface WindowsInformationProtectionPolicy extends WindowsInformationProtection {
+
+	    /** New property in RS2, pending documentation */
+	    revokeOnMdmHandoffDisabled?: boolean
+
+	    /** Enrollment url for the MDM */
+	    mdmEnrollmentUrl?: string
+
+	    /** Boolean value that sets Windows Hello for Business as a method for signing into Windows. */
+	    windowsHelloForBusinessBlocked?: boolean
+
+	    /** Integer value that sets the minimum number of characters required for the PIN. Default value is 4. The lowest number you can configure for this policy setting is 4. The largest number you can configure must be less than the number configured in the Maximum PIN length policy setting or the number 127, whichever is the lowest. */
+	    pinMinimumLength?: number
+
+	    /** Integer value that configures the use of uppercase letters in the Windows Hello for Business PIN. Default is NotAllow. Possible values are: notAllow, requireAtLeastOne, allow. */
+	    pinUppercaseLetters?: WindowsInformationProtectionPinCharacterRequirements
+
+	    /** Integer value that configures the use of lowercase letters in the Windows Hello for Business PIN. Default is NotAllow. Possible values are: notAllow, requireAtLeastOne, allow. */
+	    pinLowercaseLetters?: WindowsInformationProtectionPinCharacterRequirements
+
+	    /** Integer value that configures the use of special characters in the Windows Hello for Business PIN. Valid special characters for Windows Hello for Business PIN gestures include: ! " # $ % & ' ( )  + , - . / : ; < = > ? @ [ \ ] ^  ` { */
+	    pinSpecialCharacters?: WindowsInformationProtectionPinCharacterRequirements
+
+	    /** Integer value specifies the period of time (in days) that a PIN can be used before the system requires the user to change it. The largest number you can configure for this policy setting is 730. The lowest number you can configure for this policy setting is 0. If this policy is set to 0, then the user's PIN will never expire. This node was added in Windows 10, version 1511. Default is 0. */
+	    pinExpirationDays?: number
+
+	    /** Integer value that specifies the number of past PINs that can be associated to a user account that can't be reused. The largest number you can configure for this policy setting is 50. The lowest number you can configure for this policy setting is 0. If this policy is set to 0, then storage of previous PINs is not required. This node was added in Windows 10, version 1511. Default is 0. */
+	    numberOfPastPinsRemembered?: number
+
+	    /** The number of authentication failures allowed before the device will be wiped. A value of 0 disables device wipe functionality. Range is an integer X where 4 <= X <= 16 for desktop and 0 <= X <= 999 for mobile devices. */
+	    passwordMaximumAttemptCount?: number
+
+	    /** Specifies the maximum amount of time (in minutes) allowed after the device is idle that will cause the device to become PIN or password locked.   Range is an integer X where 0 <= X <= 999. */
+	    minutesOfInactivityBeforeDeviceLock?: number
+
+	    /** Offline interval before app data is wiped (days) */
+	    daysWithoutContactBeforeUnenroll?: number
+
+}
+
+export interface ManagedAppStatus extends Entity {
+
+	    /** Friendly name of the status report. */
+	    displayName?: string
+
+	    /** Version of the entity. */
+	    version?: string
+
+}
+
+export interface ManagedEBook extends Entity {
+
+	    /** Name of the eBook. */
+	    displayName?: string
+
+	    /** Description. */
+	    description?: string
+
+	    /** Publisher. */
+	    publisher?: string
+
+	    /** The date and time when the eBook was published. */
+	    publishedDateTime?: string
+
+	    /** Book cover. */
+	    largeCover?: MimeContent
+
+	    /** The date and time when the eBook file was created. */
+	    createdDateTime?: string
+
+	    /** The date and time when teh eBook was last modified. */
+	    lastModifiedDateTime?: string
+
+	    /** The more information Url. */
+	    informationUrl?: string
+
+	    /** The privacy statement Url. */
+	    privacyInformationUrl?: string
+
+	    /** The list of assignments for this eBook. */
+	    assignments?: ManagedEBookAssignment[]
+
+	    /** Mobile App Install Summary. */
+	    installSummary?: EBookInstallSummary
+
+	    /** The list of installation states for this eBook. */
+	    deviceStates?: DeviceInstallState[]
+
+	    /** The list of installation states for this eBook. */
+	    userStateSummary?: UserInstallStateSummary[]
+
+}
+
+export interface MobileAppAssignment extends Entity {
+
+	    /** The install intent defined by the admin. Possible values are: available, required, uninstall, availableWithoutEnrollment. */
+	    intent?: InstallIntent
+
+	    /** The target group assignment defined by the admin. */
+	    target?: DeviceAndAppManagementAssignmentTarget
+
+	    /** The settings for target assignment defined by the admin. */
+	    settings?: MobileAppAssignmentSettings
+
+}
+
+export interface MobileAppContentFile extends Entity {
+
+	    /** The Azure Storage URI. */
+	    azureStorageUri?: string
+
+	    /** A value indicating whether the file is committed. */
+	    isCommitted?: boolean
+
+	    /** The time the file was created. */
+	    createdDateTime?: string
+
+	    /** the file name. */
+	    name?: string
+
+	    /** The size of the file prior to encryption. */
+	    size?: number
+
+	    /** The size of the file after encryption. */
+	    sizeEncrypted?: number
+
+	    /** The time the Azure storage Uri expires. */
+	    azureStorageUriExpirationDateTime?: string
+
+	    /** The manifest information. */
+	    manifest?: number
+
+	    /** The state of the current upload request. Possible values are: success, transientError, error, unknown, azureStorageUriRequestSuccess, azureStorageUriRequestPending, azureStorageUriRequestFailed, azureStorageUriRequestTimedOut, azureStorageUriRenewalSuccess, azureStorageUriRenewalPending, azureStorageUriRenewalFailed, azureStorageUriRenewalTimedOut, commitFileSuccess, commitFilePending, commitFileFailed, commitFileTimedOut. */
+	    uploadState?: MobileAppContentFileUploadState
+
+}
+
+export interface MacOSOfficeSuiteApp extends MobileApp {
+
+}
+
+export interface ManagedApp extends MobileApp {
+
+	    /** The Application's availability. Possible values are: global, lineOfBusiness. */
+	    appAvailability?: ManagedAppAvailability
+
+	    /** The Application's version. */
+	    version?: string
+
+}
+
+export interface ManagedAndroidStoreApp extends ManagedApp {
+
+	    /** The app's package ID. */
+	    packageId?: string
+
+	    /** The Android AppStoreUrl. */
+	    appStoreUrl?: string
+
+	    /** The value for the minimum supported operating system. */
+	    minimumSupportedOperatingSystem?: AndroidMinimumOperatingSystem
+
+}
+
+export interface ManagedIOSStoreApp extends ManagedApp {
+
+	    /** The app's Bundle ID. */
+	    bundleId?: string
+
+	    /** The Apple AppStoreUrl. */
+	    appStoreUrl?: string
+
+	    /** The iOS architecture for which this app can run on. */
+	    applicableDeviceType?: IosDeviceType
+
+	    /** The value for the minimum supported operating system. */
+	    minimumSupportedOperatingSystem?: IosMinimumOperatingSystem
+
+}
+
+export interface ManagedMobileLobApp extends ManagedApp {
+
+	    /** The internal committed content version. */
+	    committedContentVersion?: string
+
+	    /** The name of the main Lob application file. */
+	    fileName?: string
+
+	    /** The total size, including all uploaded files. */
+	    size?: number
+
+	    /** The list of content versions for this app. */
+	    contentVersions?: MobileAppContent[]
+
+}
+
+export interface MobileAppContent extends Entity {
+
+	    /** The list of files for this app content version. */
+	    files?: MobileAppContentFile[]
+
+}
+
+export interface ManagedAndroidLobApp extends ManagedMobileLobApp {
+
+	    /** The package identifier. */
+	    packageId?: string
+
+	    /** The value for the minimum applicable operating system. */
+	    minimumSupportedOperatingSystem?: AndroidMinimumOperatingSystem
+
+	    /** The version name of managed Android Line of Business (LoB) app. */
+	    versionName?: string
+
+	    /** The version code of managed Android Line of Business (LoB) app. */
+	    versionCode?: string
+
+}
+
+export interface ManagedIOSLobApp extends ManagedMobileLobApp {
+
+	    /** The Identity Name. */
+	    bundleId?: string
+
+	    /** The iOS architecture for which this app can run on. */
+	    applicableDeviceType?: IosDeviceType
+
+	    /** The value for the minimum applicable operating system. */
+	    minimumSupportedOperatingSystem?: IosMinimumOperatingSystem
+
+	    /** The expiration time. */
+	    expirationDateTime?: string
+
+	    /** The version number of managed iOS Line of Business (LoB) app. */
+	    versionNumber?: string
+
+	    /** The build number of managed iOS Line of Business (LoB) app. */
+	    buildNumber?: string
+
+}
+
+export interface MobileLobApp extends MobileApp {
+
+	    /** The internal committed content version. */
+	    committedContentVersion?: string
+
+	    /** The name of the main Lob application file. */
+	    fileName?: string
+
+	    /** The total size, including all uploaded files. */
+	    size?: number
+
+	    /** The list of content versions for this app. */
+	    contentVersions?: MobileAppContent[]
+
+}
+
+export interface WindowsMobileMSI extends MobileLobApp {
+
+	    /** The command line. */
+	    commandLine?: string
+
+	    /** The product code. */
+	    productCode?: string
+
+	    /** The product version of Windows Mobile MSI Line of Business (LoB) app. */
+	    productVersion?: string
+
+	    /** A boolean to control whether the app's version will be used to detect the app after it is installed on a device. Set this to true for Windows Mobile MSI Line of Business (LoB) apps that use a self update feature. */
+	    ignoreVersionDetection?: boolean
+
+}
+
+export interface WindowsUniversalAppX extends MobileLobApp {
+
+	    /** The Windows architecture(s) for which this app can run on. Possible values are: none, x86, x64, arm, neutral. */
+	    applicableArchitectures?: WindowsArchitecture
+
+	    /** The Windows device type(s) for which this app can run on. Possible values are: none, desktop, mobile, holographic, team. */
+	    applicableDeviceTypes?: WindowsDeviceType
+
+	    /** The Identity Name. */
+	    identityName?: string
+
+	    /** The Identity Publisher Hash. */
+	    identityPublisherHash?: string
+
+	    /** The Identity Resource Identifier. */
+	    identityResourceIdentifier?: string
+
+	    /** Whether or not the app is a bundle. */
+	    isBundle?: boolean
+
+	    /** The value for the minimum applicable operating system. */
+	    minimumSupportedOperatingSystem?: WindowsMinimumOperatingSystem
+
+	    /** The identity version. */
+	    identityVersion?: string
+
+}
+
+export interface AndroidLobApp extends MobileLobApp {
+
+	    /** The package identifier. */
+	    packageId?: string
+
+	    /** The value for the minimum applicable operating system. */
+	    minimumSupportedOperatingSystem?: AndroidMinimumOperatingSystem
+
+	    /** The version name of Android Line of Business (LoB) app. */
+	    versionName?: string
+
+	    /** The version code of Android Line of Business (LoB) app. */
+	    versionCode?: string
+
+}
+
+export interface IosLobApp extends MobileLobApp {
+
+	    /** The Identity Name. */
+	    bundleId?: string
+
+	    /** The iOS architecture for which this app can run on. */
+	    applicableDeviceType?: IosDeviceType
+
+	    /** The value for the minimum applicable operating system. */
+	    minimumSupportedOperatingSystem?: IosMinimumOperatingSystem
+
+	    /** The expiration time. */
+	    expirationDateTime?: string
+
+	    /** The version number of iOS Line of Business (LoB) app. */
+	    versionNumber?: string
+
+	    /** The build number of iOS Line of Business (LoB) app. */
+	    buildNumber?: string
+
+}
+
+export interface MicrosoftStoreForBusinessApp extends MobileApp {
+
+	    /** The number of Microsoft Store for Business licenses in use. */
+	    usedLicenseCount?: number
+
+	    /** The total number of Microsoft Store for Business licenses. */
+	    totalLicenseCount?: number
+
+	    /** The app product key */
+	    productKey?: string
+
+	    /** The app license type Possible values are: offline, online. */
+	    licenseType?: MicrosoftStoreForBusinessLicenseType
+
+	    /** The app package identifier */
+	    packageIdentityName?: string
+
+}
+
+export interface WebApp extends MobileApp {
+
+	    /** The web app URL. */
+	    appUrl?: string
+
+	    /** Whether or not to use managed browser. This property is only applicable for Android and IOS. */
+	    useManagedBrowser?: boolean
+
+}
+
+export interface AndroidStoreApp extends MobileApp {
+
+	    /** The package identifier. */
+	    packageId?: string
+
+	    /** The Android app store URL. */
+	    appStoreUrl?: string
+
+	    /** The value for the minimum applicable operating system. */
+	    minimumSupportedOperatingSystem?: AndroidMinimumOperatingSystem
+
+}
+
+export interface IosVppApp extends MobileApp {
+
+	    /** The number of VPP licenses in use. */
+	    usedLicenseCount?: number
+
+	    /** The total number of VPP licenses. */
+	    totalLicenseCount?: number
+
+	    /** The VPP application release date and time. */
+	    releaseDateTime?: string
+
+	    /** The store URL. */
+	    appStoreUrl?: string
+
+	    /** The supported License Type. */
+	    licensingType?: VppLicensingType
+
+	    /** The applicable iOS Device Type. */
+	    applicableDeviceType?: IosDeviceType
+
+	    /** The organization associated with the Apple Volume Purchase Program Token */
+	    vppTokenOrganizationName?: string
+
+	    /** The type of volume purchase program which the given Apple Volume Purchase Program Token is associated with. Possible values are: business, education. Possible values are: business, education. */
+	    vppTokenAccountType?: VppTokenAccountType
+
+	    /** The Apple Id associated with the given Apple Volume Purchase Program Token. */
+	    vppTokenAppleId?: string
+
+	    /** The Identity Name. */
+	    bundleId?: string
+
+}
+
+export interface IosStoreApp extends MobileApp {
+
+	    /** The Identity Name. */
+	    bundleId?: string
+
+	    /** The Apple App Store URL */
+	    appStoreUrl?: string
+
+	    /** The iOS architecture for which this app can run on. */
+	    applicableDeviceType?: IosDeviceType
+
+	    /** The value for the minimum applicable operating system. */
+	    minimumSupportedOperatingSystem?: IosMinimumOperatingSystem
+
+}
+
+export interface ManagedDeviceMobileAppConfigurationUserStatus extends Entity {
+
+	    /** User name of the DevicePolicyStatus. */
+	    userDisplayName?: string
+
+	    /** Devices count for that user. */
+	    devicesCount?: number
+
+	    /** Compliance status of the policy report. Possible values are: unknown, notApplicable, compliant, remediated, nonCompliant, error, conflict. */
+	    status?: ComplianceStatus
+
+	    /** Last modified date time of the policy report. */
+	    lastReportedDateTime?: string
+
+	    /** UserPrincipalName. */
+	    userPrincipalName?: string
+
+}
+
+export interface ManagedDeviceMobileAppConfigurationAssignment extends Entity {
+
+	    /** Assignment target that the T&C policy is assigned to. */
+	    target?: DeviceAndAppManagementAssignmentTarget
+
+}
+
+export interface ManagedDeviceMobileAppConfigurationDeviceSummary extends Entity {
+
+	    /** Number of pending devices */
+	    pendingCount?: number
+
+	    /** Number of not applicable devices */
+	    notApplicableCount?: number
+
+	    /** Number of succeeded devices */
+	    successCount?: number
+
+	    /** Number of error devices */
+	    errorCount?: number
+
+	    /** Number of failed devices */
+	    failedCount?: number
+
+	    /** Last update time */
+	    lastUpdateDateTime?: string
+
+	    /** Version of the policy for that overview */
+	    configurationVersion?: number
+
+}
+
+export interface ManagedDeviceMobileAppConfigurationUserSummary extends Entity {
+
+	    /** Number of pending Users */
+	    pendingCount?: number
+
+	    /** Number of not applicable devices */
+	    notApplicableCount?: number
+
+	    /** Number of succeeded Users */
+	    successCount?: number
+
+	    /** Number of error Users */
+	    errorCount?: number
+
+	    /** Number of failed Users */
+	    failedCount?: number
+
+	    /** Last update time */
+	    lastUpdateDateTime?: string
+
+	    /** Version of the policy for that overview */
+	    configurationVersion?: number
+
+}
+
+export interface DeviceManagement extends Entity {
+
+	    /** Tenant mobile device management subscription state. Possible values are: pending, active, warning, disabled, deleted, blocked, lockedOut. */
+	    subscriptionState?: DeviceManagementSubscriptionState
+
+	    /** Account level settings. */
+	    settings?: DeviceManagementSettings
+
+	    /** intuneBrand contains data which is used in customizing the appearance of the Company Portal applications as well as the end user web portal. */
+	    intuneBrand?: IntuneBrand
+
+	    /** The terms and conditions associated with device management of the company. */
+	    termsAndConditions?: TermsAndConditions[]
+
+	    /** Apple push notification certificate. */
+	    applePushNotificationCertificate?: ApplePushNotificationCertificate
+
+	    /** Device overview */
+	    managedDeviceOverview?: ManagedDeviceOverview
+
+	    /** The list of detected apps associated with a device. */
+	    detectedApps?: DetectedApp[]
+
+	    /** The list of managed devices. */
+	    managedDevices?: ManagedDevice[]
+
+	    /** The device configurations. */
+	    deviceConfigurations?: DeviceConfiguration[]
+
+	    /** The device compliance policies. */
+	    deviceCompliancePolicies?: DeviceCompliancePolicy[]
+
+	    /** The software update status summary. */
+	    softwareUpdateStatusSummary?: SoftwareUpdateStatusSummary
+
+	    /** The device compliance state summary for this account. */
+	    deviceCompliancePolicyDeviceStateSummary?: DeviceCompliancePolicyDeviceStateSummary
+
+	    /** The summary states of compliance policy settings for this account. */
+	    deviceCompliancePolicySettingStateSummaries?: DeviceCompliancePolicySettingStateSummary[]
+
+	    /** The device configuration device state summary for this account. */
+	    deviceConfigurationDeviceStateSummaries?: DeviceConfigurationDeviceStateSummary
+
+	    /** The IOS software update installation statuses for this account. */
+	    iosUpdateStatuses?: IosUpdateDeviceStatus[]
+
+	    /** The list of device categories with the tenant. */
+	    deviceCategories?: DeviceCategory[]
+
+	    /** The list of Exchange Connectors configured by the tenant. */
+	    exchangeConnectors?: DeviceManagementExchangeConnector[]
+
+	    /** The list of device enrollment configurations */
+	    deviceEnrollmentConfigurations?: DeviceEnrollmentConfiguration[]
+
+	    /** The Exchange on premises conditional access settings. On premises conditional access will require devices to be both enrolled and compliant for mail access */
+	    conditionalAccessSettings?: OnPremisesConditionalAccessSettings
+
+	    /** The list of Mobile threat Defense connectors configured by the tenant. */
+	    mobileThreatDefenseConnectors?: MobileThreatDefenseConnector[]
+
+	    /** The list of Device Management Partners configured by the tenant. */
+	    deviceManagementPartners?: DeviceManagementPartner[]
+
+	    /** The Notification Message Templates. */
+	    notificationMessageTemplates?: NotificationMessageTemplate[]
+
+	    /** The Role Definitions. */
+	    roleDefinitions?: RoleDefinition[]
+
+	    /** The Role Assignments. */
+	    roleAssignments?: DeviceAndAppManagementRoleAssignment[]
+
+	    /** The Resource Operations. */
+	    resourceOperations?: ResourceOperation[]
+
+	    /** The telecom expense management partners. */
+	    telecomExpenseManagementPartners?: TelecomExpenseManagementPartner[]
+
+	    /** The remote assist partners. */
+	    remoteAssistancePartners?: RemoteAssistancePartner[]
+
+	    /** The windows information protection app learning summaries. */
+	    windowsInformationProtectionAppLearningSummaries?: WindowsInformationProtectionAppLearningSummary[]
+
+	    /** The windows information protection network learning summaries. */
+	    windowsInformationProtectionNetworkLearningSummaries?: WindowsInformationProtectionNetworkLearningSummary[]
+
+	    /** The list of troubleshooting events for the tenant. */
+	    troubleshootingEvents?: DeviceManagementTroubleshootingEvent[]
+
+}
+
+export interface TermsAndConditions extends Entity {
+
+	    /** DateTime the object was created. */
+	    createdDateTime?: string
+
+	    /** DateTime the object was last modified. */
+	    lastModifiedDateTime?: string
+
+	    /** Administrator-supplied name for the T&C policy. */
+	    displayName?: string
+
+	    /** Administrator-supplied description of the T&C policy. */
+	    description?: string
+
+	    /** Administrator-supplied title of the terms and conditions. This is shown to the user on prompts to accept the T&C policy. */
+	    title?: string
+
+	    /** Administrator-supplied body text of the terms and conditions, typically the terms themselves. This is shown to the user on prompts to accept the T&C policy. */
+	    bodyText?: string
+
+	    /** Administrator-supplied explanation of the terms and conditions, typically describing what it means to accept the terms and conditions set out in the T&C policy. This is shown to the user on prompts to accept the T&C policy. */
+	    acceptanceStatement?: string
+
+	    /** Integer indicating the current version of the terms. Incremented when an administrator makes a change to the terms and wishes to require users to re-accept the modified T&C policy. */
+	    version?: number
+
+	    /** The list of assignments for this T&C policy. */
+	    assignments?: TermsAndConditionsAssignment[]
+
+	    /** The list of acceptance statuses for this T&C policy. */
+	    acceptanceStatuses?: TermsAndConditionsAcceptanceStatus[]
+
+}
+
+export interface ApplePushNotificationCertificate extends Entity {
+
+	    /** Apple Id of the account used to create the MDM push certificate. */
+	    appleIdentifier?: string
+
+	    /** Topic Id. */
+	    topicIdentifier?: string
+
+	    /** Last modified date and time for Apple push notification certificate. */
+	    lastModifiedDateTime?: string
+
+	    /** The expiration date and time for Apple push notification certificate. */
+	    expirationDateTime?: string
+
+	    /** Not yet documented */
+	    certificate?: string
+
+}
+
+export interface ManagedDeviceOverview extends Entity {
+
+	    /** Total enrolled device count. Does not include PC devices managed via Intune PC Agent */
+	    enrolledDeviceCount?: number
+
+	    /** The number of devices enrolled in MDM */
+	    mdmEnrolledCount?: number
+
+	    /** The number of devices enrolled in both MDM and EAS */
+	    dualEnrolledDeviceCount?: number
+
+	    /** Device operating system summary. */
+	    deviceOperatingSystemSummary?: DeviceOperatingSystemSummary
+
+	    /** Distribution of Exchange Access State in Intune */
+	    deviceExchangeAccessStateSummary?: DeviceExchangeAccessStateSummary
+
+}
+
+export interface DetectedApp extends Entity {
+
+	    /** Name of the discovered application. Read-only */
+	    displayName?: string
+
+	    /** Version of the discovered application. Read-only */
+	    version?: string
+
+	    /** Discovered application size in bytes. Read-only */
+	    sizeInByte?: number
+
+	    /** The number of devices that have installed this application */
+	    deviceCount?: number
+
+	    /** The devices that have the discovered application installed */
+	    managedDevices?: ManagedDevice[]
+
+}
+
+export interface DeviceConfiguration extends Entity {
+
+	    /** DateTime the object was last modified. */
+	    lastModifiedDateTime?: string
+
+	    /** DateTime the object was created. */
+	    createdDateTime?: string
+
+	    /** Admin provided description of the Device Configuration. */
+	    description?: string
+
+	    /** Admin provided name of the device configuration. */
+	    displayName?: string
+
+	    /** Version of the device configuration. */
+	    version?: number
+
+	    /** The list of assignments for the device configuration profile. */
+	    assignments?: DeviceConfigurationAssignment[]
+
+	    /** Device configuration installation status by device. */
+	    deviceStatuses?: DeviceConfigurationDeviceStatus[]
+
+	    /** Device configuration installation stauts by user. */
+	    userStatuses?: DeviceConfigurationUserStatus[]
+
+	    /** Device Configuration devices status overview */
+	    deviceStatusOverview?: DeviceConfigurationDeviceOverview
+
+	    /** Device Configuration users status overview */
+	    userStatusOverview?: DeviceConfigurationUserOverview
+
+	    /** Device Configuration Setting State Device Summary */
+	    deviceSettingStateSummaries?: SettingStateDeviceSummary[]
+
+}
+
+export interface DeviceCompliancePolicy extends Entity {
+
+	    /** DateTime the object was created. */
+	    createdDateTime?: string
+
+	    /** Admin provided description of the Device Configuration. */
+	    description?: string
+
+	    /** DateTime the object was last modified. */
+	    lastModifiedDateTime?: string
+
+	    /** Admin provided name of the device configuration. */
+	    displayName?: string
+
+	    /** Version of the device configuration. */
+	    version?: number
+
+	    /** The list of scheduled action for this rule */
+	    scheduledActionsForRule?: DeviceComplianceScheduledActionForRule[]
+
+	    /** List of DeviceComplianceDeviceStatus. */
+	    deviceStatuses?: DeviceComplianceDeviceStatus[]
+
+	    /** List of DeviceComplianceUserStatus. */
+	    userStatuses?: DeviceComplianceUserStatus[]
+
+	    /** Device compliance devices status overview */
+	    deviceStatusOverview?: DeviceComplianceDeviceOverview
+
+	    /** Device compliance users status overview */
+	    userStatusOverview?: DeviceComplianceUserOverview
+
+	    /** Compliance Setting State Device Summary */
+	    deviceSettingStateSummaries?: SettingStateDeviceSummary[]
+
+	    /** The collection of assignments for this compliance policy. */
+	    assignments?: DeviceCompliancePolicyAssignment[]
+
+}
+
+export interface SoftwareUpdateStatusSummary extends Entity {
+
+	    /** The name of the policy. */
+	    displayName?: string
+
+	    /** Number of compliant devices. */
+	    compliantDeviceCount?: number
+
+	    /** Number of non compliant devices. */
+	    nonCompliantDeviceCount?: number
+
+	    /** Number of remediated devices. */
+	    remediatedDeviceCount?: number
+
+	    /** Number of devices had error. */
+	    errorDeviceCount?: number
+
+	    /** Number of unknown devices. */
+	    unknownDeviceCount?: number
+
+	    /** Number of conflict devices. */
+	    conflictDeviceCount?: number
+
+	    /** Number of not applicable devices. */
+	    notApplicableDeviceCount?: number
+
+	    /** Number of compliant users. */
+	    compliantUserCount?: number
+
+	    /** Number of non compliant users. */
+	    nonCompliantUserCount?: number
+
+	    /** Number of remediated users. */
+	    remediatedUserCount?: number
+
+	    /** Number of users had error. */
+	    errorUserCount?: number
+
+	    /** Number of unknown users. */
+	    unknownUserCount?: number
+
+	    /** Number of conflict users. */
+	    conflictUserCount?: number
+
+	    /** Number of not applicable users. */
+	    notApplicableUserCount?: number
+
+}
+
+export interface DeviceCompliancePolicyDeviceStateSummary extends Entity {
+
+	    /** Number of devices that are in grace period */
+	    inGracePeriodCount?: number
+
+	    /** Number of devices that have compliance managed by System Center Configuration Manager */
+	    configManagerCount?: number
+
+	    /** Number of unknown devices */
+	    unknownDeviceCount?: number
+
+	    /** Number of not applicable devices */
+	    notApplicableDeviceCount?: number
+
+	    /** Number of compliant devices */
+	    compliantDeviceCount?: number
+
+	    /** Number of remediated devices */
+	    remediatedDeviceCount?: number
+
+	    /** Number of NonCompliant devices */
+	    nonCompliantDeviceCount?: number
+
+	    /** Number of error devices */
+	    errorDeviceCount?: number
+
+	    /** Number of conflict devices */
+	    conflictDeviceCount?: number
+
+}
+
+export interface DeviceCompliancePolicySettingStateSummary extends Entity {
+
+	    /** The setting class name and property name. */
+	    setting?: string
+
+	    /** Name of the setting. */
+	    settingName?: string
+
+	    /** Setting platform Possible values are: android, iOS, macOS, windowsPhone81, windows81AndLater, windows10AndLater, all. */
+	    platformType?: PolicyPlatformType
+
+	    /** Number of unknown devices */
+	    unknownDeviceCount?: number
+
+	    /** Number of not applicable devices */
+	    notApplicableDeviceCount?: number
+
+	    /** Number of compliant devices */
+	    compliantDeviceCount?: number
+
+	    /** Number of remediated devices */
+	    remediatedDeviceCount?: number
+
+	    /** Number of NonCompliant devices */
+	    nonCompliantDeviceCount?: number
+
+	    /** Number of error devices */
+	    errorDeviceCount?: number
+
+	    /** Number of conflict devices */
+	    conflictDeviceCount?: number
+
+	    /** Not yet documented */
+	    deviceComplianceSettingStates?: DeviceComplianceSettingState[]
+
+}
+
+export interface DeviceConfigurationDeviceStateSummary extends Entity {
+
+	    /** Number of unknown devices */
+	    unknownDeviceCount?: number
+
+	    /** Number of not applicable devices */
+	    notApplicableDeviceCount?: number
+
+	    /** Number of compliant devices */
+	    compliantDeviceCount?: number
+
+	    /** Number of remediated devices */
+	    remediatedDeviceCount?: number
+
+	    /** Number of NonCompliant devices */
+	    nonCompliantDeviceCount?: number
+
+	    /** Number of error devices */
+	    errorDeviceCount?: number
+
+	    /** Number of conflict devices */
+	    conflictDeviceCount?: number
+
+}
+
+export interface IosUpdateDeviceStatus extends Entity {
+
+	    /** The installation status of the policy report. Possible values are: success, available, idle, downloading, downloadFailed, downloadRequiresComputer, downloadInsufficientSpace, downloadInsufficientPower, downloadInsufficientNetwork, installing, installInsufficientSpace, installInsufficientPower, installPhoneCallInProgress, installFailed, notSupportedOperation, sharedDeviceUserLoggedInError. */
+	    installStatus?: IosUpdatesInstallStatus
+
+	    /** The device version that is being reported. */
+	    osVersion?: string
+
+	    /** The device id that is being reported. */
+	    deviceId?: string
+
+	    /** The User id that is being reported. */
+	    userId?: string
+
+	    /** Device name of the DevicePolicyStatus. */
+	    deviceDisplayName?: string
+
+	    /** The User Name that is being reported */
+	    userName?: string
+
+	    /** The device model that is being reported */
+	    deviceModel?: string
+
+	    /** The DateTime when device compliance grace period expires */
+	    complianceGracePeriodExpirationDateTime?: string
+
+	    /** Compliance status of the policy report. Possible values are: unknown, notApplicable, compliant, remediated, nonCompliant, error, conflict. */
+	    status?: ComplianceStatus
+
+	    /** Last modified date time of the policy report. */
+	    lastReportedDateTime?: string
+
+	    /** UserPrincipalName. */
+	    userPrincipalName?: string
+
+}
+
+export interface DeviceCategory extends Entity {
+
+	    /** Display name for the device category. */
+	    displayName?: string
+
+	    /** Optional description for the device category. */
+	    description?: string
+
+}
+
+export interface DeviceManagementExchangeConnector extends Entity {
+
+	    /** Last sync time for the Exchange Connector */
+	    lastSyncDateTime?: string
+
+	    /** Exchange Connector Status Possible values are: none, connectionPending, connected, disconnected. */
+	    status?: DeviceManagementExchangeConnectorStatus
+
+	    /** Email address used to configure the Service To Service Exchange Connector. */
+	    primarySmtpAddress?: string
+
+	    /** The name of the server hosting the Exchange Connector. */
+	    serverName?: string
+
+	    /** The type of Exchange Connector Configured. Possible values are: onPremises, hosted, serviceToService, dedicated. */
+	    exchangeConnectorType?: DeviceManagementExchangeConnectorType
+
+	    /** The version of the ExchangeConnectorAgent */
+	    version?: string
+
+	    /** An alias assigned to the Exchange server */
+	    exchangeAlias?: string
+
+	    /** Exchange Organization to the Exchange server */
+	    exchangeOrganization?: string
+
+}
+
+export interface DeviceEnrollmentConfiguration extends Entity {
+
+	    /** Not yet documented */
+	    displayName?: string
+
+	    /** Not yet documented */
+	    description?: string
+
+	    /** Not yet documented */
+	    priority?: number
+
+	    /** Not yet documented */
+	    createdDateTime?: string
+
+	    /** Not yet documented */
+	    lastModifiedDateTime?: string
+
+	    /** Not yet documented */
+	    version?: number
+
+	    /** The list of group assignments for the device configuration profile. */
+	    assignments?: EnrollmentConfigurationAssignment[]
+
+}
+
+export interface OnPremisesConditionalAccessSettings extends Entity {
+
+	    /** Indicates if on premises conditional access is enabled for this organization */
+	    enabled?: boolean
+
+	    /** User groups that will be targeted by on premises conditional access. All users in these groups will be required to have mobile device managed and compliant for mail access. */
+	    includedGroups?: string[]
+
+	    /** User groups that will be exempt by on premises conditional access. All users in these groups will be exempt from the conditional access policy. */
+	    excludedGroups?: string[]
+
+	    /** Override the default access rule when allowing a device to ensure access is granted. */
+	    overrideDefaultRule?: boolean
+
+}
+
+export interface MobileThreatDefenseConnector extends Entity {
+
+	    /** Timestamp of last heartbeat after admin enabled option Connect to MTP */
+	    lastHeartbeatDateTime?: string
+
+	    /** Partner state of this tenant Possible values are: unavailable, available, enabled, unresponsive. */
+	    partnerState?: MobileThreatPartnerTenantState
+
+	    /** Android Toggle On or Off */
+	    androidEnabled?: boolean
+
+	    /** For Android, Allows admin to config must receive data from the data sync partner prior to being considered compliant */
+	    androidDeviceBlockedOnMissingPartnerData?: boolean
+
+	    /** For IOS, Allows admin to config must receive data from the data sync partner prior to being considered compliant */
+	    iosDeviceBlockedOnMissingPartnerData?: boolean
+
+	    /** Allows admin to block devices on the enabled platforms that do not meet minimum version requirements */
+	    partnerUnsupportedOsVersionBlocked?: boolean
+
+	    /** IOS Toggle On or Off */
+	    iosEnabled?: boolean
+
+	    /** Get or Set days the per tenant tolerance to unresponsiveness for this partner integration */
+	    partnerUnresponsivenessThresholdInDays?: number
+
+}
+
+export interface DeviceManagementPartner extends Entity {
+
+	    /** Timestamp of last heartbeat after admin enabled option Connect to Device management Partner */
+	    lastHeartbeatDateTime?: string
+
+	    /** Partner state of this tenant Possible values are: unknown, unavailable, enabled, terminated, rejected, unresponsive. */
+	    partnerState?: DeviceManagementPartnerTenantState
+
+	    /** Partner App type Possible values are: unknown, singleTenantApp, multiTenantApp. */
+	    partnerAppType?: DeviceManagementPartnerAppType
+
+	    /** Partner Single tenant App id */
+	    singleTenantAppId?: string
+
+	    /** Partner display name */
+	    displayName?: string
+
+	    /** Whether device management partner is configured or not */
+	    isConfigured?: boolean
+
+	    /** DateTime in UTC when PartnerDevices will be removed */
+	    whenPartnerDevicesWillBeRemovedDateTime?: string
+
+	    /** DateTime in UTC when PartnerDevices will be marked as NonCompliant */
+	    whenPartnerDevicesWillBeMarkedAsNonCompliantDateTime?: string
+
+}
+
+export interface NotificationMessageTemplate extends Entity {
+
+	    /** DateTime the object was last modified. */
+	    lastModifiedDateTime?: string
+
+	    /** Display name for the Notification Message Template. */
+	    displayName?: string
+
+	    /** The default locale to fallback onto when the requested locale is not available. */
+	    defaultLocale?: string
+
+	    /** The Message Template Branding Options. Branding is defined in the Intune Admin Console. Possible values are: none, includeCompanyLogo, includeCompanyName, includeContactInformation. */
+	    brandingOptions?: NotificationTemplateBrandingOptions
+
+	    /** The list of localized messages for this Notification Message Template. */
+	    localizedNotificationMessages?: LocalizedNotificationMessage[]
+
+}
+
+export interface RoleDefinition extends Entity {
+
+	    /** Display Name of the Role definition. */
+	    displayName?: string
+
+	    /** Description of the Role definition. */
+	    description?: string
+
+	    /** List of Role Permissions this role is allowed to perform. These must match the actionName that is defined as part of the rolePermission. */
+	    rolePermissions?: RolePermission[]
+
+	    /** Type of Role. Set to True if it is built-in, or set to False if it is a custom role definition. */
+	    isBuiltIn?: boolean
+
+	    /** List of Role assignments for this role definition. */
+	    roleAssignments?: RoleAssignment[]
+
+}
+
+export interface RoleAssignment extends Entity {
+
+	    /** The display or friendly name of the role Assignment. */
+	    displayName?: string
+
+	    /** Description of the Role Assignment. */
+	    description?: string
+
+	    /** List of ids of role scope member security groups.  These are IDs from Azure Active Directory. */
+	    resourceScopes?: string[]
+
+	    /** Role definition this assignment is part of. */
+	    roleDefinition?: RoleDefinition
+
+}
+
+export interface DeviceAndAppManagementRoleAssignment extends RoleAssignment {
+
+	    /** The list of ids of role member security groups. These are IDs from Azure Active Directory. */
+	    members?: string[]
+
+}
+
+export interface ResourceOperation extends Entity {
+
+	    /** Name of the Resource this operation is performed on. */
+	    resourceName?: string
+
+	    /** Type of action this operation is going to perform. The actionName should be concise and limited to as few words as possible. */
+	    actionName?: string
+
+	    /** Description of the resource operation. The description is used in mouse-over text for the operation when shown in the Azure Portal. */
+	    description?: string
+
+}
+
+export interface TelecomExpenseManagementPartner extends Entity {
+
+	    /** Display name of the TEM partner. */
+	    displayName?: string
+
+	    /** URL of the TEM partner's administrative control panel, where an administrator can configure their TEM service. */
+	    url?: string
+
+	    /** Whether the partner's AAD app has been authorized to access Intune. */
+	    appAuthorized?: boolean
+
+	    /** Whether Intune's connection to the TEM service is currently enabled or disabled. */
+	    enabled?: boolean
+
+	    /** Timestamp of the last request sent to Intune by the TEM partner. */
+	    lastConnectionDateTime?: string
+
+}
+
+export interface RemoteAssistancePartner extends Entity {
+
+	    /** Display name of the partner. */
+	    displayName?: string
+
+	    /** URL of the partner's onboarding portal, where an administrator can configure their Remote Assistance service. */
+	    onboardingUrl?: string
+
+	    /** TBD Possible values are: notOnboarded, onboarding, onboarded. */
+	    onboardingStatus?: RemoteAssistanceOnboardingStatus
+
+	    /** Timestamp of the last request sent to Intune by the TEM partner. */
+	    lastConnectionDateTime?: string
+
+}
+
+export interface WindowsInformationProtectionAppLearningSummary extends Entity {
+
+	    /** Application Name */
+	    applicationName?: string
+
+	    /** Application Type Possible values are: universal, desktop. */
+	    applicationType?: ApplicationType
+
+	    /** Device Count */
+	    deviceCount?: number
+
+}
+
+export interface WindowsInformationProtectionNetworkLearningSummary extends Entity {
+
+	    /** Website url */
+	    url?: string
+
+	    /** Device Count */
+	    deviceCount?: number
+
+}
+
+export interface TermsAndConditionsAssignment extends Entity {
+
+	    /** Assignment target that the T&C policy is assigned to. */
+	    target?: DeviceAndAppManagementAssignmentTarget
+
+}
+
+export interface TermsAndConditionsAcceptanceStatus extends Entity {
+
+	    /** Display name of the user whose acceptance the entity represents. */
+	    userDisplayName?: string
+
+	    /** Most recent version number of the T&C accepted by the user. */
+	    acceptedVersion?: number
+
+	    /** DateTime when the terms were last accepted by the user. */
+	    acceptedDateTime?: string
+
+	    /** Navigation link to the terms and conditions that are assigned. */
+	    termsAndConditions?: TermsAndConditions
+
+}
+
+export interface DeviceConfigurationState extends Entity {
+
+	    /** Not yet documented */
+	    settingStates?: DeviceConfigurationSettingState[]
+
+	    /** The name of the policy for this policyBase */
+	    displayName?: string
+
+	    /** The version of the policy */
+	    version?: number
+
+	    /** Platform type that the policy applies to Possible values are: android, iOS, macOS, windowsPhone81, windows81AndLater, windows10AndLater, all. */
+	    platformType?: PolicyPlatformType
+
+	    /** The compliance state of the policy Possible values are: unknown, notApplicable, compliant, remediated, nonCompliant, error, conflict. */
+	    state?: ComplianceStatus
+
+	    /** Count of how many setting a policy holds */
+	    settingCount?: number
+
+}
+
+export interface DeviceCompliancePolicyState extends Entity {
+
+	    /** Not yet documented */
+	    settingStates?: DeviceCompliancePolicySettingState[]
+
+	    /** The name of the policy for this policyBase */
+	    displayName?: string
+
+	    /** The version of the policy */
+	    version?: number
+
+	    /** Platform type that the policy applies to Possible values are: android, iOS, macOS, windowsPhone81, windows81AndLater, windows10AndLater, all. */
+	    platformType?: PolicyPlatformType
+
+	    /** The compliance state of the policy Possible values are: unknown, notApplicable, compliant, remediated, nonCompliant, error, conflict. */
+	    state?: ComplianceStatus
+
+	    /** Count of how many setting a policy holds */
+	    settingCount?: number
+
+}
+
+export interface DeviceConfigurationAssignment extends Entity {
+
+	    /** The assignment target for the device configuration. */
+	    target?: DeviceAndAppManagementAssignmentTarget
+
+}
+
+export interface DeviceConfigurationDeviceStatus extends Entity {
+
+	    /** Device name of the DevicePolicyStatus. */
+	    deviceDisplayName?: string
+
+	    /** The User Name that is being reported */
+	    userName?: string
+
+	    /** The device model that is being reported */
+	    deviceModel?: string
+
+	    /** The DateTime when device compliance grace period expires */
+	    complianceGracePeriodExpirationDateTime?: string
+
+	    /** Compliance status of the policy report. Possible values are: unknown, notApplicable, compliant, remediated, nonCompliant, error, conflict. */
+	    status?: ComplianceStatus
+
+	    /** Last modified date time of the policy report. */
+	    lastReportedDateTime?: string
+
+	    /** UserPrincipalName. */
+	    userPrincipalName?: string
+
+}
+
+export interface DeviceConfigurationUserStatus extends Entity {
+
+	    /** User name of the DevicePolicyStatus. */
+	    userDisplayName?: string
+
+	    /** Devices count for that user. */
+	    devicesCount?: number
+
+	    /** Compliance status of the policy report. Possible values are: unknown, notApplicable, compliant, remediated, nonCompliant, error, conflict. */
+	    status?: ComplianceStatus
+
+	    /** Last modified date time of the policy report. */
+	    lastReportedDateTime?: string
+
+	    /** UserPrincipalName. */
+	    userPrincipalName?: string
+
+}
+
+export interface DeviceConfigurationDeviceOverview extends Entity {
+
+	    /** Number of pending devices */
+	    pendingCount?: number
+
+	    /** Number of not applicable devices */
+	    notApplicableCount?: number
+
+	    /** Number of succeeded devices */
+	    successCount?: number
+
+	    /** Number of error devices */
+	    errorCount?: number
+
+	    /** Number of failed devices */
+	    failedCount?: number
+
+	    /** Last update time */
+	    lastUpdateDateTime?: string
+
+	    /** Version of the policy for that overview */
+	    configurationVersion?: number
+
+}
+
+export interface DeviceConfigurationUserOverview extends Entity {
+
+	    /** Number of pending Users */
+	    pendingCount?: number
+
+	    /** Number of not applicable devices */
+	    notApplicableCount?: number
+
+	    /** Number of succeeded Users */
+	    successCount?: number
+
+	    /** Number of error Users */
+	    errorCount?: number
+
+	    /** Number of failed Users */
+	    failedCount?: number
+
+	    /** Last update time */
+	    lastUpdateDateTime?: string
+
+	    /** Version of the policy for that overview */
+	    configurationVersion?: number
+
+}
+
+export interface SettingStateDeviceSummary extends Entity {
+
+	    /** Name of the setting */
+	    settingName?: string
+
+	    /** Name of the InstancePath for the setting */
+	    instancePath?: string
+
+	    /** Device Unkown count for the setting */
+	    unknownDeviceCount?: number
+
+	    /** Device Not Applicable count for the setting */
+	    notApplicableDeviceCount?: number
+
+	    /** Device Compliant count for the setting */
+	    compliantDeviceCount?: number
+
+	    /** Device Compliant count for the setting */
+	    remediatedDeviceCount?: number
+
+	    /** Device NonCompliant count for the setting */
+	    nonCompliantDeviceCount?: number
+
+	    /** Device error count for the setting */
+	    errorDeviceCount?: number
+
+	    /** Device conflict error count for the setting */
+	    conflictDeviceCount?: number
+
+}
+
+export interface DeviceCompliancePolicyAssignment extends Entity {
+
+	    /** Target for the compliance policy assignment. */
+	    target?: DeviceAndAppManagementAssignmentTarget
+
+}
+
+export interface DeviceComplianceScheduledActionForRule extends Entity {
+
+	    /** Name of the rule which this scheduled action applies to. */
+	    ruleName?: string
+
+	    /** The list of scheduled action configurations for this compliance policy. */
+	    scheduledActionConfigurations?: DeviceComplianceActionItem[]
+
+}
+
+export interface DeviceComplianceDeviceStatus extends Entity {
+
+	    /** Device name of the DevicePolicyStatus. */
+	    deviceDisplayName?: string
+
+	    /** The User Name that is being reported */
+	    userName?: string
+
+	    /** The device model that is being reported */
+	    deviceModel?: string
+
+	    /** The DateTime when device compliance grace period expires */
+	    complianceGracePeriodExpirationDateTime?: string
+
+	    /** Compliance status of the policy report. Possible values are: unknown, notApplicable, compliant, remediated, nonCompliant, error, conflict. */
+	    status?: ComplianceStatus
+
+	    /** Last modified date time of the policy report. */
+	    lastReportedDateTime?: string
+
+	    /** UserPrincipalName. */
+	    userPrincipalName?: string
+
+}
+
+export interface DeviceComplianceUserStatus extends Entity {
+
+	    /** User name of the DevicePolicyStatus. */
+	    userDisplayName?: string
+
+	    /** Devices count for that user. */
+	    devicesCount?: number
+
+	    /** Compliance status of the policy report. Possible values are: unknown, notApplicable, compliant, remediated, nonCompliant, error, conflict. */
+	    status?: ComplianceStatus
+
+	    /** Last modified date time of the policy report. */
+	    lastReportedDateTime?: string
+
+	    /** UserPrincipalName. */
+	    userPrincipalName?: string
+
+}
+
+export interface DeviceComplianceDeviceOverview extends Entity {
+
+	    /** Number of pending devices */
+	    pendingCount?: number
+
+	    /** Number of not applicable devices */
+	    notApplicableCount?: number
+
+	    /** Number of succeeded devices */
+	    successCount?: number
+
+	    /** Number of error devices */
+	    errorCount?: number
+
+	    /** Number of failed devices */
+	    failedCount?: number
+
+	    /** Last update time */
+	    lastUpdateDateTime?: string
+
+	    /** Version of the policy for that overview */
+	    configurationVersion?: number
+
+}
+
+export interface DeviceComplianceUserOverview extends Entity {
+
+	    /** Number of pending Users */
+	    pendingCount?: number
+
+	    /** Number of not applicable devices */
+	    notApplicableCount?: number
+
+	    /** Number of succeeded Users */
+	    successCount?: number
+
+	    /** Number of error Users */
+	    errorCount?: number
+
+	    /** Number of failed Users */
+	    failedCount?: number
+
+	    /** Last update time */
+	    lastUpdateDateTime?: string
+
+	    /** Version of the policy for that overview */
+	    configurationVersion?: number
+
+}
+
+export interface DeviceComplianceActionItem extends Entity {
+
+	    /** Number of hours to wait till the action will be enforced. Valid values 0 to 8760 */
+	    gracePeriodHours?: number
+
+	    /** What action to take Possible values are: noAction, notification, block, retire, wipe, removeResourceAccessProfiles. */
+	    actionType?: DeviceComplianceActionType
+
+	    /** What notification Message template to use */
+	    notificationTemplateId?: string
+
+	    /** A list of group IDs to speicify who to CC this notification message to. */
+	    notificationMessageCCList?: string[]
+
+}
+
+export interface AndroidCustomConfiguration extends DeviceConfiguration {
+
+	    /** OMA settings. This collection can contain a maximum of 1000 elements. */
+	    omaSettings?: OmaSetting[]
+
+}
+
+export interface AndroidGeneralDeviceConfiguration extends DeviceConfiguration {
+
+	    /** Indicates whether or not to block clipboard sharing to copy and paste between applications. */
+	    appsBlockClipboardSharing?: boolean
+
+	    /** Indicates whether or not to block copy and paste within applications. */
+	    appsBlockCopyPaste?: boolean
+
+	    /** Indicates whether or not to block the YouTube app. */
+	    appsBlockYouTube?: boolean
+
+	    /** Indicates whether or not to block Bluetooth. */
+	    bluetoothBlocked?: boolean
+
+	    /** Indicates whether or not to block the use of the camera. */
+	    cameraBlocked?: boolean
+
+	    /** Indicates whether or not to block data roaming. */
+	    cellularBlockDataRoaming?: boolean
+
+	    /** Indicates whether or not to block SMS/MMS messaging. */
+	    cellularBlockMessaging?: boolean
+
+	    /** Indicates whether or not to block voice roaming. */
+	    cellularBlockVoiceRoaming?: boolean
+
+	    /** Indicates whether or not to block syncing Wi-Fi tethering. */
+	    cellularBlockWiFiTethering?: boolean
+
+	    /** List of apps in the compliance (either allow list or block list, controlled by CompliantAppListType). This collection can contain a maximum of 10000 elements. */
+	    compliantAppsList?: AppListItem[]
+
+	    /** Type of list that is in the CompliantAppsList. Possible values are: none, appsInListCompliant, appsNotInListCompliant. */
+	    compliantAppListType?: AppListType
+
+	    /** Indicates whether or not to block diagnostic data submission. */
+	    diagnosticDataBlockSubmission?: boolean
+
+	    /** Indicates whether or not to block location services. */
+	    locationServicesBlocked?: boolean
+
+	    /** Indicates whether or not to block Google account auto sync. */
+	    googleAccountBlockAutoSync?: boolean
+
+	    /** Indicates whether or not to block the Google Play store. */
+	    googlePlayStoreBlocked?: boolean
+
+	    /** Indicates whether or not to block the screen sleep button while in Kiosk Mode. */
+	    kioskModeBlockSleepButton?: boolean
+
+	    /** Indicates whether or not to block the volume buttons while in Kiosk Mode. */
+	    kioskModeBlockVolumeButtons?: boolean
+
+	    /** A list of apps that will be allowed to run when the device is in Kiosk Mode. This collection can contain a maximum of 500 elements. */
+	    kioskModeApps?: AppListItem[]
+
+	    /** Indicates whether or not to block Near-Field Communication. */
+	    nfcBlocked?: boolean
+
+	    /** Indicates whether or not to block fingerprint unlock. */
+	    passwordBlockFingerprintUnlock?: boolean
+
+	    /** Indicates whether or not to block Smart Lock and other trust agents. */
+	    passwordBlockTrustAgents?: boolean
+
+	    /** Number of days before the password expires. Valid values 1 to 365 */
+	    passwordExpirationDays?: number
+
+	    /** Minimum length of passwords. Valid values 4 to 16 */
+	    passwordMinimumLength?: number
+
+	    /** Minutes of inactivity before the screen times out. */
+	    passwordMinutesOfInactivityBeforeScreenTimeout?: number
+
+	    /** Number of previous passwords to block. Valid values 0 to 24 */
+	    passwordPreviousPasswordBlockCount?: number
+
+	    /** Number of sign in failures allowed before factory reset. Valid values 4 to 11 */
+	    passwordSignInFailureCountBeforeFactoryReset?: number
+
+	    /** Type of password that is required. Possible values are: deviceDefault, alphabetic, alphanumeric, alphanumericWithSymbols, lowSecurityBiometric, numeric, numericComplex, any. */
+	    passwordRequiredType?: AndroidRequiredPasswordType
+
+	    /** Indicates whether or not to require a password. */
+	    passwordRequired?: boolean
+
+	    /** Indicates whether or not to block powering off the device. */
+	    powerOffBlocked?: boolean
+
+	    /** Indicates whether or not to block user performing a factory reset. */
+	    factoryResetBlocked?: boolean
+
+	    /** Indicates whether or not to block screenshots. */
+	    screenCaptureBlocked?: boolean
+
+	    /** Indicates whether or not to allow device sharing mode. */
+	    deviceSharingAllowed?: boolean
+
+	    /** Indicates whether or not to block Google Backup. */
+	    storageBlockGoogleBackup?: boolean
+
+	    /** Indicates whether or not to block removable storage usage. */
+	    storageBlockRemovableStorage?: boolean
+
+	    /** Indicates whether or not to require device encryption. */
+	    storageRequireDeviceEncryption?: boolean
+
+	    /** Indicates whether or not to require removable storage encryption. */
+	    storageRequireRemovableStorageEncryption?: boolean
+
+	    /** Indicates whether or not to block the use of the Voice Assistant. */
+	    voiceAssistantBlocked?: boolean
+
+	    /** Indicates whether or not to block voice dialing. */
+	    voiceDialingBlocked?: boolean
+
+	    /** Indicates whether or not to block popups within the web browser. */
+	    webBrowserBlockPopups?: boolean
+
+	    /** Indicates whether or not to block the web browser's auto fill feature. */
+	    webBrowserBlockAutofill?: boolean
+
+	    /** Indicates whether or not to block JavaScript within the web browser. */
+	    webBrowserBlockJavaScript?: boolean
+
+	    /** Indicates whether or not to block the web browser. */
+	    webBrowserBlocked?: boolean
+
+	    /** Cookie settings within the web browser. Possible values are: browserDefault, blockAlways, allowCurrentWebSite, allowFromWebsitesVisited, allowAlways. */
+	    webBrowserCookieSettings?: WebBrowserCookieSettings
+
+	    /** Indicates whether or not to block syncing Wi-Fi. */
+	    wiFiBlocked?: boolean
+
+	    /** List of apps which can be installed on the KNOX device. This collection can contain a maximum of 500 elements. */
+	    appsInstallAllowList?: AppListItem[]
+
+	    /** List of apps which are blocked from being launched on the KNOX device. This collection can contain a maximum of 500 elements. */
+	    appsLaunchBlockList?: AppListItem[]
+
+	    /** List of apps to be hidden on the KNOX device. This collection can contain a maximum of 500 elements. */
+	    appsHideList?: AppListItem[]
+
+	    /** Require the Android Verify apps feature is turned on. */
+	    securityRequireVerifyApps?: boolean
+
+}
+
+export interface IosCertificateProfile extends DeviceConfiguration {
+
+}
+
+export interface IosCustomConfiguration extends DeviceConfiguration {
+
+	    /** Name that is displayed to the user. */
+	    payloadName?: string
+
+	    /** Payload file name (.mobileconfig */
+	    payloadFileName?: string
+
+	    /** Payload. (UTF8 encoded byte array) */
+	    payload?: number
+
+}
+
+export interface IosGeneralDeviceConfiguration extends DeviceConfiguration {
+
+	    /** Indicates whether or not to allow account modification when the device is in supervised mode. */
+	    accountBlockModification?: boolean
+
+	    /** Indicates whether or not to allow activation lock when the device is in the supervised mode. */
+	    activationLockAllowWhenSupervised?: boolean
+
+	    /** Indicates whether or not to allow AirDrop when the device is in supervised mode. */
+	    airDropBlocked?: boolean
+
+	    /** Indicates whether or not to cause AirDrop to be considered an unmanaged drop target (iOS 9.0 and later). */
+	    airDropForceUnmanagedDropTarget?: boolean
+
+	    /** Indicates whether or not to enforce all devices receiving AirPlay requests from this device to use a pairing password. */
+	    airPlayForcePairingPasswordForOutgoingRequests?: boolean
+
+	    /** Indicates whether or not to allow Apple Watch pairing when the device is in supervised mode (iOS 9.0 and later). */
+	    appleWatchBlockPairing?: boolean
+
+	    /** Indicates whether or not to force a paired Apple Watch to use Wrist Detection (iOS 8.2 and later). */
+	    appleWatchForceWristDetection?: boolean
+
+	    /** Indicates whether or not to block the user from using News when the device is in supervised mode (iOS 9.0 and later). */
+	    appleNewsBlocked?: boolean
+
+	    /** Gets or sets the list of iOS apps allowed to autonomously enter Single App Mode. Supervised only. iOS 7.0 and later. This collection can contain a maximum of 500 elements. */
+	    appsSingleAppModeList?: AppListItem[]
+
+	    /** List of apps in the visibility list (either visible/launchable apps list or hidden/unlaunchable apps list, controlled by AppsVisibilityListType) (iOS 9.3 and later). This collection can contain a maximum of 10000 elements. */
+	    appsVisibilityList?: AppListItem[]
+
+	    /** Type of list that is in the AppsVisibilityList. Possible values are: none, appsInListCompliant, appsNotInListCompliant. */
+	    appsVisibilityListType?: AppListType
+
+	    /** Indicates whether or not to block the automatic downloading of apps purchased on other devices when the device is in supervised mode (iOS 9.0 and later). */
+	    appStoreBlockAutomaticDownloads?: boolean
+
+	    /** Indicates whether or not to block the user from using the App Store. */
+	    appStoreBlocked?: boolean
+
+	    /** Indicates whether or not to block the user from making in app purchases. */
+	    appStoreBlockInAppPurchases?: boolean
+
+	    /** Indicates whether or not to block the App Store app, not restricting installation through Host apps. Applies to supervised mode only (iOS 9.0 and later). */
+	    appStoreBlockUIAppInstallation?: boolean
+
+	    /** Indicates whether or not to require a password when using the app store. */
+	    appStoreRequirePassword?: boolean
+
+	    /** Indicates whether or not to allow modification of Bluetooth settings when the device is in supervised mode (iOS 10.0 and later). */
+	    bluetoothBlockModification?: boolean
+
+	    /** Indicates whether or not to block the user from accessing the camera of the device. */
+	    cameraBlocked?: boolean
+
+	    /** Indicates whether or not to block data roaming. */
+	    cellularBlockDataRoaming?: boolean
+
+	    /** Indicates whether or not to block global background fetch while roaming. */
+	    cellularBlockGlobalBackgroundFetchWhileRoaming?: boolean
+
+	    /** Indicates whether or not to allow changes to cellular app data usage settings when the device is in supervised mode. */
+	    cellularBlockPerAppDataModification?: boolean
+
+	    /** Indicates whether or not to block Personal Hotspot. */
+	    cellularBlockPersonalHotspot?: boolean
+
+	    /** Indicates whether or not to block voice roaming. */
+	    cellularBlockVoiceRoaming?: boolean
+
+	    /** Indicates whether or not to block untrusted TLS certificates. */
+	    certificatesBlockUntrustedTlsCertificates?: boolean
+
+	    /** Indicates whether or not to allow remote screen observation by Classroom app when the device is in supervised mode (iOS 9.3 and later). */
+	    classroomAppBlockRemoteScreenObservation?: boolean
+
+	    /** Indicates whether or not to automatically give permission to the teacher of a managed course on the Classroom app to view a student's screen without prompting when the device is in supervised mode. */
+	    classroomAppForceUnpromptedScreenObservation?: boolean
+
+	    /** List of apps in the compliance (either allow list or block list, controlled by CompliantAppListType). This collection can contain a maximum of 10000 elements. */
+	    compliantAppsList?: AppListItem[]
+
+	    /** List that is in the AppComplianceList. Possible values are: none, appsInListCompliant, appsNotInListCompliant. */
+	    compliantAppListType?: AppListType
+
+	    /** Indicates whether or not to block the user from installing configuration profiles and certificates interactively when the device is in supervised mode. */
+	    configurationProfileBlockChanges?: boolean
+
+	    /** Indicates whether or not to block definition lookup when the device is in supervised mode (iOS 8.1.3 and later ). */
+	    definitionLookupBlocked?: boolean
+
+	    /** Indicates whether or not to allow the user to enables restrictions in the device settings when the device is in supervised mode. */
+	    deviceBlockEnableRestrictions?: boolean
+
+	    /** Indicates whether or not to allow the use of the 'Erase all content and settings' option on the device when the device is in supervised mode. */
+	    deviceBlockEraseContentAndSettings?: boolean
+
+	    /** Indicates whether or not to allow device name modification when the device is in supervised mode (iOS 9.0 and later). */
+	    deviceBlockNameModification?: boolean
+
+	    /** Indicates whether or not to block diagnostic data submission. */
+	    diagnosticDataBlockSubmission?: boolean
+
+	    /** Indicates whether or not to allow diagnostics submission settings modification when the device is in supervised mode (iOS 9.3.2 and later). */
+	    diagnosticDataBlockSubmissionModification?: boolean
+
+	    /** Indicates whether or not to block the user from viewing managed documents in unmanaged apps. */
+	    documentsBlockManagedDocumentsInUnmanagedApps?: boolean
+
+	    /** Indicates whether or not to block the user from viewing unmanaged documents in managed apps. */
+	    documentsBlockUnmanagedDocumentsInManagedApps?: boolean
+
+	    /** An email address lacking a suffix that matches any of these strings will be considered out-of-domain. */
+	    emailInDomainSuffixes?: string[]
+
+	    /** Indicates whether or not to block the user from trusting an enterprise app. */
+	    enterpriseAppBlockTrust?: boolean
+
+	    /** Indicates whether or not to block the user from modifying the enterprise app trust settings. */
+	    enterpriseAppBlockTrustModification?: boolean
+
+	    /** Indicates whether or not to block the user from using FaceTime. */
+	    faceTimeBlocked?: boolean
+
+	    /** Indicates whether or not to block Find My Friends when the device is in supervised mode. */
+	    findMyFriendsBlocked?: boolean
+
+	    /** Indicates whether or not to block the user from having friends in Game Center. */
+	    gamingBlockGameCenterFriends?: boolean
+
+	    /** Indicates whether or not to block the user from using multiplayer gaming. */
+	    gamingBlockMultiplayer?: boolean
+
+	    /** Indicates whether or not to block the user from using Game Center when the device is in supervised mode. */
+	    gameCenterBlocked?: boolean
+
+	    /** indicates whether or not to allow host pairing to control the devices an iOS device can pair with when the iOS device is in supervised mode. */
+	    hostPairingBlocked?: boolean
+
+	    /** Indicates whether or not to block the user from using the iBooks Store when the device is in supervised mode. */
+	    iBooksStoreBlocked?: boolean
+
+	    /** Indicates whether or not to block the user from downloading media from the iBookstore that has been tagged as erotica. */
+	    iBooksStoreBlockErotica?: boolean
+
+	    /** Indicates whether or not to block  the user from continuing work they started on iOS device to another iOS or macOS device. */
+	    iCloudBlockActivityContinuation?: boolean
+
+	    /** Indicates whether or not to block iCloud backup. */
+	    iCloudBlockBackup?: boolean
+
+	    /** Indicates whether or not to block iCloud document sync. */
+	    iCloudBlockDocumentSync?: boolean
+
+	    /** Indicates whether or not to block Managed Apps Cloud Sync. */
+	    iCloudBlockManagedAppsSync?: boolean
+
+	    /** Indicates whether or not to block iCloud Photo Library. */
+	    iCloudBlockPhotoLibrary?: boolean
+
+	    /** Indicates whether or not to block iCloud Photo Stream Sync. */
+	    iCloudBlockPhotoStreamSync?: boolean
+
+	    /** Indicates whether or not to block Shared Photo Stream. */
+	    iCloudBlockSharedPhotoStream?: boolean
+
+	    /** Indicates whether or not to require backups to iCloud be encrypted. */
+	    iCloudRequireEncryptedBackup?: boolean
+
+	    /** Indicates whether or not to block the user from accessing explicit content in iTunes and the App Store. */
+	    iTunesBlockExplicitContent?: boolean
+
+	    /** Indicates whether or not to block Music service and revert Music app to classic mode when the device is in supervised mode (iOS 9.3 and later and macOS 10.12 and later). */
+	    iTunesBlockMusicService?: boolean
+
+	    /** Indicates whether or not to block the user from using iTunes Radio when the device is in supervised mode (iOS 9.3 and later). */
+	    iTunesBlockRadio?: boolean
+
+	    /** Indicates whether or not to block keyboard auto-correction when the device is in supervised mode (iOS 8.1.3 and later). */
+	    keyboardBlockAutoCorrect?: boolean
+
+	    /** Indicates whether or not to block the user from using dictation input when the device is in supervised mode. */
+	    keyboardBlockDictation?: boolean
+
+	    /** Indicates whether or not to block predictive keyboards when device is in supervised mode (iOS 8.1.3 and later). */
+	    keyboardBlockPredictive?: boolean
+
+	    /** Indicates whether or not to block keyboard shortcuts when the device is in supervised mode (iOS 9.0 and later). */
+	    keyboardBlockShortcuts?: boolean
+
+	    /** Indicates whether or not to block keyboard spell-checking when the device is in supervised mode (iOS 8.1.3 and later). */
+	    keyboardBlockSpellCheck?: boolean
+
+	    /** Indicates whether or not to allow assistive speak while in kiosk mode. */
+	    kioskModeAllowAssistiveSpeak?: boolean
+
+	    /** Indicates whether or not to allow access to the Assistive Touch Settings while in kiosk mode. */
+	    kioskModeAllowAssistiveTouchSettings?: boolean
+
+	    /** Indicates whether or not to allow device auto lock while in kiosk mode. */
+	    kioskModeAllowAutoLock?: boolean
+
+	    /** Indicates whether or not to allow access to the Color Inversion Settings while in kiosk mode. */
+	    kioskModeAllowColorInversionSettings?: boolean
+
+	    /** Indicates whether or not to allow use of the ringer switch while in kiosk mode. */
+	    kioskModeAllowRingerSwitch?: boolean
+
+	    /** Indicates whether or not to allow screen rotation while in kiosk mode. */
+	    kioskModeAllowScreenRotation?: boolean
+
+	    /** Indicates whether or not to allow use of the sleep button while in kiosk mode. */
+	    kioskModeAllowSleepButton?: boolean
+
+	    /** Indicates whether or not to allow use of the touchscreen while in kiosk mode. */
+	    kioskModeAllowTouchscreen?: boolean
+
+	    /** Indicates whether or not to allow access to the voice over settings while in kiosk mode. */
+	    kioskModeAllowVoiceOverSettings?: boolean
+
+	    /** Indicates whether or not to allow use of the volume buttons while in kiosk mode. */
+	    kioskModeAllowVolumeButtons?: boolean
+
+	    /** Indicates whether or not to allow access to the zoom settings while in kiosk mode. */
+	    kioskModeAllowZoomSettings?: boolean
+
+	    /** URL in the app store to the app to use for kiosk mode. Use if KioskModeManagedAppId is not known. */
+	    kioskModeAppStoreUrl?: string
+
+	    /** Indicates whether or not to require assistive touch while in kiosk mode. */
+	    kioskModeRequireAssistiveTouch?: boolean
+
+	    /** Indicates whether or not to require color inversion while in kiosk mode. */
+	    kioskModeRequireColorInversion?: boolean
+
+	    /** Indicates whether or not to require mono audio while in kiosk mode. */
+	    kioskModeRequireMonoAudio?: boolean
+
+	    /** Indicates whether or not to require voice over while in kiosk mode. */
+	    kioskModeRequireVoiceOver?: boolean
+
+	    /** Indicates whether or not to require zoom while in kiosk mode. */
+	    kioskModeRequireZoom?: boolean
+
+	    /** Managed app id of the app to use for kiosk mode. If KioskModeManagedAppId is specified then KioskModeAppStoreUrl will be ignored. */
+	    kioskModeManagedAppId?: string
+
+	    /** Indicates whether or not to block the user from using control center on the lock screen. */
+	    lockScreenBlockControlCenter?: boolean
+
+	    /** Indicates whether or not to block the user from using the notification view on the lock screen. */
+	    lockScreenBlockNotificationView?: boolean
+
+	    /** Indicates whether or not to block the user from using passbook when the device is locked. */
+	    lockScreenBlockPassbook?: boolean
+
+	    /** Indicates whether or not to block the user from using the Today View on the lock screen. */
+	    lockScreenBlockTodayView?: boolean
+
+	    /** Media content rating settings for Australia */
+	    mediaContentRatingAustralia?: MediaContentRatingAustralia
+
+	    /** Media content rating settings for Canada */
+	    mediaContentRatingCanada?: MediaContentRatingCanada
+
+	    /** Media content rating settings for France */
+	    mediaContentRatingFrance?: MediaContentRatingFrance
+
+	    /** Media content rating settings for Germany */
+	    mediaContentRatingGermany?: MediaContentRatingGermany
+
+	    /** Media content rating settings for Ireland */
+	    mediaContentRatingIreland?: MediaContentRatingIreland
+
+	    /** Media content rating settings for Japan */
+	    mediaContentRatingJapan?: MediaContentRatingJapan
+
+	    /** Media content rating settings for New Zealand */
+	    mediaContentRatingNewZealand?: MediaContentRatingNewZealand
+
+	    /** Media content rating settings for United Kingdom */
+	    mediaContentRatingUnitedKingdom?: MediaContentRatingUnitedKingdom
+
+	    /** Media content rating settings for United States */
+	    mediaContentRatingUnitedStates?: MediaContentRatingUnitedStates
+
+	    /** List of managed apps and the network rules that applies to them. This collection can contain a maximum of 1000 elements. */
+	    networkUsageRules?: IosNetworkUsageRule[]
+
+	    /** Media content rating settings for Apps Possible values are: allAllowed, allBlocked, agesAbove4, agesAbove9, agesAbove12, agesAbove17. */
+	    mediaContentRatingApps?: RatingAppsType
+
+	    /** Indicates whether or not to block the user from using the Messages app on the supervised device. */
+	    messagesBlocked?: boolean
+
+	    /** Indicates whether or not to allow notifications settings modification (iOS 9.3 and later). */
+	    notificationsBlockSettingsModification?: boolean
+
+	    /** Indicates whether or not to block fingerprint unlock. */
+	    passcodeBlockFingerprintUnlock?: boolean
+
+	    /** Block modification of registered Touch ID fingerprints when in supervised mode. */
+	    passcodeBlockFingerprintModification?: boolean
+
+	    /** Indicates whether or not to allow passcode modification on the supervised device (iOS 9.0 and later). */
+	    passcodeBlockModification?: boolean
+
+	    /** Indicates whether or not to block simple passcodes. */
+	    passcodeBlockSimple?: boolean
+
+	    /** Number of days before the passcode expires. Valid values 1 to 65535 */
+	    passcodeExpirationDays?: number
+
+	    /** Minimum length of passcode. Valid values 4 to 14 */
+	    passcodeMinimumLength?: number
+
+	    /** Minutes of inactivity before a passcode is required. */
+	    passcodeMinutesOfInactivityBeforeLock?: number
+
+	    /** Minutes of inactivity before the screen times out. */
+	    passcodeMinutesOfInactivityBeforeScreenTimeout?: number
+
+	    /** Number of character sets a passcode must contain. Valid values 0 to 4 */
+	    passcodeMinimumCharacterSetCount?: number
+
+	    /** Number of previous passcodes to block. Valid values 1 to 24 */
+	    passcodePreviousPasscodeBlockCount?: number
+
+	    /** Number of sign in failures allowed before wiping the device. Valid values 4 to 11 */
+	    passcodeSignInFailureCountBeforeWipe?: number
+
+	    /** Type of passcode that is required. Possible values are: deviceDefault, alphanumeric, numeric. */
+	    passcodeRequiredType?: RequiredPasswordType
+
+	    /** Indicates whether or not to require a passcode. */
+	    passcodeRequired?: boolean
+
+	    /** Indicates whether or not to block the user from using podcasts on the supervised device (iOS 8.0 and later). */
+	    podcastsBlocked?: boolean
+
+	    /** Indicates whether or not to block the user from using Auto fill in Safari. */
+	    safariBlockAutofill?: boolean
+
+	    /** Indicates whether or not to block JavaScript in Safari. */
+	    safariBlockJavaScript?: boolean
+
+	    /** Indicates whether or not to block popups in Safari. */
+	    safariBlockPopups?: boolean
+
+	    /** Indicates whether or not to block the user from using Safari. */
+	    safariBlocked?: boolean
+
+	    /** Cookie settings for Safari. Possible values are: browserDefault, blockAlways, allowCurrentWebSite, allowFromWebsitesVisited, allowAlways. */
+	    safariCookieSettings?: WebBrowserCookieSettings
+
+	    /** URLs matching the patterns listed here will be considered managed. */
+	    safariManagedDomains?: string[]
+
+	    /** Users can save passwords in Safari only from URLs matching the patterns listed here. Applies to devices in supervised mode (iOS 9.3 and later). */
+	    safariPasswordAutoFillDomains?: string[]
+
+	    /** Indicates whether or not to require fraud warning in Safari. */
+	    safariRequireFraudWarning?: boolean
+
+	    /** Indicates whether or not to block the user from taking Screenshots. */
+	    screenCaptureBlocked?: boolean
+
+	    /** Indicates whether or not to block the user from using Siri. */
+	    siriBlocked?: boolean
+
+	    /** Indicates whether or not to block the user from using Siri when locked. */
+	    siriBlockedWhenLocked?: boolean
+
+	    /** Indicates whether or not to block Siri from querying user-generated content when used on a supervised device. */
+	    siriBlockUserGeneratedContent?: boolean
+
+	    /** Indicates whether or not to prevent Siri from dictating, or speaking profane language on supervised device. */
+	    siriRequireProfanityFilter?: boolean
+
+	    /** Indicates whether or not to block Spotlight search from returning internet results on supervised device. */
+	    spotlightBlockInternetResults?: boolean
+
+	    /** Indicates whether or not to block voice dialing. */
+	    voiceDialingBlocked?: boolean
+
+	    /** Indicates whether or not to allow wallpaper modification on supervised device (iOS 9.0 and later) . */
+	    wallpaperBlockModification?: boolean
+
+	    /** Indicates whether or not to force the device to use only Wi-Fi networks from configuration profiles when the device is in supervised mode. */
+	    wiFiConnectOnlyToConfiguredNetworks?: boolean
+
+}
+
+export interface IosUpdateConfiguration extends DeviceConfiguration {
+
+	    /** Active Hours Start (active hours mean the time window when updates install should not happen) */
+	    activeHoursStart?: string
+
+	    /** Active Hours End (active hours mean the time window when updates install should not happen) */
+	    activeHoursEnd?: string
+
+	    /** Days in week for which active hours are configured. This collection can contain a maximum of 7 elements. */
+	    scheduledInstallDays?: DayOfWeek[]
+
+	    /** UTC Time Offset indicated in minutes */
+	    utcTimeOffsetInMinutes?: number
+
+}
+
+export interface MacOSCustomConfiguration extends DeviceConfiguration {
+
+	    /** Name that is displayed to the user. */
+	    payloadName?: string
+
+	    /** Payload file name (.mobileconfig */
+	    payloadFileName?: string
+
+	    /** Payload. (UTF8 encoded byte array) */
+	    payload?: number
+
+}
+
+export interface MacOSGeneralDeviceConfiguration extends DeviceConfiguration {
+
+	    /** List of apps in the compliance (either allow list or block list, controlled by CompliantAppListType). This collection can contain a maximum of 10000 elements. */
+	    compliantAppsList?: AppListItem[]
+
+	    /** List that is in the CompliantAppsList. Possible values are: none, appsInListCompliant, appsNotInListCompliant. */
+	    compliantAppListType?: AppListType
+
+	    /** An email address lacking a suffix that matches any of these strings will be considered out-of-domain. */
+	    emailInDomainSuffixes?: string[]
+
+	    /** Block simple passwords. */
+	    passwordBlockSimple?: boolean
+
+	    /** Number of days before the password expires. */
+	    passwordExpirationDays?: number
+
+	    /** Number of character sets a password must contain. Valid values 0 to 4 */
+	    passwordMinimumCharacterSetCount?: number
+
+	    /** Minimum length of passwords. */
+	    passwordMinimumLength?: number
+
+	    /** Minutes of inactivity required before a password is required. */
+	    passwordMinutesOfInactivityBeforeLock?: number
+
+	    /** Minutes of inactivity required before the screen times out. */
+	    passwordMinutesOfInactivityBeforeScreenTimeout?: number
+
+	    /** Number of previous passwords to block. */
+	    passwordPreviousPasswordBlockCount?: number
+
+	    /** Type of password that is required. Possible values are: deviceDefault, alphanumeric, numeric. */
+	    passwordRequiredType?: RequiredPasswordType
+
+	    /** Whether or not to require a password. */
+	    passwordRequired?: boolean
+
+}
+
+export interface AppleDeviceFeaturesConfigurationBase extends DeviceConfiguration {
+
+}
+
+export interface IosDeviceFeaturesConfiguration extends AppleDeviceFeaturesConfigurationBase {
+
+	    /** Asset tag information for the device, displayed on the login window and lock screen. */
+	    assetTagTemplate?: string
+
+	    /** A footnote displayed on the login window and lock screen. Available in iOS 9.3.1 and later. */
+	    lockScreenFootnote?: string
+
+	    /** A list of app and folders to appear on the Home Screen Dock. This collection can contain a maximum of 500 elements. */
+	    homeScreenDockIcons?: IosHomeScreenItem[]
+
+	    /** A list of pages on the Home Screen. This collection can contain a maximum of 500 elements. */
+	    homeScreenPages?: IosHomeScreenPage[]
+
+	    /** Notification settings for each bundle id. Applicable to devices in supervised mode only (iOS 9.3 and later). This collection can contain a maximum of 500 elements. */
+	    notificationSettings?: IosNotificationSettings[]
+
+}
+
+export interface MacOSDeviceFeaturesConfiguration extends AppleDeviceFeaturesConfigurationBase {
+
+}
+
+export interface WindowsDefenderAdvancedThreatProtectionConfiguration extends DeviceConfiguration {
+
+	    /** Windows Defender AdvancedThreatProtection "Allow Sample Sharing" Rule */
+	    allowSampleSharing?: boolean
+
+	    /** Expedite Windows Defender Advanced Threat Protection telemetry reporting frequency. */
+	    enableExpeditedTelemetryReporting?: boolean
+
+}
+
+export interface Windows10EndpointProtectionConfiguration extends DeviceConfiguration {
+
+	    /** Blocks stateful FTP connections to the device */
+	    firewallBlockStatefulFTP?: boolean
+
+	    /** Configures the idle timeout for security associations, in seconds, from 300 to 3600 inclusive. This is the period after which security associations will expire and be deleted. Valid values 300 to 3600 */
+	    firewallIdleTimeoutForSecurityAssociationInSeconds?: number
+
+	    /** Select the preshared key encoding to be used Possible values are: deviceDefault, none, utF8. */
+	    firewallPreSharedKeyEncodingMethod?: FirewallPreSharedKeyEncodingMethodType
+
+	    /** Configures IPSec exemptions to allow neighbor discovery IPv6 ICMP type-codes */
+	    firewallIPSecExemptionsAllowNeighborDiscovery?: boolean
+
+	    /** Configures IPSec exemptions to allow ICMP */
+	    firewallIPSecExemptionsAllowICMP?: boolean
+
+	    /** Configures IPSec exemptions to allow router discovery IPv6 ICMP type-codes */
+	    firewallIPSecExemptionsAllowRouterDiscovery?: boolean
+
+	    /** Configures IPSec exemptions to allow both IPv4 and IPv6 DHCP traffic */
+	    firewallIPSecExemptionsAllowDHCP?: boolean
+
+	    /** Specify how the certificate revocation list is to be enforced Possible values are: deviceDefault, none, attempt, require. */
+	    firewallCertificateRevocationListCheckMethod?: FirewallCertificateRevocationListCheckMethodType
+
+	    /** If an authentication set is not fully supported by a keying module, direct the module to ignore only unsupported authentication suites rather than the entire set */
+	    firewallMergeKeyingModuleSettings?: boolean
+
+	    /** Configures how packet queueing should be applied in the tunnel gateway scenario Possible values are: deviceDefault, disabled, queueInbound, queueOutbound, queueBoth. */
+	    firewallPacketQueueingMethod?: FirewallPacketQueueingMethodType
+
+	    /** Configures the firewall profile settings for domain networks */
+	    firewallProfileDomain?: WindowsFirewallNetworkProfile
+
+	    /** Configures the firewall profile settings for public networks */
+	    firewallProfilePublic?: WindowsFirewallNetworkProfile
+
+	    /** Configures the firewall profile settings for private networks */
+	    firewallProfilePrivate?: WindowsFirewallNetworkProfile
+
+	    /** List of exe files and folders to be excluded from attack surface reduction rules */
+	    defenderAttackSurfaceReductionExcludedPaths?: string[]
+
+	    /** List of paths to exe that are allowed to access protected folders */
+	    defenderGuardedFoldersAllowedAppPaths?: string[]
+
+	    /** List of folder paths to be added to the list of protected folders */
+	    defenderAdditionalGuardedFolders?: string[]
+
+	    /** Xml content containing information regarding exploit protection details. */
+	    defenderExploitProtectionXml?: number
+
+	    /** Name of the file from which DefenderExploitProtectionXml was obtained. */
+	    defenderExploitProtectionXmlFileName?: string
+
+	    /** Indicates whether or not to block user from overriding Exploit Protection settings. */
+	    defenderSecurityCenterBlockExploitProtectionOverride?: boolean
+
+	    /** Enables the Admin to choose what types of app to allow on devices. Possible values are: notConfigured, enforceComponentsAndStoreApps, auditComponentsAndStoreApps, enforceComponentsStoreAppsAndSmartlocker, auditComponentsStoreAppsAndSmartlocker. */
+	    appLockerApplicationControl?: AppLockerApplicationControlType
+
+	    /** Allows IT Admins to configure SmartScreen for Windows. */
+	    smartScreenEnableInShell?: boolean
+
+	    /** Allows IT Admins to control whether users can can ignore SmartScreen warnings and run malicious files. */
+	    smartScreenBlockOverrideForFiles?: boolean
+
+	    /** Enable Windows Defender Application Guard */
+	    applicationGuardEnabled?: boolean
+
+	    /** Block clipboard to transfer image file, text file or neither of them Possible values are: notConfigured, blockImageAndTextFile, blockImageFile, blockNone, blockTextFile. */
+	    applicationGuardBlockFileTransfer?: ApplicationGuardBlockFileTransferType
+
+	    /** Block enterprise sites to load non-enterprise content, such as third party plug-ins */
+	    applicationGuardBlockNonEnterpriseContent?: boolean
+
+	    /** Allow persisting user generated data inside the App Guard Containter (favorites, cookies, web passwords, etc.) */
+	    applicationGuardAllowPersistence?: boolean
+
+	    /** Force auditing will persist Windows logs and events to meet security/compliance criteria (sample events are user login-logoff, use of privilege rights, software installation, system changes, etc.) */
+	    applicationGuardForceAuditing?: boolean
+
+	    /** Block clipboard to share data from Host to Container, or from Container to Host, or both ways, or neither ways. Possible values are: notConfigured, blockBoth, blockHostToContainer, blockContainerToHost, blockNone. */
+	    applicationGuardBlockClipboardSharing?: ApplicationGuardBlockClipboardSharingType
+
+	    /** Allow printing to PDF from Container */
+	    applicationGuardAllowPrintToPDF?: boolean
+
+	    /** Allow printing to XPS from Container */
+	    applicationGuardAllowPrintToXPS?: boolean
+
+	    /** Allow printing to Local Printers from Container */
+	    applicationGuardAllowPrintToLocalPrinters?: boolean
+
+	    /** Allow printing to Network Printers from Container */
+	    applicationGuardAllowPrintToNetworkPrinters?: boolean
+
+	    /** Allows the Admin to disable the warning prompt for other disk encryption on the user machines. */
+	    bitLockerDisableWarningForOtherDiskEncryption?: boolean
+
+	    /** Allows the admin to require encryption to be turned on using BitLocker. This policy is valid only for a mobile SKU. */
+	    bitLockerEnableStorageCardEncryptionOnMobile?: boolean
+
+	    /** Allows the admin to require encryption to be turned on using BitLocker. */
+	    bitLockerEncryptDevice?: boolean
+
+	    /** BitLocker Removable Drive Policy. */
+	    bitLockerRemovableDrivePolicy?: BitLockerRemovableDrivePolicy
+
+}
+
+export interface Windows10GeneralConfiguration extends DeviceConfiguration {
+
+	    /** Endpoint for discovering cloud printers. */
+	    enterpriseCloudPrintDiscoveryEndPoint?: string
+
+	    /** Authentication endpoint for acquiring OAuth tokens. */
+	    enterpriseCloudPrintOAuthAuthority?: string
+
+	    /** GUID of a client application authorized to retrieve OAuth tokens from the OAuth Authority. */
+	    enterpriseCloudPrintOAuthClientIdentifier?: string
+
+	    /** OAuth resource URI for print service as configured in the Azure portal. */
+	    enterpriseCloudPrintResourceIdentifier?: string
+
+	    /** Maximum number of printers that should be queried from a discovery endpoint. This is a mobile only setting. Valid values 1 to 65535 */
+	    enterpriseCloudPrintDiscoveryMaxLimit?: number
+
+	    /** OAuth resource URI for printer discovery service as configured in Azure portal. */
+	    enterpriseCloudPrintMopriaDiscoveryResourceIdentifier?: string
+
+	    /** Specifies if search can use diacritics. */
+	    searchBlockDiacritics?: boolean
+
+	    /** Specifies whether to use automatic language detection when indexing content and properties. */
+	    searchDisableAutoLanguageDetection?: boolean
+
+	    /** Indicates whether or not to block indexing of WIP-protected items to prevent them from appearing in search results for Cortana or Explorer. */
+	    searchDisableIndexingEncryptedItems?: boolean
+
+	    /** Indicates whether or not to block remote queries of this computer's index. */
+	    searchEnableRemoteQueries?: boolean
+
+	    /** Indicates whether or not to disable the search indexer backoff feature. */
+	    searchDisableIndexerBackoff?: boolean
+
+	    /** Indicates whether or not to allow users to add locations on removable drives to libraries and to be indexed. */
+	    searchDisableIndexingRemovableDrive?: boolean
+
+	    /** Specifies minimum amount of hard drive space on the same drive as the index location before indexing stops. */
+	    searchEnableAutomaticIndexSizeManangement?: boolean
+
+	    /** Gets or sets a value allowing the device to send diagnostic and usage telemetry data, such as Watson. Possible values are: userDefined, none, basic, enhanced, full. */
+	    diagnosticsDataSubmissionMode?: DiagnosticDataSubmissionMode
+
+	    /** Gets or sets a value allowing IT admins to prevent apps and features from working with files on OneDrive. */
+	    oneDriveDisableFileSync?: boolean
+
+	    /** Allows IT Admins to control whether users are allowed to install apps from places other than the Store. */
+	    smartScreenEnableAppInstallControl?: boolean
+
+	    /** A http or https Url to a jpg, jpeg or png image that needs to be downloaded and used as the Desktop Image or a file Url to a local image on the file system that needs to used as the Desktop Image. */
+	    personalizationDesktopImageUrl?: string
+
+	    /** A http or https Url to a jpg, jpeg or png image that neeeds to be downloaded and used as the Lock Screen Image or a file Url to a local image on the file system that needs to be used as the Lock Screen Image. */
+	    personalizationLockScreenImageUrl?: string
+
+	    /** Specify a list of allowed Bluetooth services and profiles in hex formatted strings. */
+	    bluetoothAllowedServices?: string[]
+
+	    /** Whether or not to Block the user from using bluetooth advertising. */
+	    bluetoothBlockAdvertising?: boolean
+
+	    /** Whether or not to Block the user from using bluetooth discoverable mode. */
+	    bluetoothBlockDiscoverableMode?: boolean
+
+	    /** Whether or not to block specific bundled Bluetooth peripherals to automatically pair with the host device. */
+	    bluetoothBlockPrePairing?: boolean
+
+	    /** Indicates whether or not to block auto fill. */
+	    edgeBlockAutofill?: boolean
+
+	    /** Indicates whether or not to Block the user from using the Edge browser. */
+	    edgeBlocked?: boolean
+
+	    /** Indicates which cookies to block in the Edge browser. Possible values are: userDefined, allow, blockThirdParty, blockAll. */
+	    edgeCookiePolicy?: EdgeCookiePolicy
+
+	    /** Indicates whether or not to block developer tools in the Edge browser. */
+	    edgeBlockDeveloperTools?: boolean
+
+	    /** Indicates whether or not to Block the user from sending the do not track header. */
+	    edgeBlockSendingDoNotTrackHeader?: boolean
+
+	    /** Indicates whether or not to block extensions in the Edge browser. */
+	    edgeBlockExtensions?: boolean
+
+	    /** Indicates whether or not to block InPrivate browsing on corporate networks, in the Edge browser. */
+	    edgeBlockInPrivateBrowsing?: boolean
+
+	    /** Indicates whether or not to Block the user from using JavaScript. */
+	    edgeBlockJavaScript?: boolean
+
+	    /** Indicates whether or not to Block password manager. */
+	    edgeBlockPasswordManager?: boolean
+
+	    /** Block the address bar dropdown functionality in Microsoft Edge. Disable this settings to minimize network connections from Microsoft Edge to Microsoft services. */
+	    edgeBlockAddressBarDropdown?: boolean
+
+	    /** Block Microsoft compatibility list in Microsoft Edge. This list from Microsoft helps Edge properly display sites with known compatibility issues. */
+	    edgeBlockCompatibilityList?: boolean
+
+	    /** Clear browsing data on exiting Microsoft Edge. */
+	    edgeClearBrowsingDataOnExit?: boolean
+
+	    /** Allow users to change Start pages on Edge. Use the EdgeHomepageUrls to specify the Start pages that the user would see by default when they open Edge. */
+	    edgeAllowStartPagesModification?: boolean
+
+	    /** Block the Microsoft web page that opens on the first use of Microsoft Edge. This policy allows enterprises, like those enrolled in zero emissions configurations, to block this page. */
+	    edgeDisableFirstRunPage?: boolean
+
+	    /** Block the collection of information by Microsoft for live tile creation when users pin a site to Start from Microsoft Edge. */
+	    edgeBlockLiveTileDataCollection?: boolean
+
+	    /** Enable favorites sync between Internet Explorer and Microsoft Edge. Additions, deletions, modifications and order changes to favorites are shared between browsers. */
+	    edgeSyncFavoritesWithInternetExplorer?: boolean
+
+	    /** Whether or not to Block the user from using data over cellular while roaming. */
+	    cellularBlockDataWhenRoaming?: boolean
+
+	    /** Whether or not to Block the user from using VPN over cellular. */
+	    cellularBlockVpn?: boolean
+
+	    /** Whether or not to Block the user from using VPN when roaming over cellular. */
+	    cellularBlockVpnWhenRoaming?: boolean
+
+	    /** Whether or not to block end user access to Defender. */
+	    defenderBlockEndUserAccess?: boolean
+
+	    /** Number of days before deleting quarantined malware. Valid values 0 to 90 */
+	    defenderDaysBeforeDeletingQuarantinedMalware?: number
+
+	    /** Gets or sets Defender's actions to take on detected Malware per threat level. */
+	    defenderDetectedMalwareActions?: DefenderDetectedMalwareActions
+
+	    /** Defender day of the week for the system scan. Possible values are: userDefined, everyday, sunday, monday, tuesday, wednesday, thursday, friday, saturday. */
+	    defenderSystemScanSchedule?: WeeklySchedule
+
+	    /** Files and folder to exclude from scans and real time protection. */
+	    defenderFilesAndFoldersToExclude?: string[]
+
+	    /** File extensions to exclude from scans and real time protection. */
+	    defenderFileExtensionsToExclude?: string[]
+
+	    /** Max CPU usage percentage during scan. Valid values 0 to 100 */
+	    defenderScanMaxCpu?: number
+
+	    /** Value for monitoring file activity. Possible values are: userDefined, disable, monitorAllFiles, monitorIncomingFilesOnly, monitorOutgoingFilesOnly. */
+	    defenderMonitorFileActivity?: DefenderMonitorFileActivity
+
+	    /** Processes to exclude from scans and real time protection. */
+	    defenderProcessesToExclude?: string[]
+
+	    /** The configuration for how to prompt user for sample submission. Possible values are: userDefined, alwaysPrompt, promptBeforeSendingPersonalData, neverSendData, sendAllDataWithoutPrompting. */
+	    defenderPromptForSampleSubmission?: DefenderPromptForSampleSubmission
+
+	    /** Indicates whether or not to require behavior monitoring. */
+	    defenderRequireBehaviorMonitoring?: boolean
+
+	    /** Indicates whether or not to require cloud protection. */
+	    defenderRequireCloudProtection?: boolean
+
+	    /** Indicates whether or not to require network inspection system. */
+	    defenderRequireNetworkInspectionSystem?: boolean
+
+	    /** Indicates whether or not to require real time monitoring. */
+	    defenderRequireRealTimeMonitoring?: boolean
+
+	    /** Indicates whether or not to scan archive files. */
+	    defenderScanArchiveFiles?: boolean
+
+	    /** Indicates whether or not to scan downloads. */
+	    defenderScanDownloads?: boolean
+
+	    /** Indicates whether or not to scan files opened from a network folder. */
+	    defenderScanNetworkFiles?: boolean
+
+	    /** Indicates whether or not to scan incoming mail messages. */
+	    defenderScanIncomingMail?: boolean
+
+	    /** Indicates whether or not to scan mapped network drives during full scan. */
+	    defenderScanMappedNetworkDrivesDuringFullScan?: boolean
+
+	    /** Indicates whether or not to scan removable drives during full scan. */
+	    defenderScanRemovableDrivesDuringFullScan?: boolean
+
+	    /** Indicates whether or not to scan scripts loaded in Internet Explorer browser. */
+	    defenderScanScriptsLoadedInInternetExplorer?: boolean
+
+	    /** The signature update interval in hours. Specify 0 not to check. Valid values 0 to 24 */
+	    defenderSignatureUpdateIntervalInHours?: number
+
+	    /** The defender system scan type. Possible values are: userDefined, disabled, quick, full. */
+	    defenderScanType?: DefenderScanType
+
+	    /** The defender time for the system scan. */
+	    defenderScheduledScanTime?: string
+
+	    /** The time to perform a daily quick scan. */
+	    defenderScheduledQuickScanTime?: string
+
+	    /** Specifies the level of cloud-delivered protection. Possible values are: notConfigured, high, highPlus, zeroTolerance. */
+	    defenderCloudBlockLevel?: DefenderCloudBlockLevelType
+
+	    /** Specify whether to show a user-configurable setting to control the screen timeout while on the lock screen of Windows 10 Mobile devices. If this policy is set to Allow, the value set by lockScreenTimeoutInSeconds is ignored. */
+	    lockScreenAllowTimeoutConfiguration?: boolean
+
+	    /** Indicates whether or not to block action center notifications over lock screen. */
+	    lockScreenBlockActionCenterNotifications?: boolean
+
+	    /** Indicates whether or not the user can interact with Cortana using speech while the system is locked. */
+	    lockScreenBlockCortana?: boolean
+
+	    /** Indicates whether to allow toast notifications above the device lock screen. */
+	    lockScreenBlockToastNotifications?: boolean
+
+	    /** Set the duration (in seconds) from the screen locking to the screen turning off for Windows 10 Mobile devices. Supported values are 11-1800. Valid values 11 to 1800 */
+	    lockScreenTimeoutInSeconds?: number
+
+	    /** Specify whether PINs or passwords such as "1111" or "1234" are allowed. For Windows 10 desktops, it also controls the use of picture passwords. */
+	    passwordBlockSimple?: boolean
+
+	    /** The password expiration in days. Valid values 0 to 730 */
+	    passwordExpirationDays?: number
+
+	    /** The minimum password length. Valid values 4 to 16 */
+	    passwordMinimumLength?: number
+
+	    /** The minutes of inactivity before the screen times out. */
+	    passwordMinutesOfInactivityBeforeScreenTimeout?: number
+
+	    /** The number of character sets required in the password. */
+	    passwordMinimumCharacterSetCount?: number
+
+	    /** The number of previous passwords to prevent reuse of. Valid values 0 to 50 */
+	    passwordPreviousPasswordBlockCount?: number
+
+	    /** Indicates whether or not to require the user to have a password. */
+	    passwordRequired?: boolean
+
+	    /** Indicates whether or not to require a password upon resuming from an idle state. */
+	    passwordRequireWhenResumeFromIdleState?: boolean
+
+	    /** The required password type. Possible values are: deviceDefault, alphanumeric, numeric. */
+	    passwordRequiredType?: RequiredPasswordType
+
+	    /** The number of sign in failures before factory reset. Valid values 0 to 999 */
+	    passwordSignInFailureCountBeforeFactoryReset?: number
+
+	    /** Enables or disables the use of advertising ID. Added in Windows 10, version 1607. Possible values are: notConfigured, blocked, allowed. */
+	    privacyAdvertisingId?: StateManagementSetting
+
+	    /** Indicates whether or not to allow the automatic acceptance of the pairing and privacy user consent dialog when launching apps. */
+	    privacyAutoAcceptPairingAndConsentPrompts?: boolean
+
+	    /** Indicates whether or not to block the usage of cloud based speech services for Cortana, Dictation, or Store applications. */
+	    privacyBlockInputPersonalization?: boolean
+
+	    /** Indicates whether or not to block the user from unpinning apps from taskbar. */
+	    startBlockUnpinningAppsFromTaskbar?: boolean
+
+	    /** Setting the value of this collapses the app list, removes the app list entirely, or disables the corresponding toggle in the Settings app. Possible values are: userDefined, collapse, remove, disableSettingsApp. */
+	    startMenuAppListVisibility?: WindowsStartMenuAppListVisibilityType
+
+	    /** Enabling this policy hides the change account setting from appearing in the user tile in the start menu. */
+	    startMenuHideChangeAccountSettings?: boolean
+
+	    /** Enabling this policy hides the most used apps from appearing on the start menu and disables the corresponding toggle in the Settings app. */
+	    startMenuHideFrequentlyUsedApps?: boolean
+
+	    /** Enabling this policy hides hibernate from appearing in the power button in the start menu. */
+	    startMenuHideHibernate?: boolean
+
+	    /** Enabling this policy hides lock from appearing in the user tile in the start menu. */
+	    startMenuHideLock?: boolean
+
+	    /** Enabling this policy hides the power button from appearing in the start menu. */
+	    startMenuHidePowerButton?: boolean
+
+	    /** Enabling this policy hides recent jump lists from appearing on the start menu/taskbar and disables the corresponding toggle in the Settings app. */
+	    startMenuHideRecentJumpLists?: boolean
+
+	    /** Enabling this policy hides recently added apps from appearing on the start menu and disables the corresponding toggle in the Settings app. */
+	    startMenuHideRecentlyAddedApps?: boolean
+
+	    /** Enabling this policy hides "Restart/Update and Restart" from appearing in the power button in the start menu. */
+	    startMenuHideRestartOptions?: boolean
+
+	    /** Enabling this policy hides shut down/update and shut down from appearing in the power button in the start menu. */
+	    startMenuHideShutDown?: boolean
+
+	    /** Enabling this policy hides sign out from appearing in the user tile in the start menu. */
+	    startMenuHideSignOut?: boolean
+
+	    /** Enabling this policy hides sleep from appearing in the power button in the start menu. */
+	    startMenuHideSleep?: boolean
+
+	    /** Enabling this policy hides switch account from appearing in the user tile in the start menu. */
+	    startMenuHideSwitchAccount?: boolean
+
+	    /** Enabling this policy hides the user tile from appearing in the start menu. */
+	    startMenuHideUserTile?: boolean
+
+	    /** This policy setting allows you to import Edge assets to be used with startMenuLayoutXml policy. Start layout can contain secondary tile from Edge app which looks for Edge local asset file. Edge local asset would not exist and cause Edge secondary tile to appear empty in this case. This policy only gets applied when startMenuLayoutXml policy is modified. The value should be a UTF-8 Base64 encoded byte array. */
+	    startMenuLayoutEdgeAssetsXml?: number
+
+	    /** Allows admins to override the default Start menu layout and prevents the user from changing it. The layout is modified by specifying an XML file based on a layout modification schema. XML needs to be in a UTF8 encoded byte array format. */
+	    startMenuLayoutXml?: number
+
+	    /** Allows admins to decide how the Start menu is displayed. Possible values are: userDefined, fullScreen, nonFullScreen. */
+	    startMenuMode?: WindowsStartMenuModeType
+
+	    /** Enforces the visibility (Show/Hide) of the Documents folder shortcut on the Start menu. Possible values are: notConfigured, hide, show. */
+	    startMenuPinnedFolderDocuments?: VisibilitySetting
+
+	    /** Enforces the visibility (Show/Hide) of the Downloads folder shortcut on the Start menu. Possible values are: notConfigured, hide, show. */
+	    startMenuPinnedFolderDownloads?: VisibilitySetting
+
+	    /** Enforces the visibility (Show/Hide) of the FileExplorer shortcut on the Start menu. Possible values are: notConfigured, hide, show. */
+	    startMenuPinnedFolderFileExplorer?: VisibilitySetting
+
+	    /** Enforces the visibility (Show/Hide) of the HomeGroup folder shortcut on the Start menu. Possible values are: notConfigured, hide, show. */
+	    startMenuPinnedFolderHomeGroup?: VisibilitySetting
+
+	    /** Enforces the visibility (Show/Hide) of the Music folder shortcut on the Start menu. Possible values are: notConfigured, hide, show. */
+	    startMenuPinnedFolderMusic?: VisibilitySetting
+
+	    /** Enforces the visibility (Show/Hide) of the Network folder shortcut on the Start menu. Possible values are: notConfigured, hide, show. */
+	    startMenuPinnedFolderNetwork?: VisibilitySetting
+
+	    /** Enforces the visibility (Show/Hide) of the PersonalFolder shortcut on the Start menu. Possible values are: notConfigured, hide, show. */
+	    startMenuPinnedFolderPersonalFolder?: VisibilitySetting
+
+	    /** Enforces the visibility (Show/Hide) of the Pictures folder shortcut on the Start menu. Possible values are: notConfigured, hide, show. */
+	    startMenuPinnedFolderPictures?: VisibilitySetting
+
+	    /** Enforces the visibility (Show/Hide) of the Settings folder shortcut on the Start menu. Possible values are: notConfigured, hide, show. */
+	    startMenuPinnedFolderSettings?: VisibilitySetting
+
+	    /** Enforces the visibility (Show/Hide) of the Videos folder shortcut on the Start menu. Possible values are: notConfigured, hide, show. */
+	    startMenuPinnedFolderVideos?: VisibilitySetting
+
+	    /** Indicates whether or not to block access to Settings app. */
+	    settingsBlockSettingsApp?: boolean
+
+	    /** Indicates whether or not to block access to System in Settings app. */
+	    settingsBlockSystemPage?: boolean
+
+	    /** Indicates whether or not to block access to Devices in Settings app. */
+	    settingsBlockDevicesPage?: boolean
+
+	    /** Indicates whether or not to block access to Network & Internet in Settings app. */
+	    settingsBlockNetworkInternetPage?: boolean
+
+	    /** Indicates whether or not to block access to Personalization in Settings app. */
+	    settingsBlockPersonalizationPage?: boolean
+
+	    /** Indicates whether or not to block access to Accounts in Settings app. */
+	    settingsBlockAccountsPage?: boolean
+
+	    /** Indicates whether or not to block access to Time & Language in Settings app. */
+	    settingsBlockTimeLanguagePage?: boolean
+
+	    /** Indicates whether or not to block access to Ease of Access in Settings app. */
+	    settingsBlockEaseOfAccessPage?: boolean
+
+	    /** Indicates whether or not to block access to Privacy in Settings app. */
+	    settingsBlockPrivacyPage?: boolean
+
+	    /** Indicates whether or not to block access to Update & Security in Settings app. */
+	    settingsBlockUpdateSecurityPage?: boolean
+
+	    /** Indicates whether or not to block access to Apps in Settings app. */
+	    settingsBlockAppsPage?: boolean
+
+	    /** Indicates whether or not to block access to Gaming in Settings app. */
+	    settingsBlockGamingPage?: boolean
+
+	    /** Allows IT admins to block experiences that are typically for consumers only, such as Start suggestions, Membership notifications, Post-OOBE app install and redirect tiles. */
+	    windowsSpotlightBlockConsumerSpecificFeatures?: boolean
+
+	    /** Allows IT admins to turn off all Windows Spotlight features */
+	    windowsSpotlightBlocked?: boolean
+
+	    /** Block suggestions from Microsoft that show after each OS clean install, upgrade or in an on-going basis to introduce users to what is new or changed */
+	    windowsSpotlightBlockOnActionCenter?: boolean
+
+	    /** Block personalized content in Windows spotlight based on user's device usage. */
+	    windowsSpotlightBlockTailoredExperiences?: boolean
+
+	    /** Block third party content delivered via Windows Spotlight */
+	    windowsSpotlightBlockThirdPartyNotifications?: boolean
+
+	    /** Block Windows Spotlight Windows welcome experience */
+	    windowsSpotlightBlockWelcomeExperience?: boolean
+
+	    /** Allows IT admins to turn off the popup of Windows Tips. */
+	    windowsSpotlightBlockWindowsTips?: boolean
+
+	    /** Specifies the type of Spotlight Possible values are: notConfigured, disabled, enabled. */
+	    windowsSpotlightConfigureOnLockScreen?: WindowsSpotlightEnablementSettings
+
+	    /** If set, proxy settings will be applied to all processes and accounts in the device. Otherwise, it will be applied to the user account that's enrolled into MDM. */
+	    networkProxyApplySettingsDeviceWide?: boolean
+
+	    /** Disable automatic detection of settings. If enabled, the system will try to find the path to a proxy auto-config (PAC) script. */
+	    networkProxyDisableAutoDetect?: boolean
+
+	    /** Address to the proxy auto-config (PAC) script you want to use. */
+	    networkProxyAutomaticConfigurationUrl?: string
+
+	    /** Specifies manual proxy server settings. */
+	    networkProxyServer?: Windows10NetworkProxyServer
+
+	    /** Indicates whether or not to Block the user from adding email accounts to the device that are not associated with a Microsoft account. */
+	    accountsBlockAddingNonMicrosoftAccountEmail?: boolean
+
+	    /** Indicates whether or not to block the user from selecting an AntiTheft mode preference (Windows 10 Mobile only). */
+	    antiTheftModeBlocked?: boolean
+
+	    /** Whether or not to Block the user from using bluetooth. */
+	    bluetoothBlocked?: boolean
+
+	    /** Whether or not to Block the user from accessing the camera of the device. */
+	    cameraBlocked?: boolean
+
+	    /** Whether or not to block Connected Devices Service which enables discovery and connection to other devices, remote messaging, remote app sessions and other cross-device experiences. */
+	    connectedDevicesServiceBlocked?: boolean
+
+	    /** Whether or not to Block the user from doing manual root certificate installation. */
+	    certificatesBlockManualRootCertificateInstallation?: boolean
+
+	    /** Whether or not to Block the user from using copy paste. */
+	    copyPasteBlocked?: boolean
+
+	    /** Whether or not to Block the user from using Cortana. */
+	    cortanaBlocked?: boolean
+
+	    /** Indicates whether or not to Block the user from resetting their phone. */
+	    deviceManagementBlockFactoryResetOnMobile?: boolean
+
+	    /** Indicates whether or not to Block the user from doing manual un-enrollment from device management. */
+	    deviceManagementBlockManualUnenroll?: boolean
+
+	    /** Specifies what filter level of safe search is required. Possible values are: userDefined, strict, moderate. */
+	    safeSearchFilter?: SafeSearchFilterType
+
+	    /** Indicates whether or not to block popups. */
+	    edgeBlockPopups?: boolean
+
+	    /** Indicates whether or not to Block the user from using the search suggestions in the address bar. */
+	    edgeBlockSearchSuggestions?: boolean
+
+	    /** Indicates whether or not to Block the user from sending Intranet traffic to Internet Explorer from Edge. */
+	    edgeBlockSendingIntranetTrafficToInternetExplorer?: boolean
+
+	    /** Indicates whether or not to Require the user to use the smart screen filter. */
+	    edgeRequireSmartScreen?: boolean
+
+	    /** Indicates the enterprise mode site list location. Could be a local file, local network or http location. */
+	    edgeEnterpriseModeSiteListLocation?: string
+
+	    /** The first run URL for when Edge browser is opened for the first time. */
+	    edgeFirstRunUrl?: string
+
+	    /** Allows IT admins to set a default search engine for MDM-Controlled devices. Users can override this and change their default search engine provided the AllowSearchEngineCustomization policy is not set. */
+	    edgeSearchEngine?: EdgeSearchEngineBase
+
+	    /** The list of URLs for homepages shodwn on MDM-enrolled devices on Edge browser. */
+	    edgeHomepageUrls?: string[]
+
+	    /** Indicates whether or not to prevent access to about flags on Edge browser. */
+	    edgeBlockAccessToAboutFlags?: boolean
+
+	    /** Indicates whether or not users can override SmartScreen Filter warnings about potentially malicious websites. */
+	    smartScreenBlockPromptOverride?: boolean
+
+	    /** Indicates whether or not users can override the SmartScreen Filter warnings about downloading unverified files */
+	    smartScreenBlockPromptOverrideForFiles?: boolean
+
+	    /** Indicates whether or not user's localhost IP address is displayed while making phone calls using the WebRTC */
+	    webRtcBlockLocalhostIpAddress?: boolean
+
+	    /** Indicates whether or not to Block the user from using internet sharing. */
+	    internetSharingBlocked?: boolean
+
+	    /** Indicates whether or not to block the user from installing provisioning packages. */
+	    settingsBlockAddProvisioningPackage?: boolean
+
+	    /** Indicates whether or not to block the runtime configuration agent from removing provisioning packages. */
+	    settingsBlockRemoveProvisioningPackage?: boolean
+
+	    /** Indicates whether or not to block the user from changing date and time settings. */
+	    settingsBlockChangeSystemTime?: boolean
+
+	    /** Indicates whether or not to block the user from editing the device name. */
+	    settingsBlockEditDeviceName?: boolean
+
+	    /** Indicates whether or not to block the user from changing the region settings. */
+	    settingsBlockChangeRegion?: boolean
+
+	    /** Indicates whether or not to block the user from changing the language settings. */
+	    settingsBlockChangeLanguage?: boolean
+
+	    /** Indicates whether or not to block the user from changing power and sleep settings. */
+	    settingsBlockChangePowerSleep?: boolean
+
+	    /** Indicates whether or not to Block the user from location services. */
+	    locationServicesBlocked?: boolean
+
+	    /** Indicates whether or not to Block a Microsoft account. */
+	    microsoftAccountBlocked?: boolean
+
+	    /** Indicates whether or not to Block Microsoft account settings sync. */
+	    microsoftAccountBlockSettingsSync?: boolean
+
+	    /** Indicates whether or not to Block the user from using near field communication. */
+	    nfcBlocked?: boolean
+
+	    /** Indicates whether or not to Block the user from reset protection mode. */
+	    resetProtectionModeBlocked?: boolean
+
+	    /** Indicates whether or not to Block the user from taking Screenshots. */
+	    screenCaptureBlocked?: boolean
+
+	    /** Indicates whether or not to Block the user from using removable storage. */
+	    storageBlockRemovableStorage?: boolean
+
+	    /** Indicating whether or not to require encryption on a mobile device. */
+	    storageRequireMobileDeviceEncryption?: boolean
+
+	    /** Indicates whether or not to Block the user from USB connection. */
+	    usbBlocked?: boolean
+
+	    /** Indicates whether or not to Block the user from voice recording. */
+	    voiceRecordingBlocked?: boolean
+
+	    /** Indicating whether or not to block automatically connecting to Wi-Fi hotspots. Has no impact if Wi-Fi is blocked. */
+	    wiFiBlockAutomaticConnectHotspots?: boolean
+
+	    /** Indicates whether or not to Block the user from using Wi-Fi. */
+	    wiFiBlocked?: boolean
+
+	    /** Indicates whether or not to Block the user from using Wi-Fi manual configuration. */
+	    wiFiBlockManualConfiguration?: boolean
+
+	    /** Specify how often devices scan for Wi-Fi networks. Supported values are 1-500, where 100 = default, and 500 = low frequency. Valid values 1 to 500 */
+	    wiFiScanInterval?: number
+
+	    /** Indicates whether or not to allow other devices from discovering this PC for projection. */
+	    wirelessDisplayBlockProjectionToThisDevice?: boolean
+
+	    /** Indicates whether or not to allow user input from wireless display receiver. */
+	    wirelessDisplayBlockUserInputFromReceiver?: boolean
+
+	    /** Indicates whether or not to require a PIN for new devices to initiate pairing. */
+	    wirelessDisplayRequirePinForPairing?: boolean
+
+	    /** Indicates whether or not to Block the user from using the Windows store. */
+	    windowsStoreBlocked?: boolean
+
+	    /** Indicates whether apps from AppX packages signed with a trusted certificate can be side loaded. Possible values are: notConfigured, blocked, allowed. */
+	    appsAllowTrustedAppsSideloading?: StateManagementSetting
+
+	    /** Indicates whether or not to block automatic update of apps from Windows Store. */
+	    windowsStoreBlockAutoUpdate?: boolean
+
+	    /** Indicates whether or not to allow developer unlock. Possible values are: notConfigured, blocked, allowed. */
+	    developerUnlockSetting?: StateManagementSetting
+
+	    /** Indicates whether or not to block multiple users of the same app to share data. */
+	    sharedUserAppDataAllowed?: boolean
+
+	    /** Indicates whether or not to disable the launch of all apps from Windows Store that came pre-installed or were downloaded. */
+	    appsBlockWindowsStoreOriginatedApps?: boolean
+
+	    /** Indicates whether or not to enable Private Store Only. */
+	    windowsStoreEnablePrivateStoreOnly?: boolean
+
+	    /** Indicates whether application data is restricted to the system drive. */
+	    storageRestrictAppDataToSystemVolume?: boolean
+
+	    /** Indicates whether the installation of applications is restricted to the system drive. */
+	    storageRestrictAppInstallToSystemVolume?: boolean
+
+	    /** Indicates whether or not to block DVR and broadcasting. */
+	    gameDvrBlocked?: boolean
+
+	    /** Indicates whether or not to enable device discovery UX. */
+	    experienceBlockDeviceDiscovery?: boolean
+
+	    /** Indicates whether or not to allow the error dialog from displaying if no SIM card is detected. */
+	    experienceBlockErrorDialogWhenNoSIM?: boolean
+
+	    /** Indicates whether or not to enable task switching on the device. */
+	    experienceBlockTaskSwitcher?: boolean
+
+	    /** Disables the ability to quickly switch between users that are logged on simultaneously without logging off. */
+	    logonBlockFastUserSwitching?: boolean
+
+}
+
+export interface Windows10CustomConfiguration extends DeviceConfiguration {
+
+	    /** OMA settings. This collection can contain a maximum of 1000 elements. */
+	    omaSettings?: OmaSetting[]
+
+}
+
+export interface Windows10EnterpriseModernAppManagementConfiguration extends DeviceConfiguration {
+
+	    /** Indicates whether or not to uninstall a fixed list of built-in Windows apps. */
+	    uninstallBuiltInApps?: boolean
+
+}
+
+export interface SharedPCConfiguration extends DeviceConfiguration {
+
+	    /** Specifies how accounts are managed on a shared PC. Only applies when disableAccountManager is false. */
+	    accountManagerPolicy?: SharedPCAccountManagerPolicy
+
+	    /** Indicates which type of accounts are allowed to use on a shared PC. Possible values are: guest, domain. */
+	    allowedAccounts?: SharedPCAllowedAccountType
+
+	    /** Specifies whether local storage is allowed on a shared PC. */
+	    allowLocalStorage?: boolean
+
+	    /** Disables the account manager for shared PC mode. */
+	    disableAccountManager?: boolean
+
+	    /** Specifies whether the default shared PC education environment policies should be disabled. For Windows 10 RS2 and later, this policy will be applied without setting Enabled to true. */
+	    disableEduPolicies?: boolean
+
+	    /** Specifies whether the default shared PC power policies should be disabled. */
+	    disablePowerPolicies?: boolean
+
+	    /** Disables the requirement to sign in whenever the device wakes up from sleep mode. */
+	    disableSignInOnResume?: boolean
+
+	    /** Enables shared PC mode and applies the shared pc policies. */
+	    enabled?: boolean
+
+	    /** Specifies the time in seconds that a device must sit idle before the PC goes to sleep. Setting this value to 0 prevents the sleep timeout from occurring. */
+	    idleTimeBeforeSleepInSeconds?: number
+
+	    /** Specifies the display text for the account shown on the sign-in screen which launches the app specified by SetKioskAppUserModelId. Only applies when KioskAppUserModelId is set. */
+	    kioskAppDisplayName?: string
+
+	    /** Specifies the application user model ID of the app to use with assigned access. */
+	    kioskAppUserModelId?: string
+
+	    /** Specifies the daily start time of maintenance hour. */
+	    maintenanceStartTime?: string
+
+}
+
+export interface Windows10SecureAssessmentConfiguration extends DeviceConfiguration {
+
+	    /** Url link to an assessment that's automatically loaded when the secure assessment browser is launched. It has to be a valid Url (http[s]://msdn.microsoft.com/). */
+	    launchUri?: string
+
+	    /** The account used to configure the Windows device for taking the test. The user can be a domain account (domain\user), an AAD account (username@tenant.com) or a local account (username). */
+	    configurationAccount?: string
+
+	    /** Indicates whether or not to allow the app from printing during the test. */
+	    allowPrinting?: boolean
+
+	    /** Indicates whether or not to allow screen capture capability during a test. */
+	    allowScreenCapture?: boolean
+
+	    /** Indicates whether or not to allow text suggestions during the test. */
+	    allowTextSuggestion?: boolean
+
+}
+
+export interface WindowsPhone81CustomConfiguration extends DeviceConfiguration {
+
+	    /** OMA settings. This collection can contain a maximum of 1000 elements. */
+	    omaSettings?: OmaSetting[]
+
+}
+
+export interface WindowsUpdateForBusinessConfiguration extends DeviceConfiguration {
+
+	    /** Delivery Optimization Mode Possible values are: userDefined, httpOnly, httpWithPeeringNat, httpWithPeeringPrivateGroup, httpWithInternetPeering, simpleDownload, bypassMode. */
+	    deliveryOptimizationMode?: WindowsDeliveryOptimizationMode
+
+	    /** The pre-release features. Possible values are: userDefined, settingsOnly, settingsAndExperimentations, notAllowed. */
+	    prereleaseFeatures?: PrereleaseFeatures
+
+	    /** Automatic update mode. Possible values are: userDefined, notifyDownload, autoInstallAtMaintenanceTime, autoInstallAndRebootAtMaintenanceTime, autoInstallAndRebootAtScheduledTime, autoInstallAndRebootWithoutEndUserControl. */
+	    automaticUpdateMode?: AutomaticUpdateMode
+
+	    /** Allow Microsoft Update Service */
+	    microsoftUpdateServiceAllowed?: boolean
+
+	    /** Exclude Windows update Drivers */
+	    driversExcluded?: boolean
+
+	    /** Installation schedule */
+	    installationSchedule?: WindowsUpdateInstallScheduleType
+
+	    /** Defer Quality Updates by these many days */
+	    qualityUpdatesDeferralPeriodInDays?: number
+
+	    /** Defer Feature Updates by these many days */
+	    featureUpdatesDeferralPeriodInDays?: number
+
+	    /** Pause Quality Updates */
+	    qualityUpdatesPaused?: boolean
+
+	    /** Pause Feature Updates */
+	    featureUpdatesPaused?: boolean
+
+	    /** Quality Updates Pause Expiry datetime */
+	    qualityUpdatesPauseExpiryDateTime?: string
+
+	    /** Feature Updates Pause Expiry datetime */
+	    featureUpdatesPauseExpiryDateTime?: string
+
+	    /** Determines which branch devices will receive their updates from Possible values are: userDefined, all, businessReadyOnly. */
+	    businessReadyUpdatesOnly?: WindowsUpdateType
+
+}
+
+export interface Windows81GeneralConfiguration extends DeviceConfiguration {
+
+	    /** Indicates whether or not to Block the user from adding email accounts to the device that are not associated with a Microsoft account. */
+	    accountsBlockAddingNonMicrosoftAccountEmail?: boolean
+
+	    /** Value indicating whether this policy only applies to Windows 8.1. This property is read-only. */
+	    applyOnlyToWindows81?: boolean
+
+	    /** Indicates whether or not to block auto fill. */
+	    browserBlockAutofill?: boolean
+
+	    /** Indicates whether or not to block automatic detection of Intranet sites. */
+	    browserBlockAutomaticDetectionOfIntranetSites?: boolean
+
+	    /** Indicates whether or not to block enterprise mode access. */
+	    browserBlockEnterpriseModeAccess?: boolean
+
+	    /** Indicates whether or not to Block the user from using JavaScript. */
+	    browserBlockJavaScript?: boolean
+
+	    /** Indicates whether or not to block plug-ins. */
+	    browserBlockPlugins?: boolean
+
+	    /** Indicates whether or not to block popups. */
+	    browserBlockPopups?: boolean
+
+	    /** Indicates whether or not to Block the user from sending the do not track header. */
+	    browserBlockSendingDoNotTrackHeader?: boolean
+
+	    /** Indicates whether or not to block a single word entry on Intranet sites. */
+	    browserBlockSingleWordEntryOnIntranetSites?: boolean
+
+	    /** Indicates whether or not to require the user to use the smart screen filter. */
+	    browserRequireSmartScreen?: boolean
+
+	    /** The enterprise mode site list location. Could be a local file, local network or http location. */
+	    browserEnterpriseModeSiteListLocation?: string
+
+	    /** The internet security level. Possible values are: userDefined, medium, mediumHigh, high. */
+	    browserInternetSecurityLevel?: InternetSiteSecurityLevel
+
+	    /** The Intranet security level. Possible values are: userDefined, low, mediumLow, medium, mediumHigh, high. */
+	    browserIntranetSecurityLevel?: SiteSecurityLevel
+
+	    /** The logging report location. */
+	    browserLoggingReportLocation?: string
+
+	    /** Indicates whether or not to require high security for restricted sites. */
+	    browserRequireHighSecurityForRestrictedSites?: boolean
+
+	    /** Indicates whether or not to require a firewall. */
+	    browserRequireFirewall?: boolean
+
+	    /** Indicates whether or not to require fraud warning. */
+	    browserRequireFraudWarning?: boolean
+
+	    /** The trusted sites security level. Possible values are: userDefined, low, mediumLow, medium, mediumHigh, high. */
+	    browserTrustedSitesSecurityLevel?: SiteSecurityLevel
+
+	    /** Indicates whether or not to block data roaming. */
+	    cellularBlockDataRoaming?: boolean
+
+	    /** Indicates whether or not to block diagnostic data submission. */
+	    diagnosticsBlockDataSubmission?: boolean
+
+	    /** Indicates whether or not to Block the user from using a pictures password and pin. */
+	    passwordBlockPicturePasswordAndPin?: boolean
+
+	    /** Password expiration in days. */
+	    passwordExpirationDays?: number
+
+	    /** The minimum password length. */
+	    passwordMinimumLength?: number
+
+	    /** The minutes of inactivity before the screen times out. */
+	    passwordMinutesOfInactivityBeforeScreenTimeout?: number
+
+	    /** The number of character sets required in the password. */
+	    passwordMinimumCharacterSetCount?: number
+
+	    /** The number of previous passwords to prevent re-use of. Valid values 0 to 24 */
+	    passwordPreviousPasswordBlockCount?: number
+
+	    /** The required password type. Possible values are: deviceDefault, alphanumeric, numeric. */
+	    passwordRequiredType?: RequiredPasswordType
+
+	    /** The number of sign in failures before factory reset. */
+	    passwordSignInFailureCountBeforeFactoryReset?: number
+
+	    /** Indicates whether or not to require encryption on a mobile device. */
+	    storageRequireDeviceEncryption?: boolean
+
+	    /** Indicates whether or not to require automatic updates. */
+	    updatesRequireAutomaticUpdates?: boolean
+
+	    /** The user account control settings. Possible values are: userDefined, alwaysNotify, notifyOnAppChanges, notifyOnAppChangesWithoutDimming, neverNotify. */
+	    userAccountControlSettings?: WindowsUserAccountControlSettings
+
+	    /** The work folders url. */
+	    workFoldersUrl?: string
+
+}
+
+export interface WindowsPhone81GeneralConfiguration extends DeviceConfiguration {
+
+	    /** Value indicating whether this policy only applies to Windows Phone 8.1. This property is read-only. */
+	    applyOnlyToWindowsPhone81?: boolean
+
+	    /** Indicates whether or not to block copy paste. */
+	    appsBlockCopyPaste?: boolean
+
+	    /** Indicates whether or not to block bluetooth. */
+	    bluetoothBlocked?: boolean
+
+	    /** Indicates whether or not to block camera. */
+	    cameraBlocked?: boolean
+
+	    /** Indicates whether or not to block Wi-Fi tethering. Has no impact if Wi-Fi is blocked. */
+	    cellularBlockWifiTethering?: boolean
+
+	    /** List of apps in the compliance (either allow list or block list, controlled by CompliantAppListType). This collection can contain a maximum of 10000 elements. */
+	    compliantAppsList?: AppListItem[]
+
+	    /** List that is in the AppComplianceList. Possible values are: none, appsInListCompliant, appsNotInListCompliant. */
+	    compliantAppListType?: AppListType
+
+	    /** Indicates whether or not to block diagnostic data submission. */
+	    diagnosticDataBlockSubmission?: boolean
+
+	    /** Indicates whether or not to block custom email accounts. */
+	    emailBlockAddingAccounts?: boolean
+
+	    /** Indicates whether or not to block location services. */
+	    locationServicesBlocked?: boolean
+
+	    /** Indicates whether or not to block using a Microsoft Account. */
+	    microsoftAccountBlocked?: boolean
+
+	    /** Indicates whether or not to block Near-Field Communication. */
+	    nfcBlocked?: boolean
+
+	    /** Indicates whether or not to block syncing the calendar. */
+	    passwordBlockSimple?: boolean
+
+	    /** Number of days before the password expires. */
+	    passwordExpirationDays?: number
+
+	    /** Minimum length of passwords. */
+	    passwordMinimumLength?: number
+
+	    /** Minutes of inactivity before screen timeout. */
+	    passwordMinutesOfInactivityBeforeScreenTimeout?: number
+
+	    /** Number of character sets a password must contain. */
+	    passwordMinimumCharacterSetCount?: number
+
+	    /** Number of previous passwords to block. Valid values 0 to 24 */
+	    passwordPreviousPasswordBlockCount?: number
+
+	    /** Number of sign in failures allowed before factory reset. */
+	    passwordSignInFailureCountBeforeFactoryReset?: number
+
+	    /** Password type that is required. Possible values are: deviceDefault, alphanumeric, numeric. */
+	    passwordRequiredType?: RequiredPasswordType
+
+	    /** Indicates whether or not to require a password. */
+	    passwordRequired?: boolean
+
+	    /** Indicates whether or not to block screenshots. */
+	    screenCaptureBlocked?: boolean
+
+	    /** Indicates whether or not to block removable storage. */
+	    storageBlockRemovableStorage?: boolean
+
+	    /** Indicates whether or not to require encryption. */
+	    storageRequireEncryption?: boolean
+
+	    /** Indicates whether or not to block the web browser. */
+	    webBrowserBlocked?: boolean
+
+	    /** Indicates whether or not to block Wi-Fi. */
+	    wifiBlocked?: boolean
+
+	    /** Indicates whether or not to block automatically connecting to Wi-Fi hotspots. Has no impact if Wi-Fi is blocked. */
+	    wifiBlockAutomaticConnectHotspots?: boolean
+
+	    /** Indicates whether or not to block Wi-Fi hotspot reporting. Has no impact if Wi-Fi is blocked. */
+	    wifiBlockHotspotReporting?: boolean
+
+	    /** Indicates whether or not to block the Windows Store. */
+	    windowsStoreBlocked?: boolean
+
+}
+
+export interface Windows10TeamGeneralConfiguration extends DeviceConfiguration {
+
+	    /** Indicates whether or not to Block Azure Operational Insights. */
+	    azureOperationalInsightsBlockTelemetry?: boolean
+
+	    /** The Azure Operational Insights workspace id. */
+	    azureOperationalInsightsWorkspaceId?: string
+
+	    /** The Azure Operational Insights Workspace key. */
+	    azureOperationalInsightsWorkspaceKey?: string
+
+	    /** Specifies whether to automatically launch the Connect app whenever a projection is initiated. */
+	    connectAppBlockAutoLaunch?: boolean
+
+	    /** Indicates whether or not to Block setting a maintenance window for device updates. */
+	    maintenanceWindowBlocked?: boolean
+
+	    /** Maintenance window duration for device updates. Valid values 1 to 5 */
+	    maintenanceWindowDurationInHours?: number
+
+	    /** Maintenance window start time for device updates. */
+	    maintenanceWindowStartTime?: string
+
+	    /** The channel. Possible values are: userDefined, one, two, three, four, five, six, seven, eight, nine, ten, eleven, thirtySix, forty, fortyFour, fortyEight, oneHundredFortyNine, oneHundredFiftyThree, oneHundredFiftySeven, oneHundredSixtyOne, oneHundredSixtyFive. */
+	    miracastChannel?: MiracastChannel
+
+	    /** Indicates whether or not to Block wireless projection. */
+	    miracastBlocked?: boolean
+
+	    /** Indicates whether or not to require a pin for wireless projection. */
+	    miracastRequirePin?: boolean
+
+	    /** Specifies whether to disable the "My meetings and files" feature in the Start menu, which shows the signed-in user's meetings and files from Office 365. */
+	    settingsBlockMyMeetingsAndFiles?: boolean
+
+	    /** Specifies whether to allow the ability to resume a session when the session times out. */
+	    settingsBlockSessionResume?: boolean
+
+	    /** Specifies whether to disable auto-populating of the sign-in dialog with invitees from scheduled meetings. */
+	    settingsBlockSigninSuggestions?: boolean
+
+	    /** Specifies the default volume value for a new session. Permitted values are 0-100. The default is 45. Valid values 0 to 100 */
+	    settingsDefaultVolume?: number
+
+	    /** Specifies the number of minutes until the Hub screen turns off. */
+	    settingsScreenTimeoutInMinutes?: number
+
+	    /** Specifies the number of minutes until the session times out. */
+	    settingsSessionTimeoutInMinutes?: number
+
+	    /** Specifies the number of minutes until the Hub enters sleep mode. */
+	    settingsSleepTimeoutInMinutes?: number
+
+	    /** Indicates whether or not to Block the welcome screen from waking up automatically when someone enters the room. */
+	    welcomeScreenBlockAutomaticWakeUp?: boolean
+
+	    /** The welcome screen background image URL. The URL must use the HTTPS protocol and return a PNG image. */
+	    welcomeScreenBackgroundImageUrl?: string
+
+	    /** The welcome screen meeting information shown. Possible values are: userDefined, showOrganizerAndTimeOnly, showOrganizerAndTimeAndSubject. */
+	    welcomeScreenMeetingInformation?: WelcomeScreenMeetingInformation
+
+}
+
+export interface EditionUpgradeConfiguration extends DeviceConfiguration {
+
+	    /** Edition Upgrade License Type. Possible values are: productKey, licenseFile. */
+	    licenseType?: EditionUpgradeLicenseType
+
+	    /** Edition Upgrade Target Edition. Possible values are: windows10Enterprise, windows10EnterpriseN, windows10Education, windows10EducationN, windows10MobileEnterprise, windows10HolographicEnterprise, windows10Professional, windows10ProfessionalN, windows10ProfessionalEducation, windows10ProfessionalEducationN, windows10ProfessionalWorkstation, windows10ProfessionalWorkstationN. */
+	    targetEdition?: Windows10EditionType
+
+	    /** Edition Upgrade License File Content. */
+	    license?: string
+
+	    /** Edition Upgrade Product Key. */
+	    productKey?: string
+
+}
+
+export interface AndroidCompliancePolicy extends DeviceCompliancePolicy {
+
+	    /** Require a password to unlock device. */
+	    passwordRequired?: boolean
+
+	    /** Minimum password length. Valid values 4 to 16 */
+	    passwordMinimumLength?: number
+
+	    /** Type of characters in password Possible values are: deviceDefault, alphabetic, alphanumeric, alphanumericWithSymbols, lowSecurityBiometric, numeric, numericComplex, any. */
+	    passwordRequiredType?: AndroidRequiredPasswordType
+
+	    /** Minutes of inactivity before a password is required. */
+	    passwordMinutesOfInactivityBeforeLock?: number
+
+	    /** Number of days before the password expires. Valid values 1 to 365 */
+	    passwordExpirationDays?: number
+
+	    /** Number of previous passwords to block. */
+	    passwordPreviousPasswordBlockCount?: number
+
+	    /** Require that devices disallow installation of apps from unknown sources. */
+	    securityPreventInstallAppsFromUnknownSources?: boolean
+
+	    /** Disable USB debugging on Android devices. */
+	    securityDisableUsbDebugging?: boolean
+
+	    /** Require the Android Verify apps feature is turned on. */
+	    securityRequireVerifyApps?: boolean
+
+	    /** Require that devices have enabled device threat protection. */
+	    deviceThreatProtectionEnabled?: boolean
+
+	    /** Require Mobile Threat Protection minimum risk level to report noncompliance. Possible values are: unavailable, secured, low, medium, high, notSet. */
+	    deviceThreatProtectionRequiredSecurityLevel?: DeviceThreatProtectionLevel
+
+	    /** Devices must not be jailbroken or rooted. */
+	    securityBlockJailbrokenDevices?: boolean
+
+	    /** Minimum Android version. */
+	    osMinimumVersion?: string
+
+	    /** Maximum Android version. */
+	    osMaximumVersion?: string
+
+	    /** Minimum Android security patch level. */
+	    minAndroidSecurityPatchLevel?: string
+
+	    /** Require encryption on Android devices. */
+	    storageRequireEncryption?: boolean
+
+	    /** Require the device to pass the SafetyNet basic integrity check. */
+	    securityRequireSafetyNetAttestationBasicIntegrity?: boolean
+
+	    /** Require the device to pass the SafetyNet certified device check. */
+	    securityRequireSafetyNetAttestationCertifiedDevice?: boolean
+
+	    /** Require Google Play Services to be installed and enabled on the device. */
+	    securityRequireGooglePlayServices?: boolean
+
+	    /** Require the device to have up to date security providers. The device will require Google Play Services to be enabled and up to date. */
+	    securityRequireUpToDateSecurityProviders?: boolean
+
+	    /** Require the device to pass the Company Portal client app runtime integrity check. */
+	    securityRequireCompanyPortalAppIntegrity?: boolean
+
+}
+
+export interface IosCompliancePolicy extends DeviceCompliancePolicy {
+
+	    /** Indicates whether or not to block simple passcodes. */
+	    passcodeBlockSimple?: boolean
+
+	    /** Number of days before the passcode expires. Valid values 1 to 65535 */
+	    passcodeExpirationDays?: number
+
+	    /** Minimum length of passcode. Valid values 4 to 14 */
+	    passcodeMinimumLength?: number
+
+	    /** Minutes of inactivity before a passcode is required. */
+	    passcodeMinutesOfInactivityBeforeLock?: number
+
+	    /** Number of previous passcodes to block. Valid values 1 to 24 */
+	    passcodePreviousPasscodeBlockCount?: number
+
+	    /** The number of character sets required in the password. */
+	    passcodeMinimumCharacterSetCount?: number
+
+	    /** The required passcode type. Possible values are: deviceDefault, alphanumeric, numeric. */
+	    passcodeRequiredType?: RequiredPasswordType
+
+	    /** Indicates whether or not to require a passcode. */
+	    passcodeRequired?: boolean
+
+	    /** Minimum IOS version. */
+	    osMinimumVersion?: string
+
+	    /** Maximum IOS version. */
+	    osMaximumVersion?: string
+
+	    /** Devices must not be jailbroken or rooted. */
+	    securityBlockJailbrokenDevices?: boolean
+
+	    /** Require that devices have enabled device threat protection . */
+	    deviceThreatProtectionEnabled?: boolean
+
+	    /** Require Mobile Threat Protection minimum risk level to report noncompliance. Possible values are: unavailable, secured, low, medium, high, notSet. */
+	    deviceThreatProtectionRequiredSecurityLevel?: DeviceThreatProtectionLevel
+
+	    /** Indicates whether or not to require a managed email profile. */
+	    managedEmailProfileRequired?: boolean
+
+}
+
+export interface MacOSCompliancePolicy extends DeviceCompliancePolicy {
+
+	    /** Whether or not to require a password. */
+	    passwordRequired?: boolean
+
+	    /** Indicates whether or not to block simple passwords. */
+	    passwordBlockSimple?: boolean
+
+	    /** Number of days before the password expires. Valid values 1 to 65535 */
+	    passwordExpirationDays?: number
+
+	    /** Minimum length of password. Valid values 4 to 14 */
+	    passwordMinimumLength?: number
+
+	    /** Minutes of inactivity before a password is required. */
+	    passwordMinutesOfInactivityBeforeLock?: number
+
+	    /** Number of previous passwords to block. Valid values 1 to 24 */
+	    passwordPreviousPasswordBlockCount?: number
+
+	    /** The number of character sets required in the password. */
+	    passwordMinimumCharacterSetCount?: number
+
+	    /** The required password type. Possible values are: deviceDefault, alphanumeric, numeric. */
+	    passwordRequiredType?: RequiredPasswordType
+
+	    /** Minimum IOS version. */
+	    osMinimumVersion?: string
+
+	    /** Maximum IOS version. */
+	    osMaximumVersion?: string
+
+	    /** Require that devices have enabled system integrity protection. */
+	    systemIntegrityProtectionEnabled?: boolean
+
+	    /** Require that devices have enabled device threat protection . */
+	    deviceThreatProtectionEnabled?: boolean
+
+	    /** Require Mobile Threat Protection minimum risk level to report noncompliance. Possible values are: unavailable, secured, low, medium, high, notSet. */
+	    deviceThreatProtectionRequiredSecurityLevel?: DeviceThreatProtectionLevel
+
+	    /** Require encryption on Mac OS devices. */
+	    storageRequireEncryption?: boolean
+
+}
+
+export interface Windows10CompliancePolicy extends DeviceCompliancePolicy {
+
+	    /** Require a password to unlock Windows device. */
+	    passwordRequired?: boolean
+
+	    /** Indicates whether or not to block simple password. */
+	    passwordBlockSimple?: boolean
+
+	    /** Require a password to unlock an idle device. */
+	    passwordRequiredToUnlockFromIdle?: boolean
+
+	    /** Minutes of inactivity before a password is required. */
+	    passwordMinutesOfInactivityBeforeLock?: number
+
+	    /** The password expiration in days. */
+	    passwordExpirationDays?: number
+
+	    /** The minimum password length. */
+	    passwordMinimumLength?: number
+
+	    /** The number of character sets required in the password. */
+	    passwordMinimumCharacterSetCount?: number
+
+	    /** The required password type. Possible values are: deviceDefault, alphanumeric, numeric. */
+	    passwordRequiredType?: RequiredPasswordType
+
+	    /** The number of previous passwords to prevent re-use of. */
+	    passwordPreviousPasswordBlockCount?: number
+
+	    /** Require devices to be reported as healthy by Windows Device Health Attestation. */
+	    requireHealthyDeviceReport?: boolean
+
+	    /** Minimum Windows 10 version. */
+	    osMinimumVersion?: string
+
+	    /** Maximum Windows 10 version. */
+	    osMaximumVersion?: string
+
+	    /** Minimum Windows Phone version. */
+	    mobileOsMinimumVersion?: string
+
+	    /** Maximum Windows Phone version. */
+	    mobileOsMaximumVersion?: string
+
+	    /** Require devices to be reported as healthy by Windows Device Health Attestation - early launch antimalware driver is enabled. */
+	    earlyLaunchAntiMalwareDriverEnabled?: boolean
+
+	    /** Require devices to be reported healthy by Windows Device Health Attestation - bit locker is enabled */
+	    bitLockerEnabled?: boolean
+
+	    /** Require devices to be reported as healthy by Windows Device Health Attestation - secure boot is enabled. */
+	    secureBootEnabled?: boolean
+
+	    /** Require devices to be reported as healthy by Windows Device Health Attestation. */
+	    codeIntegrityEnabled?: boolean
+
+	    /** Require encryption on windows devices. */
+	    storageRequireEncryption?: boolean
+
+}
+
+export interface Windows10MobileCompliancePolicy extends DeviceCompliancePolicy {
+
+	    /** Require a password to unlock Windows Phone device. */
+	    passwordRequired?: boolean
+
+	    /** Whether or not to block syncing the calendar. */
+	    passwordBlockSimple?: boolean
+
+	    /** Minimum password length. Valid values 4 to 16 */
+	    passwordMinimumLength?: number
+
+	    /** The number of character sets required in the password. */
+	    passwordMinimumCharacterSetCount?: number
+
+	    /** The required password type. Possible values are: deviceDefault, alphanumeric, numeric. */
+	    passwordRequiredType?: RequiredPasswordType
+
+	    /** The number of previous passwords to prevent re-use of. */
+	    passwordPreviousPasswordBlockCount?: number
+
+	    /** Number of days before password expiration. Valid values 1 to 255 */
+	    passwordExpirationDays?: number
+
+	    /** Minutes of inactivity before a password is required. */
+	    passwordMinutesOfInactivityBeforeLock?: number
+
+	    /** Require a password to unlock an idle device. */
+	    passwordRequireToUnlockFromIdle?: boolean
+
+	    /** Minimum Windows Phone version. */
+	    osMinimumVersion?: string
+
+	    /** Maximum Windows Phone version. */
+	    osMaximumVersion?: string
+
+	    /** Require devices to be reported as healthy by Windows Device Health Attestation - early launch antimalware driver is enabled. */
+	    earlyLaunchAntiMalwareDriverEnabled?: boolean
+
+	    /** Require devices to be reported healthy by Windows Device Health Attestation - bit locker is enabled */
+	    bitLockerEnabled?: boolean
+
+	    /** Require devices to be reported as healthy by Windows Device Health Attestation - secure boot is enabled. */
+	    secureBootEnabled?: boolean
+
+	    /** Require devices to be reported as healthy by Windows Device Health Attestation. */
+	    codeIntegrityEnabled?: boolean
+
+	    /** Require encryption on windows devices. */
+	    storageRequireEncryption?: boolean
+
+}
+
+export interface Windows81CompliancePolicy extends DeviceCompliancePolicy {
+
+	    /** Require a password to unlock Windows device. */
+	    passwordRequired?: boolean
+
+	    /** Indicates whether or not to block simple password. */
+	    passwordBlockSimple?: boolean
+
+	    /** Password expiration in days. */
+	    passwordExpirationDays?: number
+
+	    /** The minimum password length. */
+	    passwordMinimumLength?: number
+
+	    /** Minutes of inactivity before a password is required. */
+	    passwordMinutesOfInactivityBeforeLock?: number
+
+	    /** The number of character sets required in the password. */
+	    passwordMinimumCharacterSetCount?: number
+
+	    /** The required password type. Possible values are: deviceDefault, alphanumeric, numeric. */
+	    passwordRequiredType?: RequiredPasswordType
+
+	    /** The number of previous passwords to prevent re-use of. Valid values 0 to 24 */
+	    passwordPreviousPasswordBlockCount?: number
+
+	    /** Minimum Windows 8.1 version. */
+	    osMinimumVersion?: string
+
+	    /** Maximum Windows 8.1 version. */
+	    osMaximumVersion?: string
+
+	    /** Indicates whether or not to require encryption on a windows 8.1 device. */
+	    storageRequireEncryption?: boolean
+
+}
+
+export interface WindowsPhone81CompliancePolicy extends DeviceCompliancePolicy {
+
+	    /** Whether or not to block syncing the calendar. */
+	    passwordBlockSimple?: boolean
+
+	    /** Number of days before the password expires. */
+	    passwordExpirationDays?: number
+
+	    /** Minimum length of passwords. */
+	    passwordMinimumLength?: number
+
+	    /** Minutes of inactivity before a password is required. */
+	    passwordMinutesOfInactivityBeforeLock?: number
+
+	    /** The number of character sets required in the password. */
+	    passwordMinimumCharacterSetCount?: number
+
+	    /** The required password type. Possible values are: deviceDefault, alphanumeric, numeric. */
+	    passwordRequiredType?: RequiredPasswordType
+
+	    /** Number of previous passwords to block. Valid values 0 to 24 */
+	    passwordPreviousPasswordBlockCount?: number
+
+	    /** Whether or not to require a password. */
+	    passwordRequired?: boolean
+
+	    /** Minimum Windows Phone version. */
+	    osMinimumVersion?: string
+
+	    /** Maximum Windows Phone version. */
+	    osMaximumVersion?: string
+
+	    /** Require encryption on windows phone devices. */
+	    storageRequireEncryption?: boolean
+
+}
+
+export interface DeviceComplianceSettingState extends Entity {
+
+	    /** The setting class name and property name. */
+	    setting?: string
+
+	    /** The Setting Name that is being reported */
+	    settingName?: string
+
+	    /** The Device Id that is being reported */
+	    deviceId?: string
+
+	    /** The Device Name that is being reported */
+	    deviceName?: string
+
+	    /** The user Id that is being reported */
+	    userId?: string
+
+	    /** The User email address that is being reported */
+	    userEmail?: string
+
+	    /** The User Name that is being reported */
+	    userName?: string
+
+	    /** The User PrincipalName that is being reported */
+	    userPrincipalName?: string
+
+	    /** The device model that is being reported */
+	    deviceModel?: string
+
+	    /** The compliance state of the setting Possible values are: unknown, notApplicable, compliant, remediated, nonCompliant, error, conflict. */
+	    state?: ComplianceStatus
+
+	    /** The DateTime when device compliance grace period expires */
+	    complianceGracePeriodExpirationDateTime?: string
+
+}
+
+export interface EnrollmentConfigurationAssignment extends Entity {
+
+	    /** Not yet documented */
+	    target?: DeviceAndAppManagementAssignmentTarget
+
+}
+
+export interface DeviceEnrollmentLimitConfiguration extends DeviceEnrollmentConfiguration {
+
+	    /** Not yet documented */
+	    limit?: number
+
+}
+
+export interface DeviceEnrollmentPlatformRestrictionsConfiguration extends DeviceEnrollmentConfiguration {
+
+	    /** Not yet documented */
+	    iosRestriction?: DeviceEnrollmentPlatformRestriction
+
+	    /** Not yet documented */
+	    windowsRestriction?: DeviceEnrollmentPlatformRestriction
+
+	    /** Not yet documented */
+	    windowsMobileRestriction?: DeviceEnrollmentPlatformRestriction
+
+	    /** Not yet documented */
+	    androidRestriction?: DeviceEnrollmentPlatformRestriction
+
+	    /** Not yet documented */
+	    macOSRestriction?: DeviceEnrollmentPlatformRestriction
+
+}
+
+export interface DeviceEnrollmentWindowsHelloForBusinessConfiguration extends DeviceEnrollmentConfiguration {
+
+	    /** Not yet documented */
+	    pinMinimumLength?: number
+
+	    /** Not yet documented */
+	    pinMaximumLength?: number
+
+	    /** Not yet documented Possible values are: allowed, required, disallowed. */
+	    pinUppercaseCharactersUsage?: WindowsHelloForBusinessPinUsage
+
+	    /** Not yet documented Possible values are: allowed, required, disallowed. */
+	    pinLowercaseCharactersUsage?: WindowsHelloForBusinessPinUsage
+
+	    /** Not yet documented Possible values are: allowed, required, disallowed. */
+	    pinSpecialCharactersUsage?: WindowsHelloForBusinessPinUsage
+
+	    /** Not yet documented Possible values are: notConfigured, enabled, disabled. */
+	    state?: Enablement
+
+	    /** Not yet documented */
+	    securityDeviceRequired?: boolean
+
+	    /** Not yet documented */
+	    unlockWithBiometricsEnabled?: boolean
+
+	    /** Not yet documented */
+	    remotePassportEnabled?: boolean
+
+	    /** Not yet documented */
+	    pinPreviousBlockCount?: number
+
+	    /** Not yet documented */
+	    pinExpirationInDays?: number
+
+	    /** Not yet documented Possible values are: notConfigured, enabled, disabled. */
+	    enhancedBiometricsState?: Enablement
+
+}
+
+export interface ManagedMobileApp extends Entity {
+
+	    /** The identifier for an app with it's operating system type. */
+	    mobileAppIdentifier?: MobileAppIdentifier
+
+	    /** Version of the entity. */
+	    version?: string
+
+}
+
+export interface TargetedManagedAppPolicyAssignment extends Entity {
+
+	    /** Identifier for deployment of a group or app */
+	    target?: DeviceAndAppManagementAssignmentTarget
+
+}
+
+export interface ManagedAppOperation extends Entity {
+
+	    /** The operation name. */
+	    displayName?: string
+
+	    /** The last time the app operation was modified. */
+	    lastModifiedDateTime?: string
+
+	    /** The current state of the operation */
+	    state?: string
+
+	    /** Version of the entity. */
+	    version?: string
+
+}
+
+export interface ManagedAppPolicyDeploymentSummary extends Entity {
+
+	    /** Not yet documented */
+	    displayName?: string
+
+	    /** Not yet documented */
+	    configurationDeployedUserCount?: number
+
+	    /** Not yet documented */
+	    lastRefreshTime?: string
+
+	    /** Not yet documented */
+	    configurationDeploymentSummaryPerApp?: ManagedAppPolicyDeploymentSummaryPerApp[]
+
+	    /** Version of the entity. */
+	    version?: string
+
+}
+
+export interface WindowsInformationProtectionAppLockerFile extends Entity {
+
+	    /** The friendly name */
+	    displayName?: string
+
+	    /** SHA256 hash of the file */
+	    fileHash?: string
+
+	    /** File as a byte array */
+	    file?: number
+
+	    /** Version of the entity. */
+	    version?: string
+
+}
+
+export interface IosManagedAppRegistration extends ManagedAppRegistration {
+
+}
+
+export interface AndroidManagedAppRegistration extends ManagedAppRegistration {
+
+}
+
+export interface ManagedAppStatusRaw extends ManagedAppStatus {
+
+	    /** Status report content. */
+	    content?: any
+
+}
+
+export interface LocalizedNotificationMessage extends Entity {
+
+	    /** DateTime the object was last modified. */
+	    lastModifiedDateTime?: string
+
+	    /** The Locale for which this message is destined. */
+	    locale?: string
+
+	    /** The Message Template Subject. */
+	    subject?: string
+
+	    /** The Message Template content. */
+	    messageTemplate?: string
+
+	    /** Flag to indicate whether or not this is the default locale for language fallback. This flag can only be set. To unset, set this property to true on another Localized Notification Message. */
+	    isDefault?: boolean
+
+}
+
+export interface DeviceAndAppManagementRoleDefinition extends RoleDefinition {
+
+}
+
+export interface ManagedEBookAssignment extends Entity {
+
+	    /** The assignment target for eBook. */
+	    target?: DeviceAndAppManagementAssignmentTarget
+
+	    /** The install intent for eBook. Possible values are: available, required, uninstall, availableWithoutEnrollment. */
+	    installIntent?: InstallIntent
+
+}
+
+export interface EBookInstallSummary extends Entity {
+
+	    /** Number of Devices that have successfully installed this book. */
+	    installedDeviceCount?: number
+
+	    /** Number of Devices that have failed to install this book. */
+	    failedDeviceCount?: number
+
+	    /** Number of Devices that does not have this book installed. */
+	    notInstalledDeviceCount?: number
+
+	    /** Number of Users whose devices have all succeeded to install this book. */
+	    installedUserCount?: number
+
+	    /** Number of Users that have 1 or more device that failed to install this book. */
+	    failedUserCount?: number
+
+	    /** Number of Users that did not install this book. */
+	    notInstalledUserCount?: number
+
+}
+
+export interface DeviceInstallState extends Entity {
+
+	    /** Device name. */
+	    deviceName?: string
+
+	    /** Device Id. */
+	    deviceId?: string
+
+	    /** Last sync date and time. */
+	    lastSyncDateTime?: string
+
+	    /** The install state of the eBook. Possible values are: notApplicable, installed, failed, notInstalled, uninstallFailed, unknown. */
+	    installState?: InstallState
+
+	    /** The error code for install failures. */
+	    errorCode?: string
+
+	    /** OS Version. */
+	    osVersion?: string
+
+	    /** OS Description. */
+	    osDescription?: string
+
+	    /** Device User Name. */
+	    userName?: string
+
+}
+
+export interface UserInstallStateSummary extends Entity {
+
+	    /** User name. */
+	    userName?: string
+
+	    /** Installed Device Count. */
+	    installedDeviceCount?: number
+
+	    /** Failed Device Count. */
+	    failedDeviceCount?: number
+
+	    /** Not installed device count. */
+	    notInstalledDeviceCount?: number
+
+	    /** The install state of the eBook. */
+	    deviceStates?: DeviceInstallState[]
+
+}
+
+export interface IosVppEBookAssignment extends ManagedEBookAssignment {
+
+}
+
+export interface IosVppEBook extends ManagedEBook {
+
+	    /** The Vpp token ID. */
+	    vppTokenId?: string
+
+	    /** The Apple ID associated with Vpp token. */
+	    appleId?: string
+
+	    /** The Vpp token's organization name. */
+	    vppOrganizationName?: string
+
+	    /** Genres. */
+	    genres?: string[]
+
+	    /** Language. */
+	    language?: string
+
+	    /** Seller. */
+	    seller?: string
+
+	    /** Total license count. */
+	    totalLicenseCount?: number
+
+	    /** Used license count. */
+	    usedLicenseCount?: number
+
+}
+
+export interface EnrollmentTroubleshootingEvent extends DeviceManagementTroubleshootingEvent {
+
+	    /** Device identifier created or collected by Intune. */
+	    managedDeviceIdentifier?: string
+
+	    /** Operating System. */
+	    operatingSystem?: string
+
+	    /** OS Version. */
+	    osVersion?: string
+
+	    /** Identifier for the user that tried to enroll the device. */
+	    userId?: string
+
+	    /** Azure AD device identifier. */
+	    deviceId?: string
+
+	    /** Type of the enrollment. Possible values are: unknown, userEnrollment, deviceEnrollmentManager, appleBulkWithUser, appleBulkWithoutUser, windowsAzureADJoin, windowsBulkUserless, windowsAutoEnrollment, windowsBulkAzureDomainJoin, windowsCoManagement. */
+	    enrollmentType?: DeviceEnrollmentType
+
+	    /** Highlevel failure category. Possible values are: unknown, authentication, authorization, accountValidation, userValidation, deviceNotSupported, inMaintenance, badRequest, featureNotSupported, enrollmentRestrictionsEnforced, clientDisconnected. */
+	    failureCategory?: DeviceEnrollmentFailureReason
+
+	    /** Detailed failure reason. */
+	    failureReason?: string
+
+}
 export interface AlternativeSecurityId {
 
 	    type?: number
@@ -2728,10 +7813,10 @@ export interface AssignedPlan {
 	    /** The date and time at which the plan was assigned; for example: 2013-01-02T19:32:30Z. The Timestamp type represents date and time information using ISO 8601 format and is always in UTC time. For example, midnight UTC on Jan 1, 2014 would look like this: '2014-01-01T00:00:00Z' */
 	    assignedDateTime?: string
 
-	    /** For example, “Enabled”. */
+	    /** For example, "Enabled". */
 	    capabilityStatus?: string
 
-	    /** The name of the service; for example, “Exchange”. */
+	    /** The name of the service; for example, "Exchange". */
 	    service?: string
 
 	    /** A GUID that identifies the service plan. */
@@ -3022,7 +8107,7 @@ export interface ItemBody {
 }
 export interface ResponseStatus {
 
-	    /** The response type: None = 0, Organizer = 1, TentativelyAccepted = 2, Accepted = 3, Declined = 4, NotResponded = 5. Possible values are: None, Organizer, TentativelyAccepted, Accepted, Declined, NotResponded. */
+	    /** The response type. Possible values are: None, Organizer, TentativelyAccepted, Accepted, Declined, NotResponded. */
 	    response?: ResponseType
 
 	    /** The date and time that the response was returned. It uses ISO 8601 format and is always in UTC time. For example, midnight UTC on Jan 1, 2014 would look like this: '2014-01-01T00:00:00Z' */
@@ -3031,38 +8116,52 @@ export interface ResponseStatus {
 }
 export interface PatternedRecurrence {
 
+	    /** The frequency of an event. */
 	    pattern?: RecurrencePattern
 
+	    /** The duration of an event. */
 	    range?: RecurrenceRange
 
 }
 export interface RecurrencePattern {
 
+	    /** The recurrence pattern type: daily, weekly, absoluteMonthly, relativeMonthly, absoluteYearly, relativeYearly. Required. */
 	    type?: RecurrencePatternType
 
+	    /** The number of units between occurrences, where units can be in days, weeks, months, or years, depending on the type. Required. */
 	    interval?: number
 
+	    /** The month in which the event occurs.  This is a number from 1 to 12. */
 	    month?: number
 
+	    /** The day of the month on which the event occurs. Required if type is absoluteMonthly or absoluteYearly. */
 	    dayOfMonth?: number
 
+	    /** A collection of the days of the week on which the event occurs. Possible values are: sunday, monday, tuesday, wednesday, thursday, friday, saturday. If type is relativeMonthly or relativeYearly, and daysOfWeek specifies more than one day, the event falls on the first day that satisfies the pattern.  Required if type is weekly, relativeMonthly, or relativeYearly. */
 	    daysOfWeek?: DayOfWeek[]
 
+	    /** The first day of the week. Possible values are: sunday, monday, tuesday, wednesday, thursday, friday, saturday. Default is sunday. Required if type is weekly. */
 	    firstDayOfWeek?: DayOfWeek
 
+	    /** Specifies on which instance of the allowed days specified in daysOfsWeek the event occurs, counted from the first instance in the month. Possible values are: first, second, third, fourth, last. Default is first. Optional and used if type is relativeMonthly or relativeYearly. */
 	    index?: WeekIndex
 
 }
 export interface RecurrenceRange {
 
+	    /** The recurrence range. Possible values are: endDate, noEnd, numbered. Required. */
 	    type?: RecurrenceRangeType
 
+	    /** The date to start applying the recurrence pattern. The first occurrence of the meeting may be this date or later, depending on the recurrence pattern of the event. Must be the same value as the start property of the recurring event. Required. */
 	    startDate?: string
 
+	    /** The date to stop applying the recurrence pattern. Depending on the recurrence pattern of the event, the last occurrence of the meeting may not be this date. Required if type is endDate. */
 	    endDate?: string
 
+	    /** Time zone for the startDate and endDate properties. Optional. If not specified, the time zone of the event is used. */
 	    recurrenceTimeZone?: string
 
+	    /** The number of times to repeat the event. Required and must be positive if type is numbered. */
 	    numberOfOccurrences?: number
 
 }
@@ -3077,7 +8176,7 @@ export interface ScoredEmailAddress {
 	    /** The email address. */
 	    address?: string
 
-	    /** The relevance score of the email address. A relevance score is used as a sort key, in relation to the other returned results. A higher relevance score value corresponds to a more relevant result. Relevance is determined by the user’s communication and collaboration patterns and business relationships. */
+	    /** The relevance score of the email address. A relevance score is used as a sort key, in relation to the other returned results. A higher relevance score value corresponds to a more relevant result. Relevance is determined by the user's communication and collaboration patterns and business relationships. */
 	    relevanceScore?: number
 
 }
@@ -3108,8 +8207,10 @@ export interface Website {
 }
 export interface PersonType {
 
+	    /** The type of data source, such as Person. */
 	    class?: string
 
+	    /** The secondary type of data source, such as OrganizationUser. */
 	    subclass?: string
 
 }
@@ -3127,7 +8228,7 @@ export interface IdentitySet {
 }
 export interface Identity {
 
-	    /** The identity's display name. Note that this may not always be available or up to date. For example, if a user changes their display name, the API may show the new value in a future response, but the items associated with the user won't show up as having changed when using delta */
+	    /** The identity's display name. Note that this may not always be available or up to date. For example, if a user changes their display name, the API may show the new value in a future response, but the items associated with the user won't show up as having changed when using delta. */
 	    displayName?: string
 
 	    /** Unique identifier for the identity. */
@@ -3139,6 +8240,7 @@ export interface ItemReference {
 	    /** Unique identifier of the drive instance that contains the item. Read-only. */
 	    driveId?: string
 
+	    /** Identifies the type of drive. See [drive][] resource for values. */
 	    driveType?: string
 
 	    /** Unique identifier of the item in the drive. Read-only. */
@@ -3150,7 +8252,7 @@ export interface ItemReference {
 	    /** Path that can be used to navigate to the item. Read-only. */
 	    path?: string
 
-	    /** A unique identifier for a shared resource that can be accessed via the Shares API. */
+	    /** A unique identifier for a shared resource that can be accessed via the [Shares][] API. */
 	    shareId?: string
 
 	    /** Returns identifiers useful for SharePoint REST compatibility. Read-only. */
@@ -3165,7 +8267,7 @@ export interface SharepointIds {
 	    /** An integer identifier for the item within the containing list. */
 	    listItemId?: string
 
-	    /** The unique identifier (guid) for the item within OneDrive for Busienss or a SharePoint site. */
+	    /** The unique identifier (guid) for the item within OneDrive for Business or a SharePoint site. */
 	    listItemUniqueId?: string
 
 	    /** The unique identifier (guid) for the item's site collection (SPSite). */
@@ -3183,91 +8285,121 @@ export interface BooleanColumn {
 }
 export interface CalculatedColumn {
 
+	    /** For dateTime output types, the format of the value. Must be one of dateOnly or dateTime. */
 	    format?: string
 
+	    /** The formula used to compute the value for this column. */
 	    formula?: string
 
+	    /** The output type used to format values in this column. Must be one of boolean, currency, dateTime, number, or text. */
 	    outputType?: string
 
 }
 export interface ChoiceColumn {
 
+	    /** If true, allows custom values that aren't in the configured choices. */
 	    allowTextEntry?: boolean
 
+	    /** The list of values available for this column. */
 	    choices?: string[]
 
+	    /** How the choices are to be presented in the UX. Must be one of checkBoxes, dropDownMenu, or radioButtons */
 	    displayAs?: string
 
 }
 export interface CurrencyColumn {
 
+	    /** Specifies the locale from which to infer the currency symbol. */
 	    locale?: string
 
 }
 export interface DateTimeColumn {
 
+	    /** How the value should be presented in the UX. Must be one of default, friendly, or standard. See below for more details. If unspecified, treated as default. */
 	    displayAs?: string
 
+	    /** Indicates whether the value should be presented as a date only or a date and time. Must be one of dateOnly or dateTime */
 	    format?: string
 
 }
 export interface DefaultColumnValue {
 
+	    /** The formula used to compute the default value for this column. */
 	    formula?: string
 
+	    /** The direct value to use as the default value for this column. */
 	    value?: string
 
 }
 export interface LookupColumn {
 
+	    /** Indicates whether multiple values can be selected from the source. */
 	    allowMultipleValues?: boolean
 
+	    /** Indicates whether values in the column should be able to exceed the standard limit of 255 characters. */
 	    allowUnlimitedLength?: boolean
 
+	    /** The name of the lookup source column. */
 	    columnName?: string
 
+	    /** The unique identifier of the lookup source list. */
 	    listId?: string
 
+	    /** If specified, this column is a secondary lookup, pulling an additional field from the list item looked up by the primary lookup. Use the list item looked up by the primary as the source for the column named here. */
 	    primaryLookupColumnId?: string
 
 }
 export interface NumberColumn {
 
+	    /** How many decimal places to display. See below for information about the possible values. */
 	    decimalPlaces?: string
 
+	    /** How the value should be presented in the UX. Must be one of number or percentage. If unspecified, treated as number. */
 	    displayAs?: string
 
+	    /** The maximum permitted value. */
 	    maximum?: number
 
+	    /** The minimum permitted value. */
 	    minimum?: number
 
 }
 export interface PersonOrGroupColumn {
 
+	    /** Indicates whether multiple values can be selected from the source. */
 	    allowMultipleSelection?: boolean
 
+	    /** How to display the information about the person or group chosen. See below. */
 	    displayAs?: string
 
+	    /** Whether to allow selection of people only, or people and groups. Must be one of peopleAndGroups or peopleOnly. */
 	    chooseFromType?: string
 
 }
 export interface TextColumn {
 
+	    /** Whether to allow multiple lines of text. */
 	    allowMultipleLines?: boolean
 
+	    /** Whether updates to this column should replace existing text, or append to it. */
 	    appendChangesToExistingText?: boolean
 
+	    /** The size of the text box. */
 	    linesForEditing?: number
 
+	    /** The maximum number of characters for the value. */
 	    maxLength?: number
 
+	    /** The type of text being stored. Must be one of plain or richText */
 	    textType?: string
 
 }
 export interface ContentTypeOrder {
 
+	    /** Whether this is the default Content Type */
 	    default?: boolean
 
+	    /** Specifies the position in which the Content Type appears in the selection UI. */
 	    position?: number
 
 }
@@ -3377,6 +8509,7 @@ export interface FileSystemInfo {
 	    /** The UTC date and time the file was created on a client. */
 	    createdDateTime?: string
 
+	    /** The UTC date and time the file was last accessed. Available for the recent file list only. */
 	    lastAccessedDateTime?: string
 
 	    /** The UTC date and time the file was last modified on a client. */
@@ -3388,15 +8521,18 @@ export interface Folder {
 	    /** Number of children contained immediately within this container. */
 	    childCount?: number
 
+	    /** A collection of properties defining the recommended view for the folder. */
 	    view?: FolderView
 
 }
 export interface FolderView {
 
+	    /** The method by which the folder should be sorted. */
 	    sortBy?: string
 
 	    sortOrder?: string
 
+	    /** The type of view that should be used to represent the folder. */
 	    viewType?: string
 
 }
@@ -3497,7 +8633,6 @@ export interface RemoteItem {
 	    /** Size of the remote item. Read-only. */
 	    size?: number
 
-	    /** If the current item is also available as a special folder, this facet is returned. Read-only. */
 	    specialFolder?: SpecialFolder
 
 	    /** DAV compatible URL for the item. */
@@ -3539,12 +8674,16 @@ export interface SearchResult {
 }
 export interface Video {
 
+	    /** Number of audio bits per sample. */
 	    audioBitsPerSample?: number
 
+	    /** Number of audio channels. */
 	    audioChannels?: number
 
+	    /** Name of the audio format (AAC, MP3, etc.). */
 	    audioFormat?: string
 
+	    /** Number of audio samples per second. */
 	    audioSamplesPerSecond?: number
 
 	    /** Bit rate of the video in bits per second. */
@@ -3553,6 +8692,7 @@ export interface Video {
 	    /** Duration of the file in milliseconds. */
 	    duration?: number
 
+	    /** "Four character code" name of the video format. */
 	    fourCC?: string
 
 	    frameRate?: number
@@ -3566,15 +8706,19 @@ export interface Video {
 }
 export interface ListInfo {
 
+	    /** If true, indicates that content types are enabled for this list. */
 	    contentTypesEnabled?: boolean
 
+	    /** If true, indicates that the list is not normally visible in the SharePoint user experience. */
 	    hidden?: boolean
 
+	    /** An enumerated value that represents the base list template used in creating the list. Possible values include documentLibrary, genericList, task, survey, announcements, contacts, and more. */
 	    template?: string
 
 }
 export interface ContentTypeInfo {
 
+	    /** The id of the content type. */
 	    id?: string
 
 }
@@ -3665,8 +8809,10 @@ export interface UploadSession {
 }
 export interface WorkbookSessionInfo {
 
+	    /** Id of the workbook session. */
 	    id?: string
 
+	    /** true for persistent session. false for non-persistent session (view mode) */
 	    persistChanges?: boolean
 
 }
@@ -3944,5 +9090,1196 @@ export interface RecentNotebookLinks {
 
 	    /** Opens the notebook in OneNote Online. */
 	    oneNoteWebUrl?: ExternalLink
+
+}
+export interface Report {
+
+	    /** Not yet documented */
+	    content?: any
+
+}
+export interface EducationStudent {
+
+	    /** Year the student is graduating from the school. */
+	    graduationYear?: string
+
+	    /** Current grade level of the student. */
+	    grade?: string
+
+	    /** Birth date of the student. */
+	    birthDate?: string
+
+	    /** Possible values are: female, male, other, unkownFutureValue. */
+	    gender?: EducationGender
+
+	    /** Student Number. */
+	    studentNumber?: string
+
+	    /** ID of the student in the source system. */
+	    externalId?: string
+
+}
+export interface EducationRelatedContact {
+
+	    id?: string
+
+	    displayName?: string
+
+	    emailAddress?: string
+
+	    mobilePhone?: string
+
+	    relationship?: EducationContactRelationship
+
+	    accessConsent?: boolean
+
+}
+export interface EducationTeacher {
+
+	    /** Teacher number. */
+	    teacherNumber?: string
+
+	    /** ID of the teacher in the source system. */
+	    externalId?: string
+
+}
+export interface EducationTerm {
+
+	    /** ID of term in the syncing system. */
+	    externalId?: string
+
+	    /** Start of the term. */
+	    startDate?: string
+
+	    /** End of the term. */
+	    endDate?: string
+
+	    /** Display name of the term. */
+	    displayName?: string
+
+}
+export interface DeviceAndAppManagementAssignmentTarget {
+
+}
+export interface MobileAppAssignmentSettings {
+
+}
+export interface MimeContent {
+
+	    /** Indicates the content mime type. */
+	    type?: string
+
+	    /** The byte array that contains the actual content. */
+	    value?: number
+
+}
+export interface FileEncryptionInfo {
+
+	    /** The key used to encrypt the file content. */
+	    encryptionKey?: number
+
+	    /** The initialization vector used for the encryption algorithm. */
+	    initializationVector?: number
+
+	    /** The hash of the encrypted file content + IV (content hash). */
+	    mac?: number
+
+	    /** The key used to get mac. */
+	    macKey?: number
+
+	    /** The the profile identifier. */
+	    profileIdentifier?: string
+
+	    /** The file digest prior to encryption. */
+	    fileDigest?: number
+
+	    /** The file digest algorithm. */
+	    fileDigestAlgorithm?: string
+
+}
+export interface AllLicensedUsersAssignmentTarget extends DeviceAndAppManagementAssignmentTarget {
+
+}
+export interface GroupAssignmentTarget extends DeviceAndAppManagementAssignmentTarget {
+
+	    /** The group Id that is the target of the assignment. */
+	    groupId?: string
+
+}
+export interface ExclusionGroupAssignmentTarget extends GroupAssignmentTarget {
+
+}
+export interface AllDevicesAssignmentTarget extends DeviceAndAppManagementAssignmentTarget {
+
+}
+export interface IosLobAppAssignmentSettings extends MobileAppAssignmentSettings {
+
+	    /** The VPN Configuration Id to apply for this app. */
+	    vpnConfigurationId?: string
+
+}
+export interface IosStoreAppAssignmentSettings extends MobileAppAssignmentSettings {
+
+	    /** The VPN Configuration Id to apply for this app. */
+	    vpnConfigurationId?: string
+
+}
+export interface IosVppAppAssignmentSettings extends MobileAppAssignmentSettings {
+
+	    /** Whether or not to use device licensing. */
+	    useDeviceLicensing?: boolean
+
+	    /** The VPN Configuration Id to apply for this app. */
+	    vpnConfigurationId?: string
+
+}
+export interface MicrosoftStoreForBusinessAppAssignmentSettings extends MobileAppAssignmentSettings {
+
+	    /** Whether or not to use device execution context for Microsoft Store for Business mobile app. */
+	    useDeviceContext?: boolean
+
+}
+export interface AndroidMinimumOperatingSystem {
+
+	    /** Version 4.0 or later. */
+	    v4_0?: boolean
+
+	    /** Version 4.0.3 or later. */
+	    v4_0_3?: boolean
+
+	    /** Version 4.1 or later. */
+	    v4_1?: boolean
+
+	    /** Version 4.2 or later. */
+	    v4_2?: boolean
+
+	    /** Version 4.3 or later. */
+	    v4_3?: boolean
+
+	    /** Version 4.4 or later. */
+	    v4_4?: boolean
+
+	    /** Version 5.0 or later. */
+	    v5_0?: boolean
+
+	    /** Version 5.1 or later. */
+	    v5_1?: boolean
+
+}
+export interface IosDeviceType {
+
+	    /** Whether the app should run on iPads. */
+	    iPad?: boolean
+
+	    /** Whether the app should run on iPhones and iPods. */
+	    iPhoneAndIPod?: boolean
+
+}
+export interface IosMinimumOperatingSystem {
+
+	    /** Version 8.0 or later. */
+	    v8_0?: boolean
+
+	    /** Version 9.0 or later. */
+	    v9_0?: boolean
+
+	    /** Version 10.0 or later. */
+	    v10_0?: boolean
+
+	    /** Version 11.0 or later. */
+	    v11_0?: boolean
+
+}
+export interface WindowsMinimumOperatingSystem {
+
+	    /** Windows version 8.0 or later. */
+	    v8_0?: boolean
+
+	    /** Windows version 8.1 or later. */
+	    v8_1?: boolean
+
+	    /** Windows version 10.0 or later. */
+	    v10_0?: boolean
+
+}
+export interface VppLicensingType {
+
+	    /** Whether the program supports the user licensing type. */
+	    supportsUserLicensing?: boolean
+
+	    /** Whether the program supports the device licensing type. */
+	    supportsDeviceLicensing?: boolean
+
+}
+export interface DeviceManagementSettings {
+
+	    /** The number of days a device is allowed to go without checking in to remain compliant. Valid values 0 to 120 */
+	    deviceComplianceCheckinThresholdDays?: number
+
+	    /** Is feature enabled or not for scheduled action for rule. */
+	    isScheduledActionEnabled?: boolean
+
+	    /** Device should be noncompliant when there is no compliance policy targeted when this is true */
+	    secureByDefault?: boolean
+
+}
+export interface IntuneBrand {
+
+	    /** Company/organization name that is displayed to end users. */
+	    displayName?: string
+
+	    /** Name of the person/organization responsible for IT support. */
+	    contactITName?: string
+
+	    /** Phone number of the person/organization responsible for IT support. */
+	    contactITPhoneNumber?: string
+
+	    /** Email address of the person/organization responsible for IT support. */
+	    contactITEmailAddress?: string
+
+	    /** Text comments regarding the person/organization responsible for IT support. */
+	    contactITNotes?: string
+
+	    /** URL to the company/organization's privacy policy. */
+	    privacyUrl?: string
+
+	    /** URL to the company/organization's IT helpdesk site. */
+	    onlineSupportSiteUrl?: string
+
+	    /** Display name of the company/organization's IT helpdesk site. */
+	    onlineSupportSiteName?: string
+
+	    /** Primary theme color used in the Company Portal applications and web portal. */
+	    themeColor?: RgbColor
+
+	    /** Boolean that represents whether the administrator-supplied logo images are shown or not shown. */
+	    showLogo?: boolean
+
+	    /** Logo image displayed in Company Portal apps which have a light background behind the logo. */
+	    lightBackgroundLogo?: MimeContent
+
+	    /** Logo image displayed in Company Portal apps which have a dark background behind the logo. */
+	    darkBackgroundLogo?: MimeContent
+
+	    /** Boolean that represents whether the administrator-supplied display name will be shown next to the logo image. */
+	    showNameNextToLogo?: boolean
+
+	    /** Boolean that represents whether the administrator-supplied display name will be shown next to the logo image. */
+	    showDisplayNameNextToLogo?: boolean
+
+}
+export interface RgbColor {
+
+	    /** Red value */
+	    r?: number
+
+	    /** Green value */
+	    g?: number
+
+	    /** Blue value */
+	    b?: number
+
+}
+export interface DeviceActionResult {
+
+	    /** Action name */
+	    actionName?: string
+
+	    /** State of the action Possible values are: none, pending, canceled, active, done, failed, notSupported. */
+	    actionState?: ActionState
+
+	    /** Time the action was initiated */
+	    startDateTime?: string
+
+	    /** Time the action state was last updated */
+	    lastUpdatedDateTime?: string
+
+}
+export interface ConfigurationManagerClientEnabledFeatures {
+
+	    /** Whether inventory is managed by Intune */
+	    inventory?: boolean
+
+	    /** Whether modern application is managed by Intune */
+	    modernApps?: boolean
+
+	    /** Whether resource access is managed by Intune */
+	    resourceAccess?: boolean
+
+	    /** Whether device configuration is managed by Intune */
+	    deviceConfiguration?: boolean
+
+	    /** Whether compliance policy is managed by Intune */
+	    compliancePolicy?: boolean
+
+	    /** Whether Windows Update for Business is managed by Intune */
+	    windowsUpdateForBusiness?: boolean
+
+}
+export interface DeviceHealthAttestationState {
+
+	    /** The Timestamp of the last update. */
+	    lastUpdateDateTime?: string
+
+	    /** The DHA report version. (Namespace version) */
+	    contentNamespaceUrl?: string
+
+	    /** The DHA report version. (Namespace version) */
+	    deviceHealthAttestationStatus?: string
+
+	    /** The HealthAttestation state schema version */
+	    contentVersion?: string
+
+	    /** The DateTime when device was evaluated or issued to MDM */
+	    issuedDateTime?: string
+
+	    /** TWhen an Attestation Identity Key (AIK) is present on a device, it indicates that the device has an endorsement key (EK) certificate. */
+	    attestationIdentityKey?: string
+
+	    /** The number of times a PC device has hibernated or resumed */
+	    resetCount?: number
+
+	    /** The number of times a PC device has rebooted */
+	    restartCount?: number
+
+	    /** DEP Policy defines a set of hardware and software technologies that perform additional checks on memory */
+	    dataExcutionPolicy?: string
+
+	    /** On or Off of BitLocker Drive Encryption */
+	    bitLockerStatus?: string
+
+	    /** The version of the Boot Manager */
+	    bootManagerVersion?: string
+
+	    /** The version of the Boot Manager */
+	    codeIntegrityCheckVersion?: string
+
+	    /** When Secure Boot is enabled, the core components must have the correct cryptographic signatures */
+	    secureBoot?: string
+
+	    /** When bootDebugging is enabled, the device is used in development and testing */
+	    bootDebugging?: string
+
+	    /** When operatingSystemKernelDebugging is enabled, the device is used in development and testing */
+	    operatingSystemKernelDebugging?: string
+
+	    /** When code integrity is enabled, code execution is restricted to integrity verified code */
+	    codeIntegrity?: string
+
+	    /** When test signing is allowed, the device does not enforce signature validation during boot */
+	    testSigning?: string
+
+	    /** Safe mode is a troubleshooting option for Windows that starts your computer in a limited state */
+	    safeMode?: string
+
+	    /** Operating system running with limited services that is used to prepare a computer for Windows */
+	    windowsPE?: string
+
+	    /** ELAM provides protection for the computers in your network when they start up */
+	    earlyLaunchAntiMalwareDriverProtection?: string
+
+	    /** VSM is a container that protects high value assets from a compromised kernel */
+	    virtualSecureMode?: string
+
+	    /** Informational attribute that identifies the HASH algorithm that was used by TPM */
+	    pcrHashAlgorithm?: string
+
+	    /** The security version number of the Boot Application */
+	    bootAppSecurityVersion?: string
+
+	    /** The security version number of the Boot Application */
+	    bootManagerSecurityVersion?: string
+
+	    /** The security version number of the Boot Application */
+	    tpmVersion?: string
+
+	    /** The measurement that is captured in PCR[0] */
+	    pcr0?: string
+
+	    /** Fingerprint of the Custom Secure Boot Configuration Policy */
+	    secureBootConfigurationPolicyFingerPrint?: string
+
+	    /** The Code Integrity policy that is controlling the security of the boot environment */
+	    codeIntegrityPolicy?: string
+
+	    /** The Boot Revision List that was loaded during initial boot on the attested device */
+	    bootRevisionListInfo?: string
+
+	    /** The Operating System Revision List that was loaded during initial boot on the attested device */
+	    operatingSystemRevListInfo?: string
+
+	    /** This attribute appears if DHA-Service detects an integrity issue */
+	    healthStatusMismatchInfo?: string
+
+	    /** This attribute indicates if DHA is supported for the device */
+	    healthAttestationSupportedStatus?: string
+
+}
+export interface UpdateWindowsDeviceAccountActionParameter {
+
+	    /** Not yet documented */
+	    deviceAccount?: WindowsDeviceAccount
+
+	    /** Not yet documented */
+	    passwordRotationEnabled?: boolean
+
+	    /** Not yet documented */
+	    calendarSyncEnabled?: boolean
+
+	    /** Not yet documented */
+	    deviceAccountEmail?: string
+
+	    /** Not yet documented */
+	    exchangeServer?: string
+
+	    /** Not yet documented */
+	    sessionInitiationProtocalAddress?: string
+
+}
+export interface WindowsDeviceAccount {
+
+	    /** Not yet documented */
+	    password?: string
+
+}
+export interface WindowsDefenderScanActionResult extends DeviceActionResult {
+
+	    /** Scan type either full scan or quick scan */
+	    scanType?: string
+
+}
+export interface DeleteUserFromSharedAppleDeviceActionResult extends DeviceActionResult {
+
+	    /** User principal name of the user to be deleted */
+	    userPrincipalName?: string
+
+}
+export interface DeviceGeoLocation {
+
+	    /** Time at which location was recorded, relative to UTC */
+	    lastCollectedDateTime?: string
+
+	    /** Longitude coordinate of the device's location */
+	    longitude?: number
+
+	    /** Latitude coordinate of the device's location */
+	    latitude?: number
+
+	    /** Altitude, given in meters above sea level */
+	    altitude?: number
+
+	    /** Accuracy of longitude and latitude in meters */
+	    horizontalAccuracy?: number
+
+	    /** Accuracy of altitude in meters */
+	    verticalAccuracy?: number
+
+	    /** Heading in degrees from true north */
+	    heading?: number
+
+	    /** Speed the device is traveling in meters per second */
+	    speed?: number
+
+}
+export interface LocateDeviceActionResult extends DeviceActionResult {
+
+	    /** device location */
+	    deviceLocation?: DeviceGeoLocation
+
+}
+export interface RemoteLockActionResult extends DeviceActionResult {
+
+	    /** Pin to unlock the client */
+	    unlockPin?: string
+
+}
+export interface ResetPasscodeActionResult extends DeviceActionResult {
+
+	    /** Newly generated passcode for the device */
+	    passcode?: string
+
+}
+export interface DeviceOperatingSystemSummary {
+
+	    /** Number of android device count. */
+	    androidCount?: number
+
+	    /** Number of iOS device count. */
+	    iosCount?: number
+
+	    /** Number of Mac OS X device count. */
+	    macOSCount?: number
+
+	    /** Number of Windows mobile device count. */
+	    windowsMobileCount?: number
+
+	    /** Number of Windows device count. */
+	    windowsCount?: number
+
+	    /** Number of unknown device count. */
+	    unknownCount?: number
+
+}
+export interface DeviceExchangeAccessStateSummary {
+
+	    /** Total count of devices with Exchange Access State: Allowed. */
+	    allowedDeviceCount?: number
+
+	    /** Total count of devices with Exchange Access State: Blocked. */
+	    blockedDeviceCount?: number
+
+	    /** Total count of devices with Exchange Access State: Quarantined. */
+	    quarantinedDeviceCount?: number
+
+	    /** Total count of devices with Exchange Access State: Unknown. */
+	    unknownDeviceCount?: number
+
+	    /** Total count of devices for which no Exchange Access State could be found. */
+	    unavailableDeviceCount?: number
+
+}
+export interface WindowsDeviceADAccount extends WindowsDeviceAccount {
+
+	    /** Not yet documented */
+	    domainName?: string
+
+	    /** Not yet documented */
+	    userName?: string
+
+}
+export interface WindowsDeviceAzureADAccount extends WindowsDeviceAccount {
+
+	    /** Not yet documented */
+	    userPrincipalName?: string
+
+}
+export interface OmaSetting {
+
+	    /** Display Name. */
+	    displayName?: string
+
+	    /** Description. */
+	    description?: string
+
+	    /** OMA. */
+	    omaUri?: string
+
+}
+export interface OmaSettingInteger extends OmaSetting {
+
+	    /** Value. */
+	    value?: number
+
+}
+export interface OmaSettingFloatingPoint extends OmaSetting {
+
+	    /** Value. */
+	    value?: number
+
+}
+export interface OmaSettingString extends OmaSetting {
+
+	    /** Value. */
+	    value?: string
+
+}
+export interface OmaSettingDateTime extends OmaSetting {
+
+	    /** Value. */
+	    value?: string
+
+}
+export interface OmaSettingStringXml extends OmaSetting {
+
+	    /** File name associated with the Value property (.xml). */
+	    fileName?: string
+
+	    /** Value. (UTF8 encoded byte array) */
+	    value?: number
+
+}
+export interface OmaSettingBoolean extends OmaSetting {
+
+	    /** Value. */
+	    value?: boolean
+
+}
+export interface OmaSettingBase64 extends OmaSetting {
+
+	    /** File name associated with the Value property (.cer */
+	    fileName?: string
+
+	    /** Value. (Base64 encoded string) */
+	    value?: string
+
+}
+export interface AppListItem {
+
+	    /** The application name */
+	    name?: string
+
+	    /** The publisher of the application */
+	    publisher?: string
+
+	    /** The Store URL of the application */
+	    appStoreUrl?: string
+
+	    /** The application or bundle identifier of the application */
+	    appId?: string
+
+}
+export interface MediaContentRatingAustralia {
+
+	    /** Movies rating selected for Australia Possible values are: allAllowed, allBlocked, general, parentalGuidance, mature, agesAbove15, agesAbove18. */
+	    movieRating?: RatingAustraliaMoviesType
+
+	    /** TV rating selected for Australia Possible values are: allAllowed, allBlocked, preschoolers, children, general, parentalGuidance, mature, agesAbove15, agesAbove15AdultViolence. */
+	    tvRating?: RatingAustraliaTelevisionType
+
+}
+export interface MediaContentRatingCanada {
+
+	    /** Movies rating selected for Canada Possible values are: allAllowed, allBlocked, general, parentalGuidance, agesAbove14, agesAbove18, restricted. */
+	    movieRating?: RatingCanadaMoviesType
+
+	    /** TV rating selected for Canada Possible values are: allAllowed, allBlocked, children, childrenAbove8, general, parentalGuidance, agesAbove14, agesAbove18. */
+	    tvRating?: RatingCanadaTelevisionType
+
+}
+export interface MediaContentRatingFrance {
+
+	    /** Movies rating selected for France Possible values are: allAllowed, allBlocked, agesAbove10, agesAbove12, agesAbove16, agesAbove18. */
+	    movieRating?: RatingFranceMoviesType
+
+	    /** TV rating selected for France Possible values are: allAllowed, allBlocked, agesAbove10, agesAbove12, agesAbove16, agesAbove18. */
+	    tvRating?: RatingFranceTelevisionType
+
+}
+export interface MediaContentRatingGermany {
+
+	    /** Movies rating selected for Germany Possible values are: allAllowed, allBlocked, general, agesAbove6, agesAbove12, agesAbove16, adults. */
+	    movieRating?: RatingGermanyMoviesType
+
+	    /** TV rating selected for Germany Possible values are: allAllowed, allBlocked, general, agesAbove6, agesAbove12, agesAbove16, adults. */
+	    tvRating?: RatingGermanyTelevisionType
+
+}
+export interface MediaContentRatingIreland {
+
+	    /** Movies rating selected for Ireland Possible values are: allAllowed, allBlocked, general, parentalGuidance, agesAbove12, agesAbove15, agesAbove16, adults. */
+	    movieRating?: RatingIrelandMoviesType
+
+	    /** TV rating selected for Ireland Possible values are: allAllowed, allBlocked, general, children, youngAdults, parentalSupervision, mature. */
+	    tvRating?: RatingIrelandTelevisionType
+
+}
+export interface MediaContentRatingJapan {
+
+	    /** Movies rating selected for Japan Possible values are: allAllowed, allBlocked, general, parentalGuidance, agesAbove15, agesAbove18. */
+	    movieRating?: RatingJapanMoviesType
+
+	    /** TV rating selected for Japan Possible values are: allAllowed, allBlocked, explicitAllowed. */
+	    tvRating?: RatingJapanTelevisionType
+
+}
+export interface MediaContentRatingNewZealand {
+
+	    /** Movies rating selected for New Zealand Possible values are: allAllowed, allBlocked, general, parentalGuidance, mature, agesAbove13, agesAbove15, agesAbove16, agesAbove18, restricted, agesAbove16Restricted. */
+	    movieRating?: RatingNewZealandMoviesType
+
+	    /** TV rating selected for New Zealand Possible values are: allAllowed, allBlocked, general, parentalGuidance, adults. */
+	    tvRating?: RatingNewZealandTelevisionType
+
+}
+export interface MediaContentRatingUnitedKingdom {
+
+	    /** Movies rating selected for United Kingdom Possible values are: allAllowed, allBlocked, general, universalChildren, parentalGuidance, agesAbove12Video, agesAbove12Cinema, agesAbove15, adults. */
+	    movieRating?: RatingUnitedKingdomMoviesType
+
+	    /** TV rating selected for United Kingdom Possible values are: allAllowed, allBlocked, caution. */
+	    tvRating?: RatingUnitedKingdomTelevisionType
+
+}
+export interface MediaContentRatingUnitedStates {
+
+	    /** Movies rating selected for United States Possible values are: allAllowed, allBlocked, general, parentalGuidance, parentalGuidance13, restricted, adults. */
+	    movieRating?: RatingUnitedStatesMoviesType
+
+	    /** TV rating selected for United States Possible values are: allAllowed, allBlocked, childrenAll, childrenAbove7, general, parentalGuidance, childrenAbove14, adults. */
+	    tvRating?: RatingUnitedStatesTelevisionType
+
+}
+export interface IosNetworkUsageRule {
+
+	    /** Information about the managed apps that this rule is going to apply to. This collection can contain a maximum of 500 elements. */
+	    managedApps?: AppListItem[]
+
+	    /** If set to true, corresponding managed apps will not be allowed to use cellular data when roaming. */
+	    cellularDataBlockWhenRoaming?: boolean
+
+	    /** If set to true, corresponding managed apps will not be allowed to use cellular data at any time. */
+	    cellularDataBlocked?: boolean
+
+}
+export interface IosHomeScreenItem {
+
+	    /** Name of the app */
+	    displayName?: string
+
+}
+export interface IosHomeScreenPage {
+
+	    /** Name of the page */
+	    displayName?: string
+
+	    /** A list of apps and folders to appear on a page. This collection can contain a maximum of 500 elements. */
+	    icons?: IosHomeScreenItem[]
+
+}
+export interface IosNotificationSettings {
+
+	    /** Bundle id of app to which to apply these notification settings. */
+	    bundleID?: string
+
+	    /** Application name to be associated with the bundleID. */
+	    appName?: string
+
+	    /** Publisher to be associated with the bundleID. */
+	    publisher?: string
+
+	    /** Indicates whether notifications are allowed for this app. */
+	    enabled?: boolean
+
+	    /** Indicates whether notifications can be shown in notification center. */
+	    showInNotificationCenter?: boolean
+
+	    /** Indicates whether notifications can be shown on the lock screen. */
+	    showOnLockScreen?: boolean
+
+	    /** Indicates the type of alert for notifications for this app. Possible values are: deviceDefault, banner, modal, none. */
+	    alertType?: IosNotificationAlertType
+
+	    /** Indicates whether badges are allowed for this app. */
+	    badgesEnabled?: boolean
+
+	    /** Indicates whether sounds are allowed for this app. */
+	    soundsEnabled?: boolean
+
+}
+export interface IosHomeScreenFolder extends IosHomeScreenItem {
+
+	    /** Pages of Home Screen Layout Icons which must be Application Type. This collection can contain a maximum of 500 elements. */
+	    pages?: IosHomeScreenFolderPage[]
+
+}
+export interface IosHomeScreenFolderPage {
+
+	    /** Name of the folder page */
+	    displayName?: string
+
+	    /** A list of apps to appear on a page within a folder. This collection can contain a maximum of 500 elements. */
+	    apps?: IosHomeScreenApp[]
+
+}
+export interface IosHomeScreenApp extends IosHomeScreenItem {
+
+	    /** BundleID of app */
+	    bundleID?: string
+
+}
+export interface WindowsFirewallNetworkProfile {
+
+	    /** Turn on the firewall and advanced security enforcement Possible values are: notConfigured, blocked, allowed. */
+	    firewallEnabled?: StateManagementSetting
+
+	    /** Prevent the server from operating in stealth mode */
+	    stealthModeBlocked?: boolean
+
+	    /** Configures the firewall to block all incoming traffic regardless of other policy settings */
+	    incomingTrafficBlocked?: boolean
+
+	    /** Configures the firewall to block unicast responses to multicast broadcast traffic */
+	    unicastResponsesToMulticastBroadcastsBlocked?: boolean
+
+	    /** Prevents the firewall from displaying notifications when an application is blocked from listening on a port */
+	    inboundNotificationsBlocked?: boolean
+
+	    /** Configures the firewall to merge authorized application rules from group policy with those from local store instead of ignoring the local store rules */
+	    authorizedApplicationRulesFromGroupPolicyMerged?: boolean
+
+	    /** Configures the firewall to merge global port rules from group policy with those from local store instead of ignoring the local store rules */
+	    globalPortRulesFromGroupPolicyMerged?: boolean
+
+	    /** Configures the firewall to merge connection security rules from group policy with those from local store instead of ignoring the local store rules */
+	    connectionSecurityRulesFromGroupPolicyMerged?: boolean
+
+	    /** Configures the firewall to block all outgoing connections by default */
+	    outboundConnectionsBlocked?: boolean
+
+	    /** Configures the firewall to block all incoming connections by default */
+	    inboundConnectionsBlocked?: boolean
+
+	    /** Configures the firewall to allow the host computer to respond to unsolicited network traffic of that traffic is secured by IPSec even when stealthModeBlocked is set to true */
+	    securedPacketExemptionAllowed?: boolean
+
+	    /** Configures the firewall to merge Firewall Rule policies from group policy with those from local store instead of ignoring the local store rules */
+	    policyRulesFromGroupPolicyMerged?: boolean
+
+}
+export interface BitLockerRemovableDrivePolicy {
+
+	    /** Select the encryption method for removable  drives. Possible values are: aesCbc128, aesCbc256, xtsAes128, xtsAes256. */
+	    encryptionMethod?: BitLockerEncryptionMethod
+
+	    /** Indicates whether to block write access to devices configured in another organization.  If requireEncryptionForWriteAccess is false, this value does not affect. */
+	    requireEncryptionForWriteAccess?: boolean
+
+	    /** This policy setting determines whether BitLocker protection is required for removable data drives to be writable on a computer. */
+	    blockCrossOrganizationWriteAccess?: boolean
+
+}
+export interface DefenderDetectedMalwareActions {
+
+	    /** Indicates a Defender action to take for low severity Malware threat detected. Possible values are: deviceDefault, clean, quarantine, remove, allow, userDefined, block. */
+	    lowSeverity?: DefenderThreatAction
+
+	    /** Indicates a Defender action to take for moderate severity Malware threat detected. Possible values are: deviceDefault, clean, quarantine, remove, allow, userDefined, block. */
+	    moderateSeverity?: DefenderThreatAction
+
+	    /** Indicates a Defender action to take for high severity Malware threat detected. Possible values are: deviceDefault, clean, quarantine, remove, allow, userDefined, block. */
+	    highSeverity?: DefenderThreatAction
+
+	    /** Indicates a Defender action to take for severe severity Malware threat detected. Possible values are: deviceDefault, clean, quarantine, remove, allow, userDefined, block. */
+	    severeSeverity?: DefenderThreatAction
+
+}
+export interface Windows10NetworkProxyServer {
+
+	    /** Address to the proxy server. Specify an address in the format [":"] */
+	    address?: string
+
+	    /** Addresses that should not use the proxy server. The system will not use the proxy server for addresses beginning with what is specified in this node. */
+	    exceptions?: string[]
+
+	    /** Specifies whether the proxy server should be used for local (intranet) addresses. */
+	    useForLocalAddresses?: boolean
+
+}
+export interface EdgeSearchEngineBase {
+
+}
+export interface EdgeSearchEngineCustom extends EdgeSearchEngineBase {
+
+	    /** Points to a https link containing the OpenSearch xml file that contains, at minimum, the short name and the URL to the search Engine. */
+	    edgeSearchEngineOpenSearchXmlUrl?: string
+
+}
+export interface EdgeSearchEngine extends EdgeSearchEngineBase {
+
+	    /** Allows IT admins to set a predefined default search engine for MDM-Controlled devices. Possible values are: default, bing. */
+	    edgeSearchEngineType?: EdgeSearchEngineType
+
+}
+export interface SharedPCAccountManagerPolicy {
+
+	    /** Configures when accounts are deleted. Possible values are: immediate, diskSpaceThreshold, diskSpaceThresholdOrInactiveThreshold. */
+	    accountDeletionPolicy?: SharedPCAccountDeletionPolicyType
+
+	    /** Sets the percentage of available disk space a PC should have before it stops deleting cached shared PC accounts. Only applies when AccountDeletionPolicy is DiskSpaceThreshold or DiskSpaceThresholdOrInactiveThreshold. Valid values 0 to 100 */
+	    cacheAccountsAboveDiskFreePercentage?: number
+
+	    /** Specifies when the accounts will start being deleted when they have not been logged on during the specified period, given as number of days. Only applies when AccountDeletionPolicy is DiskSpaceThreshold or DiskSpaceThresholdOrInactiveThreshold. */
+	    inactiveThresholdDays?: number
+
+	    /** Sets the percentage of disk space remaining on a PC before cached accounts will be deleted to free disk space. Accounts that have been inactive the longest will be deleted first. Only applies when AccountDeletionPolicy is DiskSpaceThresholdOrInactiveThreshold. Valid values 0 to 100 */
+	    removeAccountsBelowDiskFreePercentage?: number
+
+}
+export interface WindowsUpdateInstallScheduleType {
+
+}
+export interface WindowsUpdateScheduledInstall extends WindowsUpdateInstallScheduleType {
+
+	    /** Scheduled Install Day in week Possible values are: userDefined, everyday, sunday, monday, tuesday, wednesday, thursday, friday, saturday. */
+	    scheduledInstallDay?: WeeklySchedule
+
+	    /** Scheduled Install Time during day */
+	    scheduledInstallTime?: string
+
+}
+export interface WindowsUpdateActiveHoursInstall extends WindowsUpdateInstallScheduleType {
+
+	    /** Active Hours Start */
+	    activeHoursStart?: string
+
+	    /** Active Hours End */
+	    activeHoursEnd?: string
+
+}
+export interface DeviceConfigurationSettingState {
+
+	    /** The setting that is being reported */
+	    setting?: string
+
+	    /** Localized/user friendly setting name that is being reported */
+	    settingName?: string
+
+	    /** Name of setting instance that is being reported. */
+	    instanceDisplayName?: string
+
+	    /** The compliance state of the setting Possible values are: unknown, notApplicable, compliant, remediated, nonCompliant, error, conflict. */
+	    state?: ComplianceStatus
+
+	    /** Error code for the setting */
+	    errorCode?: number
+
+	    /** Error description */
+	    errorDescription?: string
+
+	    /** UserId */
+	    userId?: string
+
+	    /** UserName */
+	    userName?: string
+
+	    /** UserEmail */
+	    userEmail?: string
+
+	    /** UserPrincipalName. */
+	    userPrincipalName?: string
+
+	    /** Contributing policies */
+	    sources?: SettingSource[]
+
+	    /** Current value of setting on device */
+	    currentValue?: string
+
+}
+export interface SettingSource {
+
+	    /** Not yet documented */
+	    id?: string
+
+	    /** Not yet documented */
+	    displayName?: string
+
+}
+export interface DeviceCompliancePolicySettingState {
+
+	    /** The setting that is being reported */
+	    setting?: string
+
+	    /** Localized/user friendly setting name that is being reported */
+	    settingName?: string
+
+	    /** Name of setting instance that is being reported. */
+	    instanceDisplayName?: string
+
+	    /** The compliance state of the setting Possible values are: unknown, notApplicable, compliant, remediated, nonCompliant, error, conflict. */
+	    state?: ComplianceStatus
+
+	    /** Error code for the setting */
+	    errorCode?: number
+
+	    /** Error description */
+	    errorDescription?: string
+
+	    /** UserId */
+	    userId?: string
+
+	    /** UserName */
+	    userName?: string
+
+	    /** UserEmail */
+	    userEmail?: string
+
+	    /** UserPrincipalName. */
+	    userPrincipalName?: string
+
+	    /** Contributing policies */
+	    sources?: SettingSource[]
+
+	    /** Current value of setting on device */
+	    currentValue?: string
+
+}
+export interface DeviceEnrollmentPlatformRestriction {
+
+	    /** Block the platform from enrolling */
+	    platformBlocked?: boolean
+
+	    /** Block personally owned devices from enrolling */
+	    personalDeviceEnrollmentBlocked?: boolean
+
+	    /** Min OS version supported */
+	    osMinimumVersion?: string
+
+	    /** Max OS version supported */
+	    osMaximumVersion?: string
+
+}
+export interface MobileAppIdentifier {
+
+}
+export interface ManagedAppDiagnosticStatus {
+
+	    /** The validation friendly name */
+	    validationName?: string
+
+	    /** The state of the operation */
+	    state?: string
+
+	    /** Instruction on how to mitigate a failed validation */
+	    mitigationInstruction?: string
+
+}
+export interface KeyValuePair {
+
+	    /** Name for this key-value pair */
+	    name?: string
+
+	    /** Value for this key-value pair */
+	    value?: string
+
+}
+export interface WindowsInformationProtectionResourceCollection {
+
+	    /** Display name */
+	    displayName?: string
+
+	    /** Collection of resources */
+	    resources?: string[]
+
+}
+export interface WindowsInformationProtectionDataRecoveryCertificate {
+
+	    /** Data recovery Certificate subject name */
+	    subjectName?: string
+
+	    /** Data recovery Certificate description */
+	    description?: string
+
+	    /** Data recovery Certificate expiration datetime */
+	    expirationDateTime?: string
+
+	    /** Data recovery Certificate */
+	    certificate?: number
+
+}
+export interface WindowsInformationProtectionApp {
+
+	    /** App display name. */
+	    displayName?: string
+
+	    /** The app's description. */
+	    description?: string
+
+	    /** The publisher name */
+	    publisherName?: string
+
+	    /** The product name. */
+	    productName?: string
+
+	    /** If true, app is denied protection or exemption. */
+	    denied?: boolean
+
+}
+export interface WindowsInformationProtectionProxiedDomainCollection {
+
+	    /** Display name */
+	    displayName?: string
+
+	    /** Collection of proxied domains */
+	    proxiedDomains?: ProxiedDomain[]
+
+}
+export interface ProxiedDomain {
+
+	    /** The IP address or FQDN */
+	    ipAddressOrFQDN?: string
+
+	    /** Proxy IP */
+	    proxy?: string
+
+}
+export interface WindowsInformationProtectionIPRangeCollection {
+
+	    /** Display name */
+	    displayName?: string
+
+	    /** Collection of ip ranges */
+	    ranges?: IpRange[]
+
+}
+export interface IpRange {
+
+}
+export interface AndroidMobileAppIdentifier extends MobileAppIdentifier {
+
+	    /** The identifier for an app, as specified in the play store. */
+	    packageId?: string
+
+}
+export interface IosMobileAppIdentifier extends MobileAppIdentifier {
+
+	    /** The identifier for an app, as specified in the app store. */
+	    bundleId?: string
+
+}
+export interface ManagedAppPolicyDeploymentSummaryPerApp {
+
+	    /** Deployment of an app. */
+	    mobileAppIdentifier?: MobileAppIdentifier
+
+	    /** Number of users the policy is applied. */
+	    configurationAppliedUserCount?: number
+
+}
+export interface WindowsInformationProtectionStoreApp extends WindowsInformationProtectionApp {
+
+}
+export interface WindowsInformationProtectionDesktopApp extends WindowsInformationProtectionApp {
+
+	    /** The binary name. */
+	    binaryName?: string
+
+	    /** The lower binary version. */
+	    binaryVersionLow?: string
+
+	    /** The high binary version. */
+	    binaryVersionHigh?: string
+
+}
+export interface IPv6Range extends IpRange {
+
+	    /** Lower IP Address */
+	    lowerAddress?: string
+
+	    /** Upper IP Address */
+	    upperAddress?: string
+
+}
+export interface IPv4Range extends IpRange {
+
+	    /** Lower IP Address */
+	    lowerAddress?: string
+
+	    /** Upper IP Address */
+	    upperAddress?: string
+
+}
+export interface RolePermission {
+
+	    /** Actions */
+	    resourceActions?: ResourceAction[]
+
+}
+export interface ResourceAction {
+
+	    /** Allowed Actions */
+	    allowedResourceActions?: string[]
+
+	    /** Not Allowed Actions */
+	    notAllowedResourceActions?: string[]
 
 }
