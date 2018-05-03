@@ -9,23 +9,30 @@
 
 export as namespace microsoftgraph;
 
+export type DayOfWeek = "sunday" | "monday" | "tuesday" | "wednesday" | "thursday" | "friday" | "saturday"
 export type AutomaticRepliesStatus = "disabled" | "alwaysEnabled" | "scheduled"
 export type ExternalAudienceScope = "none" | "contactsOnly" | "all"
 export type AttendeeType = "required" | "optional" | "resource"
 export type FreeBusyStatus = "free" | "tentative" | "busy" | "oof" | "workingElsewhere" | "unknown"
+export type LocationType = "default" | "conferenceRoom" | "homeAddress" | "businessAddress" | "geoCoordinates" | "streetAddress" | "hotel" | "restaurant" | "localBusiness" | "postalAddress"
+export type LocationUniqueIdType = "unknown" | "locationStore" | "directory" | "private" | "bing"
 export type ActivityDomain = "unknown" | "work" | "personal" | "unrestricted"
+export type TimeZoneStandard = "windows" | "iana"
 export type BodyType = "text" | "html"
 export type Importance = "low" | "normal" | "high"
 export type InferenceClassificationType = "focused" | "other"
+export type FollowupFlagStatus = "notFlagged" | "complete" | "flagged"
 export type CalendarColor = "lightBlue" | "lightGreen" | "lightOrange" | "lightGray" | "lightYellow" | "lightTeal" | "lightPink" | "lightBrown" | "lightRed" | "maxColor" | "auto"
 export type ResponseType = "none" | "organizer" | "tentativelyAccepted" | "accepted" | "declined" | "notResponded"
 export type Sensitivity = "normal" | "personal" | "private" | "confidential"
 export type RecurrencePatternType = "daily" | "weekly" | "absoluteMonthly" | "relativeMonthly" | "absoluteYearly" | "relativeYearly"
-export type DayOfWeek = "sunday" | "monday" | "tuesday" | "wednesday" | "thursday" | "friday" | "saturday"
 export type WeekIndex = "first" | "second" | "third" | "fourth" | "last"
 export type RecurrenceRangeType = "endDate" | "noEnd" | "numbered"
 export type EventType = "singleInstance" | "occurrence" | "exception" | "seriesMaster"
 export type MeetingMessageType = "none" | "meetingRequest" | "meetingCancelled" | "meetingAccepted" | "meetingTenativelyAccepted" | "meetingDeclined"
+export type MessageActionFlag = "any" | "call" | "doNotForward" | "followUp" | "fyi" | "forward" | "noResponseNecessary" | "read" | "reply" | "replyToAll" | "review"
+export type CategoryColor = "preset0" | "preset1" | "preset2" | "preset3" | "preset4" | "preset5" | "preset6" | "preset7" | "preset8" | "preset9" | "preset10" | "preset11" | "preset12" | "preset13" | "preset14" | "preset15" | "preset16" | "preset17" | "preset18" | "preset19" | "preset20" | "preset21" | "preset22" | "preset23" | "preset24" | "none"
+export type SelectionLikelihoodInfo = "notSpecified" | "high"
 export type PhoneType = "home" | "business" | "mobile" | "other" | "assistant" | "homeFax" | "businessFax" | "otherFax" | "pager" | "radio"
 export type WebsiteType = "other" | "home" | "work" | "blog" | "profile"
 export type PlannerPreviewType = "automatic" | "noPreview" | "checklist" | "description" | "reference"
@@ -47,7 +54,9 @@ export type WindowsDeviceType = "none" | "desktop" | "mobile" | "holographic" | 
 export type MicrosoftStoreForBusinessLicenseType = "offline" | "online"
 export type VppTokenAccountType = "business" | "education"
 export type ComplianceStatus = "unknown" | "notApplicable" | "compliant" | "remediated" | "nonCompliant" | "error" | "conflict"
+export type MdmAppConfigKeyType = "stringType" | "integerType" | "realType" | "booleanType" | "tokenType"
 export type ActionState = "none" | "pending" | "canceled" | "active" | "done" | "failed" | "notSupported"
+export type ManagedDeviceOwnerType = "unknown" | "company" | "personal"
 export type ComplianceState = "unknown" | "compliant" | "noncompliant" | "conflict" | "error" | "inGracePeriod" | "configManager"
 export type ManagementAgentType = "eas" | "mdm" | "easMdm" | "intuneClient" | "easIntuneClient" | "configurationManagerClient" | "configurationManagerClientMdm" | "configurationManagerClientMdmEas" | "unknown" | "jamf" | "googleCloudDevicePolicyController"
 export type DeviceEnrollmentType = "unknown" | "userEnrollment" | "deviceEnrollmentManager" | "appleBulkWithUser" | "appleBulkWithoutUser" | "windowsAzureADJoin" | "windowsBulkUserless" | "windowsAutoEnrollment" | "windowsBulkAzureDomainJoin" | "windowsCoManagement"
@@ -117,12 +126,14 @@ export type EditionUpgradeLicenseType = "productKey" | "licenseFile"
 export type Windows10EditionType = "windows10Enterprise" | "windows10EnterpriseN" | "windows10Education" | "windows10EducationN" | "windows10MobileEnterprise" | "windows10HolographicEnterprise" | "windows10Professional" | "windows10ProfessionalN" | "windows10ProfessionalEducation" | "windows10ProfessionalEducationN" | "windows10ProfessionalWorkstation" | "windows10ProfessionalWorkstationN"
 export type DeviceComplianceActionType = "noAction" | "notification" | "block" | "retire" | "wipe" | "removeResourceAccessProfiles"
 export type DeviceThreatProtectionLevel = "unavailable" | "secured" | "low" | "medium" | "high" | "notSet"
-export type PolicyPlatformType = "android" | "iOS" | "macOS" | "windowsPhone81" | "windows81AndLater" | "windows10AndLater" | "all"
+export type PolicyPlatformType = "android" | "iOS" | "macOS" | "windowsPhone81" | "windows81AndLater" | "windows10AndLater" | "androidWorkProfile" | "all"
 export type IosUpdatesInstallStatus = "success" | "available" | "idle" | "downloading" | "downloadFailed" | "downloadRequiresComputer" | "downloadInsufficientSpace" | "downloadInsufficientPower" | "downloadInsufficientNetwork" | "installing" | "installInsufficientSpace" | "installInsufficientPower" | "installPhoneCallInProgress" | "installFailed" | "notSupportedOperation" | "sharedDeviceUserLoggedInError"
 export type DeviceManagementExchangeConnectorSyncType = "fullSync" | "deltaSync"
 export type MdmAuthority = "unknown" | "intune" | "sccm" | "office365"
 export type WindowsHelloForBusinessPinUsage = "allowed" | "required" | "disallowed"
 export type Enablement = "notConfigured" | "enabled" | "disabled"
+export type VppTokenState = "unknown" | "valid" | "expired" | "invalid"
+export type VppTokenSyncStatus = "none" | "inProgress" | "completed" | "failed"
 export type DeviceManagementExchangeConnectorStatus = "none" | "connectionPending" | "connected" | "disconnected"
 export type DeviceManagementExchangeConnectorType = "onPremises" | "hosted" | "serviceToService" | "dedicated"
 export type MobileThreatPartnerTenantState = "unavailable" | "available" | "enabled" | "unresponsive"
@@ -141,15 +152,23 @@ export type InstallState = "notApplicable" | "installed" | "failed" | "notInstal
 export type RemoteAssistanceOnboardingStatus = "notOnboarded" | "onboarding" | "onboarded"
 export type ApplicationType = "universal" | "desktop"
 export type DeviceEnrollmentFailureReason = "unknown" | "authentication" | "authorization" | "accountValidation" | "userValidation" | "deviceNotSupported" | "inMaintenance" | "badRequest" | "featureNotSupported" | "enrollmentRestrictionsEnforced" | "clientDisconnected"
+export type Status = "active" | "updated" | "deleted" | "ignored" | "unknownFutureValue"
 
 export interface Entity {
 
-	    /** Read-only. */
 	    id?: string
 
 }
 
+export interface Directory extends Entity {
+
+	    deletedItems?: DirectoryObject[]
+
+}
+
 export interface DirectoryObject extends Entity {
+
+	    deletedDateTime?: string
 
 }
 
@@ -369,7 +388,7 @@ export interface Group extends DirectoryObject {
 
 	    classification?: string
 
-	    /** The date and time the group was created. */
+	    /** Timestamp of when the group was created. The value cannot be modified and is automatically populated when the group is created. The Timestamp type represents date and time information using ISO 8601 format and is always in UTC time. For example, midnight UTC on Jan 1, 2014 would look like this: '2014-01-01T00:00:00Z'. Read-only. */
 	    createdDateTime?: string
 
 	    /** An optional description for the group. */
@@ -387,7 +406,7 @@ export interface Group extends DirectoryObject {
 	    /** Specifies whether the group is mail-enabled. If the securityEnabled property is also true, the group is a mail-enabled security group; otherwise, the group is a Microsoft Exchange distribution group. */
 	    mailEnabled?: boolean
 
-	    /** The mail alias for the group. This property must be specified when a group is created. Supports $filter. */
+	    /** The mail alias for the group, unique in the organization. This property must be specified when a group is created. Supports $filter. */
 	    mailNickname?: string
 
 	    /** Indicates the last time at which the group was synced with the on-premises directory.The Timestamp type represents date and time information using ISO 8601 format and is always in UTC time. For example, midnight UTC on Jan 1, 2014 would look like this: '2014-01-01T00:00:00Z'. Read-only. Supports $filter. */
@@ -402,6 +421,7 @@ export interface Group extends DirectoryObject {
 	    /** The any operator is required for filter expressions on multi-valued properties. Read-only. Not nullable. Supports $filter. */
 	    proxyAddresses?: string[]
 
+	    /** Timestamp of when the group was last renewed. This cannot be modified directly and is only updated via the renew service action. The Timestamp type represents date and time information using ISO 8601 format and is always in UTC time. For example, midnight UTC on Jan 1, 2014 would look like this: '2014-01-01T00:00:00Z'. Read-only. */
 	    renewedDateTime?: string
 
 	    /** Specifies whether the group is a security group. If the mailEnabled property is also true, the group is a mail-enabled security group; otherwise it is a security group. Must be false for Office 365 groups. Supports $filter. */
@@ -583,7 +603,7 @@ export interface Event extends OutlookItem {
 	    /** The start time zone that was set when the event was created. A value of tzone://Microsoft/Custom indicates that a legacy custom time zone was set in desktop Outlook. */
 	    originalStartTimeZone?: string
 
-	    /** The end time zone that was set when the event was created. A value of tzone://Microsoft/Customindicates that a legacy custom time zone was set in desktop Outlook. */
+	    /** The end time zone that was set when the event was created. A value of tzone://Microsoft/Custom indicates that a legacy custom time zone was set in desktop Outlook. */
 	    originalEndTimeZone?: string
 
 	    /** Indicates the type of response sent in response to an event message. */
@@ -610,10 +630,10 @@ export interface Event extends OutlookItem {
 	    /** The preview of the message associated with the event. It is in text format. */
 	    bodyPreview?: string
 
-	    /** The importance of the event. Possible values are: Low, Normal, High. */
+	    /** The importance of the event. Possible values are: low, normal, high. */
 	    importance?: Importance
 
-	    /** Possible values are: Normal, Personal, Private, Confidential. */
+	    /** Possible values are: normal, personal, private, confidential. */
 	    sensitivity?: Sensitivity
 
 	    /** The date, time, and time zone that the event starts. */
@@ -627,6 +647,9 @@ export interface Event extends OutlookItem {
 
 	    /** The location of the event. */
 	    location?: Location
+
+	    /** The locations where the event is held or attended from. The location and locations properties always correspond with each other. If you update the location property, any prior locations in the locations collection would be removed and replaced by the new location value. */
+	    locations?: Location[]
 
 	    /** Set to true if the event lasts all day. */
 	    isAllDay?: boolean
@@ -646,10 +669,10 @@ export interface Event extends OutlookItem {
 	    /** The categories assigned to the item. */
 	    seriesMasterId?: string
 
-	    /** The status to show. Possible values are: Free, Tentative, Busy, Oof, WorkingElsewhere, Unknown. */
+	    /** The status to show. Possible values are: free, tentative, busy, oof, workingElsewhere, unknown. */
 	    showAs?: FreeBusyStatus
 
-	    /** The event type. Possible values are: SingleInstance, Occurrence, Exception, SeriesMaster. Read-only. */
+	    /** The event type. Possible values are: singleInstance, occurrence, exception, seriesMaster. Read-only. */
 	    type?: EventType
 
 	    /** The collection of attendees for the event. */
@@ -844,10 +867,13 @@ export interface Onenote extends Entity {
 
 export interface GroupLifecyclePolicy extends Entity {
 
+	    /** Number of days before a group expires and needs to be renewed. Once renewed, the group expiration is extended by the number of days defined. */
 	    groupLifetimeInDays?: number
 
+	    /** The group type for which the expiration policy applies. Possible values are All, Selected or None. */
 	    managedGroupTypes?: string
 
+	    /** List of email address to send notifications for groups without owners. Multiple email address can be defined by separating email address with a semicolon. */
 	    alternateNotificationEmails?: string
 
 }
@@ -1107,6 +1133,8 @@ export interface User extends DirectoryObject {
 	    /** The collection of open extensions defined for the user. Read-only. Nullable. */
 	    extensions?: Extension[]
 
+	    outlook?: OutlookUser
+
 	    /** The messages in a mailbox or folder. Read-only. Nullable. */
 	    messages?: Message[]
 
@@ -1164,6 +1192,14 @@ export interface User extends DirectoryObject {
 	    /** The list of troubleshooting events for this user. */
 	    deviceManagementTroubleshootingEvents?: DeviceManagementTroubleshootingEvent[]
 
+	    activities?: UserActivity[]
+
+}
+
+export interface OutlookUser extends Entity {
+
+	    masterCategories?: OutlookCategory[]
+
 }
 
 export interface Message extends OutlookItem {
@@ -1179,6 +1215,9 @@ export interface Message extends OutlookItem {
 
 	    /** The message ID in the format specified by RFC2822. */
 	    internetMessageId?: string
+
+	    /** The collection of message headers, defined by RFC5322, that provide details of the network path taken by a message from the sender to the recipient. Read-only. */
+	    internetMessageHeaders?: InternetMessageHeader[]
 
 	    /** The subject of the message. */
 	    subject?: string
@@ -1237,6 +1276,9 @@ export interface Message extends OutlookItem {
 	    /** The classification of the message for the user, based on inferred relevance or importance, or on an explicit override. Possible values are: focused or other. */
 	    inferenceClassification?: InferenceClassificationType
 
+	    /** The flag value that indicates the status, start date, due date, or completion date for the message. */
+	    flag?: FollowupFlag
+
 	    /** The fileAttachment and itemAttachment attachments for the message. */
 	    attachments?: Attachment[]
 
@@ -1270,6 +1312,9 @@ export interface MailFolder extends Entity {
 
 	    /** The collection of messages in the mailFolder. */
 	    messages?: Message[]
+
+	    /** The collection of rules that apply to the user's Inbox folder. */
+	    messageRules?: MessageRule[]
 
 	    /** The collection of child folders in the mailFolder. */
 	    childFolders?: MailFolder[]
@@ -1521,6 +1566,8 @@ export interface ManagedDevice extends Entity {
 	    /** Name of the device */
 	    deviceName?: string
 
+	    managedDeviceOwnerType?: ManagedDeviceOwnerType
+
 	    /** List of ComplexType deviceActionResult objects. */
 	    deviceActionResults?: DeviceActionResult[]
 
@@ -1720,6 +1767,38 @@ export interface DeviceManagementTroubleshootingEvent extends Entity {
 
 }
 
+export interface UserActivity extends Entity {
+
+	    visualElements?: VisualInfo
+
+	    activitySourceHost?: string
+
+	    activationUrl?: string
+
+	    appActivityId?: string
+
+	    appDisplayName?: string
+
+	    contentUrl?: string
+
+	    createdDateTime?: string
+
+	    expirationDateTime?: string
+
+	    fallbackUrl?: string
+
+	    lastModifiedDateTime?: string
+
+	    userTimezone?: string
+
+	    contentInfo?: any
+
+	    status?: Status
+
+	    historyItems?: ActivityHistoryItem[]
+
+}
+
 export interface GroupSettingTemplate extends DirectoryObject {
 
 	    /** Display name of the template. */
@@ -1768,6 +1847,44 @@ export interface Attachment extends Entity {
 
 	    /** true if the attachment is an inline attachment; otherwise, false. */
 	    isInline?: boolean
+
+}
+
+export interface OutlookCategory extends Entity {
+
+	    /** A unique name that identifies a category in the user's mailbox. After a category is created, the name cannot be changed. Read-only. */
+	    displayName?: string
+
+	    /** A pre-set color constant that characterizes a category, and that is mapped to one of 25 predefined colors. See the note below. */
+	    color?: CategoryColor
+
+}
+
+export interface MessageRule extends Entity {
+
+	    /** The display name of the rule. */
+	    displayName?: string
+
+	    /** Indicates the order in which the rule is executed, among other rules. */
+	    sequence?: number
+
+	    /** Conditions that when fulfilled, will trigger the corresponding actions for that rule. */
+	    conditions?: MessageRulePredicates
+
+	    /** Actions to be taken on a message when the corresponding conditions are fulfilled. */
+	    actions?: MessageRuleActions
+
+	    /** Exception conditions for the rule. */
+	    exceptions?: MessageRulePredicates
+
+	    /** Indicates whether the rule is enabled to be applied to messages. */
+	    isEnabled?: boolean
+
+	    /** Indicates whether the rule is in an error condition. Read-only. */
+	    hasError?: boolean
+
+	    /** Indicates if the rule is read-only and cannot be modified or deleted by the rules REST API. */
+	    isReadOnly?: boolean
 
 }
 
@@ -1874,6 +1991,16 @@ export interface InferenceClassificationOverride extends Entity {
 
 	    /** The email address information of the sender for whom the override is created. */
 	    senderEmailAddress?: EmailAddress
+
+}
+
+export interface BaseItemVersion extends Entity {
+
+	    lastModifiedBy?: IdentitySet
+
+	    lastModifiedDateTime?: string
+
+	    publication?: PublicationFacet
 
 }
 
@@ -2013,6 +2140,8 @@ export interface DriveItem extends BaseItem {
 	    /** Photo metadata, if the item is a photo. Read-only. */
 	    photo?: Photo
 
+	    publication?: PublicationFacet
+
 	    /** Remote item data, if the item is shared from a drive other than the one being accessed. Read-only. */
 	    remoteItem?: RemoteItem
 
@@ -2050,6 +2179,8 @@ export interface DriveItem extends BaseItem {
 
 	    /** Collection containing [ThumbnailSet][] objects associated with the item. For more info, see [getting thumbnails][]. Read-only. Nullable. */
 	    thumbnails?: ThumbnailSet[]
+
+	    versions?: DriveItemVersion[]
 
 	    workbook?: Workbook
 
@@ -2092,6 +2223,8 @@ export interface ListItem extends BaseItem {
 
 	    fields?: FieldValueSet
 
+	    versions?: ListItemVersion[]
+
 }
 
 export interface Permission extends Entity {
@@ -2131,6 +2264,14 @@ export interface ThumbnailSet extends Entity {
 
 }
 
+export interface DriveItemVersion extends BaseItemVersion {
+
+	    content?: any
+
+	    size?: number
+
+}
+
 export interface Workbook extends Entity {
 
 	    application?: WorkbookApplication
@@ -2146,6 +2287,12 @@ export interface Workbook extends Entity {
 }
 
 export interface FieldValueSet extends Entity {
+
+}
+
+export interface ListItemVersion extends BaseItemVersion {
+
+	    fields?: FieldValueSet
 
 }
 
@@ -3302,6 +3449,9 @@ export interface DeviceAppManagement extends Entity {
 	    /** The Managed Device Mobile Application Configurations. */
 	    mobileAppConfigurations?: ManagedDeviceMobileAppConfiguration[]
 
+	    /** List of Vpp tokens for this organization. */
+	    vppTokens?: VppToken[]
+
 	    /** Managed app policies. */
 	    managedAppPolicies?: ManagedAppPolicy[]
 
@@ -3416,6 +3566,8 @@ export interface ManagedDeviceMobileAppConfiguration extends Entity {
 	    /** The list of group assignemenets for app configration. */
 	    assignments?: ManagedDeviceMobileAppConfigurationAssignment[]
 
+	    deviceStatuses?: ManagedDeviceMobileAppConfigurationDeviceStatus[]
+
 	    /** List of ManagedDeviceMobileAppConfigurationUserStatus. */
 	    userStatuses?: ManagedDeviceMobileAppConfigurationUserStatus[]
 
@@ -3424,6 +3576,43 @@ export interface ManagedDeviceMobileAppConfiguration extends Entity {
 
 	    /** App configuration user status summary. */
 	    userStatusSummary?: ManagedDeviceMobileAppConfigurationUserSummary
+
+}
+
+export interface VppToken extends Entity {
+
+	    /** The organization associated with the Apple Volume Purchase Program Token */
+	    organizationName?: string
+
+	    /** The type of volume purchase program which the given Apple Volume Purchase Program Token is associated with. Possible values are: business, education. Possible values are: business, education. */
+	    vppTokenAccountType?: VppTokenAccountType
+
+	    /** The apple Id associated with the given Apple Volume Purchase Program Token. */
+	    appleId?: string
+
+	    /** The expiration date time of the Apple Volume Purchase Program Token. */
+	    expirationDateTime?: string
+
+	    /** The last time when an application sync was done with the Apple volume purchase program service using the the Apple Volume Purchase Program Token. */
+	    lastSyncDateTime?: string
+
+	    /** The Apple Volume Purchase Program Token string downloaded from the Apple Volume Purchase Program. */
+	    token?: string
+
+	    /** Last modification date time associated with the Apple Volume Purchase Program Token. */
+	    lastModifiedDateTime?: string
+
+	    /** Current state of the Apple Volume Purchase Program Token. Possible values are: unknown, valid, expired, invalid. Possible values are: unknown, valid, expired, invalid. */
+	    state?: VppTokenState
+
+	    /** Current sync status of the last application sync which was triggered using the Apple Volume Purchase Program Token. Possible values are: none, inProgress, completed, failed. Possible values are: none, inProgress, completed, failed. */
+	    lastSyncStatus?: VppTokenSyncStatus
+
+	    /** Whether or not apps for the VPP token will be automatically updated. */
+	    automaticallyUpdateApps?: boolean
+
+	    /** Whether or not apps for the VPP token will be automatically updated. */
+	    countryOrRegion?: string
 
 }
 
@@ -3807,7 +3996,7 @@ export interface ManagedEBook extends Entity {
 	    /** The date and time when the eBook file was created. */
 	    createdDateTime?: string
 
-	    /** The date and time when teh eBook was last modified. */
+	    /** The date and time when the eBook was last modified. */
 	    lastModifiedDateTime?: string
 
 	    /** The more information Url. */
@@ -4168,6 +4357,24 @@ export interface IosStoreApp extends MobileApp {
 
 }
 
+export interface ManagedDeviceMobileAppConfigurationDeviceStatus extends Entity {
+
+	    deviceDisplayName?: string
+
+	    userName?: string
+
+	    deviceModel?: string
+
+	    complianceGracePeriodExpirationDateTime?: string
+
+	    status?: ComplianceStatus
+
+	    lastReportedDateTime?: string
+
+	    userPrincipalName?: string
+
+}
+
 export interface ManagedDeviceMobileAppConfigurationUserStatus extends Entity {
 
 	    /** User name of the DevicePolicyStatus. */
@@ -4241,6 +4448,16 @@ export interface ManagedDeviceMobileAppConfigurationUserSummary extends Entity {
 
 	    /** Version of the policy for that overview */
 	    configurationVersion?: number
+
+}
+
+export interface IosMobileAppConfiguration extends ManagedDeviceMobileAppConfiguration {
+
+	    /** mdm app configuration Base64 binary. */
+	    encodedSettingXml?: number
+
+	    /** app configuration setting items. */
+	    settings?: AppConfigurationSettingItem[]
 
 }
 
@@ -4766,26 +4983,26 @@ export interface OnPremisesConditionalAccessSettings extends Entity {
 
 export interface MobileThreatDefenseConnector extends Entity {
 
-	    /** Timestamp of last heartbeat after admin enabled option Connect to MTP */
+	    /** DateTime of last Heartbeat recieved from the Data Sync Partner */
 	    lastHeartbeatDateTime?: string
 
-	    /** Partner state of this tenant Possible values are: unavailable, available, enabled, unresponsive. */
+	    /** Data Sync Partner state for this account Possible values are: unavailable, available, enabled, unresponsive. */
 	    partnerState?: MobileThreatPartnerTenantState
 
-	    /** Android Toggle On or Off */
+	    /** For Android, set whether data from the data sync partner should be used during compliance evaluations */
 	    androidEnabled?: boolean
 
-	    /** For Android, Allows admin to config must receive data from the data sync partner prior to being considered compliant */
+	    /** For IOS, get or set whether data from the data sync partner should be used during compliance evaluations */
+	    iosEnabled?: boolean
+
+	    /** For Android, set whether Intune must receive data from the data sync partner prior to marking a device compliant */
 	    androidDeviceBlockedOnMissingPartnerData?: boolean
 
-	    /** For IOS, Allows admin to config must receive data from the data sync partner prior to being considered compliant */
+	    /** For IOS, set whether Intune must receive data from the data sync partner prior to marking a device compliant */
 	    iosDeviceBlockedOnMissingPartnerData?: boolean
 
-	    /** Allows admin to block devices on the enabled platforms that do not meet minimum version requirements */
+	    /** Get or set whether to block devices on the enabled platforms that do not meet the minimum version requirements of the Data Sync Partner */
 	    partnerUnsupportedOsVersionBlocked?: boolean
-
-	    /** IOS Toggle On or Off */
-	    iosEnabled?: boolean
 
 	    /** Get or Set days the per tenant tolerance to unresponsiveness for this partner integration */
 	    partnerUnresponsivenessThresholdInDays?: number
@@ -5596,7 +5813,7 @@ export interface IosGeneralDeviceConfiguration extends DeviceConfiguration {
 	    /** Indicates whether or not to block the user from downloading media from the iBookstore that has been tagged as erotica. */
 	    iBooksStoreBlockErotica?: boolean
 
-	    /** Indicates whether or not to block  the user from continuing work they started on iOS device to another iOS or macOS device. */
+	    /** Indicates whether or not to block  the the user from continuing work they started on iOS device to another iOS or macOS device. */
 	    iCloudBlockActivityContinuation?: boolean
 
 	    /** Indicates whether or not to block iCloud backup. */
@@ -6997,7 +7214,7 @@ export interface Windows10TeamGeneralConfiguration extends DeviceConfiguration {
 	    /** Indicates whether or not to Block setting a maintenance window for device updates. */
 	    maintenanceWindowBlocked?: boolean
 
-	    /** Maintenance window duration for device updates. Valid values 1 to 5 */
+	    /** Maintenance window duration for device updates. Valid values 0 to 5 */
 	    maintenanceWindowDurationInHours?: number
 
 	    /** Maintenance window start time for device updates. */
@@ -7528,7 +7745,6 @@ export interface ManagedMobileApp extends Entity {
 
 export interface TargetedManagedAppPolicyAssignment extends Entity {
 
-	    /** Identifier for deployment of a group or app */
 	    target?: DeviceAndAppManagementAssignmentTarget
 
 }
@@ -7760,6 +7976,28 @@ export interface EnrollmentTroubleshootingEvent extends DeviceManagementTroubles
 	    failureReason?: string
 
 }
+
+export interface ActivityHistoryItem extends Entity {
+
+	    status?: Status
+
+	    activeDurationSeconds?: number
+
+	    createdDateTime?: string
+
+	    lastActiveDateTime?: string
+
+	    lastModifiedDateTime?: string
+
+	    expirationDateTime?: string
+
+	    startedDateTime?: string
+
+	    userTimezone?: string
+
+	    activity?: UserActivity
+
+}
 export interface AlternativeSecurityId {
 
 	    type?: number
@@ -7866,6 +8104,7 @@ export interface MailboxSettings {
 	    /** Configuration settings to automatically notify the sender of an incoming email with a message from the signed-in user. */
 	    automaticRepliesSetting?: AutomaticRepliesSetting
 
+	    /** Folder ID of an archive folder for the user. */
 	    archiveFolder?: string
 
 	    /** The default time zone for the user's mailbox. */
@@ -7873,6 +8112,9 @@ export interface MailboxSettings {
 
 	    /** The locale information for the user, including the preferred language and country/region. */
 	    language?: LocaleInfo
+
+	    /** The days of the week and hours in a specific time zone that the user works. */
+	    workingHours?: WorkingHours
 
 }
 export interface AutomaticRepliesSetting {
@@ -7912,6 +8154,27 @@ export interface LocaleInfo {
 	    displayName?: string
 
 }
+export interface WorkingHours {
+
+	    /** The days of the week on which the user works. */
+	    daysOfWeek?: DayOfWeek[]
+
+	    /** The time of the day that the user starts working. */
+	    startTime?: string
+
+	    /** The time of the day that the user stops working. */
+	    endTime?: string
+
+	    /** The time zone to which the working hours apply. */
+	    timeZone?: TimeZoneBase
+
+}
+export interface TimeZoneBase {
+
+	    /** The name of a time zone. It can be a standard time zone name such as "Hawaii-Aleutian Standard Time", or "Customized Time Zone" for a custom time zone. */
+	    name?: string
+
+}
 export interface SettingValue {
 
 	    /** Name of the setting (as defined by the groupSettingTemplate). */
@@ -7946,6 +8209,42 @@ export interface ExtensionSchemaProperty {
 
 	    /** The type of the property that is defined as part of a schema extension.  Allowed values are Binary, Boolean, DateTime, Integer or String.  See the table below for more details. */
 	    type?: string
+
+}
+export interface CustomTimeZone extends TimeZoneBase {
+
+	    /** The time offset of the time zone from Coordinated Universal Time (UTC). This value is in minutes. Time zones that are ahead of UTC have a positive offset; time zones that are behind UTC have a negative offset. */
+	    bias?: number
+
+	    /** Specifies when the time zone switches from daylight saving time to standard time. */
+	    standardOffset?: StandardTimeZoneOffset
+
+	    /** Specifies when the time zone switches from standard time to daylight saving time. */
+	    daylightOffset?: DaylightTimeZoneOffset
+
+}
+export interface StandardTimeZoneOffset {
+
+	    /** Represents the time of day when the transition from daylight saving time to standard time occurs. */
+	    time?: string
+
+	    /** Represents the nth occurrence of the day of week that the transition from daylight saving time to standard time occurs. */
+	    dayOccurrence?: number
+
+	    /** Represents the day of the week when the transition from daylight saving time to standard time. */
+	    dayOfWeek?: DayOfWeek
+
+	    /** Represents the month of the year when the transition from daylight saving time to standard time occurs. */
+	    month?: number
+
+	    /** Represents how frequently in terms of years the change from daylight saving time to standard time occurs. For example, a value of 0 means every year. */
+	    year?: number
+
+}
+export interface DaylightTimeZoneOffset extends StandardTimeZoneOffset {
+
+	    /** The time offset from Coordinated Universal Time (UTC) for daylight saving time. This value is in minutes. */
+	    daylightBias?: number
 
 }
 export interface Recipient {
@@ -8028,6 +8327,21 @@ export interface Location {
 	    /** The street address of the location. */
 	    address?: PhysicalAddress
 
+	    /** The geographic coordinates and elevation of the location. */
+	    coordinates?: OutlookGeoCoordinates
+
+	    /** Optional URI representing the location. */
+	    locationUri?: string
+
+	    /** The type of location. Possible values are: default, conferenceRoom, homeAddress, businessAddress,geoCoordinates, streetAddress, hotel, restaurant, localBusiness, postalAddress. Read-only. */
+	    locationType?: LocationType
+
+	    /** For internal use only. */
+	    uniqueId?: string
+
+	    /** For internal use only. */
+	    uniqueIdType?: LocationUniqueIdType
+
 }
 export interface PhysicalAddress {
 
@@ -8045,6 +8359,24 @@ export interface PhysicalAddress {
 
 	    /** The postal code. */
 	    postalCode?: string
+
+}
+export interface OutlookGeoCoordinates {
+
+	    /** The altitude of the location. */
+	    altitude?: number
+
+	    /** The latitude of the location. */
+	    latitude?: number
+
+	    /** The longitude of the location. */
+	    longitude?: number
+
+	    /** The accuracy of the latitude and longitude. As an example, the accuracy can be measured in meters, such as the latitude and longitude are accurate to within 50 meters. */
+	    accuracy?: number
+
+	    /** The accuracy of the altitude. */
+	    altitudeAccuracy?: number
 
 }
 export interface LocationConstraint {
@@ -8096,6 +8428,24 @@ export interface Reminder {
 	    reminderFireTime?: DateTimeTimeZone
 
 }
+export interface TimeZoneInformation {
+
+	    /** An identifier for the time zone. */
+	    alias?: string
+
+	    /** A display string that represents the time zone. */
+	    displayName?: string
+
+}
+export interface InternetMessageHeader {
+
+	    /** Represents the key in a key-value pair. */
+	    name?: string
+
+	    /** The value in a key-value pair. */
+	    value?: string
+
+}
 export interface ItemBody {
 
 	    /** The type of the content. Possible values are Text and HTML. */
@@ -8103,6 +8453,21 @@ export interface ItemBody {
 
 	    /** The content of the item. */
 	    content?: string
+
+}
+export interface FollowupFlag {
+
+	    /** The date and time that the follow-up was finished. */
+	    completedDateTime?: DateTimeTimeZone
+
+	    /** The date and time that the follow-up is to be finished. */
+	    dueDateTime?: DateTimeTimeZone
+
+	    /** The date and time that the follow-up is to begin. */
+	    startDateTime?: DateTimeTimeZone
+
+	    /** The status for follow-up for an item. Possible values are notFlagged, complete, and flagged. */
+	    flagStatus?: FollowupFlagStatus
 
 }
 export interface ResponseStatus {
@@ -8171,6 +8536,144 @@ export interface Attendee extends AttendeeBase {
 	    status?: ResponseStatus
 
 }
+export interface MessageRulePredicates {
+
+	    /** Represents the categories that an incoming message should be labeled with in order for the condition or exception to apply. */
+	    categories?: string[]
+
+	    /** Represents the strings that appear in the subject of an incoming message in order for the condition or exception to apply. */
+	    subjectContains?: string[]
+
+	    /** Represents the strings that should appear in the body of an incoming message in order for the condition or exception to apply. */
+	    bodyContains?: string[]
+
+	    /** Represents the strings that should appear in the body or subject of an incoming message in order for the condition or exception to apply. */
+	    bodyOrSubjectContains?: string[]
+
+	    /** Represents the strings that appear in the from property of an incoming message in order for the condition or exception to apply. */
+	    senderContains?: string[]
+
+	    /** Represents the strings that appear in either the toRecipients or ccRecipients properties of an incoming message in order for the condition or exception to apply. */
+	    recipientContains?: string[]
+
+	    /** Represents the strings that appear in the headers of an incoming message in order for the condition or exception to apply. */
+	    headerContains?: string[]
+
+	    /** Represents the flag-for-action value that appears on an incoming message in order for the condition or exception to apply. Possible values are: any, call, doNotForward, followUp, fyi, forward, noResponseNecessary, read, reply, replyToAll, review. */
+	    messageActionFlag?: MessageActionFlag
+
+	    /** The importance that is stamped on an incoming message in order for the condition or exception to apply: low, normal, high. */
+	    importance?: Importance
+
+	    /** Represents the sensitivity level that must be stamped on an incoming message in order for the condition or exception to apply. Possible values are: normal, personal, private, confidential. */
+	    sensitivity?: Sensitivity
+
+	    /** Represents the specific sender email addresses of an incoming message in order for the condition or exception to apply. */
+	    fromAddresses?: Recipient[]
+
+	    /** Represents the email addresses that an incoming message must have been sent to in order for the condition or exception to apply. */
+	    sentToAddresses?: Recipient[]
+
+	    /** Indicates whether the owner of the mailbox must be in the toRecipients property of an incoming message in order for the condition or exception to apply. */
+	    sentToMe?: boolean
+
+	    /** Indicates whether the owner of the mailbox must be the only recipient in an incoming message in order for the condition or exception to apply. */
+	    sentOnlyToMe?: boolean
+
+	    /** Indicates whether the owner of the mailbox must be in the ccRecipients property of an incoming message in order for the condition or exception to apply. */
+	    sentCcMe?: boolean
+
+	    /** Indicates whether the owner of the mailbox must be in either a toRecipients or ccRecipients property of an incoming message in order for the condition or exception to apply. */
+	    sentToOrCcMe?: boolean
+
+	    /** Indicates whether the owner of the mailbox must not be a recipient of an incoming message in order for the condition or exception to apply. */
+	    notSentToMe?: boolean
+
+	    /** Indicates whether an incoming message must have attachments in order for the condition or exception to apply. */
+	    hasAttachments?: boolean
+
+	    /** Indicates whether an incoming message must be an approval request in order for the condition or exception to apply. */
+	    isApprovalRequest?: boolean
+
+	    /** Indicates whether an incoming message must be automatically forwarded in order for the condition or exception to apply. */
+	    isAutomaticForward?: boolean
+
+	    /** Indicates whether an incoming message must be an auto reply in order for the condition or exception to apply. */
+	    isAutomaticReply?: boolean
+
+	    /** Indicates whether an incoming message must be encrypted in order for the condition or exception to apply. */
+	    isEncrypted?: boolean
+
+	    /** Indicates whether an incoming message must be a meeting request in order for the condition or exception to apply. */
+	    isMeetingRequest?: boolean
+
+	    /** Indicates whether an incoming message must be a meeting response in order for the condition or exception to apply. */
+	    isMeetingResponse?: boolean
+
+	    /** Indicates whether an incoming message must be a non-delivery report in order for the condition or exception to apply. */
+	    isNonDeliveryReport?: boolean
+
+	    /** Indicates whether an incoming message must be permission controlled (RMS-protected) in order for the condition or exception to apply. */
+	    isPermissionControlled?: boolean
+
+	    /** Indicates whether an incoming message must be a read receipt in order for the condition or exception to apply. */
+	    isReadReceipt?: boolean
+
+	    /** Indicates whether an incoming message must be S/MIME-signed in order for the condition or exception to apply. */
+	    isSigned?: boolean
+
+	    /** Indicates whether an incoming message must be a voice mail in order for the condition or exception to apply. */
+	    isVoicemail?: boolean
+
+	    /** Represents the minimum and maximum sizes (in kilobytes) that an incoming message must fall in between in order for the condition or exception to apply. */
+	    withinSizeRange?: SizeRange
+
+}
+export interface SizeRange {
+
+	    /** The minimum size (in kilobytes) that an incoming message must have in order for a condition or exception to apply. */
+	    minimumSize?: number
+
+	    /** The maximum size (in kilobytes) that an incoming message must have in order for a condition or exception to apply. */
+	    maximumSize?: number
+
+}
+export interface MessageRuleActions {
+
+	    /** The ID of the folder that a message will be moved to. */
+	    moveToFolder?: string
+
+	    /** The ID of a folder that a message is to be copied to. */
+	    copyToFolder?: string
+
+	    /** Indicates whether a message should be moved to the Deleted Items folder. */
+	    delete?: boolean
+
+	    /** Indicates whether a message should be permanently deleted and not saved to the Deleted Items folder. */
+	    permanentDelete?: boolean
+
+	    /** Indicates whether a message should be marked as read. */
+	    markAsRead?: boolean
+
+	    /** Sets the importance of the message, which can be: low, normal, high. */
+	    markImportance?: Importance
+
+	    /** The email addresses of the recipients to which a message should be forwarded. */
+	    forwardTo?: Recipient[]
+
+	    /** The email addresses of the recipients to which a message should be forwarded as an attachment. */
+	    forwardAsAttachmentTo?: Recipient[]
+
+	    /** The email address to which a message should be redirected. */
+	    redirectTo?: Recipient[]
+
+	    /** A list of categories to be assigned to a message. */
+	    assignCategories?: string[]
+
+	    /** Indicates whether subsequent rules should be evaluated. */
+	    stopProcessingRules?: boolean
+
+}
 export interface ScoredEmailAddress {
 
 	    /** The email address. */
@@ -8178,6 +8681,8 @@ export interface ScoredEmailAddress {
 
 	    /** The relevance score of the email address. A relevance score is used as a sort key, in relation to the other returned results. A higher relevance score value corresponds to a more relevant result. Relevance is determined by the user's communication and collaboration patterns and business relationships. */
 	    relevanceScore?: number
+
+	    selectionLikelihood?: SelectionLikelihoodInfo
 
 }
 export interface Phone {
@@ -8280,6 +8785,13 @@ export interface SharepointIds {
 	    webId?: string
 
 }
+export interface PublicationFacet {
+
+	    level?: string
+
+	    versionId?: string
+
+}
 export interface BooleanColumn {
 
 }
@@ -8369,11 +8881,11 @@ export interface PersonOrGroupColumn {
 	    /** Indicates whether multiple values can be selected from the source. */
 	    allowMultipleSelection?: boolean
 
-	    /** How to display the information about the person or group chosen. See below. */
-	    displayAs?: string
-
 	    /** Whether to allow selection of people only, or people and groups. Must be one of peopleAndGroups or peopleOnly. */
 	    chooseFromType?: string
+
+	    /** How to display the information about the person or group chosen. See below. */
+	    displayAs?: string
 
 }
 export interface TextColumn {
@@ -8755,6 +9267,8 @@ export interface SiteCollection {
 
 	    /** The hostname for the site collection. Read-only. */
 	    hostname?: string
+
+	    root?: Root
 
 }
 export interface Thumbnail {
@@ -9311,6 +9825,18 @@ export interface VppLicensingType {
 	    supportsDeviceLicensing?: boolean
 
 }
+export interface AppConfigurationSettingItem {
+
+	    /** app configuration key. */
+	    appConfigKey?: string
+
+	    /** app configuration key type. Possible values are: stringType, integerType, realType, booleanType, tokenType. */
+	    appConfigKeyType?: MdmAppConfigKeyType
+
+	    /** app configuration key value. */
+	    appConfigKeyValue?: string
+
+}
 export interface DeviceManagementSettings {
 
 	    /** The number of days a device is allowed to go without checking in to remain compliant. Valid values 0 to 120 */
@@ -9653,6 +10179,21 @@ export interface WindowsDeviceAzureADAccount extends WindowsDeviceAccount {
 	    userPrincipalName?: string
 
 }
+export interface AppListItem {
+
+	    /** The application name */
+	    name?: string
+
+	    /** The publisher of the application */
+	    publisher?: string
+
+	    /** The Store URL of the application */
+	    appStoreUrl?: string
+
+	    /** The application or bundle identifier of the application */
+	    appId?: string
+
+}
 export interface OmaSetting {
 
 	    /** Display Name. */
@@ -9711,21 +10252,6 @@ export interface OmaSettingBase64 extends OmaSetting {
 
 	    /** Value. (Base64 encoded string) */
 	    value?: string
-
-}
-export interface AppListItem {
-
-	    /** The application name */
-	    name?: string
-
-	    /** The publisher of the application */
-	    publisher?: string
-
-	    /** The Store URL of the application */
-	    appStoreUrl?: string
-
-	    /** The application or bundle identifier of the application */
-	    appId?: string
 
 }
 export interface MediaContentRatingAustralia {
@@ -10281,5 +10807,37 @@ export interface ResourceAction {
 
 	    /** Not Allowed Actions */
 	    notAllowedResourceActions?: string[]
+
+}
+export interface ImageInfo {
+
+	    /** Optional; URI that points to an icon which represents the application used to generate the activity */
+	    iconUrl?: string
+
+	    alternativeText?: string
+
+	    /** Optional; alt-text accessible content for the image */
+	    alternateText?: string
+
+	    /** Optional; parameter used to indicate the server is able to render image dynamically in response to parameterization. For example – a high contrast image */
+	    addImageQuery?: boolean
+
+}
+export interface VisualInfo {
+
+	    /** Optional. JSON object used to represent an icon which represents the application used to generate the activity */
+	    attribution?: ImageInfo
+
+	    /** Optional. Background color used to render the activity in the UI - brand color for the application source of the activity */
+	    backgroundColor?: string
+
+	    /** Optional. Longer text description of the user's unique activity (example: document name, first sentence, and/or metadata) */
+	    description?: string
+
+	    /** Rquired. Short text description of the user's unique activity (for example, document name in cases where an activity refers to document creation) */
+	    displayText?: string
+
+	    /** Optional. Custom piece of data - JSON object used to provide custom content to render the activity in the Windows Shell UI */
+	    content?: any
 
 }
