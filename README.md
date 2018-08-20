@@ -17,30 +17,37 @@ npm install @microsoft/microsoft-graph-types --save-dev
 
 ![GIF showing intellisense and autocompletion for Microsoft Graph entities in Visual Studio Code ](https://github.com/microsoftgraph/msgraph-typescript-typings/raw/master/typings-demo.gif)
 ## Examples
-The following examples assume that you have a valid access token. We used [superagent](https://github.com/visionmedia/superagent) to perform the HTTP requests, but you can use [our JavaScript client library](https://github.com/microsoftgraph/msgraph-sdk-javascript) or other libraries as well.
+The following examples assume that you have a valid access token. We used [isomorphic-fetch](https://www.npmjs.com/package/isomorphic-fetch) to perform requests, but you can use [our JavaScript client library](https://github.com/microsoftgraph/msgraph-sdk-javascript) or other libraries as well.
 ```typescript
 import * as MicrosoftGraph from "@microsoft/microsoft-graph-types"
 
-import * as request from 'superagent';
+import * from 'isomorphic-fetch';
 const accessToken:string = "";
 ```
 ### List my recent messages
 ```typescript
-request
-    .get("https://graph.microsoft.com/v1.0/me/messages")
-    .set('Authorization', 'Bearer ' + accessToken)
-    .end((err, res) => {
-        if (err) {
-            console.error(err)
-            return;
-        }
-        let messages:[MicrosoftGraph.Message] = res.body.value;
+let url = "https://graph.microsoft.com/v1.0/me/messages";
+let request = new Request(url, {
+    method: "GET",
+    headers: new Headers({
+        "Authorization": "Bearer " + accessToken
+    })
+});
+
+fetch(request)
+.then((response) => {
+    response.json().then((res) => {
+        let messages:[MicrosoftGraph.Message] = res.value;
         for (let msg of messages) { //iterate through the recent messages
             console.log(msg.subject);
             console.log(msg.toRecipients[0].emailAddress.address);
         }
+    });
 
-    })
+})
+.catch((error) => {
+    console.error(error);
+});
 ```
 ### Send an email as the logged in user
 ```typescript
@@ -62,13 +69,29 @@ let mail:MicrosoftGraph.Message = {
     }
 }
 // send the email by sending a POST request to the Microsoft Graph
-request
-    .post('https://graph.microsoft.com/v1.0/users/me/sendMail')
-    .send({message: mail})
-    .set('Authorization', 'Bearer ' + accessToken)
-    .end((err, res) => {
-        console.log(res)
-    })
+let url = "https://graph.microsoft.com/v1.0/users/me/sendMail";
+let request = new Request(
+            url, {
+                method: "POST",
+                body: JSON.stringify({
+                    message: mail
+                }),
+                headers: new Headers({
+                    "Authorization": "Bearer " + accessToken,
+                    'Content-Type': 'application/json'
+                })
+            }
+        );
+        
+fetch(request)
+.then((response) => {
+    if(response.ok === true) {
+        console.log("Mail sent successfully..!!");
+    }
+})
+.catch((err) => {
+    console.error(err);
+});
 
 ```
 ## Microsoft Graph beta support
