@@ -1,5 +1,5 @@
 {
-  "name": "@microsoft/microsoft-graph-types",
+  "name": "@microsoft/microsoft-graph-types-beta",
   "description": "Types for Microsoft Graph objects",
   "version": "1.4.0",
   "types": "microsoft-graph.d.ts",
@@ -11,7 +11,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/microsoftgraph/msgraph-typescript-typings.git"
+    "url": "https://github.com/microsoftgraph/msgraph-typescript-typings.git#beta"
   },
   "devDependencies": {
     "@types/chai": "^3.4.35",
