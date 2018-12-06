@@ -67,6 +67,7 @@ export type DeviceManagementExchangeAccessState = "none" | "unknown" | "allowed"
 export type DeviceManagementExchangeAccessStateReason = "none" | "unknown" | "exchangeGlobalRule" | "exchangeIndividualRule" | "exchangeDeviceRule" | "exchangeUpgrade" | "exchangeMailboxPolicy" | "other" | "compliant" | "notCompliant" | "notEnrolled" | "unknownLocation" | "mfaRequired" | "azureADBlockDueToAccessPolicy" | "compromisedPassword" | "deviceNotKnownWithManagedApp"
 export type ManagedDevicePartnerReportedHealthState = "unknown" | "activated" | "deactivated" | "secured" | "lowSeverity" | "mediumSeverity" | "highSeverity" | "unresponsive" | "compromised" | "misconfigured"
 export type DeviceManagementSubscriptionState = "pending" | "active" | "warning" | "disabled" | "deleted" | "blocked" | "lockedOut"
+export type Windows10EditionType = "windows10Enterprise" | "windows10EnterpriseN" | "windows10Education" | "windows10EducationN" | "windows10MobileEnterprise" | "windows10HolographicEnterprise" | "windows10Professional" | "windows10ProfessionalN" | "windows10ProfessionalEducation" | "windows10ProfessionalEducationN" | "windows10ProfessionalWorkstation" | "windows10ProfessionalWorkstationN"
 export type AppListType = "none" | "appsInListCompliant" | "appsNotInListCompliant"
 export type AndroidRequiredPasswordType = "deviceDefault" | "alphabetic" | "alphanumeric" | "alphanumericWithSymbols" | "lowSecurityBiometric" | "numeric" | "numericComplex" | "any"
 export type WebBrowserCookieSettings = "browserDefault" | "blockAlways" | "allowCurrentWebSite" | "allowFromWebsitesVisited" | "allowAlways"
@@ -95,7 +96,6 @@ export type RatingAppsType = "allAllowed" | "allBlocked" | "agesAbove4" | "agesA
 export type RequiredPasswordType = "deviceDefault" | "alphanumeric" | "numeric"
 export type IosNotificationAlertType = "deviceDefault" | "banner" | "modal" | "none"
 export type EditionUpgradeLicenseType = "productKey" | "licenseFile"
-export type Windows10EditionType = "windows10Enterprise" | "windows10EnterpriseN" | "windows10Education" | "windows10EducationN" | "windows10MobileEnterprise" | "windows10HolographicEnterprise" | "windows10Professional" | "windows10ProfessionalN" | "windows10ProfessionalEducation" | "windows10ProfessionalEducationN" | "windows10ProfessionalWorkstation" | "windows10ProfessionalWorkstationN"
 export type StateManagementSetting = "notConfigured" | "blocked" | "allowed"
 export type FirewallPreSharedKeyEncodingMethodType = "deviceDefault" | "none" | "utF8"
 export type FirewallCertificateRevocationListCheckMethodType = "deviceDefault" | "none" | "attempt" | "require"
@@ -120,9 +120,9 @@ export type AutomaticUpdateMode = "userDefined" | "notifyDownload" | "autoInstal
 export type SafeSearchFilterType = "userDefined" | "strict" | "moderate"
 export type EdgeSearchEngineType = "default" | "bing"
 export type PrereleaseFeatures = "userDefined" | "settingsOnly" | "settingsAndExperimentations" | "notAllowed"
+export type WindowsDeliveryOptimizationMode = "userDefined" | "httpOnly" | "httpWithPeeringNat" | "httpWithPeeringPrivateGroup" | "httpWithInternetPeering" | "simpleDownload" | "bypassMode"
 export type SharedPCAccountDeletionPolicyType = "immediate" | "diskSpaceThreshold" | "diskSpaceThresholdOrInactiveThreshold"
 export type SharedPCAllowedAccountType = "guest" | "domain"
-export type WindowsDeliveryOptimizationMode = "userDefined" | "httpOnly" | "httpWithPeeringNat" | "httpWithPeeringPrivateGroup" | "httpWithInternetPeering" | "simpleDownload" | "bypassMode"
 export type WindowsUpdateType = "userDefined" | "all" | "businessReadyOnly" | "windowsInsiderBuildFast" | "windowsInsiderBuildSlow" | "windowsInsiderBuildRelease"
 export type InternetSiteSecurityLevel = "userDefined" | "medium" | "mediumHigh" | "high"
 export type SiteSecurityLevel = "userDefined" | "low" | "mediumLow" | "medium" | "mediumHigh" | "high"
@@ -172,15 +172,24 @@ export type RegistryOperation = "unknown" | "create" | "modify" | "delete" | "un
 export type RegistryValueType = "unknown" | "binary" | "dword" | "dwordLittleEndian" | "dwordBigEndian" | "expandSz" | "link" | "multiSz" | "none" | "qword" | "qwordlittleEndian" | "sz" | "unknownFutureValue"
 export type SecurityNetworkProtocol = "ip" | "icmp" | "igmp" | "ggp" | "ipv4" | "tcp" | "pup" | "udp" | "idp" | "ipv6" | "ipv6RoutingHeader" | "ipv6FragmentHeader" | "ipSecEncapsulatingSecurityPayload" | "ipSecAuthenticationHeader" | "icmpV6" | "ipv6NoNextHeader" | "ipv6DestinationOptions" | "nd" | "raw" | "ipx" | "spx" | "spxII" | "unknownFutureValue" | "unknown"
 export type UserAccountSecurityType = "unknown" | "standard" | "power" | "administrator" | "unknownFutureValue"
+export type TeamVisibilityType = "private" | "public" | "hiddenMembership" | "unknownFutureValue"
+export type ClonableTeamParts = "apps" | "tabs" | "settings" | "channels" | "members"
+export type GiphyRatingType = "moderate" | "strict" | "unknownFutureValue"
+export type TeamsAsyncOperationType = "invalid" | "cloneTeam" | "archiveTeam" | "unarchiveTeam" | "createTeam" | "unknownFutureValue"
+export type TeamsAsyncOperationStatus = "invalid" | "notStarted" | "inProgress" | "succeeded" | "failed" | "unknownFutureValue"
+export type TeamsAppDistributionMethod = "store" | "organization" | "sideloaded" | "unknownFutureValue"
+export type DataPolicyOperationStatus = "notStarted" | "running" | "complete" | "failed" | "unknownFutureValue"
 
 export interface Entity {
 
+	    /** Read-only. */
 		id?: string
 
 }
 
 export interface Directory extends Entity {
 
+	    /** Recently deleted items. Read-only. Nullable. */
 		deletedItems?: DirectoryObject[]
 
 }
@@ -196,6 +205,7 @@ export interface Device extends DirectoryObject {
 	    /** true if the account is enabled; otherwise, false. Required. */
 		accountEnabled?: boolean
 
+	    /** For internal use only. Not nullable. */
 		alternativeSecurityIds?: AlternativeSecurityId[]
 
 	    /** The Timestamp type represents date and time information using ISO 8601 format and is always in UTC time. For example, midnight UTC on Jan 1, 2014 would look like this: '2014-01-01T00:00:00Z' Read-only. */
@@ -213,10 +223,10 @@ export interface Device extends DirectoryObject {
 	    /** The display name for the device. Required. */
 		displayName?: string
 
-	    /** true if the device complies with Mobile Device Management (MDM) policies; otherwise, false. Read-only. */
+	    /** true if the device complies with Mobile Device Management (MDM) policies; otherwise, false. Read-only. This can only be updated by Intune for any device OS type or by an approved MDM app for Windows OS devices. */
 		isCompliant?: boolean
 
-	    /** true if the device is managed by a Mobile Device Management (MDM) app; otherwise, false. */
+	    /** true if the device is managed by a Mobile Device Management (MDM) app; otherwise, false. This can only be updated by Intune for any device OS type or by an approved MDM app for Windows OS devices. */
 		isManaged?: boolean
 
 	    /** The last time at which the object was synced with the on-premises directory.The Timestamp type represents date and time information using ISO 8601 format and is always in UTC time. For example, midnight UTC on Jan 1, 2014 would look like this: '2014-01-01T00:00:00Z' Read-only. */
@@ -398,13 +408,14 @@ export interface LicenseDetails extends Entity {
 	    /** Unique identifier (GUID) for the service SKU. Equal to the skuId property on the related SubscribedSku object. Read-only */
 		skuId?: string
 
-	    /** Unique SKU display name. Equal to the skuPartNumber on the related SubscribedSku object; for example: "AAD_Premium". Read-only */
+	    /** Unique SKU display name. Equal to the skuPartNumber on the related SubscribedSku object; for example: 'AAD_Premium'. Read-only */
 		skuPartNumber?: string
 
 }
 
 export interface Group extends DirectoryObject {
 
+	    /** Describes a classification for the group (such as low, medium or high business impact). Valid values for this property are defined by creating a ClassificationList setting value, based on the template definition. */
 		classification?: string
 
 	    /** Timestamp of when the group was created. The value cannot be modified and is automatically populated when the group is created. The Timestamp type represents date and time information using ISO 8601 format and is always in UTC time. For example, midnight UTC on Jan 1, 2014 would look like this: '2014-01-01T00:00:00Z'. Read-only. */
@@ -419,7 +430,7 @@ export interface Group extends DirectoryObject {
 	    /** Specifies the type of group to create. Possible values are Unified to create an Office 365 group, or DynamicMembership for dynamic groups.  For all other group types, like security-enabled groups and email-enabled security groups, do not set this property. Supports $filter. */
 		groupTypes?: string[]
 
-	    /** The SMTP address for the group, for example, "serviceadmins@contoso.onmicrosoft.com". Read-only. Supports $filter. */
+	    /** The SMTP address for the group, for example, 'serviceadmins@contoso.onmicrosoft.com'. Read-only. Supports $filter. */
 		mail?: string
 
 	    /** Specifies whether the group is mail-enabled. If the securityEnabled property is also true, the group is a mail-enabled security group; otherwise, the group is a Microsoft Exchange distribution group. */
@@ -431,6 +442,7 @@ export interface Group extends DirectoryObject {
 	    /** Indicates the last time at which the group was synced with the on-premises directory.The Timestamp type represents date and time information using ISO 8601 format and is always in UTC time. For example, midnight UTC on Jan 1, 2014 would look like this: '2014-01-01T00:00:00Z'. Read-only. Supports $filter. */
 		onPremisesLastSyncDateTime?: string
 
+	    /** Errors when using Microsoft synchronization product during provisioning. */
 		onPremisesProvisioningErrors?: OnPremisesProvisioningError[]
 
 	    /** Contains the on-premises security identifier (SID) for the group that was synchronized from on-premises to the cloud. Read-only. */
@@ -448,7 +460,7 @@ export interface Group extends DirectoryObject {
 	    /** Specifies whether the group is a security group. If the mailEnabled property is also true, the group is a mail-enabled security group; otherwise it is a security group. Must be false for Office 365 groups. Supports $filter. */
 		securityEnabled?: boolean
 
-	    /** Specifies the visibility of an Office 365 group. Possible values are: Private, Public, or empty (which is interpreted as Public). */
+	    /** Specifies the visibility of an Office 365 group. Possible values are: private, public, or hiddenmembership; blank values are treated as public.  See Group visibility options to learn more.Visibility can be set only when a group is created; it is not editable.Visibility is supported only for unified groups; it is not supported for security groups. */
 		visibility?: string
 
 	    /** Default is false. Indicates if people external to the organization can send messages to the group. */
@@ -460,8 +472,10 @@ export interface Group extends DirectoryObject {
 	    /** Default value is true. Indicates whether the current user is subscribed to receive email conversations. */
 		isSubscribedByMail?: boolean
 
-	    /** Count of posts that the current  user has not seen since his last visit. */
+	    /** Count of conversations that have been delivered one or more new posts since the signed-in user's last visit to the group. */
 		unseenCount?: number
+
+		isArchived?: boolean
 
 	    /** Users and groups that are members of this group. HTTP Methods: GET (supported for all groups), POST (supported for Office 365 groups, security groups and mail-enabled security groups), DELETE (supported for Office 365 groups and security groups) Nullable. */
 		members?: DirectoryObject[]
@@ -508,9 +522,10 @@ export interface Group extends DirectoryObject {
 	    /** The list of users or groups that are not allowed to create posts or calendar events in this group. Nullable */
 		rejectedSenders?: DirectoryObject[]
 
-	    /** The group's drive. Read-only. */
+	    /** The group's default drive. Read-only. */
 		drive?: Drive
 
+	    /** The group's drives. Read-only. */
 		drives?: Drive[]
 
 	    /** The list of SharePoint sites in this group. Access the default site with /sites/root. */
@@ -522,7 +537,10 @@ export interface Group extends DirectoryObject {
 	    /** Read-only. */
 		onenote?: Onenote
 
+	    /** The collection of lifecycle policies for this group. Read-only. Nullable. */
 		groupLifecyclePolicies?: GroupLifecyclePolicy[]
+
+		team?: Team
 
 }
 
@@ -609,12 +627,16 @@ export interface Calendar extends Entity {
 
 export interface OutlookItem extends Entity {
 
+	    /** The Timestamp type represents date and time information using ISO 8601 format and is always in UTC time. For example, midnight UTC on Jan 1, 2014 would look like this: '2014-01-01T00:00:00Z' */
 		createdDateTime?: string
 
+	    /** The Timestamp type represents date and time information using ISO 8601 format and is always in UTC time. For example, midnight UTC on Jan 1, 2014 would look like this: '2014-01-01T00:00:00Z' */
 		lastModifiedDateTime?: string
 
+	    /** Identifies the version of the item. Every time the item is changed, changeKey changes as well. This allows Exchange to apply changes to the correct version of the object. Read-only. */
 		changeKey?: string
 
+	    /** The categories associated with the item */
 		categories?: string[]
 
 }
@@ -630,7 +652,7 @@ export interface Event extends OutlookItem {
 	    /** Indicates the type of response sent in response to an event message. */
 		responseStatus?: ResponseStatus
 
-	    /** A unique identifier that is shared by all instances of an event across different calendars. */
+	    /** A unique identifier that is shared by all instances of an event across different calendars. Read-only. */
 		iCalUId?: string
 
 	    /** The number of minutes before the event start time that the reminder alert occurs. */
@@ -651,10 +673,10 @@ export interface Event extends OutlookItem {
 	    /** The preview of the message associated with the event. It is in text format. */
 		bodyPreview?: string
 
-	    /** The importance of the event. Possible values are: low, normal, high. */
+	    /** The importance of the event. The possible values are: low, normal, high. */
 		importance?: Importance
 
-	    /** Possible values are: normal, personal, private, confidential. */
+	    /** The possible values are: normal, personal, private, confidential. */
 		sensitivity?: Sensitivity
 
 	    /** The date, time, and time zone that the event starts. */
@@ -690,10 +712,10 @@ export interface Event extends OutlookItem {
 	    /** The ID for the recurring series master item, if this event is part of a recurring series. */
 		seriesMasterId?: string
 
-	    /** The status to show. Possible values are: free, tentative, busy, oof, workingElsewhere, unknown. */
+	    /** The status to show. The possible values are: free, tentative, busy, oof, workingElsewhere, unknown. */
 		showAs?: FreeBusyStatus
 
-	    /** The event type. Possible values are: singleInstance, occurrence, exception, seriesMaster. Read-only. */
+	    /** The event type. The possible values are: singleInstance, occurrence, exception, seriesMaster. Read-only. */
 		type?: EventType
 
 	    /** The collection of attendees for the event. */
@@ -705,7 +727,7 @@ export interface Event extends OutlookItem {
 	    /** The URL to open the event in Outlook Web App.The event will open in the browser if you are logged in to your mailbox via Outlook Web App. You will be prompted to login if you are not already logged in with the browser.This URL can be accessed from within an iFrame. */
 		webLink?: string
 
-	    /** A URL for an online meeting. */
+	    /** A URL for an online meeting. The property is set only when an organizer specifies an event as an online meeting such as a Skype meeting. Read-only. */
 		onlineMeetingUrl?: string
 
 	    /** The calendar that contains the event. Navigation property. Read-only. */
@@ -768,6 +790,7 @@ export interface BaseItem extends Entity {
 	    /** Date and time of item creation. Read-only. */
 		createdDateTime?: string
 
+	    /** Provides a user-visible description of the item. Optional. */
 		description?: string
 
 	    /** ETag for the item. Read-only. */
@@ -788,8 +811,10 @@ export interface BaseItem extends Entity {
 	    /** URL that displays the resource in the browser. Read-only. */
 		webUrl?: string
 
+	    /** Identity of the user who created the item. Read-only. */
 		createdByUser?: User
 
+	    /** Identity of the user who last modified the item. Read-only. */
 		lastModifiedByUser?: User
 
 }
@@ -813,6 +838,7 @@ export interface Drive extends BaseItem {
 	    /** All items contained in the drive. Read-only. Nullable. */
 		items?: DriveItem[]
 
+	    /** For drives in SharePoint, the underlying document library list. Read-only. Nullable. */
 		list?: List
 
 	    /** The root folder of the drive. Read-only. */
@@ -872,16 +898,22 @@ export interface PlannerGroup extends Entity {
 
 export interface Onenote extends Entity {
 
+	    /** The collection of OneNote notebooks that are owned by the user or group. Read-only. Nullable. */
 		notebooks?: Notebook[]
 
+	    /** The sections in all OneNote notebooks that are owned by the user or group.  Read-only. Nullable. */
 		sections?: OnenoteSection[]
 
+	    /** The section groups in all OneNote notebooks that are owned by the user or group.  Read-only. Nullable. */
 		sectionGroups?: SectionGroup[]
 
+	    /** The pages in all OneNote notebooks that are owned by the user or group.  Read-only. Nullable. */
 		pages?: OnenotePage[]
 
+	    /** The image and other file resources in OneNote pages. Getting a resources collection is not supported, but you can get the binary content of a specific resource. Read-only. Nullable. */
 		resources?: OnenoteResource[]
 
+	    /** The status of OneNote operations. Getting an operations collection is not supported, but you can get the status of long-running operations if the Operation-Location header is returned in the response. Read-only. Nullable. */
 		operations?: OnenoteOperation[]
 
 }
@@ -899,21 +931,55 @@ export interface GroupLifecyclePolicy extends Entity {
 
 }
 
+export interface Team extends Entity {
+
+	    /** A hyperlink that will go to the team in the Microsoft Teams client. This is the URL that you get when you right-click a team in the Microsoft Teams client and select Get link to team. This URL should be treated as an opaque blob, and not parsed. */
+		webUrl?: string
+
+	    /** Settings to configure whether members can perform certain actions, for example, create channels and add bots, in the team. */
+		memberSettings?: TeamMemberSettings
+
+	    /** Settings to configure whether guests can create, update, or delete channels in the team. */
+		guestSettings?: TeamGuestSettings
+
+	    /** Settings to configure messaging and mentions in the team. */
+		messagingSettings?: TeamMessagingSettings
+
+	    /** Settings to configure use of Giphy, memes, and stickers in the team. */
+		funSettings?: TeamFunSettings
+
+	    /** Whether this team is in read-only mode. */
+		isArchived?: boolean
+
+	    /** The collection of channels &amp; messages associated with the team. */
+		channels?: Channel[]
+
+	    /** The apps installed in this team. */
+		installedApps?: TeamsAppInstallation[]
+
+		operations?: TeamsAsyncOperation[]
+
+}
+
 export interface Contract extends DirectoryObject {
 
+	    /** Type of contract.Possible values are: SyndicationPartner - Partner that exclusively resells and manages O365 and Intune for this customer. They resell and support their customers. BreadthPartner - Partner has the ability to provide administrative support for this customer. However, the partner is not allowed to resell to the customer.ResellerPartner - Partner that is similar to a syndication partner, except that the partner doesn’t have exclusive access to a tenant. In the syndication case, the customer cannot buy additional direct subscriptions from Microsoft or from other partners. */
 		contractType?: string
 
+	    /** The unique identifier for the customer tenant referenced by this partnership. Corresponds to the id property of the customer tenant's organization resource. */
 		customerId?: string
 
+	    /** A copy of the customer tenant's default domain name. The copy is made when the partnership with the customer is established. It is not automatically updated if the customer tenant's default domain name changes. */
 		defaultDomainName?: string
 
+	    /** A copy of the customer tenant's display name. The copy is made when the partnership with the customer is established. It is not automatically updated if the customer tenant's display name changes. */
 		displayName?: string
 
 }
 
 export interface SubscribedSku extends Entity {
 
-	    /** For example, "Enabled". */
+	    /** For example, 'Enabled'. */
 		capabilityStatus?: string
 
 	    /** The number of licenses that have been assigned. */
@@ -928,10 +994,10 @@ export interface SubscribedSku extends Entity {
 	    /** The unique identifier (GUID) for the service SKU. */
 		skuId?: string
 
-	    /** The SKU part number; for example: "AAD_PREMIUM" or "RMSBASIC". */
+	    /** The SKU part number; for example: 'AAD_PREMIUM' or 'RMSBASIC'. */
 		skuPartNumber?: string
 
-	    /** For example, "User" or "Company". */
+	    /** For example, 'User' or 'Company'. */
 		appliesTo?: string
 
 }
@@ -965,7 +1031,7 @@ export interface Organization extends DirectoryObject {
 	    /** Postal code of the address for the organization */
 		postalCode?: string
 
-	    /** The preferred language for the organization. Should follow ISO 639-1 Code; for example "en". */
+	    /** The preferred language for the organization. Should follow ISO 639-1 Code; for example 'en'. */
 		preferredLanguage?: string
 
 	    /** The privacy profile of an organization. */
@@ -1003,6 +1069,7 @@ export interface User extends DirectoryObject {
 	    /** true if the account is enabled; otherwise, false. This property is required when a user is created. Supports $filter. */
 		accountEnabled?: boolean
 
+	    /** Sets the age group of the user. Allowed values: null, minor, notAdult and adult. Refer to the legal age group property definitions for further information. */
 		ageGroup?: string
 
 	    /** The licenses that are assigned to the user. Not nullable. */
@@ -1020,9 +1087,10 @@ export interface User extends DirectoryObject {
 	    /** The company name which the user is associated. Read-only. */
 		companyName?: string
 
+	    /** Sets whether consent has been obtained for minors. Allowed values: null, granted, denied and notRequired. Refer to the legal age group property definitions for further information. */
 		consentProvidedForMinor?: string
 
-	    /** The country/region in which the user is located; for example, "US" or "UK". Supports $filter. */
+	    /** The country/region in which the user is located; for example, 'US' or 'UK'. Supports $filter. */
 		country?: string
 
 	    /** The name for the department in which the user works. Supports $filter. */
@@ -1034,14 +1102,16 @@ export interface User extends DirectoryObject {
 	    /** The given name (first name) of the user. Supports $filter. */
 		givenName?: string
 
+	    /** The instant message voice over IP (VOIP) session initiation protocol (SIP) addresses for the user. Read-only. */
 		imAddresses?: string[]
 
-	    /** The user's job title. Supports $filter. */
+	    /** The user’s job title. Supports $filter. */
 		jobTitle?: string
 
+	    /** Used by enterprise applications to determine the legal age group of the user. This property is read-only and calculated based on ageGroup and consentProvidedForMinor properties. Allowed values: null, minorWithOutParentalConsent, minorWithParentalConsent, minorNoParentalConsentRequired, notAdult and adult. Refer to the legal age group property definitions for further information.) */
 		legalAgeGroupClassification?: string
 
-	    /** The SMTP address for the user, for example, "jeff@contoso.onmicrosoft.com". Read-Only. Supports $filter. */
+	    /** The SMTP address for the user, for example, 'jeff@contoso.onmicrosoft.com'. Read-Only. Supports $filter. */
 		mail?: string
 
 	    /** The mail alias for the user. This property must be specified when a user is created. Supports $filter. */
@@ -1050,14 +1120,16 @@ export interface User extends DirectoryObject {
 	    /** The primary cellular telephone number for the user. */
 		mobilePhone?: string
 
+	    /** Contains extensionAttributes 1-15 for the user. Note that the individual extension attributes are neither selectable nor filterable. For an onPremisesSyncEnabled user, this set of properties is mastered on-premises and is read-only. For a cloud-only user (where onPremisesSyncEnabled is false), these properties may be set during creation or update. */
 		onPremisesExtensionAttributes?: OnPremisesExtensionAttributes
 
-	    /** This property is used to associate an on-premises Active Directory user account to their Azure AD user object. This property must be specified when creating a new user account in the Graph if you are using a federated domain for the user's userPrincipalName (UPN) property. Important: The $ and  characters cannot be used when specifying this property. Supports $filter. */
+	    /** This property is used to associate an on-premises Active Directory user account to their Azure AD user object. This property must be specified when creating a new user account in the Graph if you are using a federated domain for the user’s userPrincipalName (UPN) property. Important: The $ and _ characters cannot be used when specifying this property. Supports $filter. */
 		onPremisesImmutableId?: string
 
-	    /** Indicates the last time at which the object was synced with the on-premises directory; for example: "2013-02-16T03:04:54Z". The Timestamp type represents date and time information using ISO 8601 format and is always in UTC time. For example, midnight UTC on Jan 1, 2014 would look like this: '2014-01-01T00:00:00Z'. Read-only. */
+	    /** Indicates the last time at which the object was synced with the on-premises directory; for example: '2013-02-16T03:04:54Z'. The Timestamp type represents date and time information using ISO 8601 format and is always in UTC time. For example, midnight UTC on Jan 1, 2014 would look like this: '2014-01-01T00:00:00Z'. Read-only. */
 		onPremisesLastSyncDateTime?: string
 
+	    /** Errors when using Microsoft synchronization product during provisioning. */
 		onPremisesProvisioningErrors?: OnPremisesProvisioningError[]
 
 	    /** Contains the on-premises security identifier (SID) for the user that was synchronized from on-premises to the cloud. Read-only. */
@@ -1066,16 +1138,19 @@ export interface User extends DirectoryObject {
 	    /** true if this object is synced from an on-premises directory; false if this object was originally synced from an on-premises directory but is no longer synced; null if this object has never been synced from an on-premises directory (default). Read-only */
 		onPremisesSyncEnabled?: boolean
 
+	    /** Contains the on-premises domainFQDN, also called dnsDomainName synchronized from the on-premises directory. The property is only populated for customers who are synchronizing their on-premises directory to Azure Active Directory via Azure AD Connect. Read-only. */
 		onPremisesDomainName?: string
 
+	    /** Contains the on-premises samAccountName synchronized from the on-premises directory. The property is only populated for customers who are synchronizing their on-premises directory to Azure Active Directory via Azure AD Connect. Read-only. */
 		onPremisesSamAccountName?: string
 
+	    /** Contains the on-premises userPrincipalName synchronized from the on-premises directory. The property is only populated for customers who are synchronizing their on-premises directory to Azure Active Directory via Azure AD Connect. Read-only. */
 		onPremisesUserPrincipalName?: string
 
-	    /** Specifies password policies for the user. This value is an enumeration with one possible value being "DisableStrongPassword", which allows weaker passwords than the default policy to be specified. "DisablePasswordExpiration" can also be specified. The two may be specified together; for example: "DisablePasswordExpiration, DisableStrongPassword". */
+	    /** Specifies password policies for the user. This value is an enumeration with one possible value being 'DisableStrongPassword', which allows weaker passwords than the default policy to be specified. 'DisablePasswordExpiration' can also be specified. The two may be specified together; for example: 'DisablePasswordExpiration, DisableStrongPassword'. */
 		passwordPolicies?: string
 
-	    /** Specifies the password profile for the user. The profile contains the user's password. This property is required when a user is created. The password in the profile must satisfy minimum requirements as specified by the passwordPolicies property. By default, a strong password is required. */
+	    /** Specifies the password profile for the user. The profile contains the user’s password. This property is required when a user is created. The password in the profile must satisfy minimum requirements as specified by the passwordPolicies property. By default, a strong password is required. */
 		passwordProfile?: PasswordProfile
 
 	    /** The office location in the user's place of business. */
@@ -1084,13 +1159,13 @@ export interface User extends DirectoryObject {
 	    /** The postal code for the user's postal address. The postal code is specific to the user's country/region. In the United States of America, this attribute contains the ZIP code. */
 		postalCode?: string
 
-	    /** The preferred language for the user. Should follow ISO 639-1 Code; for example "en-US". */
+	    /** The preferred language for the user. Should follow ISO 639-1 Code; for example 'en-US'. */
 		preferredLanguage?: string
 
 	    /** The plans that are provisioned for the user. Read-only. Not nullable. */
 		provisionedPlans?: ProvisionedPlan[]
 
-	    /** For example: ["SMTP: bob@contoso.com", "smtp: bob@sales.contoso.com"] The any operator is required for filter expressions on multi-valued properties. Read-only, Not nullable. Supports $filter. */
+	    /** For example: ['SMTP: bob@contoso.com', 'smtp: bob@sales.contoso.com'] The any operator is required for filter expressions on multi-valued properties. Read-only, Not nullable. Supports $filter. */
 		proxyAddresses?: string[]
 
 	    /** The state or province in the user's address. Supports $filter. */
@@ -1102,13 +1177,13 @@ export interface User extends DirectoryObject {
 	    /** The user's surname (family name or last name). Supports $filter. */
 		surname?: string
 
-	    /** A two letter country code (ISO standard 3166). Required for users that will be assigned licenses due to legal requirement to check for availability of services in countries.  Examples include: "US", "JP", and "GB". Not nullable. Supports $filter. */
+	    /** A two letter country code (ISO standard 3166). Required for users that will be assigned licenses due to legal requirement to check for availability of services in countries.  Examples include: 'US', 'JP', and 'GB'. Not nullable. Supports $filter. */
 		usageLocation?: string
 
-	    /** The user principal name (UPN) of the user. The UPN is an Internet-style login name for the user based on the Internet standard RFC 822. By convention, this should map to the user's email name. The general format is alias@domain, where domain must be present in the tenant's collection of verified domains. This property is required when a user is created. The verified domains for the tenant can be accessed from the verifiedDomains property of organization. Supports $filter and $orderby. */
+	    /** The user principal name (UPN) of the user. The UPN is an Internet-style login name for the user based on the Internet standard RFC 822. By convention, this should map to the user's email name. The general format is alias@domain, where domain must be present in the tenant’s collection of verified domains. This property is required when a user is created. The verified domains for the tenant can be accessed from the verifiedDomains property of organization. Supports $filter and $orderby. */
 		userPrincipalName?: string
 
-	    /** A string value that can be used to classify user types in your directory, such as "Member" and "Guest". Supports $filter. */
+	    /** A string value that can be used to classify user types in your directory, such as 'Member' and 'Guest'. Supports $filter. */
 		userType?: string
 
 	    /** Settings for the primary mailbox of the signed-in user. You can get or update settings for sending automatic replies to incoming messages, locale and time zone. */
@@ -1144,6 +1219,7 @@ export interface User extends DirectoryObject {
 	    /** A list for the user to enumerate their skills. */
 		skills?: string[]
 
+	    /** The limit on the maximum number of devices that the user is permitted to enroll. Allowed values are 5 or 1000. */
 		deviceEnrollmentLimit?: number
 
 	    /** Devices that are owned by the user. Read-only. Nullable. */
@@ -1152,7 +1228,7 @@ export interface User extends DirectoryObject {
 	    /** Devices that are registered for the user. Read-only. Nullable. */
 		registeredDevices?: DirectoryObject[]
 
-	    /** The user or contact that is this user's manager. Read-only. (HTTP Methods: GET, PUT, DELETE.) */
+	    /** The user or contact that is this user’s manager. Read-only. (HTTP Methods: GET, PUT, DELETE.) */
 		manager?: DirectoryObject
 
 	    /** The users and contacts that report to the user. (The users and contacts that have their manager property set to this user.) Read-only. Nullable. */
@@ -1167,11 +1243,13 @@ export interface User extends DirectoryObject {
 	    /** Directory objects that are owned by the user. Read-only. Nullable. */
 		ownedObjects?: DirectoryObject[]
 
+	    /** A collection of this user's license details. Nullable. */
 		licenseDetails?: LicenseDetails[]
 
 	    /** The collection of open extensions defined for the user. Read-only. Nullable. */
 		extensions?: Extension[]
 
+	    /** Read-only. */
 		outlook?: OutlookUser
 
 	    /** The messages in a mailbox or folder. Read-only. Nullable. */
@@ -1195,6 +1273,7 @@ export interface User extends DirectoryObject {
 	    /** The user's events. Default is to show Events under the Default Calendar. Read-only. Nullable. */
 		events?: Event[]
 
+	    /** People that are relevant to the user. Read-only. Nullable. */
 		people?: Person[]
 
 	    /** The user's contacts. Read-only. Nullable. */
@@ -1217,6 +1296,7 @@ export interface User extends DirectoryObject {
 	    /** A collection of drives available for this user. Read-only. */
 		drives?: Drive[]
 
+	    /** Entry-point to the Planner resource that might exist for a user. Read-only. */
 		planner?: PlannerUser
 
 	    /** Read-only. */
@@ -1231,16 +1311,20 @@ export interface User extends DirectoryObject {
 	    /** The list of troubleshooting events for this user. */
 		deviceManagementTroubleshootingEvents?: DeviceManagementTroubleshootingEvent[]
 
+	    /** The user's activities across devices. Read-only. Nullable. */
 		activities?: UserActivity[]
 
 		insights?: OfficeGraphInsights
 
 		settings?: UserSettings
 
+		joinedTeams?: Group[]
+
 }
 
 export interface OutlookUser extends Entity {
 
+	    /** A list of categories defined for the user. */
 		masterCategories?: OutlookCategory[]
 
 }
@@ -1253,13 +1337,13 @@ export interface Message extends OutlookItem {
 	    /** The date and time the message was sent. */
 		sentDateTime?: string
 
-	    /** Indicates whether the message has attachments. This property doesn't include inline attachments, so if a message contains only inline attachments, this property is false. To verify the existence of inline attachments, parse the body property to look for a src attribute, such as <IMG src="cid:image001.jpg@01D26CD8.6C05F070">. */
+	    /** Indicates whether the message has attachments. This property doesn't include inline attachments, so if a message contains only inline attachments, this property is false. To verify the existence of inline attachments, parse the body property to look for a src attribute, such as &amp;lt;IMG src='cid:image001.jpg@01D26CD8.6C05F070'&amp;gt;. */
 		hasAttachments?: boolean
 
 	    /** The message ID in the format specified by RFC2822. */
 		internetMessageId?: string
 
-	    /** The collection of message headers, defined by RFC5322, that provide details of the network path taken by a message from the sender to the recipient. Read-only. */
+	    /** A collection of message headers defined by RFC5322. The set includes message headers indicating the network path taken by a message from the sender to the recipient. It can also contain custom message headers that hold app data for the message. */
 		internetMessageHeaders?: InternetMessageHeader[]
 
 	    /** The subject of the message. */
@@ -1277,10 +1361,10 @@ export interface Message extends OutlookItem {
 	    /** The unique identifier for the message's parent mailFolder. */
 		parentFolderId?: string
 
-	    /** The account that is actually used to generate the message. */
+	    /** The account that is actually used to generate the message. In most cases, this value is the same as the from property. You can set this property to a different value when sending a message from a shared mailbox, or sending a message as a delegate. In any case, the value must correspond to the actual mailbox used. */
 		sender?: Recipient
 
-	    /** The mailbox owner and sender of the message. */
+	    /** The mailbox owner and sender of the message. The value must correspond to the actual mailbox used. */
 		from?: Recipient
 
 	    /** The To: recipients for the message. */
@@ -1316,7 +1400,7 @@ export interface Message extends OutlookItem {
 	    /** The URL to open the message in Outlook Web App.You can append an ispopout argument to the end of the URL to change how the message is displayed. If ispopout is not present or if it is set to 1, then the message is shown in a popout window. If ispopout is set to 0, then the browser will show the message in the Outlook Web App review pane.The message will open in the browser if you are logged in to your mailbox via Outlook Web App. You will be prompted to login if you are not already logged in with the browser.This URL can be accessed from within an iFrame. */
 		webLink?: string
 
-	    /** The classification of the message for the user, based on inferred relevance or importance, or on an explicit override. Possible values are: focused or other. */
+	    /** The classification of the message for the user, based on inferred relevance or importance, or on an explicit override. The possible values are: focused or other. */
 		inferenceClassification?: InferenceClassificationType
 
 	    /** The flag value that indicates the status, start date, due date, or completion date for the message. */
@@ -1458,7 +1542,7 @@ export interface Contact extends OutlookItem {
 	    /** The name the contact is filed under. */
 		fileAs?: string
 
-	    /** The contact's display name. */
+	    /** The contact's display name. You can specify the display name in a create or update operation. Note that later updates to other properties may cause an automatically generated value to overwrite the displayName value you have specified. To preserve a pre-existing value, always include it as displayName in an update operation. */
 		displayName?: string
 
 	    /** The contact's given name. */
@@ -1497,7 +1581,7 @@ export interface Contact extends OutlookItem {
 	    /** The contact's instant messaging (IM) addresses. */
 		imAddresses?: string[]
 
-	    /** The contact's job title. */
+	    /** The contact’s job title. */
 		jobTitle?: string
 
 	    /** The name of the contact's company. */
@@ -1738,14 +1822,16 @@ export interface ManagedDevice extends Entity {
 	    /** Automatically generated name to identify a device. Can be overwritten to a user friendly name. */
 		managedDeviceName?: string
 
-	    /** Indicates the threat state of a device when a Mobile Threat Defense partner is in use by the account and device. Read Only. Possible values are: unknown, activated, deactivated, secured, lowSeverity, mediumSeverity, highSeverity, unresponsive. */
+	    /** Indicates the threat state of a device when a Mobile Threat Defense partner is in use by the account and device. Read Only. Possible values are: unknown, activated, deactivated, secured, lowSeverity, mediumSeverity, highSeverity, unresponsive, compromised, misconfigured. */
 		partnerReportedThreatState?: ManagedDevicePartnerReportedHealthState
 
+	    /** Device configuration states for this device. */
 		deviceConfigurationStates?: DeviceConfigurationState[]
 
 	    /** Device category */
 		deviceCategory?: DeviceCategory
 
+	    /** Device compliance policy states for this device. */
 		deviceCompliancePolicyStates?: DeviceCompliancePolicyState[]
 
 }
@@ -1811,32 +1897,46 @@ export interface DeviceManagementTroubleshootingEvent extends Entity {
 
 export interface UserActivity extends Entity {
 
+	    /** Required. The object containing information to render the activity in the UX. */
 		visualElements?: VisualInfo
 
+	    /** Required. URL for the domain representing the cross-platform identity mapping for the app. Mapping is stored either as a JSON file hosted on the domain or configurable via Windows Dev Center. The JSON file is named cross-platform-app-identifiers and is hosted at root of your HTTPS domain, either at the top level domain or include a sub domain. For example: https://contoso.com or https://myapp.contoso.com but NOT https://myapp.contoso.com/somepath. You must have a unique file and domain (or sub domain) per cross-platform app identity. For example, a separate file and domain is needed for Word vs. PowerPoint. */
 		activitySourceHost?: string
 
+	    /** Required. URL used to launch the activity in the best native experience represented by the appId. Might launch a web-based app if no native app exists. */
 		activationUrl?: string
 
+	    /** Required. The unique activity ID in the context of the app - supplied by caller and immutable thereafter. */
 		appActivityId?: string
 
+	    /** Optional. Short text description of the app used to generate the activity for use in cases when the app is not installed on the user’s local device. */
 		appDisplayName?: string
 
+	    /** Optional. Used in the event the content can be rendered outside of a native or web-based app experience (for example, a pointer to an item in an RSS feed). */
 		contentUrl?: string
 
+	    /** Set by the server. DateTime in UTC when the object was created on the server. */
 		createdDateTime?: string
 
+	    /** Set by the server. DateTime in UTC when the object expired on the server. */
 		expirationDateTime?: string
 
+	    /** Optional. URL used to launch the activity in a web-based app, if available. */
 		fallbackUrl?: string
 
+	    /** Set by the server. DateTime in UTC when the object was modified on the server. */
 		lastModifiedDateTime?: string
 
+	    /** Optional. The timezone in which the user's device used to generate the activity was located at activity creation time; values supplied as Olson IDs in order to support cross-platform representation. */
 		userTimezone?: string
 
+	    /** Optional. A custom piece of data - JSON-LD extensible description of content according to schema.org syntax. */
 		contentInfo?: any
 
+	    /** Set by the server. A status code used to identify valid objects. Values: active, updated, deleted, ignored. */
 		status?: Status
 
+	    /** Optional. NavigationProperty/Containment; navigation property to the activity's historyItems. */
 		historyItems?: ActivityHistoryItem[]
 
 }
@@ -1957,6 +2057,7 @@ export interface SingleValueLegacyExtendedProperty extends Entity {
 
 export interface MultiValueLegacyExtendedProperty extends Entity {
 
+	    /** A collection of property values. */
 		value?: string[]
 
 }
@@ -1997,6 +2098,7 @@ export interface ReferenceAttachment extends Attachment {
 
 export interface OpenTypeExtension extends Extension {
 
+	    /** A unique text identifier for an open type open extension. Required. */
 		extensionName?: string
 
 }
@@ -2046,7 +2148,7 @@ export interface Post extends OutlookItem {
 
 export interface InferenceClassificationOverride extends Entity {
 
-	    /** Specifies how incoming messages from a specific sender should always be classified as. Possible values are: focused, other. */
+	    /** Specifies how incoming messages from a specific sender should always be classified as. The possible values are: focused, other. */
 		classifyAs?: InferenceClassificationType
 
 	    /** The email address information of the sender for whom the override is created. */
@@ -2174,6 +2276,7 @@ export interface DriveItem extends BaseItem {
 	    /** Audio metadata, if the item is an audio file. Read-only. */
 		audio?: Audio
 
+	    /** The content stream, if the item represents a file. */
 		content?: any
 
 	    /** An eTag for the content of the item. This eTag is not changed if only the metadata is changed. Note This property is not returned if the item is a folder. Read-only. */
@@ -2203,6 +2306,7 @@ export interface DriveItem extends BaseItem {
 	    /** Photo metadata, if the item is a photo. Read-only. */
 		photo?: Photo
 
+	    /** Provides information about the published or checked-out state of an item, in locations that support such actions. This property is not returned by default. Read-only. */
 		publication?: PublicationFacet
 
 	    /** Remote item data, if the item is shared from a drive other than the one being accessed. Read-only. */
@@ -2235,6 +2339,7 @@ export interface DriveItem extends BaseItem {
 	    /** Collection containing Item objects for the immediate children of Item. Only items representing folders have children. Read-only. Nullable. */
 		children?: DriveItem[]
 
+	    /** For drives in SharePoint, the associated document library list item. Read-only. Nullable. */
 		listItem?: ListItem
 
 	    /** The set of permissions for the item. Read-only. Nullable. */
@@ -2246,6 +2351,7 @@ export interface DriveItem extends BaseItem {
 	    /** The list of previous versions of the item. For more info, see [getting previous versions][]. Read-only. Nullable. */
 		versions?: DriveItemVersion[]
 
+	    /** For files that are Excel spreadsheets, accesses the workbook API to work with the spreadsheet's contents. Nullable. */
 		workbook?: Workbook
 
 }
@@ -2258,13 +2364,16 @@ export interface List extends BaseItem {
 	    /** Provides additional details about the list. */
 		list?: ListInfo
 
+	    /** Returns identifiers useful for SharePoint REST compatibility. Read-only. */
 		sharepointIds?: SharepointIds
 
 	    /** If present, indicates that this is a system-managed list. Read-only. */
 		system?: SystemFacet
 
+	    /** The collection of field definitions for this list. */
 		columns?: ColumnDefinition[]
 
+	    /** The collection of content types present in this list. */
 		contentTypes?: ContentType[]
 
 	    /** Only present on document libraries. Allows access to the list as a [drive][] resource with [driveItems][driveItem]. */
@@ -2280,11 +2389,13 @@ export interface ListItem extends BaseItem {
 	    /** The content type of this list item */
 		contentType?: ContentTypeInfo
 
+	    /** Returns identifiers useful for SharePoint REST compatibility. Read-only. */
 		sharepointIds?: SharepointIds
 
 	    /** For document libraries, the driveItem relationship exposes the listItem as a [driveItem][] */
 		driveItem?: DriveItem
 
+	    /** The values of the columns set on this list item. */
 		fields?: FieldValueSet
 
 	    /** The list of previous versions of the list item. */
@@ -2294,7 +2405,7 @@ export interface ListItem extends BaseItem {
 
 export interface Permission extends Entity {
 
-	    /** For user type permissions, the details of the users & applications for this permission. Read-only. */
+	    /** For user type permissions, the details of the users &amp; applications for this permission. Read-only. */
 		grantedTo?: IdentitySet
 
 	    /** Provides a reference to the ancestor of the current permission, if it is inherited from an ancestor. Read-only. */
@@ -2306,6 +2417,7 @@ export interface Permission extends Entity {
 	    /** Provides the link details of the current permission, if it is a link type permissions. Read-only. */
 		link?: SharingLink
 
+	    /** The type of permission, e.g. read. See below for the full list of roles. Read-only. */
 		roles?: string[]
 
 	    /** A unique token that can be used to access this shared item via the **shares** API. Read-only. */
@@ -2331,8 +2443,10 @@ export interface ThumbnailSet extends Entity {
 
 export interface DriveItemVersion extends BaseItemVersion {
 
+	    /** The content stream for this version of the item. */
 		content?: any
 
+	    /** Indicates the size of the content stream for this version of the item. */
 		size?: number
 
 }
@@ -2341,10 +2455,13 @@ export interface Workbook extends Entity {
 
 		application?: WorkbookApplication
 
+	    /** Represents a collection of workbook scoped named items (named ranges and constants). Read-only. */
 		names?: WorkbookNamedItem[]
 
+	    /** Represents a collection of tables associated with the workbook. Read-only. */
 		tables?: WorkbookTable[]
 
+	    /** Represents a collection of worksheets associated with the workbook. Read-only. */
 		worksheets?: WorkbookWorksheet[]
 
 		functions?: WorkbookFunctions
@@ -2379,6 +2496,7 @@ export interface SharedDriveItem extends BaseItem {
 	    /** Used to access the underlying listItem */
 		listItem?: ListItem
 
+	    /** Used to access the underlying driveItem. Deprecated -- use driveItem instead. */
 		root?: DriveItem
 
 	    /** Used to access the underlying site */
@@ -2394,68 +2512,96 @@ export interface WorkbookApplication extends Entity {
 
 export interface WorkbookNamedItem extends Entity {
 
+	    /** Represents the comment associated with this name. */
 		comment?: string
 
+	    /** The name of the object. Read-only. */
 		name?: string
 
+	    /** Indicates whether the name is scoped to the workbook or to a specific worksheet. Read-only. */
 		scope?: string
 
+	    /** Indicates what type of reference is associated with the name. The possible values are: String, Integer, Double, Boolean, Range. Read-only. */
 		type?: string
 
+	    /** Represents the formula that the name is defined to refer to. E.g. =Sheet14!$B$2:$H$12, =4.75, etc. Read-only. */
 		value?: any
 
+	    /** Specifies whether the object is visible or not. */
 		visible?: boolean
 
+	    /** Returns the worksheet on which the named item is scoped to. Available only if the item is scoped to the worksheet. Read-only. */
 		worksheet?: WorkbookWorksheet
 
 }
 
 export interface WorkbookTable extends Entity {
 
+	    /** Indicates whether the first column contains special formatting. */
 		highlightFirstColumn?: boolean
 
+	    /** Indicates whether the last column contains special formatting. */
 		highlightLastColumn?: boolean
 
+	    /** Name of the table. */
 		name?: string
 
+	    /** Indicates whether the columns show banded formatting in which odd columns are highlighted differently from even ones to make reading the table easier. */
 		showBandedColumns?: boolean
 
+	    /** Indicates whether the rows show banded formatting in which odd rows are highlighted differently from even ones to make reading the table easier. */
 		showBandedRows?: boolean
 
+	    /** Indicates whether the filter buttons are visible at the top of each column header. Setting this is only allowed if the table contains a header row. */
 		showFilterButton?: boolean
 
+	    /** Indicates whether the header row is visible or not. This value can be set to show or remove the header row. */
 		showHeaders?: boolean
 
+	    /** Indicates whether the total row is visible or not. This value can be set to show or remove the total row. */
 		showTotals?: boolean
 
+	    /** Constant value that represents the Table style. The possible values are: TableStyleLight1 thru TableStyleLight21, TableStyleMedium1 thru TableStyleMedium28, TableStyleStyleDark1 thru TableStyleStyleDark11. A custom user-defined style present in the workbook can also be specified. */
 		style?: string
 
+	    /** Represents a collection of all the columns in the table. Read-only. */
 		columns?: WorkbookTableColumn[]
 
+	    /** Represents a collection of all the rows in the table. Read-only. */
 		rows?: WorkbookTableRow[]
 
+	    /** Represents the sorting for the table. Read-only. */
 		sort?: WorkbookTableSort
 
+	    /** The worksheet containing the current table. Read-only. */
 		worksheet?: WorkbookWorksheet
 
 }
 
 export interface WorkbookWorksheet extends Entity {
 
+	    /** The display name of the worksheet. */
 		name?: string
 
+	    /** The zero-based position of the worksheet within the workbook. */
 		position?: number
 
+	    /** The Visibility of the worksheet. The possible values are: Visible, Hidden, VeryHidden. */
 		visibility?: string
 
+	    /** Returns collection of charts that are part of the worksheet. Read-only. */
 		charts?: WorkbookChart[]
 
+	    /** Returns collection of names that are associated with the worksheet. Read-only. */
 		names?: WorkbookNamedItem[]
 
+	    /** Collection of PivotTables that are part of the worksheet. */
 		pivotTables?: WorkbookPivotTable[]
 
+	    /** Returns sheet protection object for a worksheet. Read-only. */
 		protection?: WorkbookWorksheetProtection
 
+	    /** Collection of tables that are part of the worksheet. Read-only. */
 		tables?: WorkbookTable[]
 
 }
@@ -2466,102 +2612,139 @@ export interface WorkbookFunctions extends Entity {
 
 export interface WorkbookChart extends Entity {
 
+	    /** Represents the height, in points, of the chart object. */
 		height?: number
 
+	    /** The distance, in points, from the left side of the chart to the worksheet origin. */
 		left?: number
 
+	    /** Represents the name of a chart object. */
 		name?: string
 
+	    /** Represents the distance, in points, from the top edge of the object to the top of row 1 (on a worksheet) or the top of the chart area (on a chart). */
 		top?: number
 
+	    /** Represents the width, in points, of the chart object. */
 		width?: number
 
+	    /** Represents chart axes. Read-only. */
 		axes?: WorkbookChartAxes
 
+	    /** Represents the datalabels on the chart. Read-only. */
 		dataLabels?: WorkbookChartDataLabels
 
+	    /** Encapsulates the format properties for the chart area. Read-only. */
 		format?: WorkbookChartAreaFormat
 
+	    /** Represents the legend for the chart. Read-only. */
 		legend?: WorkbookChartLegend
 
+	    /** Represents either a single series or collection of series in the chart. Read-only. */
 		series?: WorkbookChartSeries[]
 
+	    /** Represents the title of the specified chart, including the text, visibility, position and formating of the title. Read-only. */
 		title?: WorkbookChartTitle
 
+	    /** The worksheet containing the current chart. Read-only. */
 		worksheet?: WorkbookWorksheet
 
 }
 
 export interface WorkbookChartAxes extends Entity {
 
+	    /** Represents the category axis in a chart. Read-only. */
 		categoryAxis?: WorkbookChartAxis
 
+	    /** Represents the series axis of a 3-dimensional chart. Read-only. */
 		seriesAxis?: WorkbookChartAxis
 
+	    /** Represents the value axis in an axis. Read-only. */
 		valueAxis?: WorkbookChartAxis
 
 }
 
 export interface WorkbookChartDataLabels extends Entity {
 
+	    /** DataLabelPosition value that represents the position of the data label. The possible values are: None, Center, InsideEnd, InsideBase, OutsideEnd, Left, Right, Top, Bottom, BestFit, Callout. */
 		position?: string
 
+	    /** String representing the separator used for the data labels on a chart. */
 		separator?: string
 
+	    /** Boolean value representing if the data label bubble size is visible or not. */
 		showBubbleSize?: boolean
 
+	    /** Boolean value representing if the data label category name is visible or not. */
 		showCategoryName?: boolean
 
+	    /** Boolean value representing if the data label legend key is visible or not. */
 		showLegendKey?: boolean
 
+	    /** Boolean value representing if the data label percentage is visible or not. */
 		showPercentage?: boolean
 
+	    /** Boolean value representing if the data label series name is visible or not. */
 		showSeriesName?: boolean
 
+	    /** Boolean value representing if the data label value is visible or not. */
 		showValue?: boolean
 
+	    /** Represents the format of chart data labels, which includes fill and font formatting. Read-only. */
 		format?: WorkbookChartDataLabelFormat
 
 }
 
 export interface WorkbookChartAreaFormat extends Entity {
 
+	    /** Represents the fill format of an object, which includes background formatting information. Read-only. */
 		fill?: WorkbookChartFill
 
+	    /** Represents the font attributes (font name, font size, color, etc.) for the current object. Read-only. */
 		font?: WorkbookChartFont
 
 }
 
 export interface WorkbookChartLegend extends Entity {
 
+	    /** Boolean value for whether the chart legend should overlap with the main body of the chart. */
 		overlay?: boolean
 
+	    /** Represents the position of the legend on the chart. The possible values are: Top, Bottom, Left, Right, Corner, Custom. */
 		position?: string
 
+	    /** A boolean value the represents the visibility of a ChartLegend object. */
 		visible?: boolean
 
+	    /** Represents the formatting of a chart legend, which includes fill and font formatting. Read-only. */
 		format?: WorkbookChartLegendFormat
 
 }
 
 export interface WorkbookChartSeries extends Entity {
 
+	    /** Represents the name of a series in a chart. */
 		name?: string
 
+	    /** Represents the formatting of a chart series, which includes fill and line formatting. Read-only. */
 		format?: WorkbookChartSeriesFormat
 
+	    /** Represents a collection of all points in the series. Read-only. */
 		points?: WorkbookChartPoint[]
 
 }
 
 export interface WorkbookChartTitle extends Entity {
 
+	    /** Boolean value representing if the chart title will overlay the chart or not. */
 		overlay?: boolean
 
+	    /** Represents the title text of a chart. */
 		text?: string
 
+	    /** A boolean value the represents the visibility of a chart title object. */
 		visible?: boolean
 
+	    /** Represents the formatting of a chart title, which includes fill and font formatting. Read-only. */
 		format?: WorkbookChartTitleFormat
 
 }
@@ -2572,140 +2755,178 @@ export interface WorkbookChartFill extends Entity {
 
 export interface WorkbookChartFont extends Entity {
 
+	    /** Represents the bold status of font. */
 		bold?: boolean
 
+	    /** HTML color code representation of the text color. E.g. #FF0000 represents Red. */
 		color?: string
 
+	    /** Represents the italic status of the font. */
 		italic?: boolean
 
+	    /** Font name (e.g. 'Calibri') */
 		name?: string
 
+	    /** Size of the font (e.g. 11) */
 		size?: number
 
+	    /** Type of underline applied to the font. The possible values are: None, Single. */
 		underline?: string
 
 }
 
 export interface WorkbookChartAxis extends Entity {
 
+	    /** Represents the interval between two major tick marks. Can be set to a numeric value or an empty string.  The returned value is always a number. */
 		majorUnit?: any
 
+	    /** Represents the maximum value on the value axis.  Can be set to a numeric value or an empty string (for automatic axis values).  The returned value is always a number. */
 		maximum?: any
 
+	    /** Represents the minimum value on the value axis. Can be set to a numeric value or an empty string (for automatic axis values).  The returned value is always a number. */
 		minimum?: any
 
+	    /** Represents the interval between two minor tick marks. 'Can be set to a numeric value or an empty string (for automatic axis values). The returned value is always a number. */
 		minorUnit?: any
 
+	    /** Represents the formatting of a chart object, which includes line and font formatting. Read-only. */
 		format?: WorkbookChartAxisFormat
 
+	    /** Returns a gridlines object that represents the major gridlines for the specified axis. Read-only. */
 		majorGridlines?: WorkbookChartGridlines
 
+	    /** Returns a Gridlines object that represents the minor gridlines for the specified axis. Read-only. */
 		minorGridlines?: WorkbookChartGridlines
 
+	    /** Represents the axis title. Read-only. */
 		title?: WorkbookChartAxisTitle
 
 }
 
 export interface WorkbookChartAxisFormat extends Entity {
 
+	    /** Represents the font attributes (font name, font size, color, etc.) for a chart axis element. Read-only. */
 		font?: WorkbookChartFont
 
+	    /** Represents chart line formatting. Read-only. */
 		line?: WorkbookChartLineFormat
 
 }
 
 export interface WorkbookChartGridlines extends Entity {
 
+	    /** Boolean value representing if the axis gridlines are visible or not. */
 		visible?: boolean
 
+	    /** Represents the formatting of chart gridlines. Read-only. */
 		format?: WorkbookChartGridlinesFormat
 
 }
 
 export interface WorkbookChartAxisTitle extends Entity {
 
+	    /** Represents the axis title. */
 		text?: string
 
+	    /** A boolean that specifies the visibility of an axis title. */
 		visible?: boolean
 
+	    /** Represents the formatting of chart axis title. Read-only. */
 		format?: WorkbookChartAxisTitleFormat
 
 }
 
 export interface WorkbookChartLineFormat extends Entity {
 
+	    /** HTML color code representing the color of lines in the chart. */
 		color?: string
 
 }
 
 export interface WorkbookChartAxisTitleFormat extends Entity {
 
+	    /** Represents the font attributes, such as font name, font size, color, etc. of chart axis title object. Read-only. */
 		font?: WorkbookChartFont
 
 }
 
 export interface WorkbookChartDataLabelFormat extends Entity {
 
+	    /** Represents the fill format of the current chart data label. Read-only. */
 		fill?: WorkbookChartFill
 
+	    /** Represents the font attributes (font name, font size, color, etc.) for a chart data label. Read-only. */
 		font?: WorkbookChartFont
 
 }
 
 export interface WorkbookChartGridlinesFormat extends Entity {
 
+	    /** Represents chart line formatting. Read-only. */
 		line?: WorkbookChartLineFormat
 
 }
 
 export interface WorkbookChartLegendFormat extends Entity {
 
+	    /** Represents the fill format of an object, which includes background formating information. Read-only. */
 		fill?: WorkbookChartFill
 
+	    /** Represents the font attributes such as font name, font size, color, etc. of a chart legend. Read-only. */
 		font?: WorkbookChartFont
 
 }
 
 export interface WorkbookChartPoint extends Entity {
 
+	    /** Returns the value of a chart point. Read-only. */
 		value?: any
 
+	    /** Encapsulates the format properties chart point. Read-only. */
 		format?: WorkbookChartPointFormat
 
 }
 
 export interface WorkbookChartPointFormat extends Entity {
 
+	    /** Represents the fill format of a chart, which includes background formating information. Read-only. */
 		fill?: WorkbookChartFill
 
 }
 
 export interface WorkbookChartSeriesFormat extends Entity {
 
+	    /** Represents the fill format of a chart series, which includes background formating information. Read-only. */
 		fill?: WorkbookChartFill
 
+	    /** Represents line formatting. Read-only. */
 		line?: WorkbookChartLineFormat
 
 }
 
 export interface WorkbookChartTitleFormat extends Entity {
 
+	    /** Represents the fill format of an object, which includes background formatting information. Read-only. */
 		fill?: WorkbookChartFill
 
+	    /** Represents the font attributes (font name, font size, color, etc.) for the current object. Read-only. */
 		font?: WorkbookChartFont
 
 }
 
 export interface WorkbookFilter extends Entity {
 
+	    /** The currently applied filter on the given column. Read-only. */
 		criteria?: WorkbookFilterCriteria
 
 }
 
 export interface WorkbookFormatProtection extends Entity {
 
+	    /** Indicates if Excel hides the formula for the cells in the range. A null value indicates that the entire range doesn't have uniform formula hidden setting. */
 		formulaHidden?: boolean
 
+	    /** Indicates if Excel locks the cells in the object. A null value indicates that the entire range doesn't have uniform lock setting. */
 		locked?: boolean
 
 }
@@ -2730,66 +2951,95 @@ export interface WorkbookPivotTable extends Entity {
 
 export interface WorkbookRange extends Entity {
 
+	    /** Represents the range reference in A1-style. Address value will contain the Sheet reference (e.g. Sheet1!A1:B4). Read-only. */
 		address?: string
 
+	    /** Represents range reference for the specified range in the language of the user. Read-only. */
 		addressLocal?: string
 
+	    /** Number of cells in the range. Read-only. */
 		cellCount?: number
 
+	    /** Represents the total number of columns in the range. Read-only. */
 		columnCount?: number
 
+	    /** Represents if all columns of the current range are hidden. */
 		columnHidden?: boolean
 
+	    /** Represents the column number of the first cell in the range. Zero-indexed. Read-only. */
 		columnIndex?: number
 
+	    /** Represents the formula in A1-style notation. */
 		formulas?: any
 
+	    /** Represents the formula in A1-style notation, in the user's language and number-formatting locale.  For example, the English '=SUM(A1, 1.5)' formula would become '=SUMME(A1; 1,5)' in German. */
 		formulasLocal?: any
 
+	    /** Represents the formula in R1C1-style notation. */
 		formulasR1C1?: any
 
+	    /** Represents if all cells of the current range are hidden. Read-only. */
 		hidden?: boolean
 
+	    /** Represents Excel's number format code for the given cell. */
 		numberFormat?: any
 
+	    /** Returns the total number of rows in the range. Read-only. */
 		rowCount?: number
 
+	    /** Represents if all rows of the current range are hidden. */
 		rowHidden?: boolean
 
+	    /** Returns the row number of the first cell in the range. Zero-indexed. Read-only. */
 		rowIndex?: number
 
+	    /** Text values of the specified range. The Text value will not depend on the cell width. The # sign substitution that happens in Excel UI will not affect the text value returned by the API. Read-only. */
 		text?: any
 
+	    /** Represents the type of data of each cell. The possible values are: Unknown, Empty, String, Integer, Double, Boolean, Error. Read-only. */
 		valueTypes?: any
 
+	    /** Represents the raw values of the specified range. The data returned could be of type string, number, or a boolean. Cell that contain an error will return the error string. */
 		values?: any
 
+	    /** Returns a format object, encapsulating the range's font, fill, borders, alignment, and other properties. Read-only. */
 		format?: WorkbookRangeFormat
 
+	    /** The worksheet containing the current range. Read-only. */
 		sort?: WorkbookRangeSort
 
+	    /** The worksheet containing the current range. Read-only. */
 		worksheet?: WorkbookWorksheet
 
 }
 
 export interface WorkbookRangeFormat extends Entity {
 
+	    /** Gets or sets the width of all colums within the range. If the column widths are not uniform, null will be returned. */
 		columnWidth?: number
 
+	    /** Represents the horizontal alignment for the specified object. The possible values are: General, Left, Center, Right, Fill, Justify, CenterAcrossSelection, Distributed. */
 		horizontalAlignment?: string
 
+	    /** Gets or sets the height of all rows in the range. If the row heights are not uniform null will be returned. */
 		rowHeight?: number
 
+	    /** Represents the vertical alignment for the specified object. The possible values are: Top, Center, Bottom, Justify, Distributed. */
 		verticalAlignment?: string
 
+	    /** Indicates if Excel wraps the text in the object. A null value indicates that the entire range doesn't have uniform wrap setting */
 		wrapText?: boolean
 
+	    /** Collection of border objects that apply to the overall range selected Read-only. */
 		borders?: WorkbookRangeBorder[]
 
+	    /** Returns the fill object defined on the overall range. Read-only. */
 		fill?: WorkbookRangeFill
 
+	    /** Returns the font object defined on the overall range selected Read-only. */
 		font?: WorkbookRangeFont
 
+	    /** Returns the format protection object for a range. Read-only. */
 		protection?: WorkbookFormatProtection
 
 }
@@ -2800,40 +3050,52 @@ export interface WorkbookRangeSort extends Entity {
 
 export interface WorkbookRangeBorder extends Entity {
 
+	    /** HTML color code representing the color of the border line, of the form #RRGGBB (e.g. 'FFA500') or as a named HTML color (e.g. 'orange'). */
 		color?: string
 
+	    /** Constant value that indicates the specific side of the border. The possible values are: EdgeTop, EdgeBottom, EdgeLeft, EdgeRight, InsideVertical, InsideHorizontal, DiagonalDown, DiagonalUp. Read-only. */
 		sideIndex?: string
 
+	    /** One of the constants of line style specifying the line style for the border. The possible values are: None, Continuous, Dash, DashDot, DashDotDot, Dot, Double, SlantDashDot. */
 		style?: string
 
+	    /** Specifies the weight of the border around a range. The possible values are: Hairline, Thin, Medium, Thick. */
 		weight?: string
 
 }
 
 export interface WorkbookRangeFill extends Entity {
 
+	    /** HTML color code representing the color of the border line, of the form #RRGGBB (e.g. 'FFA500') or as a named HTML color (e.g. 'orange') */
 		color?: string
 
 }
 
 export interface WorkbookRangeFont extends Entity {
 
+	    /** Represents the bold status of font. */
 		bold?: boolean
 
+	    /** HTML color code representation of the text color. E.g. #FF0000 represents Red. */
 		color?: string
 
+	    /** Represents the italic status of the font. */
 		italic?: boolean
 
+	    /** Font name (e.g. 'Calibri') */
 		name?: string
 
+	    /** Font size. */
 		size?: number
 
+	    /** Type of underline applied to the font. The possible values are: None, Single, Double, SingleAccountant, DoubleAccountant. */
 		underline?: string
 
 }
 
 export interface WorkbookRangeView extends Entity {
 
+	    /** Represents the cell addresses */
 		cellAddresses?: any
 
 	    /** Returns the number of visible columns. Read-only. */
@@ -2842,7 +3104,7 @@ export interface WorkbookRangeView extends Entity {
 	    /** Represents the formula in A1-style notation. */
 		formulas?: any
 
-	    /** Represents the formula in A1-style notation, in the user's language and number-formatting locale. For example, the English "=SUM(A1, 1.5)" formula would become "=SUMME(A1; 1,5)" in German. */
+	    /** Represents the formula in A1-style notation, in the user's language and number-formatting locale. For example, the English '=SUM(A1, 1.5)' formula would become '=SUMME(A1; 1,5)' in German. */
 		formulasLocal?: any
 
 	    /** Represents the formula in R1C1-style notation. */
@@ -2860,7 +3122,7 @@ export interface WorkbookRangeView extends Entity {
 	    /** Text values of the specified range. The Text value will not depend on the cell width. The # sign substitution that happens in Excel UI will not affect the text value returned by the API. Read-only. */
 		text?: any
 
-	    /** Represents the type of data of each cell. Read-only. Possible values are: Unknown, Empty, String, Integer, Double, Boolean, Error. */
+	    /** Represents the type of data of each cell. Read-only. The possible values are: Unknown, Empty, String, Integer, Double, Boolean, Error. */
 		valueTypes?: any
 
 	    /** Represents the raw values of the specified range view. The data returned could be of type string, number, or a boolean. Cell that contain an error will return the error string. */
@@ -2873,85 +3135,105 @@ export interface WorkbookRangeView extends Entity {
 
 export interface WorkbookTableColumn extends Entity {
 
+	    /** Returns the index number of the column within the columns collection of the table. Zero-indexed. Read-only. */
 		index?: number
 
+	    /** Returns the name of the table column. Read-only. */
 		name?: string
 
+	    /** Represents the raw values of the specified range. The data returned could be of type string, number, or a boolean. Cell that contain an error will return the error string. */
 		values?: any
 
+	    /** Retrieve the filter applied to the column. Read-only. */
 		filter?: WorkbookFilter
 
 }
 
 export interface WorkbookTableRow extends Entity {
 
+	    /** Returns the index number of the row within the rows collection of the table. Zero-indexed. Read-only. */
 		index?: number
 
+	    /** Represents the raw values of the specified range. The data returned could be of type string, number, or a boolean. Cell that contain an error will return the error string. */
 		values?: any
 
 }
 
 export interface WorkbookTableSort extends Entity {
 
+	    /** Represents the current conditions used to last sort the table. Read-only. */
 		fields?: WorkbookSortField[]
 
+	    /** Represents whether the casing impacted the last sort of the table. Read-only. */
 		matchCase?: boolean
 
+	    /** Represents Chinese character ordering method last used to sort the table. The possible values are: PinYin, StrokeCount. Read-only. */
 		method?: string
 
 }
 
 export interface WorkbookWorksheetProtection extends Entity {
 
+	    /** Sheet protection options. Read-only. */
 		options?: WorkbookWorksheetProtectionOptions
 
+	    /** Indicates if the worksheet is protected.  Read-only. */
 		protected?: boolean
 
 }
 
 export interface Subscription extends Entity {
 
-	    /** Specifies the resource that will be monitored for changes. Do not include the base URL (https://graph.microsoft.com/{version}/). */
+	    /** Required. Specifies the resource that will be monitored for changes. Do not include the base URL (https://graph.microsoft.com/v1.0/). */
 		resource?: string
 
-	    /** Indicates the type of change in the subscribed resource that will raise a notification. The supported values are: created, updated, deleted. Multiple values can be combined using a comma-separated list. Drive root Item notifications require the use of updated only. */
+	    /** Required. Indicates the type of change in the subscribed resource that will raise a notification. The supported values are: created, updated, deleted. Multiple values can be combined using a comma-separated list.Note: Drive root item notifications support only the updated changeType. User and group notifications support updated and deleted changeType. */
 		changeType?: string
 
-	    /** Specifies the value of the clientState property sent by the service in each notification. The maximum length is 255 characters. The client can check that the notification came from the service by comparing the value of the clientState property sent with the subscription with the value of the clientState property received with each notification. */
+	    /** Optional. Specifies the value of the clientState property sent by the service in each notification. The maximum length is 128 characters. The client can check that the notification came from the service by comparing the value of the clientState property sent with the subscription with the value of the clientState property received with each notification. */
 		clientState?: string
 
-	    /** The URL of the endpoint that will receive the notifications. This URL has to make use of the HTTPS protocol. */
+	    /** Required. The URL of the endpoint that will receive the notifications. This URL must make use of the HTTPS protocol. */
 		notificationUrl?: string
 
-	    /** Specifies the date and time when the webhook subscription expires. The time is in UTC, and can be an amount of time from subscription creation that varies for the resource subscribed to.  See the table below for maximum supported subscription length of time. */
+	    /** Required. Specifies the date and time when the webhook subscription expires. The time is in UTC, and can be an amount of time from subscription creation that varies for the resource subscribed to.  See the table below for maximum supported subscription length of time. */
 		expirationDateTime?: string
 
-	    /** Identifier of the application used to create the subscription. */
+	    /** Identifier of the application used to create the subscription. Read-only. */
 		applicationId?: string
 
-	    /** Identifier of the user or service principal that created the subscription.If the app used delegated permissions to create the subscription, this field contains the id of the signed-in user the app called on behalf of.If the app used application permissions, this field contains the id of the service principal corresponding to the app. */
+	    /** Identifier of the user or service principal that created the subscription. If the app used delegated permissions to create the subscription, this field contains the id of the signed-in user the app called on behalf of. If the app used application permissions, this field contains the id of the service principal corresponding to the app. Read-only. */
 		creatorId?: string
 
 }
 
 export interface Invitation extends Entity {
 
+	    /** The display name of the user being invited. */
 		invitedUserDisplayName?: string
 
+	    /** The userType of the user being invited. By default, this is Guest. You can invite as Member if you are a company administrator. */
 		invitedUserType?: string
 
+	    /** The email address of the user being invited. Required. */
 		invitedUserEmailAddress?: string
 
+	    /** Additional configuration for the message being sent to the invited user, including customizing message text, language and cc recipient list. */
 		invitedUserMessageInfo?: InvitedUserMessageInfo
 
+	    /** Indicates whether an email should be sent to the user being invited or not. The default is false. */
 		sendInvitationMessage?: boolean
 
+	    /** The URL user should be redirected to once the invitation is redeemed. Required. */
 		inviteRedirectUrl?: string
 
+	    /** The URL user can use to redeem his invitation. Read-Only */
 		inviteRedeemUrl?: string
 
+	    /** The status of the invitation. Possible values: PendingAcceptance, Completed, InProgress, and Error */
 		status?: string
 
+	    /** The user created as part of the invitation creation. Read-Only */
 		invitedUser?: User
 
 }
@@ -2964,7 +3246,7 @@ export interface PlannerTask extends Entity {
 	    /** Plan ID to which the task belongs. */
 		planId?: string
 
-	    /** Bucket ID to which the task belongs. The bucket needs to be in the plan that the task is in. It is 28 characters long and case sensitive. Format validation is done on the service. */
+	    /** Bucket ID to which the task belongs. The bucket needs to be in the plan that the task is in. It is 28 characters long and case-sensitive. Format validation is done on the service. */
 		bucketId?: string
 
 	    /** Title of the task. */
@@ -2991,7 +3273,7 @@ export interface PlannerTask extends Entity {
 	    /** Read-only. Value is true if the details object of the task has a non-empty description and false otherwise. */
 		hasDescription?: boolean
 
-	    /** This sets the type of preview that shows up on the task. Possible values are: automatic, noPreview, checklist, description, reference. */
+	    /** This sets the type of preview that shows up on the task. The possible values are: automatic, noPreview, checklist, description, reference. */
 		previewType?: PlannerPreviewType
 
 	    /** Read-only. Date and time at which the 'percentComplete' of the task is set to '100'. The Timestamp type represents date and time information using ISO 8601 format and is always in UTC time. For example, midnight UTC on Jan 1, 2014 would look like this: '2014-01-01T00:00:00Z' */
@@ -3040,7 +3322,7 @@ export interface PlannerPlan extends Entity {
 	    /** Read-only. Date and time at which the plan is created. The Timestamp type represents date and time information using ISO 8601 format and is always in UTC time. For example, midnight UTC on Jan 1, 2014 would look like this: '2014-01-01T00:00:00Z' */
 		createdDateTime?: string
 
-	    /** ID of the Group that owns the plan. A valid group must exist before this field can be set. Once set, this can only be updated by the owner. */
+	    /** ID of the Group that owns the plan. A valid group must exist before this field can be set. After it is set, this property can’t be updated. */
 		owner?: string
 
 	    /** Required. Title of the plan. */
@@ -3091,7 +3373,7 @@ export interface PlannerTaskDetails extends Entity {
 	    /** Description of the task */
 		description?: string
 
-	    /** This sets the type of preview that shows up on the task. Possible values are: automatic, noPreview, checklist, description, reference. When set to automatic the displayed preview is chosen by the app viewing the task. */
+	    /** This sets the type of preview that shows up on the task. The possible values are: automatic, noPreview, checklist, description, reference. When set to automatic the displayed preview is chosen by the app viewing the task. */
 		previewType?: PlannerPreviewType
 
 	    /** The collection of references on the task. */
@@ -3138,24 +3420,30 @@ export interface PlannerPlanDetails extends Entity {
 
 export interface OnenoteEntityBaseModel extends Entity {
 
+	    /** The endpoint where you can get details about the page. Read-only. */
 		self?: string
 
 }
 
 export interface OnenoteEntitySchemaObjectModel extends OnenoteEntityBaseModel {
 
+	    /** The date and time when the page was created. The timestamp represents date and time information using ISO 8601 format and is always in UTC time. For example, midnight UTC on Jan 1, 2014 would look like this: '2014-01-01T00:00:00Z'. Read-only. */
 		createdDateTime?: string
 
 }
 
 export interface OnenoteEntityHierarchyModel extends OnenoteEntitySchemaObjectModel {
 
+	    /** The name of the notebook. */
 		displayName?: string
 
+	    /** Identity of the user, device, and application which created the item. Read-only. */
 		createdBy?: IdentitySet
 
+	    /** Identity of the user, device, and application which created the item. Read-only. */
 		lastModifiedBy?: IdentitySet
 
+	    /** The date and time when the notebook was last modified. The timestamp represents date and time information using ISO 8601 format and is always in UTC time. For example, midnight UTC on Jan 1, 2014 would look like this: '2014-01-01T00:00:00Z'. Read-only. */
 		lastModifiedDateTime?: string
 
 }
@@ -3212,16 +3500,22 @@ export interface OnenoteSection extends OnenoteEntityHierarchyModel {
 
 export interface SectionGroup extends OnenoteEntityHierarchyModel {
 
+	    /** The URL for the sections navigation property, which returns all the sections in the section group. Read-only. */
 		sectionsUrl?: string
 
+	    /** The URL for the sectionGroups navigation property, which returns all the section groups in the section group. Read-only. */
 		sectionGroupsUrl?: string
 
+	    /** The notebook that contains the section group. Read-only. */
 		parentNotebook?: Notebook
 
+	    /** The section group that contains the section group. Read-only. */
 		parentSectionGroup?: SectionGroup
 
+	    /** The sections in the section group. Read-only. Nullable. */
 		sections?: OnenoteSection[]
 
+	    /** The section groups in the section. Read-only. Nullable. */
 		sectionGroups?: SectionGroup[]
 
 }
@@ -3264,18 +3558,23 @@ export interface OnenotePage extends OnenoteEntitySchemaObjectModel {
 
 export interface OnenoteResource extends OnenoteEntityBaseModel {
 
+	    /** The content stream */
 		content?: any
 
+	    /** The URL for downloading the content */
 		contentUrl?: string
 
 }
 
 export interface Operation extends Entity {
 
+	    /** The current status of the operation: notStarted, running, completed, failed */
 		status?: OperationStatus
 
+	    /** The start time of the operation. */
 		createdDateTime?: string
 
+	    /** The time of the last action of the operation. */
 		lastActionDateTime?: string
 
 }
@@ -3306,12 +3605,16 @@ export interface AdministrativeUnit extends DirectoryObject {
 
 export interface EducationRoot extends Entity {
 
+	    /** Read-only. Nullable. */
 		classes?: EducationClass[]
 
+	    /** Read-only. Nullable. */
 		schools?: EducationSchool[]
 
+	    /** Read-only. Nullable. */
 		users?: EducationUser[]
 
+	    /** Read-only. Nullable. */
 		me?: EducationUser
 
 }
@@ -3339,7 +3642,7 @@ export interface EducationClass extends Entity {
 	    /** ID of the class from the syncing system. */
 		externalId?: string
 
-	    /** How this class was created. Possible values are: sis, manual, unknownFutureValue. */
+	    /** How this class was created. The possible values are: sis, manual, unknownFutureValue. */
 		externalSource?: EducationExternalSource
 
 	    /** Term for this class. */
@@ -3354,16 +3657,20 @@ export interface EducationClass extends Entity {
 	    /** All teachers in the class. Nullable. */
 		teachers?: EducationUser[]
 
+	    /** The directory group corresponding to this class. */
 		group?: Group
 
 }
 
 export interface EducationOrganization extends Entity {
 
+	    /** Organization display name. */
 		displayName?: string
 
+	    /** Organization description. */
 		description?: string
 
+	    /** Source where this organization was created from. The possible values are: sis, manual, unknownFutureValue. */
 		externalSource?: EducationExternalSource
 
 }
@@ -3413,13 +3720,13 @@ export interface EducationSchool extends EducationOrganization {
 
 export interface EducationUser extends Entity {
 
-	    /** Default role for a user. The user's role might be different in an individual class. Possible values are: student, teacher, enum_sentinel. Supports $filter. */
+	    /** Default role for a user. The user's role might be different in an individual class. The possible values are: student, teacher, unknownFutureValue. Supports $filter. */
 		primaryRole?: EducationUserRole
 
 	    /** The middle name of user. */
 		middleName?: string
 
-	    /** Where this user was created from. Possible values are: sis, manual, unkownFutureValue. */
+	    /** Where this user was created from. The possible values are: sis, manual, unkownFutureValue. */
 		externalSource?: EducationExternalSource
 
 	    /** Address where user lives. */
@@ -3439,14 +3746,19 @@ export interface EducationUser extends Entity {
 
 		relatedContacts?: EducationRelatedContact[]
 
+	    /** True if the account is enabled; otherwise, false. This property is required when a user is created. Supports $filter. */
 		accountEnabled?: boolean
 
+	    /** The licenses that are assigned to the user. Not nullable. */
 		assignedLicenses?: AssignedLicense[]
 
+	    /** The plans that are assigned to the user. Read-only. Not nullable. */
 		assignedPlans?: AssignedPlan[]
 
+	    /** The telephone numbers for the user. Note: Although this is a string collection, only one number can be set for this property. */
 		businessPhones?: string[]
 
+	    /** The name for the department in which the user works. Supports $filter. */
 		department?: string
 
 	    /** The name displayed in the address book for the user. This is usually the combination of the user's first name, middle initial, and last name. This property is required when a user is created and it cannot be cleared during updates. Supports $filter and $orderby. */
@@ -3455,22 +3767,27 @@ export interface EducationUser extends Entity {
 	    /** The given name (first name) of the user. Supports $filter. */
 		givenName?: string
 
-	    /** The SMTP address for the user; for example, "jeff@contoso.onmicrosoft.com". Read-Only. Supports $filter. */
+	    /** The SMTP address for the user; for example, 'jeff@contoso.onmicrosoft.com'. Read-Only. Supports $filter. */
 		mail?: string
 
+	    /** The mail alias for the user. This property must be specified when a user is created. Supports $filter. */
 		mailNickname?: string
 
 	    /** The primary cellular telephone number for the user. */
 		mobilePhone?: string
 
+	    /** Specifies password policies for the user. This value is an enumeration with one possible value being 'DisableStrongPassword', which allows weaker passwords than the default policy to be specified. 'DisablePasswordExpiration' can also be specified. The two can be specified together; for example: 'DisablePasswordExpiration, DisableStrongPassword'. */
 		passwordPolicies?: string
 
+	    /** Specifies the password profile for the user. The profile contains the user’s password. This property is required when a user is created. The password in the profile must satisfy minimum requirements as specified by the passwordPolicies property. By default, a strong password is required. */
 		passwordProfile?: PasswordProfile
 
 		officeLocation?: string
 
+	    /** The preferred language for the user. Should follow ISO 639-1 Code; for example, 'en-US'. */
 		preferredLanguage?: string
 
+	    /** The plans that are provisioned for the user. Read-only. Not nullable. */
 		provisionedPlans?: ProvisionedPlan[]
 
 		refreshTokensValidFromDateTime?: string
@@ -3480,10 +3797,13 @@ export interface EducationUser extends Entity {
 	    /** The user's surname (family name or last name). Supports $filter. */
 		surname?: string
 
+	    /** A two-letter country code (ISO standard 3166). Required for users who will be assigned licenses due to a legal requirement to check for availability of services in countries or regions. Examples include: 'US', 'JP', and 'GB'. Not nullable. Supports $filter. */
 		usageLocation?: string
 
+	    /** The user principal name (UPN) of the user. The UPN is an Internet-style login name for the user based on the Internet standard RFC 822. By convention, this should map to the user's email name. The general format is alias@domain, where domain must be present in the tenant’s collection of verified domains. This property is required when a user is created. The verified domains for the tenant can be accessed from the verifiedDomains property of organization. Supports $filter and $orderby. */
 		userPrincipalName?: string
 
+	    /** A string value that can be used to classify user types in your directory, such as 'Member' and 'Guest'. Supports $filter. */
 		userType?: string
 
 	    /** Schools to which the user belongs. Nullable. */
@@ -3492,6 +3812,7 @@ export interface EducationUser extends Entity {
 	    /** Classes to which the user belongs. Nullable. */
 		classes?: EducationClass[]
 
+	    /** The directory user corresponding to this user. */
 		user?: User
 
 }
@@ -3504,7 +3825,7 @@ export interface DeviceAppManagement extends Entity {
 	    /** Whether the account is enabled for syncing applications from the Microsoft Store for Business. */
 		isEnabledForMicrosoftStoreForBusiness?: boolean
 
-	    /** The locale information used to sync applications from the Microsoft Store for Business. Cultures that are specific to a country/region. The names of these cultures follow RFC 4646 (Windows Vista and later). The format is -<country/regioncode2>, where  is a lowercase two-letter code derived from ISO 639-1 and <country/regioncode2> is an uppercase two-letter code derived from ISO 3166. For example, en-US for English (United States) is a specific culture. */
+	    /** The locale information used to sync applications from the Microsoft Store for Business. Cultures that are specific to a country/region. The names of these cultures follow RFC 4646 (Windows Vista and later). The format is -&amp;lt;country/regioncode2&amp;gt;, where  is a lowercase two-letter code derived from ISO 639-1 and &amp;lt;country/regioncode2&amp;gt; is an uppercase two-letter code derived from ISO 3166. For example, en-US for English (United States) is a specific culture. */
 		microsoftStoreForBusinessLanguage?: string
 
 	    /** The last time an application sync from the Microsoft Store for Business was completed. */
@@ -3525,6 +3846,7 @@ export interface DeviceAppManagement extends Entity {
 	    /** Managed app policies. */
 		managedAppPolicies?: ManagedAppPolicy[]
 
+	    /** iOS managed app policies. */
 		iosManagedAppProtections?: IosManagedAppProtection[]
 
 	    /** Android managed app policies. */
@@ -3672,7 +3994,7 @@ export interface VppToken extends Entity {
 	    /** Last modification date time associated with the Apple Volume Purchase Program Token. */
 		lastModifiedDateTime?: string
 
-	    /** Current state of the Apple Volume Purchase Program Token. Possible values are: unknown, valid, expired, invalid. Possible values are: unknown, valid, expired, invalid. */
+	    /** Current state of the Apple Volume Purchase Program Token. Possible values are: unknown, valid, expired, invalid, assignedToExternalMDM. Possible values are: unknown, valid, expired, invalid, assignedToExternalMDM. */
 		state?: VppTokenState
 
 	    /** Current sync status of the last application sync which was triggered using the Apple Volume Purchase Program Token. Possible values are: none, inProgress, completed, failed. Possible values are: none, inProgress, completed, failed. */
@@ -3734,7 +4056,7 @@ export interface ManagedAppProtection extends ManagedAppPolicy {
 	    /** Indicates whether internet links should be opened in the managed browser app. */
 		managedBrowserToOpenLinksRequired?: boolean
 
-	    /** Indicates whether users may use the "Save As" menu item to save a copy of protected files. */
+	    /** Indicates whether users may use the 'Save As' menu item to save a copy of protected files. */
 		saveAsBlocked?: boolean
 
 	    /** The amount of time an app is allowed to remain disconnected from the internet before all managed data it is wiped. */
@@ -3852,16 +4174,16 @@ export interface DefaultManagedAppProtection extends ManagedAppProtection {
 	    /** Type of encryption which should be used for data in a managed app. (iOS Only). Possible values are: useDeviceSettings, afterDeviceRestart, whenDeviceLockedExceptOpenFiles, whenDeviceLocked. */
 		appDataEncryptionType?: ManagedAppDataEncryptionType
 
-	    /** Indicates whether screen capture is blocked. */
+	    /** Indicates whether screen capture is blocked. (Android only) */
 		screenCaptureBlocked?: boolean
 
 	    /** Indicates whether managed-app data should be encrypted. (Android only) */
 		encryptAppData?: boolean
 
-	    /** When this setting is enabled, app level encryption is disabled if device level encryption is enabled */
+	    /** When this setting is enabled, app level encryption is disabled if device level encryption is enabled. (Android only) */
 		disableAppEncryptionIfDeviceEncryptionIsEnabled?: boolean
 
-	    /** Versions less than the specified version will block the managed app from accessing company data. */
+	    /** Versions less than the specified version will block the managed app from accessing company data. (iOS Only) */
 		minimumRequiredSdkVersion?: string
 
 	    /** A set of string key and string value pairs to be sent to the affected users, unalterned by this service */
@@ -3870,13 +4192,13 @@ export interface DefaultManagedAppProtection extends ManagedAppProtection {
 	    /** Count of apps to which the current policy is deployed. */
 		deployedAppCount?: number
 
-	    /** Define the oldest required Android security patch level a user can have to gain secure access to the app. */
+	    /** Define the oldest required Android security patch level a user can have to gain secure access to the app. (Android only) */
 		minimumRequiredPatchVersion?: string
 
-	    /** Define the oldest recommended Android security patch level a user can have for secure access to the app. */
+	    /** Define the oldest recommended Android security patch level a user can have for secure access to the app. (Android only) */
 		minimumWarningPatchVersion?: string
 
-	    /** Indicates whether use of the FaceID is allowed in place of a pin if PinRequired is set to True. */
+	    /** Indicates whether use of the FaceID is allowed in place of a pin if PinRequired is set to True. (iOS Only) */
 		faceIdBlocked?: boolean
 
 	    /** List of apps to which the policy is deployed. */
@@ -3963,7 +4285,7 @@ export interface WindowsInformationProtection extends ManagedAppPolicy {
 	    /** This is a list of proxy servers. Any server not on this list is considered non-enterprise */
 		enterpriseProxyServers?: WindowsInformationProtectionResourceCollection[]
 
-	    /** This is the comma-separated list of internal proxy servers. For example, "157.54.14.28, 157.54.11.118, 10.202.14.167, 157.53.14.163, 157.69.210.59". These proxies have been configured by the admin to connect to specific resources on the Internet. They are considered to be enterprise network locations. The proxies are only leveraged in configuring the EnterpriseProxiedDomains policy to force traffic to the matched domains through these proxies */
+	    /** This is the comma-separated list of internal proxy servers. For example, '157.54.14.28, 157.54.11.118, 10.202.14.167, 157.53.14.163, 157.69.210.59'. These proxies have been configured by the admin to connect to specific resources on the Internet. They are considered to be enterprise network locations. The proxies are only leveraged in configuring the EnterpriseProxiedDomains policy to force traffic to the matched domains through these proxies */
 		enterpriseInternalProxyServers?: WindowsInformationProtectionResourceCollection[]
 
 	    /** Boolean value that tells the client to accept the configured list of proxies and not try to detect other work proxies. Default is false */
@@ -4016,7 +4338,7 @@ export interface WindowsInformationProtectionPolicy extends WindowsInformationPr
 	    /** Integer value that configures the use of lowercase letters in the Windows Hello for Business PIN. Default is NotAllow. Possible values are: notAllow, requireAtLeastOne, allow. */
 		pinLowercaseLetters?: WindowsInformationProtectionPinCharacterRequirements
 
-	    /** Integer value that configures the use of special characters in the Windows Hello for Business PIN. Valid special characters for Windows Hello for Business PIN gestures include: ! " # $ % & ' ( )  + , - . / : ; < = > ? @ [ \ ] ^  ` { */
+	    /** Integer value that configures the use of special characters in the Windows Hello for Business PIN. Valid special characters for Windows Hello for Business PIN gestures include: ! ' # $ % &amp; ' ( )  + , - . / : ; &amp;lt; = &amp;gt; ? @ [ / ] ^  ` { */
 		pinSpecialCharacters?: WindowsInformationProtectionPinCharacterRequirements
 
 	    /** Integer value specifies the period of time (in days) that a PIN can be used before the system requires the user to change it. The largest number you can configure for this policy setting is 730. The lowest number you can configure for this policy setting is 0. If this policy is set to 0, then the user's PIN will never expire. This node was added in Windows 10, version 1511. Default is 0. */
@@ -4025,10 +4347,10 @@ export interface WindowsInformationProtectionPolicy extends WindowsInformationPr
 	    /** Integer value that specifies the number of past PINs that can be associated to a user account that can't be reused. The largest number you can configure for this policy setting is 50. The lowest number you can configure for this policy setting is 0. If this policy is set to 0, then storage of previous PINs is not required. This node was added in Windows 10, version 1511. Default is 0. */
 		numberOfPastPinsRemembered?: number
 
-	    /** The number of authentication failures allowed before the device will be wiped. A value of 0 disables device wipe functionality. Range is an integer X where 4 <= X <= 16 for desktop and 0 <= X <= 999 for mobile devices. */
+	    /** The number of authentication failures allowed before the device will be wiped. A value of 0 disables device wipe functionality. Range is an integer X where 4 &amp;lt;= X &amp;lt;= 16 for desktop and 0 &amp;lt;= X &amp;lt;= 999 for mobile devices. */
 		passwordMaximumAttemptCount?: number
 
-	    /** Specifies the maximum amount of time (in minutes) allowed after the device is idle that will cause the device to become PIN or password locked.   Range is an integer X where 0 <= X <= 999. */
+	    /** Specifies the maximum amount of time (in minutes) allowed after the device is idle that will cause the device to become PIN or password locked.   Range is an integer X where 0 &amp;lt;= X &amp;lt;= 999. */
 		minutesOfInactivityBeforeDeviceLock?: number
 
 	    /** Offline interval before app data is wiped (days) */
@@ -4130,6 +4452,107 @@ export interface MobileAppContentFile extends Entity {
 
 	    /** The state of the current upload request. Possible values are: success, transientError, error, unknown, azureStorageUriRequestSuccess, azureStorageUriRequestPending, azureStorageUriRequestFailed, azureStorageUriRequestTimedOut, azureStorageUriRenewalSuccess, azureStorageUriRenewalPending, azureStorageUriRenewalFailed, azureStorageUriRenewalTimedOut, commitFileSuccess, commitFilePending, commitFileFailed, commitFileTimedOut. */
 		uploadState?: MobileAppContentFileUploadState
+
+}
+
+export interface ManagedDeviceMobileAppConfigurationAssignment extends Entity {
+
+	    /** Assignment target that the T&amp;C policy is assigned to. */
+		target?: DeviceAndAppManagementAssignmentTarget
+
+}
+
+export interface ManagedDeviceMobileAppConfigurationDeviceStatus extends Entity {
+
+	    /** Device name of the DevicePolicyStatus. */
+		deviceDisplayName?: string
+
+	    /** The User Name that is being reported */
+		userName?: string
+
+	    /** The device model that is being reported */
+		deviceModel?: string
+
+	    /** The DateTime when device compliance grace period expires */
+		complianceGracePeriodExpirationDateTime?: string
+
+	    /** Compliance status of the policy report. Possible values are: unknown, notApplicable, compliant, remediated, nonCompliant, error, conflict, notAssigned. */
+		status?: ComplianceStatus
+
+	    /** Last modified date time of the policy report. */
+		lastReportedDateTime?: string
+
+	    /** UserPrincipalName. */
+		userPrincipalName?: string
+
+}
+
+export interface ManagedDeviceMobileAppConfigurationUserStatus extends Entity {
+
+	    /** User name of the DevicePolicyStatus. */
+		userDisplayName?: string
+
+	    /** Devices count for that user. */
+		devicesCount?: number
+
+	    /** Compliance status of the policy report. Possible values are: unknown, notApplicable, compliant, remediated, nonCompliant, error, conflict, notAssigned. */
+		status?: ComplianceStatus
+
+	    /** Last modified date time of the policy report. */
+		lastReportedDateTime?: string
+
+	    /** UserPrincipalName. */
+		userPrincipalName?: string
+
+}
+
+export interface ManagedDeviceMobileAppConfigurationDeviceSummary extends Entity {
+
+	    /** Number of pending devices */
+		pendingCount?: number
+
+	    /** Number of not applicable devices */
+		notApplicableCount?: number
+
+	    /** Number of succeeded devices */
+		successCount?: number
+
+	    /** Number of error devices */
+		errorCount?: number
+
+	    /** Number of failed devices */
+		failedCount?: number
+
+	    /** Last update time */
+		lastUpdateDateTime?: string
+
+	    /** Version of the policy for that overview */
+		configurationVersion?: number
+
+}
+
+export interface ManagedDeviceMobileAppConfigurationUserSummary extends Entity {
+
+	    /** Number of pending Users */
+		pendingCount?: number
+
+	    /** Number of not applicable users */
+		notApplicableCount?: number
+
+	    /** Number of succeeded Users */
+		successCount?: number
+
+	    /** Number of error Users */
+		errorCount?: number
+
+	    /** Number of failed Users */
+		failedCount?: number
+
+	    /** Last update time */
+		lastUpdateDateTime?: string
+
+	    /** Version of the policy for that overview */
+		configurationVersion?: number
 
 }
 
@@ -4427,107 +4850,6 @@ export interface IosStoreApp extends MobileApp {
 
 }
 
-export interface ManagedDeviceMobileAppConfigurationDeviceStatus extends Entity {
-
-	    /** Device name of the DevicePolicyStatus. */
-		deviceDisplayName?: string
-
-	    /** The User Name that is being reported */
-		userName?: string
-
-	    /** The device model that is being reported */
-		deviceModel?: string
-
-	    /** The DateTime when device compliance grace period expires */
-		complianceGracePeriodExpirationDateTime?: string
-
-	    /** Compliance status of the policy report. Possible values are: unknown, notApplicable, compliant, remediated, nonCompliant, error, conflict. */
-		status?: ComplianceStatus
-
-	    /** Last modified date time of the policy report. */
-		lastReportedDateTime?: string
-
-	    /** UserPrincipalName. */
-		userPrincipalName?: string
-
-}
-
-export interface ManagedDeviceMobileAppConfigurationUserStatus extends Entity {
-
-	    /** User name of the DevicePolicyStatus. */
-		userDisplayName?: string
-
-	    /** Devices count for that user. */
-		devicesCount?: number
-
-	    /** Compliance status of the policy report. Possible values are: unknown, notApplicable, compliant, remediated, nonCompliant, error, conflict. */
-		status?: ComplianceStatus
-
-	    /** Last modified date time of the policy report. */
-		lastReportedDateTime?: string
-
-	    /** UserPrincipalName. */
-		userPrincipalName?: string
-
-}
-
-export interface ManagedDeviceMobileAppConfigurationAssignment extends Entity {
-
-	    /** Assignment target that the T&C policy is assigned to. */
-		target?: DeviceAndAppManagementAssignmentTarget
-
-}
-
-export interface ManagedDeviceMobileAppConfigurationDeviceSummary extends Entity {
-
-	    /** Number of pending devices */
-		pendingCount?: number
-
-	    /** Number of not applicable devices */
-		notApplicableCount?: number
-
-	    /** Number of succeeded devices */
-		successCount?: number
-
-	    /** Number of error devices */
-		errorCount?: number
-
-	    /** Number of failed devices */
-		failedCount?: number
-
-	    /** Last update time */
-		lastUpdateDateTime?: string
-
-	    /** Version of the policy for that overview */
-		configurationVersion?: number
-
-}
-
-export interface ManagedDeviceMobileAppConfigurationUserSummary extends Entity {
-
-	    /** Number of pending Users */
-		pendingCount?: number
-
-	    /** Number of not applicable devices */
-		notApplicableCount?: number
-
-	    /** Number of succeeded Users */
-		successCount?: number
-
-	    /** Number of error Users */
-		errorCount?: number
-
-	    /** Number of failed Users */
-		failedCount?: number
-
-	    /** Last update time */
-		lastUpdateDateTime?: string
-
-	    /** Version of the policy for that overview */
-		configurationVersion?: number
-
-}
-
 export interface IosMobileAppConfiguration extends ManagedDeviceMobileAppConfiguration {
 
 	    /** mdm app configuration Base64 binary. */
@@ -4540,65 +4862,94 @@ export interface IosMobileAppConfiguration extends ManagedDeviceMobileAppConfigu
 
 export interface DeviceManagement extends Entity {
 
-	    /** Tenant mobile device management subscription state. Possible values are: pending, active, warning, disabled, deleted, blocked, lockedOut. */
+	    /** Tenant mobile device management subscription state. The possible values are: pending, active, warning, disabled, deleted, blocked, lockedOut. */
 		subscriptionState?: DeviceManagementSubscriptionState
 
+	    /** Account level settings. */
 		settings?: DeviceManagementSettings
 
+	    /** intuneBrand contains data which is used in customizing the appearance of the Company Portal applications as well as the end user web portal. */
 		intuneBrand?: IntuneBrand
 
+	    /** The terms and conditions associated with device management of the company. */
 		termsAndConditions?: TermsAndConditions[]
 
+	    /** Apple push notification certificate. */
 		applePushNotificationCertificate?: ApplePushNotificationCertificate
 
+	    /** Device overview */
 		managedDeviceOverview?: ManagedDeviceOverview
 
+	    /** The list of detected apps associated with a device. */
 		detectedApps?: DetectedApp[]
 
+	    /** The list of managed devices. */
 		managedDevices?: ManagedDevice[]
 
+	    /** The device configurations. */
 		deviceConfigurations?: DeviceConfiguration[]
 
+	    /** The device compliance policies. */
 		deviceCompliancePolicies?: DeviceCompliancePolicy[]
 
+	    /** The software update status summary. */
 		softwareUpdateStatusSummary?: SoftwareUpdateStatusSummary
 
+	    /** The device compliance state summary for this account. */
 		deviceCompliancePolicyDeviceStateSummary?: DeviceCompliancePolicyDeviceStateSummary
 
+	    /** The summary states of compliance policy settings for this account. */
 		deviceCompliancePolicySettingStateSummaries?: DeviceCompliancePolicySettingStateSummary[]
 
+	    /** The device configuration device state summary for this account. */
 		deviceConfigurationDeviceStateSummaries?: DeviceConfigurationDeviceStateSummary
 
+	    /** The IOS software update installation statuses for this account. */
 		iosUpdateStatuses?: IosUpdateDeviceStatus[]
 
+	    /** The list of device categories with the tenant. */
 		deviceCategories?: DeviceCategory[]
 
+	    /** The list of Exchange Connectors configured by the tenant. */
 		exchangeConnectors?: DeviceManagementExchangeConnector[]
 
+	    /** The list of device enrollment configurations */
 		deviceEnrollmentConfigurations?: DeviceEnrollmentConfiguration[]
 
+	    /** The Exchange on premises conditional access settings. On premises conditional access will require devices to be both enrolled and compliant for mail access */
 		conditionalAccessSettings?: OnPremisesConditionalAccessSettings
 
+	    /** The list of Mobile threat Defense connectors configured by the tenant. */
 		mobileThreatDefenseConnectors?: MobileThreatDefenseConnector[]
 
+	    /** The list of Device Management Partners configured by the tenant. */
 		deviceManagementPartners?: DeviceManagementPartner[]
 
+	    /** The Notification Message Templates. */
 		notificationMessageTemplates?: NotificationMessageTemplate[]
 
+	    /** The Role Definitions. */
 		roleDefinitions?: RoleDefinition[]
 
+	    /** The Role Assignments. */
 		roleAssignments?: DeviceAndAppManagementRoleAssignment[]
 
+	    /** The Resource Operations. */
 		resourceOperations?: ResourceOperation[]
 
+	    /** The telecom expense management partners. */
 		telecomExpenseManagementPartners?: TelecomExpenseManagementPartner[]
 
+	    /** The remote assist partners. */
 		remoteAssistancePartners?: RemoteAssistancePartner[]
 
+	    /** The windows information protection app learning summaries. */
 		windowsInformationProtectionAppLearningSummaries?: WindowsInformationProtectionAppLearningSummary[]
 
+	    /** The windows information protection network learning summaries. */
 		windowsInformationProtectionNetworkLearningSummaries?: WindowsInformationProtectionNetworkLearningSummary[]
 
+	    /** The list of troubleshooting events for the tenant. */
 		troubleshootingEvents?: DeviceManagementTroubleshootingEvent[]
 
 }
@@ -4611,28 +4962,28 @@ export interface TermsAndConditions extends Entity {
 	    /** DateTime the object was last modified. */
 		lastModifiedDateTime?: string
 
-	    /** Administrator-supplied name for the T&C policy. */
+	    /** Administrator-supplied name for the T&amp;C policy. */
 		displayName?: string
 
-	    /** Administrator-supplied description of the T&C policy. */
+	    /** Administrator-supplied description of the T&amp;C policy. */
 		description?: string
 
-	    /** Administrator-supplied title of the terms and conditions. This is shown to the user on prompts to accept the T&C policy. */
+	    /** Administrator-supplied title of the terms and conditions. This is shown to the user on prompts to accept the T&amp;C policy. */
 		title?: string
 
-	    /** Administrator-supplied body text of the terms and conditions, typically the terms themselves. This is shown to the user on prompts to accept the T&C policy. */
+	    /** Administrator-supplied body text of the terms and conditions, typically the terms themselves. This is shown to the user on prompts to accept the T&amp;C policy. */
 		bodyText?: string
 
-	    /** Administrator-supplied explanation of the terms and conditions, typically describing what it means to accept the terms and conditions set out in the T&C policy. This is shown to the user on prompts to accept the T&C policy. */
+	    /** Administrator-supplied explanation of the terms and conditions, typically describing what it means to accept the terms and conditions set out in the T&amp;C policy. This is shown to the user on prompts to accept the T&amp;C policy. */
 		acceptanceStatement?: string
 
-	    /** Integer indicating the current version of the terms. Incremented when an administrator makes a change to the terms and wishes to require users to re-accept the modified T&C policy. */
+	    /** Integer indicating the current version of the terms. Incremented when an administrator makes a change to the terms and wishes to require users to re-accept the modified T&amp;C policy. */
 		version?: number
 
-	    /** The list of assignments for this T&C policy. */
+	    /** The list of assignments for this T&amp;C policy. */
 		assignments?: TermsAndConditionsAssignment[]
 
-	    /** The list of acceptance statuses for this T&C policy. */
+	    /** The list of acceptance statuses for this T&amp;C policy. */
 		acceptanceStatuses?: TermsAndConditionsAcceptanceStatus[]
 
 }
@@ -4717,7 +5068,7 @@ export interface DeviceConfiguration extends Entity {
 	    /** Device configuration installation status by device. */
 		deviceStatuses?: DeviceConfigurationDeviceStatus[]
 
-	    /** Device configuration installation stauts by user. */
+	    /** Device configuration installation status by user. */
 		userStatuses?: DeviceConfigurationUserStatus[]
 
 	    /** Device Configuration devices status overview */
@@ -4915,7 +5266,7 @@ export interface DeviceConfigurationDeviceStateSummary extends Entity {
 
 export interface IosUpdateDeviceStatus extends Entity {
 
-	    /** The installation status of the policy report. Possible values are: success, available, idle, downloading, downloadFailed, downloadRequiresComputer, downloadInsufficientSpace, downloadInsufficientPower, downloadInsufficientNetwork, installing, installInsufficientSpace, installInsufficientPower, installPhoneCallInProgress, installFailed, notSupportedOperation, sharedDeviceUserLoggedInError. */
+	    /** The installation status of the policy report. Possible values are: success, available, idle, unknown, downloading, downloadFailed, downloadRequiresComputer, downloadInsufficientSpace, downloadInsufficientPower, downloadInsufficientNetwork, installing, installInsufficientSpace, installInsufficientPower, installPhoneCallInProgress, installFailed, notSupportedOperation, sharedDeviceUserLoggedInError. */
 		installStatus?: IosUpdatesInstallStatus
 
 	    /** The device version that is being reported. */
@@ -4939,7 +5290,7 @@ export interface IosUpdateDeviceStatus extends Entity {
 	    /** The DateTime when device compliance grace period expires */
 		complianceGracePeriodExpirationDateTime?: string
 
-	    /** Compliance status of the policy report. Possible values are: unknown, notApplicable, compliant, remediated, nonCompliant, error, conflict. */
+	    /** Compliance status of the policy report. Possible values are: unknown, notApplicable, compliant, remediated, nonCompliant, error, conflict, notAssigned. */
 		status?: ComplianceStatus
 
 	    /** Last modified date time of the policy report. */
@@ -4971,9 +5322,10 @@ export interface DeviceManagementExchangeConnector extends Entity {
 	    /** Email address used to configure the Service To Service Exchange Connector. */
 		primarySmtpAddress?: string
 
-	    /** The name of the server hosting the Exchange Connector. */
+	    /** The name of the Exchange server. */
 		serverName?: string
 
+	    /** The name of the server hosting the Exchange Connector. */
 		connectorServerName?: string
 
 	    /** The type of Exchange Connector Configured. Possible values are: onPremises, hosted, serviceToService, dedicated. */
@@ -5221,7 +5573,7 @@ export interface WindowsInformationProtectionNetworkLearningSummary extends Enti
 
 export interface TermsAndConditionsAssignment extends Entity {
 
-	    /** Assignment target that the T&C policy is assigned to. */
+	    /** Assignment target that the T&amp;C policy is assigned to. */
 		target?: DeviceAndAppManagementAssignmentTarget
 
 }
@@ -5231,7 +5583,7 @@ export interface TermsAndConditionsAcceptanceStatus extends Entity {
 	    /** Display name of the user whose acceptance the entity represents. */
 		userDisplayName?: string
 
-	    /** Most recent version number of the T&C accepted by the user. */
+	    /** Most recent version number of the T&amp;C accepted by the user. */
 		acceptedVersion?: number
 
 	    /** DateTime when the terms were last accepted by the user. */
@@ -5246,14 +5598,19 @@ export interface DeviceConfigurationState extends Entity {
 
 		settingStates?: DeviceConfigurationSettingState[]
 
+	    /** The name of the policy for this policyBase */
 		displayName?: string
 
+	    /** The version of the policy */
 		version?: number
 
+	    /** Platform type that the policy applies to */
 		platformType?: PolicyPlatformType
 
+	    /** The compliance state of the policy */
 		state?: ComplianceStatus
 
+	    /** Count of how many setting a policy holds */
 		settingCount?: number
 
 }
@@ -5262,14 +5619,19 @@ export interface DeviceCompliancePolicyState extends Entity {
 
 		settingStates?: DeviceCompliancePolicySettingState[]
 
+	    /** The name of the policy for this policyBase */
 		displayName?: string
 
+	    /** The version of the policy */
 		version?: number
 
+	    /** Platform type that the policy applies to */
 		platformType?: PolicyPlatformType
 
+	    /** The compliance state of the policy */
 		state?: ComplianceStatus
 
+	    /** Count of how many setting a policy holds */
 		settingCount?: number
 
 }
@@ -5295,7 +5657,7 @@ export interface DeviceConfigurationDeviceStatus extends Entity {
 	    /** The DateTime when device compliance grace period expires */
 		complianceGracePeriodExpirationDateTime?: string
 
-	    /** Compliance status of the policy report. Possible values are: unknown, notApplicable, compliant, remediated, nonCompliant, error, conflict. */
+	    /** Compliance status of the policy report. Possible values are: unknown, notApplicable, compliant, remediated, nonCompliant, error, conflict, notAssigned. */
 		status?: ComplianceStatus
 
 	    /** Last modified date time of the policy report. */
@@ -5314,7 +5676,7 @@ export interface DeviceConfigurationUserStatus extends Entity {
 	    /** Devices count for that user. */
 		devicesCount?: number
 
-	    /** Compliance status of the policy report. Possible values are: unknown, notApplicable, compliant, remediated, nonCompliant, error, conflict. */
+	    /** Compliance status of the policy report. Possible values are: unknown, notApplicable, compliant, remediated, nonCompliant, error, conflict, notAssigned. */
 		status?: ComplianceStatus
 
 	    /** Last modified date time of the policy report. */
@@ -5355,7 +5717,7 @@ export interface DeviceConfigurationUserOverview extends Entity {
 	    /** Number of pending Users */
 		pendingCount?: number
 
-	    /** Number of not applicable devices */
+	    /** Number of not applicable users */
 		notApplicableCount?: number
 
 	    /** Number of succeeded Users */
@@ -5437,7 +5799,7 @@ export interface DeviceComplianceDeviceStatus extends Entity {
 	    /** The DateTime when device compliance grace period expires */
 		complianceGracePeriodExpirationDateTime?: string
 
-	    /** Compliance status of the policy report. Possible values are: unknown, notApplicable, compliant, remediated, nonCompliant, error, conflict. */
+	    /** Compliance status of the policy report. Possible values are: unknown, notApplicable, compliant, remediated, nonCompliant, error, conflict, notAssigned. */
 		status?: ComplianceStatus
 
 	    /** Last modified date time of the policy report. */
@@ -5456,7 +5818,7 @@ export interface DeviceComplianceUserStatus extends Entity {
 	    /** Devices count for that user. */
 		devicesCount?: number
 
-	    /** Compliance status of the policy report. Possible values are: unknown, notApplicable, compliant, remediated, nonCompliant, error, conflict. */
+	    /** Compliance status of the policy report. Possible values are: unknown, notApplicable, compliant, remediated, nonCompliant, error, conflict, notAssigned. */
 		status?: ComplianceStatus
 
 	    /** Last modified date time of the policy report. */
@@ -5497,7 +5859,7 @@ export interface DeviceComplianceUserOverview extends Entity {
 	    /** Number of pending Users */
 		pendingCount?: number
 
-	    /** Number of not applicable devices */
+	    /** Number of not applicable users */
 		notApplicableCount?: number
 
 	    /** Number of succeeded Users */
@@ -5522,7 +5884,7 @@ export interface DeviceComplianceActionItem extends Entity {
 	    /** Number of hours to wait till the action will be enforced. Valid values 0 to 8760 */
 		gracePeriodHours?: number
 
-	    /** What action to take. Possible values are: noAction, notification, block, retire, wipe, removeResourceAccessProfiles. */
+	    /** What action to take. Possible values are: noAction, notification, block, retire, wipe, removeResourceAccessProfiles, pushNotification. */
 		actionType?: DeviceComplianceActionType
 
 	    /** What notification Message template to use */
@@ -5690,78 +6052,113 @@ export interface AndroidGeneralDeviceConfiguration extends DeviceConfiguration {
 
 export interface AndroidWorkProfileCustomConfiguration extends DeviceConfiguration {
 
+	    /** OMA settings. This collection can contain a maximum of 500 elements. */
 		omaSettings?: OmaSetting[]
 
 }
 
 export interface AndroidWorkProfileGeneralDeviceConfiguration extends DeviceConfiguration {
 
+	    /** Indicates whether or not to block fingerprint unlock. */
 		passwordBlockFingerprintUnlock?: boolean
 
+	    /** Indicates whether or not to block Smart Lock and other trust agents. */
 		passwordBlockTrustAgents?: boolean
 
+	    /** Number of days before the password expires. Valid values 1 to 365 */
 		passwordExpirationDays?: number
 
+	    /** Minimum length of passwords. Valid values 4 to 16 */
 		passwordMinimumLength?: number
 
+	    /** Minutes of inactivity before the screen times out. */
 		passwordMinutesOfInactivityBeforeScreenTimeout?: number
 
+	    /** Number of previous passwords to block. Valid values 0 to 24 */
 		passwordPreviousPasswordBlockCount?: number
 
+	    /** Number of sign in failures allowed before factory reset. Valid values 4 to 11 */
 		passwordSignInFailureCountBeforeFactoryReset?: number
 
+	    /** Type of password that is required. Possible values are: deviceDefault, lowSecurityBiometric, required, atLeastNumeric, numericComplex, atLeastAlphabetic, atLeastAlphanumeric, alphanumericWithSymbols. */
 		passwordRequiredType?: AndroidWorkProfileRequiredPasswordType
 
+	    /** Type of data sharing that is allowed. Possible values are: deviceDefault, preventAny, allowPersonalToWork, noRestrictions. */
 		workProfileDataSharingType?: AndroidWorkProfileCrossProfileDataSharingType
 
+	    /** Indicates whether or not to block notifications while device locked. */
 		workProfileBlockNotificationsWhileDeviceLocked?: boolean
 
+	    /** Block users from adding/removing accounts in work profile. */
 		workProfileBlockAddingAccounts?: boolean
 
+	    /** Allow bluetooth devices to access enterprise contacts. */
 		workProfileBluetoothEnableContactSharing?: boolean
 
+	    /** Block screen capture in work profile. */
 		workProfileBlockScreenCapture?: boolean
 
+	    /** Block display work profile caller ID in personal profile. */
 		workProfileBlockCrossProfileCallerId?: boolean
 
+	    /** Block work profile camera. */
 		workProfileBlockCamera?: boolean
 
+	    /** Block work profile contacts availability in personal profile. */
 		workProfileBlockCrossProfileContactsSearch?: boolean
 
+	    /** Boolean that indicates if the setting disallow cross profile copy/paste is enabled. */
 		workProfileBlockCrossProfileCopyPaste?: boolean
 
+	    /** Type of password that is required. Possible values are: deviceDefault, prompt, autoGrant, autoDeny. */
 		workProfileDefaultAppPermissionPolicy?: AndroidWorkProfileDefaultAppPermissionPolicyType
 
+	    /** Indicates whether or not to block fingerprint unlock for work profile. */
 		workProfilePasswordBlockFingerprintUnlock?: boolean
 
+	    /** Indicates whether or not to block Smart Lock and other trust agents for work profile. */
 		workProfilePasswordBlockTrustAgents?: boolean
 
+	    /** Number of days before the work profile password expires. Valid values 1 to 365 */
 		workProfilePasswordExpirationDays?: number
 
+	    /** Minimum length of work profile password. Valid values 4 to 16 */
 		workProfilePasswordMinimumLength?: number
 
+	    /** Minimum # of numeric characters required in work profile password. Valid values 1 to 10 */
 		workProfilePasswordMinNumericCharacters?: number
 
+	    /** Minimum # of non-letter characters required in work profile password. Valid values 1 to 10 */
 		workProfilePasswordMinNonLetterCharacters?: number
 
+	    /** Minimum # of letter characters required in work profile password. Valid values 1 to 10 */
 		workProfilePasswordMinLetterCharacters?: number
 
+	    /** Minimum # of lower-case characters required in work profile password. Valid values 1 to 10 */
 		workProfilePasswordMinLowerCaseCharacters?: number
 
+	    /** Minimum # of upper-case characters required in work profile password. Valid values 1 to 10 */
 		workProfilePasswordMinUpperCaseCharacters?: number
 
+	    /** Minimum # of symbols required in work profile password. Valid values 1 to 10 */
 		workProfilePasswordMinSymbolCharacters?: number
 
+	    /** Minutes of inactivity before the screen times out. */
 		workProfilePasswordMinutesOfInactivityBeforeScreenTimeout?: number
 
+	    /** Number of previous work profile passwords to block. Valid values 0 to 24 */
 		workProfilePasswordPreviousPasswordBlockCount?: number
 
+	    /** Number of sign in failures allowed before work profile is removed and all corporate data deleted. Valid values 4 to 11 */
 		workProfilePasswordSignInFailureCountBeforeFactoryReset?: number
 
+	    /** Type of work profile password that is required. Possible values are: deviceDefault, lowSecurityBiometric, required, atLeastNumeric, numericComplex, atLeastAlphabetic, atLeastAlphanumeric, alphanumericWithSymbols. */
 		workProfilePasswordRequiredType?: AndroidWorkProfileRequiredPasswordType
 
+	    /** Password is required or not for work profile */
 		workProfileRequirePassword?: boolean
 
+	    /** Require the Android Verify apps feature is turned on. */
 		securityRequireVerifyApps?: boolean
 
 }
@@ -6013,6 +6410,7 @@ export interface IosGeneralDeviceConfiguration extends DeviceConfiguration {
 	    /** URL in the app store to the app to use for kiosk mode. Use if KioskModeManagedAppId is not known. */
 		kioskModeAppStoreUrl?: string
 
+	    /** ID for built-in apps to use for kiosk mode. Used when KioskModeManagedAppId and KioskModeAppStoreUrl are not set. */
 		kioskModeBuiltInAppId?: string
 
 	    /** Indicates whether or not to require assistive touch while in kiosk mode. */
@@ -6277,7 +6675,7 @@ export interface MacOSDeviceFeaturesConfiguration extends AppleDeviceFeaturesCon
 
 export interface WindowsDefenderAdvancedThreatProtectionConfiguration extends DeviceConfiguration {
 
-	    /** Windows Defender AdvancedThreatProtection "Allow Sample Sharing" Rule */
+	    /** Windows Defender AdvancedThreatProtection 'Allow Sample Sharing' Rule */
 		allowSampleSharing?: boolean
 
 	    /** Expedite Windows Defender Advanced Threat Protection telemetry reporting frequency. */
@@ -6442,7 +6840,7 @@ export interface Windows10GeneralConfiguration extends DeviceConfiguration {
 	    /** Indicates whether or not to block indexing of WIP-protected items to prevent them from appearing in search results for Cortana or Explorer. */
 		searchDisableIndexingEncryptedItems?: boolean
 
-	    /** Indicates whether or not to block remote queries of this computer's index. */
+	    /** Indicates whether or not to block remote queries of this computer’s index. */
 		searchEnableRemoteQueries?: boolean
 
 	    /** Indicates whether or not to disable the search indexer backoff feature. */
@@ -6484,22 +6882,22 @@ export interface Windows10GeneralConfiguration extends DeviceConfiguration {
 	    /** Indicates whether or not to block auto fill. */
 		edgeBlockAutofill?: boolean
 
-	    /** Indicates whether or not to Block the user from using the Microsoft Edge browser. */
+	    /** Indicates whether or not to Block the user from using the Edge browser. */
 		edgeBlocked?: boolean
 
-	    /** Indicates which cookies to block in the Microsoft Edge browser. Possible values are: userDefined, allow, blockThirdParty, blockAll. */
+	    /** Indicates which cookies to block in the Edge browser. Possible values are: userDefined, allow, blockThirdParty, blockAll. */
 		edgeCookiePolicy?: EdgeCookiePolicy
 
-	    /** Indicates whether or not to block developer tools in the Microsoft Edge browser. */
+	    /** Indicates whether or not to block developer tools in the Edge browser. */
 		edgeBlockDeveloperTools?: boolean
 
 	    /** Indicates whether or not to Block the user from sending the do not track header. */
 		edgeBlockSendingDoNotTrackHeader?: boolean
 
-	    /** Indicates whether or not to block extensions in the Microsoft Edge browser. */
+	    /** Indicates whether or not to block extensions in the Edge browser. */
 		edgeBlockExtensions?: boolean
 
-	    /** Indicates whether or not to block InPrivate browsing on corporate networks, in the Microsoft Edge browser. */
+	    /** Indicates whether or not to block InPrivate browsing on corporate networks, in the Edge browser. */
 		edgeBlockInPrivateBrowsing?: boolean
 
 	    /** Indicates whether or not to Block the user from using JavaScript. */
@@ -6517,7 +6915,7 @@ export interface Windows10GeneralConfiguration extends DeviceConfiguration {
 	    /** Clear browsing data on exiting Microsoft Edge. */
 		edgeClearBrowsingDataOnExit?: boolean
 
-	    /** Allow users to change Start pages on Microsoft Edge. Use the EdgeHomepageUrls to specify the Start pages that the user would see by default when they open Microsoft Edge. */
+	    /** Allow users to change Start pages on Edge. Use the EdgeHomepageUrls to specify the Start pages that the user would see by default when they open Edge. */
 		edgeAllowStartPagesModification?: boolean
 
 	    /** Block the Microsoft web page that opens on the first use of Microsoft Edge. This policy allows enterprises, like those enrolled in zero emissions configurations, to block this page. */
@@ -6544,7 +6942,7 @@ export interface Windows10GeneralConfiguration extends DeviceConfiguration {
 	    /** Number of days before deleting quarantined malware. Valid values 0 to 90 */
 		defenderDaysBeforeDeletingQuarantinedMalware?: number
 
-	    /** Gets or sets Defender's actions to take on detected Malware per threat level. */
+	    /** Gets or sets Defender’s actions to take on detected Malware per threat level. */
 		defenderDetectedMalwareActions?: DefenderDetectedMalwareActions
 
 	    /** Defender day of the week for the system scan. Possible values are: userDefined, everyday, sunday, monday, tuesday, wednesday, thursday, friday, saturday. */
@@ -6631,7 +7029,7 @@ export interface Windows10GeneralConfiguration extends DeviceConfiguration {
 	    /** Set the duration (in seconds) from the screen locking to the screen turning off for Windows 10 Mobile devices. Supported values are 11-1800. Valid values 11 to 1800 */
 		lockScreenTimeoutInSeconds?: number
 
-	    /** Specify whether PINs or passwords such as "1111" or "1234" are allowed. For Windows 10 desktops, it also controls the use of picture passwords. */
+	    /** Specify whether PINs or passwords such as '1111' or '1234' are allowed. For Windows 10 desktops, it also controls the use of picture passwords. */
 		passwordBlockSimple?: boolean
 
 	    /** The password expiration in days. Valid values 0 to 730 */
@@ -6697,7 +7095,7 @@ export interface Windows10GeneralConfiguration extends DeviceConfiguration {
 	    /** Enabling this policy hides recently added apps from appearing on the start menu and disables the corresponding toggle in the Settings app. */
 		startMenuHideRecentlyAddedApps?: boolean
 
-	    /** Enabling this policy hides "Restart/Update and Restart" from appearing in the power button in the start menu. */
+	    /** Enabling this policy hides 'Restart/Update and Restart' from appearing in the power button in the start menu. */
 		startMenuHideRestartOptions?: boolean
 
 	    /** Enabling this policy hides shut down/update and shut down from appearing in the power button in the start menu. */
@@ -6715,7 +7113,7 @@ export interface Windows10GeneralConfiguration extends DeviceConfiguration {
 	    /** Enabling this policy hides the user tile from appearing in the start menu. */
 		startMenuHideUserTile?: boolean
 
-	    /** This policy setting allows you to import Microsoft Edge assets to be used with startMenuLayoutXml policy. Start layout can contain secondary tile from Microsoft Edge app which looks for Microsoft Edge local asset file. Microsoft Edge local asset would not exist and cause Microsoft Edge secondary tile to appear empty in this case. This policy only gets applied when startMenuLayoutXml policy is modified. The value should be a UTF-8 Base64 encoded byte array. */
+	    /** This policy setting allows you to import Edge assets to be used with startMenuLayoutXml policy. Start layout can contain secondary tile from Edge app which looks for Edge local asset file. Edge local asset would not exist and cause Edge secondary tile to appear empty in this case. This policy only gets applied when startMenuLayoutXml policy is modified. The value should be a UTF-8 Base64 encoded byte array. */
 		startMenuLayoutEdgeAssetsXml?: number
 
 	    /** Allows admins to override the default Start menu layout and prevents the user from changing it. The layout is modified by specifying an XML file based on a layout modification schema. XML needs to be in a UTF8 encoded byte array format. */
@@ -6763,7 +7161,7 @@ export interface Windows10GeneralConfiguration extends DeviceConfiguration {
 	    /** Indicates whether or not to block access to Devices in Settings app. */
 		settingsBlockDevicesPage?: boolean
 
-	    /** Indicates whether or not to block access to Network & Internet in Settings app. */
+	    /** Indicates whether or not to block access to Network &amp; Internet in Settings app. */
 		settingsBlockNetworkInternetPage?: boolean
 
 	    /** Indicates whether or not to block access to Personalization in Settings app. */
@@ -6772,7 +7170,7 @@ export interface Windows10GeneralConfiguration extends DeviceConfiguration {
 	    /** Indicates whether or not to block access to Accounts in Settings app. */
 		settingsBlockAccountsPage?: boolean
 
-	    /** Indicates whether or not to block access to Time & Language in Settings app. */
+	    /** Indicates whether or not to block access to Time &amp; Language in Settings app. */
 		settingsBlockTimeLanguagePage?: boolean
 
 	    /** Indicates whether or not to block access to Ease of Access in Settings app. */
@@ -6781,7 +7179,7 @@ export interface Windows10GeneralConfiguration extends DeviceConfiguration {
 	    /** Indicates whether or not to block access to Privacy in Settings app. */
 		settingsBlockPrivacyPage?: boolean
 
-	    /** Indicates whether or not to block access to Update & Security in Settings app. */
+	    /** Indicates whether or not to block access to Update &amp; Security in Settings app. */
 		settingsBlockUpdateSecurityPage?: boolean
 
 	    /** Indicates whether or not to block access to Apps in Settings app. */
@@ -6799,7 +7197,7 @@ export interface Windows10GeneralConfiguration extends DeviceConfiguration {
 	    /** Block suggestions from Microsoft that show after each OS clean install, upgrade or in an on-going basis to introduce users to what is new or changed */
 		windowsSpotlightBlockOnActionCenter?: boolean
 
-	    /** Block personalized content in Windows spotlight based on user's device usage. */
+	    /** Block personalized content in Windows spotlight based on user’s device usage. */
 		windowsSpotlightBlockTailoredExperiences?: boolean
 
 	    /** Block third party content delivered via Windows Spotlight */
@@ -6814,7 +7212,7 @@ export interface Windows10GeneralConfiguration extends DeviceConfiguration {
 	    /** Specifies the type of Spotlight. Possible values are: notConfigured, disabled, enabled. */
 		windowsSpotlightConfigureOnLockScreen?: WindowsSpotlightEnablementSettings
 
-	    /** If set, proxy settings will be applied to all processes and accounts in the device. Otherwise, it will be applied to the user account that's enrolled into MDM. */
+	    /** If set, proxy settings will be applied to all processes and accounts in the device. Otherwise, it will be applied to the user account that’s enrolled into MDM. */
 		networkProxyApplySettingsDeviceWide?: boolean
 
 	    /** Disable automatic detection of settings. If enabled, the system will try to find the path to a proxy auto-config (PAC) script. */
@@ -6865,7 +7263,7 @@ export interface Windows10GeneralConfiguration extends DeviceConfiguration {
 	    /** Indicates whether or not to Block the user from using the search suggestions in the address bar. */
 		edgeBlockSearchSuggestions?: boolean
 
-	    /** Indicates whether or not to Block the user from sending Intranet traffic to Internet Explorer from Microsoft Edge. */
+	    /** Indicates whether or not to Block the user from sending Intranet traffic to Internet Explorer from Edge. */
 		edgeBlockSendingIntranetTrafficToInternetExplorer?: boolean
 
 	    /** Indicates whether or not to Require the user to use the smart screen filter. */
@@ -6874,16 +7272,16 @@ export interface Windows10GeneralConfiguration extends DeviceConfiguration {
 	    /** Indicates the enterprise mode site list location. Could be a local file, local network or http location. */
 		edgeEnterpriseModeSiteListLocation?: string
 
-	    /** The first run URL for when Microsoft Edge browser is opened for the first time. */
+	    /** The first run URL for when Edge browser is opened for the first time. */
 		edgeFirstRunUrl?: string
 
 	    /** Allows IT admins to set a default search engine for MDM-Controlled devices. Users can override this and change their default search engine provided the AllowSearchEngineCustomization policy is not set. */
 		edgeSearchEngine?: EdgeSearchEngineBase
 
-	    /** The list of URLs for homepages shodwn on MDM-enrolled devices on Microsoft Edge browser. */
+	    /** The list of URLs for homepages shodwn on MDM-enrolled devices on Edge browser. */
 		edgeHomepageUrls?: string[]
 
-	    /** Indicates whether or not to prevent access to about flags on Microsoft Edge browser. */
+	    /** Indicates whether or not to prevent access to about flags on Edge browser. */
 		edgeBlockAccessToAboutFlags?: boolean
 
 	    /** Indicates whether or not users can override SmartScreen Filter warnings about potentially malicious websites. */
@@ -7012,6 +7410,9 @@ export interface Windows10GeneralConfiguration extends DeviceConfiguration {
 	    /** Disables the ability to quickly switch between users that are logged on simultaneously without logging off. */
 		logonBlockFastUserSwitching?: boolean
 
+	    /** Whether the device is required to connect to the network. */
+		tenantLockdownRequireNetworkDuringOutOfBoxExperience?: boolean
+
 }
 
 export interface Windows10CustomConfiguration extends DeviceConfiguration {
@@ -7073,7 +7474,7 @@ export interface Windows10SecureAssessmentConfiguration extends DeviceConfigurat
 	    /** Url link to an assessment that's automatically loaded when the secure assessment browser is launched. It has to be a valid Url (http[s]://msdn.microsoft.com/). */
 		launchUri?: string
 
-	    /** The account used to configure the Windows device for taking the test. The user can be a domain account (domain\user), an AAD account (username@tenant.com) or a local account (username). */
+	    /** The account used to configure the Windows device for taking the test. The user can be a domain account (domain/user), an AAD account (username@tenant.com) or a local account (username). */
 		configurationAccount?: string
 
 	    /** Indicates whether or not to allow the app from printing during the test. */
@@ -7132,7 +7533,7 @@ export interface WindowsUpdateForBusinessConfiguration extends DeviceConfigurati
 	    /** Feature Updates Pause Expiry datetime */
 		featureUpdatesPauseExpiryDateTime?: string
 
-	    /** Determines which branch devices will receive their updates from. Possible values are: userDefined, all, businessReadyOnly. */
+	    /** Determines which branch devices will receive their updates from. Possible values are: userDefined, all, businessReadyOnly, windowsInsiderBuildFast, windowsInsiderBuildSlow, windowsInsiderBuildRelease. */
 		businessReadyUpdatesOnly?: WindowsUpdateType
 
 }
@@ -7363,7 +7764,7 @@ export interface Windows10TeamGeneralConfiguration extends DeviceConfiguration {
 	    /** Indicates whether or not to require a pin for wireless projection. */
 		miracastRequirePin?: boolean
 
-	    /** Specifies whether to disable the "My meetings and files" feature in the Start menu, which shows the signed-in user's meetings and files from Office 365. */
+	    /** Specifies whether to disable the 'My meetings and files' feature in the Start menu, which shows the signed-in user's meetings and files from Office 365. */
 		settingsBlockMyMeetingsAndFiles?: boolean
 
 	    /** Specifies whether to allow the ability to resume a session when the session times out. */
@@ -7396,6 +7797,73 @@ export interface Windows10TeamGeneralConfiguration extends DeviceConfiguration {
 }
 
 export interface AndroidCompliancePolicy extends DeviceCompliancePolicy {
+
+	    /** Require a password to unlock device. */
+		passwordRequired?: boolean
+
+	    /** Minimum password length. Valid values 4 to 16 */
+		passwordMinimumLength?: number
+
+	    /** Type of characters in password. Possible values are: deviceDefault, alphabetic, alphanumeric, alphanumericWithSymbols, lowSecurityBiometric, numeric, numericComplex, any. */
+		passwordRequiredType?: AndroidRequiredPasswordType
+
+	    /** Minutes of inactivity before a password is required. */
+		passwordMinutesOfInactivityBeforeLock?: number
+
+	    /** Number of days before the password expires. Valid values 1 to 65535 */
+		passwordExpirationDays?: number
+
+	    /** Number of previous passwords to block. */
+		passwordPreviousPasswordBlockCount?: number
+
+	    /** Require that devices disallow installation of apps from unknown sources. */
+		securityPreventInstallAppsFromUnknownSources?: boolean
+
+	    /** Disable USB debugging on Android devices. */
+		securityDisableUsbDebugging?: boolean
+
+	    /** Require the Android Verify apps feature is turned on. */
+		securityRequireVerifyApps?: boolean
+
+	    /** Require that devices have enabled device threat protection. */
+		deviceThreatProtectionEnabled?: boolean
+
+	    /** Require Mobile Threat Protection minimum risk level to report noncompliance. Possible values are: unavailable, secured, low, medium, high, notSet. */
+		deviceThreatProtectionRequiredSecurityLevel?: DeviceThreatProtectionLevel
+
+	    /** Devices must not be jailbroken or rooted. */
+		securityBlockJailbrokenDevices?: boolean
+
+	    /** Minimum Android version. */
+		osMinimumVersion?: string
+
+	    /** Maximum Android version. */
+		osMaximumVersion?: string
+
+	    /** Minimum Android security patch level. */
+		minAndroidSecurityPatchLevel?: string
+
+	    /** Require encryption on Android devices. */
+		storageRequireEncryption?: boolean
+
+	    /** Require the device to pass the SafetyNet basic integrity check. */
+		securityRequireSafetyNetAttestationBasicIntegrity?: boolean
+
+	    /** Require the device to pass the SafetyNet certified device check. */
+		securityRequireSafetyNetAttestationCertifiedDevice?: boolean
+
+	    /** Require Google Play Services to be installed and enabled on the device. */
+		securityRequireGooglePlayServices?: boolean
+
+	    /** Require the device to have up to date security providers. The device will require Google Play Services to be enabled and up to date. */
+		securityRequireUpToDateSecurityProviders?: boolean
+
+	    /** Require the device to pass the Company Portal client app runtime integrity check. */
+		securityRequireCompanyPortalAppIntegrity?: boolean
+
+}
+
+export interface AndroidWorkProfileCompliancePolicy extends DeviceCompliancePolicy {
 
 	    /** Require a password to unlock device. */
 		passwordRequired?: boolean
@@ -7458,52 +7926,6 @@ export interface AndroidCompliancePolicy extends DeviceCompliancePolicy {
 		securityRequireUpToDateSecurityProviders?: boolean
 
 	    /** Require the device to pass the Company Portal client app runtime integrity check. */
-		securityRequireCompanyPortalAppIntegrity?: boolean
-
-}
-
-export interface AndroidWorkProfileCompliancePolicy extends DeviceCompliancePolicy {
-
-		passwordRequired?: boolean
-
-		passwordMinimumLength?: number
-
-		passwordRequiredType?: AndroidRequiredPasswordType
-
-		passwordMinutesOfInactivityBeforeLock?: number
-
-		passwordExpirationDays?: number
-
-		passwordPreviousPasswordBlockCount?: number
-
-		securityPreventInstallAppsFromUnknownSources?: boolean
-
-		securityDisableUsbDebugging?: boolean
-
-		securityRequireVerifyApps?: boolean
-
-		deviceThreatProtectionEnabled?: boolean
-
-		deviceThreatProtectionRequiredSecurityLevel?: DeviceThreatProtectionLevel
-
-		securityBlockJailbrokenDevices?: boolean
-
-		osMinimumVersion?: string
-
-		osMaximumVersion?: string
-
-		minAndroidSecurityPatchLevel?: string
-
-		storageRequireEncryption?: boolean
-
-		securityRequireSafetyNetAttestationBasicIntegrity?: boolean
-
-		securityRequireSafetyNetAttestationCertifiedDevice?: boolean
-
-		securityRequireGooglePlayServices?: boolean
-
-		securityRequireUpToDateSecurityProviders?: boolean
-
 		securityRequireCompanyPortalAppIntegrity?: boolean
 
 }
@@ -7598,10 +8020,13 @@ export interface MacOSCompliancePolicy extends DeviceCompliancePolicy {
 	    /** Require encryption on Mac OS devices. */
 		storageRequireEncryption?: boolean
 
+	    /** Whether the firewall should be enabled or not. */
 		firewallEnabled?: boolean
 
+	    /** Corresponds to the 'Block all incoming connections' option. */
 		firewallBlockAllIncoming?: boolean
 
+	    /** Corresponds to 'Enable stealth mode.' */
 		firewallEnableStealthMode?: boolean
 
 }
@@ -7822,7 +8247,7 @@ export interface DeviceComplianceSettingState extends Entity {
 	    /** The device model that is being reported */
 		deviceModel?: string
 
-	    /** The compliance state of the setting. Possible values are: unknown, notApplicable, compliant, remediated, nonCompliant, error, conflict. */
+	    /** The compliance state of the setting. Possible values are: unknown, notApplicable, compliant, remediated, nonCompliant, error, conflict, notAssigned. */
 		state?: ComplianceStatus
 
 	    /** The DateTime when device compliance grace period expires */
@@ -8140,7 +8565,7 @@ export interface EnrollmentTroubleshootingEvent extends DeviceManagementTroubles
 	    /** Type of the enrollment. Possible values are: unknown, userEnrollment, deviceEnrollmentManager, appleBulkWithUser, appleBulkWithoutUser, windowsAzureADJoin, windowsBulkUserless, windowsAutoEnrollment, windowsBulkAzureDomainJoin, windowsCoManagement. */
 		enrollmentType?: DeviceEnrollmentType
 
-	    /** Highlevel failure category. Possible values are: unknown, authentication, authorization, accountValidation, userValidation, deviceNotSupported, inMaintenance, badRequest, featureNotSupported, enrollmentRestrictionsEnforced, clientDisconnected. */
+	    /** Highlevel failure category. Possible values are: unknown, authentication, authorization, accountValidation, userValidation, deviceNotSupported, inMaintenance, badRequest, featureNotSupported, enrollmentRestrictionsEnforced, clientDisconnected, userAbandonment. */
 		failureCategory?: DeviceEnrollmentFailureReason
 
 	    /** Detailed failure reason. */
@@ -8150,94 +8575,135 @@ export interface EnrollmentTroubleshootingEvent extends DeviceManagementTroubles
 
 export interface ActivityHistoryItem extends Entity {
 
+	    /** Set by the server. A status code used to identify valid objects. Values: active, updated, deleted, ignored. */
 		status?: Status
 
+	    /** Optional. The duration of active user engagement. if not supplied, this is calculated from the startedDateTime and lastActiveDateTime. */
 		activeDurationSeconds?: number
 
+	    /** Set by the server. DateTime in UTC when the object was created on the server. */
 		createdDateTime?: string
 
+	    /** Optional. UTC DateTime when the historyItem (activity session) was last understood as active or finished - if null, historyItem status should be Ongoing. */
 		lastActiveDateTime?: string
 
+	    /** Set by the server. DateTime in UTC when the object was modified on the server. */
 		lastModifiedDateTime?: string
 
+	    /** Optional. UTC DateTime when the historyItem will undergo hard-delete. Can be set by the client. */
 		expirationDateTime?: string
 
+	    /** Required. UTC DateTime when the historyItem (activity session) was started. Required for timeline history. */
 		startedDateTime?: string
 
+	    /** Optional. The timezone in which the user's device used to generate the activity was located at activity creation time. Values supplied as Olson IDs in order to support cross-platform representation. */
 		userTimezone?: string
 
+	    /** Optional. NavigationProperty/Containment; navigation property to the associated activity. */
 		activity?: UserActivity
 
 }
 
 export interface Security extends Entity {
 
+	    /** Read-only. Nullable. */
 		alerts?: Alert[]
 
 }
 
 export interface Alert extends Entity {
 
+	    /** Name or alias of the activity group (attacker) this alert is attributed to. */
 		activityGroupName?: string
 
+	    /** Name of the analyst the alert is assigned to for triage, investigation, or remediation (supports update). */
 		assignedTo?: string
 
+	    /** Azure subscription ID, present if this alert is related to an Azure resource. */
 		azureSubscriptionId?: string
 
+	    /** Azure Active Directory tenant ID. Required. */
 		azureTenantId?: string
 
+	    /** Category of the alert (for example, credentialTheft, ransomware, etc.). */
 		category?: string
 
+	    /** Time at which the alert was closed. The Timestamp type represents date and time information using ISO 8601 format and is always in UTC time. For example, midnight UTC on Jan 1, 2014 would look like this: '2014-01-01T00:00:00Z' (supports update). */
 		closedDateTime?: string
 
+	    /** Security-related stateful information generated by the provider about the cloud application/s related to this alert. */
 		cloudAppStates?: CloudAppSecurityState[]
 
+	    /** Customer-provided comments on alert (for customer alert management) (supports update). */
 		comments?: string[]
 
+	    /** Confidence of the detection logic (percentage between 1-100). */
 		confidence?: number
 
+	    /** Time at which the alert was created by the alert provider. The Timestamp type represents date and time information using ISO 8601 format and is always in UTC time. For example, midnight UTC on Jan 1, 2014 would look like this: '2014-01-01T00:00:00Z'. Required. */
 		createdDateTime?: string
 
+	    /** Alert description. */
 		description?: string
 
+	    /** Set of alerts related to this alert entity (each alert is pushed to the SIEM as a separate record). */
 		detectionIds?: string[]
 
+	    /** Time at which the event(s) that served as the trigger(s) to generate the alert occurred. The Timestamp type represents date and time information using ISO 8601 format and is always in UTC time. For example, midnight UTC on Jan 1, 2014 would look like this: '2014-01-01T00:00:00Z'. Required. */
 		eventDateTime?: string
 
+	    /** Analyst feedback on the alert. Possible values are: unknown, truePositive, falsePositive, benignPositive. (supports update) */
 		feedback?: AlertFeedback
 
+	    /** Security-related stateful information generated by the provider about the file(s) related to this alert. */
 		fileStates?: FileSecurityState[]
 
+	    /** Security-related stateful information generated by the provider about the host(s) related to this alert. */
 		hostStates?: HostSecurityState[]
 
+	    /** Time at which the alert entity was last modified. The Timestamp type represents date and time information using ISO 8601 format and is always in UTC time. For example, midnight UTC on Jan 1, 2014 would look like this: '2014-01-01T00:00:00Z'. */
 		lastModifiedDateTime?: string
 
+	    /** Threat Intelligence pertaining to malware related to this alert. */
 		malwareStates?: MalwareState[]
 
+	    /** Security-related stateful information generated by the provider about the network connection(s) related to this alert. */
 		networkConnections?: NetworkConnection[]
 
+	    /** Security-related stateful information generated by the provider about the process or processes related to this alert. */
 		processes?: Process[]
 
+	    /** Vendor/provider recommended action(s) to take as a result of the alert (for example, isolate machine, enforce2FA, reimage host). */
 		recommendedActions?: string[]
 
+	    /** Security-related stateful information generated by the provider about the registry keys related to this alert. */
 		registryKeyStates?: RegistryKeyState[]
 
+	    /** Alert severity - set by vendor/provider. Possible values are: unknown, informational, low, medium, high. Required. */
 		severity?: AlertSeverity
 
+	    /** Hyperlinks (URIs) to the source material related to the alert, for example, provider's user interface for alerts or log search, etc. */
 		sourceMaterials?: string[]
 
+	    /** Alert lifecycle status (stage). Possible values are: unknown, newAlert, inProgress, resolved. (supports update). Required. */
 		status?: AlertStatus
 
+	    /** User-definable labels that can be applied to an alert and can serve as filter conditions (for example 'HVA', 'SAW', etc.) (supports update). */
 		tags?: string[]
 
+	    /** Alert title. Required. */
 		title?: string
 
+	    /** Security-related information about the specific properties that triggered the alert (properties appearing in the alert). Alerts might contain information about multiple users, hosts, files, ip addresses. This field indicates which properties triggered the alert generation. */
 		triggers?: AlertTrigger[]
 
+	    /** Security-related stateful information generated by the provider about the user accounts related to this alert. */
 		userStates?: UserSecurityState[]
 
+	    /** Complex type containing details about the security product/service vendor, provider, and subprovider (for example, vendor=Microsoft; provider=Windows Defender ATP; subProvider=AppLocker). Required. */
 		vendorInformation?: SecurityVendorInformation
 
+	    /** Threat intelligence pertaining to one or more vulnerabilities related to this alert. */
 		vulnerabilityStates?: VulnerabilityState[]
 
 }
@@ -8283,12 +8749,125 @@ export interface UsedInsight extends Entity {
 		resource?: Entity
 
 }
+
+export interface AppCatalogs extends Entity {
+
+		teamsApps?: TeamsApp[]
+
+}
+
+export interface TeamsApp extends Entity {
+
+	    /** The ID of the catalog provided by the app developer in the Microsoft Teams zip app package. */
+		externalId?: string
+
+	    /** The name of the catalog app provided by the app developer in the Microsoft Teams zip app package. */
+		displayName?: string
+
+	    /** The method of distribution for the app. */
+		distributionMethod?: TeamsAppDistributionMethod
+
+	    /** The details for each version of the app. */
+		appDefinitions?: TeamsAppDefinition[]
+
+}
+
+export interface Channel extends Entity {
+
+	    /** Channel name as it will appear to the user in Microsoft Teams. */
+		displayName?: string
+
+	    /** Optional textual description for the channel. */
+		description?: string
+
+	    /** A collection of all the tabs in the channel. A navigation property. */
+		tabs?: TeamsTab[]
+
+}
+
+export interface TeamsAppInstallation extends Entity {
+
+	    /** The app that is installed. */
+		teamsApp?: TeamsApp
+
+	    /** The details of this version of the app. */
+		teamsAppDefinition?: TeamsAppDefinition
+
+}
+
+export interface TeamsAsyncOperation extends Entity {
+
+		operationType?: TeamsAsyncOperationType
+
+		createdDateTime?: string
+
+		status?: TeamsAsyncOperationStatus
+
+		lastActionDateTime?: string
+
+		attemptsCount?: number
+
+		targetResourceId?: string
+
+		targetResourceLocation?: string
+
+		error?: OperationError
+
+}
+
+export interface TeamsAppDefinition extends Entity {
+
+	    /** The id from the Teams App manifest. */
+		teamsAppId?: string
+
+	    /** The name of the app provided by the app developer. */
+		displayName?: string
+
+	    /** The version number of the application. */
+		version?: string
+
+}
+
+export interface TeamsTab extends Entity {
+
+	    /** Name of the tab. */
+		displayName?: string
+
+	    /** Deep link url of the tab instance. Read only. */
+		webUrl?: string
+
+	    /** Container for custom settings applied to a tab. The tab is considered configured only once this property is set. */
+		configuration?: TeamsTabConfiguration
+
+	    /** The application that is linked to the tab. This cannot be changed after tab creation. */
+		teamsApp?: TeamsApp
+
+}
+
+export interface DataPolicyOperation extends Entity {
+
+		completedDateTime?: string
+
+		status?: DataPolicyOperationStatus
+
+		storageLocation?: string
+
+		userId?: string
+
+		submittedDateTime?: string
+
+		progress?: number
+
+}
 export interface AlternativeSecurityId {
 
+	    /** For internal use only */
 		type?: number
 
+	    /** For internal use only */
 		identityProvider?: string
 
+	    /** For internal use only */
 		key?: number
 
 }
@@ -8312,21 +8891,25 @@ export interface ServicePlanInfo {
 	    /** The name of the service plan. */
 		servicePlanName?: string
 
-	    /** The provisioning status of the service plan. Possible values:"Success" - Service is fully provisioned."Disabled" - Service has been disabled."PendingInput" - Service is not yet provisioned; awaiting service confirmation."PendingActivation" - Service is provisioned but requires explicit activation by administrator (for example, Intune_O365 service plan)"PendingProvisioning" - Microsoft has added a new service to the product SKU and it has not been activated in the tenant, yet. */
+	    /** The provisioning status of the service plan. Possible values:'Success' - Service is fully provisioned.'Disabled' - Service has been disabled.'PendingInput' - Service is not yet provisioned; awaiting service confirmation.'PendingActivation' - Service is provisioned but requires explicit activation by administrator (for example, Intune_O365 service plan)'PendingProvisioning' - Microsoft has added a new service to the product SKU and it has not been activated in the tenant, yet. */
 		provisioningStatus?: string
 
-	    /** The object the service plan can be assigned to. Possible values:"User" - service plan can be assigned to individual users."Company" - service plan can be assigned to the entire tenant. */
+	    /** The object the service plan can be assigned to. Possible values:'User' - service plan can be assigned to individual users.'Company' - service plan can be assigned to the entire tenant. */
 		appliesTo?: string
 
 }
 export interface OnPremisesProvisioningError {
 
+	    /** Value of the property causing the error. */
 		value?: string
 
+	    /** Category of the provisioning error. Note: Currently, there is only one possible value. Possible value: PropertyConflict - indicates a property value is not unique. Other objects contain the same value for the property. */
 		category?: string
 
+	    /** Name of the directory property causing the error. Current possible values: UserPrincipalName or ProxyAddress */
 		propertyCausingError?: string
 
+	    /** The date and time at which the error occurred. */
 		occurredDateTime?: string
 
 }
@@ -8347,10 +8930,10 @@ export interface AssignedPlan {
 	    /** The date and time at which the plan was assigned; for example: 2013-01-02T19:32:30Z. The Timestamp type represents date and time information using ISO 8601 format and is always in UTC time. For example, midnight UTC on Jan 1, 2014 would look like this: '2014-01-01T00:00:00Z' */
 		assignedDateTime?: string
 
-	    /** For example, "Enabled". */
+	    /** For example, 'Enabled'. */
 		capabilityStatus?: string
 
-	    /** The name of the service; for example, "Exchange". */
+	    /** The name of the service; for example, 'Exchange'. */
 		service?: string
 
 	    /** A GUID that identifies the service plan. */
@@ -8368,23 +8951,31 @@ export interface PrivacyProfile {
 }
 export interface ProvisionedPlan {
 
+	    /** For example, 'Enabled'. */
 		capabilityStatus?: string
 
+	    /** For example, 'Success'. */
 		provisioningStatus?: string
 
+	    /** The name of the service; for example, 'AccessControlS2S' */
 		service?: string
 
 }
 export interface VerifiedDomain {
 
+	    /** For example, 'Email', 'OfficeCommunicationsOnline'. */
 		capabilities?: string
 
+	    /** true if this is the default domain associated with the tenant; otherwise, false. */
 		isDefault?: boolean
 
+	    /** true if this is the initial domain associated with the tenant; otherwise, false */
 		isInitial?: boolean
 
+	    /** The domain name; for example, 'contoso.onmicrosoft.com' */
 		name?: string
 
+	    /** For example, 'Managed'. */
 		type?: string
 
 }
@@ -8399,41 +8990,58 @@ export interface AssignedLicense {
 }
 export interface OnPremisesExtensionAttributes {
 
+	    /** First customizable extension attribute. */
 		extensionAttribute1?: string
 
+	    /** Second customizable extension attribute. */
 		extensionAttribute2?: string
 
+	    /** Third customizable extension attribute. */
 		extensionAttribute3?: string
 
+	    /** Fourth customizable extension attribute. */
 		extensionAttribute4?: string
 
+	    /** Fifth customizable extension attribute. */
 		extensionAttribute5?: string
 
+	    /** Sixth customizable extension attribute. */
 		extensionAttribute6?: string
 
+	    /** Seventh customizable extension attribute. */
 		extensionAttribute7?: string
 
+	    /** Eighth customizable extension attribute. */
 		extensionAttribute8?: string
 
+	    /** Ninth customizable extension attribute. */
 		extensionAttribute9?: string
 
+	    /** Tenth customizable extension attribute. */
 		extensionAttribute10?: string
 
+	    /** Eleventh customizable extension attribute. */
 		extensionAttribute11?: string
 
+	    /** Twelfth customizable extension attribute. */
 		extensionAttribute12?: string
 
+	    /** Thirteenth customizable extension attribute. */
 		extensionAttribute13?: string
 
+	    /** Fourteenth customizable extension attribute. */
 		extensionAttribute14?: string
 
+	    /** Fifteenth customizable extension attribute. */
 		extensionAttribute15?: string
 
 }
 export interface PasswordProfile {
 
+	    /** The password for the user. This property is required when a user is created. It can be updated, but the user will be required to change the password on the next login. The password must satisfy minimum requirements as specified by the user’s passwordPolicies property. By default, a strong password is required. */
 		password?: string
 
+	    /** true if the user must change her password on the next login; otherwise false. */
 		forceChangePasswordNextSignIn?: boolean
 
 }
@@ -8457,10 +9065,10 @@ export interface MailboxSettings {
 }
 export interface AutomaticRepliesSetting {
 
-	    /** Configurations status for automatic replies. Possible values are: disabled, alwaysEnabled, scheduled. */
+	    /** Configurations status for automatic replies. The possible values are: disabled, alwaysEnabled, scheduled. */
 		status?: AutomaticRepliesStatus
 
-	    /** The set of audience external to the signed-in user's organization who will receive the ExternalReplyMessage, if Status is AlwaysEnabled or Scheduled. Possible values are: none, contactsOnly, all. */
+	    /** The set of audience external to the signed-in user's organization who will receive the ExternalReplyMessage, if Status is AlwaysEnabled or Scheduled. The possible values are: none, contactsOnly, all. */
 		externalAudience?: ExternalAudienceScope
 
 	    /** The date and time that automatic replies are set to begin, if Status is set to Scheduled. */
@@ -8478,17 +9086,19 @@ export interface AutomaticRepliesSetting {
 }
 export interface DateTimeTimeZone {
 
+	    /** A single point of time in a combined date and time representation (&amp;lt;date&amp;gt;T&amp;lt;time&amp;gt;). */
 		dateTime?: string
 
+	    /** One of the following time zone names. */
 		timeZone?: string
 
 }
 export interface LocaleInfo {
 
-	    /** A locale representation for the user, which includes the user's preferred language and country/region. For example, "en-us". The language component follows 2-letter codes as defined in ISO 639-1, and the country component follows 2-letter codes as defined in ISO 3166-1 alpha-2. */
+	    /** A locale representation for the user, which includes the user's preferred language and country/region. For example, 'en-us'. The language component follows 2-letter codes as defined in ISO 639-1, and the country component follows 2-letter codes as defined in ISO 3166-1 alpha-2. */
 		locale?: string
 
-	    /** A name representing the user's locale in natural language, for example, "English (United States)". */
+	    /** A name representing the user's locale in natural language, for example, 'English (United States)'. */
 		displayName?: string
 
 }
@@ -8509,7 +9119,7 @@ export interface WorkingHours {
 }
 export interface TimeZoneBase {
 
-	    /** The name of a time zone. It can be a standard time zone name such as "Hawaii-Aleutian Standard Time", or "Customized Time Zone" for a custom time zone. */
+	    /** The name of a time zone. It can be a standard time zone name such as 'Hawaii-Aleutian Standard Time', or 'Customized Time Zone' for a custom time zone. */
 		name?: string
 
 }
@@ -8602,7 +9212,7 @@ export interface EmailAddress {
 }
 export interface AttendeeBase extends Recipient {
 
-	    /** The type of attendee. Possible values are: required, optional, resource. Currently if the attendee is a person, findMeetingTimes always considers the person is of the Required type. */
+	    /** The type of attendee. The possible values are: required, optional, resource. Currently if the attendee is a person, findMeetingTimes always considers the person is of the Required type. */
 		type?: AttendeeType
 
 }
@@ -8611,7 +9221,7 @@ export interface MeetingTimeSuggestionsResult {
 	    /** An array of meeting suggestions. */
 		meetingTimeSuggestions?: MeetingTimeSuggestion[]
 
-	    /** A reason for not returning any meeting suggestions. Possible values are: attendeesUnavailable, attendeesUnavailableOrUnknown, locationsUnavailable, organizerUnavailable, or unknown. This property is an empty string if the meetingTimeSuggestions property does include any meeting suggestions. */
+	    /** A reason for not returning any meeting suggestions. The possible values are: attendeesUnavailable, attendeesUnavailableOrUnknown, locationsUnavailable, organizerUnavailable, or unknown. This property is an empty string if the meetingTimeSuggestions property does include any meeting suggestions. */
 		emptySuggestionsReason?: string
 
 }
@@ -8623,7 +9233,7 @@ export interface MeetingTimeSuggestion {
 	    /** A percentage that represents the likelhood of all the attendees attending. */
 		confidence?: number
 
-	    /** Availability of the meeting organizer for this meeting suggestion. Possible values are: free, tentative, busy, oof, workingElsewhere, unknown. */
+	    /** Availability of the meeting organizer for this meeting suggestion. The possible values are: free, tentative, busy, oof, workingElsewhere, unknown. */
 		organizerAvailability?: FreeBusyStatus
 
 	    /** An array that shows the availability status of each attendee for this meeting suggestion. */
@@ -8650,7 +9260,7 @@ export interface AttendeeAvailability {
 	    /** The type of attendee - whether it's a person or a resource, and whether required or optional if it's a person. */
 		attendee?: AttendeeBase
 
-	    /** The availability status of the attendee. Possible values are: free, tentative, busy, oof, workingElsewhere, unknown. */
+	    /** The availability status of the attendee. The possible values are: free, tentative, busy, oof, workingElsewhere, unknown. */
 		availability?: FreeBusyStatus
 
 }
@@ -8671,7 +9281,7 @@ export interface Location {
 	    /** Optional URI representing the location. */
 		locationUri?: string
 
-	    /** The type of location. Possible values are: default, conferenceRoom, homeAddress, businessAddress,geoCoordinates, streetAddress, hotel, restaurant, localBusiness, postalAddress. Read-only. */
+	    /** The type of location. The possible values are: default, conferenceRoom, homeAddress, businessAddress,geoCoordinates, streetAddress, hotel, restaurant, localBusiness, postalAddress. Read-only. */
 		locationType?: LocationType
 
 	    /** For internal use only. */
@@ -8692,7 +9302,7 @@ export interface PhysicalAddress {
 	    /** The state. */
 		state?: string
 
-	    /** The country or region. It's a free-format string value, for example, "United States". */
+	    /** The country or region. It's a free-format string value, for example, 'United States'. */
 		countryOrRegion?: string
 
 	    /** The postal code. */
@@ -8719,10 +9329,13 @@ export interface OutlookGeoCoordinates {
 }
 export interface LocationConstraint {
 
+	    /** The client requests the service to include in the response a meeting location for the meeting. If this is true and all the resources are busy, findMeetingTimes will not return any meeting time suggestions. If this is false and all the resources are busy, findMeetingTimes would still look for meeting times without locations. */
 		isRequired?: boolean
 
+	    /** The client requests the service to suggest one or more meeting locations. */
 		suggestLocation?: boolean
 
+	    /** Constraint information for one or more locations that the client requests for the meeting. */
 		locations?: LocationConstraintItem[]
 
 }
@@ -8734,8 +9347,10 @@ export interface LocationConstraintItem extends Location {
 }
 export interface TimeConstraint {
 
+	    /** The nature of the activity, optional. The possible values are: work, personal, unrestricted, or unknown. */
 		activityDomain?: ActivityDomain
 
+	    /** An array of time periods. */
 		timeslots?: TimeSlot[]
 
 }
@@ -8768,46 +9383,64 @@ export interface Reminder {
 }
 export interface MailTips {
 
+	    /** The email address of the recipient to get mailtips for. */
 		emailAddress?: EmailAddress
 
+	    /** Mail tips for automatic reply if it has been set up by the recipient. */
 		automaticReplies?: AutomaticRepliesMailTips
 
+	    /** The mailbox full status of the recipient. */
 		mailboxFull?: boolean
 
+	    /** A custom mail tip that can be set on the recipient's mailbox. */
 		customMailTip?: string
 
+	    /** The number of external members if the recipient is a distribution list. */
 		externalMemberCount?: number
 
+	    /** The number of members if the recipient is a distribution list. */
 		totalMemberCount?: number
 
+	    /** Whether the recipient's mailbox is restricted, for example, accepting messages from only a predefined list of senders, rejecting messages from a predefined list of senders, or accepting messages from only authenticated senders. */
 		deliveryRestricted?: boolean
 
+	    /** Whether sending messages to the recipient requires approval. For example, if the recipient is a large distribution list and a moderator has been set up to approve messages sent to that distribution list, or if sending messages to a recipient requires approval of the recipient's manager. */
 		isModerated?: boolean
 
+	    /** The scope of the recipient. Possible values are: none, internal, external, externalPartner, externalNonParther. For example, an administrator can set another organization to be its 'partner'. The scope is useful if an administrator wants certain mailtips to be accessible to certain scopes. It's also useful to senders to inform them that their message may leave the organization, helping them make the correct decisions about wording, tone and content. */
 		recipientScope?: RecipientScopeType
 
+	    /** Recipients suggested based on previous contexts where they appear in the same message. */
 		recipientSuggestions?: Recipient[]
 
+	    /** The maximum message size that has been configured for the recipient's organization or mailbox. */
 		maxMessageSize?: number
 
+	    /** Errors that occur during the getMailTips action. */
 		error?: MailTipsError
 
 }
 export interface AutomaticRepliesMailTips {
 
+	    /** The automatic reply message. */
 		message?: string
 
+	    /** The language that the automatic reply message is in. */
 		messageLanguage?: LocaleInfo
 
+	    /** The date and time that automatic replies are set to begin. */
 		scheduledStartTime?: DateTimeTimeZone
 
+	    /** The date and time that automatic replies are set to end. */
 		scheduledEndTime?: DateTimeTimeZone
 
 }
 export interface MailTipsError {
 
+	    /** The error message. */
 		message?: string
 
+	    /** The error code. */
 		code?: string
 
 }
@@ -8855,7 +9488,7 @@ export interface FollowupFlag {
 }
 export interface ResponseStatus {
 
-	    /** The response type. Possible values are: None, Organizer, TentativelyAccepted, Accepted, Declined, NotResponded. */
+	    /** The response type. The possible values are: None, Organizer, TentativelyAccepted, Accepted, Declined, NotResponded. */
 		response?: ResponseType
 
 	    /** The date and time that the response was returned. It uses ISO 8601 format and is always in UTC time. For example, midnight UTC on Jan 1, 2014 would look like this: '2014-01-01T00:00:00Z' */
@@ -8885,19 +9518,19 @@ export interface RecurrencePattern {
 	    /** The day of the month on which the event occurs. Required if type is absoluteMonthly or absoluteYearly. */
 		dayOfMonth?: number
 
-	    /** A collection of the days of the week on which the event occurs. Possible values are: sunday, monday, tuesday, wednesday, thursday, friday, saturday. If type is relativeMonthly or relativeYearly, and daysOfWeek specifies more than one day, the event falls on the first day that satisfies the pattern.  Required if type is weekly, relativeMonthly, or relativeYearly. */
+	    /** A collection of the days of the week on which the event occurs. The possible values are: sunday, monday, tuesday, wednesday, thursday, friday, saturday. If type is relativeMonthly or relativeYearly, and daysOfWeek specifies more than one day, the event falls on the first day that satisfies the pattern.  Required if type is weekly, relativeMonthly, or relativeYearly. */
 		daysOfWeek?: DayOfWeek[]
 
-	    /** The first day of the week. Possible values are: sunday, monday, tuesday, wednesday, thursday, friday, saturday. Default is sunday. Required if type is weekly. */
+	    /** The first day of the week. The possible values are: sunday, monday, tuesday, wednesday, thursday, friday, saturday. Default is sunday. Required if type is weekly. */
 		firstDayOfWeek?: DayOfWeek
 
-	    /** Specifies on which instance of the allowed days specified in daysOfsWeek the event occurs, counted from the first instance in the month. Possible values are: first, second, third, fourth, last. Default is first. Optional and used if type is relativeMonthly or relativeYearly. */
+	    /** Specifies on which instance of the allowed days specified in daysOfsWeek the event occurs, counted from the first instance in the month. The possible values are: first, second, third, fourth, last. Default is first. Optional and used if type is relativeMonthly or relativeYearly. */
 		index?: WeekIndex
 
 }
 export interface RecurrenceRange {
 
-	    /** The recurrence range. Possible values are: endDate, noEnd, numbered. Required. */
+	    /** The recurrence range. The possible values are: endDate, noEnd, numbered. Required. */
 		type?: RecurrenceRangeType
 
 	    /** The date to start applying the recurrence pattern. The first occurrence of the meeting may be this date or later, depending on the recurrence pattern of the event. Must be the same value as the start property of the recurring event. Required. */
@@ -8942,13 +9575,13 @@ export interface MessageRulePredicates {
 	    /** Represents the strings that appear in the headers of an incoming message in order for the condition or exception to apply. */
 		headerContains?: string[]
 
-	    /** Represents the flag-for-action value that appears on an incoming message in order for the condition or exception to apply. Possible values are: any, call, doNotForward, followUp, fyi, forward, noResponseNecessary, read, reply, replyToAll, review. */
+	    /** Represents the flag-for-action value that appears on an incoming message in order for the condition or exception to apply. The possible values are: any, call, doNotForward, followUp, fyi, forward, noResponseNecessary, read, reply, replyToAll, review. */
 		messageActionFlag?: MessageActionFlag
 
 	    /** The importance that is stamped on an incoming message in order for the condition or exception to apply: low, normal, high. */
 		importance?: Importance
 
-	    /** Represents the sensitivity level that must be stamped on an incoming message in order for the condition or exception to apply. Possible values are: normal, personal, private, confidential. */
+	    /** Represents the sensitivity level that must be stamped on an incoming message in order for the condition or exception to apply. The possible values are: normal, personal, private, confidential. */
 		sensitivity?: Sensitivity
 
 	    /** Represents the specific sender email addresses of an incoming message in order for the condition or exception to apply. */
@@ -9047,7 +9680,7 @@ export interface MessageRuleActions {
 	    /** The email addresses of the recipients to which a message should be forwarded as an attachment. */
 		forwardAsAttachmentTo?: Recipient[]
 
-	    /** The email address to which a message should be redirected. */
+	    /** The email addresses to which a message should be redirected. */
 		redirectTo?: Recipient[]
 
 	    /** A list of categories to be assigned to a message. */
@@ -9062,7 +9695,7 @@ export interface ScoredEmailAddress {
 	    /** The email address. */
 		address?: string
 
-	    /** The relevance score of the email address. A relevance score is used as a sort key, in relation to the other returned results. A higher relevance score value corresponds to a more relevant result. Relevance is determined by the user's communication and collaboration patterns and business relationships. */
+	    /** The relevance score of the email address. A relevance score is used as a sort key, in relation to the other returned results. A higher relevance score value corresponds to a more relevant result. Relevance is determined by the user’s communication and collaboration patterns and business relationships. */
 		relevanceScore?: number
 
 		selectionLikelihood?: SelectionLikelihoodInfo
@@ -9072,7 +9705,7 @@ export interface ScoredEmailAddress {
 }
 export interface Phone {
 
-	    /** The type of phone number. Possible values are: home, business, mobile, other, assistant, homeFax, businessFax, otherFax, pager, radio. */
+	    /** The type of phone number. The possible values are: home, business, mobile, other, assistant, homeFax, businessFax, otherFax, pager, radio. */
 		type?: PhoneType
 
 	    /** The phone number. */
@@ -9085,7 +9718,7 @@ export interface Phone {
 }
 export interface Website {
 
-	    /** Possible values are: other, home, work, blog, profile. */
+	    /** The possible values are: other, home, work, blog, profile. */
 		type?: WebsiteType
 
 	    /** The URL of the website. */
@@ -9393,7 +10026,7 @@ export interface File {
 }
 export interface Hashes {
 
-	    /** The CRC32 value of the file (if available). Read-only. */
+	    /** The CRC32 value of the file in little endian (if available). Read-only. */
 		crc32Hash?: string
 
 	    /** A proprietary hash of the file that can be used to determine if the contents of the file have changed (if available). Read-only. */
@@ -9429,6 +10062,7 @@ export interface FolderView {
 	    /** The method by which the folder should be sorted. */
 		sortBy?: string
 
+	    /** If true, indicates that items should be sorted in descending order. Otherwise, items should be sorted ascending. */
 		sortOrder?: string
 
 	    /** The type of view that should be used to represent the folder. */
@@ -9458,6 +10092,7 @@ export interface GeoCoordinates {
 }
 export interface Package {
 
+	    /** A string indicating the type of package. While oneNote is the only currently defined value, you should expect other package types to be returned and handle them accordingly. */
 		type?: string
 
 }
@@ -9532,6 +10167,7 @@ export interface RemoteItem {
 	    /** Size of the remote item. Read-only. */
 		size?: number
 
+	    /** If the current item is also available as a special folder, this facet is returned. Read-only. */
 		specialFolder?: SpecialFolder
 
 	    /** DAV compatible URL for the item. */
@@ -9591,9 +10227,10 @@ export interface Video {
 	    /** Duration of the file in milliseconds. */
 		duration?: number
 
-	    /** "Four character code" name of the video format. */
+	    /** 'Four character code' name of the video format. */
 		fourCC?: string
 
+	    /** Frame rate of the video. */
 		frameRate?: number
 
 	    /** Height of the video, in pixels. */
@@ -9661,6 +10298,7 @@ export interface SiteCollection {
 }
 export interface Thumbnail {
 
+	    /** The content stream for the thumbnail. */
 		content?: any
 
 	    /** The height of the thumbnail, in pixels. */
@@ -9678,10 +10316,13 @@ export interface Thumbnail {
 }
 export interface DriveItemUploadableProperties {
 
+	    /** Provides a user-visible description of the item. Read-write. Only on OneDrive Personal */
 		description?: string
 
+	    /** File system information on client. Read-write. */
 		fileSystemInfo?: FileSystemInfo
 
+	    /** The name of the item (filename and extension). Read-write. */
 		name?: string
 
 }
@@ -9697,12 +10338,21 @@ export interface DriveRecipient {
 		objectId?: string
 
 }
+export interface ItemPreviewInfo {
+
+		getUrl?: string
+
+		postParameters?: string
+
+		postUrl?: string
+
+}
 export interface UploadSession {
 
 	    /** The date and time in UTC that the upload session will expire. The complete file must be uploaded before this expiration time is reached. */
 		expirationDateTime?: string
 
-	    /** A collection of byte ranges that the server is missing for the file. These ranges are zero indexed and of the format "start-end" (e.g. "0-26" to indicate the first 27 bytes of the file). */
+	    /** A collection of byte ranges that the server is missing for the file. These ranges are zero indexed and of the format 'start-end' (e.g. '0-26' to indicate the first 27 bytes of the file). */
 		nextExpectedRanges?: string[]
 
 	    /** The URL endpoint that accepts PUT requests for byte ranges of the file. */
@@ -9739,48 +10389,67 @@ export interface WorkbookFilterCriteria {
 }
 export interface WorkbookIcon {
 
+	    /** Represents the index of the icon in the given set. */
 		index?: number
 
+	    /** Represents the set that the icon is part of. The possible values are: Invalid, ThreeArrows, ThreeArrowsGray, ThreeFlags, ThreeTrafficLights1, ThreeTrafficLights2, ThreeSigns, ThreeSymbols, ThreeSymbols2, FourArrows, FourArrowsGray, FourRedToBlack, FourRating, FourTrafficLights, FiveArrows, FiveArrowsGray, FiveRating, FiveQuarters, ThreeStars, ThreeTriangles, FiveBoxes. */
 		set?: string
 
 }
 export interface WorkbookSortField {
 
+	    /** Represents whether the sorting is done in an ascending fashion. */
 		ascending?: boolean
 
+	    /** Represents the color that is the target of the condition if the sorting is on font or cell color. */
 		color?: string
 
+	    /** Represents additional sorting options for this field. The possible values are: Normal, TextAsNumber. */
 		dataOption?: string
 
+	    /** Represents the icon that is the target of the condition if the sorting is on the cell's icon. */
 		icon?: WorkbookIcon
 
+	    /** Represents the column (or row, depending on the sort orientation) that the condition is on. Represented as an offset from the first column (or row). */
 		key?: number
 
+	    /** Represents the type of sorting of this condition. The possible values are: Value, CellColor, FontColor, Icon. */
 		sortOn?: string
 
 }
 export interface WorkbookWorksheetProtectionOptions {
 
+	    /** Represents the worksheet protection option of allowing using auto filter feature. */
 		allowAutoFilter?: boolean
 
+	    /** Represents the worksheet protection option of allowing deleting columns. */
 		allowDeleteColumns?: boolean
 
+	    /** Represents the worksheet protection option of allowing deleting rows. */
 		allowDeleteRows?: boolean
 
+	    /** Represents the worksheet protection option of allowing formatting cells. */
 		allowFormatCells?: boolean
 
+	    /** Represents the worksheet protection option of allowing formatting columns. */
 		allowFormatColumns?: boolean
 
+	    /** Represents the worksheet protection option of allowing formatting rows. */
 		allowFormatRows?: boolean
 
+	    /** Represents the worksheet protection option of allowing inserting columns. */
 		allowInsertColumns?: boolean
 
+	    /** Represents the worksheet protection option of allowing inserting hyperlinks. */
 		allowInsertHyperlinks?: boolean
 
+	    /** Represents the worksheet protection option of allowing inserting rows. */
 		allowInsertRows?: boolean
 
+	    /** Represents the worksheet protection option of allowing using pivot table feature. */
 		allowPivotTables?: boolean
 
+	    /** Represents the worksheet protection option of allowing using sort feature. */
 		allowSort?: boolean
 
 }
@@ -9946,16 +10615,16 @@ export interface Diagnostic {
 }
 export interface OnenotePatchContentCommand {
 
-	    /** The action to perform on the target element. Possible values are: replace, append, delete, insert, or prepend. */
+	    /** The action to perform on the target element. The possible values are: replace, append, delete, insert, or prepend. */
 		action?: OnenotePatchActionType
 
-	    /** The element to update. Must be the #<data-id> or the generated <id> of the element, or the body or title keyword. */
+	    /** The element to update. Must be the #&amp;lt;data-id&amp;gt; or the generated &amp;lt;id&amp;gt; of the element, or the body or title keyword. */
 		target?: string
 
-	    /** A string of well-formed HTML to add to the page, and any image or file binary data. If the content contains binary data, the request must be sent using the multipart/form-data content type with a "Commands" part. */
+	    /** A string of well-formed HTML to add to the page, and any image or file binary data. If the content contains binary data, the request must be sent using the multipart/form-data content type with a 'Commands' part. */
 		content?: string
 
-	    /** The location to add the supplied content, relative to the target element. Possible values are: after (default) or before. */
+	    /** The location to add the supplied content, relative to the target element. The possible values are: after (default) or before. */
 		position?: OnenotePatchInsertPosition
 
 }
@@ -9973,6 +10642,7 @@ export interface OnenotePagePreviewLinks {
 }
 export interface RecentNotebook {
 
+	    /** The name of the notebook. */
 		displayName?: string
 
 	    /** The date and time when the notebook was last modified. The timestamp represents date and time information using ISO 8601 format and is always in UTC time. For example, midnight UTC on Jan 1, 2014 would look like this: '2014-01-01T00:00:00Z'. Read-only. */
@@ -10011,7 +10681,7 @@ export interface EducationStudent {
 	    /** Birth date of the student. */
 		birthDate?: string
 
-	    /** Possible values are: female, male, other, unkownFutureValue. */
+	    /** The possible values are: female, male, other, unknownFutureValue. */
 		gender?: EducationGender
 
 	    /** Student Number. */
@@ -10191,6 +10861,9 @@ export interface IosMinimumOperatingSystem {
 	    /** Version 11.0 or later. */
 		v11_0?: boolean
 
+	    /** Version 12.0 or later. */
+		v12_0?: boolean
+
 }
 export interface WindowsMinimumOperatingSystem {
 
@@ -10254,13 +10927,13 @@ export interface IntuneBrand {
 	    /** Text comments regarding the person/organization responsible for IT support. */
 		contactITNotes?: string
 
-	    /** URL to the company/organization's privacy policy. */
+	    /** URL to the company/organization’s privacy policy. */
 		privacyUrl?: string
 
-	    /** URL to the company/organization's IT helpdesk site. */
+	    /** URL to the company/organization’s IT helpdesk site. */
 		onlineSupportSiteUrl?: string
 
-	    /** Display name of the company/organization's IT helpdesk site. */
+	    /** Display name of the company/organization’s IT helpdesk site. */
 		onlineSupportSiteName?: string
 
 	    /** Primary theme color used in the Company Portal applications and web portal. */
@@ -10803,40 +11476,40 @@ export interface IosHomeScreenApp extends IosHomeScreenItem {
 }
 export interface WindowsFirewallNetworkProfile {
 
-	    /** Turn on the firewall and advanced security enforcement. Possible values are: notConfigured, blocked, allowed. */
+	    /** Configures the host device to allow or block the firewall and advanced security enforcement for the network profile. Possible values are: notConfigured, blocked, allowed. */
 		firewallEnabled?: StateManagementSetting
 
-	    /** Prevent the server from operating in stealth mode */
+	    /** Prevent the server from operating in stealth mode. When StealthModeRequired and StealthModeBlocked are both true, StealthModeBlocked takes priority. */
 		stealthModeBlocked?: boolean
 
-	    /** Configures the firewall to block all incoming traffic regardless of other policy settings */
+	    /** Configures the firewall to block all incoming traffic regardless of other policy settings. When IncomingTrafficRequired and IncomingTrafficBlocked are both true, IncomingTrafficBlocked takes priority. */
 		incomingTrafficBlocked?: boolean
 
-	    /** Configures the firewall to block unicast responses to multicast broadcast traffic */
+	    /** Configures the firewall to block unicast responses to multicast broadcast traffic. When UnicastResponsesToMulticastBroadcastsRequired and UnicastResponsesToMulticastBroadcastsBlocked are both true, UnicastResponsesToMulticastBroadcastsBlocked takes priority. */
 		unicastResponsesToMulticastBroadcastsBlocked?: boolean
 
-	    /** Prevents the firewall from displaying notifications when an application is blocked from listening on a port */
+	    /** Prevents the firewall from displaying notifications when an application is blocked from listening on a port. When InboundNotificationsRequired and InboundNotificationsBlocked are both true, InboundNotificationsBlocked takes priority. */
 		inboundNotificationsBlocked?: boolean
 
-	    /** Configures the firewall to merge authorized application rules from group policy with those from local store instead of ignoring the local store rules */
+	    /** Configures the firewall to merge authorized application rules from group policy with those from local store instead of ignoring the local store rules. When AuthorizedApplicationRulesFromGroupPolicyNotMerged and AuthorizedApplicationRulesFromGroupPolicyMerged are both true, AuthorizedApplicationRulesFromGroupPolicyMerged takes priority. */
 		authorizedApplicationRulesFromGroupPolicyMerged?: boolean
 
-	    /** Configures the firewall to merge global port rules from group policy with those from local store instead of ignoring the local store rules */
+	    /** Configures the firewall to merge global port rules from group policy with those from local store instead of ignoring the local store rules. When GlobalPortRulesFromGroupPolicyNotMerged and GlobalPortRulesFromGroupPolicyMerged are both true, GlobalPortRulesFromGroupPolicyMerged takes priority. */
 		globalPortRulesFromGroupPolicyMerged?: boolean
 
-	    /** Configures the firewall to merge connection security rules from group policy with those from local store instead of ignoring the local store rules */
+	    /** Configures the firewall to merge connection security rules from group policy with those from local store instead of ignoring the local store rules. When ConnectionSecurityRulesFromGroupPolicyNotMerged and ConnectionSecurityRulesFromGroupPolicyMerged are both true, ConnectionSecurityRulesFromGroupPolicyMerged takes priority. */
 		connectionSecurityRulesFromGroupPolicyMerged?: boolean
 
-	    /** Configures the firewall to block all outgoing connections by default */
+	    /** Configures the firewall to block all outgoing connections by default. When OutboundConnectionsRequired and OutboundConnectionsBlocked are both true, OutboundConnectionsBlocked takes priority. */
 		outboundConnectionsBlocked?: boolean
 
-	    /** Configures the firewall to block all incoming connections by default */
+	    /** Configures the firewall to block all incoming connections by default. When InboundConnectionsRequired and InboundConnectionsBlocked are both true, InboundConnectionsBlocked takes priority. */
 		inboundConnectionsBlocked?: boolean
 
-	    /** Configures the firewall to allow the host computer to respond to unsolicited network traffic of that traffic is secured by IPSec even when stealthModeBlocked is set to true */
+	    /** Configures the firewall to allow the host computer to respond to unsolicited network traffic of that traffic is secured by IPSec even when stealthModeBlocked is set to true. When SecuredPacketExemptionBlocked and SecuredPacketExemptionAllowed are both true, SecuredPacketExemptionAllowed takes priority. */
 		securedPacketExemptionAllowed?: boolean
 
-	    /** Configures the firewall to merge Firewall Rule policies from group policy with those from local store instead of ignoring the local store rules */
+	    /** Configures the firewall to merge Firewall Rule policies from group policy with those from local store instead of ignoring the local store rules. When PolicyRulesFromGroupPolicyNotMerged and PolicyRulesFromGroupPolicyMerged are both true, PolicyRulesFromGroupPolicyMerged takes priority. */
 		policyRulesFromGroupPolicyMerged?: boolean
 
 }
@@ -10869,7 +11542,7 @@ export interface DefenderDetectedMalwareActions {
 }
 export interface Windows10NetworkProxyServer {
 
-	    /** Address to the proxy server. Specify an address in the format [":"] */
+	    /** Address to the proxy server. Specify an address in the format [':'] */
 		address?: string
 
 	    /** Addresses that should not use the proxy server. The system will not use the proxy server for addresses beginning with what is specified in this node. */
@@ -10941,7 +11614,7 @@ export interface DeviceConfigurationSettingState {
 	    /** Name of setting instance that is being reported. */
 		instanceDisplayName?: string
 
-	    /** The compliance state of the setting. Possible values are: unknown, notApplicable, compliant, remediated, nonCompliant, error, conflict. */
+	    /** The compliance state of the setting. Possible values are: unknown, notApplicable, compliant, remediated, nonCompliant, error, conflict, notAssigned. */
 		state?: ComplianceStatus
 
 	    /** Error code for the setting */
@@ -10989,7 +11662,7 @@ export interface DeviceCompliancePolicySettingState {
 	    /** Name of setting instance that is being reported. */
 		instanceDisplayName?: string
 
-	    /** The compliance state of the setting. Possible values are: unknown, notApplicable, compliant, remediated, nonCompliant, error, conflict. */
+	    /** The compliance state of the setting. Possible values are: unknown, notApplicable, compliant, remediated, nonCompliant, error, conflict, notAssigned. */
 		state?: ComplianceStatus
 
 	    /** Error code for the setting */
@@ -11231,211 +11904,296 @@ export interface VisualInfo {
 }
 export interface CloudAppSecurityState {
 
+	    /** Destination IP Address of the connection to the cloud application/service. */
 		destinationServiceIp?: string
 
+	    /** Cloud application/service name (for example 'Salesforce', 'DropBox', etc.). */
 		destinationServiceName?: string
 
+	    /** Provider-generated/calculated risk score of the Cloud Application/Service. Recommended value range of 0-1, which equates to a percentage. */
 		riskScore?: string
 
 }
 export interface FileSecurityState {
 
+	    /** Complex type containing file hashes (cryptographic and location-sensitive). */
 		fileHash?: FileHash
 
+	    /** File name (without path). */
 		name?: string
 
+	    /** Full file path of the file/imageFile. */
 		path?: string
 
+	    /** Provider generated/calculated risk score of the alert file. Recommended value range of 0-1, which equates to a percentage. */
 		riskScore?: string
 
 }
 export interface FileHash {
 
+	    /** File hash type. Possible values are: unknown, sha1, sha256, md5, authenticodeHash256, lsHash, ctph, peSha1, peSha256. */
 		hashType?: FileHashType
 
+	    /** Value of the file hash. */
 		hashValue?: string
 
 }
 export interface HostSecurityState {
 
+	    /** Host FQDN (Fully Qualified Domain Name) (for example, machine.company.com). */
 		fqdn?: string
 
 		isAzureAdJoined?: boolean
 
 		isAzureAdRegistered?: boolean
 
+	    /** True if the host is domain joined to an on-premises Active Directory domain. */
 		isHybridAzureDomainJoined?: boolean
 
+	    /** The local host name, without the DNS domain name. */
 		netBiosName?: string
 
+	    /** Host Operating System. (For example, Windows10, MacOS, RHEL, etc.). */
 		os?: string
 
+	    /** Private (not routable) IPv4 or IPv6 address (see RFC 1918) at the time of the alert. */
 		privateIpAddress?: string
 
+	    /** Publicly routable IPv4 or IPv6 address (see RFC 1918) at time of the alert. */
 		publicIpAddress?: string
 
+	    /** Provider-generated/calculated risk score of the host.  Recommended value range of 0-1, which equates to a percentage. */
 		riskScore?: string
 
 }
 export interface MalwareState {
 
+	    /** Provider-generated malware category (for example, trojan, ransomware, etc.). */
 		category?: string
 
+	    /** Provider-generated malware family (for example, 'wannacry', 'notpetya', etc.). */
 		family?: string
 
+	    /** Provider-generated malware variant name (for example, Trojan:Win32/Powessere.H). */
 		name?: string
 
+	    /** Provider-determined severity of this malware. */
 		severity?: string
 
+	    /** Indicates whether the detected file (malware/vulnerability) was running at the time of detection or was detected at rest on the disk. */
 		wasRunning?: boolean
 
 }
 export interface NetworkConnection {
 
+	    /** Name of the application managing the network connection (for example, Facebook, SMTP, etc.). */
 		applicationName?: string
 
+	    /** Destination IP address (of the network connection). */
 		destinationAddress?: string
 
+	    /** Destination domain portion of the destination URL. (for example 'www.contoso.com'). */
 		destinationDomain?: string
 
+	    /** Destination port (of the network connection). */
 		destinationPort?: string
 
+	    /** Network connection URL/URI string - excluding parameters. (for example 'www.contoso.com/products/default.html') */
 		destinationUrl?: string
 
+	    /** Network connection direction. Possible values are: unknown, inbound, outbound. */
 		direction?: ConnectionDirection
 
+	    /** Date when the destination domain was registered. The Timestamp type represents date and time information using ISO 8601 format and is always in UTC time. For example, midnight UTC on Jan 1, 2014 would look like this: '2014-01-01T00:00:00Z' */
 		domainRegisteredDateTime?: string
 
+	    /** The local DNS name resolution as it appears in the host's local DNS cache (for example, in case the 'hosts' file was tampered with). */
 		localDnsName?: string
 
+	    /** Network Address Translation destination IP address. */
 		natDestinationAddress?: string
 
+	    /** Network Address Translation destination port. */
 		natDestinationPort?: string
 
+	    /** Network Address Translation source IP address. */
 		natSourceAddress?: string
 
+	    /** Network Address Translation source port. */
 		natSourcePort?: string
 
+	    /** Network protocol. Possible values are: unknown, ip, icmp, igmp, ggp, ipv4, tcp, pup, udp, idp, ipv6, ipv6RoutingHeader, ipv6FragmentHeader, ipSecEncapsulatingSecurityPayload, ipSecAuthenticationHeader, icmpV6, ipv6NoNextHeader, ipv6DestinationOptions, nd, raw, ipx, spx, spxII. */
 		protocol?: SecurityNetworkProtocol
 
+	    /** Provider generated/calculated risk score of the network connection. Recommended value range of 0-1, which equates to a percentage. */
 		riskScore?: string
 
+	    /** Source (i.e. origin) IP address (of the network connection). */
 		sourceAddress?: string
 
+	    /** Source (i.e. origin) IP port (of the network connection). */
 		sourcePort?: string
 
+	    /** Network connection status. Possible values are: unknown, attempted, succeeded, blocked, failed. */
 		status?: ConnectionStatus
 
+	    /** Parameters (suffix) of the destination URL. */
 		urlParameters?: string
 
 }
 export interface Process {
 
+	    /** User account identifier (user account context the process ran under) for example, AccountName, SID, and so on. */
 		accountName?: string
 
+	    /** The full process invocation commandline including all parameters. */
 		commandLine?: string
 
+	    /** Time at which the process was started. The Timestamp type represents date and time information using ISO 8601 format and is always in UTC time. For example, midnight UTC on Jan 1, 2014 would look like this: '2014-01-01T00:00:00Z'. */
 		createdDateTime?: string
 
+	    /** Complex type containing file hashes (cryptographic and location-sensitive). */
 		fileHash?: FileHash
 
+	    /** The integrity level of the process. Possible values are: unknown, untrusted, low, medium, high, system. */
 		integrityLevel?: ProcessIntegrityLevel
 
+	    /** True if the process is elevated. */
 		isElevated?: boolean
 
+	    /** The name of the process' Image file. */
 		name?: string
 
+	    /** DateTime at which the parent process was started. The Timestamp type represents date and time information using ISO 8601 format and is always in UTC time. For example, midnight UTC on Jan 1, 2014 would look like this: '2014-01-01T00:00:00Z'. */
 		parentProcessCreatedDateTime?: string
 
+	    /** The Process ID (PID) of the parent process. */
 		parentProcessId?: number
 
+	    /** The name of the image file of the parent process. */
 		parentProcessName?: string
 
+	    /** Full path, including filename. */
 		path?: string
 
+	    /** The Process ID (PID) of the process. */
 		processId?: number
 
 }
 export interface RegistryKeyState {
 
+	    /** A Windows registry hive : HKEY_CURRENT_CONFIG HKEY_CURRENT_USER HKEY_LOCAL_MACHINE/SAM HKEY_LOCAL_MACHINE/Security HKEY_LOCAL_MACHINE/Software HKEY_LOCAL_MACHINE/System HKEY_USERS/.Default. Possible values are: unknown, currentConfig, currentUser, localMachineSam, localMachineSamSoftware, localMachineSystem, usersDefault. */
 		hive?: RegistryHive
 
+	    /** Current (i.e. changed) registry key (excludes HIVE). */
 		key?: string
 
+	    /** Previous (i.e. before changed) registry key (excludes HIVE). */
 		oldKey?: string
 
+	    /** Previous (i.e. before changed) registry key value data (contents). */
 		oldValueData?: string
 
+	    /** Previous (i.e. before changed) registry key value name. */
 		oldValueName?: string
 
+	    /** Operation that changed the registry key name and/or value. Possible values are: unknown, create, modify, delete. */
 		operation?: RegistryOperation
 
+	    /** Process ID (PID) of the process that modified the registry key (process details will appear in the alert 'processes' collection). */
 		processId?: number
 
+	    /** Current (i.e. changed) registry key value data (contents). */
 		valueData?: string
 
+	    /** Current (i.e. changed) registry key value name */
 		valueName?: string
 
+	    /** Registry key value type REG_BINARY REG_DWORD REG_DWORD_LITTLE_ENDIAN REG_DWORD_BIG_ENDIANREG_EXPAND_SZ REG_LINK REG_MULTI_SZ REG_NONE REG_QWORD REG_QWORD_LITTLE_ENDIAN REG_SZ Possible values are: unknown, binary, dword, dwordLittleEndian, dwordBigEndian, expandSz, link, multiSz, none, qword, qwordlittleEndian, sz. */
 		valueType?: RegistryValueType
 
 }
 export interface AlertTrigger {
 
+	    /** Name of the property serving as a detection trigger. */
 		name?: string
 
+	    /** Type of the property in the key:value pair for interpretation. For example, String, Boolean, etc. */
 		type?: string
 
+	    /** Value of the property serving as a detection trigger. */
 		value?: string
 
 }
 export interface UserSecurityState {
 
+	    /** AAD User object identifier (GUID) - represents the physical/multi-account user entity. */
 		aadUserId?: string
 
+	    /** Account name of user account (without Active Directory domain or DNS domain) - (also called mailNickName). */
 		accountName?: string
 
+	    /** NetBIOS/Active Directory domain of user account (that is, domain/account format). */
 		domainName?: string
 
+	    /** For email-related alerts - user account's email 'role'. Possible values are: unknown, sender, recipient. */
 		emailRole?: EmailRole
 
+	    /** Indicates whether the user logged on through a VPN. */
 		isVpn?: boolean
 
+	    /** Time at which the sign-in occurred. The Timestamp type represents date and time information using ISO 8601 format and is always in UTC time. For example, midnight UTC on Jan 1, 2014 would look like this: '2014-01-01T00:00:00Z'. */
 		logonDateTime?: string
 
+	    /** User sign-in ID. */
 		logonId?: string
 
+	    /** IP Address the sign-in request originated from. */
 		logonIp?: string
 
+	    /** Location (by IP address mapping) associated with a user sign-in event by this user. */
 		logonLocation?: string
 
+	    /** Method of user sign in. Possible values are: unknown, interactive, remoteInteractive, network, batch, service. */
 		logonType?: LogonType
 
+	    /** Active Directory (on-premises) Security Identifier (SID) of the user. */
 		onPremisesSecurityIdentifier?: string
 
+	    /** Provider-generated/calculated risk score of the user account. Recommended value range of 0-1, which equates to a percentage. */
 		riskScore?: string
 
+	    /** User account type (group membership), per Windows definition. Possible values are: unknown, standard, power, administrator. */
 		userAccountType?: UserAccountSecurityType
 
+	    /** User sign-in name - internet format: (user account name)@(user account DNS domain name). */
 		userPrincipalName?: string
 
 }
 export interface SecurityVendorInformation {
 
+	    /** Specific provider (product/service - not vendor company); for example, WindowsDefenderATP. */
 		provider?: string
 
+	    /** Version of the provider or subprovider, if it exists, that generated the alert. Required */
 		providerVersion?: string
 
+	    /** Specific subprovider (under aggregating provider); for example, WindowsDefenderATP.SmartScreen. */
 		subProvider?: string
 
+	    /** Name of the alert vendor (for example, Microsoft, Dell, FireEye). Required */
 		vendor?: string
 
 }
 export interface VulnerabilityState {
 
+	    /** Common Vulnerabilities and Exposures (CVE) for the vulnerability. */
 		cve?: string
 
+	    /** Base Common Vulnerability Scoring System (CVSS) severity score for this vulnerability. */
 		severity?: string
 
+	    /** Indicates whether the detected vulnerability (file) was running at the time of detection or was the file detected at rest on the disk. */
 		wasRunning?: boolean
 
 }
@@ -11494,5 +12252,94 @@ export interface UsageDetails {
 		lastAccessedDateTime?: string
 
 		lastModifiedDateTime?: string
+
+}
+export interface TeamMemberSettings {
+
+	    /** If set to true, members can add and update channels. */
+		allowCreateUpdateChannels?: boolean
+
+	    /** If set to true, members can delete channels. */
+		allowDeleteChannels?: boolean
+
+	    /** If set to true, members can add and remove apps. */
+		allowAddRemoveApps?: boolean
+
+	    /** If set to true, members can add, update, and remove tabs. */
+		allowCreateUpdateRemoveTabs?: boolean
+
+	    /** If set to true, members can add, update, and remove connectors. */
+		allowCreateUpdateRemoveConnectors?: boolean
+
+}
+export interface TeamGuestSettings {
+
+	    /** If set to true, guests can add and update channels. */
+		allowCreateUpdateChannels?: boolean
+
+	    /** If set to true, guests can delete channels. */
+		allowDeleteChannels?: boolean
+
+}
+export interface TeamMessagingSettings {
+
+	    /** If set to true, users can edit their messages. */
+		allowUserEditMessages?: boolean
+
+	    /** If set to true, users can delete their messages. */
+		allowUserDeleteMessages?: boolean
+
+	    /** If set to true, owners can delete any message. */
+		allowOwnerDeleteMessages?: boolean
+
+	    /** If set to true, @team mentions are allowed. */
+		allowTeamMentions?: boolean
+
+	    /** If set to true, @channel mentions are allowed. */
+		allowChannelMentions?: boolean
+
+}
+export interface TeamFunSettings {
+
+	    /** If set to true, enables Giphy use. */
+		allowGiphy?: boolean
+
+	    /** Giphy content rating. Possible values are: moderate, strict. */
+		giphyContentRating?: GiphyRatingType
+
+	    /** If set to true, enables users to include stickers and memes. */
+		allowStickersAndMemes?: boolean
+
+	    /** If set to true, enables users to include custom memes. */
+		allowCustomMemes?: boolean
+
+}
+export interface TeamClassSettings {
+
+		notifyGuardiansAboutAssignments?: boolean
+
+}
+export interface TeamsTabConfiguration {
+
+	    /** Identifier for the entity hosted by the tab provider. */
+		entityId?: string
+
+	    /** Url used for rendering tab contents in Teams. Required. */
+		contentUrl?: string
+
+	    /** Url called by Teams client when a Tab is removed using the Teams Client. */
+		removeUrl?: string
+
+	    /** Url for showing tab contents outside of Teams. */
+		websiteUrl?: string
+
+}
+export interface OperationError {
+
+	    /** Operation error code. */
+		code?: string
+
+	    /** Operation error message. */
+		message?: string
 
 }
