@@ -247,6 +247,9 @@ export interface Device extends DirectoryObject {
 	    /** Type of trust for the joined device. Read-only. Possible values: Workplace - indicates bring your own personal devicesAzureAd - Cloud only joined devicesServerAd - on-premises domain joined devices joined to Azure AD. For more details, see Introduction to device management in Azure Active Directory */
 		trustType?: string
 
+	    /** Groups that this group is a member of. HTTP Methods: GET (supported for all groups). Read-only. Nullable. */
+		memberOf?: DirectoryObject[]
+
 	    /** The user that cloud joined the device or registered their personal device. The registered owner is set at the time of registration. Currently, there can be only one owner. Read-only. Nullable. */
 		registeredOwners?: DirectoryObject[]
 
@@ -1349,7 +1352,7 @@ export interface Message extends OutlookItem {
 	    /** The subject of the message. */
 		subject?: string
 
-	    /** The body of the message. It can be in HTML or text format. */
+	    /** The body of the message. It can be in HTML or text format. Find out about safe HTML in a message body. */
 		body?: ItemBody
 
 	    /** The first 255 characters of the message body. It is in text format. */
@@ -1361,10 +1364,10 @@ export interface Message extends OutlookItem {
 	    /** The unique identifier for the message's parent mailFolder. */
 		parentFolderId?: string
 
-	    /** The account that is actually used to generate the message. In most cases, this value is the same as the from property. You can set this property to a different value when sending a message from a shared mailbox, or sending a message as a delegate. In any case, the value must correspond to the actual mailbox used. */
+	    /** The account that is actually used to generate the message. In most cases, this value is the same as the from property. You can set this property to a different value when sending a message from a shared mailbox, or sending a message as a delegate. In any case, the value must correspond to the actual mailbox used. Find out more about setting the from and sender properties of a message. */
 		sender?: Recipient
 
-	    /** The mailbox owner and sender of the message. The value must correspond to the actual mailbox used. */
+	    /** The mailbox owner and sender of the message. The value must correspond to the actual mailbox used. Find out more about setting the from and sender properties of a message. */
 		from?: Recipient
 
 	    /** The To: recipients for the message. */
@@ -8846,16 +8849,22 @@ export interface TeamsTab extends Entity {
 
 export interface DataPolicyOperation extends Entity {
 
+	    /** Represents when the request for this data policy operation was completed, in UTC time, using the ISO 8601 format. For example, midnight UTC on Jan 1, 2014 would look like this: '2014-01-01T00:00:00Z'. Null until the operation completes. */
 		completedDateTime?: string
 
+	    /** Possible values are: notStarted, running, complete, failed, unknownFutureValue. */
 		status?: DataPolicyOperationStatus
 
+	    /** The URL location to where data is being exported for export requests. */
 		storageLocation?: string
 
+	    /** The id for the user on whom the operation is performed. */
 		userId?: string
 
+	    /** Represents when the request for this data operation was submitted, in UTC time, using the ISO 8601 format. For example, midnight UTC on Jan 1, 2014 would look like this: '2014-01-01T00:00:00Z' */
 		submittedDateTime?: string
 
+	    /** Specifies the progress of an operation. */
 		progress?: number
 
 }
