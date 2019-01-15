@@ -256,6 +256,8 @@ export interface Device extends DirectoryObject {
 	    /** Collection of registered users of the device. For cloud joined devices and registered personal devices, registered users are set to the same value as registered owners at the time of registration. Read-only. Nullable. */
 		registeredUsers?: DirectoryObject[]
 
+		transitiveMemberOf?: DirectoryObject[]
+
 	    /** The collection of open extensions defined for the device. Read-only. Nullable. */
 		extensions?: Extension[]
 
@@ -485,6 +487,10 @@ export interface Group extends DirectoryObject {
 
 	    /** Groups that this group is a member of. HTTP Methods: GET (supported for all groups). Read-only. Nullable. */
 		memberOf?: DirectoryObject[]
+
+		transitiveMembers?: DirectoryObject[]
+
+		transitiveMemberOf?: DirectoryObject[]
 
 	    /** The user (or application) that created the group. NOTE: This is not set if the user is an administrator. Read-only. */
 		createdOnBehalfOf?: DirectoryObject
@@ -1010,6 +1016,7 @@ export interface Organization extends DirectoryObject {
 	    /** The collection of service plans associated with the tenant. Not nullable. */
 		assignedPlans?: AssignedPlan[]
 
+	    /** Telephone number for the organization. NOTE: Although this is a string collection, only one number can be set for this property. */
 		businessPhones?: string[]
 
 	    /** City name of the address for the organization */
@@ -1027,8 +1034,10 @@ export interface Organization extends DirectoryObject {
 	    /** Not nullable. */
 		marketingNotificationEmails?: string[]
 
+	    /** The time and date at which the tenant was last synced with the on-premise directory. The Timestamp type represents date and time information using ISO 8601 format and is always in UTC time. For example, midnight UTC on Jan 1, 2014 would look like this: '2014-01-01T00:00:00Z'. Read-only. */
 		onPremisesLastSyncDateTime?: string
 
+	    /** true if this object is synced from an on-premises directory; false if this object was originally synced from an on-premises directory but is no longer synced; null if this object has never been synced from an on-premises directory (default). */
 		onPremisesSyncEnabled?: boolean
 
 	    /** Postal code of the address for the organization */
@@ -1102,6 +1111,10 @@ export interface User extends DirectoryObject {
 	    /** The name displayed in the address book for the user. This is usually the combination of the user's first name, middle initial and last name. This property is required when a user is created and it cannot be cleared during updates. Supports $filter and $orderby. */
 		displayName?: string
 
+		employeeId?: string
+
+		faxNumber?: string
+
 	    /** The given name (first name) of the user. Supports $filter. */
 		givenName?: string
 
@@ -1122,6 +1135,8 @@ export interface User extends DirectoryObject {
 
 	    /** The primary cellular telephone number for the user. */
 		mobilePhone?: string
+
+		onPremisesDistinguishedName?: string
 
 	    /** Contains extensionAttributes 1-15 for the user. Note that the individual extension attributes are neither selectable nor filterable. For an onPremisesSyncEnabled user, this set of properties is mastered on-premises and is read-only. For a cloud-only user (where onPremisesSyncEnabled is false), these properties may be set during creation or update. */
 		onPremisesExtensionAttributes?: OnPremisesExtensionAttributes
@@ -1150,6 +1165,8 @@ export interface User extends DirectoryObject {
 	    /** Contains the on-premises userPrincipalName synchronized from the on-premises directory. The property is only populated for customers who are synchronizing their on-premises directory to Azure Active Directory via Azure AD Connect. Read-only. */
 		onPremisesUserPrincipalName?: string
 
+		otherMails?: string[]
+
 	    /** Specifies password policies for the user. This value is an enumeration with one possible value being 'DisableStrongPassword', which allows weaker passwords than the default policy to be specified. 'DisablePasswordExpiration' can also be specified. The two may be specified together; for example: 'DisablePasswordExpiration, DisableStrongPassword'. */
 		passwordPolicies?: string
 
@@ -1170,6 +1187,8 @@ export interface User extends DirectoryObject {
 
 	    /** For example: ['SMTP: bob@contoso.com', 'smtp: bob@sales.contoso.com'] The any operator is required for filter expressions on multi-valued properties. Read-only, Not nullable. Supports $filter. */
 		proxyAddresses?: string[]
+
+		showInAddressList?: boolean
 
 	    /** The state or province in the user's address. Supports $filter. */
 		state?: string
@@ -1248,6 +1267,8 @@ export interface User extends DirectoryObject {
 
 	    /** A collection of this user's license details. Nullable. */
 		licenseDetails?: LicenseDetails[]
+
+		transitiveMemberOf?: DirectoryObject[]
 
 	    /** The collection of open extensions defined for the user. Read-only. Nullable. */
 		extensions?: Extension[]
@@ -1412,13 +1433,13 @@ export interface Message extends OutlookItem {
 	    /** The fileAttachment and itemAttachment attachments for the message. */
 		attachments?: Attachment[]
 
-	    /** The collection of open extensions defined for the message. Read-only. Nullable. */
+	    /** The collection of open extensions defined for the message. Nullable. */
 		extensions?: Extension[]
 
-	    /** The collection of single-value extended properties defined for the message. Read-only. Nullable. */
+	    /** The collection of single-value extended properties defined for the message. Nullable. */
 		singleValueExtendedProperties?: SingleValueLegacyExtendedProperty[]
 
-	    /** The collection of multi-value extended properties defined for the message. Read-only. Nullable. */
+	    /** The collection of multi-value extended properties defined for the message. Nullable. */
 		multiValueExtendedProperties?: MultiValueLegacyExtendedProperty[]
 
 }
