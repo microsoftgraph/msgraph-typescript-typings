@@ -95,7 +95,6 @@ export type RatingUnitedStatesTelevisionType = "allAllowed" | "allBlocked" | "ch
 export type RatingAppsType = "allAllowed" | "allBlocked" | "agesAbove4" | "agesAbove9" | "agesAbove12" | "agesAbove17"
 export type RequiredPasswordType = "deviceDefault" | "alphanumeric" | "numeric"
 export type IosNotificationAlertType = "deviceDefault" | "banner" | "modal" | "none"
-export type EditionUpgradeLicenseType = "productKey" | "licenseFile"
 export type StateManagementSetting = "notConfigured" | "blocked" | "allowed"
 export type FirewallPreSharedKeyEncodingMethodType = "deviceDefault" | "none" | "utF8"
 export type FirewallCertificateRevocationListCheckMethodType = "deviceDefault" | "none" | "attempt" | "require"
@@ -120,6 +119,7 @@ export type AutomaticUpdateMode = "userDefined" | "notifyDownload" | "autoInstal
 export type SafeSearchFilterType = "userDefined" | "strict" | "moderate"
 export type EdgeSearchEngineType = "default" | "bing"
 export type PrereleaseFeatures = "userDefined" | "settingsOnly" | "settingsAndExperimentations" | "notAllowed"
+export type EditionUpgradeLicenseType = "productKey" | "licenseFile"
 export type WindowsDeliveryOptimizationMode = "userDefined" | "httpOnly" | "httpWithPeeringNat" | "httpWithPeeringPrivateGroup" | "httpWithInternetPeering" | "simpleDownload" | "bypassMode"
 export type SharedPCAccountDeletionPolicyType = "immediate" | "diskSpaceThreshold" | "diskSpaceThresholdOrInactiveThreshold"
 export type SharedPCAllowedAccountType = "guest" | "domain"
@@ -420,64 +420,64 @@ export interface LicenseDetails extends Entity {
 
 export interface Group extends DirectoryObject {
 
-	    /** Describes a classification for the group (such as low, medium or high business impact). Valid values for this property are defined by creating a ClassificationList setting value, based on the template definition. */
+	    /** Describes a classification for the group (such as low, medium or high business impact). Valid values for this property are defined by creating a ClassificationList setting value, based on the template definition.Returned by default. */
 		classification?: string
 
-	    /** Timestamp of when the group was created. The value cannot be modified and is automatically populated when the group is created. The Timestamp type represents date and time information using ISO 8601 format and is always in UTC time. For example, midnight UTC on Jan 1, 2014 would look like this: '2014-01-01T00:00:00Z'. Read-only. */
+	    /** Timestamp of when the group was created. The value cannot be modified and is automatically populated when the group is created. The Timestamp type represents date and time information using ISO 8601 format and is always in UTC time. For example, midnight UTC on Jan 1, 2014 would look like this: '2014-01-01T00:00:00Z'. Returned by default. Read-only. */
 		createdDateTime?: string
 
-	    /** An optional description for the group. */
+	    /** An optional description for the group. Returned by default. */
 		description?: string
 
-	    /** The display name for the group. This property is required when a group is created and it cannot be cleared during updates. Supports $filter and $orderby. */
+	    /** The display name for the group. This property is required when a group is created and cannot be cleared during updates. Returned by default. Supports $filter and $orderby. */
 		displayName?: string
 
-	    /** Specifies the type of group to create. Possible values are Unified to create an Office 365 group, or DynamicMembership for dynamic groups.  For all other group types, like security-enabled groups and email-enabled security groups, do not set this property. Supports $filter. */
+	    /** Specifies the type of group to create. Possible values are Unified to create an Office 365 group, or DynamicMembership for dynamic groups.  For all other group types, like security-enabled groups and email-enabled security groups, do not set this property. Returned by default. Supports $filter. */
 		groupTypes?: string[]
 
-	    /** The SMTP address for the group, for example, 'serviceadmins@contoso.onmicrosoft.com'. Read-only. Supports $filter. */
+	    /** The SMTP address for the group, for example, 'serviceadmins@contoso.onmicrosoft.com'. Returned by default. Read-only. Supports $filter. */
 		mail?: string
 
-	    /** Specifies whether the group is mail-enabled. If the securityEnabled property is also true, the group is a mail-enabled security group; otherwise, the group is a Microsoft Exchange distribution group. */
+	    /** Specifies whether the group is mail-enabled. If the securityEnabled property is also true, the group is a mail-enabled security group; otherwise, the group is a Microsoft Exchange distribution group. Returned by default. */
 		mailEnabled?: boolean
 
-	    /** The mail alias for the group, unique in the organization. This property must be specified when a group is created. Supports $filter. */
+	    /** The mail alias for the group, unique in the organization. This property must be specified when a group is created. Returned by default. Supports $filter. */
 		mailNickname?: string
 
-	    /** Indicates the last time at which the group was synced with the on-premises directory.The Timestamp type represents date and time information using ISO 8601 format and is always in UTC time. For example, midnight UTC on Jan 1, 2014 would look like this: '2014-01-01T00:00:00Z'. Read-only. Supports $filter. */
+	    /** Indicates the last time at which the group was synced with the on-premises directory.The Timestamp type represents date and time information using ISO 8601 format and is always in UTC time. For example, midnight UTC on Jan 1, 2014 would look like this: '2014-01-01T00:00:00Z'. Returned by default. Read-only. Supports $filter. */
 		onPremisesLastSyncDateTime?: string
 
-	    /** Errors when using Microsoft synchronization product during provisioning. */
+	    /** Errors when using Microsoft synchronization product during provisioning. Returned by default. */
 		onPremisesProvisioningErrors?: OnPremisesProvisioningError[]
 
-	    /** Contains the on-premises security identifier (SID) for the group that was synchronized from on-premises to the cloud. Read-only. */
+	    /** Contains the on-premises security identifier (SID) for the group that was synchronized from on-premises to the cloud. Returned by default. Read-only. */
 		onPremisesSecurityIdentifier?: string
 
-	    /** true if this group is synced from an on-premises directory; false if this group was originally synced from an on-premises directory but is no longer synced; null if this object has never been synced from an on-premises directory (default). Read-only. Supports $filter. */
+	    /** true if this group is synced from an on-premises directory; false if this group was originally synced from an on-premises directory but is no longer synced; null if this object has never been synced from an on-premises directory (default). Returned by default. Read-only. Supports $filter. */
 		onPremisesSyncEnabled?: boolean
 
-	    /** The any operator is required for filter expressions on multi-valued properties. Read-only. Not nullable. Supports $filter. */
+	    /** Email addresses for the group that direct to the same group mailbox. For example: ['SMTP: bob@contoso.com', 'smtp: bob@sales.contoso.com']. The any operator is required to filter expressions on multi-valued properties. Returned by default. Read-only. Not nullable. Supports $filter. */
 		proxyAddresses?: string[]
 
-	    /** Timestamp of when the group was last renewed. This cannot be modified directly and is only updated via the renew service action. The Timestamp type represents date and time information using ISO 8601 format and is always in UTC time. For example, midnight UTC on Jan 1, 2014 would look like this: '2014-01-01T00:00:00Z'. Read-only. */
+	    /** Timestamp of when the group was last renewed. This cannot be modified directly and is only updated via the renew service action. The Timestamp type represents date and time information using ISO 8601 format and is always in UTC time. For example, midnight UTC on Jan 1, 2014 would look like this: '2014-01-01T00:00:00Z'. Returned by default. Read-only. */
 		renewedDateTime?: string
 
-	    /** Specifies whether the group is a security group. If the mailEnabled property is also true, the group is a mail-enabled security group; otherwise it is a security group. Must be false for Office 365 groups. Supports $filter. */
+	    /** Specifies whether the group is a security group. If the mailEnabled property is also true, the group is a mail-enabled security group; otherwise it is a security group. Must be false for Office 365 groups. Returned by default. Supports $filter. */
 		securityEnabled?: boolean
 
-	    /** Specifies the visibility of an Office 365 group. Possible values are: private, public, or hiddenmembership; blank values are treated as public.  See Group visibility options to learn more.Visibility can be set only when a group is created; it is not editable.Visibility is supported only for unified groups; it is not supported for security groups. */
+	    /** Specifies the visibility of an Office 365 group. Possible values are: private, public, or hiddenmembership; blank values are treated as public.  See group visibility options to learn more.Visibility can be set only when a group is created; it is not editable.Visibility is supported only for unified groups; it is not supported for security groups. Returned by default. */
 		visibility?: string
 
-	    /** Default is false. Indicates if people external to the organization can send messages to the group. */
+	    /** Indicates if people external to the organization can send messages to the group. Default value is false. Returned only on $select. */
 		allowExternalSenders?: boolean
 
-	    /** Default is false. Indicates if new members added to the group will be auto-subscribed to receive email notifications. You can set this property in a PATCH request for the group; do not set it in the initial POST request that creates the group. */
+	    /** Indicates if new members added to the group will be auto-subscribed to receive email notifications. You can set this property in a PATCH request for the group; do not set it in the initial POST request that creates the group. Default value is false. Returned only on $select. */
 		autoSubscribeNewMembers?: boolean
 
-	    /** Default value is true. Indicates whether the current user is subscribed to receive email conversations. */
+	    /** Indicates whether the signed-in user is subscribed to receive email conversations. Default value is true. Returned only on $select. */
 		isSubscribedByMail?: boolean
 
-	    /** Count of conversations that have been delivered one or more new posts since the signed-in user's last visit to the group. */
+	    /** Count of conversations that have received new posts since the signed-in user last visited the group. Returned only on $select. */
 		unseenCount?: number
 
 		isArchived?: boolean
@@ -6697,32 +6697,6 @@ export interface MacOSDeviceFeaturesConfiguration extends AppleDeviceFeaturesCon
 
 }
 
-export interface WindowsDefenderAdvancedThreatProtectionConfiguration extends DeviceConfiguration {
-
-	    /** Windows Defender AdvancedThreatProtection 'Allow Sample Sharing' Rule */
-		allowSampleSharing?: boolean
-
-	    /** Expedite Windows Defender Advanced Threat Protection telemetry reporting frequency. */
-		enableExpeditedTelemetryReporting?: boolean
-
-}
-
-export interface EditionUpgradeConfiguration extends DeviceConfiguration {
-
-	    /** Edition Upgrade License Type. Possible values are: productKey, licenseFile. */
-		licenseType?: EditionUpgradeLicenseType
-
-	    /** Edition Upgrade Target Edition. Possible values are: windows10Enterprise, windows10EnterpriseN, windows10Education, windows10EducationN, windows10MobileEnterprise, windows10HolographicEnterprise, windows10Professional, windows10ProfessionalN, windows10ProfessionalEducation, windows10ProfessionalEducationN, windows10ProfessionalWorkstation, windows10ProfessionalWorkstationN. */
-		targetEdition?: Windows10EditionType
-
-	    /** Edition Upgrade License File Content. */
-		license?: string
-
-	    /** Edition Upgrade Product Key. */
-		productKey?: string
-
-}
-
 export interface Windows10EndpointProtectionConfiguration extends DeviceConfiguration {
 
 	    /** Blocks stateful FTP connections to the device */
@@ -7290,6 +7264,9 @@ export interface Windows10GeneralConfiguration extends DeviceConfiguration {
 	    /** Indicates whether or not to Block the user from sending Intranet traffic to Internet Explorer from Edge. */
 		edgeBlockSendingIntranetTrafficToInternetExplorer?: boolean
 
+	    /** Indicates whether or not to switch the intranet traffic from Edge to Internet Explorer. */
+		edgeSendIntranetTrafficToInternetExplorer?: boolean
+
 	    /** Indicates whether or not to Require the user to use the smart screen filter. */
 		edgeRequireSmartScreen?: boolean
 
@@ -7436,6 +7413,32 @@ export interface Windows10GeneralConfiguration extends DeviceConfiguration {
 
 	    /** Whether the device is required to connect to the network. */
 		tenantLockdownRequireNetworkDuringOutOfBoxExperience?: boolean
+
+}
+
+export interface WindowsDefenderAdvancedThreatProtectionConfiguration extends DeviceConfiguration {
+
+	    /** Windows Defender AdvancedThreatProtection 'Allow Sample Sharing' Rule */
+		allowSampleSharing?: boolean
+
+	    /** Expedite Windows Defender Advanced Threat Protection telemetry reporting frequency. */
+		enableExpeditedTelemetryReporting?: boolean
+
+}
+
+export interface EditionUpgradeConfiguration extends DeviceConfiguration {
+
+	    /** Edition Upgrade License Type. Possible values are: productKey, licenseFile. */
+		licenseType?: EditionUpgradeLicenseType
+
+	    /** Edition Upgrade Target Edition. Possible values are: windows10Enterprise, windows10EnterpriseN, windows10Education, windows10EducationN, windows10MobileEnterprise, windows10HolographicEnterprise, windows10Professional, windows10ProfessionalN, windows10ProfessionalEducation, windows10ProfessionalEducationN, windows10ProfessionalWorkstation, windows10ProfessionalWorkstationN. */
+		targetEdition?: Windows10EditionType
+
+	    /** Edition Upgrade License File Content. */
+		license?: string
+
+	    /** Edition Upgrade Product Key. */
+		productKey?: string
 
 }
 
