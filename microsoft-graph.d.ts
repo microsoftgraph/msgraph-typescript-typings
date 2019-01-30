@@ -420,6 +420,8 @@ export interface LicenseDetails extends Entity {
 
 export interface Group extends DirectoryObject {
 
+		assignedLicenses?: AssignedLicense[]
+
 	    /** Describes a classification for the group (such as low, medium or high business impact). Valid values for this property are defined by creating a ClassificationList setting value, based on the template definition.Returned by default. */
 		classification?: string
 
@@ -432,8 +434,12 @@ export interface Group extends DirectoryObject {
 	    /** The display name for the group. This property is required when a group is created and cannot be cleared during updates. Returned by default. Supports $filter and $orderby. */
 		displayName?: string
 
+		hasMembersWithLicenseErrors?: boolean
+
 	    /** Specifies the type of group to create. Possible values are Unified to create an Office 365 group, or DynamicMembership for dynamic groups.  For all other group types, like security-enabled groups and email-enabled security groups, do not set this property. Returned by default. Supports $filter. */
 		groupTypes?: string[]
+
+		licenseProcessingState?: LicenseProcessingState
 
 	    /** The SMTP address for the group, for example, 'serviceadmins@contoso.onmicrosoft.com'. Returned by default. Read-only. Supports $filter. */
 		mail?: string
@@ -487,6 +493,8 @@ export interface Group extends DirectoryObject {
 
 	    /** Groups that this group is a member of. HTTP Methods: GET (supported for all groups). Read-only. Nullable. */
 		memberOf?: DirectoryObject[]
+
+		membersWithLicenseErrors?: DirectoryObject[]
 
 		transitiveMembers?: DirectoryObject[]
 
@@ -1126,6 +1134,8 @@ export interface User extends DirectoryObject {
 
 	    /** Used by enterprise applications to determine the legal age group of the user. This property is read-only and calculated based on ageGroup and consentProvidedForMinor properties. Allowed values: null, minorWithOutParentalConsent, minorWithParentalConsent, minorNoParentalConsentRequired, notAdult and adult. Refer to the legal age group property definitions for further information.) */
 		legalAgeGroupClassification?: string
+
+		licenseAssignmentStates?: LicenseAssignmentState[]
 
 	    /** The SMTP address for the user, for example, 'jeff@contoso.onmicrosoft.com'. Read-Only. Supports $filter. */
 		mail?: string
@@ -2091,7 +2101,7 @@ export interface FileAttachment extends Attachment {
 	    /** The ID of the attachment in the Exchange store. */
 		contentId?: string
 
-	    /** The Uniform Resource Identifier (URI) that corresponds to the location of the content of the attachment. */
+	    /** Do not use this property as it is not supported. */
 		contentLocation?: string
 
 	    /** The base64-encoded contents of the file. */
@@ -8931,6 +8941,20 @@ export interface ServicePlanInfo {
 		appliesTo?: string
 
 }
+export interface AssignedLicense {
+
+	    /** A collection of the unique identifiers for plans that have been disabled. */
+		disabledPlans?: string[]
+
+	    /** The unique identifier for the SKU. */
+		skuId?: string
+
+}
+export interface LicenseProcessingState {
+
+		state?: string
+
+}
 export interface OnPremisesProvisioningError {
 
 	    /** Value of the property causing the error. */
@@ -9012,13 +9036,17 @@ export interface VerifiedDomain {
 		type?: string
 
 }
-export interface AssignedLicense {
+export interface LicenseAssignmentState {
 
-	    /** A collection of the unique identifiers for plans that have been disabled. */
+		skuId?: string
+
 		disabledPlans?: string[]
 
-	    /** The unique identifier for the SKU. */
-		skuId?: string
+		assignedByGroup?: string
+
+		state?: string
+
+		error?: string
 
 }
 export interface OnPremisesExtensionAttributes {
@@ -9497,7 +9525,7 @@ export interface InternetMessageHeader {
 }
 export interface ItemBody {
 
-	    /** The type of the content. Possible values are Text and HTML. */
+	    /** The type of the content. Possible values are text and HTML. */
 		contentType?: BodyType
 
 	    /** The content of the item. */
