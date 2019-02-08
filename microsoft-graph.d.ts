@@ -420,6 +420,7 @@ export interface LicenseDetails extends Entity {
 
 export interface Group extends DirectoryObject {
 
+	    /** The licenses that are assigned to the group. Returned only on $select. Read-only. */
 		assignedLicenses?: AssignedLicense[]
 
 	    /** Describes a classification for the group (such as low, medium or high business impact). Valid values for this property are defined by creating a ClassificationList setting value, based on the template definition.Returned by default. */
@@ -434,11 +435,13 @@ export interface Group extends DirectoryObject {
 	    /** The display name for the group. This property is required when a group is created and cannot be cleared during updates. Returned by default. Supports $filter and $orderby. */
 		displayName?: string
 
+	    /** Indicates whether there are members in this group that have license errors from its group-based license assignment. This property is never returned on a GET operation. You can use it as a $filter argument to get groups that have members with license errors (that is, filter for this property being true). See an example. */
 		hasMembersWithLicenseErrors?: boolean
 
 	    /** Specifies the type of group to create. Possible values are Unified to create an Office 365 group, or DynamicMembership for dynamic groups.  For all other group types, like security-enabled groups and email-enabled security groups, do not set this property. Returned by default. Supports $filter. */
 		groupTypes?: string[]
 
+	    /** Indicates status of the group license assignment to all members of the group. Default value is false. Read-only. Possible values: QueuedForProcessing, ProcessingInProgress, and ProcessingComplete.Returned only on $select. Read-only. */
 		licenseProcessingState?: LicenseProcessingState
 
 	    /** The SMTP address for the group, for example, 'serviceadmins@contoso.onmicrosoft.com'. Returned by default. Read-only. Supports $filter. */
@@ -494,6 +497,7 @@ export interface Group extends DirectoryObject {
 	    /** Groups that this group is a member of. HTTP Methods: GET (supported for all groups). Read-only. Nullable. */
 		memberOf?: DirectoryObject[]
 
+	    /** A list of group members with license errors from this group-based license assignment. Read-only. */
 		membersWithLicenseErrors?: DirectoryObject[]
 
 		transitiveMembers?: DirectoryObject[]
@@ -1119,8 +1123,10 @@ export interface User extends DirectoryObject {
 	    /** The name displayed in the address book for the user. This is usually the combination of the user's first name, middle initial and last name. This property is required when a user is created and it cannot be cleared during updates. Supports $filter and $orderby. */
 		displayName?: string
 
+	    /** The employee identifier assigned to the user by the organization. Supports $filter. */
 		employeeId?: string
 
+	    /** The fax number of the user. */
 		faxNumber?: string
 
 	    /** The given name (first name) of the user. Supports $filter. */
@@ -1135,6 +1141,7 @@ export interface User extends DirectoryObject {
 	    /** Used by enterprise applications to determine the legal age group of the user. This property is read-only and calculated based on ageGroup and consentProvidedForMinor properties. Allowed values: null, minorWithOutParentalConsent, minorWithParentalConsent, minorNoParentalConsentRequired, notAdult and adult. Refer to the legal age group property definitions for further information.) */
 		legalAgeGroupClassification?: string
 
+	    /** State of license assignments for this user. Read-only. */
 		licenseAssignmentStates?: LicenseAssignmentState[]
 
 	    /** The SMTP address for the user, for example, 'jeff@contoso.onmicrosoft.com'. Read-Only. Supports $filter. */
@@ -1146,6 +1153,7 @@ export interface User extends DirectoryObject {
 	    /** The primary cellular telephone number for the user. */
 		mobilePhone?: string
 
+	    /** Contains the on-premises Active Directory distinguished name or DN. The property is only populated for customers who are synchronizing their on-premises directory to Azure Active Directory via Azure AD Connect. Read-only. */
 		onPremisesDistinguishedName?: string
 
 	    /** Contains extensionAttributes 1-15 for the user. Note that the individual extension attributes are neither selectable nor filterable. For an onPremisesSyncEnabled user, this set of properties is mastered on-premises and is read-only. For a cloud-only user (where onPremisesSyncEnabled is false), these properties may be set during creation or update. */
@@ -1175,6 +1183,7 @@ export interface User extends DirectoryObject {
 	    /** Contains the on-premises userPrincipalName synchronized from the on-premises directory. The property is only populated for customers who are synchronizing their on-premises directory to Azure Active Directory via Azure AD Connect. Read-only. */
 		onPremisesUserPrincipalName?: string
 
+	    /** A list of additional email addresses for the user; for example: ['bob@contoso.com', 'Robert@fabrikam.com']. Supports $filter. */
 		otherMails?: string[]
 
 	    /** Specifies password policies for the user. This value is an enumeration with one possible value being 'DisableStrongPassword', which allows weaker passwords than the default policy to be specified. 'DisablePasswordExpiration' can also be specified. The two may be specified together; for example: 'DisablePasswordExpiration, DisableStrongPassword'. */
@@ -1198,6 +1207,7 @@ export interface User extends DirectoryObject {
 	    /** For example: ['SMTP: bob@contoso.com', 'smtp: bob@sales.contoso.com'] The any operator is required for filter expressions on multi-valued properties. Read-only, Not nullable. Supports $filter. */
 		proxyAddresses?: string[]
 
+	    /** true if the Outlook global address list should contain this user, otherwise false. If not set, this will be treated as true. For users invited through the invitation manager, this property will be set to false. */
 		showInAddressList?: boolean
 
 	    /** The state or province in the user's address. Supports $filter. */
@@ -1377,7 +1387,7 @@ export interface Message extends OutlookItem {
 	    /** The message ID in the format specified by RFC2822. */
 		internetMessageId?: string
 
-	    /** A collection of message headers defined by RFC5322. The set includes message headers indicating the network path taken by a message from the sender to the recipient. It can also contain custom message headers that hold app data for the message. */
+	    /** A collection of message headers defined by RFC5322. The set includes message headers indicating the network path taken by a message from the sender to the recipient. It can also contain custom message headers that hold app data for the message.  Returned only on applying a $select query option. Read-only. */
 		internetMessageHeaders?: InternetMessageHeader[]
 
 	    /** The subject of the message. */
@@ -3778,6 +3788,7 @@ export interface EducationUser extends Entity {
 	    /** Entity who created the user. */
 		createdBy?: IdentitySet
 
+	    /** Set of contacts related to the user.  This optional property must be specified in a $select clause and can only be retrieved for an individual user. */
 		relatedContacts?: EducationRelatedContact[]
 
 	    /** True if the account is enabled; otherwise, false. This property is required when a user is created. Supports $filter. */
@@ -10723,6 +10734,39 @@ export interface RecentNotebookLinks {
 
 	    /** Opens the notebook in OneNote Online. */
 		oneNoteWebUrl?: ExternalLink
+
+}
+export interface CopyNotebookModel {
+
+		isDefault?: boolean
+
+		userRole?: OnenoteUserRole
+
+		isShared?: boolean
+
+		sectionsUrl?: string
+
+		sectionGroupsUrl?: string
+
+		links?: NotebookLinks
+
+		name?: string
+
+		createdBy?: string
+
+		createdByIdentity?: IdentitySet
+
+		lastModifiedBy?: string
+
+		lastModifiedByIdentity?: IdentitySet
+
+		lastModifiedTime?: string
+
+		id?: string
+
+		self?: string
+
+		createdTime?: string
 
 }
 export interface Report {
