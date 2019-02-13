@@ -1233,89 +1233,87 @@ export interface Group extends DirectoryObject {
 
 		assignedLicenses?: AssignedLicense[]
 
-	    /** Describes a classification for the group (such as low, medium or high business impact). Valid values for this property are defined by creating a ClassificationList setting value, based on the template definition. */
+	    /** Describes a classification for the group (such as low, medium or high business impact). Valid values for this property are defined by creating a ClassificationList setting value, based on the template definition.Returned by default. */
 		classification?: string
 
-	    /** Timestamp of when the group was created. The value cannot be modified and is automatically populated when the group is created. The Timestamp type represents date and time information using ISO 8601 format and is always in UTC time. For example, midnight UTC on Jan 1, 2014 would look like this: '2014-01-01T00:00:00Z'. Read-only. */
+	    /** Timestamp of when the group was created. The value cannot be modified and is automatically populated when the group is created. The Timestamp type represents date and time information using ISO 8601 format and is always in UTC time. For example, midnight UTC on Jan 1, 2014 would look like this: '2014-01-01T00:00:00Z'. Returned by default. Read-only. */
 		createdDateTime?: string
 
-	    /** An optional description for the group. */
+	    /** An optional description for the group. Returned by default. */
 		description?: string
 
-	    /** The display name for the group. This property is required when a group is created and it cannot be cleared during updates. Supports $filter and $orderby. */
+	    /** The display name for the group. This property is required when a group is created and cannot be cleared during updates. Returned by default. Supports $filter and $orderby. */
 		displayName?: string
 
-		expirationDateTime?: string
-
-	    /** Specifies the type of group to create. Possible values are Unified to create an Office 365 group, or DynamicMembership for dynamic groups.  For all other group types, like security-enabled groups and email-enabled security groups, do not set this property. Supports $filter. */
+	    /** Specifies the type of group to create. Possible values are Unified to create an Office 365 group, or DynamicMembership for dynamic groups.  For all other group types, like security-enabled groups and email-enabled security groups, do not set this property. Returned by default. Supports $filter. */
 		groupTypes?: string[]
 
 		hasMembersWithLicenseErrors?: boolean
 
 		licenseProcessingState?: LicenseProcessingState
 
-	    /** The SMTP address for the group, for example, 'serviceadmins@contoso.onmicrosoft.com'. Read-only. Supports $filter. */
+	    /** The SMTP address for the group, for example, 'serviceadmins@contoso.onmicrosoft.com'. Returned by default. Read-only. Supports $filter. */
 		mail?: string
 
-	    /** Specifies whether the group is mail-enabled. If the securityEnabled property is also true, the group is a mail-enabled security group; otherwise, the group is a Microsoft Exchange distribution group. */
+	    /** Specifies whether the group is mail-enabled. If the securityEnabled property is also true, the group is a mail-enabled security group; otherwise, the group is a Microsoft Exchange distribution group. Returned by default. */
 		mailEnabled?: boolean
 
-	    /** The mail alias for the group, unique in the organization. This property must be specified when a group is created. Supports $filter. */
+	    /** The mail alias for the group, unique in the organization. This property must be specified when a group is created. Returned by default. Supports $filter. */
 		mailNickname?: string
 
 		membershipRule?: string
 
 		membershipRuleProcessingState?: string
 
-	    /** Indicates the last time at which the group was synced with the on-premises directory.The Timestamp type represents date and time information using ISO 8601 format and is always in UTC time. For example, midnight UTC on Jan 1, 2014 would look like this: '2014-01-01T00:00:00Z'. Read-only. Supports $filter. */
+	    /** Indicates the last time at which the group was synced with the on-premises directory.The Timestamp type represents date and time information using ISO 8601 format and is always in UTC time. For example, midnight UTC on Jan 1, 2014 would look like this: '2014-01-01T00:00:00Z'. Returned by default. Read-only. Supports $filter. */
 		onPremisesLastSyncDateTime?: string
 
-	    /** Errors when using Microsoft synchronization product during provisioning. */
+	    /** Errors when using Microsoft synchronization product during provisioning. Returned by default. */
 		onPremisesProvisioningErrors?: OnPremisesProvisioningError[]
 
-	    /** Contains the on-premises security identifier (SID) for the group that was synchronized from on-premises to the cloud. Read-only. */
+	    /** Contains the on-premises security identifier (SID) for the group that was synchronized from on-premises to the cloud. Returned by default. Read-only. */
 		onPremisesSecurityIdentifier?: string
 
-	    /** true if this group is synced from an on-premises directory; false if this group was originally synced from an on-premises directory but is no longer synced; null if this object has never been synced from an on-premises directory (default). Read-only. Supports $filter. */
+	    /** true if this group is synced from an on-premises directory; false if this group was originally synced from an on-premises directory but is no longer synced; null if this object has never been synced from an on-premises directory (default). Returned by default. Read-only. Supports $filter. */
 		onPremisesSyncEnabled?: boolean
 
-	    /** The preferred data location for the group. For more information, see  OneDrive Online Multi-Geo. */
+	    /** The preferred data location for the group. For more information, see  OneDrive Online Multi-Geo. Returned by default. */
 		preferredDataLocation?: string
 
 		preferredLanguage?: string
 
-	    /** The any operator is required for filter expressions on multi-valued properties. Read-only. Not nullable. Supports $filter. */
+	    /** Email addresses for the group that direct to the same group mailbox. For example: ['SMTP: bob@contoso.com', 'smtp: bob@sales.contoso.com']. The any operator is required to filter expressions on multi-valued properties. Returned by default. Read-only. Not nullable. Supports $filter. */
 		proxyAddresses?: string[]
 
-	    /** Timestamp of when the group was last renewed. This cannot be modified directly and is only updated via the renew service action. The Timestamp type represents date and time information using ISO 8601 format and is always in UTC time. For example, midnight UTC on Jan 1, 2014 would look like this: '2014-01-01T00:00:00Z'. Read-only. */
+	    /** Timestamp of when the group was last renewed. This cannot be modified directly and is only updated via the renew service action. The Timestamp type represents date and time information using ISO 8601 format and is always in UTC time. For example, midnight UTC on Jan 1, 2014 would look like this: '2014-01-01T00:00:00Z'. Returned by default. Read-only. */
 		renewedDateTime?: string
 
 		resourceBehaviorOptions?: string[]
 
 		resourceProvisioningOptions?: string[]
 
-	    /** Specifies whether the group is a security group. If the mailEnabled property is also true, the group is a mail-enabled security group; otherwise it is a security group. Must be false for Office 365 groups. Supports $filter. */
+	    /** Specifies whether the group is a security group. If the mailEnabled property is also true, the group is a mail-enabled security group; otherwise it is a security group. Must be false for Office 365 groups. Returned by default. Supports $filter. */
 		securityEnabled?: boolean
 
 		theme?: string
 
-	    /** Specifies the visibility of an Office 365 group. Possible values are: private, public, or hiddenmembership; blank values are treated as public.  See Group visibility options to learn more.Visibility can be set only when a group is created; it is not editable.Visibility is supported only for unified groups; it is not supported for security groups. */
+	    /** Specifies the visibility of an Office 365 group. Possible values are: private, public, or hiddenmembership; blank values are treated as public.  See group visibility options to learn more.Visibility can be set only when a group is created; it is not editable.Visibility is supported only for unified groups; it is not supported for security groups. Returned by default. */
 		visibility?: string
 
 		accessType?: GroupAccessType
 
-	    /** Default is false. Indicates if people external to the organization can send messages to the group. */
+	    /** Indicates if people external to the organization can send messages to the group. Default value is false. Returned only on $select. */
 		allowExternalSenders?: boolean
 
-	    /** Default is false. Indicates if new members added to the group will be auto-subscribed to receive email notifications. You can set this property in a PATCH request for the group; do not set it in the initial POST request that creates the group. */
+	    /** Indicates if new members added to the group will be auto-subscribed to receive email notifications. You can set this property in a PATCH request for the group; do not set it in the initial POST request that creates the group. Default value is false. Returned only on $select. */
 		autoSubscribeNewMembers?: boolean
 
 		isFavorite?: boolean
 
-	    /** Default value is true. Indicates whether the current user is subscribed to receive email conversations. */
+	    /** Indicates whether the signed-in user is subscribed to receive email conversations. Default value is true. Returned only on $select. */
 		isSubscribedByMail?: boolean
 
-	    /** Count of conversations that have been delivered one or more new posts since the signed-in user's last visit to the group. */
+	    /** Count of conversations that have received new posts since the signed-in user last visited the group. Returned only on $select. */
 		unseenCount?: number
 
 		unseenConversationsCount?: number
@@ -2705,9 +2703,6 @@ export interface Organization extends DirectoryObject {
 	    /** Country/region abbreviation for the organization */
 		countryLetterCode?: string
 
-	    /** Timestamp of when the organization was created. The value cannot be modified and is automatically populated when the organization is created. The Timestamp type represents date and time information using ISO 8601 format and is always in UTC time. For example, midnight UTC on Jan 1, 2014 would look like this: '2014-01-01T00:00:00Z'. Read-only. */
-		createdDateTime?: string
-
 	    /** The display name for the tenant. */
 		displayName?: string
 
@@ -2933,6 +2928,18 @@ export interface OrgContact extends DirectoryObject {
 		memberOf?: DirectoryObject[]
 
 		transitiveMemberOf?: DirectoryObject[]
+
+}
+
+export interface DirectoryObjectPartnerReference extends DirectoryObject {
+
+		description?: string
+
+		displayName?: string
+
+		externalPartnerTenantId?: string
+
+		objectType?: string
 
 }
 
@@ -3552,6 +3559,8 @@ export interface Workbook extends Entity {
 	    /** Represents a collection of worksheets associated with the workbook. Read-only. */
 		worksheets?: WorkbookWorksheet[]
 
+		comments?: WorkbookComment[]
+
 		functions?: WorkbookFunctions
 
 }
@@ -3687,6 +3696,9 @@ export interface WorkbookTable extends Entity {
 	    /** Indicates whether the last column contains special formatting. */
 		highlightLastColumn?: boolean
 
+	    /** Legacy Id used in older Excle clients. The value of the identifier remains the same even when the table is renamed. This property should be interpreted as an opaque string value and should not be parsed to any other type. Read-only. */
+		legacyId?: string
+
 	    /** Name of the table. */
 		name?: string
 
@@ -3747,6 +3759,16 @@ export interface WorkbookWorksheet extends Entity {
 
 	    /** Collection of tables that are part of the worksheet. Read-only. */
 		tables?: WorkbookTable[]
+
+}
+
+export interface WorkbookComment extends Entity {
+
+		content?: string
+
+		contentType?: string
+
+		replies?: WorkbookCommentReply[]
 
 }
 
@@ -4055,6 +4077,14 @@ export interface WorkbookChartTitleFormat extends Entity {
 
 	    /** Represents the font attributes (font name, font size, color, etc.) for the current object. Read-only. */
 		font?: WorkbookChartFont
+
+}
+
+export interface WorkbookCommentReply extends Entity {
+
+		content?: string
+
+		contentType?: string
 
 }
 
