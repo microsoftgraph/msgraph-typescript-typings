@@ -46,7 +46,6 @@ export type OnenoteUserRole = "Owner" | "Contributor" | "Reader" | "None"
 export type EducationUserRole = "student" | "teacher" | "none" | "unknownFutureValue"
 export type EducationExternalSource = "sis" | "manual" | "unknownFutureValue"
 export type EducationGender = "female" | "male" | "other" | "unknownFutureValue"
-export type EducationContactRelationship = "parent" | "relative" | "aide" | "doctor" | "guardian" | "child" | "other" | "unknownFutureValue"
 export type InstallIntent = "available" | "required" | "uninstall" | "availableWithoutEnrollment"
 export type MobileAppPublishingState = "notPublished" | "processing" | "published"
 export type WindowsArchitecture = "none" | "x86" | "x64" | "arm" | "neutral"
@@ -144,10 +143,10 @@ export type DeviceManagementExchangeConnectorType = "onPremises" | "hosted" | "s
 export type MobileThreatPartnerTenantState = "unavailable" | "available" | "enabled" | "unresponsive"
 export type DeviceManagementPartnerTenantState = "unknown" | "unavailable" | "enabled" | "terminated" | "rejected" | "unresponsive"
 export type DeviceManagementPartnerAppType = "unknown" | "singleTenantApp" | "multiTenantApp"
+export type ManagedAppDataStorageLocation = "oneDriveForBusiness" | "sharePoint" | "localStorage"
 export type ManagedAppDataTransferLevel = "allApps" | "managedApps" | "none"
 export type ManagedAppClipboardSharingLevel = "allApps" | "managedAppsWithPasteIn" | "managedApps" | "blocked"
 export type ManagedAppPinCharacterSet = "numeric" | "alphanumericAndSymbol"
-export type ManagedAppDataStorageLocation = "oneDriveForBusiness" | "sharePoint" | "localStorage"
 export type ManagedAppDataEncryptionType = "useDeviceSettings" | "afterDeviceRestart" | "whenDeviceLockedExceptOpenFiles" | "whenDeviceLocked"
 export type WindowsInformationProtectionEnforcementLevel = "noProtection" | "encryptAndAuditOnly" | "encryptAuditAndPrompt" | "encryptAuditAndBlock"
 export type WindowsInformationProtectionPinCharacterRequirements = "notAllow" | "requireAtLeastOne" | "allow"
@@ -208,7 +207,7 @@ export interface Device extends DirectoryObject {
 	    /** For internal use only. Not nullable. */
 		alternativeSecurityIds?: AlternativeSecurityId[]
 
-	    /** The Timestamp type represents date and time information using ISO 8601 format and is always in UTC time. For example, midnight UTC on Jan 1, 2014 would look like this: '2014-01-01T00:00:00Z' Read-only. */
+	    /** The timestamp type represents date and time information using ISO 8601 format and is always in UTC time. For example, midnight UTC on Jan 1, 2014 would look like this: '2014-01-01T00:00:00Z'. Read-only. */
 		approximateLastSignInDateTime?: string
 
 	    /** Unique identifier set by Azure Device Registration Service at the time of registration. */
@@ -264,6 +263,22 @@ export interface Device extends DirectoryObject {
 }
 
 export interface Extension extends Entity {
+
+}
+
+export interface DirectoryObjectPartnerReference extends DirectoryObject {
+
+	    /** Description of the object returned. Read-only. */
+		description?: string
+
+	    /** Name of directory object being returned, like group or application. Read-only. */
+		displayName?: string
+
+	    /** The tenant identifier for the partner tenant. Read-only. */
+		externalPartnerTenantId?: string
+
+	    /** The type of the referenced object in the partner tenant. Read-only. */
+		objectType?: string
 
 }
 
@@ -1040,6 +1055,9 @@ export interface Organization extends DirectoryObject {
 	    /** Country/region abbreviation for the organization */
 		countryLetterCode?: string
 
+	    /** Timestamp of when the organization was created. The value cannot be modified and is automatically populated when the organization is created. The Timestamp type represents date and time information using ISO 8601 format and is always in UTC time. For example, midnight UTC on Jan 1, 2014 would look like this: '2014-01-01T00:00:00Z'. Read-only. */
+		createdDateTime?: string
+
 	    /** The display name for the tenant. */
 		displayName?: string
 
@@ -1108,7 +1126,7 @@ export interface User extends DirectoryObject {
 	    /** The city in which the user is located. Supports $filter. */
 		city?: string
 
-	    /** The company name which the user is associated. Read-only. */
+	    /** The company name which the user is associated. This property can be useful for describing the company that an external user comes from. */
 		companyName?: string
 
 	    /** Sets whether consent has been obtained for minors. Allowed values: null, granted, denied and notRequired. Refer to the legal age group property definitions for further information. */
@@ -3332,7 +3350,7 @@ export interface PlannerTask extends Entity {
 	    /** Number of checklist items that are present on the task. */
 		checklistItemCount?: number
 
-	    /** Number of checklist items with value set to 'false', representing incomplete items. */
+	    /** Number of checklist items with value set to false, representing incomplete items. */
 		activeChecklistItemCount?: number
 
 	    /** The categories to which the task has been applied. See applied Categories for possible values. */
@@ -3787,9 +3805,6 @@ export interface EducationUser extends Entity {
 
 	    /** Entity who created the user. */
 		createdBy?: IdentitySet
-
-	    /** Set of contacts related to the user.  This optional property must be specified in a $select clause and can only be retrieved for an individual user. */
-		relatedContacts?: EducationRelatedContact[]
 
 	    /** True if the account is enabled; otherwise, false. This property is required when a user is created. Supports $filter. */
 		accountEnabled?: boolean
@@ -6024,7 +6039,7 @@ export interface AndroidGeneralDeviceConfiguration extends DeviceConfiguration {
 	    /** Number of previous passwords to block. Valid values 0 to 24 */
 		passwordPreviousPasswordBlockCount?: number
 
-	    /** Number of sign in failures allowed before factory reset. Valid values 4 to 11 */
+	    /** Number of sign in failures allowed before factory reset. Valid values 1 to 16 */
 		passwordSignInFailureCountBeforeFactoryReset?: number
 
 	    /** Type of password that is required. Possible values are: deviceDefault, alphabetic, alphanumeric, alphanumericWithSymbols, lowSecurityBiometric, numeric, numericComplex, any. */
@@ -6122,7 +6137,7 @@ export interface AndroidWorkProfileGeneralDeviceConfiguration extends DeviceConf
 	    /** Number of previous passwords to block. Valid values 0 to 24 */
 		passwordPreviousPasswordBlockCount?: number
 
-	    /** Number of sign in failures allowed before factory reset. Valid values 4 to 11 */
+	    /** Number of sign in failures allowed before factory reset. Valid values 1 to 16 */
 		passwordSignInFailureCountBeforeFactoryReset?: number
 
 	    /** Type of password that is required. Possible values are: deviceDefault, lowSecurityBiometric, required, atLeastNumeric, numericComplex, atLeastAlphabetic, atLeastAlphanumeric, alphanumericWithSymbols. */
@@ -6194,7 +6209,7 @@ export interface AndroidWorkProfileGeneralDeviceConfiguration extends DeviceConf
 	    /** Number of previous work profile passwords to block. Valid values 0 to 24 */
 		workProfilePasswordPreviousPasswordBlockCount?: number
 
-	    /** Number of sign in failures allowed before work profile is removed and all corporate data deleted. Valid values 4 to 11 */
+	    /** Number of sign in failures allowed before work profile is removed and all corporate data deleted. Valid values 1 to 16 */
 		workProfilePasswordSignInFailureCountBeforeFactoryReset?: number
 
 	    /** Type of work profile password that is required. Possible values are: deviceDefault, lowSecurityBiometric, required, atLeastNumeric, numericComplex, atLeastAlphabetic, atLeastAlphanumeric, alphanumericWithSymbols. */
@@ -7279,10 +7294,10 @@ export interface Windows10GeneralConfiguration extends DeviceConfiguration {
 	    /** Indicates whether or not to block popups. */
 		edgeBlockPopups?: boolean
 
-	    /** Indicates whether or not to Block the user from using the search suggestions in the address bar. */
+	    /** Indicates whether or not to block the user from using the search suggestions in the address bar. */
 		edgeBlockSearchSuggestions?: boolean
 
-	    /** Indicates whether or not to Block the user from sending Intranet traffic to Internet Explorer from Edge. */
+	    /** Indicates whether or not to switch the intranet traffic from Edge to Internet Explorer. Note: the name of this property is misleading; the property is obsolete, use EdgeSendIntranetTrafficToInternetExplorer instead. */
 		edgeBlockSendingIntranetTrafficToInternetExplorer?: boolean
 
 	    /** Indicates whether or not to switch the intranet traffic from Edge to Internet Explorer. */
@@ -7858,10 +7873,10 @@ export interface AndroidCompliancePolicy extends DeviceCompliancePolicy {
 	    /** Minutes of inactivity before a password is required. */
 		passwordMinutesOfInactivityBeforeLock?: number
 
-	    /** Number of days before the password expires. Valid values 1 to 65535 */
+	    /** Number of days before the password expires. Valid values 1 to 365 */
 		passwordExpirationDays?: number
 
-	    /** Number of previous passwords to block. */
+	    /** Number of previous passwords to block. Valid values 1 to 24 */
 		passwordPreviousPasswordBlockCount?: number
 
 	    /** Require that devices disallow installation of apps from unknown sources. */
@@ -7928,7 +7943,7 @@ export interface AndroidWorkProfileCompliancePolicy extends DeviceCompliancePoli
 	    /** Number of days before the password expires. Valid values 1 to 365 */
 		passwordExpirationDays?: number
 
-	    /** Number of previous passwords to block. */
+	    /** Number of previous passwords to block. Valid values 1 to 24 */
 		passwordPreviousPasswordBlockCount?: number
 
 	    /** Require that devices disallow installation of apps from unknown sources. */
@@ -8050,16 +8065,16 @@ export interface MacOSCompliancePolicy extends DeviceCompliancePolicy {
 	    /** The required password type. Possible values are: deviceDefault, alphanumeric, numeric. */
 		passwordRequiredType?: RequiredPasswordType
 
-	    /** Minimum IOS version. */
+	    /** Minimum MacOS version. */
 		osMinimumVersion?: string
 
-	    /** Maximum IOS version. */
+	    /** Maximum MacOS version. */
 		osMaximumVersion?: string
 
 	    /** Require that devices have enabled system integrity protection. */
 		systemIntegrityProtectionEnabled?: boolean
 
-	    /** Require that devices have enabled device threat protection . */
+	    /** Require that devices have enabled device threat protection. */
 		deviceThreatProtectionEnabled?: boolean
 
 	    /** Require Mobile Threat Protection minimum risk level to report noncompliance. Possible values are: unavailable, secured, low, medium, high, notSet. */
@@ -9116,6 +9131,9 @@ export interface PasswordProfile {
 	    /** true if the user must change her password on the next login; otherwise false. */
 		forceChangePasswordNextSignIn?: boolean
 
+	    /** If true, at next sign-in, the user must perform a multi-factor authentication (MFA) before being forced to change their password. The behavior is identical to forceChangePasswordNextSignIn except that the user is required to first perform a multi-factor authentication before password change. After a password change, this property will be automatically reset to false. If not set, default is false. */
+		forceChangePasswordNextSignInWithMfa?: boolean
+
 }
 export interface MailboxSettings {
 
@@ -9158,7 +9176,7 @@ export interface AutomaticRepliesSetting {
 }
 export interface DateTimeTimeZone {
 
-	    /** A single point of time in a combined date and time representation (&amp;lt;date&amp;gt;T&amp;lt;time&amp;gt;). */
+	    /** A single point of time in a combined date and time representation ({date}T{time}; for example, 2017-08-29T04:00:00.0000000). */
 		dateTime?: string
 
 	    /** One of the following time zone names. */
@@ -10796,21 +10814,6 @@ export interface EducationStudent {
 		externalId?: string
 
 }
-export interface EducationRelatedContact {
-
-		id?: string
-
-		displayName?: string
-
-		emailAddress?: string
-
-		mobilePhone?: string
-
-		relationship?: EducationContactRelationship
-
-		accessConsent?: boolean
-
-}
 export interface EducationTeacher {
 
 	    /** Teacher number. */
@@ -11890,7 +11893,7 @@ export interface ProxiedDomain {
 	    /** The IP address or FQDN */
 		ipAddressOrFQDN?: string
 
-	    /** Proxy IP */
+	    /** Proxy IP or FQDN */
 		proxy?: string
 
 }
@@ -11899,7 +11902,7 @@ export interface WindowsInformationProtectionIPRangeCollection {
 	    /** Display name */
 		displayName?: string
 
-	    /** Collection of ip ranges */
+	    /** Collection of Internet protocol address ranges */
 		ranges?: IpRange[]
 
 }
@@ -11944,19 +11947,19 @@ export interface WindowsInformationProtectionDesktopApp extends WindowsInformati
 }
 export interface IPv6Range extends IpRange {
 
-	    /** Lower IP Address */
+	    /** Lower address */
 		lowerAddress?: string
 
-	    /** Upper IP Address */
+	    /** Upper address */
 		upperAddress?: string
 
 }
 export interface IPv4Range extends IpRange {
 
-	    /** Lower IP Address */
+	    /** Lower address. */
 		lowerAddress?: string
 
-	    /** Upper IP Address */
+	    /** Upper address. */
 		upperAddress?: string
 
 }
@@ -12187,7 +12190,7 @@ export interface Process {
 }
 export interface RegistryKeyState {
 
-	    /** A Windows registry hive : HKEY_CURRENT_CONFIG HKEY_CURRENT_USER HKEY_LOCAL_MACHINE/SAM HKEY_LOCAL_MACHINE/Security HKEY_LOCAL_MACHINE/Software HKEY_LOCAL_MACHINE/System HKEY_USERS/.Default. Possible values are: unknown, currentConfig, currentUser, localMachineSam, localMachineSamSoftware, localMachineSystem, usersDefault. */
+	    /** A Windows registry hive : HKEY_CURRENT_CONFIG HKEY_CURRENT_USER HKEY_LOCAL_MACHINE/SAM HKEY_LOCAL_MACHINE/Security HKEY_LOCAL_MACHINE/Software HKEY_LOCAL_MACHINE/System HKEY_USERS/.Default. Possible values are: unknown, currentConfig, currentUser, localMachineSam, localMachineSecurity, localMachineSoftware, localMachineSystem, usersDefault. */
 		hive?: RegistryHive
 
 	    /** Current (i.e. changed) registry key (excludes HIVE). */
