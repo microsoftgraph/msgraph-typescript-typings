@@ -43,7 +43,6 @@ export type FreeBusyStatus = "free" | "tentative" | "busy" | "oof" | "workingEls
 export type PhysicalAddressType = "unknown" | "home" | "business" | "other"
 export type LocationType = "default" | "conferenceRoom" | "homeAddress" | "businessAddress" | "geoCoordinates" | "streetAddress" | "hotel" | "restaurant" | "localBusiness" | "postalAddress"
 export type LocationUniqueIdType = "unknown" | "locationStore" | "directory" | "private" | "bing"
-export type ActivityDomain = "unknown" | "work" | "personal" | "unrestricted"
 export type RecipientScopeType = "none" | "internal" | "external" | "externalPartner" | "externalNonPartner"
 export type MailTipsType = "automaticReplies" | "mailboxFullStatus" | "customMailTip" | "externalMemberCount" | "totalMemberCount" | "maxMessageSize" | "deliveryRestriction" | "moderationStatus" | "recipientScope" | "recipientSuggestions"
 export type ExchangeIdFormat = "entryId" | "ewsId" | "immutableEntryId" | "restId" | "restImmutableEntryId"
@@ -83,7 +82,11 @@ export type TokenIssuerType = "AzureAD" | "ADFederationServices" | "UnknownFutur
 export type RiskState = "none" | "confirmedSafe" | "remediated" | "dismissed" | "atRisk" | "confirmedCompromised" | "unknownFutureValue"
 export type RiskDetail = "none" | "adminGeneratedTemporaryPassword" | "userPerformedSecuredPasswordChange" | "userPerformedSecuredPasswordReset" | "adminConfirmedSigninSafe" | "aiConfirmedSigninSafe" | "userPassedMFADrivenByRiskBasedPolicy" | "adminDismissedAllRiskForUser" | "adminConfirmedSigninCompromised" | "hidden" | "unknownFutureValue"
 export type RiskEventType = "unlikelyTravel" | "anonymizedIPAddress" | "maliciousIPAddress" | "unfamiliarFeatures" | "malwareInfectedIPAddress" | "suspiciousIPAddress" | "leakedCredentials" | "investigationsThreatIntelligence" | "generic" | "unknownFutureValue"
-export type NetworkType = "intranet" | "extranet" | "namedNetwork" | "trusted"
+export type NetworkType = "intranet" | "extranet" | "namedNetwork" | "trusted" | "unknownFutureValue"
+export type AzureADLicenseType = "none" | "free" | "basic" | "premiumP1" | "premiumP2" | "unknownFutureValue"
+export type RegistrationStatusType = "registered" | "enabled" | "capable" | "unknownFutureValue"
+export type AuthMethodsType = "email" | "mobileSMS" | "mobilePhone" | "officePhone" | "securityQuestion" | "appNotification" | "appNotificationCode" | "unknownFutureValue"
+export type FeatureType = "registration" | "reset" | "unknownFutureValue"
 export type RiskEventStatus = "active" | "remediated" | "dismissedAsFixed" | "dismissedAsFalsePositive" | "dismissedAsIgnore" | "loginBlocked" | "closedMfaAuto" | "closedMultipleReasons"
 export type UserRiskLevel = "unknown" | "none" | "low" | "medium" | "high"
 export type ApprovalState = "pending" | "approved" | "denied" | "aborted" | "canceled"
@@ -98,6 +101,7 @@ export type AndroidManagedStoreAccountAppSyncStatus = "success" | "credentialsNo
 export type AndroidManagedStoreAccountEnrollmentTarget = "none" | "all" | "targeted" | "targetedAsEnrollmentRestrictions"
 export type AndroidManagedStoreAppConfigurationSchemaItemDataType = "bool" | "integer" | "string" | "choice" | "multiselect" | "bundle" | "bundleArray" | "hidden"
 export type InstallIntent = "available" | "required" | "uninstall" | "availableWithoutEnrollment"
+export type Win32LobAppNotification = "showAll" | "showReboot" | "hideAll"
 export type MobileAppPublishingState = "notPublished" | "processing" | "published"
 export type ResultantAppState = "installed" | "failed" | "notInstalled" | "uninstallFailed" | "pendingInstall" | "unknown" | "notApplicable"
 export type ResultantAppStateDetail = "noAdditionalDetails" | "seeInstallErrorCode" | "seeUninstallErrorCode" | "pendingReboot" | "platformNotApplicable" | "minimumCpuSpeedNotMet" | "minimumLogicalProcessorCountNotMet" | "minimumPhysicalMemoryNotMet" | "minimumOsVersionNotMet" | "minimumDiskSpaceNotMet" | "processorArchitectureNotApplicable"
@@ -151,7 +155,9 @@ export type ConfigurationManagerClientState = "unknown" | "installed" | "healthy
 export type DeviceManagementSubscriptionState = "pending" | "active" | "warning" | "disabled" | "deleted" | "blocked" | "lockedOut"
 export type DeviceManagementSubscriptions = "none" | "intune" | "office365" | "intunePremium" | "intune_EDU" | "intune_SMB"
 export type AdminConsentState = "notConfigured" | "granted" | "notGranted"
+export type AppLogUploadState = "pending" | "completed" | "failed"
 export type HealthState = "unknown" | "healthy" | "unhealthy"
+export type AppLogDecryptionAlgorithm = "aes256"
 export type AdministratorConfiguredDeviceComplianceState = "basedOnDeviceCompliancePolicy" | "nonCompliant"
 export type DerivedCredentialProviderType = "notConfigured" | "entrustDataCard" | "purebred" | "xTec" | "intercede"
 export type Windows10EditionType = "windows10Enterprise" | "windows10EnterpriseN" | "windows10Education" | "windows10EducationN" | "windows10MobileEnterprise" | "windows10HolographicEnterprise" | "windows10Professional" | "windows10ProfessionalN" | "windows10ProfessionalEducation" | "windows10ProfessionalEducationN" | "windows10ProfessionalWorkstation" | "windows10ProfessionalWorkstationN" | "notConfigured"
@@ -248,8 +254,8 @@ export type DefenderSecurityCenterITContactDisplayType = "notConfigured" | "disp
 export type FirewallPreSharedKeyEncodingMethodType = "deviceDefault" | "none" | "utF8"
 export type FirewallCertificateRevocationListCheckMethodType = "deviceDefault" | "none" | "attempt" | "require"
 export type FirewallPacketQueueingMethodType = "deviceDefault" | "disabled" | "queueInbound" | "queueOutbound" | "queueBoth"
-export type DefenderAttackSurfaceType = "userDefined" | "block" | "auditMode"
 export type DefenderProtectionType = "userDefined" | "enable" | "auditMode"
+export type DefenderAttackSurfaceType = "userDefined" | "block" | "auditMode"
 export type FolderProtectionType = "userDefined" | "enable" | "auditMode" | "blockDiskModification" | "auditDiskModification"
 export type AppLockerApplicationControlType = "notConfigured" | "enforceComponentsAndStoreApps" | "auditComponentsAndStoreApps" | "enforceComponentsStoreAppsAndSmartlocker" | "auditComponentsStoreAppsAndSmartlocker"
 export type DeviceGuardLocalSystemAuthorityCredentialGuardType = "notConfigured" | "enableWithUEFILock" | "enableWithoutUEFILock"
@@ -269,6 +275,7 @@ export type EdgeCookiePolicy = "userDefined" | "allow" | "blockThirdParty" | "bl
 export type EdgeOpenOptions = "notConfigured" | "startPage" | "newTabPage" | "previousPages" | "specificPages"
 export type VisibilitySetting = "notConfigured" | "hide" | "show"
 export type InternetExplorerMessageSetting = "notConfigured" | "disabled" | "enabled" | "keepGoing"
+export type EdgeKioskModeRestrictionType = "notConfigured" | "digitalSignage" | "normalMode" | "publicBrowsingSingleApp" | "publicBrowsingMultiApp"
 export type DefenderThreatAction = "deviceDefault" | "clean" | "quarantine" | "remove" | "allow" | "userDefined" | "block"
 export type WeeklySchedule = "userDefined" | "everyday" | "sunday" | "monday" | "tuesday" | "wednesday" | "thursday" | "friday" | "saturday"
 export type DefenderMonitorFileActivity = "userDefined" | "disable" | "monitorAllFiles" | "monitorIncomingFilesOnly" | "monitorOutgoingFilesOnly"
@@ -290,6 +297,8 @@ export type PrereleaseFeatures = "userDefined" | "settingsOnly" | "settingsAndEx
 export type EditionUpgradeLicenseType = "productKey" | "licenseFile" | "notConfigured"
 export type WindowsSModeConfiguration = "noRestriction" | "block" | "unlock"
 export type WindowsDeliveryOptimizationMode = "userDefined" | "httpOnly" | "httpWithPeeringNat" | "httpWithPeeringPrivateGroup" | "httpWithInternetPeering" | "simpleDownload" | "bypassMode"
+export type DeliveryOptimizationRestrictPeerSelectionByOptions = "notConfigured" | "subnetMask"
+export type DeliveryOptimizationGroupIdOptionsType = "notConfigured" | "adSite" | "authenticatedDomainSid" | "dhcpUserOption" | "dnsSuffix"
 export type WindowsKioskAppType = "unknown" | "store" | "desktop" | "aumId"
 export type WindowsAppStartLayoutTileSize = "hidden" | "small" | "medium" | "wide" | "large"
 export type SharedPCAccountDeletionPolicyType = "immediate" | "diskSpaceThreshold" | "diskSpaceThresholdOrInactiveThreshold"
@@ -300,6 +309,7 @@ export type NetworkSingleSignOnType = "disabled" | "prelogon" | "postlogon"
 export type CertificateDestinationStore = "computerCertStoreRoot" | "computerCertStoreIntermediate" | "userCertStoreIntermediate"
 export type WindowsUpdateType = "userDefined" | "all" | "businessReadyOnly" | "windowsInsiderBuildFast" | "windowsInsiderBuildSlow" | "windowsInsiderBuildRelease"
 export type WindowsUpdateForBusinessUpdateWeeks = "userDefined" | "firstWeek" | "secondWeek" | "thirdWeek" | "fourthWeek" | "everyWeek"
+export type WindowsUpdateStatus = "upToDate" | "pendingInstallation" | "pendingReboot" | "failed"
 export type AutoRestartNotificationDismissalMethod = "notConfigured" | "automatic" | "user"
 export type Windows10VpnProfileTarget = "user" | "device" | "autoPilotDevice"
 export type Windows10VpnConnectionType = "pulseSecure" | "f5EdgeClient" | "dellSonicWallMobileConnect" | "checkPointCapsuleVpn" | "automatic" | "ikEv2" | "l2tp" | "pptp" | "citrix" | "paloAltoGlobalProtect"
@@ -320,6 +330,10 @@ export type PolicyPlatformType = "android" | "androidForWork" | "iOS" | "macOS" 
 export type IosUpdatesInstallStatus = "success" | "available" | "idle" | "unknown" | "downloading" | "downloadFailed" | "downloadRequiresComputer" | "downloadInsufficientSpace" | "downloadInsufficientPower" | "downloadInsufficientNetwork" | "installing" | "installInsufficientSpace" | "installInsufficientPower" | "installPhoneCallInProgress" | "installFailed" | "notSupportedOperation" | "sharedDeviceUserLoggedInError"
 export type NdesConnectorState = "none" | "active" | "inactive"
 export type RestrictedAppsState = "prohibitedApps" | "notApprovedApps"
+export type DeviceTypes = "desktop" | "windowsRT" | "winMO6" | "nokia" | "windowsPhone" | "mac" | "winCE" | "winEmbedded" | "iPhone" | "iPad" | "iPod" | "android" | "iSocConsumer" | "unix" | "macMDM" | "holoLens" | "surfaceHub" | "androidForWork" | "androidEnterprise" | "blackberry" | "palm" | "unknown"
+export type EncryptionReadinessState = "notReady" | "ready"
+export type EncryptionState = "notEncrypted" | "encrypted"
+export type AdvancedBitLockerState = "success" | "noUserConsent" | "osVolumeEncryptionMethodMismatch" | "osVolumeTpmRequired" | "osVolumeTpmOnlyRequired" | "osVolumeTpmPinRequired" | "osVolumeTpmStartupKeyRequired" | "osVolumeTpmPinStartupKeyRequired" | "osVolumeUnprotected" | "recoveryKeyBackupFailed" | "fixedDriveNotEncrypted" | "fixedDriveEncryptionMethodMismatch" | "loggedOnUserNonAdmin" | "windowsRecoveryEnvironmentNotConfigured" | "tpmNotAvailable" | "tpmNotReady" | "networkError"
 export type DeviceManagementExchangeConnectorSyncType = "fullSync" | "deltaSync"
 export type MdmAuthority = "unknown" | "intune" | "sccm" | "office365"
 export type WindowsHelloForBusinessPinUsage = "allowed" | "required" | "disallowed"
@@ -338,7 +352,7 @@ export type UnaryManagementConditionExpressionOperatorType = "not"
 export type ManagedAppDataStorageLocation = "oneDriveForBusiness" | "sharePoint" | "localStorage"
 export type ManagedAppDataTransferLevel = "allApps" | "managedApps" | "none"
 export type ManagedAppClipboardSharingLevel = "allApps" | "managedAppsWithPasteIn" | "managedApps" | "blocked"
-export type ManagedAppRemediationAction = "block" | "wipe"
+export type ManagedAppRemediationAction = "block" | "wipe" | "warn"
 export type ManagedAppPinCharacterSet = "numeric" | "alphanumericAndSymbol"
 export type ManagedAppDataEncryptionType = "useDeviceSettings" | "afterDeviceRestart" | "whenDeviceLockedExceptOpenFiles" | "whenDeviceLocked"
 export type AppManagementLevel = "unspecified" | "unmanaged" | "mdm" | "androidEnterprise"
@@ -388,6 +402,7 @@ export type QuarantineReason = "EncounteredBaseEscrowThreshold" | "EncounteredTo
 export type SynchronizationScheduleState = "Active" | "Disabled"
 export type ScopeOperatorMultiValuedComparisonType = "All" | "Any"
 export type ScopeOperatorType = "Binary" | "Unary"
+export type ContactRelationship = "parent" | "relative" | "aide" | "doctor" | "guardian" | "child" | "other" | "unknownFutureValue"
 export type EducationUserRole = "student" | "teacher" | "none" | "unknownFutureValue"
 export type EducationSynchronizationProfileState = "deleting" | "deletionFailed" | "provisioningFailed" | "provisioned" | "provisioning" | "unknownFutureValue"
 export type EducationSynchronizationStatus = "paused" | "inProgress" | "success" | "error" | "validationError" | "quarantined" | "unknownFutureValue"
@@ -437,8 +452,7 @@ export type Priority = "None" | "High" | "Low"
 export type GroupPolicyConfigurationType = "policy" | "preference"
 export type GroupPolicyDefinitionClassType = "user" | "machine" | "both"
 export type GroupPolicyType = "admxBacked" | "admxIngested"
-export type AddressType = "unknown" | "home" | "business" | "other"
-export type AvailabilityStatus = "unknown" | "free" | "tentative" | "busy" | "oof" | "workingElsewhere"
+export type ActivityDomain = "unknown" | "work" | "personal" | "unrestricted"
 
 export interface Entity {
 
@@ -721,7 +735,7 @@ export interface User extends DirectoryObject {
 	    /** The city in which the user is located. Supports $filter. */
 		city?: string
 
-	    /** The company name which the user is associated. Read-only. */
+	    /** The company name which the user is associated. This property can be useful for describing the company that an external user comes from. */
 		companyName?: string
 
 	    /** Sets whether consent has been obtained for minors. Allowed values: null, granted, denied and notRequired. Refer to the legal age group property definitions for further information. */
@@ -729,6 +743,9 @@ export interface User extends DirectoryObject {
 
 	    /** The country/region in which the user is located; for example, 'US' or 'UK'. Supports $filter. */
 		country?: string
+
+	    /** The created date of the user object. */
+		createdDateTime?: string
 
 	    /** The name for the department in which the user works. Supports $filter. */
 		department?: string
@@ -738,8 +755,10 @@ export interface User extends DirectoryObject {
 	    /** The name displayed in the address book for the user. This is usually the combination of the user's first name, middle initial and last name. This property is required when a user is created and it cannot be cleared during updates. Supports $filter and $orderby. */
 		displayName?: string
 
+	    /** The employee identifier assigned to the user by the organization. Supports $filter. */
 		employeeId?: string
 
+	    /** The fax number of the user. */
 		faxNumber?: string
 
 	    /** The given name (first name) of the user. Supports $filter. */
@@ -748,6 +767,7 @@ export interface User extends DirectoryObject {
 	    /** The instant message voice over IP (VOIP) session initiation protocol (SIP) addresses for the user. Read-only. */
 		imAddresses?: string[]
 
+	    /** true if the user is a resource account; otherwise, false. Null value should be considered false. */
 		isResourceAccount?: boolean
 
 	    /** The user’s job title. Supports $filter. */
@@ -756,6 +776,7 @@ export interface User extends DirectoryObject {
 	    /** Used by enterprise applications to determine the legal age group of the user. This property is read-only and calculated based on ageGroup and consentProvidedForMinor properties. Allowed values: null, minorWithOutParentalConsent, minorWithParentalConsent, minorNoParentalConsentRequired, notAdult and adult. Refer to the legal age group property definitions for further information.) */
 		legalAgeGroupClassification?: string
 
+	    /** State of license assignments for this user. Read-only. */
 		licenseAssignmentStates?: LicenseAssignmentState[]
 
 	    /** The SMTP address for the user, for example, 'jeff@contoso.onmicrosoft.com'. Read-Only. Supports $filter. */
@@ -767,6 +788,7 @@ export interface User extends DirectoryObject {
 	    /** The primary cellular telephone number for the user. */
 		mobilePhone?: string
 
+	    /** Contains the on-premises Active Directory distinguished name or DN. The property is only populated for customers who are synchronizing their on-premises directory to Azure Active Directory via Azure AD Connect. Read-only. */
 		onPremisesDistinguishedName?: string
 
 	    /** Contains extensionAttributes 1-15 for the user. Note that the individual extension attributes are neither selectable nor filterable. For an onPremisesSyncEnabled user, this set of properties is mastered on-premises and is read-only. For a cloud-only user (where onPremisesSyncEnabled is false), these properties may be set during creation or update. */
@@ -796,6 +818,7 @@ export interface User extends DirectoryObject {
 	    /** Contains the on-premises userPrincipalName synchronized from the on-premises directory. The property is only populated for customers who are synchronizing their on-premises directory to Azure Active Directory via Azure AD Connect. Read-only. */
 		onPremisesUserPrincipalName?: string
 
+	    /** A list of additional email addresses for the user; for example: ['bob@contoso.com', 'Robert@fabrikam.com']. Supports $filter. */
 		otherMails?: string[]
 
 	    /** Specifies password policies for the user. This value is an enumeration with one possible value being 'DisableStrongPassword', which allows weaker passwords than the default policy to be specified. 'DisablePasswordExpiration' can also be specified. The two may be specified together; for example: 'DisablePasswordExpiration, DisableStrongPassword'. */
@@ -824,6 +847,7 @@ export interface User extends DirectoryObject {
 
 		refreshTokensValidFromDateTime?: string
 
+	    /** true if the Outlook global address list should contain this user, otherwise false. If not set, this will be treated as true. For users invited through the invitation manager, this property will be set to false. */
 		showInAddressList?: boolean
 
 	    /** The state or province in the user's address. Supports $filter. */
@@ -971,6 +995,8 @@ export interface User extends DirectoryObject {
 	    /** A collection of drives available for this user. Read-only. */
 		drives?: Drive[]
 
+		followedSites?: Site[]
+
 		insights?: OfficeGraphInsights
 
 		settings?: UserSettings
@@ -1005,6 +1031,8 @@ export interface User extends DirectoryObject {
 
 	    /** The list of mobile app troubleshooting events for this user. */
 		mobileAppTroubleshootingEvents?: MobileAppTroubleshootingEvent[]
+
+		informationProtection?: InformationProtection
 
 		agreementAcceptances?: AgreementAcceptance[]
 
@@ -1142,7 +1170,7 @@ export interface Message extends OutlookItem {
 	    /** The message ID in the format specified by RFC2822. */
 		internetMessageId?: string
 
-	    /** A collection of message headers defined by RFC5322. The set includes message headers indicating the network path taken by a message from the sender to the recipient. It can also contain custom message headers that hold app data for the message. */
+	    /** A collection of message headers defined by RFC5322. The set includes message headers indicating the network path taken by a message from the sender to the recipient. It can also contain custom message headers that hold app data for the message.  Returned only on applying a $select query option. Read-only. */
 		internetMessageHeaders?: InternetMessageHeader[]
 
 	    /** The subject of the message. */
@@ -1231,6 +1259,7 @@ export interface Message extends OutlookItem {
 
 export interface Group extends DirectoryObject {
 
+	    /** The licenses that are assigned to the group. Returned only on $select. Read-only. */
 		assignedLicenses?: AssignedLicense[]
 
 	    /** Describes a classification for the group (such as low, medium or high business impact). Valid values for this property are defined by creating a ClassificationList setting value, based on the template definition.Returned by default. */
@@ -1248,8 +1277,10 @@ export interface Group extends DirectoryObject {
 	    /** Specifies the type of group to create. Possible values are Unified to create an Office 365 group, or DynamicMembership for dynamic groups.  For all other group types, like security-enabled groups and email-enabled security groups, do not set this property. Returned by default. Supports $filter. */
 		groupTypes?: string[]
 
+	    /** Indicates whether there are members in this group that have license errors from its group-based license assignment. This property is never returned on a GET operation. You can use it as a $filter argument to get groups that have members with license errors (that is, filter for this property being true). See an example. */
 		hasMembersWithLicenseErrors?: boolean
 
+	    /** Indicates status of the group license assignment to all members of the group. Default value is false. Read-only. Possible values: QueuedForProcessing, ProcessingInProgress, and ProcessingComplete.Returned only on $select. Read-only. */
 		licenseProcessingState?: LicenseProcessingState
 
 	    /** The SMTP address for the group, for example, 'serviceadmins@contoso.onmicrosoft.com'. Returned by default. Read-only. Supports $filter. */
@@ -1330,6 +1361,7 @@ export interface Group extends DirectoryObject {
 	    /** Users and groups that are members of this group. HTTP Methods: GET (supported for all groups), POST (supported for Office 365 groups, security groups and mail-enabled security groups), DELETE (supported for Office 365 groups and security groups) Nullable. */
 		members?: DirectoryObject[]
 
+	    /** A list of group members with license errors from this group-based license assignment. Read-only. */
 		membersWithLicenseErrors?: DirectoryObject[]
 
 	    /** Groups that this group is a member of. HTTP Methods: GET (supported for all groups). Read-only. Nullable. */
@@ -1890,6 +1922,50 @@ export interface Drive extends BaseItem {
 
 }
 
+export interface Site extends BaseItem {
+
+	    /** The full title for the site. Read-only. */
+		displayName?: string
+
+	    /** If present, indicates that this is the root site in the site collection. Read-only. */
+		root?: Root
+
+	    /** Returns identifiers useful for SharePoint REST compatibility. Read-only. */
+		sharepointIds?: SharepointIds
+
+	    /** Provides details about the site's site collection. Available only on the root site. Read-only. */
+		siteCollection?: SiteCollection
+
+		analytics?: ItemAnalytics
+
+	    /** The collection of column definitions reusable across lists under this site. */
+		columns?: ColumnDefinition[]
+
+	    /** The collection of content types defined for this site. */
+		contentTypes?: ContentType[]
+
+	    /** The default drive (document library) for this site. */
+		drive?: Drive
+
+	    /** The collection of drives (document libraries) under this site. */
+		drives?: Drive[]
+
+	    /** Used to address any item contained in this site. This collection cannot be enumerated. */
+		items?: BaseItem[]
+
+	    /** The collection of lists under this site. */
+		lists?: List[]
+
+		pages?: SitePage[]
+
+	    /** The collection of the sub-sites under this site. */
+		sites?: Site[]
+
+	    /** Calls the OneNote service for notebook related operations. */
+		onenote?: Onenote
+
+}
+
 export interface OfficeGraphInsights extends Entity {
 
 		trending?: Trending[]
@@ -2286,9 +2362,10 @@ export interface Device extends DirectoryObject {
 	    /** For internal use only. Not nullable. */
 		alternativeSecurityIds?: AlternativeSecurityId[]
 
-	    /** The Timestamp type represents date and time information using ISO 8601 format and is always in UTC time. For example, midnight UTC on Jan 1, 2014 would look like this: '2014-01-01T00:00:00Z' Read-only. */
+	    /** The timestamp type represents date and time information using ISO 8601 format and is always in UTC time. For example, midnight UTC on Jan 1, 2014 would look like this: '2014-01-01T00:00:00Z'. Read-only. */
 		approximateLastSignInDateTime?: string
 
+	    /** The timestamp when the device is no longer deemed compliant. The timestamp type represents date and time information using ISO 8601 format and is always in UTC time. For example, midnight UTC on Jan 1, 2014 would look like this: '2014-01-01T00:00:00Z'. Read-only. */
 		complianceExpirationDateTime?: string
 
 	    /** Unique identifier set by Azure Device Registration Service at the time of registration. */
@@ -2324,8 +2401,10 @@ export interface Device extends DirectoryObject {
 	    /** For interal use only. Not nullable. */
 		physicalIds?: string[]
 
+	    /** The profile type of the device. Possible values:RegisteredDevice (default)SecureVMPrinterSharedIoT */
 		profileType?: string
 
+	    /** List of labels applied to the device by the system. */
 		systemLabels?: string[]
 
 	    /** Type of trust for the joined device. Read-only. Possible values: Workplace - indicates bring your own personal devicesAzureAd - Cloud only joined devicesServerAd - on-premises domain joined devices joined to Azure AD. For more details, see Introduction to device management in Azure Active Directory */
@@ -2369,6 +2448,15 @@ export interface DeviceManagementTroubleshootingEvent extends Entity {
 	    /** Id used for tracing the failure in the service. */
 		correlationId?: string
 
+	    /** Object containing detailed information about the error and its remediation. */
+		troubleshootingErrorDetails?: DeviceManagementTroubleshootingErrorDetails
+
+	    /** Event Name corresponding to the Troubleshooting Event. It is an Optional field */
+		eventName?: string
+
+	    /** A set of string key and string value pairs which provides additional information on the Troubleshooting event */
+		additionalInformation?: KeyValuePair[]
+
 }
 
 export interface MobileAppIntentAndState extends Entity {
@@ -2397,6 +2485,15 @@ export interface MobileAppTroubleshootingEvent extends DeviceManagementTroublesh
 
 	    /** Intune Mobile Application Troubleshooting History Item */
 		history?: MobileAppTroubleshootingHistoryItem[]
+
+	    /** The collection property of AppLogUploadRequest. */
+		appLogCollectionRequests?: AppLogCollectionRequest[]
+
+}
+
+export interface InformationProtection extends Entity {
+
+		sensitivityLabels?: SensitivityLabel[]
 
 }
 
@@ -2512,50 +2609,6 @@ export interface Conversation extends Entity {
 
 	    /** A collection of all the conversation threads in the conversation. A navigation property. Read-only. Nullable. */
 		threads?: ConversationThread[]
-
-}
-
-export interface Site extends BaseItem {
-
-	    /** The full title for the site. Read-only. */
-		displayName?: string
-
-	    /** If present, indicates that this is the root site in the site collection. Read-only. */
-		root?: Root
-
-	    /** Returns identifiers useful for SharePoint REST compatibility. Read-only. */
-		sharepointIds?: SharepointIds
-
-	    /** Provides details about the site's site collection. Available only on the root site. Read-only. */
-		siteCollection?: SiteCollection
-
-		analytics?: ItemAnalytics
-
-	    /** The collection of column definitions reusable across lists under this site. */
-		columns?: ColumnDefinition[]
-
-	    /** The collection of content types defined for this site. */
-		contentTypes?: ContentType[]
-
-	    /** The default drive (document library) for this site. */
-		drive?: Drive
-
-	    /** The collection of drives (document libraries) under this site. */
-		drives?: Drive[]
-
-	    /** Used to address any item contained in this site. This collection cannot be enumerated. */
-		items?: BaseItem[]
-
-	    /** The collection of lists under this site. */
-		lists?: List[]
-
-		pages?: SitePage[]
-
-	    /** The collection of the sub-sites under this site. */
-		sites?: Site[]
-
-	    /** Calls the OneNote service for notebook related operations. */
-		onenote?: Onenote
 
 }
 
@@ -2702,6 +2755,9 @@ export interface Organization extends DirectoryObject {
 
 	    /** Country/region abbreviation for the organization */
 		countryLetterCode?: string
+
+	    /** Timestamp of when the organization was created. The value cannot be modified and is automatically populated when the organization is created. The Timestamp type represents date and time information using ISO 8601 format and is always in UTC time. For example, midnight UTC on Jan 1, 2014 would look like this: '2014-01-01T00:00:00Z'. Read-only. */
+		createdDateTime?: string
 
 	    /** The display name for the tenant. */
 		displayName?: string
@@ -2933,12 +2989,16 @@ export interface OrgContact extends DirectoryObject {
 
 export interface DirectoryObjectPartnerReference extends DirectoryObject {
 
+	    /** Description of the object returned. Read-only. */
 		description?: string
 
+	    /** Name of directory object being returned, like group or application. Read-only. */
 		displayName?: string
 
+	    /** The tenant identifier for the partner tenant. Read-only. */
 		externalPartnerTenantId?: string
 
+	    /** The type of the referenced object in the partner tenant. Read-only. */
 		objectType?: string
 
 }
@@ -3003,6 +3063,12 @@ export interface Domain extends Entity {
 
 	    /** True if the domain has completed domain ownership verification. Not nullable */
 		isVerified?: boolean
+
+	    /** Specifies the number of days before a user receives notification that their password will expire. If the property is not set, a default value of 14 days will be used. */
+		passwordNotificationWindowInDays?: number
+
+	    /** Specifies the length of time that a password is valid before it must be changed. If the property is not set, a default value of 90 days will be used. */
+		passwordValidityPeriodInDays?: number
 
 	    /** The capabilities assigned to the domain.Can include 0, 1 or more of following values: Email, Sharepoint, EmailInternalRelayOnly, OfficeCommunicationsOnline, SharePointDefaultDomain, FullRedelegation, SharePointPublic, OrgIdAuthentication, Yammer, Intune The values which you can add/remove using Graph API include: Email, OfficeCommunicationsOnline, YammerNot nullable */
 		supportedServices?: string[]
@@ -3615,6 +3681,8 @@ export interface Subscription extends Entity {
 
 	    /** Identifier of the user or service principal that created the subscription. If the app used delegated permissions to create the subscription, this field contains the id of the signed-in user the app called on behalf of. If the app used application permissions, this field contains the id of the service principal corresponding to the app. Read-only. */
 		creatorId?: string
+
+		includeProperties?: boolean
 
 }
 
@@ -4530,7 +4598,7 @@ export interface FileAttachment extends Attachment {
 	    /** The ID of the attachment in the Exchange store. */
 		contentId?: string
 
-	    /** The Uniform Resource Identifier (URI) that corresponds to the location of the content of the attachment. */
+	    /** Do not use this property as it is not supported. */
 		contentLocation?: string
 
 	    /** The base64-encoded contents of the file. */
@@ -4718,6 +4786,8 @@ export interface ItemActivityStat extends Entity {
 
 		incompleteData?: IncompleteData
 
+		activities?: ItemActivity[]
+
 }
 
 export interface ListItemVersion extends BaseItemVersion {
@@ -4846,7 +4916,7 @@ export interface PlannerTask extends Entity {
 	    /** Number of checklist items that are present on the task. */
 		checklistItemCount?: number
 
-	    /** Number of checklist items with value set to 'false', representing incomplete items. */
+	    /** Number of checklist items with value set to false, representing incomplete items. */
 		activeChecklistItemCount?: number
 
 	    /** The categories to which the task has been applied. See applied Categories for possible values. */
@@ -5175,11 +5245,13 @@ export interface DirectoryAudit extends Entity {
 
 		activityDateTime?: string
 
+		loggedByService?: string
+
+		operationType?: string
+
 		initiatedBy?: AuditActivityInitiator
 
 		targetResources?: TargetResource[]
-
-		loggedByService?: string
 
 		additionalDetails?: KeyValue[]
 
@@ -5255,6 +5327,120 @@ export interface RestrictedSignIn extends SignIn {
 
 }
 
+export interface AzureADLicenseUsage extends Entity {
+
+		snapshotDateTime?: string
+
+		licenseInfoDetails?: LicenseInfoDetail[]
+
+}
+
+export interface AzureADUserFeatureUsage extends Entity {
+
+		lastUpdatedDateTime?: string
+
+		userId?: string
+
+		userDisplayName?: string
+
+		userPrincipalName?: string
+
+		licenseRecommended?: AzureADLicenseType
+
+		licenseAssigned?: AzureADLicenseType
+
+		featureUsageDetails?: FeatureUsageDetail[]
+
+}
+
+export interface AzureADFeatureUsage extends Entity {
+
+		snapshotDateTime?: string
+
+		featureName?: string
+
+		usage?: number
+
+}
+
+export interface ApplicationSignInDetailedSummary extends Entity {
+
+		appId?: string
+
+		appDisplayName?: string
+
+		status?: SignInStatus
+
+		signInCount?: number
+
+		aggregatedEventDateTime?: string
+
+}
+
+export interface ApplicationSignInSummary extends Entity {
+
+		appDisplayName?: string
+
+		successfulSignInCount?: number
+
+		failedSignInCount?: number
+
+		successPercentage?: number
+
+}
+
+export interface CredentialUserRegistrationCount extends Entity {
+
+		totalUserCount?: number
+
+		userRegistrationCounts?: UserRegistrationCount[]
+
+}
+
+export interface CredentialUserRegistrationDetails extends Entity {
+
+		userPrincipalName?: string
+
+		userDisplayName?: string
+
+		authMethods?: AuthMethodsType[]
+
+		isRegistered?: boolean
+
+		isEnabled?: boolean
+
+		isCapable?: boolean
+
+}
+
+export interface CredentialUsageSummary extends Entity {
+
+		feature?: FeatureType
+
+		successfulActivityCount?: number
+
+		failureActivityCount?: number
+
+		authMethod?: AuthMethodsType
+
+}
+
+export interface UserCredentialUsageDetails extends Entity {
+
+		feature?: FeatureType
+
+		userPrincipalName?: string
+
+		userDisplayName?: string
+
+		isSuccess?: boolean
+
+		authMethod?: AuthMethodsType
+
+		failureReason?: string
+
+}
+
 export interface AuditLogRoot extends Entity {
 
 		signIns?: SignIn[]
@@ -5262,6 +5448,14 @@ export interface AuditLogRoot extends Entity {
 		directoryAudits?: DirectoryAudit[]
 
 		restrictedSignIns?: RestrictedSignIn[]
+
+}
+
+export interface ReportRoot extends Entity {
+
+		applicationSignInDetailedSummary?: ApplicationSignInDetailedSummary[]
+
+		credentialUserRegistrationDetails?: CredentialUserRegistrationDetails[]
 
 }
 
@@ -5653,6 +5847,9 @@ export interface DeviceManagement extends Entity {
 	    /** Data sharing consents. */
 		dataSharingConsents?: DataSharingConsent[]
 
+	    /** The collection property of MobileAppTroubleshootingEvent. */
+		mobileAppTroubleshootingEvents?: MobileAppTroubleshootingEvent[]
+
 	    /** The device configurations. */
 		deviceConfigurations?: DeviceConfiguration[]
 
@@ -5688,6 +5885,9 @@ export interface DeviceManagement extends Entity {
 
 	    /** Restricted apps violations for this account. */
 		deviceConfigurationRestrictedAppsViolations?: RestrictedAppsViolation[]
+
+	    /** Encryption report for devices in this account */
+		managedDeviceEncryptionStates?: ManagedDeviceEncryptionState[]
 
 	    /** Summary of policies in conflict state for this account. */
 		deviceConfigurationConflictSummary?: DeviceConfigurationConflictSummary[]
@@ -6079,6 +6279,9 @@ export interface DeviceManagementScript extends Entity {
 
 	    /** List of Scope Tag IDs for this PowerShellScript instance. */
 		roleScopeTagIds?: string[]
+
+	    /** A value indicating whether the PowerShell script should run as 32-bit */
+		runAs32Bit?: boolean
 
 	    /** The list of group assignments for the device management script. */
 		groupAssignments?: DeviceManagementScriptGroupAssignment[]
@@ -6580,6 +6783,40 @@ export interface RestrictedAppsViolation extends Entity {
 
 }
 
+export interface ManagedDeviceEncryptionState extends Entity {
+
+	    /** User name */
+		userPrincipalName?: string
+
+	    /** Platform of the device. */
+		deviceType?: DeviceTypes
+
+	    /** Operating system version of the device */
+		osVersion?: string
+
+	    /** Device TPM Version */
+		tpmSpecificationVersion?: string
+
+	    /** Device name */
+		deviceName?: string
+
+	    /** Encryption readiness state */
+		encryptionReadinessState?: EncryptionReadinessState
+
+	    /** Device encryption state */
+		encryptionState?: EncryptionState
+
+	    /** Encryption policy setting state */
+		encryptionPolicySettingState?: ComplianceStatus
+
+	    /** Advanced BitLocker State */
+		advancedBitLockerStates?: AdvancedBitLockerState
+
+	    /** Policy Details */
+		policyDetails?: EncryptionReportPolicyDetails[]
+
+}
+
 export interface DeviceConfigurationConflictSummary extends Entity {
 
 	    /** The set of policies in conflict with the given setting */
@@ -7048,6 +7285,9 @@ export interface WindowsAutopilotDeploymentProfile extends Entity {
 	    /** The template used to name the AutoPilot Device. This can be a custom text and can also contain either the serial number of the device, or a randomly generated number. The total length of the text generated by the template can be no more than 15 characters. */
 		deviceNameTemplate?: string
 
+	    /** Enable Autopilot White Glove for the profile. */
+		enableWhiteGlove?: boolean
+
 	    /** The list of assigned devices for the profile. */
 		assignedDevices?: WindowsAutopilotDeviceIdentity[]
 
@@ -7116,11 +7356,11 @@ export interface DepOnboardingSetting extends Entity {
 	    /** Gets synced device count */
 		syncedDeviceCount?: number
 
-	    /** Gets synced device count */
-		defaultProfileDisplayName?: string
-
 	    /** Consent granted for data sharing with Apple Dep Service */
 		dataSharingConsentGranted?: boolean
+
+	    /** List of Scope Tags for this Entity instance. */
+		roleScopeTagIds?: string[]
 
 	    /** Default iOS Enrollment Profile */
 		defaultIosEnrollmentProfile?: DepIOSEnrollmentProfile
@@ -8287,6 +8527,9 @@ export interface WindowsInformationProtectionWipeAction extends Entity {
 	    /** Targeted device Mac address. */
 		targetedDeviceMacAddress?: string
 
+	    /** Last checkin time of the device that was targeted by this wipe action. */
+		lastCheckInDateTime?: string
+
 }
 
 export interface ManagedEBook extends Entity {
@@ -8721,6 +8964,9 @@ export interface OfficeSuiteApp extends MobileApp {
 
 	    /** The property to represent the update version in which the specific target version is available for the Office365 app suite. */
 		updateVersion?: string
+
+	    /** The property to represent the XML configuration file that can be specified for Office ProPlus Apps. Takes precedence over all other properties. When present, the XML configuration file will be used to create the app. */
+		officeConfigurationXml?: number
 
 }
 
@@ -9228,6 +9474,9 @@ export interface MicrosoftStoreForBusinessApp extends MobileApp {
 	    /** The app package identifier */
 		packageIdentityName?: string
 
+	    /** The supported License Type. */
+		licensingType?: VppLicensingType
+
 	    /** The collection of contained apps in a mobileApp acting as a package. */
 		containedApps?: MobileContainedApp[]
 
@@ -9577,6 +9826,22 @@ export interface ManagedDeviceMobileAppConfigurationState extends Entity {
 
 }
 
+export interface AppLogCollectionRequest extends Entity {
+
+	    /** Log upload status */
+		status?: AppLogUploadState
+
+	    /** Error message if any during the upload process */
+		errorMessage?: string
+
+	    /** List of log folders.  */
+		customLogFolders?: string[]
+
+	    /** Time at which the upload log request reached a terminal state */
+		completedDateTime?: string
+
+}
+
 export interface WindowsDeviceMalwareState extends Entity {
 
 	    /** Malware name */
@@ -9647,10 +9912,6 @@ export interface WindowsManagementAppHealthState extends Entity {
 
 	    /** Windows 10 OS version of the device on which Windows management app is installed. */
 		deviceOSVersion?: string
-
-}
-
-export interface ReportRoot extends Entity {
 
 }
 
@@ -10076,26 +10337,6 @@ export interface WindowsAssignedAccessProfile extends Entity {
 
 	    /** Allows admins to override the default Start layout and prevents the user from changing it.Â The layout is modified by specifying an XML file based on a layout modification schema. XML needs to be in Binary format. */
 		startMenuLayoutXml?: number
-
-}
-
-export interface DeviceManagementApplicabilityRuleOsEdition extends Entity {
-
-	    /** Name for object. */
-		name?: string
-
-}
-
-export interface DeviceManagementApplicabilityRuleOsVersion extends Entity {
-
-	    /** Min OS version for Applicability Rule. */
-		minOSVerison?: string
-
-	    /** Max OS version for Applicability Rule. */
-		maxOSVersion?: string
-
-	    /** Name for object. */
-		name?: string
 
 }
 
@@ -10914,7 +11155,7 @@ export interface AndroidGeneralDeviceConfiguration extends DeviceConfiguration {
 	    /** Number of previous passwords to block. Valid values 0 to 24 */
 		passwordPreviousPasswordBlockCount?: number
 
-	    /** Number of sign in failures allowed before factory reset. Valid values 4 to 11 */
+	    /** Number of sign in failures allowed before factory reset. Valid values 1 to 16 */
 		passwordSignInFailureCountBeforeFactoryReset?: number
 
 	    /** Type of password that is required. Possible values are: deviceDefault, alphabetic, alphanumeric, alphanumericWithSymbols, lowSecurityBiometric, numeric, numericComplex, any. */
@@ -10982,6 +11223,13 @@ export interface AndroidGeneralDeviceConfiguration extends DeviceConfiguration {
 
 	    /** Require the Android Verify apps feature is turned on. */
 		securityRequireVerifyApps?: boolean
+
+}
+
+export interface AndroidOmaCpConfiguration extends DeviceConfiguration {
+
+	    /** Configuration XML that will be applied to the device. When it is read, it only provides a placeholder string since the original data is encrypted and stored. */
+		configurationXml?: number
 
 }
 
@@ -11217,7 +11465,7 @@ export interface AndroidWorkProfileGeneralDeviceConfiguration extends DeviceConf
 	    /** Number of previous passwords to block. Valid values 0 to 24 */
 		passwordPreviousPasswordBlockCount?: number
 
-	    /** Number of sign in failures allowed before factory reset. Valid values 4 to 11 */
+	    /** Number of sign in failures allowed before factory reset. Valid values 1 to 16 */
 		passwordSignInFailureCountBeforeFactoryReset?: number
 
 	    /** Type of password that is required. Possible values are: deviceDefault, lowSecurityBiometric, required, atLeastNumeric, numericComplex, atLeastAlphabetic, atLeastAlphanumeric, alphanumericWithSymbols. */
@@ -11289,7 +11537,7 @@ export interface AndroidWorkProfileGeneralDeviceConfiguration extends DeviceConf
 	    /** Number of previous work profile passwords to block. Valid values 0 to 24 */
 		workProfilePasswordPreviousPasswordBlockCount?: number
 
-	    /** Number of sign in failures allowed before work profile is removed and all corporate data deleted. Valid values 4 to 11 */
+	    /** Number of sign in failures allowed before work profile is removed and all corporate data deleted. Valid values 1 to 16 */
 		workProfilePasswordSignInFailureCountBeforeFactoryReset?: number
 
 	    /** Type of work profile password that is required. Possible values are: deviceDefault, lowSecurityBiometric, required, atLeastNumeric, numericComplex, atLeastAlphabetic, atLeastAlphanumeric, alphanumericWithSymbols. */
@@ -11562,6 +11810,9 @@ export interface IosGeneralDeviceConfiguration extends DeviceConfiguration {
 	    /** Indicates whether or not to require a password when using the app store. */
 		appStoreRequirePassword?: boolean
 
+	    /** Indicates whether or not to force user authentication before autofilling passwords and credit card information in Safari and other apps on supervised devices. */
+		autoFillForceAuthentication?: boolean
+
 	    /** Indicates whether or not to allow modification of Bluetooth settings when the device is in supervised mode (iOS 10.0 and later). */
 		bluetoothBlockModification?: boolean
 
@@ -11580,6 +11831,9 @@ export interface IosGeneralDeviceConfiguration extends DeviceConfiguration {
 	    /** Indicates whether or not to block Personal Hotspot. */
 		cellularBlockPersonalHotspot?: boolean
 
+	    /** Indicates whether or not to allow users to change the settings of the cellular plan on a supervised device. */
+		cellularBlockPlanModification?: boolean
+
 	    /** Indicates whether or not to block voice roaming. */
 		cellularBlockVoiceRoaming?: boolean
 
@@ -11591,6 +11845,12 @@ export interface IosGeneralDeviceConfiguration extends DeviceConfiguration {
 
 	    /** Indicates whether or not to automatically give permission to the teacher of a managed course on the Classroom app to view a student's screen without prompting when the device is in supervised mode. */
 		classroomAppForceUnpromptedScreenObservation?: boolean
+
+	    /** Indicates whether or not to automatically give permission to the teacher's requests, without prompting the student, when the device is in supervised mode. */
+		classroomForceAutomaticallyJoinClasses?: boolean
+
+	    /** Indicates whether or not to allow the teacher to lock apps or the device without prompting the student. Supervised only. */
+		classroomForceUnpromptedAppAndDeviceLock?: boolean
 
 	    /** List of apps in the compliance (either allow list or block list, controlled by CompliantAppListType). This collection can contain a maximum of 10000 elements. */
 		compliantAppsList?: AppListItem[]
@@ -11633,6 +11893,9 @@ export interface IosGeneralDeviceConfiguration extends DeviceConfiguration {
 
 	    /** Indicates whether or not to block the user from modifying the enterprise app trust settings. */
 		enterpriseAppBlockTrustModification?: boolean
+
+	    /** Indicates whether or not to allow the addition or removal of cellular plans on the eSIM of a supervised device. */
+		esimBlockModification?: boolean
 
 	    /** Indicates whether or not to block the user from using FaceTime. */
 		faceTimeBlocked?: boolean
@@ -11859,6 +12122,9 @@ export interface IosGeneralDeviceConfiguration extends DeviceConfiguration {
 	    /** Indicates whether or not to block the user from using podcasts on the supervised device (iOS 8.0 and later). */
 		podcastsBlocked?: boolean
 
+	    /** Indicates whether or not to enable the prompt to setup nearby devices with a supervised device. */
+		proximityBlockSetupToNewDevice?: boolean
+
 	    /** Indicates whether or not to block the user from using Auto fill in Safari. */
 		safariBlockAutofill?: boolean
 
@@ -11897,6 +12163,12 @@ export interface IosGeneralDeviceConfiguration extends DeviceConfiguration {
 
 	    /** Indicates whether or not to prevent Siri from dictating, or speaking profane language on supervised device. */
 		siriRequireProfanityFilter?: boolean
+
+	    /** Sets how many days a software update will be delyed for a supervised device. Valid values 0 to 90 */
+		softwareUpdatesEnforcedDelayInDays?: number
+
+	    /** Indicates whether or not to delay user visibility of software updates when the device is in supervised mode. */
+		softwareUpdatesForceDelayed?: boolean
 
 	    /** Indicates whether or not to block Spotlight search from returning internet results on supervised device. */
 		spotlightBlockInternetResults?: boolean
@@ -12107,6 +12379,12 @@ export interface MacOSScepCertificateProfile extends MacOSCertificateProfileBase
 	    /** Custom String that defines the AAD Attribute. */
 		subjectAlternativeNameFormatString?: string
 
+	    /** Target store certificate */
+		certificateStore?: CertificateStore
+
+	    /** Custom Subject Alternative Name Settings. This collection can contain a maximum of 500 elements. */
+		customSubjectAlternativeNames?: CustomSubjectAlternativeName[]
+
 	    /** Trusted Root Certificate. */
 		rootCertificate?: MacOSTrustedRootCertificate
 
@@ -12272,6 +12550,15 @@ export interface MacOSGeneralDeviceConfiguration extends DeviceConfiguration {
 
 	    /** Indicates whether or not to block sharing passwords with the AirDrop passwords feature. */
 		passwordBlockAirDropSharing?: boolean
+
+	    /** Sets how many days a software update will be delyed for a supervised device. Valid values 0 to 90 */
+		softwareUpdatesEnforcedDelayInDays?: number
+
+	    /** Indicates whether or not to delay user visibility of software updates when the device is in supervised mode. */
+		softwareUpdatesForceDelayed?: boolean
+
+	    /** Indicates whether or not to allow content caching. */
+		contentCachingBlocked?: boolean
 
 }
 
@@ -12734,17 +13021,11 @@ export interface Windows10EndpointProtectionConfiguration extends DeviceConfigur
 	    /** Enable Local accounts that are not password protected to log on from locations other than the physical device.Default is enabled */
 		localSecurityOptionsBlockRemoteLogonWithBlankPassword?: boolean
 
-	    /** Determines whether the Local Administrator account is enabled or disabled. Usage of this property will be discontinued after sprint 1812 and will be replaced with LocalSecurityOptionsDisableAdministratorAccount */
-		localSecurityOptionsEnableAdministratorAccount?: boolean
-
 	    /** Determines whether the Local Administrator account is enabled or disabled. */
 		localSecurityOptionsDisableAdministratorAccount?: boolean
 
 	    /** Define a different account name to be associated with the security identifier (SID) for the account â€œAdministratorâ€. */
 		localSecurityOptionsAdministratorAccountName?: string
-
-	    /** Determines if the Guest account is enabled or disabled.  Usage of this property will be discontinued after sprint 1812 and will be replaced with LocalSecurityOptionsDisableGuestAccount */
-		localSecurityOptionsEnableGuestAccount?: boolean
 
 	    /** Determines if the Guest account is enabled or disabled. */
 		localSecurityOptionsDisableGuestAccount?: boolean
@@ -12802,9 +13083,6 @@ export interface Windows10EndpointProtectionConfiguration extends DeviceConfigur
 
 	    /** This security setting determines which challenge/response authentication protocol is used for network logons. */
 		lanManagerAuthenticationLevel?: LanManagerAuthenticationLevel
-
-	    /** If enabled,the SMB client will allow insecure guest logons. If not configured, the SMB client will reject insecure guest logons. Usage of this property will be discontinued after sprint 1812 and will be replaced with LanManagerWorkstationDisableInsecureGuestLogons */
-		lanManagerWorkstationEnableInsecureGuestLogons?: boolean
 
 	    /** If enabled,the SMB client will allow insecure guest logons. If not configured, the SMB client will reject insecure guest logons. */
 		lanManagerWorkstationDisableInsecureGuestLogons?: boolean
@@ -12899,8 +13177,14 @@ export interface Windows10EndpointProtectionConfiguration extends DeviceConfigur
 	    /** Used to disable the display of the account protection area. */
 		defenderSecurityCenterDisableAccountUI?: boolean
 
+	    /** Used to disable the display of the Clear TPM button. */
+		defenderSecurityCenterDisableClearTpmUI?: boolean
+
 	    /** Used to disable the display of the hardware protection area. */
 		defenderSecurityCenterDisableHardwareUI?: boolean
+
+	    /** Used to disable the display of the notification area control. The user needs to either sign out and sign in or reboot the computer for this setting to take effect. */
+		defenderSecurityCenterDisableNotificationAreaUI?: boolean
 
 	    /** Used to disable the display of the ransomware protection area.  */
 		defenderSecurityCenterDisableRansomwareUI?: boolean
@@ -12910,6 +13194,9 @@ export interface Windows10EndpointProtectionConfiguration extends DeviceConfigur
 
 	    /** Used to disable the display of the security process troubleshooting under Device security. */
 		defenderSecurityCenterDisableTroubleshootingUI?: boolean
+
+	    /** Used to disable the display of update TPM Firmware when a vulnerable firmware is detected. */
+		defenderSecurityCenterDisableVulnerableTpmFirmwareUpdateUI?: boolean
 
 	    /** The company name that is displayed to the users. */
 		defenderSecurityCenterOrganizationDisplayName?: string
@@ -12968,6 +13255,9 @@ export interface Windows10EndpointProtectionConfiguration extends DeviceConfigur
 	    /** Configures the firewall profile settings for private networks */
 		firewallProfilePrivate?: WindowsFirewallNetworkProfile
 
+	    /** Value indicating the behavior of Adobe Reader from creating child processes */
+		defenderAdobeReaderLaunchChildProcess?: DefenderProtectionType
+
 	    /** List of exe files and folders to be excluded from attack surface reduction rules */
 		defenderAttackSurfaceReductionExcludedPaths?: string[]
 
@@ -12976,6 +13266,9 @@ export interface Windows10EndpointProtectionConfiguration extends DeviceConfigur
 
 	    /** Value indicating the behavior ofÂ  Office applications injecting into other processes */
 		defenderOfficeAppsOtherProcessInjection?: DefenderProtectionType
+
+	    /** Value indicating the behavior of Office communication applications, including Microsoft Outlook, from creating child processes */
+		defenderOfficeCommunicationAppsLaunchChildProcess?: DefenderProtectionType
 
 	    /** Value indicating the behavior of Office applications/macros creating or launching executable content */
 		defenderOfficeAppsExecutableContentCreationOrLaunchType?: DefenderAttackSurfaceType
@@ -13117,6 +13410,9 @@ export interface Windows10EndpointProtectionConfiguration extends DeviceConfigur
 
 	    /** Allow users to download files from Edge in the application guard container and save them on the host file system */
 		applicationGuardAllowFileSaveOnHost?: boolean
+
+	    /** Allows the admin to allow standard users to enable encrpytion during Azure AD Join. */
+		bitLockerAllowStandardUserEncryption?: boolean
 
 	    /** Allows the Admin to disable the warning prompt for other disk encryption on the user machines. */
 		bitLockerDisableWarningForOtherDiskEncryption?: boolean
@@ -13368,7 +13664,7 @@ export interface Windows10GeneralConfiguration extends DeviceConfiguration {
 	    /** Allow or prevent Edge from entering the full screen mode. */
 		edgeBlockFullScreenMode?: boolean
 
-	    /** Configure what appears when Microsoft Edge opens a new tab. */
+	    /** Configure to load a blank page in Edge instead of the default New tab page and prevent users from changing it. */
 		edgeBlockWebContentOnNewTabPage?: boolean
 
 	    /** Configure whether Edge preloads the new tab page at Windows startup. */
@@ -13382,6 +13678,12 @@ export interface Windows10GeneralConfiguration extends DeviceConfiguration {
 
 	    /** Allow or prevent users from overriding certificate errors. */
 		edgePreventCertificateErrorOverride?: boolean
+
+	    /** Controls how the Microsoft Edge settings are restricted based on the configure kiosk mode. */
+		edgeKioskModeRestriction?: EdgeKioskModeRestrictionType
+
+	    /** Specifies the time in minutes from the last user activity before Microsoft Edge kiosk resets.  Valid values are 0-1440. The default is 5. 0 indicates no reset. Valid values 0 to 1440 */
+		edgeKioskResetAfterIdleTimeInMinutes?: number
 
 	    /** Whether or not to Block the user from using data over cellular while roaming. */
 		cellularBlockDataWhenRoaming?: boolean
@@ -13448,6 +13750,15 @@ export interface Windows10GeneralConfiguration extends DeviceConfiguration {
 
 	    /** Indicates whether or not to scan downloads. */
 		defenderScanDownloads?: boolean
+
+	    /** When enabled, low CPU priority will be used during scheduled scans. */
+		defenderScheduleScanEnableLowCpuPriority?: boolean
+
+	    /** When blocked, catch-up scans for scheduled quick scans will be turned off. */
+		defenderDisableCatchupQuickScan?: boolean
+
+	    /** When blocked, catch-up scans for scheduled full scans will be turned off. */
+		defenderDisableCatchupFullScan?: boolean
 
 	    /** Indicates whether or not to scan files opened from a network folder. */
 		defenderScanNetworkFiles?: boolean
@@ -13749,10 +14060,13 @@ export interface Windows10GeneralConfiguration extends DeviceConfiguration {
 	    /** Indicates whether or not to block popups. */
 		edgeBlockPopups?: boolean
 
-	    /** Indicates whether or not to Block the user from using the search suggestions in the address bar. */
+	    /** Indicates whether or not to block the user from using the search suggestions in the address bar. */
 		edgeBlockSearchSuggestions?: boolean
 
-	    /** Indicates whether or not to Block the user from sending Intranet traffic to Internet Explorer from Edge. */
+	    /** Indicates whether or not to block the user from adding new search engine or changing the default search engine. */
+		edgeBlockSearchEngineCustomization?: boolean
+
+	    /** Indicates whether or not to switch the intranet traffic from Edge to Internet Explorer. Note: the name of this property is misleading; the property is obsolete, use EdgeSendIntranetTrafficToInternetExplorer instead. */
 		edgeBlockSendingIntranetTrafficToInternetExplorer?: boolean
 
 	    /** Indicates whether or not to switch the intranet traffic from Edge to Internet Explorer. */
@@ -13982,9 +14296,51 @@ export interface WindowsDeliveryOptimizationConfiguration extends DeviceConfigur
 	    /** Specifies the download method that delivery optimization can use to manage network bandwidth consumption for large content distribution scenarios. */
 		deliveryOptimizationMode?: WindowsDeliveryOptimizationMode
 
+	    /** Option 1 (Subnet mask) only applies to Delivery Optimization modes Download Mode LAN (1) and Group (2). */
+		restrictPeerSelectionBy?: DeliveryOptimizationRestrictPeerSelectionByOptions
+
+	    /** The options set in this policy only apply to Delivery Optimization mode Group (2) download mode. If Group (2) isn't set as Download mode, this policy will be ignored. For option 3 - DHCP Option ID, the client will query DHCP Option ID 234 and use the returned GUID value as the Group ID. */
+		groupIdSource?: DeliveryOptimizationGroupIdSource
+
+	    /** Specifies foreground and background bandwidth usage using percentages, absolutes, or hours. */
+		bandwidthMode?: DeliveryOptimizationBandwidth
+
+	    /** Specifies number of seconds to delay an HTTP source in a background download that is allowed to use peer-to-peer. Valid values 0 to 4294967295 */
+		backgroundDownloadFromHttpDelayInSeconds?: number
+
+	    /** Specifying 0 sets Delivery Optimization to manage this setting using the cloud service. Valid values 0 to 86400 */
+		foregroundDownloadFromHttpDelayInSeconds?: number
+
+	    /** Specifies the minimum RAM size in GB to use Peer Caching (1-100000). Valid values 1 to 100000 */
+		minimumRamAllowedToPeerInGigabytes?: number
+
+	    /** Recommended values: 64 GB to 256 GB. Valid values 1 to 100000 */
+		minimumDiskSizeAllowedToPeerInGigabytes?: number
+
+	    /** Recommended values: 1 MB to 100,000 MB. Valid values 1 to 100000 */
+		minimumFileSizeToCacheInMegabytes?: number
+
+	    /** The default value is 0. The value 0 (zero) means "not limited" and the cloud service default value will be used. Valid values 0 to 100 */
+		minimumBatteryPercentageAllowedToUpload?: number
+
+	    /** Specifies the drive that Delivery Optimization should use for its cache. */
+		modifyCacheLocation?: string
+
+	    /** Specifies the maximum time in days that each file is held in the Delivery Optimization cache after downloading successfully (0-49710). Valid values 0 to 49710 */
+		maximumCacheAgeInDays?: number
+
+	    /** Specifies the maximum cache size that Delivery Optimization either as a percentage or in GB. */
+		maximumCacheSize?: DeliveryOptimizationMaxCacheSize
+
+	    /** Specifies whether the device is allowed to participate in Peer Caching while connected via VPN to the domain network. */
+		vpnPeerCaching?: Enablement
+
 }
 
 export interface WindowsIdentityProtectionConfiguration extends DeviceConfiguration {
+
+	    /** Boolean value used to enable the Windows Hello security key as a logon credential. */
+		useSecurityKeyForSignin?: boolean
 
 	    /** Boolean value used to enable enhanced anti-spoofing for facial feature recognition on Windows Hello face authentication. */
 		enhancedAntiSpoofingForFacialFeaturesEnabled?: boolean
@@ -14409,6 +14765,37 @@ export interface WindowsPhone81TrustedRootCertificate extends DeviceConfiguratio
 
 	    /** File name to display in UI. */
 		certFileName?: string
+
+}
+
+export interface WindowsUpdateState extends Entity {
+
+	    /** The id of the device. */
+		deviceId?: string
+
+	    /** The id of the user. */
+		userId?: string
+
+	    /** Device display name. */
+		deviceDisplayName?: string
+
+	    /** User principal name. */
+		userPrincipalName?: string
+
+	    /** Windows udpate status. */
+		status?: WindowsUpdateStatus
+
+	    /** The Quality Update Version of the device. */
+		qualityUpdateVersion?: string
+
+	    /** The current feature update version of the device. */
+		featureUpdateVersion?: string
+
+	    /** The date time that the Windows Update Agent did a successful scan. */
+		lastScanDateTime?: string
+
+	    /** Last date time that the device sync with with Microsoft Intune. */
+		lastSyncDateTime?: string
 
 }
 
@@ -14886,8 +15273,11 @@ export interface AndroidForWorkCompliancePolicy extends DeviceCompliancePolicy {
 	    /** Number of days before the password expires. Valid values 1 to 365 */
 		passwordExpirationDays?: number
 
-	    /** Number of previous passwords to block. */
+	    /** Number of previous passwords to block. Valid values 1 to 24 */
 		passwordPreviousPasswordBlockCount?: number
+
+	    /** Number of sign-in failures allowed before factory reset. Valid values 1 to 16 */
+		passwordSignInFailureCountBeforeFactoryReset?: number
 
 	    /** Require that devices disallow installation of apps from unknown sources. */
 		securityPreventInstallAppsFromUnknownSources?: boolean
@@ -14950,11 +15340,14 @@ export interface AndroidCompliancePolicy extends DeviceCompliancePolicy {
 	    /** Minutes of inactivity before a password is required. */
 		passwordMinutesOfInactivityBeforeLock?: number
 
-	    /** Number of days before the password expires. Valid values 1 to 65535 */
+	    /** Number of days before the password expires. Valid values 1 to 365 */
 		passwordExpirationDays?: number
 
-	    /** Number of previous passwords to block. */
+	    /** Number of previous passwords to block. Valid values 1 to 24 */
 		passwordPreviousPasswordBlockCount?: number
+
+	    /** Number of sign-in failures allowed before factory reset. Valid values 1 to 16 */
+		passwordSignInFailureCountBeforeFactoryReset?: number
 
 	    /** Require that devices disallow installation of apps from unknown sources. */
 		securityPreventInstallAppsFromUnknownSources?: boolean
@@ -15047,8 +15440,11 @@ export interface AndroidWorkProfileCompliancePolicy extends DeviceCompliancePoli
 	    /** Number of days before the password expires. Valid values 1 to 365 */
 		passwordExpirationDays?: number
 
-	    /** Number of previous passwords to block. */
+	    /** Number of previous passwords to block. Valid values 1 to 24 */
 		passwordPreviousPasswordBlockCount?: number
+
+	    /** Number of sign-in failures allowed before factory reset. Valid values 1 to 16 */
+		passwordSignInFailureCountBeforeFactoryReset?: number
 
 	    /** Require that devices disallow installation of apps from unknown sources. */
 		securityPreventInstallAppsFromUnknownSources?: boolean
@@ -15181,10 +15577,10 @@ export interface MacOSCompliancePolicy extends DeviceCompliancePolicy {
 	    /** The required password type. Possible values are: deviceDefault, alphanumeric, numeric. */
 		passwordRequiredType?: RequiredPasswordType
 
-	    /** Minimum IOS version. */
+	    /** Minimum MacOS version. */
 		osMinimumVersion?: string
 
-	    /** Maximum IOS version. */
+	    /** Maximum MacOS version. */
 		osMaximumVersion?: string
 
 	    /** Minimum MacOS build version. */
@@ -15196,7 +15592,7 @@ export interface MacOSCompliancePolicy extends DeviceCompliancePolicy {
 	    /** Require that devices have enabled system integrity protection. */
 		systemIntegrityProtectionEnabled?: boolean
 
-	    /** Require that devices have enabled device threat protection . */
+	    /** Require that devices have enabled device threat protection. */
 		deviceThreatProtectionEnabled?: boolean
 
 	    /** Require Mobile Threat Protection minimum risk level to report noncompliance. Possible values are: unavailable, secured, low, medium, high, notSet. */
@@ -16381,6 +16777,10 @@ export interface Office365ServicesUserCounts extends Entity {
 		teamsActive?: number
 
 		teamsInactive?: number
+
+		office365Active?: number
+
+		office365Inactive?: number
 
 		reportPeriod?: string
 
@@ -17768,7 +18168,6 @@ export interface TeamsTab extends Entity {
 
 		teamsAppId?: string
 
-	    /** Index of the order used for sorting tabs */
 		sortOrderIndex?: string
 
 		messageId?: string
@@ -17786,12 +18185,16 @@ export interface TeamsTab extends Entity {
 
 export interface IdentityProvider extends Entity {
 
+	    /** The identity provider type. It must be one of the following values for B2C scenarios: MicrosoftGoogleAmazonLinkedInFacebookGitHubTwitterWeiboQQWeChatFor B2B scenarios, the value must be Google. */
 		type?: string
 
+	    /** The display name of the identity provider. */
 		name?: string
 
+	    /** The client ID for the application. This is the client ID obtained when registering the application with the identity provider. */
 		clientId?: string
 
+	    /** The client secret for the application. This is the client secret obtained when registering the application with the identity provider. This is write-only. A read operation will return '****'. */
 		clientSecret?: string
 
 }
@@ -17883,12 +18286,6 @@ export interface EducationSynchronizationProfile extends Entity {
 		state?: EducationSynchronizationProfileState
 
 		handleSpecialCharacterConstraint?: boolean
-
-		termStartDate?: string
-
-		termEndDate?: string
-
-		dateFormat?: string
 
 		errors?: EducationSynchronizationError[]
 
@@ -18003,6 +18400,9 @@ export interface EducationUser extends Entity {
 
 	    /** Default role for a user. The user's role might be different in an individual class. The possible values are: student, teacher, unknownFutureValue. Supports $filter. */
 		primaryRole?: EducationUserRole
+
+	    /** Set of contacts related to the user.  This optional property must be specified in a $select clause and can only be retrieved for an individual user. */
+		relatedContacts?: RelatedContact[]
 
 	    /** The middle name of user. */
 		middleName?: string
@@ -18211,6 +18611,13 @@ export interface EducationSubmissionResource extends Entity {
 
 }
 
+export interface AppleVppTokenTroubleshootingEvent extends DeviceManagementTroubleshootingEvent {
+
+	    /** Apple Volume Purchase Program Token Identifier. */
+		tokenId?: string
+
+}
+
 export interface EnrollmentTroubleshootingEvent extends DeviceManagementTroubleshootingEvent {
 
 	    /** Device identifier created or collected by Intune. */
@@ -18248,6 +18655,8 @@ export interface DataClassificationService extends Entity {
 		classifyText?: TextClassificationRequest[]
 
 		classifyFile?: FileClassificationRequest[]
+
+		sensitivityLabels?: SensitivityLabel[]
 
 }
 
@@ -18301,6 +18710,42 @@ export interface FileClassificationRequest extends Entity {
 
 }
 
+export interface SensitivityLabel extends Entity {
+
+		name?: string
+
+		description?: string
+
+		toolTip?: string
+
+		isEndpointProtectionEnabled?: boolean
+
+		applicationMode?: string
+
+		labelActions?: LabelActionBase[]
+
+		assignedPolicies?: LabelPolicy[]
+
+}
+
+export interface LabelPolicy extends Entity {
+
+		labelIds?: string[]
+
+		isEnabled?: boolean
+
+		priority?: number
+
+		name?: string
+
+}
+
+export interface EvaluateLabelJobResponse extends JobResponseBase {
+
+		result?: EvaluateLabelResult
+
+}
+
 export interface ClassificationJobResponse extends JobResponseBase {
 
 		result?: DetectedSensitiveContentWrapper
@@ -18329,6 +18774,18 @@ export interface DataPolicyOperation extends Entity {
 
 }
 
+export interface Chat extends Entity {
+
+		topic?: string
+
+		createdDateTime?: string
+
+		lastUpdatedDateTime?: string
+
+		messages?: ChatMessage[]
+
+}
+
 export interface Agreement extends Entity {
 
 		displayName?: string
@@ -18353,6 +18810,8 @@ export interface AgreementFile extends Entity {
 
 export interface Security extends Entity {
 
+		providerStatus?: SecurityProviderStatus[]
+
 	    /** Read-only. Nullable. */
 		alerts?: Alert[]
 
@@ -18375,6 +18834,8 @@ export interface Security extends Entity {
 		tiIndicators?: TiIndicator[]
 
 		userSecurityProfiles?: UserSecurityProfile[]
+
+		securityActions?: SecurityAction[]
 
 }
 
@@ -18424,6 +18885,8 @@ export interface Alert extends Entity {
 
 	    /** Security-related stateful information generated by the provider about the file(s) related to this alert. */
 		fileStates?: FileSecurityState[]
+
+		historyStates?: AlertHistoryState[]
 
 	    /** Security-related stateful information generated by the provider about the host(s) related to this alert. */
 		hostStates?: HostSecurityState[]
@@ -18747,6 +19210,8 @@ export interface TiIndicator extends Entity {
 
 		diamondModel?: DiamondModel
 
+		domainName?: string
+
 		emailEncoding?: string
 
 		emailLanguage?: string
@@ -18788,8 +19253,6 @@ export interface TiIndicator extends Entity {
 		fileSize?: number
 
 		fileType?: string
-
-		hostName?: string
 
 		ingestedDateTime?: string
 
@@ -18853,31 +19316,17 @@ export interface TiIndicator extends Entity {
 
 export interface UserSecurityProfile extends Entity {
 
-		aadUserDisplayName?: string
-
-		aadUserId?: string
-
-		accountAliases?: AccountAlias[]
-
-		accountInstance?: number
-
-		accountService?: string
-
-		accountStatus?: AccountStatus
+		accounts?: UserAccount[]
 
 		azureSubscriptionId?: string
 
 		azureTenantId?: string
 
-		domainName?: string
+		createdDateTime?: string
 
-		firstSeenDateTime?: string
+		displayName?: string
 
-		lastSeenDateTime?: string
-
-		lastVpnClientIp?: string
-
-		mfaEnabled?: boolean
+		lastModifiedDateTime?: string
 
 		riskScore?: string
 
@@ -18887,7 +19336,37 @@ export interface UserSecurityProfile extends Entity {
 
 		vendorInformation?: SecurityVendorInformation
 
-		vpnClientId?: string
+}
+
+export interface SecurityAction extends Entity {
+
+		actionReason?: string
+
+		appId?: string
+
+		azureTenantId?: string
+
+		clientContext?: string
+
+		completedDateTime?: string
+
+		createdDateTime?: string
+
+		errorInfo?: ResultInfo
+
+		lastActionDateTime?: string
+
+		name?: string
+
+		parameters?: KeyValuePair[]
+
+		states?: SecurityActionState[]
+
+		status?: OperationStatus
+
+		user?: string
+
+		vendorInformation?: SecurityVendorInformation
 
 }
 
@@ -19589,6 +20068,610 @@ export interface GroupPolicyPresentationValueText extends GroupPolicyPresentatio
 		value?: string
 
 }
+
+export interface Financials extends Entity {
+
+		companies?: Company[]
+
+}
+
+export interface Company extends Entity {
+
+		systemVersion?: string
+
+		name?: string
+
+		displayName?: string
+
+		businessProfileId?: string
+
+		items?: Item[]
+
+		customers?: Customer[]
+
+		vendors?: Vendor[]
+
+		companyInformation?: CompanyInformation[]
+
+		customerPaymentJournals?: CustomerPaymentJournal[]
+
+		customerPayments?: CustomerPayment[]
+
+		accounts?: Account[]
+
+		taxGroups?: TaxGroup[]
+
+		journals?: Journal[]
+
+		journalLines?: JournalLine[]
+
+		employees?: Employee[]
+
+		generalLedgerEntries?: GeneralLedgerEntry[]
+
+		currencies?: Currency[]
+
+		paymentMethods?: PaymentMethod[]
+
+		dimensions?: Dimension[]
+
+		dimensionValues?: DimensionValue[]
+
+		paymentTerms?: PaymentTerm[]
+
+		shipmentMethods?: ShipmentMethod[]
+
+		itemCategories?: ItemCategory[]
+
+		countriesRegions?: CountryRegion[]
+
+		unitsOfMeasure?: UnitOfMeasure[]
+
+		agedAccountsReceivable?: AgedAccountsReceivable[]
+
+		agedAccountsPayable?: AgedAccountsPayable[]
+
+		taxAreas?: TaxArea[]
+
+		picture?: Picture[]
+
+}
+
+export interface Item extends Entity {
+
+		number?: string
+
+		displayName?: string
+
+		type?: string
+
+		itemCategoryId?: string
+
+		itemCategoryCode?: string
+
+		blocked?: boolean
+
+		baseUnitOfMeasureId?: string
+
+		gtin?: string
+
+		inventory?: Decimal
+
+		unitPrice?: Decimal
+
+		priceIncludesTax?: boolean
+
+		unitCost?: Decimal
+
+		taxGroupId?: string
+
+		taxGroupCode?: string
+
+		lastModifiedDateTime?: string
+
+		picture?: Picture[]
+
+		itemCategory?: ItemCategory
+
+}
+
+export interface Picture extends Entity {
+
+		width?: number
+
+		height?: number
+
+		contentType?: string
+
+		content?: any
+
+}
+
+export interface ItemCategory extends Entity {
+
+		code?: string
+
+		displayName?: string
+
+		lastModifiedDateTime?: string
+
+}
+
+export interface Customer extends Entity {
+
+		number?: string
+
+		displayName?: string
+
+		type?: string
+
+		address?: PostalAddressType
+
+		phoneNumber?: string
+
+		email?: string
+
+		website?: string
+
+		taxLiable?: boolean
+
+		taxAreaId?: string
+
+		taxAreaDisplayName?: string
+
+		taxRegistrationNumber?: string
+
+		currencyId?: string
+
+		currencyCode?: string
+
+		paymentTermsId?: string
+
+		shipmentMethodId?: string
+
+		paymentMethodId?: string
+
+		blocked?: string
+
+		balance?: Decimal
+
+		overdueAmount?: Decimal
+
+		totalSalesExcludingTax?: Decimal
+
+		lastModifiedDateTime?: string
+
+		picture?: Picture[]
+
+		currency?: Currency
+
+		paymentTerm?: PaymentTerm
+
+		shipmentMethod?: ShipmentMethod
+
+		paymentMethod?: PaymentMethod
+
+}
+
+export interface Currency extends Entity {
+
+		code?: string
+
+		displayName?: string
+
+		symbol?: string
+
+		amountDecimalPlaces?: string
+
+		amountRoundingPrecision?: Decimal
+
+		lastModifiedDateTime?: string
+
+}
+
+export interface PaymentTerm extends Entity {
+
+		code?: string
+
+		displayName?: string
+
+		dueDateCalculation?: string
+
+		discountDateCalculation?: string
+
+		discountPercent?: Decimal
+
+		calculateDiscountOnCreditMemos?: boolean
+
+		lastModifiedDateTime?: string
+
+}
+
+export interface ShipmentMethod extends Entity {
+
+		code?: string
+
+		displayName?: string
+
+		lastModifiedDateTime?: string
+
+}
+
+export interface PaymentMethod extends Entity {
+
+		code?: string
+
+		displayName?: string
+
+		lastModifiedDateTime?: string
+
+}
+
+export interface Vendor extends Entity {
+
+		number?: string
+
+		displayName?: string
+
+		address?: PostalAddressType
+
+		phoneNumber?: string
+
+		email?: string
+
+		website?: string
+
+		taxRegistrationNumber?: string
+
+		currencyId?: string
+
+		currencyCode?: string
+
+		paymentTermsId?: string
+
+		paymentMethodId?: string
+
+		taxLiable?: boolean
+
+		blocked?: string
+
+		balance?: Decimal
+
+		lastModifiedDateTime?: string
+
+		picture?: Picture[]
+
+		currency?: Currency
+
+		paymentTerm?: PaymentTerm
+
+		paymentMethod?: PaymentMethod
+
+}
+
+export interface CompanyInformation extends Entity {
+
+		displayName?: string
+
+		address?: PostalAddressType
+
+		phoneNumber?: string
+
+		faxNumber?: string
+
+		email?: string
+
+		website?: string
+
+		taxRegistrationNumber?: string
+
+		currencyCode?: string
+
+		currentFiscalYearStartDate?: string
+
+		industry?: string
+
+		picture?: any
+
+		businessProfileId?: string
+
+		lastModifiedDateTime?: string
+
+}
+
+export interface CustomerPaymentJournal extends Entity {
+
+		code?: string
+
+		displayName?: string
+
+		lastModifiedDateTime?: string
+
+		balancingAccountId?: string
+
+		balancingAccountNumber?: string
+
+		customerPayments?: CustomerPayment[]
+
+		account?: Account
+
+}
+
+export interface CustomerPayment extends Entity {
+
+		journalDisplayName?: string
+
+		lineNumber?: number
+
+		customerId?: string
+
+		customerNumber?: string
+
+		contactId?: string
+
+		postingDate?: string
+
+		documentNumber?: string
+
+		externalDocumentNumber?: string
+
+		amount?: Decimal
+
+		appliesToInvoiceId?: string
+
+		appliesToInvoiceNumber?: string
+
+		description?: string
+
+		comment?: string
+
+		lastModifiedDateTime?: string
+
+		customer?: Customer
+
+}
+
+export interface Account extends Entity {
+
+		number?: string
+
+		displayName?: string
+
+		category?: string
+
+		subCategory?: string
+
+		blocked?: boolean
+
+		lastModifiedDateTime?: string
+
+}
+
+export interface TaxGroup extends Entity {
+
+		code?: string
+
+		displayName?: string
+
+		taxType?: string
+
+		lastModifiedDateTime?: string
+
+}
+
+export interface Journal extends Entity {
+
+		code?: string
+
+		displayName?: string
+
+		lastModifiedDateTime?: string
+
+		balancingAccountId?: string
+
+		balancingAccountNumber?: string
+
+		account?: Account
+
+		journalLines?: JournalLine[]
+
+}
+
+export interface JournalLine extends Entity {
+
+		journalDisplayName?: string
+
+		lineNumber?: number
+
+		accountId?: string
+
+		accountNumber?: string
+
+		postingDate?: string
+
+		documentNumber?: string
+
+		externalDocumentNumber?: string
+
+		amount?: Decimal
+
+		description?: string
+
+		comment?: string
+
+		lastModifiedDateTime?: string
+
+		account?: Account
+
+}
+
+export interface Employee extends Entity {
+
+		number?: string
+
+		displayName?: string
+
+		givenName?: string
+
+		middleName?: string
+
+		surname?: string
+
+		jobTitle?: string
+
+		address?: PostalAddressType
+
+		phoneNumber?: string
+
+		mobilePhone?: string
+
+		email?: string
+
+		personalEmail?: string
+
+		employmentDate?: string
+
+		terminationDate?: string
+
+		status?: string
+
+		birthDate?: string
+
+		lastModifiedDateTime?: string
+
+		picture?: Picture[]
+
+}
+
+export interface GeneralLedgerEntry extends Entity {
+
+		postingDate?: string
+
+		documentNumber?: string
+
+		documentType?: string
+
+		accountId?: string
+
+		accountNumber?: string
+
+		description?: string
+
+		debitAmount?: Decimal
+
+		creditAmount?: Decimal
+
+		lastModifiedDateTime?: string
+
+		account?: Account
+
+}
+
+export interface Dimension extends Entity {
+
+		code?: string
+
+		displayName?: string
+
+		lastModifiedDateTime?: string
+
+		dimensionValues?: DimensionValue[]
+
+}
+
+export interface DimensionValue extends Entity {
+
+		code?: string
+
+		displayName?: string
+
+		lastModifiedDateTime?: string
+
+}
+
+export interface CountryRegion extends Entity {
+
+		code?: string
+
+		displayName?: string
+
+		addressFormat?: string
+
+		lastModifiedDateTime?: string
+
+}
+
+export interface UnitOfMeasure extends Entity {
+
+		code?: string
+
+		displayName?: string
+
+		internationalStandardCode?: string
+
+		lastModifiedDateTime?: string
+
+}
+
+export interface AgedAccountsReceivable extends Entity {
+
+		customerNumber?: string
+
+		name?: string
+
+		currencyCode?: string
+
+		balanceDue?: Decimal
+
+		currentAmount?: Decimal
+
+		period1Amount?: Decimal
+
+		period2Amount?: Decimal
+
+		period3Amount?: Decimal
+
+		agedAsOfDate?: string
+
+		periodLengthFilter?: string
+
+}
+
+export interface AgedAccountsPayable extends Entity {
+
+		vendorNumber?: string
+
+		name?: string
+
+		currencyCode?: string
+
+		balanceDue?: Decimal
+
+		currentAmount?: Decimal
+
+		period1Amount?: Decimal
+
+		period2Amount?: Decimal
+
+		period3Amount?: Decimal
+
+		agedAsOfDate?: string
+
+		periodLengthFilter?: string
+
+}
+
+export interface TaxArea extends Entity {
+
+		code?: string
+
+		displayName?: string
+
+		taxType?: string
+
+		lastModifiedDateTime?: string
+
+}
 export interface MeetingParticipants {
 
 		organizer?: MeetingParticipantInfo
@@ -19967,6 +21050,7 @@ export interface PasswordProfile {
 	    /** true if the user must change her password on the next login; otherwise false. */
 		forceChangePasswordNextSignIn?: boolean
 
+	    /** If true, at next sign-in, the user must perform a multi-factor authentication (MFA) before being forced to change their password. The behavior is identical to forceChangePasswordNextSignIn except that the user is required to first perform a multi-factor authentication before password change. After a password change, this property will be automatically reset to false. If not set, default is false. */
 		forceChangePasswordNextSignInWithMfa?: boolean
 
 }
@@ -20023,7 +21107,7 @@ export interface AutomaticRepliesSetting {
 }
 export interface DateTimeTimeZone {
 
-	    /** A single point of time in a combined date and time representation (&amp;lt;date&amp;gt;T&amp;lt;time&amp;gt;). */
+	    /** A single point of time in a combined date and time representation ({date}T{time}; for example, 2017-08-29T04:00:00.0000000). */
 		dateTime?: string
 
 	    /** One of the following time zone names. */
@@ -21008,54 +22092,6 @@ export interface AttendeeBase extends Recipient {
 		type?: AttendeeType
 
 }
-export interface MeetingTimeSuggestionsResult {
-
-	    /** An array of meeting suggestions. */
-		meetingTimeSuggestions?: MeetingTimeSuggestion[]
-
-	    /** A reason for not returning any meeting suggestions. The possible values are: attendeesUnavailable, attendeesUnavailableOrUnknown, locationsUnavailable, organizerUnavailable, or unknown. This property is an empty string if the meetingTimeSuggestions property does include any meeting suggestions. */
-		emptySuggestionsReason?: string
-
-}
-export interface MeetingTimeSuggestion {
-
-	    /** A time period suggested for the meeting. */
-		meetingTimeSlot?: TimeSlot
-
-	    /** A percentage that represents the likelhood of all the attendees attending. */
-		confidence?: number
-
-	    /** Availability of the meeting organizer for this meeting suggestion. The possible values are: free, tentative, busy, oof, workingElsewhere, unknown. */
-		organizerAvailability?: FreeBusyStatus
-
-	    /** An array that shows the availability status of each attendee for this meeting suggestion. */
-		attendeeAvailability?: AttendeeAvailability[]
-
-	    /** An array that specifies the name and geographic location of each meeting location for this meeting suggestion. */
-		locations?: Location[]
-
-	    /** Reason for suggesting the meeting time. */
-		suggestionReason?: string
-
-}
-export interface TimeSlot {
-
-	    /** The time the period ends. */
-		start?: DateTimeTimeZone
-
-	    /** The time a period begins. */
-		end?: DateTimeTimeZone
-
-}
-export interface AttendeeAvailability {
-
-	    /** The type of attendee - whether it's a person or a resource, and whether required or optional if it's a person. */
-		attendee?: AttendeeBase
-
-	    /** The availability status of the attendee. The possible values are: free, tentative, busy, oof, workingElsewhere, unknown. */
-		availability?: FreeBusyStatus
-
-}
 export interface Location {
 
 	    /** The name associated with the location. */
@@ -21121,74 +22157,6 @@ export interface OutlookGeoCoordinates {
 
 	    /** The accuracy of the altitude. */
 		altitudeAccuracy?: number
-
-}
-export interface LocationConstraint {
-
-	    /** The client requests the service to include in the response a meeting location for the meeting. If this is true and all the resources are busy, findMeetingTimes will not return any meeting time suggestions. If this is false and all the resources are busy, findMeetingTimes would still look for meeting times without locations. */
-		isRequired?: boolean
-
-	    /** The client requests the service to suggest one or more meeting locations. */
-		suggestLocation?: boolean
-
-	    /** Constraint information for one or more locations that the client requests for the meeting. */
-		locations?: LocationConstraintItem[]
-
-}
-export interface LocationConstraintItem extends Location {
-
-	    /** If set to true and the specified resource is busy, findMeetingTimes looks for another resource that is free. If set to false and the specified resource is busy, findMeetingTimes returns the resource best ranked in the user's cache without checking if it's free. Default is true. */
-		resolveAvailability?: boolean
-
-}
-export interface TimeConstraint {
-
-	    /** The nature of the activity, optional. The possible values are: work, personal, unrestricted, or unknown. */
-		activityDomain?: ActivityDomain
-
-	    /** An array of time periods. */
-		timeslots?: TimeSlot[]
-
-}
-export interface MeetingTimeCandidatesResult {
-
-		meetingTimeSlots?: MeetingTimeCandidate[]
-
-		emptySuggestionsHint?: string
-
-}
-export interface MeetingTimeCandidate {
-
-		meetingTimeSlot?: TimeSlotOLD
-
-		confidence?: number
-
-		organizerAvailability?: FreeBusyStatus
-
-		attendeeAvailability?: AttendeeAvailability[]
-
-		locations?: Location[]
-
-		suggestionHint?: string
-
-}
-export interface TimeSlotOLD {
-
-		start?: TimeStamp
-
-		end?: TimeStamp
-
-}
-export interface TimeStamp {
-
-	    /** The date portion of the timestamp. */
-		date?: string
-
-	    /** The time portion of the timestamp. */
-		time?: string
-
-	    /** The timezone portion of the timestamp, which is one of the 24 longitudinal areas in the world. */
-		timeZone?: string
 
 }
 export interface MailTips {
@@ -21317,7 +22285,7 @@ export interface InternetMessageHeader {
 }
 export interface ItemBody {
 
-	    /** The type of the content. Possible values are Text and HTML. */
+	    /** The type of the content. Possible values are text and HTML. */
 		contentType?: BodyType
 
 	    /** The content of the item. */
@@ -22263,6 +23231,39 @@ export interface RecentNotebookLinks {
 		oneNoteWebUrl?: ExternalLink
 
 }
+export interface CopyNotebookModel {
+
+		isDefault?: boolean
+
+		userRole?: OnenoteUserRole
+
+		isShared?: boolean
+
+		sectionsUrl?: string
+
+		sectionGroupsUrl?: string
+
+		links?: NotebookLinks
+
+		name?: string
+
+		createdBy?: string
+
+		createdByIdentity?: IdentitySet
+
+		lastModifiedBy?: string
+
+		lastModifiedByIdentity?: IdentitySet
+
+		lastModifiedTime?: string
+
+		id?: string
+
+		self?: string
+
+		createdTime?: string
+
+}
 export interface AuditActivityInitiator {
 
 		user?: UserIdentity
@@ -22294,9 +23295,15 @@ export interface AppIdentity {
 }
 export interface TargetResource {
 
+		id?: string
+
 		displayName?: string
 
-		id?: string
+		type?: string
+
+		userPrincipalName?: string
+
+		groupType?: GroupType
 
 		modifiedProperties?: ModifiedProperty[]
 
@@ -22308,41 +23315,6 @@ export interface ModifiedProperty {
 		oldValue?: string
 
 		newValue?: string
-
-}
-export interface TargetResourceUser extends TargetResource {
-
-		userPrincipalName?: string
-
-}
-export interface TargetResourceApp extends TargetResource {
-
-}
-export interface TargetResourcePolicy extends TargetResource {
-
-		policyType?: string
-
-}
-export interface TargetResourceDevice extends TargetResource {
-
-}
-export interface TargetResourceDirectory extends TargetResource {
-
-}
-export interface TargetResourceGroup extends TargetResource {
-
-		groupType?: GroupType
-
-}
-export interface TargetResourceRole extends TargetResource {
-
-}
-export interface TargetResourceOther extends TargetResource {
-
-}
-export interface TargetResourceServicePrincipal extends TargetResource {
-
-		appId?: string
 
 }
 export interface SignInStatus {
@@ -22407,6 +23379,37 @@ export interface NetworkLocationDetail {
 		networkType?: NetworkType
 
 		networkNames?: string[]
+
+}
+export interface LicenseInfoDetail {
+
+		licenseType?: AzureADLicenseType
+
+		totalLicenseCount?: number
+
+		totalAssignedCount?: number
+
+		totalUsageCount?: number
+
+}
+export interface FeatureUsageDetail {
+
+		featureName?: string
+
+		licenseRequired?: AzureADLicenseType
+
+		licenseAssigned?: AzureADLicenseType
+
+		lastUsedDateTime?: string
+
+		lastConfiguredDateTime?: string
+
+}
+export interface UserRegistrationCount {
+
+		registrationStatus?: RegistrationStatusType
+
+		registrationCount?: number
 
 }
 export interface GovernanceSchedule {
@@ -22900,6 +23903,12 @@ export interface MacOsVppAppAssignmentSettings extends MobileAppAssignmentSettin
 		useDeviceLicensing?: boolean
 
 }
+export interface Win32LobAppAssignmentSettings extends MobileAppAssignmentSettings {
+
+	    /** The notification status this app assignment. */
+		notifications?: Win32LobAppNotification
+
+}
 export interface ExcludedApps {
 
 	    /** The value for if MS Office Access should be excluded or not. */
@@ -23063,6 +24072,12 @@ export interface Win32LobAppMsiInformation {
 
 	    /** The MSI package type. */
 		packageType?: Win32LobAppMsiPackageType
+
+	    /** The MSI product name. */
+		productName?: string
+
+	    /** The MSI publisher. */
+		publisher?: string
 
 }
 export interface Win32LobAppRegistryDetection extends Win32LobAppDetection {
@@ -23364,6 +24379,12 @@ export interface ConfigurationManagerClientEnabledFeatures {
 	    /** Whether Windows Update for Business is managed by Intune */
 		windowsUpdateForBusiness?: boolean
 
+	    /** Whether Endpoint Protection is managed by Intune */
+		endpointProtection?: boolean
+
+	    /** Whether Office application is managed by Intune */
+		officeApps?: boolean
+
 }
 export interface DeviceHealthAttestationState {
 
@@ -23527,6 +24548,18 @@ export interface WindowsDeviceAccount {
 		password?: string
 
 }
+export interface AppLogCollectionDownloadDetails {
+
+	    /** Download SAS Url for completed AppLogUploadRequest */
+		downloadUrl?: string
+
+	    /** DecryptionKey as string */
+		decryptionKey?: string
+
+	    /** DecryptionAlgorithm for Content */
+		appLogDecryptionAlgorithm?: AppLogDecryptionAlgorithm
+
+}
 export interface DailySchedule extends RunSchedule {
 
 	    /** Interval in number of days */
@@ -23654,6 +24687,12 @@ export interface ManagedDeviceModelsAndManufacturers {
 
 	    /** List of Manufactures for managed devices in the account */
 		deviceManufacturers?: string[]
+
+}
+export interface MobileAppTroubleshootingHistoryItem {
+
+	    /** Time when the history item occurred. */
+		occurrenceDateTime?: string
 
 }
 export interface WindowsDeviceADAccount extends WindowsDeviceAccount {
@@ -24411,7 +25450,7 @@ export interface ProxiedDomain {
 	    /** The IP address or FQDN */
 		ipAddressOrFQDN?: string
 
-	    /** Proxy IP */
+	    /** Proxy IP or FQDN */
 		proxy?: string
 
 }
@@ -24420,20 +25459,95 @@ export interface IpRange {
 }
 export interface IPv6Range extends IpRange {
 
-	    /** Lower IP Address */
+	    /** Lower address */
 		lowerAddress?: string
 
-	    /** Upper IP Address */
+	    /** Upper address */
 		upperAddress?: string
 
 }
 export interface IPv4Range extends IpRange {
 
-	    /** Lower IP Address */
+	    /** Lower address. */
 		lowerAddress?: string
 
-	    /** Upper IP Address */
+	    /** Upper address. */
 		upperAddress?: string
+
+}
+export interface DeliveryOptimizationGroupIdSource {
+
+}
+export interface DeliveryOptimizationBandwidth {
+
+}
+export interface DeliveryOptimizationMaxCacheSize {
+
+}
+export interface DeliveryOptimizationGroupIdCustom extends DeliveryOptimizationGroupIdSource {
+
+	    /** Specifies an arbitrary group ID that the device belongs to */
+		groupIdCustom?: string
+
+}
+export interface DeliveryOptimizationGroupIdSourceOptions extends DeliveryOptimizationGroupIdSource {
+
+	    /** Set this policy to restrict peer selection to a specific source. */
+		groupIdSourceOption?: DeliveryOptimizationGroupIdOptionsType
+
+}
+export interface DeliveryOptimizationBandwidthHoursWithPercentage extends DeliveryOptimizationBandwidth {
+
+	    /** Background download percentage hours. */
+		bandwidthBackgroundPercentageHours?: DeliveryOptimizationBandwidthBusinessHoursLimit
+
+	    /** Foreground download percentage hours. */
+		bandwidthForegroundPercentageHours?: DeliveryOptimizationBandwidthBusinessHoursLimit
+
+}
+export interface DeliveryOptimizationBandwidthBusinessHoursLimit {
+
+	    /** Specifies the beginning of business hours using a 24-hour clock (0-23). Valid values 0 to 23 */
+		bandwidthBeginBusinessHours?: number
+
+	    /** Specifies the end of business hours using a 24-hour clock (0-23). Valid values 0 to 23 */
+		bandwidthEndBusinessHours?: number
+
+	    /** Specifies the percentage of bandwidth to limit during business hours (0-100). Valid values 0 to 100 */
+		bandwidthPercentageDuringBusinessHours?: number
+
+	    /** Specifies the percentage of bandwidth to limit outsidse business hours (0-100). Valid values 0 to 100 */
+		bandwidthPercentageOutsideBusinessHours?: number
+
+}
+export interface DeliveryOptimizationBandwidthPercentage extends DeliveryOptimizationBandwidth {
+
+	    /** The default value 0 (zero) means that Delivery Optimization dynamically adjusts to use the available bandwidth for background downloads. Valid values 0 to 100 */
+		maximumBackgroundBandwidthPercentage?: number
+
+	    /** The default value 0 (zero) means that Delivery Optimization dynamically adjusts to use the available bandwidth for foreground downloads. Valid values 0 to 100 */
+		maximumForegroundBandwidthPercentage?: number
+
+}
+export interface DeliveryOptimizationBandwidthAbsolute extends DeliveryOptimizationBandwidth {
+
+	    /** The value 0 (zero) means that Delivery Optimization dynamically adjusts to use the available bandwidth for downloads. Valid values 0 to 4294967295 */
+		maximumDownloadBandwidthInKilobytesPerSecond?: number
+
+	    /** The default value is 0, which permits unlimited possible bandwidth (optimized for minimal usage of upload bandwidth). Valid values 0 to 4000000 */
+		maximumUploadBandwidthInKilobytesPerSecond?: number
+
+}
+export interface DeliveryOptimizationMaxCacheSizePercentage extends DeliveryOptimizationMaxCacheSize {
+
+	    /** Specifies the maximum cache size that Delivery Optimization can utilize, as a percentage of disk size (1-100). Valid values 1 to 100 */
+		maximumCacheSizePercentage?: number
+
+}
+export interface DeliveryOptimizationMaxCacheSizeAbsolute extends DeliveryOptimizationMaxCacheSize {
+
+	    /** The value 0 (zero) means "unlimited" cache. Delivery Optimization will clear the cache when the device is running low on disk space. Valid values 0 to 4294967295 */
+		maximumCacheSizeInGigabytes?: number
 
 }
 export interface WindowsKioskProfile {
@@ -24772,6 +25886,15 @@ export interface ManagedDeviceReportedApp {
 		appId?: string
 
 }
+export interface EncryptionReportPolicyDetails {
+
+	    /** Policy Id for Encryption Report */
+		policyId?: string
+
+	    /** Policy Name for Encryption Report */
+		policyName?: string
+
+}
 export interface DeviceAndAppManagementData {
 
 		content?: any
@@ -24965,7 +26088,7 @@ export interface WindowsInformationProtectionIPRangeCollection {
 	    /** Display name */
 		displayName?: string
 
-	    /** Collection of ip ranges */
+	    /** Collection of Internet protocol address ranges */
 		ranges?: IpRange[]
 
 }
@@ -25663,6 +26786,57 @@ export interface EducationSynchronizationLicenseAssignment {
 		skuIds?: string[]
 
 }
+export interface RelatedContact {
+
+	    /** Identity of the contact within Azure Active Directory. */
+		id?: string
+
+	    /** Name of the contact. Required. */
+		displayName?: string
+
+	    /** Primary email address of the contact. */
+		emailAddress?: string
+
+	    /** Mobile phone number of the contact. */
+		mobilePhone?: string
+
+	    /** Relationship to the user. Possible values are parent, relative, aide, doctor, guardian, child, other, unknownFutureValue. */
+		relationship?: ContactRelationship
+
+	    /** Indicates whether the user has been consented to access student data. */
+		accessConsent?: boolean
+
+}
+export interface EducationStudent {
+
+	    /** Year the student is graduating from the school. */
+		graduationYear?: string
+
+	    /** Current grade level of the student. */
+		grade?: string
+
+	    /** Birth date of the student. */
+		birthDate?: string
+
+	    /** The possible values are: female, male, other, unknownFutureValue. */
+		gender?: EducationGender
+
+	    /** Student Number. */
+		studentNumber?: string
+
+	    /** ID of the student in the source system. */
+		externalId?: string
+
+}
+export interface EducationTeacher {
+
+	    /** Teacher number. */
+		teacherNumber?: string
+
+	    /** ID of the teacher in the source system. */
+		externalId?: string
+
+}
 export interface EducationFileSynchronizationVerificationMessage {
 
 		type?: string
@@ -25731,6 +26905,8 @@ export interface EducationOneRosterApiDataProvider extends EducationSynchronizat
 
 		schoolsIds?: string[]
 
+		termIds?: string[]
+
 		providerName?: string
 
 		customizations?: EducationSynchronizationCustomizations
@@ -25779,36 +26955,6 @@ export interface EducationIdentityDomain {
 export interface EducationIdentityCreationConfiguration extends EducationIdentitySynchronizationConfiguration {
 
 		userDomains?: EducationIdentityDomain[]
-
-}
-export interface EducationStudent {
-
-	    /** Year the student is graduating from the school. */
-		graduationYear?: string
-
-	    /** Current grade level of the student. */
-		grade?: string
-
-	    /** Birth date of the student. */
-		birthDate?: string
-
-	    /** The possible values are: female, male, other, unknownFutureValue. */
-		gender?: EducationGender
-
-	    /** Student Number. */
-		studentNumber?: string
-
-	    /** ID of the student in the source system. */
-		externalId?: string
-
-}
-export interface EducationTeacher {
-
-	    /** Teacher number. */
-		teacherNumber?: string
-
-	    /** ID of the teacher in the source system. */
-		externalId?: string
 
 }
 export interface EducationTerm {
@@ -25981,10 +27127,28 @@ export interface AuditProperty {
 		newValue?: string
 
 }
-export interface MobileAppTroubleshootingHistoryItem {
+export interface DeviceManagementTroubleshootingErrorDetails {
 
-	    /** Time when the history item occurred. */
-		occurrenceDateTime?: string
+		context?: string
+
+		failure?: string
+
+	    /** The detailed description of what went wrong. */
+		failureDetails?: string
+
+	    /** The detailed description of how to remediate this issue. */
+		remediation?: string
+
+	    /** Links to helpful documentation about this failure. */
+		resources?: DeviceManagementTroubleshootingErrorResource[]
+
+}
+export interface DeviceManagementTroubleshootingErrorResource {
+
+		text?: string
+
+	    /** The link to the web resource. Can contain any of the following formatters: {{UPN}}, {{DeviceGUID}}, {{UserGUID}} */
+		link?: string
 
 }
 export interface MobileAppTroubleshootingDeviceCheckinHistory extends MobileAppTroubleshootingHistoryItem {
@@ -26059,7 +27223,7 @@ export interface MobileAppSupportedDeviceType {
 		maximumOperatingSystemVersion?: string
 
 }
-export interface CaasChildError {
+export interface CaaSErrorBase {
 
 		code?: string
 
@@ -26067,10 +27231,76 @@ export interface CaasChildError {
 
 		target?: string
 
-}
-export interface CaasError extends CaasChildError {
+		innerError?: CaasInnerError
 
-		details?: CaasChildError[]
+}
+export interface CaasInnerError {
+
+		code?: string
+
+		clientRequestId?: string
+
+		activityId?: string
+
+}
+export interface CaasError extends CaaSErrorBase {
+
+		details?: CaaSErrorBase[]
+
+}
+export interface LabelActionBase {
+
+		name?: string
+
+}
+export interface EvaluateLabelResult {
+
+		sensitivityLabel?: MatchingLabel
+
+		responsibleSensitiveTypes?: ResponsibleSensitiveType[]
+
+		responsiblePolicy?: ResponsiblePolicy
+
+}
+export interface MatchingLabel {
+
+		id?: string
+
+		name?: string
+
+		description?: string
+
+		toolTip?: string
+
+		policyTip?: string
+
+		isEndpointProtectionEnabled?: boolean
+
+		applicationMode?: string
+
+		labelActions?: LabelActionBase[]
+
+}
+export interface ResponsibleSensitiveType {
+
+		id?: string
+
+		name?: string
+
+		description?: string
+
+		rulePackageId?: string
+
+		rulePackageType?: string
+
+		publisherName?: string
+
+}
+export interface ResponsiblePolicy {
+
+		id?: string
+
+		name?: string
 
 }
 export interface DetectedSensitiveContentWrapper {
@@ -26111,9 +27341,55 @@ export interface SensitiveContentEvidence {
 		length?: number
 
 }
+export interface DiscoveredSensitiveType {
+
+		id?: string
+
+		count?: number
+
+		confidence?: number
+
+}
+export interface EncryptAction extends LabelActionBase {
+
+}
+export interface ContentMarkingAction extends LabelActionBase {
+
+		placement?: string
+
+		fontSize?: number
+
+		text?: string
+
+		fontColor?: string
+
+		margin?: number
+
+		alignment?: string
+
+}
+export interface ContentMarkingHeaderAction extends ContentMarkingAction {
+
+}
+export interface ContentMarkingFooterAction extends ContentMarkingAction {
+
+}
 export interface AgreementFileData {
 
 		data?: number
+
+}
+export interface SecurityProviderStatus {
+
+		enabled?: boolean
+
+		endpoint?: string
+
+		provider?: string
+
+		region?: string
+
+		vendor?: string
 
 }
 export interface CloudAppSecurityState {
@@ -26150,6 +27426,23 @@ export interface FileHash {
 
 	    /** Value of the file hash. */
 		hashValue?: string
+
+}
+export interface AlertHistoryState {
+
+		appId?: string
+
+		assignedTo?: string
+
+		comments?: string[]
+
+		feedback?: AlertFeedback
+
+		status?: AlertStatus
+
+		updatedDateTime?: string
+
+		user?: string
 
 }
 export interface HostSecurityState {
@@ -26296,7 +27589,7 @@ export interface Process {
 }
 export interface RegistryKeyState {
 
-	    /** A Windows registry hive : HKEY_CURRENT_CONFIG HKEY_CURRENT_USER HKEY_LOCAL_MACHINE/SAM HKEY_LOCAL_MACHINE/Security HKEY_LOCAL_MACHINE/Software HKEY_LOCAL_MACHINE/System HKEY_USERS/.Default. Possible values are: unknown, currentConfig, currentUser, localMachineSam, localMachineSamSoftware, localMachineSystem, usersDefault. */
+	    /** A Windows registry hive : HKEY_CURRENT_CONFIG HKEY_CURRENT_USER HKEY_LOCAL_MACHINE/SAM HKEY_LOCAL_MACHINE/Security HKEY_LOCAL_MACHINE/Software HKEY_LOCAL_MACHINE/System HKEY_USERS/.Default. Possible values are: unknown, currentConfig, currentUser, localMachineSam, localMachineSecurity, localMachineSoftware, localMachineSystem, usersDefault. */
 		hive?: RegistryHive
 
 	    /** Current (i.e. changed) registry key (excludes HIVE). */
@@ -26530,6 +27823,32 @@ export interface SecureScoreControlStateUpdate {
 		updatedDateTime?: string
 
 }
+export interface SecurityActionState {
+
+		appId?: string
+
+		status?: OperationStatus
+
+		updatedDateTime?: string
+
+		user?: string
+
+}
+export interface UserAccount {
+
+		displayName?: string
+
+		lastSeenDateTime?: string
+
+		riskScore?: string
+
+		service?: string
+
+		signinName?: string
+
+		status?: AccountStatus
+
+}
 export interface AccountAlias {
 
 		id?: string
@@ -26538,6 +27857,15 @@ export interface AccountAlias {
 
 }
 export interface EntitySetNames {
+
+}
+export interface TimeSlot {
+
+	    /** The time the period ends. */
+		start?: DateTimeTimeZone
+
+	    /** The time a period begins. */
+		end?: DateTimeTimeZone
 
 }
 export interface BookingReminder {
@@ -26717,43 +28045,79 @@ export interface GroupPolicyPresentationDropdownListItem {
 		value?: string
 
 }
-export interface AttendeeGriffin {
+export interface LocationConstraint {
 
-		type?: AttendeeType
+	    /** Constraint information for one or more locations that the client requests for the meeting. */
+		locations?: LocationConstraintItem[]
 
-		emailAddress?: EmailAddressGriffin
-
-}
-export interface EmailAddressGriffin {
-
-		name?: string
-
-		address?: string
-
-}
-export interface LocationConstraints {
-
-		locations?: LocationConstraintItemGriffin[]
-
+	    /** The client requests the service to include in the response a meeting location for the meeting. If this is true and all the resources are busy, findMeetingTimes will not return any meeting time suggestions. If this is false and all the resources are busy, findMeetingTimes would still look for meeting times without locations. */
 		isRequired?: boolean
 
+	    /** The client requests the service to suggest one or more meeting locations. */
 		suggestLocation?: boolean
 
 }
-export interface LocationDataModel {
+export interface LocationConstraintItem extends Location {
 
-		displayName?: string
-
-		locationEmailAddress?: string
-
-		address?: PostalAddressGriffin
-
-		locationUri?: string
-
-		coordinates?: GeoCoordinatesGriffin
+	    /** If set to true and the specified resource is busy, findMeetingTimes looks for another resource that is free. If set to false and the specified resource is busy, findMeetingTimes returns the resource best ranked in the user's cache without checking if it's free. Default is true. */
+		resolveAvailability?: boolean
 
 }
-export interface PostalAddressGriffin {
+export interface MeetingTimeSuggestionsResult {
+
+	    /** An array of meeting suggestions. */
+		meetingTimeSuggestions?: MeetingTimeSuggestion[]
+
+	    /** A reason for not returning any meeting suggestions. The possible values are: attendeesUnavailable, attendeesUnavailableOrUnknown, locationsUnavailable, organizerUnavailable, or unknown. This property is an empty string if the meetingTimeSuggestions property does include any meeting suggestions. */
+		emptySuggestionsReason?: string
+
+}
+export interface MeetingTimeSuggestion {
+
+	    /** A percentage that represents the likelhood of all the attendees attending. */
+		confidence?: number
+
+		order?: number
+
+	    /** Availability of the meeting organizer for this meeting suggestion. The possible values are: free, tentative, busy, oof, workingElsewhere, unknown. */
+		organizerAvailability?: FreeBusyStatus
+
+	    /** An array that shows the availability status of each attendee for this meeting suggestion. */
+		attendeeAvailability?: AttendeeAvailability[]
+
+	    /** An array that specifies the name and geographic location of each meeting location for this meeting suggestion. */
+		locations?: Location[]
+
+	    /** Reason for suggesting the meeting time. */
+		suggestionReason?: string
+
+	    /** A time period suggested for the meeting. */
+		meetingTimeSlot?: TimeSlot
+
+}
+export interface AttendeeAvailability {
+
+	    /** The type of attendee - whether it's a person or a resource, and whether required or optional if it's a person. */
+		attendee?: AttendeeBase
+
+	    /** The availability status of the attendee. The possible values are: free, tentative, busy, oof, workingElsewhere, unknown. */
+		availability?: FreeBusyStatus
+
+}
+export interface TimeConstraint {
+
+	    /** The nature of the activity, optional. The possible values are: work, personal, unrestricted, or unknown. */
+		activityDomain?: ActivityDomain
+
+		timeSlots?: TimeSlot[]
+
+}
+export interface DateTimeTimeZoneType {
+
+		dateTime?: string
+
+}
+export interface PostalAddressType {
 
 		street?: string
 
@@ -26761,82 +28125,8 @@ export interface PostalAddressGriffin {
 
 		state?: string
 
-		countryOrRegion?: string
+		countryLetterCode?: string
 
 		postalCode?: string
-
-		type?: AddressType
-
-		isInferred?: boolean
-
-}
-export interface GeoCoordinatesGriffin {
-
-		latitude?: number
-
-		longitude?: number
-
-		accuracy?: number
-
-		altitude?: number
-
-		altitudeAccuracy?: number
-
-}
-export interface LocationConstraintItemGriffin extends LocationDataModel {
-
-		resolveAvailability?: boolean
-
-}
-export interface FindMeetingTimesResponse {
-
-		meetingTimeSuggestions?: MeetingTimeSuggestionGriffin[]
-
-		emptySuggestionsReason?: string
-
-}
-export interface MeetingTimeSuggestionGriffin {
-
-		confidence?: number
-
-		order?: number
-
-		organizerAvailability?: AvailabilityStatus
-
-		attendeeAvailability?: AttendeeAvailabilityDataModel[]
-
-		locations?: LocationDataModel[]
-
-		suggestionReason?: string
-
-		meetingTimeSlot?: MeetingTimeSlotDataModel
-
-}
-export interface AttendeeAvailabilityDataModel {
-
-		attendee?: AttendeeGriffin
-
-		availability?: AvailabilityStatus
-
-}
-export interface MeetingTimeSlotDataModel {
-
-		start?: DateTimeTimeZone
-
-		end?: DateTimeTimeZone
-
-}
-export interface FindMeetingTimesTimeConstraints {
-
-		activityDomain?: ActivityDomain
-
-		timeSlots?: SearchWindowTimeSlot[]
-
-}
-export interface SearchWindowTimeSlot {
-
-		start?: DateTimeTimeZone
-
-		end?: DateTimeTimeZone
 
 }
