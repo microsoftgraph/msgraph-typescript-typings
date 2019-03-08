@@ -20155,13 +20155,13 @@ export interface Item extends Entity {
 
 		gtin?: string
 
-		inventory?: Decimal
+		inventory?: number
 
-		unitPrice?: Decimal
+		unitPrice?: number
 
 		priceIncludesTax?: boolean
 
-		unitCost?: Decimal
+		unitCost?: number
 
 		taxGroupId?: string
 
@@ -20233,11 +20233,11 @@ export interface Customer extends Entity {
 
 		blocked?: string
 
-		balance?: Decimal
+		balance?: number
 
-		overdueAmount?: Decimal
+		overdueAmount?: number
 
-		totalSalesExcludingTax?: Decimal
+		totalSalesExcludingTax?: number
 
 		lastModifiedDateTime?: string
 
@@ -20263,7 +20263,7 @@ export interface Currency extends Entity {
 
 		amountDecimalPlaces?: string
 
-		amountRoundingPrecision?: Decimal
+		amountRoundingPrecision?: number
 
 		lastModifiedDateTime?: string
 
@@ -20279,7 +20279,7 @@ export interface PaymentTerm extends Entity {
 
 		discountDateCalculation?: string
 
-		discountPercent?: Decimal
+		discountPercent?: number
 
 		calculateDiscountOnCreditMemos?: boolean
 
@@ -20335,7 +20335,7 @@ export interface Vendor extends Entity {
 
 		blocked?: string
 
-		balance?: Decimal
+		balance?: number
 
 		lastModifiedDateTime?: string
 
@@ -20415,7 +20415,7 @@ export interface CustomerPayment extends Entity {
 
 		externalDocumentNumber?: string
 
-		amount?: Decimal
+		amount?: number
 
 		appliesToInvoiceId?: string
 
@@ -20493,7 +20493,7 @@ export interface JournalLine extends Entity {
 
 		externalDocumentNumber?: string
 
-		amount?: Decimal
+		amount?: number
 
 		description?: string
 
@@ -20557,9 +20557,9 @@ export interface GeneralLedgerEntry extends Entity {
 
 		description?: string
 
-		debitAmount?: Decimal
+		debitAmount?: number
 
-		creditAmount?: Decimal
+		creditAmount?: number
 
 		lastModifiedDateTime?: string
 
@@ -20621,15 +20621,15 @@ export interface AgedAccountsReceivable extends Entity {
 
 		currencyCode?: string
 
-		balanceDue?: Decimal
+		balanceDue?: number
 
-		currentAmount?: Decimal
+		currentAmount?: number
 
-		period1Amount?: Decimal
+		period1Amount?: number
 
-		period2Amount?: Decimal
+		period2Amount?: number
 
-		period3Amount?: Decimal
+		period3Amount?: number
 
 		agedAsOfDate?: string
 
@@ -20645,15 +20645,15 @@ export interface AgedAccountsPayable extends Entity {
 
 		currencyCode?: string
 
-		balanceDue?: Decimal
+		balanceDue?: number
 
-		currentAmount?: Decimal
+		currentAmount?: number
 
-		period1Amount?: Decimal
+		period1Amount?: number
 
-		period2Amount?: Decimal
+		period2Amount?: number
 
-		period3Amount?: Decimal
+		period3Amount?: number
 
 		agedAsOfDate?: string
 
