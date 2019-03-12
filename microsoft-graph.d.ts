@@ -1620,8 +1620,6 @@ export interface Event extends OutlookItem {
 	    /** A URL for an online meeting. The property is set only when an organizer specifies an event as an online meeting such as a Skype meeting. Read-only. */
 		onlineMeetingUrl?: string
 
-		creationOptions?: EventCreationOptions
-
 	    /** The calendar that contains the event. Navigation property. Read-only. */
 		calendar?: Calendar
 
@@ -22411,11 +22409,6 @@ export interface Attendee extends AttendeeBase {
 
 	    /** The attendee's response (none, accepted, declined, etc.) for the event and date-time that the response was sent. */
 		status?: ResponseStatus
-
-}
-export interface EventCreationOptions {
-
-		saveToGroupCalendarOnly?: boolean
 
 }
 export interface Phone {
