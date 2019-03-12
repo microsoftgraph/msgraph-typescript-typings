@@ -210,6 +210,9 @@ export interface Device extends DirectoryObject {
 	    /** The timestamp type represents date and time information using ISO 8601 format and is always in UTC time. For example, midnight UTC on Jan 1, 2014 would look like this: '2014-01-01T00:00:00Z'. Read-only. */
 		approximateLastSignInDateTime?: string
 
+	    /** The timestamp when the device is no longer deemed compliant. The timestamp type represents date and time information using ISO 8601 format and is always in UTC time. For example, midnight UTC on Jan 1, 2014 would look like this: '2014-01-01T00:00:00Z'. Read-only. */
+		complianceExpirationDateTime?: string
+
 	    /** Unique identifier set by Azure Device Registration Service at the time of registration. */
 		deviceId?: string
 
@@ -242,6 +245,12 @@ export interface Device extends DirectoryObject {
 
 	    /** For interal use only. Not nullable. */
 		physicalIds?: string[]
+
+	    /** The profile type of the device. Possible values:RegisteredDevice (default)SecureVMPrinterSharedIoT */
+		profileType?: string
+
+	    /** List of labels applied to the device by the system. */
+		systemLabels?: string[]
 
 	    /** Type of trust for the joined device. Read-only. Possible values: Workplace - indicates bring your own personal devicesAzureAd - Cloud only joined devicesServerAd - on-premises domain joined devices joined to Azure AD. For more details, see Introduction to device management in Azure Active Directory */
 		trustType?: string
@@ -330,6 +339,12 @@ export interface Domain extends Entity {
 
 	    /** True if the domain has completed domain ownership verification. Not nullable */
 		isVerified?: boolean
+
+	    /** Specifies the number of days before a user receives notification that their password will expire. If the property is not set, a default value of 14 days will be used. */
+		passwordNotificationWindowInDays?: number
+
+	    /** Specifies the length of time that a password is valid before it must be changed. If the property is not set, a default value of 90 days will be used. */
+		passwordValidityPeriodInDays?: number
 
 	    /** The capabilities assigned to the domain.Can include 0, 1 or more of following values: Email, Sharepoint, EmailInternalRelayOnly, OfficeCommunicationsOnline, SharePointDefaultDomain, FullRedelegation, SharePointPublic, OrgIdAuthentication, Yammer, Intune The values which you can add/remove using Graph API include: Email, OfficeCommunicationsOnline, YammerNot nullable */
 		supportedServices?: string[]
@@ -1152,6 +1167,9 @@ export interface User extends DirectoryObject {
 
 	    /** The instant message voice over IP (VOIP) session initiation protocol (SIP) addresses for the user. Read-only. */
 		imAddresses?: string[]
+
+	    /** true if the user is a resource account; otherwise, false. Null value should be considered false. */
+		isResourceAccount?: boolean
 
 	    /** The user’s job title. Supports $filter. */
 		jobTitle?: string
@@ -2526,6 +2544,8 @@ export interface Workbook extends Entity {
 	    /** Represents a collection of worksheets associated with the workbook. Read-only. */
 		worksheets?: WorkbookWorksheet[]
 
+		comments?: WorkbookComment[]
+
 		functions?: WorkbookFunctions
 
 }
@@ -2605,6 +2625,9 @@ export interface WorkbookTable extends Entity {
 	    /** Indicates whether the last column contains special formatting. */
 		highlightLastColumn?: boolean
 
+	    /** Legacy Id used in older Excle clients. The value of the identifier remains the same even when the table is renamed. This property should be interpreted as an opaque string value and should not be parsed to any other type. Read-only. */
+		legacyId?: string
+
 	    /** Name of the table. */
 		name?: string
 
@@ -2665,6 +2688,16 @@ export interface WorkbookWorksheet extends Entity {
 
 	    /** Collection of tables that are part of the worksheet. Read-only. */
 		tables?: WorkbookTable[]
+
+}
+
+export interface WorkbookComment extends Entity {
+
+		content?: string
+
+		contentType?: string
+
+		replies?: WorkbookCommentReply[]
 
 }
 
@@ -2973,6 +3006,14 @@ export interface WorkbookChartTitleFormat extends Entity {
 
 	    /** Represents the font attributes (font name, font size, color, etc.) for the current object. Read-only. */
 		font?: WorkbookChartFont
+
+}
+
+export interface WorkbookCommentReply extends Entity {
+
+		content?: string
+
+		contentType?: string
 
 }
 
@@ -8926,6 +8967,18 @@ export interface DataPolicyOperation extends Entity {
 
 	    /** Specifies the progress of an operation. */
 		progress?: number
+
+}
+
+export interface IdentityProvider extends Entity {
+
+		type?: string
+
+		name?: string
+
+		clientId?: string
+
+		clientSecret?: string
 
 }
 export interface AlternativeSecurityId {
