@@ -453,6 +453,8 @@ export type GroupPolicyConfigurationType = "policy" | "preference"
 export type GroupPolicyDefinitionClassType = "user" | "machine" | "both"
 export type GroupPolicyType = "admxBacked" | "admxIngested"
 export type ActivityDomain = "unknown" | "work" | "personal" | "unrestricted"
+export type ScheduleEntityTheme = "white" | "blue" | "green" | "purple" | "pink" | "yellow" | "gray" | "darkBlue" | "darkGreen" | "darkPurple" | "darkPink" | "darkYellow" | "unknownFutureValue"
+export type TimeOffReasonIconType = "none" | "car" | "calendar" | "running" | "plane" | "firstAid" | "doctor" | "notWorking" | "clock" | "juryDuty" | "globe" | "cup" | "phone" | "weather" | "umbrella" | "piggyBank" | "dog" | "cake" | "trafficCone" | "pin" | "sunny" | "unknownFutureValue"
 
 export interface Entity {
 
@@ -2646,6 +2648,8 @@ export interface Team extends Entity {
 
 	    /** Whether this team is in read-only mode. */
 		isArchived?: boolean
+
+		schedule?: Schedule
 
 		template?: TeamsTemplate
 
@@ -18054,6 +18058,26 @@ export interface TeamsApp extends Entity {
 
 }
 
+export interface Schedule extends Entity {
+
+		enabled?: boolean
+
+		timeZone?: string
+
+		provisionStatus?: OperationStatus
+
+		provisionStatusCode?: string
+
+		shifts?: Shift[]
+
+		timesOff?: TimeOff[]
+
+		timeOffReasons?: TimeOffReason[]
+
+		schedulingGroups?: SchedulingGroup[]
+
+}
+
 export interface TeamsTemplate extends Entity {
 
 }
@@ -18127,7 +18151,7 @@ export interface ChatMessage extends Entity {
 
 		lastModifiedDateTime?: string
 
-		deleted?: boolean
+		deletedDateTime?: string
 
 		subject?: string
 
@@ -18183,17 +18207,23 @@ export interface TeamsTab extends Entity {
 
 export interface IdentityProvider extends Entity {
 
-	    /** The identity provider type. It must be one of the following values for B2C scenarios: MicrosoftGoogleAmazonLinkedInFacebookGitHubTwitterWeiboQQWeChatFor B2B scenarios, the value must be Google. */
 		type?: string
 
-	    /** The display name of the identity provider. */
 		name?: string
 
-	    /** The client ID for the application. This is the client ID obtained when registering the application with the identity provider. */
 		clientId?: string
 
-	    /** The client secret for the application. This is the client secret obtained when registering the application with the identity provider. This is write-only. A read operation will return '****'. */
 		clientSecret?: string
+
+}
+
+export interface TrustFramework extends Entity {
+
+		policies?: TrustFrameworkPolicy[]
+
+}
+
+export interface TrustFrameworkPolicy extends Entity {
 
 }
 
@@ -20668,6 +20698,58 @@ export interface TaxArea extends Entity {
 		taxType?: string
 
 		lastModifiedDateTime?: string
+
+}
+
+export interface ChangeTrackedEntity extends Entity {
+
+		createdDateTime?: string
+
+		lastModifiedDateTime?: string
+
+		lastModifiedBy?: IdentitySet
+
+}
+
+export interface Shift extends ChangeTrackedEntity {
+
+		sharedShift?: ShiftItem
+
+		draftShift?: ShiftItem
+
+		userId?: string
+
+		schedulingGroupId?: string
+
+}
+
+export interface TimeOff extends ChangeTrackedEntity {
+
+		sharedTimeOff?: TimeOffItem
+
+		draftTimeOff?: TimeOffItem
+
+		userId?: string
+
+}
+
+export interface TimeOffReason extends ChangeTrackedEntity {
+
+		displayName?: string
+
+		iconType?: TimeOffReasonIconType
+
+		isActive?: boolean
+
+}
+
+export interface SchedulingGroup extends ChangeTrackedEntity {
+
+		displayName?: string
+
+		isActive?: boolean
+
+		userIds?: string[]
 
 }
 export interface MeetingParticipants {
@@ -28121,5 +28203,41 @@ export interface PostalAddressType {
 		countryLetterCode?: string
 
 		postalCode?: string
+
+}
+export interface ScheduleEntity {
+
+		startDateTime?: string
+
+		endDateTime?: string
+
+		theme?: ScheduleEntityTheme
+
+}
+export interface ShiftActivity {
+
+		isPaid?: boolean
+
+		startDateTime?: string
+
+		endDateTime?: string
+
+		code?: string
+
+		displayName?: string
+
+}
+export interface ShiftItem extends ScheduleEntity {
+
+		displayName?: string
+
+		notes?: string
+
+		activities?: ShiftActivity[]
+
+}
+export interface TimeOffItem extends ScheduleEntity {
+
+		timeOffReasonId?: string
 
 }
