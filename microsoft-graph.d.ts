@@ -16,7 +16,6 @@ export type AttendeeType = "required" | "optional" | "resource"
 export type FreeBusyStatus = "free" | "tentative" | "busy" | "oof" | "workingElsewhere" | "unknown"
 export type LocationType = "default" | "conferenceRoom" | "homeAddress" | "businessAddress" | "geoCoordinates" | "streetAddress" | "hotel" | "restaurant" | "localBusiness" | "postalAddress"
 export type LocationUniqueIdType = "unknown" | "locationStore" | "directory" | "private" | "bing"
-export type ActivityDomain = "unknown" | "work" | "personal" | "unrestricted"
 export type MailTipsType = "automaticReplies" | "mailboxFullStatus" | "customMailTip" | "externalMemberCount" | "totalMemberCount" | "maxMessageSize" | "deliveryRestriction" | "moderationStatus" | "recipientScope" | "recipientSuggestions"
 export type RecipientScopeType = "none" | "internal" | "external" | "externalPartner" | "externalNonPartner"
 export type TimeZoneStandard = "windows" | "iana"
@@ -37,6 +36,8 @@ export type CategoryColor = "preset0" | "preset1" | "preset2" | "preset3" | "pre
 export type SelectionLikelihoodInfo = "notSpecified" | "high"
 export type PhoneType = "home" | "business" | "mobile" | "other" | "assistant" | "homeFax" | "businessFax" | "otherFax" | "pager" | "radio"
 export type WebsiteType = "other" | "home" | "work" | "blog" | "profile"
+export type ActivityDomain = "unknown" | "work" | "personal" | "unrestricted"
+export type PhysicalAddressType = "unknown" | "home" | "business" | "other"
 export type PlannerPreviewType = "automatic" | "noPreview" | "checklist" | "description" | "reference"
 export type OperationStatus = "NotStarted" | "Running" | "Completed" | "Failed"
 export type OnenotePatchInsertPosition = "After" | "Before"
@@ -210,6 +211,9 @@ export interface Device extends DirectoryObject {
 	    /** The timestamp type represents date and time information using ISO 8601 format and is always in UTC time. For example, midnight UTC on Jan 1, 2014 would look like this: '2014-01-01T00:00:00Z'. Read-only. */
 		approximateLastSignInDateTime?: string
 
+	    /** The timestamp when the device is no longer deemed compliant. The timestamp type represents date and time information using ISO 8601 format and is always in UTC time. For example, midnight UTC on Jan 1, 2014 would look like this: '2014-01-01T00:00:00Z'. Read-only. */
+		complianceExpirationDateTime?: string
+
 	    /** Unique identifier set by Azure Device Registration Service at the time of registration. */
 		deviceId?: string
 
@@ -242,6 +246,12 @@ export interface Device extends DirectoryObject {
 
 	    /** For interal use only. Not nullable. */
 		physicalIds?: string[]
+
+	    /** The profile type of the device. Possible values:RegisteredDevice (default)SecureVMPrinterSharedIoT */
+		profileType?: string
+
+	    /** List of labels applied to the device by the system. */
+		systemLabels?: string[]
 
 	    /** Type of trust for the joined device. Read-only. Possible values: Workplace - indicates bring your own personal devicesAzureAd - Cloud only joined devicesServerAd - on-premises domain joined devices joined to Azure AD. For more details, see Introduction to device management in Azure Active Directory */
 		trustType?: string
@@ -330,6 +340,12 @@ export interface Domain extends Entity {
 
 	    /** True if the domain has completed domain ownership verification. Not nullable */
 		isVerified?: boolean
+
+	    /** Specifies the number of days before a user receives notification that their password will expire. If the property is not set, a default value of 14 days will be used. */
+		passwordNotificationWindowInDays?: number
+
+	    /** Specifies the length of time that a password is valid before it must be changed. If the property is not set, a default value of 90 days will be used. */
+		passwordValidityPeriodInDays?: number
 
 	    /** The capabilities assigned to the domain.Can include 0, 1 or more of following values: Email, Sharepoint, EmailInternalRelayOnly, OfficeCommunicationsOnline, SharePointDefaultDomain, FullRedelegation, SharePointPublic, OrgIdAuthentication, Yammer, Intune The values which you can add/remove using Graph API include: Email, OfficeCommunicationsOnline, YammerNot nullable */
 		supportedServices?: string[]
@@ -1152,6 +1168,9 @@ export interface User extends DirectoryObject {
 
 	    /** The instant message voice over IP (VOIP) session initiation protocol (SIP) addresses for the user. Read-only. */
 		imAddresses?: string[]
+
+	    /** true if the user is a resource account; otherwise, false. Null value should be considered false. */
+		isResourceAccount?: boolean
 
 	    /** The user’s job title. Supports $filter. */
 		jobTitle?: string
@@ -2526,6 +2545,8 @@ export interface Workbook extends Entity {
 	    /** Represents a collection of worksheets associated with the workbook. Read-only. */
 		worksheets?: WorkbookWorksheet[]
 
+		comments?: WorkbookComment[]
+
 		functions?: WorkbookFunctions
 
 }
@@ -2605,6 +2626,9 @@ export interface WorkbookTable extends Entity {
 	    /** Indicates whether the last column contains special formatting. */
 		highlightLastColumn?: boolean
 
+	    /** Legacy Id used in older Excle clients. The value of the identifier remains the same even when the table is renamed. This property should be interpreted as an opaque string value and should not be parsed to any other type. Read-only. */
+		legacyId?: string
+
 	    /** Name of the table. */
 		name?: string
 
@@ -2665,6 +2689,16 @@ export interface WorkbookWorksheet extends Entity {
 
 	    /** Collection of tables that are part of the worksheet. Read-only. */
 		tables?: WorkbookTable[]
+
+}
+
+export interface WorkbookComment extends Entity {
+
+		content?: string
+
+		contentType?: string
+
+		replies?: WorkbookCommentReply[]
 
 }
 
@@ -2973,6 +3007,14 @@ export interface WorkbookChartTitleFormat extends Entity {
 
 	    /** Represents the font attributes (font name, font size, color, etc.) for the current object. Read-only. */
 		font?: WorkbookChartFont
+
+}
+
+export interface WorkbookCommentReply extends Entity {
+
+		content?: string
+
+		contentType?: string
 
 }
 
@@ -8928,6 +8970,18 @@ export interface DataPolicyOperation extends Entity {
 		progress?: number
 
 }
+
+export interface IdentityProvider extends Entity {
+
+		type?: string
+
+		name?: string
+
+		clientId?: string
+
+		clientSecret?: string
+
+}
 export interface AlternativeSecurityId {
 
 	    /** For internal use only */
@@ -9306,54 +9360,6 @@ export interface AttendeeBase extends Recipient {
 		type?: AttendeeType
 
 }
-export interface MeetingTimeSuggestionsResult {
-
-	    /** An array of meeting suggestions. */
-		meetingTimeSuggestions?: MeetingTimeSuggestion[]
-
-	    /** A reason for not returning any meeting suggestions. The possible values are: attendeesUnavailable, attendeesUnavailableOrUnknown, locationsUnavailable, organizerUnavailable, or unknown. This property is an empty string if the meetingTimeSuggestions property does include any meeting suggestions. */
-		emptySuggestionsReason?: string
-
-}
-export interface MeetingTimeSuggestion {
-
-	    /** A time period suggested for the meeting. */
-		meetingTimeSlot?: TimeSlot
-
-	    /** A percentage that represents the likelhood of all the attendees attending. */
-		confidence?: number
-
-	    /** Availability of the meeting organizer for this meeting suggestion. The possible values are: free, tentative, busy, oof, workingElsewhere, unknown. */
-		organizerAvailability?: FreeBusyStatus
-
-	    /** An array that shows the availability status of each attendee for this meeting suggestion. */
-		attendeeAvailability?: AttendeeAvailability[]
-
-	    /** An array that specifies the name and geographic location of each meeting location for this meeting suggestion. */
-		locations?: Location[]
-
-	    /** Reason for suggesting the meeting time. */
-		suggestionReason?: string
-
-}
-export interface TimeSlot {
-
-	    /** The time the period ends. */
-		start?: DateTimeTimeZone
-
-	    /** The time a period begins. */
-		end?: DateTimeTimeZone
-
-}
-export interface AttendeeAvailability {
-
-	    /** The type of attendee - whether it's a person or a resource, and whether required or optional if it's a person. */
-		attendee?: AttendeeBase
-
-	    /** The availability status of the attendee. The possible values are: free, tentative, busy, oof, workingElsewhere, unknown. */
-		availability?: FreeBusyStatus
-
-}
 export interface Location {
 
 	    /** The name associated with the location. */
@@ -9415,33 +9421,6 @@ export interface OutlookGeoCoordinates {
 
 	    /** The accuracy of the altitude. */
 		altitudeAccuracy?: number
-
-}
-export interface LocationConstraint {
-
-	    /** The client requests the service to include in the response a meeting location for the meeting. If this is true and all the resources are busy, findMeetingTimes will not return any meeting time suggestions. If this is false and all the resources are busy, findMeetingTimes would still look for meeting times without locations. */
-		isRequired?: boolean
-
-	    /** The client requests the service to suggest one or more meeting locations. */
-		suggestLocation?: boolean
-
-	    /** Constraint information for one or more locations that the client requests for the meeting. */
-		locations?: LocationConstraintItem[]
-
-}
-export interface LocationConstraintItem extends Location {
-
-	    /** If set to true and the specified resource is busy, findMeetingTimes looks for another resource that is free. If set to false and the specified resource is busy, findMeetingTimes returns the resource best ranked in the user's cache without checking if it's free. Default is true. */
-		resolveAvailability?: boolean
-
-}
-export interface TimeConstraint {
-
-	    /** The nature of the activity, optional. The possible values are: work, personal, unrestricted, or unknown. */
-		activityDomain?: ActivityDomain
-
-	    /** An array of time periods. */
-		timeslots?: TimeSlot[]
 
 }
 export interface Reminder {
@@ -9825,6 +9804,82 @@ export interface PersonType {
 
 	    /** The secondary type of data source, such as OrganizationUser. */
 		subclass?: string
+
+}
+export interface LocationConstraint {
+
+	    /** Constraint information for one or more locations that the client requests for the meeting. */
+		locations?: LocationConstraintItem[]
+
+	    /** The client requests the service to include in the response a meeting location for the meeting. If this is true and all the resources are busy, findMeetingTimes will not return any meeting time suggestions. If this is false and all the resources are busy, findMeetingTimes would still look for meeting times without locations. */
+		isRequired?: boolean
+
+	    /** The client requests the service to suggest one or more meeting locations. */
+		suggestLocation?: boolean
+
+}
+export interface LocationConstraintItem extends Location {
+
+	    /** If set to true and the specified resource is busy, findMeetingTimes looks for another resource that is free. If set to false and the specified resource is busy, findMeetingTimes returns the resource best ranked in the user's cache without checking if it's free. Default is true. */
+		resolveAvailability?: boolean
+
+}
+export interface MeetingTimeSuggestionsResult {
+
+	    /** An array of meeting suggestions. */
+		meetingTimeSuggestions?: MeetingTimeSuggestion[]
+
+	    /** A reason for not returning any meeting suggestions. The possible values are: attendeesUnavailable, attendeesUnavailableOrUnknown, locationsUnavailable, organizerUnavailable, or unknown. This property is an empty string if the meetingTimeSuggestions property does include any meeting suggestions. */
+		emptySuggestionsReason?: string
+
+}
+export interface MeetingTimeSuggestion {
+
+	    /** A percentage that represents the likelhood of all the attendees attending. */
+		confidence?: number
+
+		order?: number
+
+	    /** Availability of the meeting organizer for this meeting suggestion. The possible values are: free, tentative, busy, oof, workingElsewhere, unknown. */
+		organizerAvailability?: FreeBusyStatus
+
+	    /** An array that shows the availability status of each attendee for this meeting suggestion. */
+		attendeeAvailability?: AttendeeAvailability[]
+
+	    /** An array that specifies the name and geographic location of each meeting location for this meeting suggestion. */
+		locations?: Location[]
+
+	    /** Reason for suggesting the meeting time. */
+		suggestionReason?: string
+
+	    /** A time period suggested for the meeting. */
+		meetingTimeSlot?: TimeSlot
+
+}
+export interface AttendeeAvailability {
+
+	    /** The type of attendee - whether it's a person or a resource, and whether required or optional if it's a person. */
+		attendee?: AttendeeBase
+
+	    /** The availability status of the attendee. The possible values are: free, tentative, busy, oof, workingElsewhere, unknown. */
+		availability?: FreeBusyStatus
+
+}
+export interface TimeSlot {
+
+	    /** The time the period ends. */
+		start?: DateTimeTimeZone
+
+	    /** The time a period begins. */
+		end?: DateTimeTimeZone
+
+}
+export interface TimeConstraint {
+
+	    /** The nature of the activity, optional. The possible values are: work, personal, unrestricted, or unknown. */
+		activityDomain?: ActivityDomain
+
+		timeSlots?: TimeSlot[]
 
 }
 export interface IdentitySet {
