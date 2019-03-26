@@ -161,27 +161,27 @@ export type AppLogDecryptionAlgorithm = "aes256"
 export type AdministratorConfiguredDeviceComplianceState = "basedOnDeviceCompliancePolicy" | "nonCompliant"
 export type DerivedCredentialProviderType = "notConfigured" | "entrustDataCard" | "purebred" | "xTec" | "intercede"
 export type Windows10EditionType = "windows10Enterprise" | "windows10EnterpriseN" | "windows10Education" | "windows10EducationN" | "windows10MobileEnterprise" | "windows10HolographicEnterprise" | "windows10Professional" | "windows10ProfessionalN" | "windows10ProfessionalEducation" | "windows10ProfessionalEducationN" | "windows10ProfessionalWorkstation" | "windows10ProfessionalWorkstationN" | "notConfigured"
+export type SubjectNameFormat = "commonName" | "commonNameIncludingEmail" | "commonNameAsEmail" | "custom" | "commonNameAsIMEI" | "commonNameAsSerialNumber" | "commonNameAsAadDeviceId" | "commonNameAsIntuneDeviceId" | "commonNameAsDurableDeviceId"
+export type CertificateValidityPeriodScale = "days" | "months" | "years"
+export type SubjectAlternativeNameType = "none" | "emailAddress" | "userPrincipalName" | "customAzureADAttribute" | "domainNameService"
+export type KeyUsages = "keyEncipherment" | "digitalSignature"
+export type KeySize = "size1024" | "size2048"
+export type HashAlgorithms = "sha1" | "sha2"
+export type DevicePlatformType = "android" | "androidForWork" | "iOS" | "macOS" | "windowsPhone81" | "windows81AndLater" | "windows10AndLater" | "androidWorkProfile"
+export type CertificateIssuanceStates = "unknown" | "challengeIssued" | "challengeIssueFailed" | "requestCreationFailed" | "requestSubmitFailed" | "challengeValidationSucceeded" | "challengeValidationFailed" | "issueFailed" | "issuePending" | "issued" | "responseProcessingFailed" | "responsePending" | "enrollmentSucceeded" | "enrollmentNotNeeded" | "revoked" | "removedFromCollection" | "renewVerified" | "installFailed" | "installed" | "deleteFailed" | "deleted" | "renewalRequested" | "requested"
+export type KeyStorageProviderOption = "useTpmKspOtherwiseUseSoftwareKsp" | "useTpmKspOtherwiseFail" | "usePassportForWorkKspOtherwiseFail" | "useSoftwareKsp"
+export type CertificateRevocationStatus = "none" | "pending" | "issued" | "failed" | "revoked"
+export type CertificateStore = "user" | "machine"
 export type AndroidDeviceOwnerAppAutoUpdatePolicyType = "notConfigured" | "userChoice" | "never" | "wiFiOnly" | "always"
 export type AndroidDeviceOwnerDefaultAppPermissionPolicyType = "deviceDefault" | "prompt" | "autoGrant" | "autoDeny"
 export type AndroidKeyguardFeature = "notConfigured" | "camera" | "notifications" | "unredactedNotifications" | "trustAgents" | "fingerprint" | "remoteInput" | "allFeatures"
-export type AndroidDeviceOwnerRequiredPasswordType = "deviceDefault" | "required" | "numeric" | "numericComplex" | "alphabetic" | "alphanumeric" | "alphanumericWithSymbols"
+export type AndroidDeviceOwnerRequiredPasswordType = "deviceDefault" | "required" | "numeric" | "numericComplex" | "alphabetic" | "alphanumeric" | "alphanumericWithSymbols" | "lowSecurityBiometric"
 export type AndroidDeviceOwnerBatteryPluggedMode = "notConfigured" | "ac" | "usb" | "wireless"
 export type AndroidDeviceOwnerSystemUpdateInstallType = "deviceDefault" | "postpone" | "windowed" | "automatic"
 export type AndroidDeviceOwnerWiFiSecurityType = "open" | "wep" | "wpaPersonal"
 export type EasAuthenticationMethod = "usernameAndPassword" | "certificate"
 export type EmailSyncDuration = "userDefined" | "oneDay" | "threeDays" | "oneWeek" | "twoWeeks" | "oneMonth" | "unlimited"
 export type UserEmailSource = "userPrincipalName" | "primarySmtpAddress"
-export type SubjectNameFormat = "commonName" | "commonNameIncludingEmail" | "commonNameAsEmail" | "custom" | "commonNameAsIMEI" | "commonNameAsSerialNumber" | "commonNameAsAadDeviceId" | "commonNameAsIntuneDeviceId" | "commonNameAsDurableDeviceId"
-export type CertificateValidityPeriodScale = "days" | "months" | "years"
-export type DevicePlatformType = "android" | "androidForWork" | "iOS" | "macOS" | "windowsPhone81" | "windows81AndLater" | "windows10AndLater" | "androidWorkProfile"
-export type KeyUsages = "keyEncipherment" | "digitalSignature"
-export type CertificateIssuanceStates = "unknown" | "challengeIssued" | "challengeIssueFailed" | "requestCreationFailed" | "requestSubmitFailed" | "challengeValidationSucceeded" | "challengeValidationFailed" | "issueFailed" | "issuePending" | "issued" | "responseProcessingFailed" | "responsePending" | "enrollmentSucceeded" | "enrollmentNotNeeded" | "revoked" | "removedFromCollection" | "renewVerified" | "installFailed" | "installed" | "deleteFailed" | "deleted" | "renewalRequested" | "requested"
-export type KeyStorageProviderOption = "useTpmKspOtherwiseUseSoftwareKsp" | "useTpmKspOtherwiseFail" | "usePassportForWorkKspOtherwiseFail" | "useSoftwareKsp"
-export type SubjectAlternativeNameType = "none" | "emailAddress" | "userPrincipalName" | "customAzureADAttribute" | "domainNameService"
-export type CertificateRevocationStatus = "none" | "pending" | "issued" | "failed" | "revoked"
-export type KeySize = "size1024" | "size2048"
-export type HashAlgorithms = "sha1" | "sha2"
-export type CertificateStore = "user" | "machine"
 export type AndroidUsernameSource = "username" | "userPrincipalName" | "samAccountName" | "primarySmtpAddress"
 export type IntendedPurpose = "unassigned" | "smimeEncryption" | "smimeSigning" | "vpn" | "wifi"
 export type EmailSyncSchedule = "userDefined" | "asMessagesArrive" | "manual" | "fifteenMinutes" | "thirtyMinutes" | "sixtyMinutes" | "basedOnMyUsage"
@@ -238,7 +238,10 @@ export type VpnOnDemandRuleConnectionAction = "connect" | "evaluateConnection" |
 export type VpnOnDemandRuleConnectionDomainAction = "connectIfNeeded" | "neverConnect"
 export type VpnProviderType = "notConfigured" | "appProxy" | "packetTunnel"
 export type DmaGuardDeviceEnumerationPolicyType = "deviceDefault" | "blockAll" | "allowAll"
+export type WindowsFirewallRuleNetworkProfileTypes = "notConfigured" | "domain" | "private" | "public"
 export type StateManagementSetting = "notConfigured" | "blocked" | "allowed"
+export type WindowsFirewallRuleTrafficDirectionType = "notConfigured" | "out" | "in"
+export type WindowsFirewallRuleInterfaceTypes = "notConfigured" | "remoteAccess" | "wireless" | "lan"
 export type Enablement = "notConfigured" | "enabled" | "disabled"
 export type ServiceStartType = "manual" | "automatic" | "disabled"
 export type LocalSecurityOptionsFormatAndEjectOfRemovableMediaAllowedUserType = "notConfigured" | "administrators" | "administratorsAndPowerUsers" | "administratorsAndInteractiveUsers"
@@ -283,7 +286,6 @@ export type DefenderPotentiallyUnwantedAppAction = "deviceDefault" | "block" | "
 export type DefenderPromptForSampleSubmission = "userDefined" | "alwaysPrompt" | "promptBeforeSendingPersonalData" | "neverSendData" | "sendAllDataWithoutPrompting"
 export type DefenderScanType = "userDefined" | "disabled" | "quick" | "full"
 export type DefenderCloudBlockLevelType = "notConfigured" | "high" | "highPlus" | "zeroTolerance"
-export type DefenderScheduleScanDay = "everyday" | "monday" | "tuesday" | "wednesday" | "thursday" | "friday" | "saturday" | "sunday" | "noScheduledScan"
 export type DefenderSubmitSamplesConsentType = "sendSafeSamplesAutomatically" | "alwaysPrompt" | "neverSend" | "sendAllSamplesAutomatically"
 export type WindowsPrivacyDataAccessLevel = "notConfigured" | "forceAllow" | "forceDeny" | "userInControl"
 export type WindowsPrivacyDataCategory = "notConfigured" | "accountInfo" | "appsRunInBackground" | "calendar" | "callHistory" | "camera" | "contacts" | "diagnosticsInfo" | "email" | "location" | "messaging" | "microphone" | "motion" | "notifications" | "phone" | "radios" | "tasks" | "syncWithDevices" | "trustedDevices"
@@ -299,6 +301,7 @@ export type WindowsSModeConfiguration = "noRestriction" | "block" | "unlock"
 export type WindowsDeliveryOptimizationMode = "userDefined" | "httpOnly" | "httpWithPeeringNat" | "httpWithPeeringPrivateGroup" | "httpWithInternetPeering" | "simpleDownload" | "bypassMode"
 export type DeliveryOptimizationRestrictPeerSelectionByOptions = "notConfigured" | "subnetMask"
 export type DeliveryOptimizationGroupIdOptionsType = "notConfigured" | "adSite" | "authenticatedDomainSid" | "dhcpUserOption" | "dnsSuffix"
+export type WindowsHealthMonitoringScope = "undefined" | "healthMonitoring" | "bootPerformance"
 export type WindowsKioskAppType = "unknown" | "store" | "desktop" | "aumId"
 export type WindowsAppStartLayoutTileSize = "hidden" | "small" | "medium" | "wide" | "large"
 export type SharedPCAccountDeletionPolicyType = "immediate" | "diskSpaceThreshold" | "diskSpaceThresholdOrInactiveThreshold"
@@ -311,6 +314,7 @@ export type WindowsUpdateType = "userDefined" | "all" | "businessReadyOnly" | "w
 export type WindowsUpdateForBusinessUpdateWeeks = "userDefined" | "firstWeek" | "secondWeek" | "thirdWeek" | "fourthWeek" | "everyWeek"
 export type WindowsUpdateStatus = "upToDate" | "pendingInstallation" | "pendingReboot" | "failed"
 export type AutoRestartNotificationDismissalMethod = "notConfigured" | "automatic" | "user"
+export type WindowsUpdateNotificationDisplayOption = "notConfigured" | "defaultNotifications" | "restartWarningsOnly" | "disableAllNotifications"
 export type Windows10VpnProfileTarget = "user" | "device" | "autoPilotDevice"
 export type Windows10VpnConnectionType = "pulseSecure" | "f5EdgeClient" | "dellSonicWallMobileConnect" | "checkPointCapsuleVpn" | "automatic" | "ikEv2" | "l2tp" | "pptp" | "citrix" | "paloAltoGlobalProtect"
 export type Windows10VpnAuthenticationMethod = "certificate" | "usernameAndPassword" | "customEapXml"
@@ -355,10 +359,12 @@ export type ManagedAppClipboardSharingLevel = "allApps" | "managedAppsWithPasteI
 export type ManagedAppRemediationAction = "block" | "wipe" | "warn"
 export type ManagedAppPinCharacterSet = "numeric" | "alphanumericAndSymbol"
 export type ManagedAppDataEncryptionType = "useDeviceSettings" | "afterDeviceRestart" | "whenDeviceLockedExceptOpenFiles" | "whenDeviceLocked"
+export type AndroidManagedAppSafetyNetDeviceAttestationType = "none" | "basicIntegrity" | "basicIntegrityAndDeviceCertification"
+export type AndroidManagedAppSafetyNetAppsVerificationType = "none" | "enabled"
 export type AppManagementLevel = "unspecified" | "unmanaged" | "mdm" | "androidEnterprise"
 export type WindowsInformationProtectionEnforcementLevel = "noProtection" | "encryptAndAuditOnly" | "encryptAuditAndPrompt" | "encryptAuditAndBlock"
 export type WindowsInformationProtectionPinCharacterRequirements = "notAllow" | "requireAtLeastOne" | "allow"
-export type ManagedAppFlaggedReason = "none" | "rootedDevice"
+export type ManagedAppFlaggedReason = "none" | "rootedDevice" | "androidBootloaderUnlocked" | "androidFactoryRomModified"
 export type NotificationTemplateBrandingOptions = "none" | "includeCompanyLogo" | "includeCompanyName" | "includeContactInformation"
 export type RoleAssignmentScopeType = "resourceScope" | "allDevices" | "allLicensedUsers" | "allDevicesAndLicensedUsers"
 export type EmbeddedSIMDeviceStateValue = "notEvaluated" | "failed" | "installing" | "installed" | "deleting" | "error" | "deleted" | "removedByUser"
@@ -366,6 +372,7 @@ export type InstallState = "notApplicable" | "installed" | "failed" | "notInstal
 export type WindowsAutopilotSyncStatus = "unknown" | "inProgress" | "completed" | "failed"
 export type WindowsUserType = "administrator" | "standard"
 export type WindowsDeviceUsageType = "singleUser" | "shared"
+export type WindowsAutopilotDeviceType = "windowsPc" | "surfaceHub2"
 export type WindowsAutopilotProfileAssignmentStatus = "unknown" | "assignedInSync" | "assignedOutOfSync" | "assignedUnkownSyncState" | "notAssigned" | "pending" | "failed"
 export type WindowsAutopilotProfileAssignmentDetailedStatus = "none" | "hardwareRequirementsNotMet"
 export type EnrollmentState = "unknown" | "enrolled" | "pendingReset" | "failed" | "notContacted" | "blocked"
@@ -450,9 +457,11 @@ export type UserPfxIntendedPurpose = "unassigned" | "smimeEncryption" | "smimeSi
 export type UserPfxPaddingScheme = "none" | "pkcs1" | "oaepSha1" | "oaepSha256" | "oaepSha384" | "oaepSha512"
 export type Priority = "None" | "High" | "Low"
 export type GroupPolicyConfigurationType = "policy" | "preference"
-export type GroupPolicyDefinitionClassType = "user" | "machine" | "both"
+export type GroupPolicyDefinitionClassType = "user" | "machine"
 export type GroupPolicyType = "admxBacked" | "admxIngested"
 export type ActivityDomain = "unknown" | "work" | "personal" | "unrestricted"
+export type ScheduleEntityTheme = "white" | "blue" | "green" | "purple" | "pink" | "yellow" | "gray" | "darkBlue" | "darkGreen" | "darkPurple" | "darkPink" | "darkYellow" | "unknownFutureValue"
+export type TimeOffReasonIconType = "none" | "car" | "calendar" | "running" | "plane" | "firstAid" | "doctor" | "notWorking" | "clock" | "juryDuty" | "globe" | "cup" | "phone" | "weather" | "umbrella" | "piggyBank" | "dog" | "cake" | "trafficCone" | "pin" | "sunny" | "unknownFutureValue"
 
 export interface Entity {
 
@@ -2647,6 +2656,8 @@ export interface Team extends Entity {
 	    /** Whether this team is in read-only mode. */
 		isArchived?: boolean
 
+		schedule?: Schedule
+
 		template?: TeamsTemplate
 
 	    /** The collection of channels &amp; messages associated with the team. */
@@ -3600,6 +3611,7 @@ export interface DriveItem extends BaseItem {
 	    /** The set of permissions for the item. Read-only. Nullable. */
 		permissions?: Permission[]
 
+	    /** The set of subscriptions on the item. Only supported on the root of a drive. */
 		subscriptions?: Subscription[]
 
 	    /** Collection containing [ThumbnailSet][] objects associated with the item. For more info, see [getting thumbnails][]. Read-only. Nullable. */
@@ -6266,7 +6278,7 @@ export interface DeviceManagementScript extends Entity {
 	    /** The date and time the device management script was last modified. */
 		lastModifiedDateTime?: string
 
-	    /** Indicates the type of execution context the device management script runs in. */
+	    /** Indicates the type of execution context. */
 		runAsAccount?: RunAsAccountType
 
 	    /** Indicate whether the script signature needs be checked. */
@@ -7246,6 +7258,21 @@ export interface WindowsAutopilotDeviceIdentity extends Entity {
 	    /** User Principal Name. */
 		userPrincipalName?: string
 
+	    /** Resource Name. */
+		resourceName?: string
+
+	    /** SKU Number */
+		skuNumber?: string
+
+	    /** System Family */
+		systemFamily?: string
+
+	    /** AAD Device ID */
+		azureActiveDirectoryDeviceId?: string
+
+	    /** Managed Device ID */
+		managedDeviceId?: string
+
 	    /** Deployment profile currently assigned to the Windows autopilot device. */
 		deploymentProfile?: WindowsAutopilotDeploymentProfile
 
@@ -7282,6 +7309,9 @@ export interface WindowsAutopilotDeploymentProfile extends Entity {
 
 	    /** The template used to name the AutoPilot Device. This can be a custom text and can also contain either the serial number of the device, or a randomly generated number. The total length of the text generated by the template can be no more than 15 characters. */
 		deviceNameTemplate?: string
+
+	    /** The AutoPilot device type that this profile is applicable to. */
+		deviceType?: WindowsAutopilotDeviceType
 
 	    /** Enable Autopilot White Glove for the profile. */
 		enableWhiteGlove?: boolean
@@ -7881,6 +7911,9 @@ export interface IosLobAppProvisioningConfiguration extends Entity {
 	    /** Payload. (UTF8 encoded byte array) */
 		payload?: number
 
+	    /** List of Scope Tags for this iOS LOB app provisioning configuration entity. */
+		roleScopeTagIds?: string[]
+
 	    /** DateTime the object was created. */
 		createdDateTime?: string
 
@@ -8172,6 +8205,9 @@ export interface ManagedAppProtection extends ManagedAppPolicy {
 	    /** Timeout in minutes for an app pin instead of non biometrics passcode */
 		pinRequiredInsteadOfBiometricTimeout?: string
 
+	    /** Specify the number of characters that may be cut or copied from Org data and accounts to any application. This setting overrides the AllowedOutboundClipboardSharingLevel restriction. Default value of '0' means no exception is allowed. */
+		allowedOutboundClipboardSharingExceptionLength?: number
+
 }
 
 export interface TargetedManagedAppProtection extends ManagedAppProtection {
@@ -8265,6 +8301,18 @@ export interface AndroidManagedAppProtection extends TargetedManagedAppProtectio
 	    /** Defines a managed app behavior, either block or wipe, if the specified device manufacturer is not allowed. */
 		appActionIfAndroidDeviceManufacturerNotAllowed?: ManagedAppRemediationAction
 
+	    /** Defines the Android SafetyNet Device Attestation requirement for a managed app to work. */
+		requiredAndroidSafetyNetDeviceAttestationType?: AndroidManagedAppSafetyNetDeviceAttestationType
+
+	    /** Defines a managed app behavior, either warn or block, if the specified Android SafetyNet Attestation requirment fails. */
+		appActionIfAndroidSafetyNetDeviceAttestationFailed?: ManagedAppRemediationAction
+
+	    /** Defines the Android SafetyNet Apps Verification requirement for a managed app to work. */
+		requiredAndroidSafetyNetAppsVerificationType?: AndroidManagedAppSafetyNetAppsVerificationType
+
+	    /** Defines a managed app behavior, either warn or block, if the specified Android App Verification requirment fails. */
+		appActionIfAndroidSafetyNetAppsVerificationFailed?: ManagedAppRemediationAction
+
 	    /** List of apps to which the policy is deployed. */
 		apps?: ManagedMobileApp[]
 
@@ -8340,6 +8388,18 @@ export interface DefaultManagedAppProtection extends ManagedAppProtection {
 
 	    /** Protect incoming data from unknown source. This setting is only allowed to be True when AllowedInboundDataTransferSources is set to AllApps. (iOS Only) */
 		protectInboundDataFromUnknownSources?: boolean
+
+	    /** Defines the Android SafetyNet Device Attestation requirement for a managed app to work. */
+		requiredAndroidSafetyNetDeviceAttestationType?: AndroidManagedAppSafetyNetDeviceAttestationType
+
+	    /** Defines a managed app behavior, either warn or block, if the specified Android SafetyNet Attestation requirment fails. */
+		appActionIfAndroidSafetyNetDeviceAttestationFailed?: ManagedAppRemediationAction
+
+	    /** Defines the Android SafetyNet Apps Verification requirement for a managed app to work. */
+		requiredAndroidSafetyNetAppsVerificationType?: AndroidManagedAppSafetyNetAppsVerificationType
+
+	    /** Defines a managed app behavior, either warn or block, if the specified Android App Verification requirment fails. */
+		appActionIfAndroidSafetyNetAppsVerificationFailed?: ManagedAppRemediationAction
 
 	    /** List of apps to which the policy is deployed. */
 		apps?: ManagedMobileApp[]
@@ -9397,6 +9457,9 @@ export interface AndroidManagedStoreApp extends MobileApp {
 	    /** The Play for Work Store app URL. */
 		appStoreUrl?: string
 
+	    /** Whether this app supports OEMConfig policy. */
+		supportsOemConfig?: boolean
+
 }
 
 export interface MacOsVppApp extends MobileApp {
@@ -9573,6 +9636,9 @@ export interface AndroidManagedStoreAppConfiguration extends ManagedDeviceMobile
 
 	    /** List of Android app permissions and corresponding permission actions. */
 		permissionActions?: AndroidPermissionAction[]
+
+	    /** Whether or not this AppConfig is an OEMConfig policy. */
+		appSupportsOemConfig?: boolean
 
 }
 
@@ -10298,6 +10364,12 @@ export interface WindowsUpdateForBusinessConfiguration extends DeviceConfigurati
 	    /** Specifies whether to enable end userâ€™s access to pause software updates. */
 		userPauseAccess?: Enablement
 
+	    /** Specifies whether to disable userâ€™s access to scan Windows Update. */
+		userWindowsUpdateScanAccess?: Enablement
+
+	    /** Specifies what Windows Update notifications users see. */
+		updateNotificationLevel?: WindowsUpdateNotificationDisplayOption
+
 }
 
 export interface WindowsPrivacyDataAccessControlItem extends Entity {
@@ -10335,6 +10407,82 @@ export interface WindowsAssignedAccessProfile extends Entity {
 
 	    /** Allows admins to override the default Start layout and prevents the user from changing it.Â The layout is modified by specifying an XML file based on a layout modification schema. XML needs to be in Binary format. */
 		startMenuLayoutXml?: number
+
+}
+
+export interface ManagedDeviceCertificateState extends Entity {
+
+	    /** Device platform */
+		devicePlatform?: DevicePlatformType
+
+	    /** Key usage */
+		certificateKeyUsage?: KeyUsages
+
+	    /** Validity period units */
+		certificateValidityPeriodUnits?: CertificateValidityPeriodScale
+
+	    /** Issuance State */
+		certificateIssuanceState?: CertificateIssuanceStates
+
+	    /** Key Storage Provider */
+		certificateKeyStorageProvider?: KeyStorageProviderOption
+
+	    /** Subject name format */
+		certificateSubjectNameFormat?: SubjectNameFormat
+
+	    /** Subject alternative name format */
+		certificateSubjectAlternativeNameFormat?: SubjectAlternativeNameType
+
+	    /** Revoke status */
+		certificateRevokeStatus?: CertificateRevocationStatus
+
+	    /** Certificate profile display name */
+		certificateProfileDisplayName?: string
+
+	    /** Device display name */
+		deviceDisplayName?: string
+
+	    /** User display name */
+		userDisplayName?: string
+
+	    /** Certificate expiry date */
+		certificateExpirationDateTime?: string
+
+	    /** Last certificate issuance state change */
+		certificateLastIssuanceStateChangedDateTime?: string
+
+	    /** Last certificate issuance state change */
+		lastCertificateStateChangeDateTime?: string
+
+	    /** Issuer */
+		certificateIssuer?: string
+
+	    /** Thumbprint */
+		certificateThumbprint?: string
+
+	    /** Serial number */
+		certificateSerialNumber?: string
+
+	    /** Key length */
+		certificateKeyLength?: number
+
+	    /** Extended key usage */
+		certificateEnhancedKeyUsage?: string
+
+	    /** Validity period */
+		certificateValidityPeriod?: number
+
+	    /** Subject name format string for custom subject name formats */
+		certificateSubjectNameFormatString?: string
+
+	    /** Subject alternative name format string for custom formats */
+		certificateSubjectAlternativeNameFormatString?: string
+
+	    /** Issuance date */
+		certificateIssuanceDateTime?: string
+
+	    /** Error code */
+		certificateErrorCode?: number
 
 }
 
@@ -10587,82 +10735,6 @@ export interface AndroidForWorkPkcsCertificateProfile extends AndroidForWorkCert
 
 	    /** Certificate state for devices */
 		managedDeviceCertificateStates?: ManagedDeviceCertificateState[]
-
-}
-
-export interface ManagedDeviceCertificateState extends Entity {
-
-	    /** Device platform */
-		devicePlatform?: DevicePlatformType
-
-	    /** Key usage */
-		certificateKeyUsage?: KeyUsages
-
-	    /** Validity period units */
-		certificateValidityPeriodUnits?: CertificateValidityPeriodScale
-
-	    /** Issuance State */
-		certificateIssuanceState?: CertificateIssuanceStates
-
-	    /** Key Storage Provider */
-		certificateKeyStorageProvider?: KeyStorageProviderOption
-
-	    /** Subject name format */
-		certificateSubjectNameFormat?: SubjectNameFormat
-
-	    /** Subject alternative name format */
-		certificateSubjectAlternativeNameFormat?: SubjectAlternativeNameType
-
-	    /** Revoke status */
-		certificateRevokeStatus?: CertificateRevocationStatus
-
-	    /** Certificate profile display name */
-		certificateProfileDisplayName?: string
-
-	    /** Device display name */
-		deviceDisplayName?: string
-
-	    /** User display name */
-		userDisplayName?: string
-
-	    /** Certificate expiry date */
-		certificateExpirationDateTime?: string
-
-	    /** Last certificate issuance state change */
-		certificateLastIssuanceStateChangedDateTime?: string
-
-	    /** Last certificate issuance state change */
-		lastCertificateStateChangeDateTime?: string
-
-	    /** Issuer */
-		certificateIssuer?: string
-
-	    /** Thumbprint */
-		certificateThumbprint?: string
-
-	    /** Serial number */
-		certificateSerialNumber?: string
-
-	    /** Key length */
-		certificateKeyLength?: number
-
-	    /** Extended key usage */
-		certificateEnhancedKeyUsage?: string
-
-	    /** Validity period */
-		certificateValidityPeriod?: number
-
-	    /** Subject name format string for custom subject name formats */
-		certificateSubjectNameFormatString?: string
-
-	    /** Subject alternative name format string for custom formats */
-		certificateSubjectAlternativeNameFormatString?: string
-
-	    /** Issuance date */
-		certificateIssuanceDateTime?: string
-
-	    /** Error code */
-		certificateErrorCode?: number
 
 }
 
@@ -12911,6 +12983,9 @@ export interface Windows10EndpointProtectionConfiguration extends DeviceConfigur
 	    /** This policy is intended to provide additional security against external DMA capable devices. It allows for more control over the enumeration of external DMA capable devices incompatible with DMA Remapping/device memory isolation and sandboxing. This policy only takes effect when Kernel DMA Protection is supported and enabled by the system firmware. Kernel DMA Protection is a platform feature that cannot be controlled via policy or by end user. It has to be supported by the system at the time of manufacturing. To check if the system supports Kernel DMA Protection, please check the Kernel DMA Protection field in the Summary page of MSINFO32.exe. */
 		dmaGuardDeviceEnumerationPolicy?: DmaGuardDeviceEnumerationPolicyType
 
+	    /** Configures the firewall rule settings. This collection can contain a maximum of 150 elements. */
+		firewallRules?: WindowsFirewallRule[]
+
 	    /** This user right is used by Credential Manager during Backup/Restore. Users' saved credentials might be compromised if this privilege is given to other entities. Only states NotConfigured and Allowed are supported */
 		userRightsAccessCredentialManagerAsTrustedCaller?: DeviceManagementUserRightsSetting
 
@@ -13449,6 +13524,9 @@ export interface Windows10GeneralConfiguration extends DeviceConfiguration {
 	    /** Allows secondary authentication devices to work with Windows. */
 		authenticationAllowSecondaryDevice?: boolean
 
+	    /** Indicates whether or not Web Credential Provider will be enabled. */
+		authenticationWebSignIn?: Enablement
+
 	    /** Specifies the preferred domain among available domains in the Azure AD tenant. */
 		authenticationPreferredAzureADTenantDomainName?: string
 
@@ -13797,9 +13875,6 @@ export interface Windows10GeneralConfiguration extends DeviceConfiguration {
 	    /** Allows or disallows Windows Defender On Access Protection functionality. */
 		defenderBlockOnAccessProtection?: boolean
 
-	    /** Selects the day that the Windows Defender scan should run. */
-		defenderScheduleScanDay?: DefenderScheduleScanDay
-
 	    /** Checks for the user consent level in Windows Defender to send data. */
 		defenderSubmitSamplesConsentType?: DefenderSubmitSamplesConsentType
 
@@ -13856,6 +13931,9 @@ export interface Windows10GeneralConfiguration extends DeviceConfiguration {
 
 	    /** Indicates whether or not to allow the automatic acceptance of the pairing and privacy user consent dialog when launching apps. */
 		privacyAutoAcceptPairingAndConsentPrompts?: boolean
+
+	    /** This policy prevents the privacy experience from launching during user logon for new and upgraded users.â€‹ */
+		privacyDisableLaunchExperience?: boolean
 
 	    /** Indicates whether or not to block the usage of cloud based speech services for Cortana, Dictation, or Store applications. */
 		privacyBlockInputPersonalization?: boolean
@@ -14226,6 +14304,9 @@ export interface Windows10GeneralConfiguration extends DeviceConfiguration {
 	    /** This policy setting allows you to block direct memory access (DMA) for all hot pluggable PCI downstream ports until a user logs into Windows. */
 		dataProtectionBlockDirectMemoryAccess?: boolean
 
+	    /** List of semi-colon delimited Package Family Names of Windows apps. Listed Windows apps are to be launched after logon.â€‹ */
+		appManagementPackageFamilyNamesToLaunchAfterLogOn?: string[]
+
 	    /** Indicates a list of applications with their access control levels over privacy data categories, and/or the default access levels per category. */
 		privacyAccessControls?: WindowsPrivacyDataAccessControlItem[]
 
@@ -14335,6 +14416,16 @@ export interface WindowsDeliveryOptimizationConfiguration extends DeviceConfigur
 
 }
 
+export interface WindowsHealthMonitoringConfiguration extends DeviceConfiguration {
+
+	    /** Enables device health monitoring on the device */
+		allowDeviceHealthMonitoring?: Enablement
+
+	    /** Sepcifies set of events collected from the device where health monitoring is enabled */
+		configDeviceHealthMonitoringScope?: WindowsHealthMonitoringScope
+
+}
+
 export interface WindowsIdentityProtectionConfiguration extends DeviceConfiguration {
 
 	    /** Boolean value used to enable the Windows Hello security key as a logon credential. */
@@ -14410,9 +14501,6 @@ export interface WindowsKioskConfiguration extends DeviceConfiguration {
 	    /** Enable public browsing kiosk mode for the Microsoft Edge browser. The Default is false. */
 		edgeKioskEnablePublicBrowsing?: boolean
 
-	    /** Specifies the time in minutes from the last user activity before Microsoft Edge kiosk resets.  Valid values are 0-1440. The default is 5. 0 indicates no reset. Valid values 0 to 1440 */
-		edgeKioskResetAfterIdleTimeInMinutes?: number
-
 }
 
 export interface Windows10EnterpriseModernAppManagementConfiguration extends DeviceConfiguration {
@@ -14474,6 +14562,9 @@ export interface SharedPCConfiguration extends DeviceConfiguration {
 
 	    /** Specifies the daily start time of maintenance hour. */
 		maintenanceStartTime?: string
+
+	    /** Specifies whether to auto connect new non-admin Azure AD accounts to pre-configured candidate local accounts */
+		fastFirstSignIn?: Enablement
 
 }
 
@@ -15709,6 +15800,9 @@ export interface Windows10CompliancePolicy extends DeviceCompliancePolicy {
 	    /** Require to consider SCCM Compliance state into consideration for Intune Compliance State. */
 		configurationManagerComplianceRequired?: boolean
 
+	    /** Require Trusted Platform Module(TPM) to be present. */
+		tpmRequired?: boolean
+
 }
 
 export interface Windows10MobileCompliancePolicy extends DeviceCompliancePolicy {
@@ -16514,6 +16608,12 @@ export interface DepMacOSEnrollmentProfile extends DepEnrollmentBaseProfile {
 
 	    /** Indicates if iCloud Analytics screen is disabled */
 		iCloudDiagnosticsDisabled?: boolean
+
+	    /** Indicates if iCloud Documents and Desktop screen is disabled */
+		iCloudStorageDisabled?: boolean
+
+	    /** Indicates if iCloud Documents and Desktop screen is disabled */
+		chooseYourLockScreenDisabled?: boolean
 
 }
 
@@ -18054,6 +18154,26 @@ export interface TeamsApp extends Entity {
 
 }
 
+export interface Schedule extends Entity {
+
+		enabled?: boolean
+
+		timeZone?: string
+
+		provisionStatus?: OperationStatus
+
+		provisionStatusCode?: string
+
+		shifts?: Shift[]
+
+		timesOff?: TimeOff[]
+
+		timeOffReasons?: TimeOffReason[]
+
+		schedulingGroups?: SchedulingGroup[]
+
+}
+
 export interface TeamsTemplate extends Entity {
 
 }
@@ -18127,7 +18247,7 @@ export interface ChatMessage extends Entity {
 
 		lastModifiedDateTime?: string
 
-		deleted?: boolean
+		deletedDateTime?: string
 
 		subject?: string
 
@@ -18183,17 +18303,23 @@ export interface TeamsTab extends Entity {
 
 export interface IdentityProvider extends Entity {
 
-	    /** The identity provider type. It must be one of the following values for B2C scenarios: MicrosoftGoogleAmazonLinkedInFacebookGitHubTwitterWeiboQQWeChatFor B2B scenarios, the value must be Google. */
 		type?: string
 
-	    /** The display name of the identity provider. */
 		name?: string
 
-	    /** The client ID for the application. This is the client ID obtained when registering the application with the identity provider. */
 		clientId?: string
 
-	    /** The client secret for the application. This is the client secret obtained when registering the application with the identity provider. This is write-only. A read operation will return '****'. */
 		clientSecret?: string
+
+}
+
+export interface TrustFramework extends Entity {
+
+		policies?: TrustFrameworkPolicy[]
+
+}
+
+export interface TrustFrameworkPolicy extends Entity {
 
 }
 
@@ -20668,6 +20794,58 @@ export interface TaxArea extends Entity {
 		taxType?: string
 
 		lastModifiedDateTime?: string
+
+}
+
+export interface ChangeTrackedEntity extends Entity {
+
+		createdDateTime?: string
+
+		lastModifiedDateTime?: string
+
+		lastModifiedBy?: IdentitySet
+
+}
+
+export interface Shift extends ChangeTrackedEntity {
+
+		sharedShift?: ShiftItem
+
+		draftShift?: ShiftItem
+
+		userId?: string
+
+		schedulingGroupId?: string
+
+}
+
+export interface TimeOff extends ChangeTrackedEntity {
+
+		sharedTimeOff?: TimeOffItem
+
+		draftTimeOff?: TimeOffItem
+
+		userId?: string
+
+}
+
+export interface TimeOffReason extends ChangeTrackedEntity {
+
+		displayName?: string
+
+		iconType?: TimeOffReasonIconType
+
+		isActive?: boolean
+
+}
+
+export interface SchedulingGroup extends ChangeTrackedEntity {
+
+		displayName?: string
+
+		isActive?: boolean
+
+		userIds?: string[]
 
 }
 export interface MeetingParticipants {
@@ -23937,6 +24115,9 @@ export interface ExcludedApps {
 	    /** The value for if MS Office SharePointDesigner should be excluded or not. */
 		sharePointDesigner?: boolean
 
+	    /** The value for if MS Office Teams should be excluded or not. */
+		teams?: boolean
+
 	    /** The value for if MS Office Visio should be excluded or not. */
 		visio?: boolean
 
@@ -24120,7 +24301,7 @@ export interface Win32LobAppFileSystemDetection extends Win32LobAppDetection {
 	    /** The file system detection type */
 		detectionType?: Win32LobAppFileSystemDetectionType
 
-	    /** The operator for file or fodler detection */
+	    /** The operator for file or folder detection */
 		operator?: Win32LobAppDetectionOperator
 
 	    /** The file or folder detection value */
@@ -24733,21 +24914,6 @@ export interface Report {
 		content?: any
 
 }
-export interface AppListItem {
-
-	    /** The application name */
-		name?: string
-
-	    /** The publisher of the application */
-		publisher?: string
-
-	    /** The Store URL of the application */
-		appStoreUrl?: string
-
-	    /** The application or bundle identifier of the application */
-		appId?: string
-
-}
 export interface ExtendedKeyUsage {
 
 	    /** Extended Key Usage Name */
@@ -24764,6 +24930,21 @@ export interface CustomSubjectAlternativeName {
 
 	    /** Custom SAN Name */
 		name?: string
+
+}
+export interface AppListItem {
+
+	    /** The application name */
+		name?: string
+
+	    /** The publisher of the application */
+		publisher?: string
+
+	    /** The Store URL of the application */
+		appStoreUrl?: string
+
+	    /** The application or bundle identifier of the application */
+		appId?: string
 
 }
 export interface OmaSetting {
@@ -25157,6 +25338,75 @@ export interface Windows10VpnProxyServer extends VpnProxyServer {
 
 	    /** Bypass proxy server for local address. */
 		bypassProxyServerForLocalAddress?: boolean
+
+}
+export interface WindowsFirewallRule {
+
+	    /** The display name of the rule. Does not need to be unique. */
+		displayName?: string
+
+	    /** The description of the rule. */
+		description?: string
+
+	    /** The package family name of a Microsoft Store application that's affected by the firewall rule. */
+		packageFamilyName?: string
+
+	    /** The full file path of an app that's affected by the firewall rule. */
+		filePath?: string
+
+	    /** The name used in cases when a service, not an application, is sending or receiving traffic. */
+		serviceName?: string
+
+	    /** 0-255 number representing the IP protocol (TCP = 6, UDP = 17). If not specified, the default is All. Valid values 0 to 255 */
+		protocol?: number
+
+	    /** List of local port ranges. For example, "100-120", "200", "300-320". If not specified, the default is All. */
+		localPortRanges?: string[]
+
+	    /** List of remote port ranges. For example, "100-120", "200", "300-320". If not specified, the default is All. */
+		remotePortRanges?: string[]
+
+	    /** List of local addresses covered by the rule. Valid tokens include:
+- "*" indicates any local address. If present, this must be the only token included.
+- A subnet can be specified using either the subnet mask or network prefix notation. If neither a subnet mask nor a network prefix is specified, the subnet mask defaults to 255.255.255.255.
+- A valid IPv6 address.
+- An IPv4 address range in the format of "start address - end address" with no spaces included.
+- An IPv6 address range in the format of "start address - end address" with no spaces included.
+Default is any address. */
+		localAddressRanges?: string[]
+
+	    /** List of tokens specifying the remote addresses covered by the rule. Tokens are case insensitive. Valid tokens include:
+- "*" indicates any remote address. If present, this must be the only token included.
+- "Defaultgateway"
+- "DHCP"
+- "DNS"
+- "WINS"
+- "Intranet" (supported on Windows versions 1809+)
+- "RmtIntranet" (supported on Windows versions 1809+)
+- "Internet" (supported on Windows versions 1809+)
+- "Ply2Renders" (supported on Windows versions 1809+)
+- "LocalSubnet" indicates any local address on the local subnet.
+- A subnet can be specified using either the subnet mask or network prefix notation. If neither a subnet mask nor a network prefix is specified, the subnet mask defaults to 255.255.255.255.
+- A valid IPv6 address.
+- An IPv4 address range in the format of "start address - end address" with no spaces included.
+- An IPv6 address range in the format of "start address - end address" with no spaces included.
+Default is any address. */
+		remoteAddressRanges?: string[]
+
+	    /** Specifies the profiles to which the rule belongs. If not specified, the default is All. */
+		profileTypes?: WindowsFirewallRuleNetworkProfileTypes
+
+	    /** The action the rule enforces. If not specified, the default is Allowed. */
+		action?: StateManagementSetting
+
+	    /** The traffic direction that the rule is enabled for. If not specified, the default is Out. */
+		trafficDirection?: WindowsFirewallRuleTrafficDirectionType
+
+	    /** The interface types of the rule. */
+		interfaceTypes?: WindowsFirewallRuleInterfaceTypes
+
+	    /** Specifies the list of authorized local users for the app container. This is a string in Security Descriptor Definition Language (SDDL) format. */
+		localUserAuthorizations?: string
 
 }
 export interface DeviceManagementUserRightsSetting {
@@ -25572,6 +25822,9 @@ export interface WindowsKioskMultipleApps extends WindowsKioskAppConfiguration {
 	    /** This setting allows the admin to specify whether the Task Bar is shown or not. */
 		showTaskBar?: boolean
 
+	    /** This setting allows access to Downloads folder in file explorer. */
+		allowAccessToDownloadsFolder?: boolean
+
 	    /** This setting indicates that desktop apps are allowed. Default to true. */
 		disallowDesktopApps?: boolean
 
@@ -25589,6 +25842,9 @@ export interface WindowsKioskAppBase {
 
 	    /** The app type */
 		appType?: WindowsKioskAppType
+
+	    /** Allow the app to be auto-launched in multi-app kiosk mode */
+		autoLaunch?: boolean
 
 }
 export interface WindowsKioskUWPApp extends WindowsKioskAppBase {
@@ -28121,5 +28377,41 @@ export interface PostalAddressType {
 		countryLetterCode?: string
 
 		postalCode?: string
+
+}
+export interface ScheduleEntity {
+
+		startDateTime?: string
+
+		endDateTime?: string
+
+		theme?: ScheduleEntityTheme
+
+}
+export interface ShiftActivity {
+
+		isPaid?: boolean
+
+		startDateTime?: string
+
+		endDateTime?: string
+
+		code?: string
+
+		displayName?: string
+
+}
+export interface ShiftItem extends ScheduleEntity {
+
+		displayName?: string
+
+		notes?: string
+
+		activities?: ShiftActivity[]
+
+}
+export interface TimeOffItem extends ScheduleEntity {
+
+		timeOffReasonId?: string
 
 }
