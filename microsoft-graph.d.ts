@@ -104,17 +104,19 @@ export type InstallIntent = "available" | "required" | "uninstall" | "availableW
 export type Win32LobAppNotification = "showAll" | "showReboot" | "hideAll"
 export type MobileAppPublishingState = "notPublished" | "processing" | "published"
 export type ResultantAppState = "installed" | "failed" | "notInstalled" | "uninstallFailed" | "pendingInstall" | "unknown" | "notApplicable"
-export type ResultantAppStateDetail = "noAdditionalDetails" | "seeInstallErrorCode" | "seeUninstallErrorCode" | "pendingReboot" | "platformNotApplicable" | "minimumCpuSpeedNotMet" | "minimumLogicalProcessorCountNotMet" | "minimumPhysicalMemoryNotMet" | "minimumOsVersionNotMet" | "minimumDiskSpaceNotMet" | "processorArchitectureNotApplicable"
+export type ResultantAppStateDetail = "noAdditionalDetails" | "dependencyFailedToInstall" | "dependencyWithRequirementsNotMet" | "dependencyPendingReboot" | "dependencyWithAutoInstallDisabled" | "seeInstallErrorCode" | "autoInstallDisabled" | "seeUninstallErrorCode" | "pendingReboot" | "installingDependencies" | "powerShellScriptRequirementNotMet" | "registryRequirementNotMet" | "fileSystemRequirementNotMet" | "platformNotApplicable" | "minimumCpuSpeedNotMet" | "minimumLogicalProcessorCountNotMet" | "minimumPhysicalMemoryNotMet" | "minimumOsVersionNotMet" | "minimumDiskSpaceNotMet" | "processorArchitectureNotApplicable"
+export type MobileAppDependecyType = "detect" | "autoInstall"
 export type OfficeProductId = "o365ProPlusRetail" | "o365BusinessRetail" | "visioProRetail" | "projectProRetail"
 export type OfficeUpdateChannel = "none" | "current" | "deferred" | "firstReleaseCurrent" | "firstReleaseDeferred"
 export type WindowsArchitecture = "none" | "x86" | "x64" | "arm" | "neutral" | "arm64"
 export type OfficeSuiteInstallProgressDisplayLevel = "none" | "full"
 export type ManagedAppAvailability = "global" | "lineOfBusiness"
 export type MobileAppContentFileUploadState = "success" | "transientError" | "error" | "unknown" | "azureStorageUriRequestSuccess" | "azureStorageUriRequestPending" | "azureStorageUriRequestFailed" | "azureStorageUriRequestTimedOut" | "azureStorageUriRenewalSuccess" | "azureStorageUriRenewalPending" | "azureStorageUriRenewalFailed" | "azureStorageUriRenewalTimedOut" | "commitFileSuccess" | "commitFilePending" | "commitFileFailed" | "commitFileTimedOut"
-export type Win32LobAppFileSystemDetectionType = "notConfigured" | "exists" | "modifiedDate" | "createdDate" | "version" | "sizeInMB"
+export type Win32LobAppFileSystemDetectionType = "notConfigured" | "exists" | "modifiedDate" | "createdDate" | "version" | "sizeInMB" | "doesNotExist"
 export type Win32LobAppDetectionOperator = "notConfigured" | "equal" | "notEqual" | "greaterThan" | "greaterThanOrEqual" | "lessThan" | "lessThanOrEqual"
 export type Win32LobAppRegistryDetectionType = "notConfigured" | "exists" | "doesNotExist" | "string" | "integer" | "version"
 export type RunAsAccountType = "system" | "user"
+export type Win32LobAppPowerShellScriptDetectionType = "notConfigured" | "string" | "dateTime" | "integer" | "float" | "version" | "boolean"
 export type Win32LobAppReturnCodeType = "failed" | "success" | "softReboot" | "hardReboot" | "retry"
 export type Win32LobAppMsiPackageType = "perMachine" | "perUser" | "dualPurpose"
 export type WindowsDeviceType = "none" | "desktop" | "mobile" | "holographic" | "team"
@@ -152,10 +154,10 @@ export type WindowsMalwareState = "unknown" | "detected" | "cleaned" | "quaranti
 export type WindowsMalwareThreatState = "active" | "actionFailed" | "manualStepsRequired" | "fullScanRequired" | "rebootRequired" | "remediatedWithNonCriticalFailures" | "quarantined" | "removed" | "cleaned" | "allowed" | "noStatusCleared"
 export type ManagedDevicePartnerReportedHealthState = "unknown" | "activated" | "deactivated" | "secured" | "lowSeverity" | "mediumSeverity" | "highSeverity" | "unresponsive" | "compromised" | "misconfigured"
 export type ConfigurationManagerClientState = "unknown" | "installed" | "healthy" | "installFailed" | "updateFailed" | "communicationError"
+export type AppLogUploadState = "pending" | "completed" | "failed"
 export type DeviceManagementSubscriptionState = "pending" | "active" | "warning" | "disabled" | "deleted" | "blocked" | "lockedOut"
 export type DeviceManagementSubscriptions = "none" | "intune" | "office365" | "intunePremium" | "intune_EDU" | "intune_SMB"
 export type AdminConsentState = "notConfigured" | "granted" | "notGranted"
-export type AppLogUploadState = "pending" | "completed" | "failed"
 export type HealthState = "unknown" | "healthy" | "unhealthy"
 export type AppLogDecryptionAlgorithm = "aes256"
 export type AdministratorConfiguredDeviceComplianceState = "basedOnDeviceCompliancePolicy" | "nonCompliant"
@@ -176,6 +178,7 @@ export type AndroidDeviceOwnerAppAutoUpdatePolicyType = "notConfigured" | "userC
 export type AndroidDeviceOwnerDefaultAppPermissionPolicyType = "deviceDefault" | "prompt" | "autoGrant" | "autoDeny"
 export type AndroidKeyguardFeature = "notConfigured" | "camera" | "notifications" | "unredactedNotifications" | "trustAgents" | "fingerprint" | "remoteInput" | "allFeatures"
 export type AndroidDeviceOwnerRequiredPasswordType = "deviceDefault" | "required" | "numeric" | "numericComplex" | "alphabetic" | "alphanumeric" | "alphanumericWithSymbols" | "lowSecurityBiometric"
+export type AndroidDeviceOwnerPlayStoreMode = "notConfigured" | "allowList" | "blockList"
 export type AndroidDeviceOwnerBatteryPluggedMode = "notConfigured" | "ac" | "usb" | "wireless"
 export type AndroidDeviceOwnerSystemUpdateInstallType = "deviceDefault" | "postpone" | "windowed" | "automatic"
 export type AndroidDeviceOwnerWiFiSecurityType = "open" | "wep" | "wpaPersonal"
@@ -860,6 +863,8 @@ export interface User extends DirectoryObject {
 
 	    /** true if the Outlook global address list should contain this user, otherwise false. If not set, this will be treated as true. For users invited through the invitation manager, this property will be set to false. */
 		showInAddressList?: boolean
+
+		signInSessionsValidFromDateTime?: string
 
 	    /** The state or province in the user's address. Supports $filter. */
 		state?: string
@@ -2248,6 +2253,9 @@ export interface ManagedDevice extends Entity {
 
 	    /** The device protection status. */
 		windowsProtectionState?: WindowsProtectionState
+
+	    /** The primary users associated with the managed device. */
+		users?: User[]
 
 	    /** Device compliance policy states for this device. */
 		deviceCompliancePolicyStates?: DeviceCompliancePolicyState[]
@@ -7277,8 +7285,11 @@ export interface WindowsAutopilotDeviceIdentity extends Entity {
 	    /** Profile set time of the Windows autopilot device. */
 		deploymentProfileAssignedDateTime?: string
 
-	    /** Order Identifier of the Windows autopilot device. */
+	    /** Order Identifier of the Windows autopilot device - Deprecated */
 		orderIdentifier?: string
+
+	    /** Group Tag of the Windows autopilot device. */
+		groupTag?: string
 
 	    /** Purchase Order Identifier of the Windows autopilot device. */
 		purchaseOrderIdentifier?: string
@@ -7476,6 +7487,9 @@ export interface ImportedWindowsAutopilotDeviceIdentity extends Entity {
 
 	    /** Product Key of the Windows autopilot device. */
 		productKey?: string
+
+	    /** The Import Id of the Windows autopilot device. */
+		importId?: string
 
 	    /** Hardware Blob of the Windows autopilot device. */
 		hardwareIdentifier?: number
@@ -7991,6 +8005,9 @@ export interface MobileApp extends Entity {
 	    /** List of scope tag ids for this mobile app. */
 		roleScopeTagIds?: string[]
 
+	    /** The total number of dependencies the child app has. */
+		dependentAppCount?: number
+
 	    /** The list of categories for this app. */
 		categories?: MobileAppCategory[]
 
@@ -8005,6 +8022,9 @@ export interface MobileApp extends Entity {
 
 	    /** The list of installation states for this mobile app. */
 		userStatuses?: UserAppInstallStatus[]
+
+	    /** List of relationships for this mobile app. */
+		relationships?: MobileAppRelationship[]
 
 }
 
@@ -8907,6 +8927,16 @@ export interface UserAppInstallStatus extends Entity {
 
 }
 
+export interface MobileAppRelationship extends Entity {
+
+	    /** The target child mobile app's app id. */
+		targetId?: string
+
+	    /** The target child mobile app's display name. */
+		targetDisplayName?: string
+
+}
+
 export interface MobileAppContentFile extends Entity {
 
 	    /** The Azure Storage URI. */
@@ -9130,6 +9160,16 @@ export interface IosVppAppAssignedLicense extends Entity {
 
 }
 
+export interface MobileAppDependency extends MobileAppRelationship {
+
+	    /** The type of dependency relationship between the parent and child apps. */
+		dependencyType?: MobileAppDependecyType
+
+	    /** The total number of dependencies the child app has. */
+		dependentAppCount?: number
+
+}
+
 export interface MacOSOfficeSuiteApp extends MobileApp {
 
 }
@@ -9348,6 +9388,9 @@ export interface Win32LobApp extends MobileLobApp {
 
 	    /** The detection rules to detect Win32 Line of Business (LoB) app. */
 		detectionRules?: Win32LobAppDetection[]
+
+	    /** The requirement rules to detect Win32 Line of Business (LoB) app. */
+		requirementRules?: Win32LobAppRequirement[]
 
 	    /** The install experience for this app. */
 		installExperience?: Win32LobAppInstallExperience
@@ -10698,6 +10741,12 @@ export interface AndroidDeviceOwnerGeneralDeviceConfiguration extends DeviceConf
 	    /** Whether or not to display a virtual home button when the device is in Kiosk Mode. */
 		kioskModeVirtualHomeButtonEnabled?: boolean
 
+	    /** Whether or not to allow a user to configure Bluetooth settings in Kiosk Mode. */
+		kioskModeBluetoothConfigurationEnabled?: boolean
+
+	    /** Whether or not to allow a user to configure Wi-Fi settings in Kiosk Mode. */
+		kioskModeWiFiConfigurationEnabled?: boolean
+
 	    /** Indicates whether or not to block unmuting the microphone on the device. */
 		microphoneForceMute?: boolean
 
@@ -10719,6 +10768,24 @@ export interface AndroidDeviceOwnerGeneralDeviceConfiguration extends DeviceConf
 	    /** Indicates the minimum length of the password required on the device. Valid values 4 to 16 */
 		passwordMinimumLength?: number
 
+	    /** Indicates the minimum number of letter characters required for device password. Valid values 1 to 16 */
+		passwordMinimumLetterCharacters?: number
+
+	    /** Indicates the minimum number of lower case characters required for device password. Valid values 1 to 16 */
+		passwordMinimumLowerCaseCharacters?: number
+
+	    /** Indicates the minimum number of non-letter characters required for device password. Valid values 1 to 16 */
+		passwordMinimumNonLetterCharacters?: number
+
+	    /** Indicates the minimum number of numeric characters required for device password. Valid values 1 to 16 */
+		passwordMinimumNumericCharacters?: number
+
+	    /** Indicates the minimum number of symbol characters required for device password. Valid values 1 to 16 */
+		passwordMinimumSymbolCharacters?: number
+
+	    /** Indicates the minimum number of upper caseletter characters required for device password. Valid values 1 to 16 */
+		passwordMinimumUpperCaseCharacters?: number
+
 	    /** Milliseconds of inactivity before the screen times out. */
 		passwordMinutesOfInactivityBeforeScreenTimeout?: number
 
@@ -10730,6 +10797,9 @@ export interface AndroidDeviceOwnerGeneralDeviceConfiguration extends DeviceConf
 
 	    /** Indicates the number of times a user can enter an incorrect password before the device is wiped. Valid values 4 to 11 */
 		passwordSignInFailureCountBeforeFactoryReset?: number
+
+	    /** Indicates the Play Store mode of the device. */
+		playStoreMode?: AndroidDeviceOwnerPlayStoreMode
 
 	    /** Indicates whether or not rebooting the device into safe boot is disabled. */
 		safeBootBlocked?: boolean
@@ -10860,6 +10930,9 @@ export interface AndroidForWorkCertificateProfileBase extends DeviceConfiguratio
 	    /** Extended Key Usage (EKU) settings. This collection can contain a maximum of 500 elements. */
 		extendedKeyUsages?: ExtendedKeyUsage[]
 
+	    /** Certificate Subject Alternative Name Type. */
+		subjectAlternativeNameType?: SubjectAlternativeNameType
+
 	    /** Trusted Root Certificate. */
 		rootCertificate?: AndroidForWorkTrustedRootCertificate
 
@@ -10889,9 +10962,6 @@ export interface AndroidForWorkPkcsCertificateProfile extends AndroidForWorkCert
 	    /** Custom String that defines the AAD Attribute. */
 		subjectAlternativeNameFormatString?: string
 
-	    /** Certificate Subject Alternative Name Type. */
-		subjectAlternativeNameType?: SubjectAlternativeNameType
-
 	    /** Certificate state for devices */
 		managedDeviceCertificateStates?: ManagedDeviceCertificateState[]
 
@@ -10920,11 +10990,8 @@ export interface AndroidForWorkScepCertificateProfile extends AndroidForWorkCert
 	    /** Target store certificate */
 		certificateStore?: CertificateStore
 
-	    /** Custom Subject Alterantive Name Settings. This collection can contain a maximum of 500 elements. */
+	    /** Custom Subject Alternative Name Settings. This collection can contain a maximum of 500 elements. */
 		customSubjectAlternativeNames?: CustomSubjectAlternativeName[]
-
-	    /** Certificate Subject Alternative Name Type. */
-		subjectAlternativeNameType?: SubjectAlternativeNameType
 
 	    /** Certificate state for devices */
 		managedDeviceCertificateStates?: ManagedDeviceCertificateState[]
@@ -11557,6 +11624,9 @@ export interface AndroidWorkProfileCertificateProfileBase extends DeviceConfigur
 	    /** Extended Key Usage (EKU) settings. This collection can contain a maximum of 500 elements. */
 		extendedKeyUsages?: ExtendedKeyUsage[]
 
+	    /** Certificate Subject Alternative Name Type. */
+		subjectAlternativeNameType?: SubjectAlternativeNameType
+
 	    /** Trusted Root Certificate. */
 		rootCertificate?: AndroidWorkProfileTrustedRootCertificate
 
@@ -11586,9 +11656,6 @@ export interface AndroidWorkProfilePkcsCertificateProfile extends AndroidWorkPro
 	    /** Custom String that defines the AAD Attribute. */
 		subjectAlternativeNameFormatString?: string
 
-	    /** Certificate Subject Alternative Name Type. */
-		subjectAlternativeNameType?: SubjectAlternativeNameType
-
 }
 
 export interface AndroidWorkProfileScepCertificateProfile extends AndroidWorkProfileCertificateProfileBase {
@@ -11614,11 +11681,8 @@ export interface AndroidWorkProfileScepCertificateProfile extends AndroidWorkPro
 	    /** Target store certificate */
 		certificateStore?: CertificateStore
 
-	    /** Custom Subject Alterantive Name Settings. This collection can contain a maximum of 500 elements. */
+	    /** Custom Subject Alternative Name Settings. This collection can contain a maximum of 500 elements. */
 		customSubjectAlternativeNames?: CustomSubjectAlternativeName[]
-
-	    /** Certificate Subject Alternative Name Type. */
-		subjectAlternativeNameType?: SubjectAlternativeNameType
 
 	    /** Certificate state for devices */
 		managedDeviceCertificateStates?: ManagedDeviceCertificateState[]
@@ -11929,7 +11993,7 @@ export interface IosScepCertificateProfile extends IosCertificateProfileBase {
 	    /** Target store certificate */
 		certificateStore?: CertificateStore
 
-	    /** Custom Subject Alterantive Name Settings. This collection can contain a maximum of 500 elements. */
+	    /** Custom Subject Alternative Name Settings. This collection can contain a maximum of 500 elements. */
 		customSubjectAlternativeNames?: CustomSubjectAlternativeName[]
 
 	    /** Trusted Root Certificate. */
@@ -12667,6 +12731,19 @@ export interface MacOSEndpointProtectionConfiguration extends DeviceConfiguratio
 
 }
 
+export interface MacOSExtensionsConfiguration extends DeviceConfiguration {
+
+	    /** If set to true, users can approve additional kernel extensions not explicitly allowed by configurations profiles. */
+		kernelExtensionOverridesAllowed?: boolean
+
+	    /** All kernel extensions validly signed by the team identifiers in this list will be allowed to load. */
+		kernelExtensionAllowedTeamIdentifiers?: string[]
+
+	    /** A list of kernel extensions that will be allowed to load. . This collection can contain a maximum of 500 elements. */
+		kernelExtensionsAllowed?: MacOSKernelExtension[]
+
+}
+
 export interface MacOSGeneralDeviceConfiguration extends DeviceConfiguration {
 
 	    /** List of apps in the compliance (either allow list or block list, controlled by CompliantAppListType). This collection can contain a maximum of 10000 elements. */
@@ -13053,6 +13130,60 @@ export interface IosDeviceFeaturesConfiguration extends AppleDeviceFeaturesConfi
 }
 
 export interface MacOSDeviceFeaturesConfiguration extends AppleDeviceFeaturesConfigurationBase {
+
+	    /** List of applications, files, folders, and other items to launch when the user logs in. This collection can contain a maximum of 500 elements. */
+		autoLaunchItems?: MacOSLaunchItem[]
+
+	    /** Whether to show admin host information on the login window. */
+		adminShowHostInfo?: boolean
+
+	    /** Custom text to be displayed on the login window. */
+		loginWindowText?: string
+
+	    /** Whether to show the name and password dialog or a list of users on the login window. */
+		authorizedUsersListHidden?: boolean
+
+	    /** Whether to show only network and system users in the authorized users list on the login window. */
+		authorizedUsersListHideLocalUsers?: boolean
+
+	    /** Whether to hide mobile users in the authorized users list on the login window. */
+		authorizedUsersListHideMobileAccounts?: boolean
+
+	    /** Whether to show network users in the authorized users list on the login window. */
+		authorizedUsersListIncludeNetworkUsers?: boolean
+
+	    /** Whether to hide admin users in the authorized users list on the login window. */
+		authorizedUsersListHideAdminUsers?: boolean
+
+	    /** Whether to show other users in the authorized users list on the login window. */
+		authorizedUsersListShowOtherManagedUsers?: boolean
+
+	    /** Whether to hide the Shut Down button item on the login window. */
+		shutDownDisabled?: boolean
+
+	    /** Whether to hide the Restart button item on the login window. */
+		restartDisabled?: boolean
+
+	    /** Whether to hide the Sleep menu item on the login window. */
+		sleepDisabled?: boolean
+
+	    /** Whether the Other user will disregard use of the `&amp;gt;console&amp;gt; special user name. */
+		consoleAccessDisabled?: boolean
+
+	    /** Whether the Shut Down menu item on the login window will be disabled while the user is logged in. */
+		shutDownDisabledWhileLoggedIn?: boolean
+
+	    /** Whether the Restart menu item on the login window will be disabled while the user is logged in. */
+		restartDisabledWhileLoggedIn?: boolean
+
+	    /** Whether the Power Off menu item on the login window will be disabled while the user is logged in. */
+		powerOffDisabledWhileLoggedIn?: boolean
+
+	    /** Whether the Log Out menu item on the login window will be disabled while the user is logged in. */
+		logOutDisabledWhileLoggedIn?: boolean
+
+	    /** Whether to disable the immediate screen lock functions. */
+		screenLockDisableImmediate?: boolean
 
 }
 
@@ -14931,7 +15062,7 @@ export interface Windows81CertificateProfileBase extends WindowsCertificateProfi
 	    /** Extended Key Usage (EKU) settings. This collection can contain a maximum of 500 elements. */
 		extendedKeyUsages?: ExtendedKeyUsage[]
 
-	    /** Custom Subject Alterantive Name Settings. This collection can contain a maximum of 500 elements. */
+	    /** Custom Subject Alternative Name Settings. This collection can contain a maximum of 500 elements. */
 		customSubjectAlternativeNames?: CustomSubjectAlternativeName[]
 
 }
@@ -15504,6 +15635,58 @@ export interface DeviceCompliancePolicyGroupAssignment extends Entity {
 
 }
 
+export interface AndroidDeviceOwnerCompliancePolicy extends DeviceCompliancePolicy {
+
+	    /** Minimum Android version. */
+		osMinimumVersion?: string
+
+	    /** Maximum Android version. */
+		osMaximumVersion?: string
+
+	    /** Minimum Android security patch level. */
+		minAndroidSecurityPatchLevel?: string
+
+	    /** Require a password to unlock device. */
+		passwordRequired?: boolean
+
+	    /** Minimum password length. Valid values 4 to 16 */
+		passwordMinimumLength?: number
+
+	    /** Indicates the minimum number of letter characters required for device password. Valid values 1 to 16 */
+		passwordMinimumLetterCharacters?: number
+
+	    /** Indicates the minimum number of lower case characters required for device password. Valid values 1 to 16 */
+		passwordMinimumLowerCaseCharacters?: number
+
+	    /** Indicates the minimum number of non-letter characters required for device password. Valid values 1 to 16 */
+		passwordMinimumNonLetterCharacters?: number
+
+	    /** Indicates the minimum number of numeric characters required for device password. Valid values 1 to 16 */
+		passwordMinimumNumericCharacters?: number
+
+	    /** Indicates the minimum number of symbol characters required for device password. Valid values 1 to 16 */
+		passwordMinimumSymbolCharacters?: number
+
+	    /** Indicates the minimum number of upper case letter characters required for device password. Valid values 1 to 16 */
+		passwordMinimumUpperCaseCharacters?: number
+
+	    /** Type of characters in password */
+		passwordRequiredType?: AndroidDeviceOwnerRequiredPasswordType
+
+	    /** Minutes of inactivity before a password is required. */
+		passwordMinutesOfInactivityBeforeLock?: number
+
+	    /** Number of days before the password expires. Valid values 1 to 365 */
+		passwordExpirationDays?: number
+
+	    /** Number of previous passwords to block. Valid values 1 to 24 */
+		passwordPreviousPasswordCountToBlock?: number
+
+	    /** Require encryption on Android devices. */
+		storageRequireEncryption?: boolean
+
+}
+
 export interface AndroidForWorkCompliancePolicy extends DeviceCompliancePolicy {
 
 	    /** Require a password to unlock device. */
@@ -15958,9 +16141,6 @@ export interface Windows10CompliancePolicy extends DeviceCompliancePolicy {
 
 	    /** Require to consider SCCM Compliance state into consideration for Intune Compliance State. */
 		configurationManagerComplianceRequired?: boolean
-
-	    /** Require Trusted Platform Module(TPM) to be present. */
-		tpmRequired?: boolean
 
 }
 
@@ -16705,6 +16885,9 @@ export interface DepEnrollmentBaseProfile extends EnrollmentProfile {
 
 	    /** Indicates if privacy screen is disabled */
 		privacyPaneDisabled?: boolean
+
+	    /** Sets a literal or name pattern. */
+		deviceNameTemplate?: string
 
 }
 
@@ -24272,8 +24455,11 @@ export interface IntuneBrand {
 	    /** Boolean that represents whether the administrator-supplied display name will be shown next to the logo image. */
 		showNameNextToLogo?: boolean
 
-	    /** Customized image displayed in Compnay Portal app landing page */
+	    /** Customized image displayed in Company Portal app landing page */
 		landingPageCustomizedImage?: MimeContent
+
+	    /** Custom privacy message. */
+		customPrivacyMessage?: string
 
 	    /** Boolean that represents whether the administrator-supplied display name will be shown next to the logo image. */
 		showDisplayNameNextToLogo?: boolean
@@ -24463,6 +24649,33 @@ export interface IosVppAppRevokeLicensesActionResult {
 
 	    /** Time the action state was last updated */
 		lastUpdatedDateTime?: string
+
+}
+export interface MobileAppRelationshipState {
+
+	    /** The collection of source mobile app's ids. */
+		sourceIds?: string[]
+
+	    /** The related target app's id. */
+		targetId?: string
+
+	    /** The related target app's display name. */
+		targetDisplayName?: string
+
+	    /** The corresponding device id. */
+		deviceId?: string
+
+	    /** The install state of the app of target app. */
+		installState?: ResultantAppState
+
+	    /** The install state detail of the app. */
+		installStateDetail?: ResultantAppStateDetail
+
+	    /** The error code for install or uninstall failures of target app. */
+		errorCode?: number
+
+	    /** The last sync time of the target app. */
+		targetLastSyncDateTime?: string
 
 }
 export interface AllLicensedUsersAssignmentTarget extends DeviceAndAppManagementAssignmentTarget {
@@ -24666,6 +24879,15 @@ export interface WindowsMinimumOperatingSystem {
 export interface Win32LobAppDetection {
 
 }
+export interface Win32LobAppRequirement {
+
+	    /** The operator for detection */
+		operator?: Win32LobAppDetectionOperator
+
+	    /** The detection value */
+		detectionValue?: string
+
+}
 export interface Win32LobAppInstallExperience {
 
 	    /** Indicates the type of execution context the app runs in. */
@@ -24769,6 +24991,57 @@ export interface Win32LobAppPowerShellScriptDetection extends Win32LobAppDetecti
 
 	    /** The base64 encoded script content to detect Win32 Line of Business (LoB) app */
 		scriptContent?: string
+
+}
+export interface Win32LobAppRegistryRequirement extends Win32LobAppRequirement {
+
+	    /** A value indicating whether this registry path is for checking 32-bit app on 64-bit system */
+		check32BitOn64System?: boolean
+
+	    /** The registry key path to detect Win32 Line of Business (LoB) app */
+		keyPath?: string
+
+	    /** The registry value name */
+		valueName?: string
+
+	    /** The registry data detection type */
+		detectionType?: Win32LobAppRegistryDetectionType
+
+}
+export interface Win32LobAppPowerShellScriptRequirement extends Win32LobAppRequirement {
+
+	    /** The unique display name for this rule */
+		displayName?: string
+
+	    /** A value indicating whether signature check is enforced */
+		enforceSignatureCheck?: boolean
+
+	    /** A value indicating whether this script should run as 32-bit */
+		runAs32Bit?: boolean
+
+	    /** Indicates the type of execution context the script runs in. */
+		runAsAccount?: RunAsAccountType
+
+	    /** The base64 encoded script content to detect Win32 Line of Business (LoB) app */
+		scriptContent?: string
+
+	    /** The detection type for script output */
+		detectionType?: Win32LobAppPowerShellScriptDetectionType
+
+}
+export interface Win32LobAppFileSystemRequirement extends Win32LobAppRequirement {
+
+	    /** The file or folder path to detect Win32 Line of Business (LoB) app */
+		path?: string
+
+	    /** The file or folder name to detect Win32 Line of Business (LoB) app */
+		fileOrFolderName?: string
+
+	    /** A value indicating whether this file or folder is for checking 32-bit app on 64-bit system */
+		check32BitOn64System?: boolean
+
+	    /** The file system detection type */
+		detectionType?: Win32LobAppFileSystemDetectionType
 
 }
 export interface MacOSMinimumOperatingSystem {
@@ -25266,6 +25539,12 @@ export interface ResetPasscodeActionResult extends DeviceActionResult {
 		passcode?: string
 
 }
+export interface MobileAppTroubleshootingHistoryItem {
+
+	    /** Time when the history item occurred. */
+		occurrenceDateTime?: string
+
+}
 export interface DeviceOperatingSystemSummary {
 
 	    /** Number of android device count. */
@@ -25312,12 +25591,6 @@ export interface ManagedDeviceModelsAndManufacturers {
 
 	    /** List of Manufactures for managed devices in the account */
 		deviceManufacturers?: string[]
-
-}
-export interface MobileAppTroubleshootingHistoryItem {
-
-	    /** Time when the history item occurred. */
-		occurrenceDateTime?: string
 
 }
 export interface WindowsDeviceADAccount extends WindowsDeviceAccount {
@@ -25599,6 +25872,15 @@ export interface MacOSFirewallApplication {
 		allowsIncomingConnections?: boolean
 
 }
+export interface MacOSKernelExtension {
+
+	    /** The team identifier that was used to sign the kernel extension. */
+		teamIdentifier?: string
+
+	    /** Bundle ID of the kernel extension. */
+		bundleId?: string
+
+}
 export interface UnsupportedDeviceConfigurationDetail {
 
 	    /** A message explaining why an entity is unsupported. */
@@ -25738,6 +26020,15 @@ export interface IosHomeScreenApp extends IosHomeScreenItem {
 
 	    /** BundleID of app */
 		bundleID?: string
+
+}
+export interface MacOSLaunchItem {
+
+	    /** Path to the launch item. */
+		path?: string
+
+	    /** Whether or not to hide the item from the Users and Groups List. */
+		hide?: boolean
 
 }
 export interface VpnOnDemandRule {
@@ -26830,7 +27121,7 @@ export interface WindowsInformationProtectionDesktopApp extends WindowsInformati
 }
 export interface RolePermission {
 
-	    /** Allowed Actions */
+	    /** Allowed Actions - Deprecated */
 		actions?: string[]
 
 	    /** Actions */
@@ -26912,15 +27203,6 @@ export interface WindowsEnrollmentStatusScreenSettings {
 		allowDeviceUseOnInstallFailure?: boolean
 
 }
-export interface ManagementCertificateWithThumbprint {
-
-	    /** The thumbprint of the management certificate */
-		thumbprint?: string
-
-	    /** The Base 64 encoded management certificate */
-		certificate?: string
-
-}
 export interface ImportedWindowsAutopilotDeviceIdentityState {
 
 	    /** Device status reported by Device Directory Service(DDS). Possible values are: unknown, pending, partial, complete, error. */
@@ -26934,6 +27216,15 @@ export interface ImportedWindowsAutopilotDeviceIdentityState {
 
 	    /** Device error name reported by Device Directory Service(DDS). */
 		deviceErrorName?: string
+
+}
+export interface ManagementCertificateWithThumbprint {
+
+	    /** The thumbprint of the management certificate */
+		thumbprint?: string
+
+	    /** The Base 64 encoded management certificate */
+		certificate?: string
 
 }
 export interface UserActivationCounts {
