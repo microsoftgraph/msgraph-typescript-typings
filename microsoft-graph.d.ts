@@ -84,8 +84,8 @@ export type RiskDetail = "none" | "adminGeneratedTemporaryPassword" | "userPerfo
 export type RiskEventType = "unlikelyTravel" | "anonymizedIPAddress" | "maliciousIPAddress" | "unfamiliarFeatures" | "malwareInfectedIPAddress" | "suspiciousIPAddress" | "leakedCredentials" | "investigationsThreatIntelligence" | "generic" | "adminConfirmedUserCompromised" | "mcasImpossibleTravel" | "mcasSuspiciousInboxManipulationRules" | "investigationsThreatIntelligenceSigninLinked" | "maliciousIPAddressValidCredentialsBlockedIP" | "unknownFutureValue"
 export type NetworkType = "intranet" | "extranet" | "namedNetwork" | "trusted" | "unknownFutureValue"
 export type AzureADLicenseType = "none" | "free" | "basic" | "premiumP1" | "premiumP2" | "unknownFutureValue"
-export type RegistrationStatusType = "registered" | "enabled" | "capable" | "unknownFutureValue"
-export type AuthMethodsType = "email" | "mobileSMS" | "mobilePhone" | "officePhone" | "securityQuestion" | "appNotification" | "appNotificationCode" | "unknownFutureValue"
+export type RegistrationStatusType = "registered" | "enabled" | "capable" | "mfaRegistered" | "unknownFutureValue"
+export type AuthMethodsType = "email" | "mobileSMS" | "mobilePhone" | "officePhone" | "securityQuestion" | "appNotification" | "appNotificationCode" | "appNotificationAndCode" | "appPassword" | "fido" | "alternateMobilePhone" | "mobilePhoneAndSMS" | "unknownFutureValue"
 export type FeatureType = "registration" | "reset" | "unknownFutureValue"
 export type RiskEventStatus = "active" | "remediated" | "dismissedAsFixed" | "dismissedAsFalsePositive" | "dismissedAsIgnore" | "loginBlocked" | "closedMfaAuto" | "closedMultipleReasons"
 export type UserRiskLevel = "unknown" | "none" | "low" | "medium" | "high"
@@ -5452,6 +5452,8 @@ export interface CredentialUserRegistrationDetails extends Entity {
 
 		isCapable?: boolean
 
+		isMfaRegistered?: boolean
+
 }
 
 export interface CredentialUsageSummary extends Entity {
@@ -5480,6 +5482,8 @@ export interface UserCredentialUsageDetails extends Entity {
 
 		failureReason?: string
 
+		eventDateTime?: string
+
 }
 
 export interface AuditLogRoot extends Entity {
@@ -5497,6 +5501,8 @@ export interface ReportRoot extends Entity {
 		applicationSignInDetailedSummary?: ApplicationSignInDetailedSummary[]
 
 		credentialUserRegistrationDetails?: CredentialUserRegistrationDetails[]
+
+		userCredentialUsageDetails?: UserCredentialUsageDetails[]
 
 }
 
@@ -18611,6 +18617,8 @@ export interface ChatMessage extends Entity {
 
 		replies?: ChatMessage[]
 
+		hostedImages?: ChatMessageHostedImage[]
+
 }
 
 export interface ChatThread extends Entity {
@@ -18640,6 +18648,10 @@ export interface TeamsTab extends Entity {
 
 	    /** The application that is linked to the tab. This cannot be changed after tab creation. */
 		teamsApp?: TeamsApp
+
+}
+
+export interface ChatMessageHostedImage extends Entity {
 
 }
 
@@ -29157,6 +29169,8 @@ export interface ShiftActivity {
 		code?: string
 
 		displayName?: string
+
+		theme?: ScheduleEntityTheme
 
 }
 export interface ShiftItem extends ScheduleEntity {
