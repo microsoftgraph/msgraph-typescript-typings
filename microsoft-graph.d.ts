@@ -179,6 +179,14 @@ export type TeamsAsyncOperationType = "invalid" | "cloneTeam" | "archiveTeam" | 
 export type TeamsAsyncOperationStatus = "invalid" | "notStarted" | "inProgress" | "succeeded" | "failed" | "unknownFutureValue"
 export type TeamsAppDistributionMethod = "store" | "organization" | "sideloaded" | "unknownFutureValue"
 export type DataPolicyOperationStatus = "notStarted" | "running" | "complete" | "failed" | "unknownFutureValue"
+export type RiskLevel = "low" | "medium" | "high" | "hidden" | "none" | "unknownFutureValue"
+export type AppliedConditionalAccessPolicyResult = "success" | "failure" | "notApplied" | "notEnabled" | "unknown" | "unknownFutureValue"
+export type ConditionalAccessStatus = "success" | "failure" | "notApplied" | "unknownFutureValue"
+export type GroupType = "unifiedGroups" | "azureAD" | "unknownFutureValue"
+export type OperationResult = "success" | "failure" | "timeout" | "unknownFutureValue"
+export type RiskState = "none" | "confirmedSafe" | "remediated" | "dismissed" | "atRisk" | "confirmedCompromised" | "unknownFutureValue"
+export type RiskDetail = "none" | "adminGeneratedTemporaryPassword" | "userPerformedSecuredPasswordChange" | "userPerformedSecuredPasswordReset" | "adminConfirmedSigninSafe" | "aiConfirmedSigninSafe" | "userPassedMFADrivenByRiskBasedPolicy" | "adminDismissedAllRiskForUser" | "adminConfirmedSigninCompromised" | "hidden" | "adminConfirmedUserCompromised" | "unknownFutureValue"
+export type RiskEventType = "unlikelyTravel" | "anonymizedIPAddress" | "maliciousIPAddress" | "unfamiliarFeatures" | "malwareInfectedIPAddress" | "suspiciousIPAddress" | "leakedCredentials" | "investigationsThreatIntelligence" | "generic" | "adminConfirmedUserCompromised" | "mcasImpossibleTravel" | "mcasSuspiciousInboxManipulationRules" | "investigationsThreatIntelligenceSigninLinked" | "maliciousIPAddressValidCredentialsBlockedIP" | "unknownFutureValue"
 
 export interface Entity {
 
@@ -8960,8 +8968,10 @@ export interface Channel extends Entity {
 	    /** Optional textual description for the channel. */
 		description?: string
 
+	    /** The email address for sending messages to the channel. Read-only. */
 		email?: string
 
+	    /** A hyperlink that will navigate to the channel in Microsoft Teams. This is the URL that you get when you right-click a channel in Microsoft Teams and select Get link to channel. This URL should be treated as an opaque blob, and not parsed. Read-only. */
 		webUrl?: string
 
 	    /** A collection of all the tabs in the channel. A navigation property. */
@@ -9059,6 +9069,96 @@ export interface IdentityProvider extends Entity {
 		clientId?: string
 
 		clientSecret?: string
+
+}
+
+export interface DirectoryAudit extends Entity {
+
+		category?: string
+
+		correlationId?: string
+
+		result?: OperationResult
+
+		resultReason?: string
+
+		activityDisplayName?: string
+
+		activityDateTime?: string
+
+		loggedByService?: string
+
+		operationType?: string
+
+		initiatedBy?: AuditActivityInitiator
+
+		targetResources?: TargetResource[]
+
+		additionalDetails?: KeyValue[]
+
+}
+
+export interface SignIn extends Entity {
+
+		createdDateTime?: string
+
+		userDisplayName?: string
+
+		userPrincipalName?: string
+
+		userId?: string
+
+		appId?: string
+
+		appDisplayName?: string
+
+		ipAddress?: string
+
+		status?: SignInStatus
+
+		clientAppUsed?: string
+
+		deviceDetail?: DeviceDetail
+
+		location?: SignInLocation
+
+		correlationId?: string
+
+		conditionalAccessStatus?: ConditionalAccessStatus
+
+		appliedConditionalAccessPolicies?: AppliedConditionalAccessPolicy[]
+
+		isInteractive?: boolean
+
+		riskDetail?: RiskDetail
+
+		riskLevelAggregated?: RiskLevel
+
+		riskLevelDuringSignIn?: RiskLevel
+
+		riskState?: RiskState
+
+		riskEventTypes?: RiskEventType[]
+
+		resourceDisplayName?: string
+
+		resourceId?: string
+
+}
+
+export interface RestrictedSignIn extends SignIn {
+
+		targetTenantId?: string
+
+}
+
+export interface AuditLogRoot extends Entity {
+
+		signIns?: SignIn[]
+
+		directoryAudits?: DirectoryAudit[]
+
+		restrictedSignIns?: RestrictedSignIn[]
 
 }
 export interface AlternativeSecurityId {
@@ -12696,5 +12796,115 @@ export interface OperationError {
 
 	    /** Operation error message. */
 		message?: string
+
+}
+export interface AuditActivityInitiator {
+
+		user?: UserIdentity
+
+		app?: AppIdentity
+
+}
+export interface UserIdentity {
+
+		id?: string
+
+		displayName?: string
+
+		ipAddress?: string
+
+		userPrincipalName?: string
+
+}
+export interface AppIdentity {
+
+		appId?: string
+
+		displayName?: string
+
+		servicePrincipalId?: string
+
+		servicePrincipalName?: string
+
+}
+export interface TargetResource {
+
+		id?: string
+
+		displayName?: string
+
+		type?: string
+
+		userPrincipalName?: string
+
+		groupType?: GroupType
+
+		modifiedProperties?: ModifiedProperty[]
+
+}
+export interface ModifiedProperty {
+
+		displayName?: string
+
+		oldValue?: string
+
+		newValue?: string
+
+}
+export interface KeyValue {
+
+		key?: string
+
+		value?: string
+
+}
+export interface SignInStatus {
+
+		errorCode?: number
+
+		failureReason?: string
+
+		additionalDetails?: string
+
+}
+export interface DeviceDetail {
+
+		deviceId?: string
+
+		displayName?: string
+
+		operatingSystem?: string
+
+		browser?: string
+
+		isCompliant?: boolean
+
+		isManaged?: boolean
+
+		trustType?: string
+
+}
+export interface SignInLocation {
+
+		city?: string
+
+		state?: string
+
+		countryOrRegion?: string
+
+		geoCoordinates?: GeoCoordinates
+
+}
+export interface AppliedConditionalAccessPolicy {
+
+		id?: string
+
+		displayName?: string
+
+		enforcedGrantControls?: string[]
+
+		enforcedSessionControls?: string[]
+
+		result?: AppliedConditionalAccessPolicyResult
 
 }
