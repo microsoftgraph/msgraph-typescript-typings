@@ -923,6 +923,8 @@ export interface Site extends BaseItem {
 	    /** Provides details about the site's site collection. Available only on the root site. Read-only. */
 		siteCollection?: SiteCollection
 
+		analytics?: ItemAnalytics
+
 	    /** The collection of column definitions reusable across lists under this site. */
 		columns?: ColumnDefinition[]
 
@@ -2425,6 +2427,8 @@ export interface DriveItem extends BaseItem {
 	    /** WebDAV compatible URL for the item. */
 		webDavUrl?: string
 
+		analytics?: ItemAnalytics
+
 	    /** Collection containing Item objects for the immediate children of Item. Only items representing folders have children. Read-only. Nullable. */
 		children?: DriveItem[]
 
@@ -2476,6 +2480,16 @@ export interface List extends BaseItem {
 
 }
 
+export interface ItemAnalytics extends Entity {
+
+		itemActivityStats?: ItemActivityStat[]
+
+		allTime?: ItemActivityStat
+
+		lastSevenDays?: ItemActivityStat
+
+}
+
 export interface ListItem extends BaseItem {
 
 	    /** The content type of this list item */
@@ -2483,6 +2497,8 @@ export interface ListItem extends BaseItem {
 
 	    /** Returns identifiers useful for SharePoint REST compatibility. Read-only. */
 		sharepointIds?: SharepointIds
+
+		analytics?: ItemAnalytics
 
 	    /** For document libraries, the driveItem relationship exposes the listItem as a [driveItem][] */
 		driveItem?: DriveItem
@@ -2588,6 +2604,42 @@ export interface Workbook extends Entity {
 }
 
 export interface FieldValueSet extends Entity {
+
+}
+
+export interface ItemActivity extends Entity {
+
+		access?: AccessAction
+
+		activityDateTime?: string
+
+		actor?: IdentitySet
+
+		driveItem?: DriveItem
+
+}
+
+export interface ItemActivityStat extends Entity {
+
+		startDateTime?: string
+
+		endDateTime?: string
+
+		access?: ItemActionStat
+
+		create?: ItemActionStat
+
+		delete?: ItemActionStat
+
+		edit?: ItemActionStat
+
+		move?: ItemActionStat
+
+		isTrending?: boolean
+
+		incompleteData?: IncompleteData
+
+		activities?: ItemActivity[]
 
 }
 
@@ -8832,38 +8884,52 @@ export interface Alert extends Entity {
 
 export interface SecureScoreControlProfile extends Entity {
 
+	    /** Control action type (Config, Review, Behavior). */
 		actionType?: string
 
+	    /** URL to where the control can be actioned. */
 		actionUrl?: string
 
+	    /** GUID string for tenant ID. */
 		azureTenantId?: string
 
 		complianceInformation?: ComplianceInformation[]
 
+	    /** Control action category (Identity, Data, Device, Apps, Infrastructure). */
 		controlCategory?: string
 
 		controlStateUpdates?: SecureScoreControlStateUpdate[]
 
+	    /** Flag to indicate if a control is depreciated. */
 		deprecated?: boolean
 
+	    /** Resource cost of implemmentating control (low, moderate, high). */
 		implementationCost?: string
 
+	    /** Time at which the control profile entity was last modified. The Timestamp type represents date and time */
 		lastModifiedDateTime?: string
 
+	    /** max attainable score for the control. */
 		maxScore?: number
 
+	    /** Microsoft's stack ranking of control. */
 		rank?: number
 
+	    /** Description of what the control will help remediate. */
 		remediation?: string
 
+	    /** Description of the impact on users of the remediation. */
 		remediationImpact?: string
 
+	    /** Service that owns the control (Exchange, Sharepoint, Azure AD). */
 		service?: string
 
+	    /** List of threats the control mitigates (accountBreach,dataDeletion,dataExfiltration,dataSpillage, */
 		threats?: string[]
 
 		tier?: string
 
+	    /** Title of the control. */
 		title?: string
 
 		userImpact?: string
@@ -8874,24 +8940,34 @@ export interface SecureScoreControlProfile extends Entity {
 
 export interface SecureScore extends Entity {
 
+	    /** Active user count of the given tenant. */
 		activeUserCount?: number
 
+	    /** Average score by different scopes (for example, average by industry, average by seating) and control category (Identity, Data, Device, Apps, Infrastructure) within the scope. */
 		averageComparativeScores?: AverageComparativeScore[]
 
+	    /** GUID string for tenant ID. */
 		azureTenantId?: string
 
+	    /** Contains tenant scores for a set of controls. */
 		controlScores?: ControlScore[]
 
+	    /** The date when the entity is created. */
 		createdDateTime?: string
 
+	    /** Tenant current attained score on specified date. */
 		currentScore?: number
 
+	    /** Microsoft-provided services for the tenant (for example, Exchange online, Skype, Sharepoint). */
 		enabledServices?: string[]
 
+	    /** Licensed user count of the given tenant. */
 		licensedUserCount?: number
 
+	    /** Tenant maximum possible score on specified date. */
 		maxScore?: number
 
+	    /** Complex type containing details about the security product/service vendor, provider, and subprovider (for example, vendor=Microsoft; provider=SecureScore). Required. */
 		vendorInformation?: SecurityVendorInformation
 
 }
@@ -9074,74 +9150,105 @@ export interface IdentityProvider extends Entity {
 
 export interface DirectoryAudit extends Entity {
 
+	    /** Indicates which resource category that's targeted by the activity. (For example: User Management, Group Management etc..) */
 		category?: string
 
+	    /** Indicates a unique ID that helps correlate activities that span across various services. Can be used to trace logs across services. */
 		correlationId?: string
 
+	    /** Indicates the result of the activity.Possible values are: success, failure, timeout, unknownFutureValue. */
 		result?: OperationResult
 
+	    /** Describes cause of 'failure' or 'timeout' results. */
 		resultReason?: string
 
+	    /** Indicates the activity name or the operation name (examples: 'Create User' and 'Add member to group'). For full list, see Azure AD activity list. */
 		activityDisplayName?: string
 
+	    /** Indicates the date and time the activity was performed. The Timestamp type is always in UTC time. For example, midnight UTC on Jan 1, 2014 would look like this: '2014-01-01T00:00:00Z' */
 		activityDateTime?: string
 
+	    /** Indicates information on which service initiated the activity (For example: Self-service Password Management, Core Directory, B2C, Invited Users, Microsoft Identity Manager, Privileged Identity Management. */
 		loggedByService?: string
 
 		operationType?: string
 
+	    /** Indicates information about the user or app initiated the activity. */
 		initiatedBy?: AuditActivityInitiator
 
+	    /** Indicates information on which resource was changed due to the activity. Target Resource Type can be User, Device, Directory, App, Role, Group, Policy or Other. */
 		targetResources?: TargetResource[]
 
+	    /** Indicates additional details on the activity. */
 		additionalDetails?: KeyValue[]
 
 }
 
 export interface SignIn extends Entity {
 
+	    /** Date and time (UTC) the sign-in was initiated. Example: midnight on Jan 1, 2014 is reported as '2014-01-01T00:00:00Z'. */
 		createdDateTime?: string
 
+	    /** Display name of the user that initiated the sign-in. */
 		userDisplayName?: string
 
+	    /** User principal name of the user that initiated the sign-in. */
 		userPrincipalName?: string
 
+	    /** ID of the user that initiated the sign-in. */
 		userId?: string
 
+	    /** Unique GUID representing the app ID in the Azure Active Directory. */
 		appId?: string
 
+	    /** App name displayed in the Azure Portal. */
 		appDisplayName?: string
 
+	    /** IP address of the client used to sign in. */
 		ipAddress?: string
 
+	    /** Sign-in status. Possible values include Success and Failure. */
 		status?: SignInStatus
 
+	    /** Identifies the legacy client used for sign-in activity.  Includes Browser, Exchange Active Sync, modern clients, IMAP, MAPI, SMTP, and POP. */
 		clientAppUsed?: string
 
+	    /** Device information from where the sign-in occurred; includes device ID, operating system, and browser. */
 		deviceDetail?: DeviceDetail
 
+	    /** Provides the city, state, and country code where the sign-in originated. */
 		location?: SignInLocation
 
+	    /** The request ID sent from the client when the sign-in is initiated; used to troubleshoot sign-in activity. */
 		correlationId?: string
 
+	    /** Reports status of an activated conditional access policy. Possible values are: success, failure, notApplied, and unknownFutureValue. */
 		conditionalAccessStatus?: ConditionalAccessStatus
 
 		appliedConditionalAccessPolicies?: AppliedConditionalAccessPolicy[]
 
+	    /** Indicates if a sign-in is interactive or not. */
 		isInteractive?: boolean
 
+	    /** Provides the 'reason' behind a specific state of a risky user, sign-in or a risk event. The possible values are: none, adminGeneratedTemporaryPassword, userPerformedSecuredPasswordChange, userPerformedSecuredPasswordReset, adminConfirmedSigninSafe, aiConfirmedSigninSafe, userPassedMFADrivenByRiskBasedPolicy, adminDismissedAllRiskForUser, adminConfirmedSigninCompromised, unknownFutureValue. The value none means that no action has been performed on the user or sign-in so far. Note: Details for this property require an Azure AD Premium P2 license. Other licenses return the value hidden. */
 		riskDetail?: RiskDetail
 
+	    /** Aggregated risk level. The possible values are: none, low, medium, high, hidden, and unknownFutureValue. The value hidden means the user or sign-in was not enabled for Azure AD Identity Protection. Note: Details for this property are only available for Azure AD Premium P2 customers. All other customers will be returned hidden. */
 		riskLevelAggregated?: RiskLevel
 
+	    /** Risk level during sign-in. The possible values are: none, low, medium, high, hidden, and unknownFutureValue. The value hidden means the user or sign-in was not enabled for Azure AD Identity Protection. Note: Details for this property are only available for Azure AD Premium P2 customers. All other customers will be returned hidden. */
 		riskLevelDuringSignIn?: RiskLevel
 
+	    /** Reports status of the risky user, sign-in, or a risk event. The possible values are: none, confirmedSafe, remediated, dismissed, atRisk, confirmedCompromised, unknownFutureValue. */
 		riskState?: RiskState
 
+	    /** Risk event types associated with the sign-in. The possible values are: unlikelyTravel, anonymizedIPAddress, maliciousIPAddress, unfamiliarFeatures, malwareInfectedIPAddress, suspiciousIPAddress, leakedCredentials, investigationsThreatIntelligence,  generic, and unknownFutureValue. */
 		riskEventTypes?: RiskEventType[]
 
+	    /** Name of the resource the user signed into. */
 		resourceDisplayName?: string
 
+	    /** ID of the resource that the user signed into. */
 		resourceId?: string
 
 }
@@ -9154,8 +9261,10 @@ export interface RestrictedSignIn extends SignIn {
 
 export interface AuditLogRoot extends Entity {
 
+	    /** Read-only. Nullable. */
 		signIns?: SignIn[]
 
+	    /** Read-only. Nullable. */
 		directoryAudits?: DirectoryAudit[]
 
 		restrictedSignIns?: RestrictedSignIn[]
@@ -10613,6 +10722,23 @@ export interface Video {
 
 	    /** Width of the video, in pixels. */
 		width?: number
+
+}
+export interface AccessAction {
+
+}
+export interface ItemActionStat {
+
+		actionCount?: number
+
+		actorCount?: number
+
+}
+export interface IncompleteData {
+
+		missingDataBeforeDateTime?: string
+
+		wasThrottled?: boolean
 
 }
 export interface ListInfo {
@@ -12609,46 +12735,61 @@ export interface VulnerabilityState {
 }
 export interface AverageComparativeScore {
 
+	    /** Average score within specified basis. */
 		averageScore?: number
 
+	    /** Scope type. The possible values are: AllTenants, TotalSeats, IndustryTypes. */
 		basis?: string
 
 }
 export interface ControlScore {
 
+	    /** Control action category (Identity, Data, Device, Apps, Infrastructure). */
 		controlCategory?: string
 
+	    /** Control unique name. */
 		controlName?: string
 
+	    /** Description of the control. */
 		description?: string
 
+	    /** Tenant achieved score for the control (it varies day by day depending on tenant operations on the control). */
 		score?: number
 
 }
 export interface ComplianceInformation {
 
+	    /** Collection of the certification controls associated with certification */
 		certificationControls?: CertificationControl[]
 
+	    /** Compliance certification name (for example, ISO 27018:2014, GDPR, FedRAMP, NIST 800-171) */
 		certificationName?: string
 
 }
 export interface CertificationControl {
 
+	    /** Certification control name */
 		name?: string
 
+	    /** URL for the Microsoft Service Trust Portal */
 		url?: string
 
 }
 export interface SecureScoreControlStateUpdate {
 
+	    /** Assigns the control to the user who will take the action. */
 		assignedTo?: string
 
+	    /** Provides optional comment about the control. */
 		comment?: string
 
+	    /** State of the control, which can be modified via a PATCH command (for example, ignored, thirdParty). */
 		state?: string
 
+	    /** ID of the user who updated tenant state. */
 		updatedBy?: string
 
+	    /** Time at which the control state was updated. */
 		updatedDateTime?: string
 
 }
@@ -12800,111 +12941,151 @@ export interface OperationError {
 }
 export interface AuditActivityInitiator {
 
+	    /** If the resource initiating the activity is a user, this property Indicates all the user related information like userId, Name, UserPrinicpalName. */
 		user?: UserIdentity
 
+	    /** If the resource initiating the activity is an app, this property indicates all the app related information like appId, Name, servicePrincipalId, Name. */
 		app?: AppIdentity
 
 }
 export interface UserIdentity {
 
+	    /** Unique identifier for the identity. */
 		id?: string
 
+	    /** The identity's display name. Note that this may not always be available or up-to-date. */
 		displayName?: string
 
+	    /** Indicates the client IP address used by user performing the activity (audit log only). */
 		ipAddress?: string
 
+	    /** The userPrincipalName attribute of the user. */
 		userPrincipalName?: string
 
 }
 export interface AppIdentity {
 
+	    /** Refers to the Unique GUID representing Application Id in the Azure Active Directory. */
 		appId?: string
 
+	    /** Refers to the Application Name displayed in the Azure Portal. */
 		displayName?: string
 
+	    /** Refers to the Unique GUID indicating Service Principal Id in Azure Active Directory for the corresponding App. */
 		servicePrincipalId?: string
 
+	    /** Refers to the Service Principal Name is the Application name in the tenant. */
 		servicePrincipalName?: string
 
 }
 export interface TargetResource {
 
+	    /** Indicates the unique ID of the resource. */
 		id?: string
 
+	    /** Indicates the visible name defined for the resource. Typically specified when the resource is created. */
 		displayName?: string
 
+	    /** Describes the resource type.  Example values include Application, Group, ServicePrincipal, and User. */
 		type?: string
 
+	    /** When type is set to User, this includes the user name that initiated the action; null for other types. */
 		userPrincipalName?: string
 
+	    /** When type is set to Group, this indicates the group type. */
 		groupType?: GroupType
 
+	    /** Indicates name, old value and new value of each attribute that changed. Property values depend on the operation type. */
 		modifiedProperties?: ModifiedProperty[]
 
 }
 export interface ModifiedProperty {
 
+	    /** Indicates the property name of the target attribute that was changed. */
 		displayName?: string
 
+	    /** Indicates the previous value (before the update) for the property. */
 		oldValue?: string
 
+	    /** Indicates the updated value for the propery. */
 		newValue?: string
 
 }
 export interface KeyValue {
 
+	    /** Key for the key-value pair. */
 		key?: string
 
+	    /** Value for the key-value pair. */
 		value?: string
 
 }
 export interface SignInStatus {
 
+	    /** Provides the 5-6digit error code that's generated during a sign-in failure. Check out the list of error codes and messages. */
 		errorCode?: number
 
+	    /** Provides the error message or the reason for failure for the corresponding sign-in activity. Check out the list of error codes and messages. */
 		failureReason?: string
 
+	    /** Provides additional details on the sign-in activity */
 		additionalDetails?: string
 
 }
 export interface DeviceDetail {
 
+	    /** Refers to the UniqueID of the device used for signing in. */
 		deviceId?: string
 
+	    /** Refers to the name of the device used for signing in. */
 		displayName?: string
 
+	    /** Indicates the operating system name and version used for signing in. */
 		operatingSystem?: string
 
+	    /** Indicates the browser information of the used for signing in. */
 		browser?: string
 
+	    /** Indicates whether the device is compliant. */
 		isCompliant?: boolean
 
+	    /** Indicates whether the device is managed. */
 		isManaged?: boolean
 
+	    /** Provides information about whether the signed-in device is Workplace Joined, AzureAD Joined, Domain Joined. */
 		trustType?: string
 
 }
 export interface SignInLocation {
 
+	    /** Provides the city where the sign-in originated. This is calculated using latitude/longitude information from the sign-in activity. */
 		city?: string
 
+	    /** Provides the State where the sign-in originated. This is calculated using latitude/longitude information from the sign-in activity. */
 		state?: string
 
+	    /** Provides the country code info (2 letter code) where the sign-in originated.  This is calculated using latitude/longitude information from the sign-in activity. */
 		countryOrRegion?: string
 
+	    /** Provides the latitude, longitude and altitude where the sign-in originated. */
 		geoCoordinates?: GeoCoordinates
 
 }
 export interface AppliedConditionalAccessPolicy {
 
+	    /** Unique GUID of the conditional access polic.y */
 		id?: string
 
+	    /** Refers to the Name of the conditional access policy (example: 'Require MFA for Salesforce'). */
 		displayName?: string
 
+	    /** Refers to the grant controls enforced by the conditional access policy (example: 'Require multi-factor authentication'). */
 		enforcedGrantControls?: string[]
 
+	    /** Refers to the session controls enforced by the conditional access policy (example: 'Require app enforced controls'). */
 		enforcedSessionControls?: string[]
 
+	    /** Indicates the result of the CA policy that was triggered. Possible values are:successfailurenotApplied - Policy isn't applied because policy conditions were not met.notEnabled - This is due to the policy in disabled state. */
 		result?: AppliedConditionalAccessPolicyResult
 
 }
