@@ -85,7 +85,8 @@ export type RiskEventType = "unlikelyTravel" | "anonymizedIPAddress" | "maliciou
 export type NetworkType = "intranet" | "extranet" | "namedNetwork" | "trusted" | "unknownFutureValue"
 export type AzureADLicenseType = "none" | "free" | "basic" | "premiumP1" | "premiumP2" | "unknownFutureValue"
 export type RegistrationStatusType = "registered" | "enabled" | "capable" | "mfaRegistered" | "unknownFutureValue"
-export type AuthMethodsType = "email" | "mobileSMS" | "mobilePhone" | "officePhone" | "securityQuestion" | "appNotification" | "appNotificationCode" | "appNotificationAndCode" | "appPassword" | "fido" | "alternateMobilePhone" | "mobilePhoneAndSMS" | "unknownFutureValue"
+export type RegistrationAuthMethod = "email" | "mobilePhone" | "officePhone" | "securityQuestion" | "appNotification" | "appCode" | "alternateMobilePhone" | "fido" | "appPassword" | "unknownFutureValue"
+export type UsageAuthMethod = "email" | "mobileSMS" | "mobileCall" | "officePhone" | "securityQuestion" | "appNotification" | "appCode" | "alternateMobileCall" | "fido" | "appPassword" | "unknownFutureValue"
 export type FeatureType = "registration" | "reset" | "unknownFutureValue"
 export type RiskEventStatus = "active" | "remediated" | "dismissedAsFixed" | "dismissedAsFalsePositive" | "dismissedAsIgnore" | "loginBlocked" | "closedMfaAuto" | "closedMultipleReasons"
 export type UserRiskLevel = "unknown" | "none" | "low" | "medium" | "high"
@@ -105,7 +106,7 @@ export type Win32LobAppNotification = "showAll" | "showReboot" | "hideAll"
 export type MobileAppPublishingState = "notPublished" | "processing" | "published"
 export type ResultantAppState = "installed" | "failed" | "notInstalled" | "uninstallFailed" | "pendingInstall" | "unknown" | "notApplicable"
 export type ResultantAppStateDetail = "noAdditionalDetails" | "dependencyFailedToInstall" | "dependencyWithRequirementsNotMet" | "dependencyPendingReboot" | "dependencyWithAutoInstallDisabled" | "seeInstallErrorCode" | "autoInstallDisabled" | "seeUninstallErrorCode" | "pendingReboot" | "installingDependencies" | "powerShellScriptRequirementNotMet" | "registryRequirementNotMet" | "fileSystemRequirementNotMet" | "platformNotApplicable" | "minimumCpuSpeedNotMet" | "minimumLogicalProcessorCountNotMet" | "minimumPhysicalMemoryNotMet" | "minimumOsVersionNotMet" | "minimumDiskSpaceNotMet" | "processorArchitectureNotApplicable"
-export type MobileAppDependecyType = "detect" | "autoInstall"
+export type MobileAppDependencyType = "detect" | "autoInstall"
 export type OfficeProductId = "o365ProPlusRetail" | "o365BusinessRetail" | "visioProRetail" | "projectProRetail"
 export type OfficeUpdateChannel = "none" | "current" | "deferred" | "firstReleaseCurrent" | "firstReleaseDeferred"
 export type WindowsArchitecture = "none" | "x86" | "x64" | "arm" | "neutral" | "arm64"
@@ -128,7 +129,7 @@ export type CertificateStatus = "notProvisioned" | "provisioned"
 export type ComplianceStatus = "unknown" | "notApplicable" | "compliant" | "remediated" | "nonCompliant" | "error" | "conflict" | "notAssigned"
 export type AndroidPermissionActionType = "prompt" | "autoGrant" | "autoDeny"
 export type MdmAppConfigKeyType = "stringType" | "integerType" | "realType" | "booleanType" | "tokenType"
-export type ManagedDeviceRemoteAction = "retire" | "delete" | "fullScan" | "quickScan" | "signatureUpdate"
+export type ManagedDeviceRemoteAction = "retire" | "delete" | "fullScan" | "quickScan" | "signatureUpdate" | "wipe"
 export type RemoteAction = "unknown" | "factoryReset" | "removeCompanyData" | "resetPasscode" | "remoteLock" | "enableLostMode" | "disableLostMode" | "locateDevice" | "rebootNow" | "recoverPasscode" | "cleanWindowsDevice" | "logoutSharedAppleDeviceActiveUser" | "quickScan" | "fullScan" | "windowsDefenderUpdateSignatures" | "factoryResetKeepEnrollmentData" | "updateDeviceAccount" | "automaticRedeployment" | "shutDown"
 export type RunState = "unknown" | "success" | "fail"
 export type DeviceGuardVirtualizationBasedSecurityHardwareRequirementState = "meetHardwareRequirements" | "secureBootRequired" | "dmaProtectionRequired" | "hyperVNotSupportedForGuestVM" | "hyperVNotAvailable"
@@ -169,7 +170,7 @@ export type SubjectAlternativeNameType = "none" | "emailAddress" | "userPrincipa
 export type KeyUsages = "keyEncipherment" | "digitalSignature"
 export type KeySize = "size1024" | "size2048"
 export type HashAlgorithms = "sha1" | "sha2"
-export type DevicePlatformType = "android" | "androidForWork" | "iOS" | "macOS" | "windowsPhone81" | "windows81AndLater" | "windows10AndLater" | "androidWorkProfile"
+export type DevicePlatformType = "android" | "androidForWork" | "iOS" | "macOS" | "windowsPhone81" | "windows81AndLater" | "windows10AndLater" | "androidWorkProfile" | "unknown"
 export type CertificateIssuanceStates = "unknown" | "challengeIssued" | "challengeIssueFailed" | "requestCreationFailed" | "requestSubmitFailed" | "challengeValidationSucceeded" | "challengeValidationFailed" | "issueFailed" | "issuePending" | "issued" | "responseProcessingFailed" | "responsePending" | "enrollmentSucceeded" | "enrollmentNotNeeded" | "revoked" | "removedFromCollection" | "renewVerified" | "installFailed" | "installed" | "deleteFailed" | "deleted" | "renewalRequested" | "requested"
 export type KeyStorageProviderOption = "useTpmKspOtherwiseUseSoftwareKsp" | "useTpmKspOtherwiseFail" | "usePassportForWorkKspOtherwiseFail" | "useSoftwareKsp"
 export type CertificateRevocationStatus = "none" | "pending" | "issued" | "failed" | "revoked"
@@ -181,8 +182,12 @@ export type AndroidDeviceOwnerRequiredPasswordType = "deviceDefault" | "required
 export type AndroidDeviceOwnerPlayStoreMode = "notConfigured" | "allowList" | "blockList"
 export type AndroidDeviceOwnerBatteryPluggedMode = "notConfigured" | "ac" | "usb" | "wireless"
 export type AndroidDeviceOwnerSystemUpdateInstallType = "deviceDefault" | "postpone" | "windowed" | "automatic"
-export type AndroidDeviceOwnerWiFiSecurityType = "open" | "wep" | "wpaPersonal"
-export type EasAuthenticationMethod = "usernameAndPassword" | "certificate"
+export type AndroidDeviceOwnerWiFiSecurityType = "open" | "wep" | "wpaPersonal" | "wpaEnterprise"
+export type AndroidEapType = "eapTls" | "eapTtls" | "peap"
+export type WiFiAuthenticationMethod = "certificate" | "usernameAndPassword" | "derivedCredential"
+export type NonEapAuthenticationMethodForEapTtlsType = "unencryptedPassword" | "challengeHandshakeAuthenticationProtocol" | "microsoftChap" | "microsoftChapVersionTwo"
+export type NonEapAuthenticationMethodForPeap = "none" | "microsoftChapVersionTwo"
+export type EasAuthenticationMethod = "usernameAndPassword" | "certificate" | "derivedCredential"
 export type EmailSyncDuration = "userDefined" | "oneDay" | "threeDays" | "oneWeek" | "twoWeeks" | "oneMonth" | "unlimited"
 export type UserEmailSource = "userPrincipalName" | "primarySmtpAddress"
 export type AndroidUsernameSource = "username" | "userPrincipalName" | "samAccountName" | "primarySmtpAddress"
@@ -190,15 +195,11 @@ export type IntendedPurpose = "unassigned" | "smimeEncryption" | "smimeSigning" 
 export type EmailSyncSchedule = "userDefined" | "asMessagesArrive" | "manual" | "fifteenMinutes" | "thirtyMinutes" | "sixtyMinutes" | "basedOnMyUsage"
 export type DomainNameSource = "fullDomainName" | "netBiosDomainName"
 export type AndroidWiFiSecurityType = "open" | "wpaEnterprise"
-export type WiFiAuthenticationMethod = "certificate" | "usernameAndPassword"
-export type AndroidEapType = "eapTls" | "eapTtls" | "peap"
-export type NonEapAuthenticationMethodForEapTtlsType = "unencryptedPassword" | "challengeHandshakeAuthenticationProtocol" | "microsoftChap" | "microsoftChapVersionTwo"
-export type NonEapAuthenticationMethodForPeap = "none" | "microsoftChapVersionTwo"
 export type AndroidForWorkRequiredPasswordType = "deviceDefault" | "lowSecurityBiometric" | "required" | "atLeastNumeric" | "numericComplex" | "atLeastAlphabetic" | "atLeastAlphanumeric" | "alphanumericWithSymbols"
 export type AndroidForWorkCrossProfileDataSharingType = "deviceDefault" | "preventAny" | "allowPersonalToWork" | "noRestrictions"
 export type AndroidForWorkDefaultAppPermissionPolicyType = "deviceDefault" | "prompt" | "autoGrant" | "autoDeny"
 export type AndroidForWorkVpnConnectionType = "ciscoAnyConnect" | "pulseSecure" | "f5EdgeClient" | "dellSonicWallMobileConnect" | "checkPointCapsuleVpn" | "citrix"
-export type VpnAuthenticationMethod = "certificate" | "usernameAndPassword"
+export type VpnAuthenticationMethod = "certificate" | "usernameAndPassword" | "derivedCredential"
 export type AppListType = "none" | "appsInListCompliant" | "appsNotInListCompliant"
 export type AndroidRequiredPasswordType = "deviceDefault" | "alphabetic" | "alphanumeric" | "alphanumericWithSymbols" | "lowSecurityBiometric" | "numeric" | "numericComplex" | "any"
 export type WebBrowserCookieSettings = "browserDefault" | "blockAlways" | "allowCurrentWebSite" | "allowFromWebsitesVisited" | "allowAlways"
@@ -208,6 +209,8 @@ export type AndroidWorkProfileCrossProfileDataSharingType = "deviceDefault" | "p
 export type AndroidWorkProfileDefaultAppPermissionPolicyType = "deviceDefault" | "prompt" | "autoGrant" | "autoDeny"
 export type AndroidWorkProfileVpnConnectionType = "ciscoAnyConnect" | "pulseSecure" | "f5EdgeClient" | "dellSonicWallMobileConnect" | "checkPointCapsuleVpn" | "citrix" | "paloAltoGlobalProtect"
 export type AppleSubjectNameFormat = "commonName" | "commonNameAsEmail" | "custom" | "commonNameIncludingEmail" | "commonNameAsIMEI" | "commonNameAsSerialNumber"
+export type DeviceManagementDerivedCredentialIssuer = "intercede" | "entrustDatacard" | "purebred"
+export type DeviceManagementDerivedCredentialNotificationType = "none" | "companyPortal" | "email"
 export type RatingAustraliaMoviesType = "allAllowed" | "allBlocked" | "general" | "parentalGuidance" | "mature" | "agesAbove15" | "agesAbove18"
 export type RatingAustraliaTelevisionType = "allAllowed" | "allBlocked" | "preschoolers" | "children" | "general" | "parentalGuidance" | "mature" | "agesAbove15" | "agesAbove15AdultViolence"
 export type RatingCanadaMoviesType = "allAllowed" | "allBlocked" | "general" | "parentalGuidance" | "agesAbove14" | "agesAbove18" | "restricted"
@@ -234,6 +237,7 @@ export type EapType = "eapTls" | "leap" | "eapSim" | "eapTtls" | "peap" | "eapFa
 export type EapFastConfiguration = "noProtectedAccessCredential" | "useProtectedAccessCredential" | "useProtectedAccessCredentialAndProvision" | "useProtectedAccessCredentialAndProvisionAnonymously"
 export type MacOSGatekeeperAppSources = "notConfigured" | "macAppStore" | "macAppStoreAndIdentifiedDevelopers" | "anywhere"
 export type UsernameSource = "userPrincipalName" | "primarySmtpAddress" | "samAccountName"
+export type EmailCertificateType = "none" | "certificate" | "derivedCredential"
 export type IosNotificationAlertType = "deviceDefault" | "banner" | "modal" | "none"
 export type IosWallpaperDisplayLocation = "notConfigured" | "lockScreen" | "homeScreen" | "lockAndHomeScreens"
 export type AppleVpnConnectionType = "ciscoAnyConnect" | "pulseSecure" | "f5EdgeClient" | "dellSonicWallMobileConnect" | "checkPointCapsuleVpn" | "customVpn" | "ciscoIPSec" | "citrix" | "ciscoAnyConnectV2" | "paloAltoGlobalProtect" | "zscalerPrivateAccess" | "f5Access2018" | "citrixSso" | "paloAltoGlobalProtectV2"
@@ -413,7 +417,7 @@ export type SynchronizationScheduleState = "Active" | "Disabled"
 export type ScopeOperatorMultiValuedComparisonType = "All" | "Any"
 export type ScopeOperatorType = "Binary" | "Unary"
 export type ContactRelationship = "parent" | "relative" | "aide" | "doctor" | "guardian" | "child" | "other" | "unknownFutureValue"
-export type EducationUserRole = "student" | "teacher" | "none" | "unknownFutureValue"
+export type EducationUserRole = "student" | "teacher" | "none" | "unknownFutureValue" | "faculty"
 export type EducationSynchronizationProfileState = "deleting" | "deletionFailed" | "provisioningFailed" | "provisioned" | "provisioning" | "unknownFutureValue"
 export type EducationSynchronizationStatus = "paused" | "inProgress" | "success" | "error" | "validationError" | "quarantined" | "unknownFutureValue"
 export type EducationExternalSource = "sis" | "manual" | "unknownFutureValue"
@@ -1277,6 +1281,8 @@ export interface Message extends OutlookItem {
 
 export interface Group extends DirectoryObject {
 
+		assignedLabels?: AssignedLabel[]
+
 	    /** The licenses that are assigned to the group. Returned only on $select. Read-only. */
 		assignedLicenses?: AssignedLicense[]
 
@@ -1292,7 +1298,7 @@ export interface Group extends DirectoryObject {
 	    /** The display name for the group. This property is required when a group is created and cannot be cleared during updates. Returned by default. Supports $filter and $orderby. */
 		displayName?: string
 
-	    /** Specifies the type of group to create. Possible values are Unified to create an Office 365 group, or DynamicMembership for dynamic groups.  For all other group types, like security-enabled groups and email-enabled security groups, do not set this property. Returned by default. Supports $filter. */
+	    /** Specifies the group type and its membership.  If the collection contains Unified then the group is an Office 365 group; otherwise it's a security group.  If the collection includes DynamicMembership, the group has dynamic membership; otherwise, membership is static.  Returned by default. Supports $filter. */
 		groupTypes?: string[]
 
 	    /** Indicates whether there are members in this group that have license errors from its group-based license assignment. This property is never returned on a GET operation. You can use it as a $filter argument to get groups that have members with license errors (that is, filter for this property being true). See an example. */
@@ -1304,7 +1310,7 @@ export interface Group extends DirectoryObject {
 	    /** The SMTP address for the group, for example, 'serviceadmins@contoso.onmicrosoft.com'. Returned by default. Read-only. Supports $filter. */
 		mail?: string
 
-	    /** Specifies whether the group is mail-enabled. If the securityEnabled property is also true, the group is a mail-enabled security group; otherwise, the group is a Microsoft Exchange distribution group. Returned by default. */
+	    /** Specifies whether the group is mail-enabled. Returned by default. */
 		mailEnabled?: boolean
 
 	    /** The mail alias for the group, unique in the organization. This property must be specified when a group is created. Returned by default. Supports $filter. */
@@ -1341,7 +1347,7 @@ export interface Group extends DirectoryObject {
 
 		resourceProvisioningOptions?: string[]
 
-	    /** Specifies whether the group is a security group. If the mailEnabled property is also true, the group is a mail-enabled security group; otherwise it is a security group. Must be false for Office 365 groups. Returned by default. Supports $filter. */
+	    /** Specifies whether the group is a security group. Returned by default. Supports $filter. */
 		securityEnabled?: boolean
 
 		theme?: string
@@ -1954,6 +1960,7 @@ export interface Site extends BaseItem {
 	    /** Provides details about the site's site collection. Available only on the root site. Read-only. */
 		siteCollection?: SiteCollection
 
+	    /** Analytics about the view activities that took place in this site. */
 		analytics?: ItemAnalytics
 
 	    /** The collection of column definitions reusable across lists under this site. */
@@ -2207,6 +2214,9 @@ export interface ManagedDevice extends Entity {
 
 	    /** Indicates the threat state of a device when a Mobile Threat Defense partner is in use by the account and device. Read Only. Possible values are: unknown, activated, deactivated, secured, lowSeverity, mediumSeverity, highSeverity, unresponsive, compromised, misconfigured. */
 		partnerReportedThreatState?: ManagedDevicePartnerReportedHealthState
+
+	    /** Indicates the time after when a device will be auto retired because of scheduled action. */
+		retireAfterDateTime?: string
 
 	    /** Indicates the last logged on users of a device */
 		usersLoggedOn?: LoggedOnUser[]
@@ -3548,8 +3558,10 @@ export interface ListItem extends BaseItem {
 	    /** Returns identifiers useful for SharePoint REST compatibility. Read-only. */
 		sharepointIds?: SharepointIds
 
+	    /** The list of recent activities that took place on this item. */
 		activities?: ItemActivityOLD[]
 
+	    /** Analytics about the view activities that took place on this item. */
 		analytics?: ItemAnalytics
 
 	    /** For document libraries, the driveItem relationship exposes the listItem as a [driveItem][] */
@@ -3633,8 +3645,10 @@ export interface DriveItem extends BaseItem {
 	    /** For files that are Excel spreadsheets, accesses the workbook API to work with the spreadsheet's contents. Nullable. */
 		workbook?: Workbook
 
+	    /** The list of recent activities that took place on this item. */
 		activities?: ItemActivityOLD[]
 
+	    /** Analytics about the view activities that took place on this item. */
 		analytics?: ItemAnalytics
 
 	    /** Collection containing Item objects for the immediate children of Item. Only items representing folders have children. Read-only. Nullable. */
@@ -4803,36 +4817,50 @@ export interface FieldValueSet extends Entity {
 
 export interface ItemActivity extends Entity {
 
+	    /** An item was accessed. */
 		access?: AccessAction
 
+	    /** Details about when the activity took place. Read-only. */
 		activityDateTime?: string
 
+	    /** Identity of who performed the action. Read-only. */
 		actor?: IdentitySet
 
+	    /** Exposes the driveItem that was the target of this activity. */
 		driveItem?: DriveItem
 
 }
 
 export interface ItemActivityStat extends Entity {
 
+	    /** When the interval starts. Read-only. */
 		startDateTime?: string
 
+	    /** When the interval ends. Read-only. */
 		endDateTime?: string
 
+	    /** Statistics about the access actions in this interval. Read-only. */
 		access?: ItemActionStat
 
+	    /** Statistics about the create actions in this interval. Read-only. */
 		create?: ItemActionStat
 
+	    /** Statistics about the delete actions in this interval. Read-only. */
 		delete?: ItemActionStat
 
+	    /** Statistics about the edit actions in this interval. Read-only. */
 		edit?: ItemActionStat
 
+	    /** Statistics about the move actions in this interval. Read-only. */
 		move?: ItemActionStat
 
+	    /** Indicates whether the item is 'trending.' Read-only. */
 		isTrending?: boolean
 
+	    /** Indicates that the statistics in this interval are based on incomplete data. Read-only. */
 		incompleteData?: IncompleteData
 
+	    /** Exposes the itemActivities represented in this itemActivityStat resource. */
 		activities?: ItemActivity[]
 
 }
@@ -5481,7 +5509,7 @@ export interface CredentialUserRegistrationDetails extends Entity {
 
 		userDisplayName?: string
 
-		authMethods?: AuthMethodsType[]
+		authMethods?: RegistrationAuthMethod[]
 
 		isRegistered?: boolean
 
@@ -5501,7 +5529,7 @@ export interface CredentialUsageSummary extends Entity {
 
 		failureActivityCount?: number
 
-		authMethod?: AuthMethodsType
+		authMethod?: UsageAuthMethod
 
 }
 
@@ -5515,7 +5543,7 @@ export interface UserCredentialUsageDetails extends Entity {
 
 		isSuccess?: boolean
 
-		authMethod?: AuthMethodsType
+		authMethod?: UsageAuthMethod
 
 		failureReason?: string
 
@@ -7421,6 +7449,9 @@ export interface WindowsAutopilotDeploymentProfile extends Entity {
 	    /** Enable Autopilot White Glove for the profile. */
 		enableWhiteGlove?: boolean
 
+	    /** Scope tags for the profile. */
+		roleScopeTagIds?: string[]
+
 	    /** The list of assigned devices for the profile. */
 		assignedDevices?: WindowsAutopilotDeviceIdentity[]
 
@@ -7541,6 +7572,9 @@ export interface ImportedWindowsAutopilotDeviceIdentity extends Entity {
 
 	    /** Current state of the imported device. */
 		state?: ImportedWindowsAutopilotDeviceIdentityState
+
+	    /** UPN of the user the device will be assigned */
+		assignedUserPrincipalName?: string
 
 }
 
@@ -7884,11 +7918,23 @@ export interface DeviceManagementTemplate extends Entity {
 	    /** The template's description */
 		description?: string
 
+	    /** The template's version information */
+		versionInfo?: string
+
+	    /** The template is deprecated or not. Intents cannot be created from a deprecated template. */
+		isDeprecated?: boolean
+
+	    /** Number of Intents created from this template. */
+		intentCount?: number
+
 	    /** Collection of all settings this template has */
 		settings?: DeviceManagementSettingInstance[]
 
 	    /** Collection of setting categories within the template */
 		categories?: DeviceManagementTemplateSettingCategory[]
+
+	    /** Collection of templates this template can migrate to */
+		migratableTo?: DeviceManagementTemplate[]
 
 }
 
@@ -8460,9 +8506,6 @@ export interface IosManagedAppProtection extends TargetedManagedAppProtection {
 	    /** Defines a managed app behavior, either block or wipe, if the specified device model is not allowed. */
 		appActionIfIosDeviceModelNotAllowed?: ManagedAppRemediationAction
 
-	    /** Defines if third party keyboards are allowed while accessing a managed app */
-		thirdPartyKeyboardsBlocked?: boolean
-
 	    /** Defines if open-in operation is supported from the managed app to the filesharing locations selected. This setting only applies when AllowedOutboundDataTransferDestinations is set to ManagedApps and DisableProtectionOfManagedOutboundOpenInData is set to False. */
 		filterOpenInToOnlyManagedApps?: boolean
 
@@ -8471,6 +8514,9 @@ export interface IosManagedAppProtection extends TargetedManagedAppProtection {
 
 	    /** Protect incoming data from unknown source. This setting is only allowed to be True when AllowedInboundDataTransferSources is set to AllApps. */
 		protectInboundDataFromUnknownSources?: boolean
+
+	    /** A custom browser protocol to open weblink on iOS. */
+		customBrowserProtocol?: string
 
 	    /** List of apps to which the policy is deployed. */
 		apps?: ManagedMobileApp[]
@@ -8523,6 +8569,12 @@ export interface AndroidManagedAppProtection extends TargetedManagedAppProtectio
 
 	    /** Defines a managed app behavior, either warn or block, if the specified Android App Verification requirment fails. */
 		appActionIfAndroidSafetyNetAppsVerificationFailed?: ManagedAppRemediationAction
+
+	    /** Unique identifier of a custom browser to open weblink on Android. */
+		customBrowserPackageId?: string
+
+	    /** Friendly name of the preferred custom browser to open weblink on Android. */
+		customBrowserDisplayName?: string
 
 	    /** List of apps to which the policy is deployed. */
 		apps?: ManagedMobileApp[]
@@ -8588,9 +8640,6 @@ export interface DefaultManagedAppProtection extends ManagedAppProtection {
 	    /** Defines a managed app behavior, either block or wipe, if the specified device manufacturer is not allowed. (Android only) */
 		appActionIfAndroidDeviceManufacturerNotAllowed?: ManagedAppRemediationAction
 
-	    /** Defines if third party keyboards are allowed while accessing a managed app. (iOS Only) */
-		thirdPartyKeyboardsBlocked?: boolean
-
 	    /** Defines if open-in operation is supported from the managed app to the filesharing locations selected. This setting only applies when AllowedOutboundDataTransferDestinations is set to ManagedApps and DisableProtectionOfManagedOutboundOpenInData is set to False. (iOS Only) */
 		filterOpenInToOnlyManagedApps?: boolean
 
@@ -8611,6 +8660,15 @@ export interface DefaultManagedAppProtection extends ManagedAppProtection {
 
 	    /** Defines a managed app behavior, either warn or block, if the specified Android App Verification requirment fails. */
 		appActionIfAndroidSafetyNetAppsVerificationFailed?: ManagedAppRemediationAction
+
+	    /** A custom browser protocol to open weblink on iOS. (iOS only) */
+		customBrowserProtocol?: string
+
+	    /** Unique identifier of a custom browser to open weblink on Android. (Android only) */
+		customBrowserPackageId?: string
+
+	    /** Friendly name of the preferred custom browser to open weblink on Android. (Android only) */
+		customBrowserDisplayName?: string
 
 	    /** List of apps to which the policy is deployed. */
 		apps?: ManagedMobileApp[]
@@ -9208,7 +9266,7 @@ export interface IosVppAppAssignedLicense extends Entity {
 export interface MobileAppDependency extends MobileAppRelationship {
 
 	    /** The type of dependency relationship between the parent and child apps. */
-		dependencyType?: MobileAppDependecyType
+		dependencyType?: MobileAppDependencyType
 
 	    /** The total number of dependencies the child app has. */
 		dependentAppCount?: number
@@ -11644,6 +11702,15 @@ export interface AndroidEnterpriseWiFiConfiguration extends AndroidWiFiConfigura
 	    /** Enable identity privacy (Outer Identity) when EAP Type is configured to EAP-TTLS or PEAP. The String provided here is used to mask the username of individual users when they attempt to connect to Wi-Fi network. */
 		outerIdentityPrivacyTemporaryValue?: string
 
+	    /** Username format string used to build the username to connect to wifi */
+		usernameFormatString?: string
+
+	    /** Password format string used to build the password to connect to wifi */
+		passwordFormatString?: string
+
+	    /** PreSharedKey used to build the password to connect to wifi */
+		preSharedKey?: string
+
 	    /** Trusted Root Certificate for Server Validation when EAP Type is configured to EAP-TLS, EAP-TTLS or PEAP. This is the certificate presented by the Wi-Fi endpoint when the device attempts to connect to Wi-Fi endpoint. The device (or user) must accept this certificate to continue the connection attempt. */
 		rootCertificateForServerValidation?: AndroidTrustedRootCertificate
 
@@ -12068,6 +12135,29 @@ export interface IosImportedPFXCertificateProfile extends IosCertificateProfile 
 
 }
 
+export interface IosDerivedCredentialAuthenticationConfiguration extends DeviceConfiguration {
+
+	    /** Tenant level settings for the Derived Credentials to be used for authentication. */
+		derivedCredentialSettings?: DeviceManagementDerivedCredentialSettings
+
+}
+
+export interface DeviceManagementDerivedCredentialSettings extends Entity {
+
+	    /** The URL that will be accessible to end users as they retrieve a derived credential using the Company Portal. */
+		helpUrl?: string
+
+	    /** The display name for the profile. */
+		displayName?: string
+
+	    /** The derived credential provider to use. */
+		issuer?: DeviceManagementDerivedCredentialIssuer
+
+	    /** The methods used to inform the end user to open Company Portal to deliver Wi-Fi, VPN, or email profiles that use certificates to the device. */
+		notificationType?: DeviceManagementDerivedCredentialNotificationType
+
+}
+
 export interface IosCustomConfiguration extends DeviceConfiguration {
 
 	    /** Name that is displayed to the user. */
@@ -12316,20 +12406,35 @@ export interface IosGeneralDeviceConfiguration extends DeviceConfiguration {
 	    /** Indicates whether or not to allow device auto lock while in kiosk mode. */
 		kioskModeAllowAutoLock?: boolean
 
+	    /** Indicates whether or not to block device auto lock while in kiosk mode. */
+		kioskModeBlockAutoLock?: boolean
+
 	    /** Indicates whether or not to allow access to the Color Inversion Settings while in kiosk mode. */
 		kioskModeAllowColorInversionSettings?: boolean
 
 	    /** Indicates whether or not to allow use of the ringer switch while in kiosk mode. */
 		kioskModeAllowRingerSwitch?: boolean
 
+	    /** Indicates whether or not to block use of the ringer switch while in kiosk mode. */
+		kioskModeBlockRingerSwitch?: boolean
+
 	    /** Indicates whether or not to allow screen rotation while in kiosk mode. */
 		kioskModeAllowScreenRotation?: boolean
+
+	    /** Indicates whether or not to block screen rotation while in kiosk mode. */
+		kioskModeBlockScreenRotation?: boolean
 
 	    /** Indicates whether or not to allow use of the sleep button while in kiosk mode. */
 		kioskModeAllowSleepButton?: boolean
 
+	    /** Indicates whether or not to block use of the sleep button while in kiosk mode. */
+		kioskModeBlockSleepButton?: boolean
+
 	    /** Indicates whether or not to allow use of the touchscreen while in kiosk mode. */
 		kioskModeAllowTouchscreen?: boolean
+
+	    /** Indicates whether or not to block use of the touchscreen while in kiosk mode. */
+		kioskModeBlockTouchscreen?: boolean
 
 	    /** Indicates whether or not to allow access to the voice over settings while in kiosk mode. */
 		kioskModeAllowVoiceOverSettings?: boolean
@@ -12580,6 +12685,12 @@ export interface IosGeneralDeviceConfiguration extends DeviceConfiguration {
 	    /** Indicates whether or not unmanaged apps can read from managed contacts accounts (iOS 12.0 or later). */
 		contactsAllowUnmanagedToManagedRead?: boolean
 
+	    /** Indicates whether or not to block the user from modifying the personal hotspot setting (iOS 12.2 or later). */
+		cellularBlockPersonalHotspotModification?: boolean
+
+	    /** Indicates whether or not server-side Siri logging is disabled (iOS 12.2 or later). */
+		siriDisableServerLogging?: boolean
+
 }
 
 export interface IosUpdateConfiguration extends DeviceConfiguration {
@@ -12658,11 +12769,20 @@ export interface IosEnterpriseWiFiConfiguration extends IosWiFiConfiguration {
 	    /** Enable identity privacy (Outer Identity) when EAP Type is configured to EAP - TTLS, EAP - FAST or PEAP. This property masks usernames with the text you enter. For example, if you use 'anonymous', each user that authenticates with this Wi-Fi connection using their real username is displayed as 'anonymous'. */
 		outerIdentityPrivacyTemporaryValue?: string
 
+	    /** Username format string used to build the username to connect to wifi */
+		usernameFormatString?: string
+
+	    /** Password format string used to build the password to connect to wifi */
+		passwordFormatString?: string
+
 	    /** Trusted Root Certificates for Server Validation when EAP Type is configured to EAP-TLS/TTLS/FAST or PEAP. If you provide this value you do not need to provide trustedServerCertificateNames, and vice versa. */
 		rootCertificatesForServerValidation?: IosTrustedRootCertificate[]
 
 	    /** Identity Certificate for client authentication when EAP Type is configured to EAP-TLS, EAP-TTLS (with Certificate Authentication), or PEAP (with Certificate Authentication). */
 		identityCertificateForClientAuthentication?: IosCertificateProfileBase
+
+	    /** Tenant level settings for the Derived Credentials to be used for authentication. */
+		derivedCredentialSettings?: DeviceManagementDerivedCredentialSettings
 
 }
 
@@ -12911,6 +13031,27 @@ export interface MacOSGeneralDeviceConfiguration extends DeviceConfiguration {
 	    /** Indicates whether or not to allow content caching. */
 		contentCachingBlocked?: boolean
 
+	    /** Indicates whether or not to block iCloud Photo Library. */
+		iCloudBlockPhotoLibrary?: boolean
+
+	    /** Indicates whether or not to block the user from taking Screenshots. */
+		screenCaptureBlocked?: boolean
+
+	    /** Indicates whether or not to allow remote screen observation by Classroom app. Requires MDM enrollment via Apple School Manager or Apple Business Manager. */
+		classroomAppBlockRemoteScreenObservation?: boolean
+
+	    /** Indicates whether or not to automatically give permission to the teacher of a managed course on the Classroom app to view a student's screen without prompting. Requires MDM enrollment via Apple School Manager or Apple Business Manager. */
+		classroomAppForceUnpromptedScreenObservation?: boolean
+
+	    /** Indicates whether or not to automatically give permission to the teacher's requests, without prompting the student. Requires MDM enrollment via Apple School Manager or Apple Business Manager. */
+		classroomForceAutomaticallyJoinClasses?: boolean
+
+	    /** Indicates whether a student enrolled in an unmanaged course via Classroom will be required to request permission from the teacher when attempting to leave the course. Requires MDM enrollment via Apple School Manager or Apple Business Manager. */
+		classroomForceRequestPermissionToLeaveClasses?: boolean
+
+	    /** Indicates whether or not to allow the teacher to lock apps or the device without prompting the student. Requires MDM enrollment via Apple School Manager or Apple Business Manager. */
+		classroomForceUnpromptedAppAndDeviceLock?: boolean
+
 }
 
 export interface MacOSWiFiConfiguration extends DeviceConfiguration {
@@ -13057,6 +13198,12 @@ export interface IosEasEmailProfileConfiguration extends EasEmailProfileConfigur
 	    /** Specifies whether the connection should use OAuth for authentication. */
 		useOAuth?: boolean
 
+	    /** Signing Certificate type for this Email profile. */
+		signingCertificateType?: EmailCertificateType
+
+	    /** Encryption Certificate type for this Email profile. */
+		encryptionCertificateType?: EmailCertificateType
+
 	    /** Identity certificate. */
 		identityCertificate?: IosCertificateProfileBase
 
@@ -13065,6 +13212,9 @@ export interface IosEasEmailProfileConfiguration extends EasEmailProfileConfigur
 
 	    /** S/MIME encryption certificate. */
 		smimeEncryptionCertificate?: IosCertificateProfile
+
+	    /** Tenant level settings for the Derived Credentials to be used for authentication. */
+		derivedCredentialSettings?: DeviceManagementDerivedCredentialSettings
 
 }
 
@@ -13303,6 +13453,9 @@ export interface IosVpnConfiguration extends AppleVpnConfiguration {
 
 	    /** Identity certificate for client authentication when authentication method is certificate. */
 		identityCertificate?: IosCertificateProfileBase
+
+	    /** Tenant level settings for the Derived Credentials to be used for authentication. */
+		derivedCredentialSettings?: DeviceManagementDerivedCredentialSettings
 
 }
 
@@ -14756,8 +14909,11 @@ export interface WindowsHealthMonitoringConfiguration extends DeviceConfiguratio
 	    /** Enables device health monitoring on the device */
 		allowDeviceHealthMonitoring?: Enablement
 
-	    /** Sepcifies set of events collected from the device where health monitoring is enabled */
+	    /** Specifies set of events collected from the device where health monitoring is enabled */
 		configDeviceHealthMonitoringScope?: WindowsHealthMonitoringScope
+
+	    /** Specifies custom set of events collected from the device where health monitoring is enabled */
+		configDeviceHealthMonitoringCustomScope?: string
 
 }
 
@@ -16187,6 +16343,9 @@ export interface Windows10CompliancePolicy extends DeviceCompliancePolicy {
 	    /** Require to consider SCCM Compliance state into consideration for Intune Compliance State. */
 		configurationManagerComplianceRequired?: boolean
 
+	    /** Require Trusted Platform Module(TPM) to be present. */
+		tpmRequired?: boolean
+
 }
 
 export interface Windows10MobileCompliancePolicy extends DeviceCompliancePolicy {
@@ -16448,8 +16607,10 @@ export interface DeviceEnrollmentPlatformRestrictionsConfiguration extends Devic
 	    /** Not yet documented */
 		androidRestriction?: DeviceEnrollmentPlatformRestriction
 
+	    /** Android for work restrictions based on platform, platform operating system version, and device ownership */
 		androidForWorkRestriction?: DeviceEnrollmentPlatformRestriction
 
+	    /** Mac restrictions based on platform, platform operating system version, and device ownership */
 		macRestriction?: DeviceEnrollmentPlatformRestriction
 
 	    /** Not yet documented */
@@ -17673,6 +17834,8 @@ export interface OneDriveUsageAccountDetail extends Entity {
 
 		ownerDisplayName?: string
 
+		ownerPrincipalName?: string
+
 		isDeleted?: boolean
 
 		lastActivityDate?: string
@@ -17804,6 +17967,8 @@ export interface SharePointSiteUsageDetail extends Entity {
 		siteUrl?: string
 
 		ownerDisplayName?: string
+
+		ownerPrincipalName?: string
 
 		isDeleted?: boolean
 
@@ -18654,6 +18819,8 @@ export interface ChatMessage extends Entity {
 
 		locale?: string
 
+		webUrl?: string
+
 		replies?: ChatMessage[]
 
 		hostedImages?: ChatMessageHostedImage[]
@@ -18845,6 +19012,8 @@ export interface EducationClass extends Entity {
 	    /** Term for this class. */
 		term?: EducationTerm
 
+		course?: EducationCourse
+
 	    /** All schools that this class is associated with. Nullable. */
 		schools?: EducationSchool[]
 
@@ -19010,11 +19179,15 @@ export interface EducationUser extends Entity {
 	    /** A string value that can be used to classify user types in your directory, such as 'Member' and 'Guest'. Supports $filter. */
 		userType?: string
 
+		onPremisesInfo?: EducationOnPremisesInfo
+
 	    /** Schools to which the user belongs. Nullable. */
 		schools?: EducationSchool[]
 
 	    /** Classes to which the user belongs. Nullable. */
 		classes?: EducationClass[]
+
+		taughtClasses?: EducationClass[]
 
 	    /** The directory user corresponding to this user. */
 		user?: User
@@ -21498,6 +21671,9 @@ export interface SecurityBaselineTemplate extends DeviceManagementTemplate {
 	    /** The security baseline device states */
 		deviceStates?: SecurityBaselineDeviceState[]
 
+	    /** The security baseline per category device state summary */
+		categoryDeviceStateSummaries?: SecurityBaselineCategoryStateSummary[]
+
 }
 
 export interface SecurityBaselineStateSummary extends Entity {
@@ -21538,6 +21714,13 @@ export interface SecurityBaselineDeviceState extends Entity {
 
 	    /** Last modified date time of the policy report */
 		lastReportedDateTime?: string
+
+}
+
+export interface SecurityBaselineCategoryStateSummary extends SecurityBaselineStateSummary {
+
+	    /** The category name */
+		displayName?: string
 
 }
 
@@ -22030,6 +22213,13 @@ export interface IdentityUserRisk {
 		level?: UserRiskLevel
 
 		lastChangedDateTime?: string
+
+}
+export interface AssignedLabel {
+
+		labelId?: string
+
+		displayName?: string
 
 }
 export interface LicenseProcessingState {
@@ -23630,33 +23820,46 @@ export interface AccessAction {
 }
 export interface ItemActionSet {
 
+	    /** A comment was added to the item. */
 		comment?: CommentAction
 
+	    /** An item was created. */
 		create?: CreateAction
 
+	    /** An item was deleted. */
 		delete?: DeleteAction
 
+	    /** An item was edited. */
 		edit?: EditAction
 
+	    /** A user was mentioned in the item. */
 		mention?: MentionAction
 
+	    /** An item was moved. */
 		move?: MoveAction
 
+	    /** An item was renamed. */
 		rename?: RenameAction
 
+	    /** An item was restored. */
 		restore?: RestoreAction
 
+	    /** An item was shared. */
 		share?: ShareAction
 
+	    /** An item was versioned. */
 		version?: VersionAction
 
 }
 export interface CommentAction {
 
+	    /** If true, this activity was a reply to an existing comment thread. */
 		isReply?: boolean
 
+	    /** The identity of the user who started the comment thread. */
 		parentAuthor?: IdentitySet
 
+	    /** The identities of the users participating in this comment thread. */
 		participants?: IdentitySet[]
 
 }
@@ -23665,8 +23868,10 @@ export interface CreateAction {
 }
 export interface DeleteAction {
 
+	    /** The name of the item that was deleted. */
 		name?: string
 
+	    /** File or Folder, depending on the type of the deleted item. */
 		objectType?: string
 
 }
@@ -23675,20 +23880,25 @@ export interface EditAction {
 }
 export interface MentionAction {
 
+	    /** The identities of the users mentioned in this action. */
 		mentionees?: IdentitySet[]
 
 }
 export interface MoveAction {
 
+	    /** The name of the location the item was moved from. */
 		from?: string
 
+	    /** The name of the location the item was moved to. */
 		to?: string
 
 }
 export interface RenameAction {
 
+	    /** The new name of the item. */
 		newName?: string
 
+	    /** The previous name of the item. */
 		oldName?: string
 
 }
@@ -23697,11 +23907,13 @@ export interface RestoreAction {
 }
 export interface ShareAction {
 
+	    /** The identities the item was shared with in this action. */
 		recipients?: IdentitySet[]
 
 }
 export interface VersionAction {
 
+	    /** The name of the new version that was created by this action. */
 		newVersion?: string
 
 }
@@ -23709,22 +23921,28 @@ export interface ItemActivityTimeSet {
 
 		lastRecordedDateTime?: string
 
+	    /** When the activity was observed to take place. */
 		observedDateTime?: string
 
+	    /** When the observation was recorded on the service. */
 		recordedDateTime?: string
 
 }
 export interface ItemActionStat {
 
+	    /** The number of times the action took place. Read-only. */
 		actionCount?: number
 
+	    /** The number of distinct actors that performed the action. Read-only. */
 		actorCount?: number
 
 }
 export interface IncompleteData {
 
+	    /** The service does not have source data before the specified time. */
 		missingDataBeforeDateTime?: string
 
+	    /** Some data was not recorded due to excessive activity. */
 		wasThrottled?: boolean
 
 }
@@ -26365,7 +26583,7 @@ export interface WindowsFirewallNetworkProfile {
 	    /** Configures the firewall to allow all outgoing connections by default. When OutboundConnectionsRequired and OutboundConnectionsBlocked are both true, OutboundConnectionsBlocked takes priority. */
 		outboundConnectionsRequired?: boolean
 
-	    /** Configures the firewall to block all outgoing connections by default. When OutboundConnectionsRequired and OutboundConnectionsBlocked are both true, OutboundConnectionsBlocked takes priority. */
+	    /** Configures the firewall to block all outgoing connections by default. When OutboundConnectionsRequired and OutboundConnectionsBlocked are both true, OutboundConnectionsBlocked takes priority. This setting will get applied to Windows releases version 1809 and above. */
 		outboundConnectionsBlocked?: boolean
 
 	    /** Configures the firewall to allow all incoming connections by default. When InboundConnectionsRequired and InboundConnectionsBlocked are both true, InboundConnectionsBlocked takes priority. */
@@ -27971,6 +28189,11 @@ export interface EducationTeacher {
 		externalId?: string
 
 }
+export interface EducationOnPremisesInfo {
+
+		immutableId?: string
+
+}
 export interface EducationFileSynchronizationVerificationMessage {
 
 		type?: string
@@ -28104,6 +28327,19 @@ export interface EducationTerm {
 
 	    /** Display name of the term. */
 		displayName?: string
+
+}
+export interface EducationCourse {
+
+		subject?: string
+
+		courseNumber?: string
+
+		description?: string
+
+		displayName?: string
+
+		externalId?: string
 
 }
 export interface EducationItemBody {
