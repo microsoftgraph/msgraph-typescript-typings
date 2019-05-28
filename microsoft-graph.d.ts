@@ -477,7 +477,7 @@ export interface Group extends DirectoryObject {
 	    /** Indicates whether there are members in this group that have license errors from its group-based license assignment. This property is never returned on a GET operation. You can use it as a $filter argument to get groups that have members with license errors (that is, filter for this property being true). See an example. */
 		hasMembersWithLicenseErrors?: boolean
 
-	    /** Specifies the type of group to create. Possible values are Unified to create an Office 365 group, or DynamicMembership for dynamic groups.  For all other group types, like security-enabled groups and email-enabled security groups, do not set this property. Returned by default. Supports $filter. */
+	    /** Specifies the group type and its membership.  If the collection contains Unified then the group is an Office 365 group; otherwise it's a security group.  If the collection includes DynamicMembership, the group has dynamic membership; otherwise, membership is static.  Returned by default. Supports $filter. */
 		groupTypes?: string[]
 
 	    /** Indicates status of the group license assignment to all members of the group. Default value is false. Read-only. Possible values: QueuedForProcessing, ProcessingInProgress, and ProcessingComplete.Returned only on $select. Read-only. */
@@ -486,7 +486,7 @@ export interface Group extends DirectoryObject {
 	    /** The SMTP address for the group, for example, 'serviceadmins@contoso.onmicrosoft.com'. Returned by default. Read-only. Supports $filter. */
 		mail?: string
 
-	    /** Specifies whether the group is mail-enabled. If the securityEnabled property is also true, the group is a mail-enabled security group; otherwise, the group is a Microsoft Exchange distribution group. Returned by default. */
+	    /** Specifies whether the group is mail-enabled. Returned by default. */
 		mailEnabled?: boolean
 
 	    /** The mail alias for the group, unique in the organization. This property must be specified when a group is created. Returned by default. Supports $filter. */
@@ -510,7 +510,7 @@ export interface Group extends DirectoryObject {
 	    /** Timestamp of when the group was last renewed. This cannot be modified directly and is only updated via the renew service action. The Timestamp type represents date and time information using ISO 8601 format and is always in UTC time. For example, midnight UTC on Jan 1, 2014 would look like this: '2014-01-01T00:00:00Z'. Returned by default. Read-only. */
 		renewedDateTime?: string
 
-	    /** Specifies whether the group is a security group. If the mailEnabled property is also true, the group is a mail-enabled security group; otherwise it is a security group. Must be false for Office 365 groups. Returned by default. Supports $filter. */
+	    /** Specifies whether the group is a security group. Returned by default. Supports $filter. */
 		securityEnabled?: boolean
 
 	    /** Specifies the visibility of an Office 365 group. Possible values are: private, public, or hiddenmembership; blank values are treated as public.  See group visibility options to learn more.Visibility can be set only when a group is created; it is not editable.Visibility is supported only for unified groups; it is not supported for security groups. Returned by default. */
@@ -923,6 +923,7 @@ export interface Site extends BaseItem {
 	    /** Provides details about the site's site collection. Available only on the root site. Read-only. */
 		siteCollection?: SiteCollection
 
+	    /** Analytics about the view activities that took place in this site. */
 		analytics?: ItemAnalytics
 
 	    /** The collection of column definitions reusable across lists under this site. */
@@ -2153,6 +2154,18 @@ export interface MultiValueLegacyExtendedProperty extends Entity {
 
 }
 
+export interface MailSearchFolder extends MailFolder {
+
+		isSupported?: boolean
+
+		includeNestedFolders?: boolean
+
+		sourceFolderIds?: string[]
+
+		filterQuery?: string
+
+}
+
 export interface FileAttachment extends Attachment {
 
 	    /** The ID of the attachment in the Exchange store. */
@@ -2427,6 +2440,7 @@ export interface DriveItem extends BaseItem {
 	    /** WebDAV compatible URL for the item. */
 		webDavUrl?: string
 
+	    /** Analytics about the view activities that took place on this item. */
 		analytics?: ItemAnalytics
 
 	    /** Collection containing Item objects for the immediate children of Item. Only items representing folders have children. Read-only. Nullable. */
@@ -2498,6 +2512,7 @@ export interface ListItem extends BaseItem {
 	    /** Returns identifiers useful for SharePoint REST compatibility. Read-only. */
 		sharepointIds?: SharepointIds
 
+	    /** Analytics about the view activities that took place on this item. */
 		analytics?: ItemAnalytics
 
 	    /** For document libraries, the driveItem relationship exposes the listItem as a [driveItem][] */
@@ -2609,36 +2624,50 @@ export interface FieldValueSet extends Entity {
 
 export interface ItemActivity extends Entity {
 
+	    /** An item was accessed. */
 		access?: AccessAction
 
+	    /** Details about when the activity took place. Read-only. */
 		activityDateTime?: string
 
+	    /** Identity of who performed the action. Read-only. */
 		actor?: IdentitySet
 
+	    /** Exposes the driveItem that was the target of this activity. */
 		driveItem?: DriveItem
 
 }
 
 export interface ItemActivityStat extends Entity {
 
+	    /** When the interval starts. Read-only. */
 		startDateTime?: string
 
+	    /** When the interval ends. Read-only. */
 		endDateTime?: string
 
+	    /** Statistics about the access actions in this interval. Read-only. */
 		access?: ItemActionStat
 
+	    /** Statistics about the create actions in this interval. Read-only. */
 		create?: ItemActionStat
 
+	    /** Statistics about the delete actions in this interval. Read-only. */
 		delete?: ItemActionStat
 
+	    /** Statistics about the edit actions in this interval. Read-only. */
 		edit?: ItemActionStat
 
+	    /** Statistics about the move actions in this interval. Read-only. */
 		move?: ItemActionStat
 
+	    /** Indicates whether the item is 'trending.' Read-only. */
 		isTrending?: boolean
 
+	    /** Indicates that the statistics in this interval are based on incomplete data. Read-only. */
 		incompleteData?: IncompleteData
 
+	    /** Exposes the itemActivities represented in this itemActivityStat resource. */
 		activities?: ItemActivity[]
 
 }
@@ -10729,15 +10758,19 @@ export interface AccessAction {
 }
 export interface ItemActionStat {
 
+	    /** The number of times the action took place. Read-only. */
 		actionCount?: number
 
+	    /** The number of distinct actors that performed the action. Read-only. */
 		actorCount?: number
 
 }
 export interface IncompleteData {
 
+	    /** The service does not have source data before the specified time. */
 		missingDataBeforeDateTime?: string
 
+	    /** Some data was not recorded due to excessive activity. */
 		wasThrottled?: boolean
 
 }
@@ -12019,7 +12052,7 @@ export interface WindowsFirewallNetworkProfile {
 	    /** Configures the firewall to merge connection security rules from group policy with those from local store instead of ignoring the local store rules. When ConnectionSecurityRulesFromGroupPolicyNotMerged and ConnectionSecurityRulesFromGroupPolicyMerged are both true, ConnectionSecurityRulesFromGroupPolicyMerged takes priority. */
 		connectionSecurityRulesFromGroupPolicyMerged?: boolean
 
-	    /** Configures the firewall to block all outgoing connections by default. When OutboundConnectionsRequired and OutboundConnectionsBlocked are both true, OutboundConnectionsBlocked takes priority. */
+	    /** Configures the firewall to block all outgoing connections by default. When OutboundConnectionsRequired and OutboundConnectionsBlocked are both true, OutboundConnectionsBlocked takes priority. This setting will get applied to Windows releases version 1809 and above. */
 		outboundConnectionsBlocked?: boolean
 
 	    /** Configures the firewall to block all incoming connections by default. When InboundConnectionsRequired and InboundConnectionsBlocked are both true, InboundConnectionsBlocked takes priority. */
