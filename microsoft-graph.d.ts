@@ -70,21 +70,29 @@ export type OnenotePatchInsertPosition = "After" | "Before";
 export type OnenotePatchActionType = "Replace" | "Append" | "Delete" | "Insert" | "Prepend";
 export type OnenoteSourceService = "Unknown" | "OneDrive" | "OneDriveForBusiness" | "OnPremOneDriveForBusiness";
 export type OnenoteUserRole = "Owner" | "Contributor" | "Reader" | "None";
-export type RiskLevel = "low" | "medium" | "high" | "hidden" | "none" | "unknownFutureValue";
-export type AppliedConditionalAccessPolicyResult = "success" | "failure" | "notApplied" | "notEnabled" | "unknown" | "unknownFutureValue";
+export type AppliedConditionalAccessPolicyResult = "success" | "failure" | "notApplied" | "notEnabled" | "unknown" | "unknownFutureValue" | "reportOnlySuccess" | "reportOnlyFailure" | "reportOnlyNotApplied" | "reportOnlyInterrupted";
+export type AuthenticationMethod = "claimInAccessToken" | "password" | "sms" | "hardwareOathToken" | "softwareOathToken" | "fido2Token" | "authenticatorAppPushNotification" | "authenticatorAppPasswordlessSignIn" | "federated" | "unknownFutureValue";
+export type AuthenticationStepRequirement = "primaryAuthentication" | "mfa" | "unknownFutureValue";
+export type AuthenticationStepResultDetail = "methodSucceded" | "userIsBlocked" | "fraudCodeEntered" | "noPhoneInput" | "phoneUnreachable" | "claimInToken" | "unknownFutureValue";
+export type AuthMethodsType = "email" | "mobileSMS" | "mobilePhone" | "officePhone" | "securityQuestion" | "appNotification" | "appNotificationCode" | "appNotificationAndCode" | "appPassword" | "fido" | "alternateMobilePhone" | "mobilePhoneAndSMS" | "unknownFutureValue";
+export type AzureADLicenseType = "none" | "free" | "basic" | "premiumP1" | "premiumP2" | "unknownFutureValue";
 export type ConditionalAccessStatus = "success" | "failure" | "notApplied" | "unknownFutureValue";
+export type FeatureType = "registration" | "reset" | "unknownFutureValue";
 export type GroupType = "unifiedGroups" | "azureAD" | "unknownFutureValue";
+export type NetworkType = "intranet" | "extranet" | "namedNetwork" | "trusted" | "unknownFutureValue";
 export type OperationResult = "success" | "failure" | "timeout" | "unknownFutureValue";
-export type TokenIssuerType = "AzureAD" | "ADFederationServices" | "UnknownFutureValue";
-export type RiskState = "none" | "confirmedSafe" | "remediated" | "dismissed" | "atRisk" | "confirmedCompromised" | "unknownFutureValue";
+export type RegistrationStatusType = "registered" | "enabled" | "capable" | "mfaRegistered" | "unknownFutureValue";
+export type RequirementProvider = "MFA" | "CA" | "unknownFutureValue";
 export type RiskDetail = "none" | "adminGeneratedTemporaryPassword" | "userPerformedSecuredPasswordChange" | "userPerformedSecuredPasswordReset" | "adminConfirmedSigninSafe" | "aiConfirmedSigninSafe" | "userPassedMFADrivenByRiskBasedPolicy" | "adminDismissedAllRiskForUser" | "adminConfirmedSigninCompromised" | "hidden" | "adminConfirmedUserCompromised" | "unknownFutureValue";
 export type RiskEventType = "unlikelyTravel" | "anonymizedIPAddress" | "maliciousIPAddress" | "unfamiliarFeatures" | "malwareInfectedIPAddress" | "suspiciousIPAddress" | "leakedCredentials" | "investigationsThreatIntelligence" | "generic" | "adminConfirmedUserCompromised" | "mcasImpossibleTravel" | "mcasSuspiciousInboxManipulationRules" | "investigationsThreatIntelligenceSigninLinked" | "maliciousIPAddressValidCredentialsBlockedIP" | "unknownFutureValue";
-export type NetworkType = "intranet" | "extranet" | "namedNetwork" | "trusted" | "unknownFutureValue";
-export type AzureADLicenseType = "none" | "free" | "basic" | "premiumP1" | "premiumP2" | "unknownFutureValue";
-export type RegistrationStatusType = "registered" | "enabled" | "capable" | "mfaRegistered" | "unknownFutureValue";
+export type RiskLevel = "low" | "medium" | "high" | "hidden" | "none" | "unknownFutureValue";
+export type RiskState = "none" | "confirmedSafe" | "remediated" | "dismissed" | "atRisk" | "confirmedCompromised" | "unknownFutureValue";
 export type RegistrationAuthMethod = "email" | "mobilePhone" | "officePhone" | "securityQuestion" | "appNotification" | "appCode" | "alternateMobilePhone" | "fido" | "appPassword" | "unknownFutureValue";
 export type UsageAuthMethod = "email" | "mobileSMS" | "mobileCall" | "officePhone" | "securityQuestion" | "appNotification" | "appCode" | "alternateMobileCall" | "fido" | "appPassword" | "unknownFutureValue";
-export type FeatureType = "registration" | "reset" | "unknownFutureValue";
+export type TokenIssuerType = "AzureAD" | "ADFederationServices" | "UnknownFutureValue";
+export type InitiatorType = "user" | "app" | "system" | "unknownFutureValue";
+export type ProvisioningResult = "success" | "failure" | "skipped" | "unknownFutureValue";
+export type ProvisioningStepType = "import" | "scoping" | "matching" | "processing" | "referenceResolution" | "export" | "unknownFutureValue";
 export type RiskEventStatus = "active" | "remediated" | "dismissedAsFixed" | "dismissedAsFalsePositive" | "dismissedAsIgnore" | "loginBlocked" | "closedMfaAuto" | "closedMultipleReasons";
 export type UserRiskLevel = "unknown" | "none" | "low" | "medium" | "high";
 export type ApprovalState = "pending" | "approved" | "denied" | "aborted" | "canceled";
@@ -714,6 +722,7 @@ export interface User extends DirectoryObject {
 		refreshTokensValidFromDateTime?: string;
 	    /** true if the Outlook global address list should contain this user, otherwise false. If not set, this will be treated as true. For users invited through the invitation manager, this property will be set to false. */
 		showInAddressList?: boolean;
+	    /** Any refresh tokens or sessions tokens (session cookies) issued before this time are invalid, and applications will get an error when using an invalid refresh or sessions token to acquire a delegated access token (to access APIs such as Microsoft Graph).  If this happens, the application will need to acquire a new refresh token by making a request to the authorize endpoint. Read-only. Use revokeSignInSessions to reset. */
 		signInSessionsValidFromDateTime?: string;
 	    /** The state or province in the user's address. Supports $filter. */
 		state?: string;
@@ -761,7 +770,7 @@ export interface User extends DirectoryObject {
 		createdObjects?: DirectoryObject[];
 	    /** The users and contacts that report to the user. (The users and contacts that have their manager property set to this user.) Read-only. Nullable. */
 		directReports?: DirectoryObject[];
-	    /** A collection of this user's license details. Nullable. */
+	    /** A collection of this user's license details. Read-only. */
 		licenseDetails?: LicenseDetails[];
 	    /** The user or contact that is this user’s manager. Read-only. (HTTP Methods: GET, PUT, DELETE.) */
 		manager?: DirectoryObject;
@@ -2427,6 +2436,7 @@ export interface List extends BaseItem {
 		drive?: Drive;
 	    /** All items contained in the list. */
 		items?: ListItem[];
+		subscriptions?: Subscription[];
 }
 
 export interface SitePage extends BaseItem {
@@ -2460,6 +2470,25 @@ export interface ListItem extends BaseItem {
 		fields?: FieldValueSet;
 	    /** The list of previous versions of the list item. */
 		versions?: ListItemVersion[];
+}
+
+export interface Subscription extends Entity {
+	    /** Required. Specifies the resource that will be monitored for changes. Do not include the base URL (https://graph.microsoft.com/v1.0/). */
+		resource?: string;
+	    /** Required. Indicates the type of change in the subscribed resource that will raise a notification. The supported values are: created, updated, deleted. Multiple values can be combined using a comma-separated list.Note: Drive root item notifications support only the updated changeType. User and group notifications support updated and deleted changeType. */
+		changeType?: string;
+	    /** Optional. Specifies the value of the clientState property sent by the service in each notification. The maximum length is 128 characters. The client can check that the notification came from the service by comparing the value of the clientState property sent with the subscription with the value of the clientState property received with each notification. */
+		clientState?: string;
+	    /** Required. The URL of the endpoint that will receive the notifications. This URL must make use of the HTTPS protocol. */
+		notificationUrl?: string;
+	    /** Required. Specifies the date and time when the webhook subscription expires. The time is in UTC, and can be an amount of time from subscription creation that varies for the resource subscribed to.  See the table below for maximum supported subscription length of time. */
+		expirationDateTime?: string;
+	    /** Identifier of the application used to create the subscription. Read-only. */
+		applicationId?: string;
+	    /** Identifier of the user or service principal that created the subscription. If the app used delegated permissions to create the subscription, this field contains the id of the signed-in user the app called on behalf of. If the app used application permissions, this field contains the id of the service principal corresponding to the app. Read-only. */
+		creatorId?: string;
+		includeProperties?: boolean;
+		lifecycleNotificationUrl?: string;
 }
 
 export interface DriveItem extends BaseItem {
@@ -2554,25 +2583,6 @@ export interface Permission extends Entity {
 		roles?: string[];
 	    /** A unique token that can be used to access this shared item via the **shares** API. Read-only. */
 		shareId?: string;
-}
-
-export interface Subscription extends Entity {
-	    /** Required. Specifies the resource that will be monitored for changes. Do not include the base URL (https://graph.microsoft.com/v1.0/). */
-		resource?: string;
-	    /** Required. Indicates the type of change in the subscribed resource that will raise a notification. The supported values are: created, updated, deleted. Multiple values can be combined using a comma-separated list.Note: Drive root item notifications support only the updated changeType. User and group notifications support updated and deleted changeType. */
-		changeType?: string;
-	    /** Optional. Specifies the value of the clientState property sent by the service in each notification. The maximum length is 128 characters. The client can check that the notification came from the service by comparing the value of the clientState property sent with the subscription with the value of the clientState property received with each notification. */
-		clientState?: string;
-	    /** Required. The URL of the endpoint that will receive the notifications. This URL must make use of the HTTPS protocol. */
-		notificationUrl?: string;
-	    /** Required. Specifies the date and time when the webhook subscription expires. The time is in UTC, and can be an amount of time from subscription creation that varies for the resource subscribed to.  See the table below for maximum supported subscription length of time. */
-		expirationDateTime?: string;
-	    /** Identifier of the application used to create the subscription. Read-only. */
-		applicationId?: string;
-	    /** Identifier of the user or service principal that created the subscription. If the app used delegated permissions to create the subscription, this field contains the id of the signed-in user the app called on behalf of. If the app used application permissions, this field contains the id of the service principal corresponding to the app. Read-only. */
-		creatorId?: string;
-		includeProperties?: boolean;
-		lifecycleNotificationUrl?: string;
 }
 
 export interface ThumbnailSet extends Entity {
@@ -3645,57 +3655,78 @@ export interface DirectoryAudit extends Entity {
 }
 
 export interface SignIn extends Entity {
-	    /** Date and time (UTC) the sign-in was initiated. Example: midnight on Jan 1, 2014 is reported as '2014-01-01T00:00:00Z'. */
-		createdDateTime?: string;
-	    /** Display name of the user that initiated the sign-in. */
-		userDisplayName?: string;
-	    /** User principal name of the user that initiated the sign-in. */
-		userPrincipalName?: string;
-	    /** ID of the user that initiated the sign-in. */
-		userId?: string;
-	    /** Unique GUID representing the app ID in the Azure Active Directory. */
-		appId?: string;
+		alternateSignInName?: string;
 	    /** App name displayed in the Azure Portal. */
 		appDisplayName?: string;
-	    /** IP address of the client used to sign in. */
-		ipAddress?: string;
-	    /** Sign-in status. Possible values include Success and Failure. */
-		status?: SignInStatus;
+	    /** Unique GUID representing the app ID in the Azure Active Directory. */
+		appId?: string;
+		appliedConditionalAccessPolicies?: AppliedConditionalAccessPolicy[];
+		authenticationDetails?: AuthenticationDetail[];
+		authenticationMethodsUsed?: string[];
+		authenticationProcessingDetails?: KeyValue[];
+		authenticationRequirementPolicies?: AuthenticationRequirementPolicy[];
 	    /** Identifies the legacy client used for sign-in activity.  Includes Browser, Exchange Active Sync, modern clients, IMAP, MAPI, SMTP, and POP. */
 		clientAppUsed?: string;
+	    /** Reports status of an activated conditional access policy. Possible values are: success, failure, notApplied, and unknownFutureValue. */
+		conditionalAccessStatus?: ConditionalAccessStatus;
+	    /** The request ID sent from the client when the sign-in is initiated; used to troubleshoot sign-in activity. */
+		correlationId?: string;
+	    /** Date and time (UTC) the sign-in was initiated. Example: midnight on Jan 1, 2014 is reported as '2014-01-01T00:00:00Z'. */
+		createdDateTime?: string;
 	    /** Device information from where the sign-in occurred; includes device ID, operating system, and browser. */
 		deviceDetail?: DeviceDetail;
+	    /** Indicates if a sign-in is interactive or not. */
+		isInteractive?: boolean;
+	    /** IP address of the client used to sign in. */
+		ipAddress?: string;
 	    /** Provides the city, state, and country code where the sign-in originated. */
 		location?: SignInLocation;
 		mfaDetail?: MfaDetail;
-	    /** The request ID sent from the client when the sign-in is initiated; used to troubleshoot sign-in activity. */
-		correlationId?: string;
-	    /** Reports status of an activated conditional access policy. Possible values are: success, failure, notApplied, and unknownFutureValue. */
-		conditionalAccessStatus?: ConditionalAccessStatus;
-		appliedConditionalAccessPolicies?: AppliedConditionalAccessPolicy[];
-		originalRequestId?: string;
-	    /** Indicates if a sign-in is interactive or not. */
-		isInteractive?: boolean;
-		tokenIssuerName?: string;
-		tokenIssuerType?: TokenIssuerType;
-		authenticationProcessingDetails?: KeyValue[];
 		networkLocationDetails?: NetworkLocationDetail[];
+		originalRequestId?: string;
 		processingTimeInMilliseconds?: number;
 	    /** Provides the 'reason' behind a specific state of a risky user, sign-in or a risk event. The possible values are: none, adminGeneratedTemporaryPassword, userPerformedSecuredPasswordChange, userPerformedSecuredPasswordReset, adminConfirmedSigninSafe, aiConfirmedSigninSafe, userPassedMFADrivenByRiskBasedPolicy, adminDismissedAllRiskForUser, adminConfirmedSigninCompromised, unknownFutureValue. The value none means that no action has been performed on the user or sign-in so far. Note: Details for this property require an Azure AD Premium P2 license. Other licenses return the value hidden. */
 		riskDetail?: RiskDetail;
+	    /** Risk event types associated with the sign-in. The possible values are: unlikelyTravel, anonymizedIPAddress, maliciousIPAddress, unfamiliarFeatures, malwareInfectedIPAddress, suspiciousIPAddress, leakedCredentials, investigationsThreatIntelligence,  generic, and unknownFutureValue. */
+		riskEventTypes?: RiskEventType[];
 	    /** Aggregated risk level. The possible values are: none, low, medium, high, hidden, and unknownFutureValue. The value hidden means the user or sign-in was not enabled for Azure AD Identity Protection. Note: Details for this property are only available for Azure AD Premium P2 customers. All other customers will be returned hidden. */
 		riskLevelAggregated?: RiskLevel;
 	    /** Risk level during sign-in. The possible values are: none, low, medium, high, hidden, and unknownFutureValue. The value hidden means the user or sign-in was not enabled for Azure AD Identity Protection. Note: Details for this property are only available for Azure AD Premium P2 customers. All other customers will be returned hidden. */
 		riskLevelDuringSignIn?: RiskLevel;
 	    /** Reports status of the risky user, sign-in, or a risk event. The possible values are: none, confirmedSafe, remediated, dismissed, atRisk, confirmedCompromised, unknownFutureValue. */
 		riskState?: RiskState;
-	    /** Risk event types associated with the sign-in. The possible values are: unlikelyTravel, anonymizedIPAddress, maliciousIPAddress, unfamiliarFeatures, malwareInfectedIPAddress, suspiciousIPAddress, leakedCredentials, investigationsThreatIntelligence,  generic, and unknownFutureValue. */
-		riskEventTypes?: RiskEventType[];
 	    /** Name of the resource the user signed into. */
 		resourceDisplayName?: string;
 	    /** ID of the resource that the user signed into. */
 		resourceId?: string;
-		authenticationMethodsUsed?: string[];
+	    /** Sign-in status. Possible values include Success and Failure. */
+		status?: SignInStatus;
+		tokenIssuerName?: string;
+		tokenIssuerType?: TokenIssuerType;
+	    /** Display name of the user that initiated the sign-in. */
+		userDisplayName?: string;
+	    /** ID of the user that initiated the sign-in. */
+		userId?: string;
+	    /** User principal name of the user that initiated the sign-in. */
+		userPrincipalName?: string;
+}
+
+export interface ProvisioningObjectSummary extends Entity {
+		activityDateTime?: string;
+		tenantId?: string;
+		jobId?: string;
+		cycleId?: string;
+		changeId?: string;
+		action?: string;
+		durationInMilliseconds?: number;
+		initatedBy?: Initiator;
+		sourceSystem?: ProvisioningSystemDetails;
+		targetSystem?: ProvisioningSystemDetails;
+		sourceIdentity?: ProvisionedIdentity;
+		targetIdentity?: ProvisionedIdentity;
+		statusInfo?: StatusBase;
+		provisioningSteps?: ProvisioningStep[];
+		modifiedProperties?: ModifiedProperty[];
 }
 
 export interface RestrictedSignIn extends SignIn {
@@ -3776,6 +3807,7 @@ export interface AuditLogRoot extends Entity {
 	    /** Read-only. Nullable. */
 		directoryAudits?: DirectoryAudit[];
 		restrictedSignIns?: RestrictedSignIn[];
+		directoryProvisioning?: ProvisioningObjectSummary[];
 }
 
 export interface ReportRoot extends Entity {
@@ -16033,13 +16065,29 @@ export interface ModifiedProperty {
 	    /** Indicates the updated value for the propery. */
 		newValue?: string;
 }
-export interface SignInStatus {
-	    /** Provides the 5-6digit error code that's generated during a sign-in failure. Check out the list of error codes and messages. */
-		errorCode?: number;
-	    /** Provides the error message or the reason for failure for the corresponding sign-in activity. Check out the list of error codes and messages. */
-		failureReason?: string;
-	    /** Provides additional details on the sign-in activity */
-		additionalDetails?: string;
+export interface AppliedConditionalAccessPolicy {
+	    /** Unique GUID of the conditional access polic.y */
+		id?: string;
+	    /** Refers to the Name of the conditional access policy (example: 'Require MFA for Salesforce'). */
+		displayName?: string;
+	    /** Refers to the grant controls enforced by the conditional access policy (example: 'Require multi-factor authentication'). */
+		enforcedGrantControls?: string[];
+	    /** Refers to the session controls enforced by the conditional access policy (example: 'Require app enforced controls'). */
+		enforcedSessionControls?: string[];
+	    /** Indicates the result of the CA policy that was triggered. Possible values are:successfailurenotApplied - Policy isn't applied because policy conditions were not met.notEnabled - This is due to the policy in disabled state. */
+		result?: AppliedConditionalAccessPolicyResult;
+}
+export interface AuthenticationDetail {
+		authenticationStepDateTime?: string;
+		authenticationMethod?: AuthenticationMethod;
+		authenticationMethodDetail?: string;
+		succeeded?: boolean;
+		authenticationStepResultDetail?: AuthenticationStepResultDetail;
+		authenticationStepRequirement?: AuthenticationStepRequirement;
+}
+export interface AuthenticationRequirementPolicy {
+		requirementProvider?: RequirementProvider;
+		detail?: string;
 }
 export interface DeviceDetail {
 	    /** Refers to the UniqueID of the device used for signing in. */
@@ -16071,21 +16119,46 @@ export interface MfaDetail {
 		authMethod?: string;
 		authDetail?: string;
 }
-export interface AppliedConditionalAccessPolicy {
-	    /** Unique GUID of the conditional access polic.y */
-		id?: string;
-	    /** Refers to the Name of the conditional access policy (example: 'Require MFA for Salesforce'). */
-		displayName?: string;
-	    /** Refers to the grant controls enforced by the conditional access policy (example: 'Require multi-factor authentication'). */
-		enforcedGrantControls?: string[];
-	    /** Refers to the session controls enforced by the conditional access policy (example: 'Require app enforced controls'). */
-		enforcedSessionControls?: string[];
-	    /** Indicates the result of the CA policy that was triggered. Possible values are:successfailurenotApplied - Policy isn't applied because policy conditions were not met.notEnabled - This is due to the policy in disabled state. */
-		result?: AppliedConditionalAccessPolicyResult;
-}
 export interface NetworkLocationDetail {
 		networkType?: NetworkType;
 		networkNames?: string[];
+}
+export interface SignInStatus {
+	    /** Provides the 5-6digit error code that's generated during a sign-in failure. Check out the list of error codes and messages. */
+		errorCode?: number;
+	    /** Provides the error message or the reason for failure for the corresponding sign-in activity. Check out the list of error codes and messages. */
+		failureReason?: string;
+	    /** Provides additional details on the sign-in activity */
+		additionalDetails?: string;
+}
+export interface Initiator extends Identity {
+		initiatorType?: InitiatorType;
+}
+export interface ProvisioningSystemDetails extends Identity {
+		details?: DetailsInfo;
+}
+export interface DetailsInfo {
+}
+export interface ProvisionedIdentity extends Identity {
+		identityType?: string;
+		details?: DetailsInfo;
+}
+export interface StatusBase {
+		status?: ProvisioningResult;
+}
+export interface ProvisioningStep {
+		name?: string;
+		status?: ProvisioningResult;
+		description?: string;
+		details?: DetailsInfo;
+		provisioningStepType?: ProvisioningStepType;
+}
+export interface StatusDetails extends StatusBase {
+		errorCode?: string;
+		reason?: string;
+		additionalDetails?: string;
+		errorCategory?: string;
+		recommendedAction?: string;
 }
 export interface LicenseInfoDetail {
 		licenseType?: AzureADLicenseType;
