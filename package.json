@@ -5,7 +5,7 @@
   "license": "MIT",
   "types": "microsoft-graph.d.ts",
   "scripts": {
-    "test": "tsc && mocha spec/"
+    "test": "tsc && mocha spec/**.ts"
   },
   "typescript": {
     "definition": "microsoft-graph.d.ts"
@@ -15,10 +15,11 @@
     "url": "https://github.com/microsoftgraph/msgraph-typescript-typings.git"
   },
   "devDependencies": {
-    "@microsoft/microsoft-graph-client": "^1.5.2",
+    "@microsoft/microsoft-graph-client": "^1.7.0",
     "@types/chai": "^4.1.7",
+    "@types/node": "^12.0.8",
     "chai": "^4.2.0",
-    "mocha": "^6.1.3",
-    "typescript": "^3.4.3"
+    "mocha": "^6.1.4",
+    "typescript": "^3.5.2"
   }
 }
