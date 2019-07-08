@@ -17,7 +17,7 @@ function ReplaceVersionInVersionFile() {
 	let DTVersionArr = argv.newVersion.split(".");
 	DTVersionArr.splice(2);
 	return src(["../../microsoft-graph.d.ts"])
-		.pipe(replace(/Type definitions for non-npm package microsoft-graph <VERSION_STRING>/g, `Type definitions for non-npm package microsoft-graph ${DTVersionArr.join(".")}`))
+		.pipe(replace(/Type definitions for non-npm package microsoft-graph .+/g, `Type definitions for non-npm package microsoft-graph ${DTVersionArr.join(".")}`))
 		.pipe(dest("../../"));
 }
 
