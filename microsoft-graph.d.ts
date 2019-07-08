@@ -357,6 +357,8 @@ export type RiskEventStatus =
     | "closedMfaAuto"
     | "closedMultipleReasons";
 export type UserRiskLevel = "unknown" | "none" | "low" | "medium" | "high";
+export type RiskDetectionTimingType = "notDefined" | "realtime" | "nearRealtime" | "offline" | "unknownFutureValue";
+export type ActivityType = "signin" | "user" | "unknownFutureValue";
 export type ApprovalState = "pending" | "approved" | "denied" | "aborted" | "canceled";
 export type RoleSummaryStatus = "ok" | "bad";
 export type SetupStatus =
@@ -1825,6 +1827,12 @@ export type MobileAppIntent =
     | "requiredAndAvailableInstall"
     | "availableInstallWithoutEnrollment"
     | "exclude";
+export type ApplicationMode = "manual" | "automatic" | "recommended";
+export type Alignment = "left" | "right" | "center";
+export type PageOrientation = "horizontal" | "diagonal";
+export type GroupPrivacy = "public" | "private";
+export type SiteAccessType = "block" | "full" | "limited";
+export type EncryptWith = "template" | "userDefinedRights";
 export type DataPolicyOperationStatus = "notStarted" | "running" | "complete" | "failed" | "unknownFutureValue";
 export type UserIdentityType = "aadUser" | "onPremiseAadUser" | "anonymousGuest" | "federatedUser";
 export type ApplicationIdentityType = "aadApplication" | "bot" | "tenantBot" | "office365Connector" | "outgoingWebhook";
@@ -2206,6 +2214,7 @@ export interface User extends DirectoryObject {
     isResourceAccount?: boolean;
     // The user’s job title. Supports $filter.
     jobTitle?: string;
+    lastPasswordChangeDateTime?: string;
     /**
      * Used by enterprise applications to determine the legal age group of the user. This property is read-only and calculated
      * based on ageGroup and consentProvidedForMinor properties. Allowed values: null, minorWithOutParentalConsent,
@@ -3673,6 +3682,7 @@ export interface MobileAppTroubleshootingEvent extends DeviceManagementTroublesh
 // tslint:disable-next-line: interface-name
 export interface InformationProtection extends Entity {
     sensitivityLabels?: SensitivityLabel[];
+    sensitivityPolicySettings?: SensitivityPolicySettings;
 }
 export interface Chat extends Entity {
     topic?: string;
@@ -3909,6 +3919,16 @@ export interface Organization extends DirectoryObject {
     certificateConnectorSetting?: CertificateConnectorSetting;
     // The collection of open extensions defined for the organization. Read-only. Nullable.
     extensions?: Extension[];
+    brandings?: OrganizationalBranding[];
+}
+export interface OrganizationalBranding extends Entity {
+    backgroundColor?: string;
+    backgroundImage?: any;
+    bannerLogo?: any;
+    locale?: string;
+    signInPageText?: string;
+    squareLogo?: any;
+    usernameHintText?: string;
 }
 export interface SchemaExtension extends Entity {
     // Description for the schema extension.
@@ -5639,7 +5659,7 @@ export interface Notebook extends OnenoteEntityHierarchyModel {
     sectionGroupsUrl?: string;
     /**
      * Links for opening the notebook. The oneNoteClientURL link opens the notebook in the OneNote native client if it's
-     * installed. The oneNoteWebURL link opens the notebook in OneNote Online.
+     * installed. The oneNoteWebURL link opens the notebook in OneNote on the web.
      */
     links?: NotebookLinks;
     // The sections in the notebook. Read-only. Nullable.
@@ -5652,7 +5672,7 @@ export interface OnenoteSection extends OnenoteEntityHierarchyModel {
     isDefault?: boolean;
     /**
      * Links for opening the section. The oneNoteClientURL link opens the section in the OneNote native client if it's
-     * installed. The oneNoteWebURL link opens the section in OneNote Online.
+     * installed. The oneNoteWebURL link opens the section in OneNote on the web.
      */
     links?: SectionLinks;
     // The pages endpoint where you can get details for all the pages in the section. Read-only.
@@ -5688,7 +5708,7 @@ export interface OnenotePage extends OnenoteEntitySchemaObjectModel {
     createdByAppId?: string;
     /**
      * Links for opening the page. The oneNoteClientURL link opens the page in the OneNote native client if it 's installed.
-     * The oneNoteWebUrl link opens the page in OneNote Online. Read-only.
+     * The oneNoteWebUrl link opens the page in OneNote on the web. Read-only.
      */
     links?: PageLinks;
     // The URL for the page's HTML content. Read-only.
@@ -5964,6 +5984,27 @@ export interface IdentityRiskEvent extends Entity {
     createdDateTime?: string;
     userId?: string;
     impactedUser?: User;
+}
+export interface RiskDetection extends Entity {
+    requestId?: string;
+    correlationId?: string;
+    riskType?: RiskEventType;
+    riskState?: RiskState;
+    riskLevel?: RiskLevel;
+    riskDetail?: RiskDetail;
+    source?: string;
+    detectionTimingType?: RiskDetectionTimingType;
+    activity?: ActivityType;
+    tokenIssuerType?: TokenIssuerType;
+    ipAddress?: string;
+    location?: SignInLocation;
+    activityDateTime?: string;
+    detectedDateTime?: string;
+    lastUpdatedDateTime?: string;
+    userId?: string;
+    userDisplayName?: string;
+    userPrincipalName?: string;
+    additionalInfo?: string;
 }
 export interface LocatedRiskEvent extends IdentityRiskEvent {
     location?: SignInLocation;
@@ -16127,6 +16168,9 @@ export interface EnrollmentTroubleshootingEvent extends DeviceManagementTroubles
 export interface DataClassificationService extends Entity {
     sensitiveTypes?: SensitiveType[];
     jobs?: JobResponseBase[];
+    classifyFileJobs?: JobResponseBase[];
+    classifyTextJobs?: JobResponseBase[];
+    evaluateLabelJobs?: JobResponseBase[];
     classifyText?: TextClassificationRequest[];
     classifyFile?: FileClassificationRequest[];
     sensitivityLabels?: SensitivityLabel[];
@@ -16146,7 +16190,7 @@ export interface JobResponseBase extends Entity {
     creationDateTime?: string;
     startDateTime?: string;
     endDateTime?: string;
-    error?: CaasError;
+    error?: ClassificationError;
 }
 export interface TextClassificationRequest extends Entity {
     text?: string;
@@ -16158,21 +16202,24 @@ export interface FileClassificationRequest extends Entity {
 }
 export interface SensitivityLabel extends Entity {
     name?: string;
+    displayName?: string;
     description?: string;
     toolTip?: string;
     isEndpointProtectionEnabled?: boolean;
-    applicationMode?: string;
+    isDefault?: boolean;
+    applicationMode?: ApplicationMode;
     labelActions?: LabelActionBase[];
     assignedPolicies?: LabelPolicy[];
-}
-export interface LabelPolicy extends Entity {
-    labelIds?: string[];
-    isEnabled?: boolean;
     priority?: number;
-    name?: string;
+    sublabels?: SensitivityLabel[];
+}
+export interface SensitivityPolicySettings extends Entity {
+    isMandatory?: boolean;
+    helpWebUrl?: string;
+    downgradeSensitivityRequiresJustification?: boolean;
 }
 export interface EvaluateLabelJobResponse extends JobResponseBase {
-    result?: EvaluateLabelResult;
+    result?: EvaluateLabelJobResultGroup;
 }
 export interface ClassificationJobResponse extends JobResponseBase {
     result?: DetectedSensitiveContentWrapper;
@@ -19401,7 +19448,7 @@ export interface PlannerPlanContextDetailsCollection {}
 export interface NotebookLinks {
     // Opens the notebook in the OneNote native client if it's installed.
     oneNoteClientUrl?: ExternalLink;
-    // Opens the notebook in OneNote Online.
+    // Opens the notebook in OneNote on the web.
     oneNoteWebUrl?: ExternalLink;
 }
 export interface ExternalLink {
@@ -19411,13 +19458,13 @@ export interface ExternalLink {
 export interface SectionLinks {
     // Opens the section in the OneNote native client if it's installed.
     oneNoteClientUrl?: ExternalLink;
-    // Opens the section in OneNote Online.
+    // Opens the section in OneNote on the web.
     oneNoteWebUrl?: ExternalLink;
 }
 export interface PageLinks {
     // Opens the page in the OneNote native client if it's installed.
     oneNoteClientUrl?: ExternalLink;
-    // Opens the page in OneNote Online.
+    // Opens the page in OneNote on the web.
     oneNoteWebUrl?: ExternalLink;
 }
 export interface OnenoteOperationError {
@@ -19467,7 +19514,7 @@ export interface RecentNotebook {
     lastAccessedTime?: string;
     /**
      * Links for opening the notebook. The oneNoteClientURL link opens the notebook in the OneNote client, if it's installed.
-     * The oneNoteWebURL link opens the notebook in OneNote Online.
+     * The oneNoteWebURL link opens the notebook in OneNote on the web.
      */
     links?: RecentNotebookLinks;
     // The backend store where the Notebook resides, either OneDriveForBusiness or OneDrive.
@@ -19476,7 +19523,7 @@ export interface RecentNotebook {
 export interface RecentNotebookLinks {
     // Opens the notebook in the OneNote native client if it's installed.
     oneNoteClientUrl?: ExternalLink;
-    // Opens the notebook in OneNote Online.
+    // Opens the notebook in OneNote on the web.
     oneNoteWebUrl?: ExternalLink;
 }
 export interface CopyNotebookModel {
@@ -22708,24 +22755,32 @@ export interface MobileAppSupportedDeviceType {
     // Maximum OS version
     maximumOperatingSystemVersion?: string;
 }
-export interface CaaSErrorBase {
+export interface ClassifcationErrorBase {
     code?: string;
     message?: string;
     target?: string;
-    innerError?: CaasInnerError;
+    innerError?: ClassificationInnerError;
 }
-export interface CaasInnerError {
+export interface ClassificationInnerError {
     code?: string;
     clientRequestId?: string;
     activityId?: string;
 }
-export interface CaasError extends CaaSErrorBase {
-    details?: CaaSErrorBase[];
+export interface ClassificationError extends ClassifcationErrorBase {
+    details?: ClassifcationErrorBase[];
 }
 export interface LabelActionBase {
     name?: string;
 }
-export interface EvaluateLabelResult {
+export interface LabelPolicy {
+    id?: string;
+    name?: string;
+}
+export interface EvaluateLabelJobResultGroup {
+    automatic?: EvaluateLabelJobResult;
+    recommended?: EvaluateLabelJobResult;
+}
+export interface EvaluateLabelJobResult {
     sensitivityLabel?: MatchingLabel;
     responsibleSensitiveTypes?: ResponsibleSensitiveType[];
     responsiblePolicy?: ResponsiblePolicy;
@@ -22733,12 +22788,14 @@ export interface EvaluateLabelResult {
 export interface MatchingLabel {
     id?: string;
     name?: string;
+    displayName?: string;
     description?: string;
     toolTip?: string;
     policyTip?: string;
     isEndpointProtectionEnabled?: boolean;
-    applicationMode?: string;
+    applicationMode?: ApplicationMode;
     labelActions?: LabelActionBase[];
+    priority?: number;
 }
 export interface ResponsibleSensitiveType {
     id?: string;
@@ -22778,20 +22835,42 @@ export interface DiscoveredSensitiveType {
     count?: number;
     confidence?: number;
 }
-// tslint:disable-next-line: no-empty-interface
-export interface EncryptAction extends LabelActionBase {}
-export interface ContentMarkingAction extends LabelActionBase {
-    placement?: string;
+export interface EncryptContent extends LabelActionBase {
+    encryptWith?: EncryptWith;
+}
+export interface EncryptWithUserDefinedRights extends EncryptContent {
+    decryptionRightsManagementTemplateId?: string;
+    allowMailForwarding?: boolean;
+    allowAdHocPermissions?: boolean;
+}
+export interface EncryptWithTemplate extends EncryptContent {
+    templateId?: string;
+    availableForEncryption?: boolean;
+}
+export interface MarkContent extends LabelActionBase {
     fontSize?: number;
     text?: string;
     fontColor?: string;
-    margin?: number;
-    alignment?: string;
 }
-// tslint:disable-next-line: no-empty-interface
-export interface ContentMarkingHeaderAction extends ContentMarkingAction {}
-// tslint:disable-next-line: no-empty-interface
-export interface ContentMarkingFooterAction extends ContentMarkingAction {}
+export interface AddHeader extends MarkContent {
+    margin?: number;
+    alignment?: Alignment;
+}
+export interface AddFooter extends MarkContent {
+    margin?: number;
+    alignment?: Alignment;
+}
+export interface AddWatermark extends MarkContent {
+    orientation?: PageOrientation;
+}
+export interface ProtectGroup extends LabelActionBase {
+    allowEmailFromGuestUsers?: boolean;
+    allowGuestUsers?: boolean;
+    privacy?: GroupPrivacy;
+}
+export interface ProtectSite extends LabelActionBase {
+    accessType?: SiteAccessType;
+}
 export interface AgreementFileData {
     data?: number;
 }
