@@ -86,6 +86,17 @@ export type Tone =
     | "Flash";
 export type VideoResolutionFormat = "Sd360p" | "Sd540p" | "Hd720p" | "Hd1080p";
 export type VoiceGender = "Female" | "Male";
+export type PhoneType =
+    | "home"
+    | "business"
+    | "mobile"
+    | "other"
+    | "assistant"
+    | "homeFax"
+    | "businessFax"
+    | "otherFax"
+    | "pager"
+    | "radio";
 export type Status = "active" | "updated" | "deleted" | "ignored" | "unknownFutureValue";
 export type DayOfWeek = "sunday" | "monday" | "tuesday" | "wednesday" | "thursday" | "friday" | "saturday";
 export type AutomaticRepliesStatus = "disabled" | "alwaysEnabled" | "scheduled";
@@ -147,17 +158,6 @@ export type RecurrencePatternType =
 export type WeekIndex = "first" | "second" | "third" | "fourth" | "last";
 export type RecurrenceRangeType = "endDate" | "noEnd" | "numbered";
 export type EventType = "singleInstance" | "occurrence" | "exception" | "seriesMaster";
-export type PhoneType =
-    | "home"
-    | "business"
-    | "mobile"
-    | "other"
-    | "assistant"
-    | "homeFax"
-    | "businessFax"
-    | "otherFax"
-    | "pager"
-    | "radio";
 export type EmailType = "unknown" | "work" | "personal" | "main" | "other";
 export type WebsiteType = "other" | "home" | "work" | "blog" | "profile";
 export type MeetingMessageType =
@@ -246,12 +246,53 @@ export type AuthenticationMethod =
     | "unknownFutureValue";
 export type AuthenticationStepRequirement = "primaryAuthentication" | "mfa" | "unknownFutureValue";
 export type AuthenticationStepResultDetail =
-    | "methodSucceded"
+    | "none"
+    | "requireMfaInCloud"
+    | "requireMfaAtExtIdP"
+    | "mfaDoneInCloud"
+    | "mfaDoneAtExtIdP"
+    | "mfaFromSessionToken_Deprecated"
+    | "mfaFromBlobGrant_Deprecated"
+    | "mfaFromAccessToken_Deprecated"
+    | "mfaFromFlowToken_Deprecated"
+    | "skipMfaDueToIcn"
+    | "skipMfaDueToIP"
+    | "skipMfaDueToNgc"
+    | "skipMfaDueToRegisteredDevice"
+    | "skipMfaDueToRememberedDevice"
+    | "skipMfaDueToAppPassword"
+    | "skipMfaDuringWindowsBrokerLogon"
+    | "skipMfaDuringProofUp"
+    | "mfaExpired"
+    | "skipMfaDueToFidoUVFlag"
+    | "skipMfaDueToWiaOrWiaOrMFaForDrsFlow"
+    | "skipMfaDueToWia"
+    | "skipMfaDueToWiaForDrsFlow"
+    | "mfaFromCredential"
+    | "success"
+    | "authenticationPending"
+    | "invalidSession"
+    | "userVoiceAuthFailedCallWentToVoicemail"
+    | "smsAuthFailedWrongCodeEntered"
+    | "userAuthFailedDuplicateRequest"
+    | "userVoiceAuthFailedPhoneHungUp"
+    | "oathCodeIncorrect"
+    | "userVoiceAuthFailedPhoneUnreachable"
+    | "smsAuthFailedMaxAllowedCodeRetryReached"
+    | "phoneAppDenied"
+    | "internalError"
+    | "phoneAppNotificationFailed"
+    | "authenticationMethodFailed"
+    | "phoneAppAllDevicesBlocked"
+    | "proofDataNotFound"
+    | "invalidFormat"
+    | "phoneAppNoResponse"
+    | "pinEntered"
     | "userIsBlocked"
-    | "fraudCodeEntered"
-    | "noPhoneInput"
-    | "phoneUnreachable"
-    | "claimInToken"
+    | "oathCodeDuplicate"
+    | "authenticationMethodNotConfigured"
+    | "userNotFound"
+    | "smsSent"
     | "unknownFutureValue";
 export type AuthMethodsType =
     | "email"
@@ -347,6 +388,7 @@ export type ProvisioningStepType =
     | "referenceResolution"
     | "export"
     | "unknownFutureValue";
+export type MigrationStatus = "ready" | "needsReview" | "additionalStepsRequired" | "unknownFutureValue";
 export type RiskEventStatus =
     | "active"
     | "remediated"
@@ -1692,6 +1734,7 @@ export type TeamVisibilityType = "private" | "public" | "hiddenMembership" | "un
 export type ClonableTeamParts = "apps" | "tabs" | "settings" | "channels" | "members";
 export type GiphyRatingType = "moderate" | "strict" | "unknownFutureValue";
 export type ChatMessageBodyType = "text" | "html";
+export type ChannelMembershipType = "standard" | "private" | "unknownFutureValue";
 export type TeamsAsyncOperationType =
     | "invalid"
     | "cloneTeam"
@@ -2028,6 +2071,9 @@ export type OnPremisesPublishingType =
     | "unknownFutureValue";
 export type AgentStatus = "active" | "inactive";
 export type StagedFeatureName = "passthroughAuthentication" | "seamlessSso" | "passwordHashSync" | "unknownFutureValue";
+export type AnalyticsActivityType = "Email" | "Meeting" | "Focus" | "Chat" | "Call";
+export type EntityType = "event" | "message" | "driveItem";
+export type TermField = "wellKnownFolderName" | "folderId";
 export interface Entity {
     // Read-only.
     id?: string;
@@ -2471,7 +2517,8 @@ export interface User extends DirectoryObject {
     // Zero or more WIP device registrations that belong to the user.
     windowsInformationProtectionDeviceRegistrations?: WindowsInformationProtectionDeviceRegistration[];
     devices?: Device[];
-    joinedTeams?: Group[];
+    joinedTeams?: Team[];
+    teamwork?: UserTeamwork;
     // The list of troubleshooting events for this user.
     deviceManagementTroubleshootingEvents?: DeviceManagementTroubleshootingEvent[];
     // The list of troubleshooting events for this user.
@@ -2482,6 +2529,7 @@ export interface User extends DirectoryObject {
     chats?: Chat[];
     agreementAcceptances?: AgreementAcceptance[];
     notifications?: Notification[];
+    analytics?: UserAnalytics;
 }
 export interface AppRoleAssignment extends Entity {
     appRoleId?: string;
@@ -3647,6 +3695,49 @@ export interface Device extends DirectoryObject {
     transitiveMemberOf?: DirectoryObject[];
     commands?: Command[];
 }
+export interface Team extends Entity {
+    displayName?: string;
+    description?: string;
+    // A unique ID for the team that has been used in a few places such as the audit log/Office 365 Management Activity API.
+    internalId?: string;
+    classification?: string;
+    specialization?: TeamSpecialization;
+    visibility?: TeamVisibilityType;
+    /**
+     * A hyperlink that will go to the team in the Microsoft Teams client. This is the URL that you get when you right-click a
+     * team in the Microsoft Teams client and select Get link to team. This URL should be treated as an opaque blob, and not
+     * parsed.
+     */
+    webUrl?: string;
+    /**
+     * Settings to configure whether members can perform certain actions, for example, create channels and add bots, in the
+     * team.
+     */
+    memberSettings?: TeamMemberSettings;
+    // Settings to configure whether guests can create, update, or delete channels in the team.
+    guestSettings?: TeamGuestSettings;
+    // Settings to configure messaging and mentions in the team.
+    messagingSettings?: TeamMessagingSettings;
+    // Settings to configure use of Giphy, memes, and stickers in the team.
+    funSettings?: TeamFunSettings;
+    discoverySettings?: TeamDiscoverySettings;
+    // Whether this team is in read-only mode.
+    isArchived?: boolean;
+    schedule?: Schedule;
+    template?: TeamsTemplate;
+    // The collection of channels &amp; messages associated with the team.
+    channels?: Channel[];
+    apps?: TeamsCatalogApp[];
+    // The apps installed in this team.
+    installedApps?: TeamsAppInstallation[];
+    operations?: TeamsAsyncOperation[];
+    owners?: User[];
+    primaryChannel?: Channel;
+    group?: Group;
+}
+export interface UserTeamwork extends Entity {
+    installedApps?: TeamsAppInstallation[];
+}
 export interface DeviceManagementTroubleshootingEvent extends Entity {
     // Time when the event occurred .
     eventDateTime?: string;
@@ -3688,6 +3779,7 @@ export interface Chat extends Entity {
     topic?: string;
     createdDateTime?: string;
     lastUpdatedDateTime?: string;
+    installedApps?: TeamsAppInstallation[];
     members?: ConversationMember[];
     messages?: ChatMessage[];
 }
@@ -3709,6 +3801,10 @@ export interface Notification extends Entity {
     priority?: Priority;
     groupName?: string;
     targetPolicy?: TargetPolicyEndpoints;
+}
+export interface UserAnalytics extends Entity {
+    settings?: Settings;
+    activityStatistics?: ActivityStatistics[];
 }
 export interface DirectorySetting extends Entity {
     displayName?: string;
@@ -3766,42 +3862,6 @@ export interface PlannerGroup extends Entity {
     // Read-only. Nullable. Returns the plannerPlans owned by the group.
     plans?: PlannerPlan[];
 }
-export interface Team extends Entity {
-    displayName?: string;
-    description?: string;
-    classification?: string;
-    specialization?: TeamSpecialization;
-    visibility?: TeamVisibilityType;
-    /**
-     * A hyperlink that will go to the team in the Microsoft Teams client. This is the URL that you get when you right-click a
-     * team in the Microsoft Teams client and select Get link to team. This URL should be treated as an opaque blob, and not
-     * parsed.
-     */
-    webUrl?: string;
-    /**
-     * Settings to configure whether members can perform certain actions, for example, create channels and add bots, in the
-     * team.
-     */
-    memberSettings?: TeamMemberSettings;
-    // Settings to configure whether guests can create, update, or delete channels in the team.
-    guestSettings?: TeamGuestSettings;
-    // Settings to configure messaging and mentions in the team.
-    messagingSettings?: TeamMessagingSettings;
-    // Settings to configure use of Giphy, memes, and stickers in the team.
-    funSettings?: TeamFunSettings;
-    // Whether this team is in read-only mode.
-    isArchived?: boolean;
-    schedule?: Schedule;
-    template?: TeamsTemplate;
-    // The collection of channels &amp; messages associated with the team.
-    channels?: Channel[];
-    apps?: TeamsCatalogApp[];
-    // The apps installed in this team.
-    installedApps?: TeamsAppInstallation[];
-    operations?: TeamsAsyncOperation[];
-    owners?: User[];
-    group?: Group;
-}
 export interface Channel extends Entity {
     // Channel name as it will appear to the user in Microsoft Teams.
     displayName?: string;
@@ -3816,10 +3876,12 @@ export interface Channel extends Entity {
      * parsed. Read-only.
      */
     webUrl?: string;
+    membershipType?: ChannelMembershipType;
     messages?: ChatMessage[];
     chatThreads?: ChatThread[];
     // A collection of all the tabs in the channel. A navigation property.
     tabs?: TeamsTab[];
+    members?: ConversationMember[];
 }
 export interface GroupLifecyclePolicy extends Entity {
     /**
@@ -3862,11 +3924,11 @@ export interface Organization extends DirectoryObject {
      * property.
      */
     businessPhones?: string[];
-    // City name of the address for the organization
+    // City name of the address for the organization.
     city?: string;
-    // Country/region name of the address for the organization
+    // Country/region name of the address for the organization.
     country?: string;
-    // Country/region abbreviation for the organization
+    // Country/region abbreviation for the organization.
     countryLetterCode?: string;
     /**
      * Timestamp of when the organization was created. The value cannot be modified and is automatically populated when the
@@ -3895,7 +3957,7 @@ export interface Organization extends DirectoryObject {
      * (default).
      */
     onPremisesSyncEnabled?: boolean;
-    // Postal code of the address for the organization
+    // Postal code of the address for the organization.
     postalCode?: string;
     // The preferred language for the organization. Should follow ISO 639-1 Code; for example 'en'.
     preferredLanguage?: string;
@@ -3905,9 +3967,9 @@ export interface Organization extends DirectoryObject {
     provisionedPlans?: ProvisionedPlan[];
     securityComplianceNotificationMails?: string[];
     securityComplianceNotificationPhones?: string[];
-    // State name of the address for the organization
+    // State name of the address for the organization.
     state?: string;
-    // Street name of the address for organization
+    // Street name of the address for organization.
     street?: string;
     // Not nullable.
     technicalNotificationMails?: string[];
@@ -4015,25 +4077,19 @@ export interface Synchronization extends Entity {
     templates?: SynchronizationTemplate[];
 }
 export interface OrgContact extends DirectoryObject {
-    businessPhones?: string[];
-    city?: string;
+    addresses?: PhysicalOfficeAddress[];
     companyName?: string;
-    country?: string;
     department?: string;
     displayName?: string;
     givenName?: string;
     jobTitle?: string;
     mail?: string;
     mailNickname?: string;
-    mobilePhone?: string;
     onPremisesSyncEnabled?: boolean;
     onPremisesLastSyncDateTime?: string;
     onPremisesProvisioningErrors?: OnPremisesProvisioningError[];
-    officeLocation?: string;
-    postalCode?: string;
+    phones?: Phone[];
     proxyAddresses?: string[];
-    state?: string;
-    streetAddress?: string;
     surname?: string;
     manager?: DirectoryObject;
     directReports?: DirectoryObject[];
@@ -5959,6 +6015,19 @@ export interface UserCredentialUsageDetails extends Entity {
     failureReason?: string;
     eventDateTime?: string;
 }
+export interface RelyingPartyDetailedSummary extends Entity {
+    relyingPartyId?: string;
+    serviceId?: string;
+    relyingPartyName?: string;
+    successfulSignInCount?: number;
+    failedSignInCount?: number;
+    totalSignInCount?: number;
+    signInSuccessRate?: number;
+    uniqueUserCount?: number;
+    migrationStatus?: MigrationStatus;
+    migrationValidationDetails?: KeyValuePair[];
+    replyUrls?: string[];
+}
 export interface AuditLogRoot extends Entity {
     // Read-only. Nullable.
     signIns?: SignIn[];
@@ -7542,6 +7611,8 @@ export interface GroupPolicyDefinitionFile extends Entity {
     targetNamespace?: string;
     // Specifies the type of group policy.
     policyType?: GroupPolicyType;
+    // The revision version associated with the file.
+    revision?: string;
     // The date and time the entity was last modified.
     lastModifiedDateTime?: string;
     // The group policy definitions associated with the file.
@@ -7883,8 +7954,8 @@ export interface VppToken extends Entity {
     // The expiration date time of the Apple Volume Purchase Program Token.
     expirationDateTime?: string;
     /**
-     * The last time when an application sync was done with the Apple volume purchase program service using the the Apple
-     * Volume Purchase Program Token.
+     * The last time when an application sync was done with the Apple volume purchase program service using the Apple Volume
+     * Purchase Program Token.
      */
     lastSyncDateTime?: string;
     // The Apple Volume Purchase Program Token string downloaded from the Apple Volume Purchase Program.
@@ -10963,7 +11034,7 @@ export interface IosGeneralDeviceConfiguration extends DeviceConfiguration {
     // Indicates whether or not to block the user from downloading media from the iBookstore that has been tagged as erotica.
     iBooksStoreBlockErotica?: boolean;
     /**
-     * Indicates whether or not to block the the user from continuing work they started on iOS device to another iOS or macOS
+     * Indicates whether or not to block the user from continuing work they started on iOS device to another iOS or macOS
      * device.
      */
     iCloudBlockActivityContinuation?: boolean;
@@ -12422,7 +12493,7 @@ export interface Windows10EndpointProtectionConfiguration extends DeviceConfigur
     deviceGuardLaunchSystemGuard?: Enablement;
     // Allows IT Admins to configure SmartScreen for Windows.
     smartScreenEnableInShell?: boolean;
-    // Allows IT Admins to control whether users can can ignore SmartScreen warnings and run malicious files.
+    // Allows IT Admins to control whether users can ignore SmartScreen warnings and run malicious files.
     smartScreenBlockOverrideForFiles?: boolean;
     // Enable Windows Defender Application Guard
     applicationGuardEnabled?: boolean;
@@ -15837,8 +15908,17 @@ export interface TeamsTab extends Entity {
     // The application that is linked to the tab. This cannot be changed after tab creation.
     teamsApp?: TeamsApp;
 }
+export interface ConversationMember extends Entity {
+    roles?: string[];
+    displayName?: string;
+}
 // tslint:disable-next-line: no-empty-interface
 export interface ChatMessageHostedContent extends Entity {}
+export interface AadUserConversationMember extends ConversationMember {
+    userId?: string;
+    email?: string;
+    user?: User;
+}
 // tslint:disable-next-line: interface-name
 export interface IdentityProvider extends Entity {
     type?: string;
@@ -15923,12 +16003,12 @@ export interface EducationClass extends Entity {
     // Term for this class.
     term?: EducationTerm;
     course?: EducationCourse;
-    // All schools that this class is associated with. Nullable.
-    schools?: EducationSchool[];
     // All users in the class. Nullable.
     members?: EducationUser[];
     // All teachers in the class. Nullable.
     teachers?: EducationUser[];
+    // All schools that this class is associated with. Nullable.
+    schools?: EducationSchool[];
     // The directory group corresponding to this class.
     group?: Group;
     assignments?: EducationAssignment[];
@@ -16065,11 +16145,11 @@ export interface EducationUser extends Entity {
      */
     userType?: string;
     onPremisesInfo?: EducationOnPremisesInfo;
-    // Schools to which the user belongs. Nullable.
-    schools?: EducationSchool[];
     // Classes to which the user belongs. Nullable.
     classes?: EducationClass[];
     taughtClasses?: EducationClass[];
+    // Schools to which the user belongs. Nullable.
+    schools?: EducationSchool[];
     // The directory user corresponding to this user.
     user?: User;
     // List of assignments for the user. Nullable.
@@ -16244,14 +16324,8 @@ export interface DataPolicyOperation extends Entity {
     // Specifies the progress of an operation.
     progress?: number;
 }
-export interface ConversationMember extends Entity {
-    roles?: string[];
-    displayName?: string;
-}
-export interface AadUserConversationMember extends ConversationMember {
-    userId?: string;
-    email?: string;
-}
+// tslint:disable-next-line: no-empty-interface
+export interface Teamwork extends Entity {}
 export interface Agreement extends Entity {
     displayName?: string;
     isViewingBeforeAcceptanceRequired?: boolean;
@@ -16966,6 +17040,7 @@ export interface GroupPolicyPresentationListBox extends GroupPolicyPresentation 
      * box shows two columns, one for the name and one for the data. The default value is false.
      */
     explicitValue?: boolean;
+    valuePrefix?: string;
 }
 export interface GroupPolicyPresentationLongDecimalTextBox extends GroupPolicyPresentation {
     // An unsigned integer that specifies the initial value for the decimal text box. The default value is 1.
@@ -17035,6 +17110,8 @@ export interface Company extends Entity {
     customers?: Customer[];
     vendors?: Vendor[];
     companyInformation?: CompanyInformation[];
+    salesInvoices?: SalesInvoice[];
+    salesInvoiceLines?: SalesInvoiceLine[];
     customerPaymentJournals?: CustomerPaymentJournal[];
     customerPayments?: CustomerPayment[];
     accounts?: Account[];
@@ -17051,10 +17128,18 @@ export interface Company extends Entity {
     shipmentMethods?: ShipmentMethod[];
     itemCategories?: ItemCategory[];
     countriesRegions?: CountryRegion[];
+    salesOrders?: SalesOrder[];
+    salesOrderLines?: SalesOrderLine[];
     unitsOfMeasure?: UnitOfMeasure[];
     agedAccountsReceivable?: AgedAccountsReceivable[];
     agedAccountsPayable?: AgedAccountsPayable[];
     taxAreas?: TaxArea[];
+    salesQuotes?: SalesQuote[];
+    salesQuoteLines?: SalesQuoteLine[];
+    salesCreditMemos?: SalesCreditMemo[];
+    salesCreditMemoLines?: SalesCreditMemoLine[];
+    purchaseInvoices?: PurchaseInvoice[];
+    purchaseInvoiceLines?: PurchaseInvoiceLine[];
     picture?: Picture[];
 }
 // tslint:disable-next-line: interface-name
@@ -17107,9 +17192,6 @@ export interface Customer extends Entity {
     shipmentMethodId?: string;
     paymentMethodId?: string;
     blocked?: string;
-    balance?: number;
-    overdueAmount?: number;
-    totalSalesExcludingTax?: number;
     lastModifiedDateTime?: string;
     picture?: Picture[];
     currency?: Currency;
@@ -17177,7 +17259,80 @@ export interface CompanyInformation extends Entity {
     currentFiscalYearStartDate?: string;
     industry?: string;
     picture?: any;
-    businessProfileId?: string;
+    lastModifiedDateTime?: string;
+}
+export interface SalesInvoice extends Entity {
+    number?: string;
+    externalDocumentNumber?: string;
+    invoiceDate?: string;
+    dueDate?: string;
+    customerPurchaseOrderReference?: string;
+    customerId?: string;
+    customerNumber?: string;
+    customerName?: string;
+    billToName?: string;
+    billToCustomerId?: string;
+    billToCustomerNumber?: string;
+    shipToName?: string;
+    shipToContact?: string;
+    sellingPostalAddress?: PostalAddressType;
+    billingPostalAddress?: PostalAddressType;
+    shippingPostalAddress?: PostalAddressType;
+    currencyId?: string;
+    currencyCode?: string;
+    orderId?: string;
+    orderNumber?: string;
+    paymentTermsId?: string;
+    shipmentMethodId?: string;
+    salesperson?: string;
+    pricesIncludeTax?: boolean;
+    discountAmount?: number;
+    discountAppliedBeforeTax?: boolean;
+    totalAmountExcludingTax?: number;
+    totalTaxAmount?: number;
+    totalAmountIncludingTax?: number;
+    status?: string;
+    lastModifiedDateTime?: string;
+    phoneNumber?: string;
+    email?: string;
+    salesInvoiceLines?: SalesInvoiceLine[];
+    customer?: Customer;
+    currency?: Currency;
+    paymentTerm?: PaymentTerm;
+    shipmentMethod?: ShipmentMethod;
+}
+export interface SalesInvoiceLine extends Entity {
+    documentId?: string;
+    sequence?: number;
+    itemId?: string;
+    accountId?: string;
+    lineType?: string;
+    description?: string;
+    unitOfMeasureId?: string;
+    unitPrice?: number;
+    quantity?: number;
+    discountAmount?: number;
+    discountPercent?: number;
+    discountAppliedBeforeTax?: boolean;
+    amountExcludingTax?: number;
+    taxCode?: string;
+    taxPercent?: number;
+    totalTaxAmount?: number;
+    amountIncludingTax?: number;
+    invoiceDiscountAllocation?: number;
+    netAmount?: number;
+    netTaxAmount?: number;
+    netAmountIncludingTax?: number;
+    shipmentDate?: string;
+    item?: Item;
+    account?: Account;
+}
+export interface Account extends Entity {
+    number?: string;
+    displayName?: string;
+    category?: string;
+    subCategory?: string;
+    blocked?: boolean;
     lastModifiedDateTime?: string;
 }
 export interface CustomerPaymentJournal extends Entity {
@@ -17205,14 +17360,6 @@ export interface CustomerPayment extends Entity {
     comment?: string;
     lastModifiedDateTime?: string;
     customer?: Customer;
-}
-export interface Account extends Entity {
-    number?: string;
-    displayName?: string;
-    category?: string;
-    subCategory?: string;
-    blocked?: boolean;
-    lastModifiedDateTime?: string;
 }
 export interface TaxGroup extends Entity {
     code?: string;
@@ -17259,6 +17406,7 @@ export interface Employee extends Entity {
     terminationDate?: string;
     status?: string;
     birthDate?: string;
+    statisticsGroupCode?: string;
     lastModifiedDateTime?: string;
     picture?: Picture[];
 }
@@ -17290,6 +17438,73 @@ export interface CountryRegion extends Entity {
     displayName?: string;
     addressFormat?: string;
     lastModifiedDateTime?: string;
+}
+export interface SalesOrder extends Entity {
+    number?: string;
+    externalDocumentNumber?: string;
+    orderDate?: string;
+    customerId?: string;
+    customerNumber?: string;
+    customerName?: string;
+    billToName?: string;
+    billToCustomerId?: string;
+    billToCustomerNumber?: string;
+    shipToName?: string;
+    shipToContact?: string;
+    sellingPostalAddress?: PostalAddressType;
+    billingPostalAddress?: PostalAddressType;
+    shippingPostalAddress?: PostalAddressType;
+    currencyId?: string;
+    currencyCode?: string;
+    pricesIncludeTax?: boolean;
+    paymentTermsId?: string;
+    salesperson?: string;
+    partialShipping?: boolean;
+    requestedDeliveryDate?: string;
+    discountAmount?: number;
+    discountAppliedBeforeTax?: boolean;
+    totalAmountExcludingTax?: number;
+    totalTaxAmount?: number;
+    totalAmountIncludingTax?: number;
+    fullyShipped?: boolean;
+    status?: string;
+    lastModifiedDateTime?: string;
+    phoneNumber?: string;
+    email?: string;
+    salesOrderLines?: SalesOrderLine[];
+    customer?: Customer;
+    currency?: Currency;
+    paymentTerm?: PaymentTerm;
+}
+export interface SalesOrderLine extends Entity {
+    documentId?: string;
+    sequence?: number;
+    itemId?: string;
+    accountId?: string;
+    lineType?: string;
+    description?: string;
+    unitOfMeasureId?: string;
+    quantity?: number;
+    unitPrice?: number;
+    discountAmount?: number;
+    discountPercent?: number;
+    discountAppliedBeforeTax?: boolean;
+    amountExcludingTax?: number;
+    taxCode?: string;
+    taxPercent?: number;
+    totalTaxAmount?: number;
+    amountIncludingTax?: number;
+    invoiceDiscountAllocation?: number;
+    netAmount?: number;
+    netTaxAmount?: number;
+    netAmountIncludingTax?: number;
+    shipmentDate?: string;
+    shippedQuantity?: number;
+    invoicedQuantity?: number;
+    invoiceQuantity?: number;
+    shipQuantity?: number;
+    item?: Item;
+    account?: Account;
 }
 export interface UnitOfMeasure extends Entity {
     code?: string;
@@ -17326,6 +17541,184 @@ export interface TaxArea extends Entity {
     displayName?: string;
     taxType?: string;
     lastModifiedDateTime?: string;
+}
+export interface SalesQuote extends Entity {
+    number?: string;
+    externalDocumentNumber?: string;
+    documentDate?: string;
+    dueDate?: string;
+    customerId?: string;
+    customerNumber?: string;
+    customerName?: string;
+    billToName?: string;
+    billToCustomerId?: string;
+    billToCustomerNumber?: string;
+    shipToName?: string;
+    shipToContact?: string;
+    sellingPostalAddress?: PostalAddressType;
+    billingPostalAddress?: PostalAddressType;
+    shippingPostalAddress?: PostalAddressType;
+    currencyId?: string;
+    currencyCode?: string;
+    paymentTermsId?: string;
+    shipmentMethodId?: string;
+    salesperson?: string;
+    discountAmount?: number;
+    totalAmountExcludingTax?: number;
+    totalTaxAmount?: number;
+    totalAmountIncludingTax?: number;
+    status?: string;
+    sentDate?: string;
+    validUntilDate?: string;
+    acceptedDate?: string;
+    lastModifiedDateTime?: string;
+    phoneNumber?: string;
+    email?: string;
+    salesQuoteLines?: SalesQuoteLine[];
+    customer?: Customer;
+    currency?: Currency;
+    paymentTerm?: PaymentTerm;
+    shipmentMethod?: ShipmentMethod;
+}
+export interface SalesQuoteLine extends Entity {
+    documentId?: string;
+    sequence?: number;
+    itemId?: string;
+    accountId?: string;
+    lineType?: string;
+    description?: string;
+    unitOfMeasureId?: string;
+    unitPrice?: number;
+    quantity?: number;
+    discountAmount?: number;
+    discountPercent?: number;
+    discountAppliedBeforeTax?: boolean;
+    amountExcludingTax?: number;
+    taxCode?: string;
+    taxPercent?: number;
+    totalTaxAmount?: number;
+    amountIncludingTax?: number;
+    netAmount?: number;
+    netTaxAmount?: number;
+    netAmountIncludingTax?: number;
+    item?: Item;
+    account?: Account;
+}
+export interface SalesCreditMemo extends Entity {
+    number?: string;
+    externalDocumentNumber?: string;
+    creditMemoDate?: string;
+    dueDate?: string;
+    customerId?: string;
+    customerNumber?: string;
+    customerName?: string;
+    billToName?: string;
+    billToCustomerId?: string;
+    billToCustomerNumber?: string;
+    sellingPostalAddress?: PostalAddressType;
+    billingPostalAddress?: PostalAddressType;
+    currencyId?: string;
+    currencyCode?: string;
+    paymentTermsId?: string;
+    salesperson?: string;
+    pricesIncludeTax?: boolean;
+    discountAmount?: number;
+    discountAppliedBeforeTax?: boolean;
+    totalAmountExcludingTax?: number;
+    totalTaxAmount?: number;
+    totalAmountIncludingTax?: number;
+    status?: string;
+    lastModifiedDateTime?: string;
+    invoiceId?: string;
+    invoiceNumber?: string;
+    phoneNumber?: string;
+    email?: string;
+    salesCreditMemoLines?: SalesCreditMemoLine[];
+    customer?: Customer;
+    currency?: Currency;
+    paymentTerm?: PaymentTerm;
+}
+export interface SalesCreditMemoLine extends Entity {
+    documentId?: string;
+    sequence?: number;
+    itemId?: string;
+    accountId?: string;
+    lineType?: string;
+    description?: string;
+    unitOfMeasureId?: string;
+    unitPrice?: number;
+    quantity?: number;
+    discountAmount?: number;
+    discountPercent?: number;
+    discountAppliedBeforeTax?: boolean;
+    amountExcludingTax?: number;
+    taxCode?: string;
+    taxPercent?: number;
+    totalTaxAmount?: number;
+    amountIncludingTax?: number;
+    invoiceDiscountAllocation?: number;
+    netAmount?: number;
+    netTaxAmount?: number;
+    netAmountIncludingTax?: number;
+    shipmentDate?: string;
+    item?: Item;
+    account?: Account;
+}
+export interface PurchaseInvoice extends Entity {
+    number?: string;
+    invoiceDate?: string;
+    dueDate?: string;
+    vendorInvoiceNumber?: string;
+    vendorId?: string;
+    vendorNumber?: string;
+    vendorName?: string;
+    payToName?: string;
+    payToContact?: string;
+    payToVendorId?: string;
+    payToVendorNumber?: string;
+    shipToName?: string;
+    shipToContact?: string;
+    buyFromAddress?: PostalAddressType;
+    payToAddress?: PostalAddressType;
+    shipToAddress?: PostalAddressType;
+    currencyId?: string;
+    currencyCode?: string;
+    pricesIncludeTax?: boolean;
+    discountAmount?: number;
+    discountAppliedBeforeTax?: boolean;
+    totalAmountExcludingTax?: number;
+    totalTaxAmount?: number;
+    totalAmountIncludingTax?: number;
+    status?: string;
+    lastModifiedDateTime?: string;
+    purchaseInvoiceLines?: PurchaseInvoiceLine[];
+    vendor?: Vendor;
+    currency?: Currency;
+}
+export interface PurchaseInvoiceLine extends Entity {
+    documentId?: string;
+    sequence?: number;
+    itemId?: string;
+    accountId?: string;
+    lineType?: string;
+    description?: string;
+    unitCost?: number;
+    quantity?: number;
+    discountAmount?: number;
+    discountPercent?: number;
+    discountAppliedBeforeTax?: boolean;
+    amountExcludingTax?: number;
+    taxCode?: string;
+    taxPercent?: number;
+    totalTaxAmount?: number;
+    amountIncludingTax?: number;
+    invoiceDiscountAllocation?: number;
+    netAmount?: number;
+    netTaxAmount?: number;
+    netAmountIncludingTax?: number;
+    expectedReceiptDate?: string;
+    item?: Item;
+    account?: Account;
 }
 export interface ChangeTrackedEntity extends Entity {
     createdDateTime?: string;
@@ -17558,6 +17951,38 @@ export interface ApplicationTemplate extends Entity {
     categories?: string[];
     publisher?: string;
     description?: string;
+}
+export interface ActivityStatistics extends Entity {
+    activity?: AnalyticsActivityType;
+    startDate?: string;
+    endDate?: string;
+    timeZoneUsed?: string;
+    duration?: string;
+}
+export interface EmailActivityStatistics extends ActivityStatistics {
+    afterHours?: string;
+    readEmail?: string;
+    sentEmail?: string;
+}
+export interface MeetingActivityStatistics extends ActivityStatistics {
+    afterHours?: string;
+    organized?: string;
+    recurring?: string;
+    long?: string;
+    conflicting?: string;
+    multitasking?: string;
+}
+// tslint:disable-next-line: no-empty-interface
+export interface FocusActivityStatistics extends ActivityStatistics {}
+export interface ChatActivityStatistics extends ActivityStatistics {
+    afterHours?: string;
+}
+export interface CallActivityStatistics extends ActivityStatistics {
+    afterHours?: string;
+}
+export interface Search extends Entity {
+    value?: SearchResponse[];
+    requests?: SearchRequest[];
 }
 export interface MeetingParticipants {
     organizer?: MeetingParticipantInfo;
@@ -18045,6 +18470,23 @@ export interface WebApplication {
 export interface ImplicitGrantSettings {
     enableIdTokenIssuance?: boolean;
     enableAccessTokenIssuance?: boolean;
+}
+export interface PhysicalOfficeAddress {
+    city?: string;
+    countryOrRegion?: string;
+    officeLocation?: string;
+    postalCode?: string;
+    state?: string;
+    street?: string;
+}
+export interface Phone {
+    /**
+     * The type of phone number. The possible values are: home, business, mobile, other, assistant, homeFax, businessFax,
+     * otherFax, pager, radio.
+     */
+    type?: PhoneType;
+    // The phone number.
+    number?: string;
 }
 export interface SettingValue {
     // Name of the setting (as defined by the groupSettingTemplate).
@@ -18866,15 +19308,6 @@ export interface RecurrenceRange {
 export interface Attendee extends AttendeeBase {
     // The attendee's response (none, accepted, declined, etc.) for the event and date-time that the response was sent.
     status?: ResponseStatus;
-}
-export interface Phone {
-    /**
-     * The type of phone number. The possible values are: home, business, mobile, other, assistant, homeFax, businessFax,
-     * otherFax, pager, radio.
-     */
-    type?: PhoneType;
-    // The phone number.
-    number?: string;
 }
 export interface TypedEmailAddress extends EmailAddress {
     type?: EmailType;
@@ -19737,6 +20170,12 @@ export interface UserRegistrationCount {
     registrationStatus?: RegistrationStatusType;
     registrationCount?: number;
 }
+export interface KeyValuePair {
+    // Name for this key-value pair
+    name?: string;
+    // Value for this key-value pair
+    value?: string;
+}
 export interface RiskUserActivity {
     eventTypes?: RiskEventType[];
     detail?: RiskDetail;
@@ -19956,12 +20395,6 @@ export interface AndroidForWorkAppConfigurationSchemaItem {
      */
     selections?: KeyValuePair[];
 }
-export interface KeyValuePair {
-    // Name for this key-value pair
-    name?: string;
-    // Value for this key-value pair
-    value?: string;
-}
 export interface AndroidManagedStoreAppConfigurationSchemaItem {
     // Unique key the application uses to identify the item
     schemaItemKey?: string;
@@ -19998,7 +20431,7 @@ export interface FileEncryptionInfo {
     mac?: number;
     // The key used to get mac.
     macKey?: number;
-    // The the profile identifier.
+    // The profile identifier.
     profileIdentifier?: string;
     // The file digest prior to encryption.
     fileDigest?: number;
@@ -22205,6 +22638,9 @@ export interface TeamFunSettings {
     // If set to true, enables users to include custom memes.
     allowCustomMemes?: boolean;
 }
+export interface TeamDiscoverySettings {
+    showInTeamsSearchAndSuggestions?: boolean;
+}
 export interface TeamClassSettings {
     notifyGuardiansAboutAssignments?: boolean;
 }
@@ -22762,6 +23198,7 @@ export interface ClassifcationErrorBase {
     innerError?: ClassificationInnerError;
 }
 export interface ClassificationInnerError {
+    errorDateTime?: string;
     code?: string;
     clientRequestId?: string;
     activityId?: string;
@@ -22817,6 +23254,7 @@ export interface DetectedSensitiveContent {
     displayName?: string;
     uniqueCount?: number;
     confidence?: number;
+    recommendedConfidence?: number;
     matches?: SensitiveContentLocation[];
 }
 export interface SensitiveContentLocation {
@@ -23300,6 +23738,7 @@ export interface AccessReviewSettings {
     autoReviewSettings?: AutoReviewSettings;
     autoApplyReviewResultsEnabled?: boolean;
     accessRecommendationsEnabled?: boolean;
+    applyDeniedDecisionsSettings?: AccessReviewDenyActionSettings;
 }
 export interface AccessReviewRecurrenceSettings {
     recurrenceType?: string;
@@ -23309,6 +23748,12 @@ export interface AccessReviewRecurrenceSettings {
 }
 export interface AutoReviewSettings {
     notReviewedResult?: string;
+}
+export interface AccessReviewDenyActionSettings {
+    removeAccessToResource?: boolean;
+    disableUserSignIn?: boolean;
+    deleteUserFromDirectory?: boolean;
+    timeBeforeDeletionInDays?: number;
 }
 export interface ProgramResource extends Identity {
     type?: string;
@@ -23516,4 +23961,57 @@ export interface UpdateWindow {
 export interface ApplicationServicePrincipal {
     application?: Application;
     servicePrincipal?: ServicePrincipal;
+}
+export interface Settings {
+    hasLicense?: boolean;
+    hasOptedOut?: boolean;
+    hasGraphMailbox?: boolean;
+}
+export interface SearchRequest {
+    entityType?: EntityType;
+    query?: SearchQuery;
+    from?: number;
+    size?: number;
+    _sources?: string[];
+    enableTopResults?: boolean;
+}
+export interface SearchQuery {
+    query_string?: SearchQueryString;
+    filter?: FilterContainer;
+}
+export interface SearchQueryString {
+    query?: string;
+}
+export interface FilterContainer {
+    bool?: FilterContainer[];
+    should?: FilterContainer[];
+    term?: TermFilter;
+    range?: RangeFilter;
+}
+export interface TermFilter {
+    field?: TermField;
+    value?: string;
+}
+export interface RangeFilter {
+    field?: TermField;
+    gt?: string;
+    gte?: string;
+    lt?: string;
+    lte?: string;
+}
+export interface SearchResponse {
+    searchTerms?: string[];
+    hitsContainers?: SearchHitsContainer[];
+}
+export interface SearchHitsContainer {
+    hits?: SearchHit[];
+    total?: number;
+    moreResultsAvailable?: boolean;
+}
+export interface SearchHit {
+    _id?: string;
+    _score?: number;
+    _sortField?: string;
+    _summary?: string;
+    _source?: Entity;
 }
