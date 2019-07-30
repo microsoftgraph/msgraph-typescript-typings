@@ -1,4 +1,4 @@
-// Type definitions for non-npm package microsoft-graph 1.10
+// Type definitions for non-npm package microsoft-graph <VERSION_STRING>
 // Project: https://github.com/microsoftgraph/msgraph-typescript-typings
 // Definitions by: Microsoft Graph Team <https://github.com/microsoftgraph>
 // Definitions: https://github.com/DefinitelyTyped/DefinitelyTyped
@@ -800,12 +800,14 @@ export interface Entity {
     // Read-only.
     id?: string;
 }
+export interface DirectoryObject extends Entity {
+    deletedDateTime?: string;
+}
+// tslint:disable-next-line: no-empty-interface
+export interface AdministrativeUnit extends DirectoryObject {}
 export interface Directory extends Entity {
     // Recently deleted items. Read-only. Nullable.
     deletedItems?: DirectoryObject[];
-}
-export interface DirectoryObject extends Entity {
-    deletedDateTime?: string;
 }
 export interface Device extends DirectoryObject {
     // true if the account is enabled; otherwise, false. Required.
@@ -1343,14 +1345,14 @@ export interface Event extends OutlookItem {
     importance?: Importance;
     // The possible values are: normal, personal, private, confidential.
     sensitivity?: Sensitivity;
-    // The date, time, and time zone that the event starts.
+    // The date, time, and time zone that the event starts. By default, the start time is in UTC.
     start?: DateTimeTimeZone;
     /**
      * The Timestamp type represents date and time information using ISO 8601 format and is always in UTC time. For example,
      * midnight UTC on Jan 1, 2014 would look like this: '2014-01-01T00:00:00Z'
      */
     originalStart?: string;
-    // The date, time, and time zone that the event ends.
+    // The date, time, and time zone that the event ends. By default, the end time is in UTC.
     end?: DateTimeTimeZone;
     // The location of the event.
     location?: Location;
@@ -1617,11 +1619,11 @@ export interface Organization extends DirectoryObject {
      * property.
      */
     businessPhones?: string[];
-    // City name of the address for the organization
+    // City name of the address for the organization.
     city?: string;
-    // Country/region name of the address for the organization
+    // Country/region name of the address for the organization.
     country?: string;
-    // Country/region abbreviation for the organization
+    // Country/region abbreviation for the organization.
     countryLetterCode?: string;
     /**
      * Timestamp of when the organization was created. The value cannot be modified and is automatically populated when the
@@ -1645,7 +1647,7 @@ export interface Organization extends DirectoryObject {
      * (default).
      */
     onPremisesSyncEnabled?: boolean;
-    // Postal code of the address for the organization
+    // Postal code of the address for the organization.
     postalCode?: string;
     // The preferred language for the organization. Should follow ISO 639-1 Code; for example 'en'.
     preferredLanguage?: string;
@@ -1655,9 +1657,9 @@ export interface Organization extends DirectoryObject {
     provisionedPlans?: ProvisionedPlan[];
     securityComplianceNotificationMails?: string[];
     securityComplianceNotificationPhones?: string[];
-    // State name of the address for the organization
+    // State name of the address for the organization.
     state?: string;
-    // Street name of the address for organization
+    // Street name of the address for organization.
     street?: string;
     // Not nullable.
     technicalNotificationMails?: string[];
@@ -3848,8 +3850,6 @@ export interface OnenoteOperation extends Operation {
 }
 // tslint:disable-next-line: no-empty-interface
 export interface ReportRoot extends Entity {}
-// tslint:disable-next-line: no-empty-interface
-export interface AdministrativeUnit extends DirectoryObject {}
 export interface EducationRoot extends Entity {
     // Read-only. Nullable.
     classes?: EducationClass[];
@@ -3940,7 +3940,7 @@ export interface EducationUser extends Entity {
     mailingAddress?: PhysicalAddress;
     // If the primary role is student, this block will contain student specific data.
     student?: EducationStudent;
-    // If the primary role is teacher, this block will conatin teacher specific data.
+    // If the primary role is teacher, this block will contain teacher specific data.
     teacher?: EducationTeacher;
     // Entity who created the user.
     createdBy?: IdentitySet;
@@ -4141,8 +4141,8 @@ export interface VppToken extends Entity {
     // The expiration date time of the Apple Volume Purchase Program Token.
     expirationDateTime?: string;
     /**
-     * The last time when an application sync was done with the Apple volume purchase program service using the the Apple
-     * Volume Purchase Program Token.
+     * The last time when an application sync was done with the Apple volume purchase program service using the Apple Volume
+     * Purchase Program Token.
      */
     lastSyncDateTime?: string;
     // The Apple Volume Purchase Program Token string downloaded from the Apple Volume Purchase Program.
@@ -5912,7 +5912,7 @@ export interface IosGeneralDeviceConfiguration extends DeviceConfiguration {
     // Indicates whether or not to block the user from downloading media from the iBookstore that has been tagged as erotica.
     iBooksStoreBlockErotica?: boolean;
     /**
-     * Indicates whether or not to block the the user from continuing work they started on iOS device to another iOS or macOS
+     * Indicates whether or not to block the user from continuing work they started on iOS device to another iOS or macOS
      * device.
      */
     iCloudBlockActivityContinuation?: boolean;
@@ -6232,7 +6232,7 @@ export interface Windows10EndpointProtectionConfiguration extends DeviceConfigur
     appLockerApplicationControl?: AppLockerApplicationControlType;
     // Allows IT Admins to configure SmartScreen for Windows.
     smartScreenEnableInShell?: boolean;
-    // Allows IT Admins to control whether users can can ignore SmartScreen warnings and run malicious files.
+    // Allows IT Admins to control whether users can ignore SmartScreen warnings and run malicious files.
     smartScreenBlockOverrideForFiles?: boolean;
     // Enable Windows Defender Application Guard
     applicationGuardEnabled?: boolean;
@@ -8328,7 +8328,7 @@ export interface DateTimeTimeZone {
      * 2017-08-29T04:00:00.0000000).
      */
     dateTime?: string;
-    // One of the following time zone names.
+    // Represents a time zone, for example, 'Pacific Standard Time'. See below for more possible values.
     timeZone?: string;
 }
 export interface LocaleInfo {
@@ -9751,7 +9751,7 @@ export interface FileEncryptionInfo {
     mac?: number;
     // The key used to get mac.
     macKey?: number;
-    // The the profile identifier.
+    // The profile identifier.
     profileIdentifier?: string;
     // The file digest prior to encryption.
     fileDigest?: number;
