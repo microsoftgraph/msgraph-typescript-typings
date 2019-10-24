@@ -211,6 +211,10 @@ export type PlaceType = "unknown" | "room" | "roomList" | "publicPlace" | "perso
 export type BookingType = "unknown" | "standard" | "reserved";
 export type AutomaticRepliesStatus = "disabled" | "alwaysEnabled" | "scheduled";
 export type ExternalAudienceScope = "none" | "contactsOnly" | "all";
+export type DelegateMeetingMessageDeliveryOptions =
+    | "sendToDelegateAndInformationToPrincipal"
+    | "sendToDelegateAndPrincipal"
+    | "sendToDelegateOnly";
 export type MailTipsType =
     | "automaticReplies"
     | "mailboxFullStatus"
@@ -229,6 +233,9 @@ export type TimeZoneStandard = "windows" | "iana";
 export type Importance = "low" | "normal" | "high";
 export type InferenceClassificationType = "focused" | "other";
 export type FollowupFlagStatus = "notFlagged" | "complete" | "flagged";
+export type CalendarSharingActionImportance = "primary" | "secondary";
+export type CalendarSharingActionType = "accept";
+export type CalendarSharingAction = "accept" | "acceptAndViewCalendar" | "viewCalendar" | "addThisCalendar";
 export type MeetingMessageType =
     | "none"
     | "meetingRequest"
@@ -246,6 +253,7 @@ export type RecurrencePatternType =
     | "relativeYearly";
 export type WeekIndex = "first" | "second" | "third" | "fourth" | "last";
 export type RecurrenceRangeType = "endDate" | "noEnd" | "numbered";
+export type ResponseType = "none" | "organizer" | "tentativelyAccepted" | "accepted" | "declined" | "notResponded";
 export type CalendarColor =
     | "lightBlue"
     | "lightGreen"
@@ -258,7 +266,16 @@ export type CalendarColor =
     | "lightRed"
     | "maxColor"
     | "auto";
-export type ResponseType = "none" | "organizer" | "tentativelyAccepted" | "accepted" | "declined" | "notResponded";
+export type OnlineMeetingProviderType = "unknown" | "skypeForBusiness" | "skypeForConsumer" | "teamsForBusiness";
+export type CalendarRoleType =
+    | "none"
+    | "freeBusyRead"
+    | "limitedRead"
+    | "read"
+    | "write"
+    | "delegateWithoutPrivateEventAccess"
+    | "delegateWithPrivateEventAccess"
+    | "custom";
 export type Sensitivity = "normal" | "personal" | "private" | "confidential";
 export type WebsiteType = "other" | "home" | "work" | "blog" | "profile";
 export type EmailType = "unknown" | "work" | "personal" | "main" | "other";
@@ -290,6 +307,7 @@ export type CategoryColor =
     | "preset24"
     | "none";
 export type TaskStatus = "notStarted" | "inProgress" | "completed" | "waitingOnOthers" | "deferred";
+export type AttachmentType = "file" | "item" | "reference";
 export type ReferenceAttachmentProvider = "other" | "oneDriveBusiness" | "oneDriveConsumer" | "dropbox";
 export type ReferenceAttachmentPermission =
     | "other"
@@ -406,6 +424,19 @@ export type RiskEventStatus =
     | "closedMfaAuto"
     | "closedMultipleReasons";
 export type UserRiskLevel = "unknown" | "none" | "low" | "medium" | "high";
+export type ConditionalAccessPolicyState = "enabled" | "disabled";
+export type ConditionalAccessClientApp = "browser" | "modern" | "easSupported" | "easUnsupported" | "other";
+export type ConditionalAccessGrantControl =
+    | "block"
+    | "mfa"
+    | "compliantDevice"
+    | "domainJoinedDevice"
+    | "approvedApplication"
+    | "compliantApplication";
+export type CloudAppSecuritySessionControlType = "mcasConfigured" | "monitorOnly" | "blockDownloads";
+export type SigninFrequencyType = "days" | "hours";
+export type PersistentBrowserSessionMode = "always" | "never";
+export type ConditionalAccessDevicePlatform = "android" | "iOS" | "windows" | "windowsPhone" | "macOS" | "all";
 export type RiskDetectionTimingType = "notDefined" | "realtime" | "nearRealtime" | "offline" | "unknownFutureValue";
 export type ActivityType = "signin" | "user" | "unknownFutureValue";
 export type ContentFormat = "default" | "email";
@@ -456,6 +487,7 @@ export type AndroidManagedStoreAppConfigurationSchemaItemDataType =
     | "hidden";
 export type InstallIntent = "available" | "required" | "uninstall" | "availableWithoutEnrollment";
 export type Win32LobAppNotification = "showAll" | "showReboot" | "hideAll";
+export type DeviceAndAppManagementAssignmentSource = "direct" | "policySets";
 export type MobileAppPublishingState = "notPublished" | "processing" | "published";
 export type ResultantAppState =
     | "installed"
@@ -487,6 +519,7 @@ export type ResultantAppStateDetail =
     | "minimumDiskSpaceNotMet"
     | "processorArchitectureNotApplicable";
 export type MobileAppDependencyType = "detect" | "autoInstall";
+export type MicrosoftEdgeChannel = "dev" | "beta" | "stable";
 export type OfficeProductId = "o365ProPlusRetail" | "o365BusinessRetail" | "visioProRetail" | "projectProRetail";
 export type OfficeUpdateChannel = "none" | "current" | "deferred" | "firstReleaseCurrent" | "firstReleaseDeferred";
 export type WindowsArchitecture = "none" | "x86" | "x64" | "arm" | "neutral" | "arm64";
@@ -541,6 +574,7 @@ export type Win32LobAppPowerShellScriptDetectionType =
     | "float"
     | "version"
     | "boolean";
+export type Win32LobAppRestartBehavior = "basedOnReturnCode" | "allow" | "suppress" | "force";
 export type Win32LobAppReturnCodeType = "failed" | "success" | "softReboot" | "hardReboot" | "retry";
 export type Win32LobAppMsiPackageType = "perMachine" | "perUser" | "dualPurpose";
 export type WindowsDeviceType = "none" | "desktop" | "mobile" | "holographic" | "team";
@@ -568,7 +602,6 @@ export type MdmAppConfigKeyType = "stringType" | "integerType" | "realType" | "b
 export type InstallState = "notApplicable" | "installed" | "failed" | "notInstalled" | "uninstallFailed" | "unknown";
 export type PolicySetStatus = "unknown" | "validating" | "partialSuccess" | "success" | "error" | "notAssigned";
 export type ErrorCode = "noError" | "unauthorized" | "notFound" | "deleted";
-export type DeviceAndAppManagementAssignmentSource = "direct" | "policySets";
 export type AdministratorConfiguredDeviceComplianceState = "basedOnDeviceCompliancePolicy" | "nonCompliant";
 export type DerivedCredentialProviderType = "notConfigured" | "entrustDataCard" | "purebred" | "xTec" | "intercede";
 export type Windows10EditionType =
@@ -653,9 +686,9 @@ export type KeyStorageProviderOption =
     | "usePassportForWorkKspOtherwiseFail"
     | "useSoftwareKsp";
 export type CertificateRevocationStatus = "none" | "pending" | "issued" | "failed" | "revoked";
+export type CertificateStore = "user" | "machine";
 export type KeySize = "size1024" | "size2048";
 export type HashAlgorithms = "sha1" | "sha2";
-export type CertificateStore = "user" | "machine";
 export type AndroidDeviceOwnerAppAutoUpdatePolicyType = "notConfigured" | "userChoice" | "never" | "wiFiOnly" | "always";
 export type AndroidDeviceOwnerDefaultAppPermissionPolicyType = "deviceDefault" | "prompt" | "autoGrant" | "autoDeny";
 export type AndroidDeviceOwnerVirtualHomeButtonType = "notConfigured" | "swipeUp" | "floating";
@@ -676,7 +709,8 @@ export type AndroidDeviceOwnerRequiredPasswordType =
     | "alphabetic"
     | "alphanumeric"
     | "alphanumericWithSymbols"
-    | "lowSecurityBiometric";
+    | "lowSecurityBiometric"
+    | "customPassword";
 export type AndroidDeviceOwnerPlayStoreMode = "notConfigured" | "allowList" | "blockList";
 export type AndroidDeviceOwnerBatteryPluggedMode = "notConfigured" | "ac" | "usb" | "wireless";
 export type AndroidDeviceOwnerSystemUpdateInstallType = "deviceDefault" | "postpone" | "windowed" | "automatic";
@@ -780,6 +814,12 @@ export type AndroidWorkProfileVpnConnectionType =
     | "citrix"
     | "paloAltoGlobalProtect";
 export type WiFiProxySetting = "none" | "manual" | "automatic";
+export type EapType = "eapTls" | "leap" | "eapSim" | "eapTtls" | "peap" | "eapFast";
+export type EapFastConfiguration =
+    | "noProtectedAccessCredential"
+    | "useProtectedAccessCredential"
+    | "useProtectedAccessCredentialAndProvision"
+    | "useProtectedAccessCredentialAndProvisionAnonymously";
 export type AppleSubjectNameFormat =
     | "commonName"
     | "commonNameAsEmail"
@@ -923,12 +963,6 @@ export type RatingUnitedStatesTelevisionType =
 export type RatingAppsType = "allAllowed" | "allBlocked" | "agesAbove4" | "agesAbove9" | "agesAbove12" | "agesAbove17";
 export type RequiredPasswordType = "deviceDefault" | "alphanumeric" | "numeric";
 export type WiFiSecurityType = "open" | "wpaPersonal" | "wpaEnterprise" | "wep" | "wpa2Personal" | "wpa2Enterprise";
-export type EapType = "eapTls" | "leap" | "eapSim" | "eapTtls" | "peap" | "eapFast";
-export type EapFastConfiguration =
-    | "noProtectedAccessCredential"
-    | "useProtectedAccessCredential"
-    | "useProtectedAccessCredentialAndProvision"
-    | "useProtectedAccessCredentialAndProvisionAnonymously";
 export type MacOSGatekeeperAppSources =
     | "notConfigured"
     | "macAppStore"
@@ -1188,7 +1222,11 @@ export type DeliveryOptimizationGroupIdOptionsType =
     | "authenticatedDomainSid"
     | "dhcpUserOption"
     | "dnsSuffix";
-export type WindowsHealthMonitoringScope = "undefined" | "healthMonitoring" | "bootPerformance";
+export type WindowsHealthMonitoringScope =
+    | "undefined"
+    | "healthMonitoring"
+    | "bootPerformance"
+    | "userExperienceAnalytics";
 export type WindowsKioskAppType = "unknown" | "store" | "desktop" | "aumId";
 export type WindowsAppStartLayoutTileSize = "hidden" | "small" | "medium" | "wide" | "large";
 export type SharedPCAccountDeletionPolicyType =
@@ -1419,7 +1457,9 @@ export type DeviceManagementTemplateType =
     | "advancedThreatProtectionSecurityBaseline"
     | "deviceConfiguration"
     | "custom"
-    | "securityTemplate";
+    | "securityTemplate"
+    | "microsoftEdgeSecurityBaseline"
+    | "microsoftOffice365ProPlusSecurityBaseline";
 export type SecurityBaselineComplianceState =
     | "unknown"
     | "secure"
@@ -1436,7 +1476,15 @@ export type ManagedDeviceRemoteAction =
     | "signatureUpdate"
     | "wipe"
     | "customTextNotification"
-    | "rebootNow";
+    | "rebootNow"
+    | "setDeviceName";
+export type UserExperienceAnalyticsSummarizedBy =
+    | "none"
+    | "model"
+    | "allRegressions"
+    | "modelRegression"
+    | "manufacturerRegression"
+    | "operatingSystemVersionRegression";
 export type RemoteAction =
     | "unknown"
     | "factoryReset"
@@ -1461,7 +1509,7 @@ export type RemoteAction =
     | "rotateFileVaultKey"
     | "getFileVaultKey"
     | "setDeviceName";
-export type RunState = "unknown" | "success" | "fail" | "error" | "pending";
+export type RunState = "unknown" | "success" | "fail" | "scriptError" | "pending" | "notApplicable";
 export type DeviceGuardVirtualizationBasedSecurityHardwareRequirementState =
     | "meetHardwareRequirements"
     | "secureBootRequired"
@@ -1540,8 +1588,7 @@ export type DeviceEnrollmentType =
     | "windowsBulkAzureDomainJoin"
     | "windowsCoManagement"
     | "appleUserEnrollment"
-    | "appleUserEnrollmentWithServiceAccount"
-    | "appleUserEnrollmentWithAzureAD";
+    | "appleUserEnrollmentWithServiceAccount";
 export type LostModeState = "disabled" | "enabled";
 export type DeviceRegistrationState =
     | "notRegistered"
@@ -1675,8 +1722,7 @@ export type ConfigurationManagerClientState =
     | "updateFailed"
     | "communicationError";
 export type AppLogUploadState = "pending" | "completed" | "failed";
-export type DeviceHealthScriptDetectionType = "notConfigured" | "string";
-export type DeviceHealthScriptComplianceRuleOperator = "notConfigured" | "equal" | "notEqual";
+export type RemediationState = "unknown" | "skipped" | "success" | "remediationFailed" | "scriptError";
 export type DeviceManagementSubscriptionState =
     | "pending"
     | "active"
@@ -1695,6 +1741,7 @@ export type DeviceManagementSubscriptions =
 export type AdminConsentState = "notConfigured" | "granted" | "notGranted";
 export type UserExperienceAnalyticsInsightSeverity = "none" | "informational" | "warning" | "error";
 export type UserExperienceAnalyticsHealthState = "unknown" | "insufficientData" | "needsAttention" | "meetingGoals";
+export type DiskType = "unkown" | "hdd" | "ssd";
 export type HealthState = "unknown" | "healthy" | "unhealthy";
 export type ConfigurationManagerActionType =
     | "refreshMachinePolicy"
@@ -1731,6 +1778,9 @@ export type ImportedWindowsAutopilotDeviceIdentityImportStatus =
 export type AppleUserInitiatedEnrollmentType = "unknown" | "device" | "user";
 export type BinaryManagementConditionExpressionOperatorType = "or" | "and";
 export type UnaryManagementConditionExpressionOperatorType = "not";
+export type GroupPolicyMigrationReadiness = "none" | "partial" | "complete" | "error" | "notApplicable";
+export type GroupPolicySettingType = "unknown" | "policy" | "account";
+export type GroupPolicySettingScope = "unknown" | "device" | "user";
 export type GroupPolicyConfigurationType = "policy" | "preference";
 export type GroupPolicyDefinitionClassType = "user" | "machine";
 export type GroupPolicyType = "admxBacked" | "admxIngested";
@@ -1740,6 +1790,7 @@ export type ManagedAppClipboardSharingLevel = "allApps" | "managedAppsWithPasteI
 export type ManagedAppRemediationAction = "block" | "wipe" | "warn";
 export type ManagedAppPinCharacterSet = "numeric" | "alphanumericAndSymbol";
 export type ManagedAppNotificationRestriction = "allow" | "blockOrganizationalData" | "block";
+export type ManagedAppDeviceThreatLevel = "notConfigured" | "secured" | "low" | "medium" | "high";
 export type ManagedAppDataEncryptionType =
     | "useDeviceSettings"
     | "afterDeviceRestart"
@@ -1774,6 +1825,9 @@ export type DeviceAppManagementTaskPriority = "none" | "high" | "low";
 export type DeviceAppManagementTaskStatus = "unknown" | "pending" | "active" | "completed" | "rejected";
 export type RoleAssignmentScopeType = "resourceScope" | "allDevices" | "allLicensedUsers" | "allDevicesAndLicensedUsers";
 export type RemoteAssistanceOnboardingStatus = "notOnboarded" | "onboarding" | "onboarded";
+export type DeviceManagementReportStatus = "unknown" | "notStarted" | "inProgress" | "completed" | "failed";
+export type DeviceManagementReportFileFormat = "csv" | "pdf";
+export type DeviceManagementScheduledReportRecurrence = "none" | "daily" | "weekly" | "monthly";
 export type EmbeddedSIMDeviceStateValue =
     | "notEvaluated"
     | "failed"
@@ -1822,9 +1876,16 @@ export type MobileAppIntent =
     | "requiredAndAvailableInstall"
     | "availableInstallWithoutEnrollment"
     | "exclude";
+export type WindowsDefenderApplicationControlSupplementalPolicyStatuses =
+    | "unknown"
+    | "success"
+    | "tokenError"
+    | "notAuthorizedByToken"
+    | "policyNotFound";
 export type ApplicationType = "universal" | "desktop";
 export type UserPfxIntendedPurpose = "unassigned" | "smimeEncryption" | "smimeSigning" | "vpn" | "wifi";
 export type UserPfxPaddingScheme = "none" | "pkcs1" | "oaepSha1" | "oaepSha256" | "oaepSha384" | "oaepSha512";
+export type EntityType = "event" | "message" | "driveItem" | "externalFile" | "externalItem";
 export type Priority = "None" | "High" | "Low";
 export type PlannerPreviewType = "automatic" | "noPreview" | "checklist" | "description" | "reference";
 export type OperationStatus = "NotStarted" | "Running" | "Completed" | "Failed";
@@ -2274,6 +2335,10 @@ export interface User extends DirectoryObject {
     isResourceAccount?: boolean;
     // The user’s job title. Supports $filter.
     jobTitle?: string;
+    /**
+     * The time when this Azure AD user last changed their password. The date and time information uses ISO 8601 format and is
+     * always in UTC time. For example, midnight UTC on Jan 1, 2014 would look like this: '2014-01-01T00:00:00Z'
+     */
     lastPasswordChangeDateTime?: string;
     /**
      * Used by enterprise applications to determine the legal age group of the user. This property is read-only and calculated
@@ -2798,6 +2863,7 @@ export interface Group extends DirectoryObject {
     resourceProvisioningOptions?: string[];
     // Specifies whether the group is a security group. Returned by default. Supports $filter.
     securityEnabled?: boolean;
+    // Security identifier of the group, used in Windows scenarios. Returned by default.
     securityIdentifier?: string;
     theme?: string;
     /**
@@ -2832,6 +2898,8 @@ export interface Group extends DirectoryObject {
     unseenCount?: number;
     unseenConversationsCount?: number;
     unseenMessagesCount?: number;
+    hideFromOutlookClients?: boolean;
+    hideFromAddressLists?: boolean;
     isArchived?: boolean;
     appRoleAssignments?: AppRoleAssignment[];
     /**
@@ -2956,10 +3024,15 @@ export interface Calendar extends Entity {
      * shared that calendar with the user.
      */
     owner?: EmailAddress;
+    allowedOnlineMeetingProviders?: OnlineMeetingProviderType[];
+    defaultOnlineMeetingProvider?: OnlineMeetingProviderType;
+    isTallyingResponses?: boolean;
+    isRemovable?: boolean;
     // The collection of single-value extended properties defined for the calendar. Read-only. Nullable.
     singleValueExtendedProperties?: SingleValueLegacyExtendedProperty[];
     // The collection of multi-value extended properties defined for the calendar. Read-only. Nullable.
     multiValueExtendedProperties?: MultiValueLegacyExtendedProperty[];
+    calendarPermissions?: CalendarPermission[];
     // The events in the calendar. Navigation property. Read-only.
     events?: Event[];
     // The calendar view for the calendar. Navigation property. Read-only.
@@ -3055,6 +3128,10 @@ export interface Event extends OutlookItem {
      * a Skype meeting. Read-only.
      */
     onlineMeetingUrl?: string;
+    isOnlineMeeting?: boolean;
+    onlineMeetingProvider?: OnlineMeetingProviderType;
+    onlineMeeting?: OnlineMeetingInfo;
+    allowNewTimeProposals?: boolean;
     /**
      * The collection of fileAttachment and itemAttachment attachments for the event. Navigation property. Read-only.
      * Nullable.
@@ -4340,6 +4417,7 @@ export interface ResourceSpecificPermissionGrant extends DirectoryObject {
     permission?: string;
 }
 export interface CertificateBasedAuthConfiguration extends Entity {
+    // Collection of certificate authorities which creates a trusted certificate chain.
     certificateAuthorities?: CertificateAuthority[];
 }
 export interface OrgContact extends DirectoryObject {
@@ -4519,6 +4597,8 @@ export interface UnifiedRoleAssignment extends Entity {
     principalId?: string;
     resourceScope?: string;
     roleDefinitionId?: string;
+    principal?: DirectoryObject;
+    roleDefinition?: UnifiedRoleDefinition;
 }
 export interface DomainDnsCnameRecord extends DomainDnsRecord {
     // The canonical name of the CNAME record. Used to configure the CNAME record at the DNS host.
@@ -4730,6 +4810,10 @@ export interface Organization extends DirectoryObject {
     // Certificate connector setting.
     certificateConnectorSetting?: CertificateConnectorSetting;
     brandings?: OrganizationalBranding[];
+    /**
+     * Navigation property to manage certificate-based authentication configuration. Only a single instance of
+     * certificateBasedAuthConfiguration can be created in the collection.
+     */
     certificateBasedAuthConfiguration?: CertificateBasedAuthConfiguration[];
     // The collection of open extensions defined for the organization. Read-only. Nullable.
     extensions?: Extension[];
@@ -4845,7 +4929,6 @@ export interface EducationSchool extends EducationOrganization {
     externalId?: string;
     // Phone number of school.
     phone?: string;
-    // Fax number of school.
     fax?: string;
     // Entity who created the school.
     createdBy?: IdentitySet;
@@ -6042,6 +6125,12 @@ export interface Mention extends Entity {
     deepLink?: string;
     application?: string;
 }
+export interface CalendarSharingMessage extends Message {
+    canAccept?: boolean;
+    suggestedCalendarName?: string;
+    sharingMessageAction?: CalendarSharingMessageAction;
+    sharingMessageActions?: CalendarSharingMessageAction[];
+}
 export interface EventMessage extends Message {
     /**
      * The type of event message: none, meetingRequest, meetingCancelled, meetingAccepted, meetingTenativelyAccepted,
@@ -6068,6 +6157,11 @@ export interface EventMessageRequest extends EventMessage {
     previousStartDateTime?: DateTimeTimeZone;
     previousEndDateTime?: DateTimeTimeZone;
     responseRequested?: boolean;
+    allowNewTimeProposals?: boolean;
+}
+export interface EventMessageResponse extends EventMessage {
+    proposedNewTime?: TimeSlot;
+    responseType?: ResponseType;
 }
 export interface MessageRule extends Entity {
     // The display name of the rule.
@@ -6103,6 +6197,13 @@ export interface MailSearchFolder extends MailFolder {
     sourceFolderIds?: string[];
     // The OData query to filter the messages.
     filterQuery?: string;
+}
+export interface CalendarPermission extends Entity {
+    emailAddress?: EmailAddress;
+    isRemovable?: boolean;
+    isInsideOrganization?: boolean;
+    role?: CalendarRoleType;
+    allowedRoles?: CalendarRoleType[];
 }
 // tslint:disable-next-line: interface-name
 export interface InferenceClassificationOverride extends Entity {
@@ -6326,6 +6427,21 @@ export interface FilterOperatorSchema extends Entity {
     multivaluedComparisonType?: ScopeOperatorMultiValuedComparisonType;
     supportedAttributeTypes?: AttributeType[];
 }
+// tslint:disable-next-line: interface-name
+export interface IdentityGovernance extends Entity {
+    entitlementManagement?: EntitlementManagement;
+}
+export interface EntitlementManagement extends Entity {
+    accessPackageCatalogs?: AccessPackageCatalog[];
+    accessPackageResources?: AccessPackageResource[];
+    accessPackageResourceRequests?: AccessPackageResourceRequest[];
+    accessPackageResourceRoleScopes?: AccessPackageResourceRoleScope[];
+    accessPackages?: AccessPackage[];
+    accessPackageAssignmentPolicies?: AccessPackageAssignmentPolicy[];
+    accessPackageAssignments?: AccessPackageAssignment[];
+    accessPackageAssignmentRequests?: AccessPackageAssignmentRequest[];
+    accessPackageAssignmentResourceRoles?: AccessPackageAssignmentResourceRole[];
+}
 export interface AccessPackageCatalog extends Entity {
     displayName?: string;
     description?: string;
@@ -6354,22 +6470,25 @@ export interface AccessPackageResource extends Entity {
     accessPackageResourceScopes?: AccessPackageResourceScope[];
     accessPackageResourceRoles?: AccessPackageResourceRole[];
 }
-export interface AccessPackageResourceRole extends Entity {
-    displayName?: string;
-    description?: string;
-    originId?: string;
-    originSystem?: string;
+export interface AccessPackageResourceRequest extends Entity {
+    catalogId?: string;
+    executeImmediately?: boolean;
+    isValidationOnly?: boolean;
+    requestType?: string;
+    requestState?: string;
+    requestStatus?: string;
+    justification?: string;
+    expirationDateTime?: string;
     accessPackageResource?: AccessPackageResource;
+    requestor?: AccessPackageSubject;
 }
-export interface AccessPackageResourceScope extends Entity {
-    displayName?: string;
-    description?: string;
-    originId?: string;
-    originSystem?: string;
-    roleOriginId?: string;
-    isRootScope?: boolean;
-    url?: string;
-    accessPackageResource?: AccessPackageResource;
+export interface AccessPackageResourceRoleScope extends Entity {
+    createdBy?: string;
+    createdDateTime?: string;
+    modifiedBy?: string;
+    modifiedDateTime?: string;
+    accessPackageResourceRole?: AccessPackageResourceRole;
+    accessPackageResourceScope?: AccessPackageResourceScope;
 }
 export interface AccessPackage extends Entity {
     catalogId?: string;
@@ -6384,35 +6503,6 @@ export interface AccessPackage extends Entity {
     accessPackageCatalog?: AccessPackageCatalog;
     accessPackageResourceRoleScopes?: AccessPackageResourceRoleScope[];
     accessPackageAssignmentPolicies?: AccessPackageAssignmentPolicy[];
-}
-export interface AccessPackageResourceRequest extends Entity {
-    catalogId?: string;
-    executeImmediately?: boolean;
-    isValidationOnly?: boolean;
-    requestType?: string;
-    requestState?: string;
-    requestStatus?: string;
-    justification?: string;
-    expirationDateTime?: string;
-    accessPackageResource?: AccessPackageResource;
-    requestor?: AccessPackageSubject;
-}
-export interface AccessPackageSubject extends Entity {
-    objectId?: string;
-    altSecId?: string;
-    displayName?: string;
-    principalName?: string;
-    email?: string;
-    onPremisesSecurityIdentifier?: string;
-    type?: string;
-}
-export interface AccessPackageResourceRoleScope extends Entity {
-    createdBy?: string;
-    createdDateTime?: string;
-    modifiedBy?: string;
-    modifiedDateTime?: string;
-    accessPackageResourceRole?: AccessPackageResourceRole;
-    accessPackageResourceScope?: AccessPackageResourceScope;
 }
 export interface AccessPackageAssignmentPolicy extends Entity {
     userType?: string;
@@ -6434,10 +6524,8 @@ export interface AccessPackageAssignmentPolicy extends Entity {
     createdDateTime?: string;
     modifiedBy?: string;
     modifiedDateTime?: string;
-    subjectsScope?: AccessPackageSubject[];
     accessPackage?: AccessPackage;
     accessPackageCatalog?: AccessPackageCatalog;
-    approvers?: AccessPackageSubject[];
 }
 export interface AccessPackageAssignment extends Entity {
     catalogId?: string;
@@ -6475,6 +6563,32 @@ export interface AccessPackageAssignmentResourceRole extends Entity {
     accessPackageResourceRole?: AccessPackageResourceRole;
     accessPackageSubject?: AccessPackageSubject;
     accessPackageAssignments?: AccessPackageAssignment[];
+}
+export interface AccessPackageResourceRole extends Entity {
+    displayName?: string;
+    description?: string;
+    originId?: string;
+    originSystem?: string;
+    accessPackageResource?: AccessPackageResource;
+}
+export interface AccessPackageResourceScope extends Entity {
+    displayName?: string;
+    description?: string;
+    originId?: string;
+    originSystem?: string;
+    roleOriginId?: string;
+    isRootScope?: boolean;
+    url?: string;
+    accessPackageResource?: AccessPackageResource;
+}
+export interface AccessPackageSubject extends Entity {
+    objectId?: string;
+    altSecId?: string;
+    displayName?: string;
+    principalName?: string;
+    email?: string;
+    onPremisesSecurityIdentifier?: string;
+    type?: string;
 }
 export interface AccessReview extends Entity {
     displayName?: string;
@@ -6642,6 +6756,30 @@ export interface MalwareRiskEvent extends LocatedRiskEvent {
     deviceInformation?: string;
     malwareName?: string;
 }
+export interface NamedLocation extends Entity {
+    displayName?: string;
+    createdDateTime?: string;
+    modifiedDateTime?: string;
+}
+export interface CountryNamedLocation extends NamedLocation {
+    countriesAndRegions?: string[];
+    includeUnknownCountriesAndRegions?: boolean;
+}
+// tslint:disable-next-line: interface-name
+export interface IpNamedLocation extends NamedLocation {
+    ipRanges?: IpRange[];
+    isTrusted?: boolean;
+}
+export interface ConditionalAccessPolicy extends Entity {
+    createdDateTime?: string;
+    modifiedDateTime?: string;
+    displayName?: string;
+    description?: string;
+    state?: ConditionalAccessPolicyState;
+    conditions?: ConditionalAccessConditionSet;
+    grantControls?: ConditionalAccessGrantControls;
+    sessionControls?: ConditionalAccessSessionControls;
+}
 export interface RiskyUser extends Entity {
     isDeleted?: boolean;
     isGuest?: boolean;
@@ -6658,6 +6796,10 @@ export interface RiskyUserHistoryItem extends RiskyUser {
     userId?: string;
     initiatedBy?: string;
     activity?: RiskUserActivity;
+}
+export interface ConditionalAccessRoot extends Entity {
+    policies?: ConditionalAccessPolicy[];
+    namedLocations?: NamedLocation[];
 }
 // tslint:disable-next-line: interface-name
 export interface InformationProtectionLabel extends Entity {
@@ -6703,6 +6845,8 @@ export interface DeviceManagement extends Entity {
     windowsMalwareOverview?: WindowsMalwareOverview;
     // The date &amp; time when tenant data moved between scaleunits.
     accountMoveCompletionDateTime?: string;
+    // A list of Group Policy Object files uploaded.
+    groupPolicyObjectFiles?: GroupPolicyObjectFile[];
     // The Audit Events
     auditEvents?: AuditEvent[];
     // The singleton Android for Work settings entity.
@@ -6782,6 +6926,8 @@ export interface DeviceManagement extends Entity {
     applePushNotificationCertificate?: ApplePushNotificationCertificate;
     // The list of device management scripts associated with the tenant.
     deviceManagementScripts?: DeviceManagementScript[];
+    // The list of device health scripts associated with the tenant.
+    deviceHealthScripts?: DeviceHealthScript[];
     // Device overview
     managedDeviceOverview?: ManagedDeviceOverview;
     // The list of detected apps associated with a device.
@@ -6800,6 +6946,12 @@ export interface DeviceManagement extends Entity {
     userExperienceAnalyticsBaselines?: UserExperienceAnalyticsBaseline[];
     // User experience analytics categories
     userExperienceAnalyticsCategories?: UserExperienceAnalyticsCategory[];
+    // User experience analytics device performance
+    userExperienceAnalyticsDevicePerformance?: UserExperienceAnalyticsDevicePerformance[];
+    // User experience analytics regression summary
+    userExperienceAnalyticsRegressionSummary?: UserExperienceAnalyticsRegressionSummary;
+    // User experience analytics device Startup History
+    userExperienceAnalyticsDeviceStartupHistory?: UserExperienceAnalyticsDeviceStartupHistory[];
     // Collection of Derived credential settings associated with account.
     derivedCredentials?: DeviceManagementDerivedCredentialSettings[];
     // The Windows autopilot account settings.
@@ -6820,6 +6972,8 @@ export interface DeviceManagement extends Entity {
     managementConditions?: ManagementCondition[];
     // The management condition statements associated with device management of the company.
     managementConditionStatements?: ManagementConditionStatement[];
+    // A list of Group Policy migration reports.
+    groupPolicyMigrationReports?: GroupPolicyMigrationReport[];
     // The group policy configurations created by this account.
     groupPolicyConfigurations?: GroupPolicyConfiguration[];
     // The available group policy definitions for this account.
@@ -6840,6 +6994,8 @@ export interface DeviceManagement extends Entity {
     resourceOperations?: ResourceOperation[];
     // The remote assist partners.
     remoteAssistancePartners?: RemoteAssistancePartner[];
+    // Reports singleton
+    reports?: DeviceManagementReports;
     // The telecom expense management partners.
     telecomExpenseManagementPartners?: TelecomExpenseManagementPartner[];
     // The embedded SIM activation code pools created by this account.
@@ -7443,6 +7599,16 @@ export interface MobileThreatDefenseConnector extends Entity {
     lastHeartbeatDateTime?: string;
     // Data Sync Partner state for this account. Possible values are: unavailable, available, enabled, unresponsive.
     partnerState?: MobileThreatPartnerTenantState;
+    /**
+     * For Android, set whether data from the data sync partner should be used during Mobile Application Management (MAM)
+     * evaluations. Only one partner per platform may be enabled for Mobile Application Management (MAM) evaluation.
+     */
+    androidMobileApplicationManagementEnabled?: boolean;
+    /**
+     * For IOS, get or set whether data from the data sync partner should be used during Mobile Application Management (MAM)
+     * evaluations. Only one partner per platform may be enabled for Mobile Application Management (MAM) evaluation.
+     */
+    iosMobileApplicationManagementEnabled?: boolean;
     // For Android, set whether data from the data sync partner should be used during compliance evaluations
     androidEnabled?: boolean;
     // For IOS, get or set whether data from the data sync partner should be used during compliance evaluations
@@ -7564,6 +7730,8 @@ export interface DeviceManagementTemplate extends Entity {
     intentCount?: number;
     // The template's type.
     templateType?: DeviceManagementTemplateType;
+    // The template's platform.
+    platformType?: PolicyPlatformType;
     // When the template was published
     publishedDateTime?: string;
     // Collection of all settings this template has
@@ -7620,8 +7788,6 @@ export interface DeviceManagementScript extends Entity {
     displayName?: string;
     // Optional description for the device management script.
     description?: string;
-    // The interval for script to run. If not defined the script will run once
-    runSchedule?: RunSchedule;
     // The script content.
     scriptContent?: number;
     // The date and time the device management script was created. This property is read-only.
@@ -7648,6 +7814,38 @@ export interface DeviceManagementScript extends Entity {
     deviceRunStates?: DeviceManagementScriptDeviceState[];
     // List of run states for this script across all users.
     userRunStates?: DeviceManagementScriptUserState[];
+}
+export interface DeviceHealthScript extends Entity {
+    // Name of the device health script publisher
+    publisher?: string;
+    // Version of the device health script
+    version?: string;
+    // Name of the device health script
+    displayName?: string;
+    // Description of the device health script
+    description?: string;
+    // The entire content of the detection powershell script
+    detectionScriptContent?: number;
+    // The entire content of the remediation powershell script
+    remediationScriptContent?: number;
+    // The timestamp of when the device health script was created. This property is read-only.
+    createdDateTime?: string;
+    // The timestamp of when the device health script was modified. This property is read-only.
+    lastModifiedDateTime?: string;
+    // Indicates the type of execution context
+    runAsAccount?: RunAsAccountType;
+    // Indicate whether the script signature needs be checked
+    enforceSignatureCheck?: boolean;
+    // Indicate whether PowerShell script(s) should run as 32-bit
+    runAs32Bit?: boolean;
+    // List of Scope Tag IDs for the device health script
+    roleScopeTagIds?: string[];
+    // The list of group assignments for the device health script
+    assignments?: DeviceManagementScriptAssignment[];
+    // High level run summary for device health script.
+    runSummary?: DeviceHealthScriptRunSummary;
+    // List of run states for the device health script across all devices
+    deviceRunStates?: DeviceHealthScriptDeviceState[];
 }
 export interface ManagedDeviceOverview extends Entity {
     // Total enrolled device count. Does not include PC devices managed via Intune PC Agent
@@ -7726,6 +7924,64 @@ export interface UserExperienceAnalyticsCategory extends Entity {
     insights?: UserExperienceAnalyticsInsight[];
     // The metric values for the user experience analytics category.
     metricValues?: UserExperienceAnalyticsMetric[];
+}
+export interface UserExperienceAnalyticsDevicePerformance extends Entity {
+    // The user experience analytics device name.
+    deviceName?: string;
+    // The user experience analytics device model.
+    model?: string;
+    // The user experience analytics device manufacturer.
+    manufacturer?: string;
+    // The user experience analytics device disk type.
+    diskType?: DiskType;
+    // The user experience analytics device Operating System version.
+    operatingSystemVersion?: string;
+    // The user experience analytics device boot score.
+    bootScore?: number;
+    // The user experience analytics device core boot time in milliseconds.
+    coreBootTimeInMs?: number;
+    // The user experience analytics device group policy boot time in milliseconds.
+    groupPolicyBootTimeInMs?: number;
+    // The health state of the user experience analytics device.
+    healthStatus?: UserExperienceAnalyticsHealthState;
+    // The user experience analytics device login score.
+    loginScore?: number;
+    // The user experience analytics device core login time in milliseconds.
+    coreLoginTimeInMs?: number;
+    // The user experience analytics device group policy login time in milliseconds.
+    groupPolicyLoginTimeInMs?: number;
+    // User experience analytics summarized device count.
+    deviceCount?: number;
+}
+export interface UserExperienceAnalyticsRegressionSummary extends Entity {
+    // The metric values for the user experience analytics model regression.
+    modelRegression?: UserExperienceAnalyticsMetric[];
+    // The metric values for the user experience analytics Manufacturer regression.
+    manufacturerRegression?: UserExperienceAnalyticsMetric[];
+    // The metric values for the user experience analytics operating system regression.
+    operatingSystemRegression?: UserExperienceAnalyticsMetric[];
+}
+export interface UserExperienceAnalyticsDeviceStartupHistory extends Entity {
+    // The user experience analytics device id.
+    deviceId?: string;
+    // The user experience analytics device boot start time.
+    startTime?: string;
+    // The user experience analytics device core boot time in milliseconds.
+    coreBootTimeInMs?: number;
+    // The User experience analytics Device group policy boot time in milliseconds.
+    groupPolicyBootTimeInMs?: number;
+    // The user experience analytics device feature update time in milliseconds.
+    featureUpdateBootTimeInMs?: number;
+    // The user experience analytics device total boot time in milliseconds.
+    totalBootTimeInMs?: number;
+    // The User experience analytics Device group policy login time in milliseconds.
+    groupPolicyLoginTimeInMs?: number;
+    // The user experience analytics device core login time in milliseconds.
+    coreLoginTimeInMs?: number;
+    // The user experience analytics device total login time in milliseconds.
+    totalLoginTimeInMs?: number;
+    // The user experience analytics device first login.
+    isFirstLogin?: boolean;
 }
 export interface DeviceManagementDerivedCredentialSettings extends Entity {
     // The URL that will be accessible to end users as they retrieve a derived credential using the Company Portal.
@@ -7960,6 +8216,34 @@ export interface ManagementConditionStatement extends Entity {
     // The management conditions associated to the management condition statement.
     managementConditions?: ManagementCondition[];
 }
+export interface GroupPolicyMigrationReport extends Entity {
+    // The Group Policy Object GUID from GPO Xml content
+    groupPolicyObjectId?: string;
+    // The name of Group Policy Object from the GPO Xml Content
+    displayName?: string;
+    // The distinguished name of the OU.
+    ouDistinguishedName?: string;
+    // The date and time at which the GroupPolicyMigrationReport was created.
+    createdDateTime?: string;
+    // The date and time at which the GroupPolicyMigrationReport was last modified.
+    lastModifiedDateTime?: string;
+    // The date and time at which the GroupPolicyMigrationReport was created.
+    groupPolicyCreatedDateTime?: string;
+    // The date and time at which the GroupPolicyMigrationReport was last modified.
+    groupPolicyLastModifiedDateTime?: string;
+    // The Intune coverage for the associated Group Policy Object file.
+    migrationReadiness?: GroupPolicyMigrationReadiness;
+    // The Targeted in AD property from GPO Xml Content
+    targetedInActiveDirectory?: boolean;
+    // The total number of Group Policy Settings from GPO file.
+    totalSettingsCount?: number;
+    // The number of Group Policy Settings supported by Intune.
+    supportedSettingsCount?: number;
+    // The Percentage of Group Policy Settings supported by Intune.
+    supportedSettingsPercent?: number;
+    // A list of group policy settings to MDM/Intune mappings.
+    groupPolicySettingMappings?: GroupPolicySettingMapping[];
+}
 export interface GroupPolicyConfiguration extends Entity {
     // The date and time the object was created.
     createdDateTime?: string;
@@ -8126,6 +8410,14 @@ export interface RemoteAssistancePartner extends Entity {
     onboardingStatus?: RemoteAssistanceOnboardingStatus;
     // Timestamp of the last request sent to Intune by the TEM partner.
     lastConnectionDateTime?: string;
+}
+export interface DeviceManagementReports extends Entity {
+    // Entity representing the configuration of a cached report
+    cachedReportConfigurations?: DeviceManagementCachedReportConfiguration[];
+    // Entity representing a job to export a report
+    exportJobs?: DeviceManagementExportJob[];
+    // Entity representing a schedule for which reports are delivered
+    reportSchedules?: DeviceManagementReportSchedule[];
 }
 export interface TelecomExpenseManagementPartner extends Entity {
     // Display name of the TEM partner.
@@ -8381,6 +8673,8 @@ export interface DeviceAppManagement extends Entity {
     windowsInformationProtectionWipeActions?: WindowsInformationProtectionWipeAction[];
     // Device app management tasks.
     deviceAppManagementTasks?: DeviceAppManagementTask[];
+    // The collection of Windows Defender Application Control Supplemental Policies.
+    wdacSupplementalPolicies?: WindowsDefenderApplicationControlSupplementalPolicy[];
 }
 export interface ManagedEBook extends Entity {
     // Name of the eBook.
@@ -8749,6 +9043,15 @@ export interface ManagedAppProtection extends ManagedAppPolicy {
     allowedOutboundClipboardSharingExceptionLength?: number;
     // Specify app notification restriction
     notificationRestriction?: ManagedAppNotificationRestriction;
+    // Requires a pin to be unique from the number specified in this property.
+    previousPinBlockCount?: number;
+    // Maximum allowed device threat level, as reported by the MTD app
+    maximumAllowedDeviceThreatLevel?: ManagedAppDeviceThreatLevel;
+    /**
+     * Determines what action to take if the mobile threat defense threat threshold isn't met. Warn isn't a supported value
+     * for this property
+     */
+    mobileThreatDefenseRemediationAction?: ManagedAppRemediationAction;
 }
 export interface TargetedManagedAppProtection extends ManagedAppProtection {
     // Indicates if the policy is deployed to any inclusion groups or not.
@@ -8838,6 +9141,12 @@ export interface AndroidManagedAppProtection extends TargetedManagedAppProtectio
     customBrowserPackageId?: string;
     // Friendly name of the preferred custom browser to open weblink on Android.
     customBrowserDisplayName?: string;
+    // Minimum version of the Company portal that must be installed on the device or app access will be blocked
+    minimumRequiredCompanyPortalVersion?: string;
+    // Minimum version of the Company portal that must be installed on the device or the user will receive a warning
+    minimumWarningCompanyPortalVersion?: string;
+    // Minimum version of the Company portal that must be installed on the device or the company data on the app will be wiped
+    minimumWipeCompanyPortalVersion?: string;
     // List of apps to which the policy is deployed.
     apps?: ManagedMobileApp[];
     // Navigation property to deployment summary of the configuration.
@@ -8925,6 +9234,12 @@ export interface DefaultManagedAppProtection extends ManagedAppProtection {
     customBrowserPackageId?: string;
     // Friendly name of the preferred custom browser to open weblink on Android. (Android only)
     customBrowserDisplayName?: string;
+    // Minimum version of the Company portal that must be installed on the device or app access will be blocked
+    minimumRequiredCompanyPortalVersion?: string;
+    // Minimum version of the Company portal that must be installed on the device or the user will receive a warning
+    minimumWarningCompanyPortalVersion?: string;
+    // Minimum version of the Company portal that must be installed on the device or the company data on the app will be wiped
+    minimumWipeCompanyPortalVersion?: string;
     // List of apps to which the policy is deployed.
     apps?: ManagedMobileApp[];
     // Navigation property to deployment summary of the configuration.
@@ -9152,6 +9467,30 @@ export interface DeviceAppManagementTask extends Entity {
     // The status.
     status?: DeviceAppManagementTaskStatus;
 }
+export interface WindowsDefenderApplicationControlSupplementalPolicy extends Entity {
+    // The display name of WindowsDefenderApplicationControl supplemental policy.
+    displayName?: string;
+    // The description of WindowsDefenderApplicationControl supplemental policy.
+    description?: string;
+    // The WindowsDefenderApplicationControl supplemental policy content in byte array format.
+    content?: number;
+    // The WindowsDefenderApplicationControl supplemental policy content's file name.
+    contentFileName?: string;
+    // The WindowsDefenderApplicationControl supplemental policy's version.
+    version?: string;
+    // The date and time when the WindowsDefenderApplicationControl supplemental policy was uploaded.
+    creationDateTime?: string;
+    // The date and time when the WindowsDefenderApplicationControl supplemental policy was last modified.
+    lastModifiedDateTime?: string;
+    // List of Scope Tags for this WindowsDefenderApplicationControl supplemental policy entity.
+    roleScopeTagIds?: string[];
+    // The associated group assignments for this WindowsDefenderApplicationControl supplemental policy.
+    assignments?: WindowsDefenderApplicationControlSupplementalPolicyAssignment[];
+    // WindowsDefenderApplicationControl supplemental policy deployment summary.
+    deploySummary?: WindowsDefenderApplicationControlSupplementalPolicyDeploymentSummary;
+    // The list of device deployment states for this WindowsDefenderApplicationControl supplemental policy.
+    deviceStatuses?: WindowsDefenderApplicationControlSupplementalPolicyDeploymentStatus[];
+}
 export interface MobileAppAssignment extends Entity {
     /**
      * The install intent defined by the admin. Possible values are: available, required, uninstall,
@@ -9162,6 +9501,10 @@ export interface MobileAppAssignment extends Entity {
     target?: DeviceAndAppManagementAssignmentTarget;
     // The settings for target assignment defined by the admin.
     settings?: MobileAppAssignmentSettings;
+    // The resource type which is the source for the assignment.
+    source?: DeviceAndAppManagementAssignmentSource;
+    // The identifier of the source of the assignment.
+    sourceId?: string;
 }
 export interface MobileAppInstallSummary extends Entity {
     // Number of Devices that have successfully installed this app.
@@ -9404,6 +9747,12 @@ export interface MobileAppDependency extends MobileAppRelationship {
     // The total number of dependencies the child app has.
     dependentAppCount?: number;
 }
+export interface WindowsMicrosoftEdgeApp extends MobileApp {
+    // The channel to install on target devices.
+    channel?: MicrosoftEdgeChannel;
+}
+// tslint:disable-next-line: no-empty-interface
+export interface MacOSMicrosoftEdgeApp extends MobileApp {}
 // tslint:disable-next-line: no-empty-interface
 export interface MacOSOfficeSuiteApp extends MobileApp {}
 export interface OfficeSuiteApp extends MobileApp {
@@ -10009,12 +10358,6 @@ export interface DeviceManagementScriptRunSummary extends Entity {
     successDeviceCount?: number;
     // Error device count.
     errorDeviceCount?: number;
-    // Compliant device count.
-    compliantDeviceCount?: number;
-    // Not Compliant device count.
-    notCompliantDeviceCount?: number;
-    // Pending device count.
-    pendingDeviceCount?: number;
     // Success user count.
     successUserCount?: number;
     // Error user count.
@@ -10031,14 +10374,6 @@ export interface DeviceManagementScriptDeviceState extends Entity {
     errorCode?: number;
     // Error description corresponding to erroneous execution of the device management script.
     errorDescription?: string;
-    // The latest time that Intune Managment Extension syncs to Intune.
-    lastSyncDateTime?: string;
-    // Output of the detection script before remediation.
-    preRemediationDetectionScriptOutput?: string;
-    // Error output of the remediation script.
-    remediationScriptError?: string;
-    // Detection script output after remediation.
-    postRemediationDetectionScriptOutput?: string;
     // The managed devices that executes the device management script.
     managedDevice?: ManagedDevice;
 }
@@ -10063,9 +10398,9 @@ export interface DeviceConfigurationGroupAssignment extends Entity {
 export interface DeviceConfigurationAssignment extends Entity {
     // The assignment target for the device configuration.
     target?: DeviceAndAppManagementAssignmentTarget;
-    // The assignment source for the device configuration, direct or parcel/policySet.
+    // The assignment source for the device configuration, direct or parcel/policySet. This property is read-only.
     source?: DeviceAndAppManagementAssignmentSource;
-    // The identifier of the source of the assignment.
+    // The identifier of the source of the assignment. This property is read-only.
     sourceId?: string;
 }
 export interface DeviceConfigurationDeviceStatus extends Entity {
@@ -10245,14 +10580,26 @@ export interface DeviceComplianceUserOverview extends Entity {
 export interface DeviceCompliancePolicyAssignment extends Entity {
     // Target for the compliance policy assignment.
     target?: DeviceAndAppManagementAssignmentTarget;
+    // The assignment source for the device compliance policy, direct or parcel/policySet.
+    source?: DeviceAndAppManagementAssignmentSource;
+    // The identifier of the source of the assignment.
+    sourceId?: string;
 }
 export interface WindowsAutopilotDeploymentProfileAssignment extends Entity {
     // The assignment target for the Windows Autopilot deployment profile.
     target?: DeviceAndAppManagementAssignmentTarget;
+    // Type of resource used for deployment to a group, direct or parcel/policySet
+    source?: DeviceAndAppManagementAssignmentSource;
+    // Identifier for resource used for deployment to a group
+    sourceId?: string;
 }
 export interface EnrollmentConfigurationAssignment extends Entity {
     // Not yet documented
     target?: DeviceAndAppManagementAssignmentTarget;
+    // Type of resource used for deployment to a group, direct or policySet
+    source?: DeviceAndAppManagementAssignmentSource;
+    // Identifier for resource used for deployment to a group
+    sourceId?: string;
 }
 export interface EnrollmentRestrictionsConfigurationPolicySetItem extends PolicySetItem {
     // Priority of the EnrollmentRestrictionsConfigurationPolicySetItem.
@@ -10711,6 +11058,8 @@ export interface AndroidDeviceOwnerGeneralDeviceConfiguration extends DeviceConf
     factoryResetDeviceAdministratorEmails?: string[];
     // Indicates whether or not the factory reset option in settings is disabled.
     factoryResetBlocked?: boolean;
+    // Proxy is set up directly with host, port and excluded hosts.
+    globalProxy?: AndroidDeviceOwnerGlobalProxy;
     // Whether or not to enable screen saver mode or not in Kiosk Mode.
     kioskModeScreenSaverConfigurationEnabled?: boolean;
     // URL for an image that will be the device's screen saver in Kiosk Mode.
@@ -11207,6 +11556,8 @@ export interface AndroidForWorkGeneralDeviceConfiguration extends DeviceConfigur
     vpnEnableAlwaysOnLockdownMode?: boolean;
     // Allow widgets from work profile apps.
     workProfileAllowWidgets?: boolean;
+    // Prevent app installations from unknown sources in the personal profile.
+    workProfileBlockPersonalAppInstallsFromUnknownSources?: boolean;
 }
 export interface AndroidForWorkVpnConfiguration extends DeviceConfiguration {
     // Connection name displayed to the user.
@@ -11616,6 +11967,8 @@ export interface AndroidWorkProfileGeneralDeviceConfiguration extends DeviceConf
     vpnEnableAlwaysOnLockdownMode?: boolean;
     // Allow widgets from work profile apps.
     workProfileAllowWidgets?: boolean;
+    // Prevent app installations from unknown sources in the personal profile.
+    workProfileBlockPersonalAppInstallsFromUnknownSources?: boolean;
 }
 export interface AndroidWorkProfileVpnConfiguration extends DeviceConfiguration {
     // Connection name displayed to the user.
@@ -11699,6 +12052,79 @@ export interface AndroidWorkProfileEnterpriseWiFiConfiguration extends AndroidWo
      * establish a Wi-Fi connection.
      */
     identityCertificateForClientAuthentication?: AndroidWorkProfileCertificateProfileBase;
+}
+export interface MacOSTrustedRootCertificate extends DeviceConfiguration {
+    // Trusted Root Certificate.
+    trustedRootCertificate?: number;
+    // File name to display in UI.
+    certFileName?: string;
+}
+export interface MacOSCertificateProfileBase extends DeviceConfiguration {
+    // Certificate renewal threshold percentage.
+    renewalThresholdPercentage?: number;
+    // Certificate Subject Name Format.
+    subjectNameFormat?: AppleSubjectNameFormat;
+    // Certificate Subject Alternative Name Type.
+    subjectAlternativeNameType?: SubjectAlternativeNameType;
+    // Value for the Certificate Validity Period.
+    certificateValidityPeriodValue?: number;
+    // Scale for the Certificate Validity Period.
+    certificateValidityPeriodScale?: CertificateValidityPeriodScale;
+}
+export interface MacOSImportedPFXCertificateProfile extends MacOSCertificateProfileBase {
+    intendedPurpose?: IntendedPurpose;
+    // Certificate state for devices
+    managedDeviceCertificateStates?: ManagedDeviceCertificateState[];
+}
+export interface MacOSPkcsCertificateProfile extends MacOSCertificateProfileBase {
+    // PKCS certification authority FQDN.
+    certificationAuthority?: string;
+    // PKCS certification authority Name.
+    certificationAuthorityName?: string;
+    // PKCS certificate template name.
+    certificateTemplateName?: string;
+    // Format string that defines the subject alternative name.
+    subjectAlternativeNameFormatString?: string;
+    /**
+     * Format string that defines the subject name. Example: CN={{EmailAddress}},E={{EmailAddress}},OU=Enterprise
+     * Users,O=Contoso Corporation,L=Redmond,ST=WA,C=US
+     */
+    subjectNameFormatString?: string;
+    // Target store certificate
+    certificateStore?: CertificateStore;
+    // Custom Subject Alternative Name Settings. This collection can contain a maximum of 500 elements.
+    customSubjectAlternativeNames?: CustomSubjectAlternativeName[];
+    // AllowAllAppsAccess setting
+    allowAllAppsAccess?: boolean;
+    // Certificate state for devices
+    managedDeviceCertificateStates?: ManagedDeviceCertificateState[];
+}
+export interface MacOSScepCertificateProfile extends MacOSCertificateProfileBase {
+    // SCEP Server Url(s).
+    scepServerUrls?: string[];
+    /**
+     * Custom format to use with SubjectNameFormat = Custom. Example: CN={{EmailAddress}},E={{EmailAddress}},OU=Enterprise
+     * Users,O=Contoso Corporation,L=Redmond,ST=WA,C=US
+     */
+    subjectNameFormatString?: string;
+    // SCEP Key Usage.
+    keyUsage?: KeyUsages;
+    // SCEP Key Size.
+    keySize?: KeySize;
+    // SCEP Hash Algorithm.
+    hashAlgorithm?: HashAlgorithms;
+    // Extended Key Usage (EKU) settings. This collection can contain a maximum of 500 elements.
+    extendedKeyUsages?: ExtendedKeyUsage[];
+    // Custom String that defines the AAD Attribute.
+    subjectAlternativeNameFormatString?: string;
+    // Target store certificate
+    certificateStore?: CertificateStore;
+    // Custom Subject Alternative Name Settings. This collection can contain a maximum of 500 elements.
+    customSubjectAlternativeNames?: CustomSubjectAlternativeName[];
+    // Trusted Root Certificate.
+    rootCertificate?: MacOSTrustedRootCertificate;
+    // Certificate state for devices
+    managedDeviceCertificateStates?: ManagedDeviceCertificateState[];
 }
 // tslint:disable-next-line: interface-name no-empty-interface
 export interface IosCertificateProfile extends DeviceConfiguration {}
@@ -12193,6 +12619,21 @@ export interface IosGeneralDeviceConfiguration extends DeviceConfiguration {
      */
     airPrintBlockiBeaconDiscovery?: boolean;
     /**
+     * Indicates if devices can access files or other resources on a network server using the Server Message Block (SMB)
+     * protocol. Available for devices running iOS and iPadOS, versions 13.0 and later.
+     */
+    filesNetworkDriveAccessBlocked?: boolean;
+    /**
+     * Indicates if sevices with access can connect to and open files on a USB drive. Available for devices running iOS and
+     * iPadOS, versions 13.0 and later.
+     */
+    filesUsbDriveAccessBlocked?: boolean;
+    /**
+     * Indicates whether or not Wi-Fi remains on, even when device is in airplane mode. Available for devices running iOS and
+     * iPadOS, versions 13.0 and later.
+     */
+    wifiPowerOnForced?: boolean;
+    /**
      * Indicates whether or not the removal of system apps from the device is blocked on a supervised device (iOS 11.0 and
      * later).
      */
@@ -12228,8 +12669,6 @@ export interface IosGeneralDeviceConfiguration extends DeviceConfiguration {
     findMyDeviceInFindMyAppBlocked?: boolean;
     // Indicates whether or not to block Find My Friends when the device is supervised (iOS 13 or later).
     findMyFriendsInFindMyAppBlocked?: boolean;
-    // Indicates whether or not to block WiFi power modification when the device is supervised (iOS 13 or later).
-    wiFiBlockPowerModification?: boolean;
     // Indicates whether or not to block the iTunes app. Requires a supervised device for iOS 13 and later.
     iTunesBlocked?: boolean;
 }
@@ -12318,56 +12757,6 @@ export interface IosEnterpriseWiFiConfiguration extends IosWiFiConfiguration {
     identityCertificateForClientAuthentication?: IosCertificateProfileBase;
     // Tenant level settings for the Derived Credentials to be used for authentication.
     derivedCredentialSettings?: DeviceManagementDerivedCredentialSettings;
-}
-export interface MacOSCertificateProfileBase extends DeviceConfiguration {
-    // Certificate renewal threshold percentage.
-    renewalThresholdPercentage?: number;
-    // Certificate Subject Name Format.
-    subjectNameFormat?: AppleSubjectNameFormat;
-    // Certificate Subject Alternative Name Type.
-    subjectAlternativeNameType?: SubjectAlternativeNameType;
-    // Value for the Certificate Validity Period.
-    certificateValidityPeriodValue?: number;
-    // Scale for the Certificate Validity Period.
-    certificateValidityPeriodScale?: CertificateValidityPeriodScale;
-}
-export interface MacOSImportedPFXCertificateProfile extends MacOSCertificateProfileBase {
-    intendedPurpose?: IntendedPurpose;
-    // Certificate state for devices
-    managedDeviceCertificateStates?: ManagedDeviceCertificateState[];
-}
-export interface MacOSScepCertificateProfile extends MacOSCertificateProfileBase {
-    // SCEP Server Url(s).
-    scepServerUrls?: string[];
-    /**
-     * Custom format to use with SubjectNameFormat = Custom. Example: CN={{EmailAddress}},E={{EmailAddress}},OU=Enterprise
-     * Users,O=Contoso Corporation,L=Redmond,ST=WA,C=US
-     */
-    subjectNameFormatString?: string;
-    // SCEP Key Usage.
-    keyUsage?: KeyUsages;
-    // SCEP Key Size.
-    keySize?: KeySize;
-    // SCEP Hash Algorithm.
-    hashAlgorithm?: HashAlgorithms;
-    // Extended Key Usage (EKU) settings. This collection can contain a maximum of 500 elements.
-    extendedKeyUsages?: ExtendedKeyUsage[];
-    // Custom String that defines the AAD Attribute.
-    subjectAlternativeNameFormatString?: string;
-    // Target store certificate
-    certificateStore?: CertificateStore;
-    // Custom Subject Alternative Name Settings. This collection can contain a maximum of 500 elements.
-    customSubjectAlternativeNames?: CustomSubjectAlternativeName[];
-    // Trusted Root Certificate.
-    rootCertificate?: MacOSTrustedRootCertificate;
-    // Certificate state for devices
-    managedDeviceCertificateStates?: ManagedDeviceCertificateState[];
-}
-export interface MacOSTrustedRootCertificate extends DeviceConfiguration {
-    // Trusted Root Certificate.
-    trustedRootCertificate?: number;
-    // File name to display in UI.
-    certFileName?: string;
 }
 export interface MacOSCustomConfiguration extends DeviceConfiguration {
     // Name that is displayed to the user.
@@ -12778,6 +13167,8 @@ export interface MacOSDeviceFeaturesConfiguration extends AppleDeviceFeaturesCon
     associatedDomains?: KeyValuePair[];
     // Gets or sets a single sign-on extension profile.
     singleSignOnExtension?: SingleSignOnExtension;
+    // PKINIT Certificate for the authentication with single sign-on extensions.
+    singleSignOnExtensionPkinitCertificate?: MacOSCertificateProfileBase;
 }
 // tslint:disable-next-line: interface-name
 export interface IosDeviceFeaturesConfiguration extends AppleDeviceFeaturesConfigurationBase {
@@ -12806,6 +13197,8 @@ export interface IosDeviceFeaturesConfiguration extends AppleDeviceFeaturesConfi
     singleSignOnExtension?: SingleSignOnExtension;
     // Identity Certificate for the renewal of Kerberos ticket used in single sign-on settings.
     identityCertificateForClientAuthentication?: IosCertificateProfileBase;
+    // PKINIT Certificate for the authentication with single sign-on extension settings.
+    singleSignOnExtensionPkinitCertificate?: IosCertificateProfileBase;
 }
 export interface AppleVpnConfiguration extends DeviceConfiguration {
     // Connection name displayed to the user.
@@ -15846,6 +16239,64 @@ export interface SecurityBaselineSettingState extends Entity {
     // The setting category id which this setting belongs to
     settingCategoryId?: string;
 }
+export interface UserExperienceAnalyticsMetric extends Entity {
+    // The value of the user experience analytics metric.
+    value?: number;
+    // The unit of the user experience analytics metric.
+    unit?: string;
+}
+export interface DeviceHealthScriptRunSummary extends Entity {
+    // Number of devices for which the detection script did not find an issue and the device is healthy
+    noIssueDetectedDeviceCount?: number;
+    // Number of devices for which the detection script found an issue
+    issueDetectedDeviceCount?: number;
+    // Number of devices on which the detection script execution encountered an error and did not complete
+    detectionScriptErrorDeviceCount?: number;
+    // Number of devices which have not yet run the latest version of the device health script
+    detectionScriptPendingDeviceCount?: number;
+    // Number of devices for which the remediation script was able to resolve the detected issue
+    issueRemediatedDeviceCount?: number;
+    // Number of devices for which remediation was skipped
+    remediationSkippedDeviceCount?: number;
+    // Number of devices for which the remediation script executed successfully but failed to resolve the detected issue
+    issueReoccurredDeviceCount?: number;
+    // Number of devices for which the remediation script execution encountered an error and did not complete
+    remediationScriptErrorDeviceCount?: number;
+    // Last run time for the script across all devices
+    lastScriptRunDateTime?: string;
+}
+export interface DeviceHealthScriptDeviceState extends Entity {
+    // Detection state from the lastest device health script execution
+    detectionState?: RunState;
+    // The last timestamp of when the device health script executed
+    lastStateUpdateDateTime?: string;
+    // The next timestamp of when the device health script is expected to execute
+    expectedStateUpdateDateTime?: string;
+    // The last time that Intune Managment Extension synced with Intune
+    lastSyncDateTime?: string;
+    // Output of the detection script before remediation
+    preRemediationDetectionScriptOutput?: string;
+    // Error from the detection script before remediation
+    preRemediationDetectionScriptError?: string;
+    // Error output of the remediation script
+    remediationScriptError?: string;
+    // Detection script output after remediation
+    postRemediationDetectionScriptOutput?: string;
+    // Error from the detection script after remediation
+    postRemediationDetectionScriptError?: string;
+    // Remediation state from the lastest device health script execution
+    remediationState?: RemediationState;
+    // The managed device on which the device health script executed
+    managedDevice?: ManagedDevice;
+}
+export interface DeviceHealthScriptAssignment extends Entity {
+    // The Azure Active Directory group we are targeting the script to
+    target?: DeviceAndAppManagementAssignmentTarget;
+    // Determine whether we want to run detection script only or run both detection script and remediation script
+    runRemediationScript?: boolean;
+    // Script run schedule for the target group
+    runSchedule?: RunSchedule;
+}
 export interface AppLogCollectionRequest extends Entity {
     // Log upload status
     status?: AppLogUploadState;
@@ -15882,16 +16333,6 @@ export interface WindowsDeviceMalwareState extends Entity {
 }
 // tslint:disable-next-line: no-empty-interface
 export interface WindowsManagedDevice extends ManagedDevice {}
-export interface DeviceHealthScript extends DeviceManagementScript {
-    complianceRule?: DeviceHealthScriptComplianceRule;
-    remediationScriptContent?: number;
-}
-export interface UserExperienceAnalyticsMetric extends Entity {
-    // The value of the user experience analytics metric.
-    value?: number;
-    // The unit of the user experience analytics metric.
-    unit?: string;
-}
 export interface WindowsManagementAppHealthState extends Entity {
     // Windows management app health state.
     healthState?: HealthState;
@@ -15975,6 +16416,8 @@ export interface DepEnrollmentBaseProfile extends EnrollmentProfile {
     screenTimeScreenDisabled?: boolean;
     // Sets a literal or name pattern.
     deviceNameTemplate?: string;
+    // URL for setup assistant login
+    configurationWebUrl?: boolean;
 }
 export interface DepIOSEnrollmentProfile extends DepEnrollmentBaseProfile {
     // Indicates the iTunes pairing mode
@@ -16049,6 +16492,8 @@ export interface ImportedAppleDeviceIdentity extends Entity {
     isSupervised?: boolean;
     // Apple device discovery source.
     discoverySource?: DiscoverySource;
+    // Indicates if the device is deleted from Apple Business Manager
+    isDeleted?: boolean;
     // Created Date Time of the device
     createdDateTime?: string;
     // Last Contacted Date Time of the device
@@ -16070,6 +16515,11 @@ export interface AppleEnrollmentProfileAssignment extends Entity {
     target?: DeviceAndAppManagementAssignmentTarget;
 }
 export interface ActiveDirectoryWindowsAutopilotDeploymentProfile extends WindowsAutopilotDeploymentProfile {
+    /**
+     * The Autopilot Hybrid Azure AD join flow will continue even if it does not establish domain controller connectivity
+     * during OOBE.
+     */
+    hybridAzureADJoinSkipConnectivityCheck?: boolean;
     // Configuration to join Active Directory domain
     domainJoinConfiguration?: WindowsDomainJoinConfiguration;
 }
@@ -16173,6 +16623,42 @@ export interface NetworkIPv6ConfigurationManagementCondition extends NetworkMana
     ipV6DNSServerList?: string[];
     // Valid DNS suffixes for the current network. e.g. seattle.contoso.com
     dnsSuffixList?: string[];
+}
+export interface GroupPolicySettingMapping extends Entity {
+    // Parent Id of the group policy setting.
+    parentId?: string;
+    // List of Child Ids of the group policy setting.
+    childIdList?: string[];
+    // The name of this group policy setting.
+    settingName?: string;
+    // The value of this group policy setting.
+    settingValue?: string;
+    // The value type of this group policy setting.
+    settingValueType?: string;
+    // The display name of this group policy setting.
+    settingDisplayName?: string;
+    // The display value of this group policy setting.
+    settingDisplayValue?: string;
+    // The display value type of this group policy setting.
+    settingDisplayValueType?: string;
+    // The display units of this group policy setting value
+    settingValueDisplayUnits?: string;
+    // The category the group policy setting is in.
+    settingCategory?: string;
+    // The CSP name this group policy setting maps to.
+    mdmCspName?: string;
+    // The MDM CSP URI this group policy setting maps to.
+    mdmSettingUri?: string;
+    // The minimum OS version this mdm setting supports.
+    mdmMinimumOSVersion?: number;
+    // The setting type (security or admx) of the Group Policy.
+    settingType?: GroupPolicySettingType;
+    // Indicates if the setting is supported by Intune or not
+    isMdmSupported?: boolean;
+    // The scope of the setting
+    settingScope?: GroupPolicySettingScope;
+    // The list of Intune Setting URIs this group policy setting maps to
+    intuneSettingUriList?: string[];
 }
 export interface GroupPolicyDefinitionValue extends Entity {
     // The date and time the object was created.
@@ -16372,6 +16858,8 @@ export interface AppVulnerabilityTask extends DeviceAppManagementTask {
     managedDeviceCount?: number;
     // The number of vulnerable mobile apps.
     mobileAppCount?: number;
+    // The remediation steps.
+    remediation?: string;
     // The vulnerable managed devices.
     managedDevices?: AppVulnerabilityManagedDevice[];
     // The vulnerable mobile apps.
@@ -16405,6 +16893,75 @@ export interface RoleScopeTagAutoAssignment extends Entity {
 }
 // tslint:disable-next-line: no-empty-interface
 export interface DeviceAndAppManagementRoleDefinition extends RoleDefinition {}
+export interface DeviceManagementCachedReportConfiguration extends Entity {
+    // Name of the report
+    reportName?: string;
+    // Filters applied on report creation.
+    filter?: string;
+    // Columns selected from the report
+    select?: string[];
+    // Ordering of columns in the report
+    orderBy?: string[];
+    // Status of the cached report
+    status?: DeviceManagementReportStatus;
+    // Time that the cached report was last refreshed
+    lastRefreshDateTime?: string;
+    // Time that the cached report expires
+    expirationDateTime?: string;
+}
+export interface DeviceManagementExportJob extends Entity {
+    // Name of the report
+    reportName?: string;
+    // Filters applied on the report
+    filter?: string;
+    // Columns selected from the report
+    select?: string[];
+    // Ordering of columns in the report
+    orderBy?: string[];
+    // Format of the exported report
+    format?: DeviceManagementReportFileFormat;
+    /**
+     * A snapshot is an identifiable subset of the dataset represented by the ReportName. A sessionId or
+     * CachedReportConfiguration id can be used here. If a sessionId is specified, Filter, Select, and OrderBy are applied to
+     * the data represented by the sessionId. Filter, Select, and OrderBy cannot be specified together with a
+     * CachedReportConfiguration id.
+     */
+    snapshotId?: string;
+    // Status of the export job
+    status?: DeviceManagementReportStatus;
+    // Temporary location of the exported report
+    url?: string;
+    // Time that the exported report was requested
+    requestDateTime?: string;
+    // Time that the exported report expires
+    expirationDateTime?: string;
+}
+export interface DeviceManagementReportSchedule extends Entity {
+    // Name of the schedule
+    reportScheduleName?: string;
+    // Subject of the scheduled reports that are delivered
+    subject?: string;
+    // Emails to which the scheduled reports are delivered
+    emails?: string[];
+    // Frequency of scheduled report delivery
+    recurrence?: DeviceManagementScheduledReportRecurrence;
+    // Time that the delivery of the scheduled reports starts
+    startDateTime?: string;
+    // Time that the delivery of the scheduled reports ends
+    endDateTime?: string;
+    // The Id of the User who created the report
+    userId?: string;
+    // Name of the report
+    reportName?: string;
+    // Filters applied on the report
+    filter?: string;
+    // Columns selected from the report
+    select?: string[];
+    // Ordering of columns in the report
+    orderBy?: string[];
+    // Format of the scheduled report
+    format?: DeviceManagementReportFileFormat;
+}
 export interface EmbeddedSIMActivationCodePoolAssignment extends Entity {
     // The type of groups targeted by the embedded SIM activation code pool.
     target?: DeviceAndAppManagementAssignmentTarget;
@@ -16460,6 +17017,38 @@ export interface EnrollmentTroubleshootingEvent extends DeviceManagementTroubles
     // Detailed failure reason.
     failureReason?: string;
 }
+export interface WindowsDefenderApplicationControlSupplementalPolicyAssignment extends Entity {
+    // The target group assignment defined by the admin.
+    target?: DeviceAndAppManagementAssignmentTarget;
+}
+export interface WindowsDefenderApplicationControlSupplementalPolicyDeploymentSummary extends Entity {
+    // Number of Devices that have successfully deployed this WindowsDefenderApplicationControl supplemental policy.
+    deployedDeviceCount?: number;
+    // Number of Devices that have failed to deploy this WindowsDefenderApplicationControl supplemental policy.
+    failedDeviceCount?: number;
+}
+export interface WindowsDefenderApplicationControlSupplementalPolicyDeploymentStatus extends Entity {
+    // Device name.
+    deviceName?: string;
+    // Device ID.
+    deviceId?: string;
+    // Last sync date time.
+    lastSyncDateTime?: string;
+    // Windows OS Version.
+    osVersion?: string;
+    // Windows OS Version Description.
+    osDescription?: string;
+    // The deployment state of the policy.
+    deploymentStatus?: WindowsDefenderApplicationControlSupplementalPolicyStatuses;
+    // The name of the user of this device.
+    userName?: string;
+    // User Principal Name.
+    userPrincipalName?: string;
+    // Human readable version of the WindowsDefenderApplicationControl supplemental policy.
+    policyVersion?: string;
+    // The navigation link to the WindowsDefenderApplicationControl supplemental policy.
+    policy?: WindowsDefenderApplicationControlSupplementalPolicy;
+}
 export interface WindowsFeatureUpdateProfileAssignment extends Entity {
     // The assignment target that the feature update profile is assigned to.
     target?: DeviceAndAppManagementAssignmentTarget;
@@ -16469,6 +17058,8 @@ export interface IntuneBrandingProfileAssignment extends Entity {
     // Assignment target that the branding profile is assigned to.
     target?: DeviceAndAppManagementAssignmentTarget;
 }
+// tslint:disable-next-line: no-empty-interface
+export interface Search extends Entity {}
 export interface Financials extends Entity {
     companies?: Company[];
 }
@@ -18763,6 +19354,40 @@ export interface RecordOperation extends CommsOperation {
 export interface SubscribeToToneOperation extends CommsOperation {}
 // tslint:disable-next-line: no-empty-interface
 export interface UnmuteParticipantOperation extends CommsOperation {}
+export interface External extends Entity {
+    connections?: Connections[];
+}
+export interface Connections extends Entity {
+    name?: string;
+    description?: string;
+    configuration?: Configuration;
+    schema?: Schema;
+    items?: ExternalItem[];
+    operations?: ConnectionOperation[];
+}
+export interface Schema extends Entity {
+    baseType?: string;
+    properties?: Property[];
+}
+export interface ExternalItem extends Entity {
+    properties?: Properties;
+    content?: string;
+    acl?: Acl[];
+}
+export interface ConnectionOperation extends Entity {
+    error?: ErrorDetail;
+}
+export interface ExternalFile extends ExternalItem {
+    createdDateTime?: string;
+    modifiedDateTime?: string;
+    createdBy?: string;
+    lastModifiedBy?: string;
+    title?: string;
+    url?: string;
+    name?: string;
+    extension?: string;
+    size?: number;
+}
 export interface AppCatalogs extends Entity {
     teamsApps?: TeamsApp[];
 }
@@ -19210,6 +19835,7 @@ export interface MailboxSettings {
     timeZone?: string;
     // The locale information for the user, including the preferred language and country/region.
     language?: LocaleInfo;
+    delegateMeetingMessageDeliveryOptions?: DelegateMeetingMessageDeliveryOptions;
     // The days of the week and hours in a specific time zone that the user works.
     workingHours?: WorkingHours;
     // The date format for the user's mailbox.
@@ -19697,19 +20323,37 @@ export interface ProtectSite extends LabelActionBase {
     accessType?: SiteAccessType;
 }
 export interface CertificateAuthority {
+    /**
+     * Required. true if the trusted certificate is a root authority, false if the trusted certificate is an intermediate
+     * authority.
+     */
     isRootAuthority?: boolean;
+    // The URL of the certificate revocation list.
     certificateRevocationListUrl?: string;
+    /**
+     * The URL contains the list of all revoked certificates since the last time a full certificate revocaton list was
+     * created.
+     */
     deltaCertificateRevocationListUrl?: string;
+    // Required. The base64 encoded string representing the public certificate.
     certificate?: number;
+    // The issuer of the certificate, calculated from the certificate value. Read-only.
     issuer?: string;
+    // The subject key identifier of the certificate, calculated from the certificate value. Read-only.
     issuerSki?: string;
 }
 export interface PhysicalOfficeAddress {
+    // The city.
     city?: string;
+    // The country or region. It's a free-format string value, for example, 'United States'.
     countryOrRegion?: string;
+    // Office location such as building and office number for an organizational contact.
     officeLocation?: string;
+    // The postal code.
     postalCode?: string;
+    // The state.
     state?: string;
+    // The street.
     street?: string;
 }
 export interface Phone {
@@ -20747,6 +21391,11 @@ export interface FollowupFlag {
     // The status for follow-up for an item. Possible values are notFlagged, complete, and flagged.
     flagStatus?: FollowupFlagStatus;
 }
+export interface CalendarSharingMessageAction {
+    importance?: CalendarSharingActionImportance;
+    actionType?: CalendarSharingActionType;
+    action?: CalendarSharingAction;
+}
 export interface PatternedRecurrence {
     // The frequency of an event.
     pattern?: RecurrencePattern;
@@ -20857,6 +21506,15 @@ export interface ResponseStatus {
 export interface Attendee extends AttendeeBase {
     // The attendee's response (none, accepted, declined, etc.) for the event and date-time that the response was sent.
     status?: ResponseStatus;
+    proposedNewTime?: TimeSlot;
+}
+export interface OnlineMeetingInfo {
+    joinUrl?: string;
+    conferenceId?: string;
+    tollNumber?: string;
+    tollFreeNumbers?: string[];
+    quickDial?: string;
+    phones?: Phone[];
 }
 export interface RankedEmailAddress {
     address?: string;
@@ -20876,6 +21534,27 @@ export interface PersonDataSource {
 export interface TypedEmailAddress extends EmailAddress {
     type?: EmailType;
     otherLabel?: string;
+}
+export interface AttachmentItem {
+    attachmentType?: AttachmentType;
+    name?: string;
+    size?: number;
+    contentType?: string;
+    isInline?: boolean;
+}
+export interface UploadSession {
+    // The URL endpoint that accepts PUT requests for byte ranges of the file.
+    uploadUrl?: string;
+    /**
+     * The date and time in UTC that the upload session will expire. The complete file must be uploaded before this expiration
+     * time is reached.
+     */
+    expirationDateTime?: string;
+    /**
+     * A collection of byte ranges that the server is missing for the file. These ranges are zero indexed and of the format
+     * 'start-end' (e.g. '0-26' to indicate the first 27 bytes of the file).
+     */
+    nextExpectedRanges?: string[];
 }
 export interface MessageRulePredicates {
     /**
@@ -21288,20 +21967,6 @@ export interface ItemPreviewInfo {
     postParameters?: string;
     postUrl?: string;
 }
-export interface UploadSession {
-    /**
-     * The date and time in UTC that the upload session will expire. The complete file must be uploaded before this expiration
-     * time is reached.
-     */
-    expirationDateTime?: string;
-    /**
-     * A collection of byte ranges that the server is missing for the file. These ranges are zero indexed and of the format
-     * 'start-end' (e.g. '0-26' to indicate the first 27 bytes of the file).
-     */
-    nextExpectedRanges?: string[];
-    // The URL endpoint that accepts PUT requests for byte ranges of the file.
-    uploadUrl?: string;
-}
 export interface ExtensionSchemaProperty {
     // The name of the strongly-typed property defined as part of a schema extension.
     name?: string;
@@ -21568,9 +22233,80 @@ export interface UserGovernanceCriteria extends GovernanceCriteria {
 export interface AgreementFileData {
     data?: number;
 }
+export interface ConditionalAccessSessionControl {
+    isEnabled?: boolean;
+}
+// tslint:disable-next-line: no-empty-interface
+export interface ApplicationEnforcedRestrictionsSessionControl extends ConditionalAccessSessionControl {}
+export interface CloudAppSecuritySessionControl extends ConditionalAccessSessionControl {
+    cloudAppSecurityType?: CloudAppSecuritySessionControlType;
+}
+export interface SignInFrequencySessionControl extends ConditionalAccessSessionControl {
+    value?: number;
+    type?: SigninFrequencyType;
+}
+export interface PersistentBrowserSessionControl extends ConditionalAccessSessionControl {
+    mode?: PersistentBrowserSessionMode;
+}
+export interface ConditionalAccessSessionControls {
+    applicationEnforcedRestrictions?: ApplicationEnforcedRestrictionsSessionControl;
+    cloudAppSecurity?: CloudAppSecuritySessionControl;
+    signInFrequency?: SignInFrequencySessionControl;
+    persistentBrowser?: PersistentBrowserSessionControl;
+}
 export interface RiskUserActivity {
     eventTypes?: RiskEventType[];
     detail?: RiskDetail;
+}
+// tslint:disable-next-line: interface-name no-empty-interface
+export interface IpRange {}
+// tslint:disable-next-line: interface-name
+export interface IPv4CidrRange extends IpRange {
+    cidrAddress?: string;
+}
+// tslint:disable-next-line: interface-name
+export interface IPv6CidrRange extends IpRange {
+    cidrAddress?: string;
+}
+export interface ConditionalAccessApplications {
+    includeApplications?: string[];
+    excludeApplications?: string[];
+    includeUserActions?: string[];
+}
+export interface ConditionalAccessUsers {
+    includeUsers?: string[];
+    excludeUsers?: string[];
+    includeGroups?: string[];
+    excludeGroups?: string[];
+    includeRoles?: string[];
+    excludeRoles?: string[];
+}
+export interface ConditionalAccessPlatforms {
+    includePlatforms?: ConditionalAccessDevicePlatform[];
+    excludePlatforms?: ConditionalAccessDevicePlatform[];
+}
+export interface ConditionalAccessLocations {
+    includeLocations?: string[];
+    excludeLocations?: string[];
+}
+export interface ConditionalAccessDeviceStates {
+    includeStates?: string[];
+    excludeStates?: string[];
+}
+export interface ConditionalAccessConditionSet {
+    applications?: ConditionalAccessApplications;
+    users?: ConditionalAccessUsers;
+    signInRiskLevels?: RiskLevel[];
+    platforms?: ConditionalAccessPlatforms;
+    locations?: ConditionalAccessLocations;
+    clientAppTypes?: ConditionalAccessClientApp[];
+    deviceStates?: ConditionalAccessDeviceStates;
+}
+export interface ConditionalAccessGrantControls {
+    operator?: string;
+    builtInControls?: ConditionalAccessGrantControl[];
+    customAuthenticationFactors?: string[];
+    termsOfUse?: string[];
 }
 export interface LabelDetails {
     id?: string;
@@ -21838,6 +22574,12 @@ export interface OsVersionCount {
     // The Timestamp of the last update for the device count in UTC
     lastUpdateDateTime?: string;
 }
+export interface GroupPolicyObjectFile {
+    // The distinguished name of the OU.
+    ouDistinguishedName?: string;
+    // The Group Policy Object file content.
+    content?: string;
+}
 export interface AndroidEnrollmentCompanyCode {
     // Enrollment Token used by the User to enroll their device.
     enrollmentToken?: string;
@@ -21989,6 +22731,22 @@ export interface IosLobAppAssignmentSettings extends MobileAppAssignmentSettings
     // Whether or not to uninstall the app when device is removed from Intune.
     uninstallOnDeviceRemoval?: boolean;
 }
+export interface Win32LobAppRestartSettings {
+    // The number of minutes to wait before restarting the device after an app installation.
+    gracePeriodInMinutes?: number;
+    // The number of minutes before the restart time to display the countdown dialog for pending restarts.
+    countdownDisplayBeforeRestartInMinutes?: number;
+    // The number of minutes to snooze the restart notification dialog when the snooze button is selected.
+    restartNotificationSnoozeDurationInMinutes?: number;
+}
+export interface MobileAppInstallTimeSettings {
+    // Whether the local device time or UTC time should be used when determining the available and deadline times.
+    useLocalTime?: boolean;
+    // The time at which the app should be available for installation.
+    startDateTime?: string;
+    // The time at which the app should be installed.
+    deadlineDateTime?: string;
+}
 // tslint:disable-next-line: interface-name
 export interface IosStoreAppAssignmentSettings extends MobileAppAssignmentSettings {
     // The VPN Configuration Id to apply for this app.
@@ -22024,6 +22782,10 @@ export interface MacOsVppAppAssignmentSettings extends MobileAppAssignmentSettin
 export interface Win32LobAppAssignmentSettings extends MobileAppAssignmentSettings {
     // The notification status for this app assignment.
     notifications?: Win32LobAppNotification;
+    // The reboot settings to apply for this app assignment.
+    restartSettings?: Win32LobAppRestartSettings;
+    // The install time settings to apply for this app assignment.
+    installTimeSettings?: MobileAppInstallTimeSettings;
 }
 export interface ExcludedApps {
     // The value for if MS Office Access should be excluded or not.
@@ -22131,6 +22893,8 @@ export interface Win32LobAppRequirement {
 export interface Win32LobAppInstallExperience {
     // Indicates the type of execution context the app runs in.
     runAsAccount?: RunAsAccountType;
+    // Device restart behavior.
+    deviceRestartBehavior?: Win32LobAppRestartBehavior;
 }
 export interface Win32LobAppReturnCode {
     // Return code.
@@ -22327,6 +23091,14 @@ export interface AuditActor {
     ipAddress?: string;
     // User Id.
     userId?: string;
+    // List of user scope tags when the audit was performed.
+    scopeTags?: ScopeTagInfo[];
+}
+export interface ScopeTagInfo {
+    // Scope Tag Display name.
+    scopeTagName?: string;
+    // Scope Tag Id.
+    scopeTagId?: string;
 }
 export interface AuditResource {
     // Display name.
@@ -22356,8 +23128,6 @@ export interface HasPayloadLinkResultItem {
     // The reason where the link comes from.
     sources?: DeviceAndAppManagementAssignmentSource[];
 }
-// tslint:disable-next-line: no-empty-interface
-export interface RunSchedule {}
 export interface DeviceManagementApplicabilityRuleOsEdition {
     // Applicability rule OS edition type.
     osEditionTypes?: Windows10EditionType[];
@@ -22642,6 +23412,8 @@ export interface CustomSubjectAlternativeName {
     // Custom SAN Name
     name?: string;
 }
+// tslint:disable-next-line: no-empty-interface
+export interface AndroidDeviceOwnerGlobalProxy {}
 export interface AppListItem {
     // The application name
     name?: string;
@@ -22651,6 +23423,18 @@ export interface AppListItem {
     appStoreUrl?: string;
     // The application or bundle identifier of the application
     appId?: string;
+}
+export interface AndroidDeviceOwnerGlobalProxyAutoConfig extends AndroidDeviceOwnerGlobalProxy {
+    // The proxy auto-config URL
+    proxyAutoConfigURL?: string;
+}
+export interface AndroidDeviceOwnerGlobalProxyDirect extends AndroidDeviceOwnerGlobalProxy {
+    // The host name
+    host?: string;
+    // The port
+    port?: number;
+    // The excluded hosts
+    excludedHosts?: string[];
 }
 export interface OmaSetting {
     // Display Name.
@@ -23531,8 +24315,6 @@ export interface ProxiedDomain {
     // Proxy IP or FQDN
     proxy?: string;
 }
-// tslint:disable-next-line: interface-name no-empty-interface
-export interface IpRange {}
 // tslint:disable-next-line: interface-name
 export interface IPv6Range extends IpRange {
     // Lower address
@@ -24044,6 +24826,8 @@ export interface ConfigurationManagerAction {
     // The action type to trigger on Configuration Manager client
     action?: ConfigurationManagerActionType;
 }
+// tslint:disable-next-line: no-empty-interface
+export interface RunSchedule {}
 export interface AppLogCollectionDownloadDetails {
     // Download SAS Url for completed AppLogUploadRequest
     downloadUrl?: string;
@@ -24110,11 +24894,6 @@ export interface MobileAppTroubleshootingHistoryItem {
     // Time when the history item occurred.
     occurrenceDateTime?: string;
 }
-export interface DeviceHealthScriptComplianceRule {
-    detectionType?: DeviceHealthScriptDetectionType;
-    operator?: DeviceHealthScriptComplianceRuleOperator;
-    detectionValue?: string;
-}
 export interface DeviceOperatingSystemSummary {
     // Number of android device count.
     androidCount?: number;
@@ -24128,6 +24907,14 @@ export interface DeviceOperatingSystemSummary {
     windowsCount?: number;
     // Number of unknown device count.
     unknownCount?: number;
+    // Number of dedicated Android devices.
+    androidDedicatedCount?: number;
+    // Number of device admin Android devices.
+    androidDeviceAdminCount?: number;
+    // Number of fully managed Android devices.
+    androidFullyManagedCount?: number;
+    // Number of work profile Android devices.
+    androidWorkProfileCount?: number;
 }
 export interface DeviceExchangeAccessStateSummary {
     // Total count of devices with Exchange Access State: Allowed.
@@ -24398,6 +25185,53 @@ export interface MobileAppSupportedDeviceType {
     minimumOperatingSystemVersion?: string;
     // Maximum OS version
     maximumOperatingSystemVersion?: string;
+}
+export interface SearchRequest {
+    entityTypes?: EntityType[];
+    contentSources?: string[];
+    query?: SearchQuery;
+    from?: number;
+    size?: number;
+    stored_fields?: string[];
+    enableTopResults?: boolean;
+}
+export interface SearchQuery {
+    query_string?: SearchQueryString;
+    filter?: FilterContainer;
+}
+export interface SearchQueryString {
+    query?: string;
+}
+export interface FilterContainer {
+    bool?: FilterContainer[];
+    should?: FilterContainer[];
+    term?: TermFilter;
+    range?: RangeFilter;
+}
+export interface TermFilter {
+    value?: string;
+}
+export interface RangeFilter {
+    gt?: string;
+    gte?: string;
+    lt?: string;
+    lte?: string;
+}
+export interface SearchResponse {
+    searchTerms?: string[];
+    hitsContainers?: SearchHitsContainer[];
+}
+export interface SearchHitsContainer {
+    hits?: SearchHit[];
+    total?: number;
+    moreResultsAvailable?: boolean;
+}
+export interface SearchHit {
+    _id?: string;
+    _score?: number;
+    _sortField?: string;
+    _summary?: string;
+    _source?: Entity;
 }
 export interface DateTimeTimeZoneType {
     dateTime?: string;
@@ -25188,6 +26022,21 @@ export interface Prompt {}
 export interface MediaPrompt extends Prompt {
     mediaInfo?: MediaInfo;
     loop?: number;
+}
+export interface Configuration {
+    authorizedApps?: string[];
+}
+// tslint:disable-next-line: no-empty-interface
+export interface Properties {}
+export interface Acl {
+    value?: string;
+    identitySource?: string;
+}
+export interface Property {
+    name?: string;
+    isSearchable?: boolean;
+    isRetrievable?: boolean;
+    isQueryable?: boolean;
 }
 export interface ErrorDetail {
     errorCode?: string;
