@@ -1,4 +1,4 @@
-// Type definitions for non-npm package microsoft-graph 1.12
+// Type definitions for non-npm package microsoft-graph <VERSION_STRING>
 // Project: https://github.com/microsoftgraph/msgraph-typescript-typings
 // Definitions by: Microsoft Graph Team <https://github.com/microsoftgraph>
 //                 Muthurathinam Muthusamy <https://github.com/muthurathinam>
@@ -1048,6 +1048,11 @@ export interface User extends DirectoryObject {
     isResourceAccount?: boolean;
     // The user’s job title. Supports $filter.
     jobTitle?: string;
+    /**
+     * The time when this Azure AD user last changed their password. The date and time information uses ISO 8601 format and is
+     * always in UTC time. For example, midnight UTC on Jan 1, 2014 would look like this: '2014-01-01T00:00:00Z'
+     */
+    lastPasswordChangeDateTime?: string;
     /**
      * Used by enterprise applications to determine the legal age group of the user. This property is read-only and calculated
      * based on ageGroup and consentProvidedForMinor properties. Allowed values: null, minorWithOutParentalConsent,
@@ -2137,6 +2142,8 @@ export interface Group extends DirectoryObject {
     renewedDateTime?: string;
     // Specifies whether the group is a security group. Returned by default. Supports $filter.
     securityEnabled?: boolean;
+    // Security identifier of the group, used in Windows scenarios. Returned by default.
+    securityIdentifier?: string;
     /**
      * Specifies the visibility of an Office 365 group. Possible values are: Private, Public, or Hiddenmembership; blank
      * values are treated as public. See group visibility options to learn more.Visibility can be set only when a group is
@@ -2296,6 +2303,8 @@ export interface Device extends DirectoryObject {
      * Intune for any device OS type or by an approved MDM app for Windows OS devices.
      */
     isManaged?: boolean;
+    // Application identifier used to register device into MDM. Read-only. Supports $filter.
+    mdmAppId?: string;
     /**
      * The last time at which the object was synced with the on-premises directory.The Timestamp type represents date and time
      * information using ISO 8601 format and is always in UTC time. For example, midnight UTC on Jan 1, 2014 would look like
