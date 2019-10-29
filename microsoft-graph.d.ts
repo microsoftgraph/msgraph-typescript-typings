@@ -157,12 +157,21 @@ export type BookingPriceType =
     | "notSet";
 export type BookingReminderRecipients = "allAttendees" | "staff" | "customer";
 export type BookingStaffRole = "guest" | "administrator" | "viewer" | "externalGuest";
+export type UserFlowType =
+    | "signUp"
+    | "signIn"
+    | "signUpOrSignIn"
+    | "passwordReset"
+    | "profileUpdate"
+    | "resourceOwner"
+    | "unknownFutureValue";
 export type ApplicationMode = "manual" | "automatic" | "recommended";
 export type Alignment = "left" | "right" | "center";
 export type PageOrientation = "horizontal" | "diagonal";
 export type GroupPrivacy = "public" | "private";
 export type SiteAccessType = "block" | "full" | "limited";
 export type EncryptWith = "template" | "userDefinedRights";
+export type PermissionClassificationType = "low" | "medium" | "high" | "unknownFutureValue";
 export type PhoneType =
     | "home"
     | "business"
@@ -2143,7 +2152,13 @@ export type TimeOffReasonIconType =
 export type ScheduleChangeState = "pending" | "approved" | "declined" | "unknownFutureValue";
 export type ScheduleChangeRequestActor = "sender" | "recipient" | "manager" | "system" | "unknownFutureValue";
 export type WorkforceIntegrationEncryptionProtocol = "sharedSecret" | "unknownFutureValue";
-export type WorkforceIntegrationSupportedEntities = "none" | "shift" | "swapRequest";
+export type WorkforceIntegrationSupportedEntities =
+    | "none"
+    | "shift"
+    | "swapRequest"
+    | "userShiftPreferences"
+    | "openShift"
+    | "openShiftRequest";
 export interface Entity {
     // Read-only.
     id?: string;
@@ -4294,6 +4309,18 @@ export interface BookingCurrency extends Entity {
     symbol?: string;
 }
 // tslint:disable-next-line: interface-name
+export interface IdentityContainer extends Entity {
+    userFlows?: IdentityUserFlow[];
+    featureConfigurations?: FeatureConfiguration[];
+}
+// tslint:disable-next-line: interface-name
+export interface IdentityUserFlow extends Entity {
+    userFlowType?: UserFlowType;
+    userFlowTypeVersion?: number;
+}
+// tslint:disable-next-line: no-empty-interface
+export interface FeatureConfiguration extends Entity {}
+// tslint:disable-next-line: interface-name
 export interface IdentityProvider extends Entity {
     type?: string;
     name?: string;
@@ -4306,8 +4333,9 @@ export interface TrustFramework extends Entity {
 }
 // tslint:disable-next-line: no-empty-interface
 export interface TrustFrameworkPolicy extends Entity {}
-// tslint:disable-next-line: no-empty-interface
-export interface TrustFrameworkKeySet extends Entity {}
+export interface TrustFrameworkKeySet extends Entity {
+    keys?: TrustFrameworkKey[];
+}
 export interface DataClassificationService extends Entity {
     exactMatchDataStores?: ExactMatchDataStore[];
     sensitiveTypes?: SensitiveType[];
@@ -4408,6 +4436,11 @@ export interface AllowedDataLocation extends Entity {
     location?: string;
     isDefault?: boolean;
     domain?: string;
+}
+export interface DelegatedPermissionClassification extends Entity {
+    permissionId?: string;
+    permissionName?: string;
+    classification?: PermissionClassificationType;
 }
 export interface ResourceSpecificPermissionGrant extends DirectoryObject {
     clientId?: string;
@@ -5096,8 +5129,6 @@ export interface EducationSubmission extends Entity {
     releasedDateTime?: string;
     returnedBy?: IdentitySet;
     returnedDateTime?: string;
-    grade?: EducationAssignmentGrade;
-    feedback?: EducationFeedback;
     resourcesFolderUrl?: string;
     resources?: EducationSubmissionResource[];
     submittedResources?: EducationSubmissionResource[];
@@ -5419,6 +5450,7 @@ export interface DriveItem extends BaseItem {
     thumbnails?: ThumbnailSet[];
     // The list of previous versions of the item. For more info, see [getting previous versions][]. Read-only. Nullable.
     versions?: DriveItemVersion[];
+    document?: Document;
 }
 export interface Workbook extends Entity {
     application?: WorkbookApplication;
@@ -5471,6 +5503,9 @@ export interface DriveItemVersion extends BaseItemVersion {
     content?: any;
     // Indicates the size of the content stream for this version of the item.
     size?: number;
+}
+export interface Document extends Entity {
+    comments?: DocumentComment[];
 }
 export interface WorkbookApplication extends Entity {
     calculationMode?: string;
@@ -19409,10 +19444,12 @@ export interface Schedule extends Entity {
     provisionStatusCode?: string;
     workforceIntegrationIds?: string[];
     shifts?: Shift[];
+    openShifts?: OpenShift[];
     timesOff?: TimeOff[];
     timeOffReasons?: TimeOffReason[];
     schedulingGroups?: SchedulingGroup[];
     swapShiftsChangeRequests?: SwapShiftsChangeRequest[];
+    openShiftChangeRequests?: OpenShiftChangeRequest[];
     timeOffRequests?: TimeOffRequest[];
 }
 // tslint:disable-next-line: no-empty-interface
@@ -19518,6 +19555,11 @@ export interface Shift extends ChangeTrackedEntity {
     userId?: string;
     schedulingGroupId?: string;
 }
+export interface OpenShift extends ChangeTrackedEntity {
+    sharedOpenShift?: OpenShiftItem;
+    draftOpenShift?: OpenShiftItem;
+    schedulingGroupId?: string;
+}
 export interface TimeOff extends ChangeTrackedEntity {
     sharedTimeOff?: TimeOffItem;
     draftTimeOff?: TimeOffItem;
@@ -19552,10 +19594,20 @@ export interface ShiftChangeRequest extends ScheduleChangeRequest {
 export interface SwapShiftsChangeRequest extends ShiftChangeRequest {
     recipientShiftId?: string;
 }
+export interface OpenShiftChangeRequest extends ScheduleChangeRequest {
+    openShiftId?: string;
+}
 export interface TimeOffRequest extends ScheduleChangeRequest {
     startDateTime?: string;
     endDateTime?: string;
     timeOffReasonId?: string;
+}
+export interface DocumentComment extends Entity {
+    content?: string;
+    replies?: DocumentCommentReply[];
+}
+export interface DocumentCommentReply extends Entity {
+    content?: string;
 }
 export interface AuditActivityInitiator {
     /**
@@ -20114,6 +20166,15 @@ export interface OAuth2Permission {
     userConsentDisplayName?: string;
     value?: string;
 }
+export interface Credential {
+    fieldId?: string;
+    value?: string;
+    type?: string;
+}
+export interface PasswordSingleSignOnCredentialSet {
+    id?: string;
+    credentials?: Credential[];
+}
 export interface ApplicationServicePrincipal {
     application?: Application;
     servicePrincipal?: ServicePrincipal;
@@ -20203,6 +20264,24 @@ export interface BookingSchedulingPolicy {
     sendConfirmationsToOwner?: boolean;
     // Allow customers to choose a specific person for the booking.
     allowStaffSelection?: boolean;
+}
+export interface TrustFrameworkKey {
+    k?: string;
+    x5c?: string[];
+    x5t?: string;
+    kty?: string;
+    use?: string;
+    exp?: number;
+    nbf?: number;
+    kid?: string;
+    e?: string;
+    n?: string;
+    d?: string;
+    p?: string;
+    q?: string;
+    dp?: string;
+    dq?: string;
+    qi?: string;
 }
 export interface ClassifcationErrorBase {
     code?: string;
@@ -21984,6 +22063,24 @@ export interface HybridAgentUpdaterConfiguration {
 export interface UpdateWindow {
     updateWindowStartTime?: string;
     updateWindowEndTime?: string;
+}
+export interface PropertyToEvaluate {
+    propertyName?: string;
+    propertyValue?: string;
+}
+export interface ExpressionEvaluationDetails {
+    expressionResult?: boolean;
+    expression?: string;
+    expressionEvaluationDetails?: ExpressionEvaluationDetails[];
+    propertyToEvaluate?: PropertyToEvaluate;
+}
+export interface MembershipRuleEvaluationDetails {
+    membershipRuleEvaluationDetails?: ExpressionEvaluationDetails;
+}
+export interface EvaluateDynamicMembershipResult {
+    membershipRule?: string;
+    membershipRuleEvaluationResult?: boolean;
+    membershipRuleEvaluationDetails?: ExpressionEvaluationDetails;
 }
 export interface SynchronizationSecretKeyStringValuePair {
     key?: SynchronizationSecret;
@@ -26166,6 +26263,9 @@ export interface ShiftItem extends ScheduleEntity {
     displayName?: string;
     notes?: string;
     activities?: ShiftActivity[];
+}
+export interface OpenShiftItem extends ShiftItem {
+    openSlotCount?: number;
 }
 export interface TimeOffItem extends ScheduleEntity {
     timeOffReasonId?: string;
