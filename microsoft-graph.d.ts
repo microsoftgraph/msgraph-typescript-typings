@@ -3838,15 +3838,19 @@ export interface Post extends OutlookItem {
     attachments?: Attachment[];
 }
 export interface FileAttachment extends Attachment {
+    // The #microsoft.graph.fileAttachment data type.
+    "@odata.type"?: string;
     // The ID of the attachment in the Exchange store.
     contentId?: string;
     // Do not use this property as it is not supported.
     contentLocation?: string;
     // The base64-encoded contents of the file.
-    contentBytes?: number;
+    contentBytes?: string;
 }
 // tslint:disable-next-line: interface-name
 export interface ItemAttachment extends Attachment {
+    // The #microsoft.graph.itemAttachment data type.
+    "@odata.type"?: string;
     // The attached message or event. Navigation property.
     item?: OutlookItem;
 }
