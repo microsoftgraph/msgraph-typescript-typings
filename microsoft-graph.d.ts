@@ -157,12 +157,39 @@ export type BookingPriceType =
     | "notSet";
 export type BookingReminderRecipients = "allAttendees" | "staff" | "customer";
 export type BookingStaffRole = "guest" | "administrator" | "viewer" | "externalGuest";
+export type UserFlowType =
+    | "signUp"
+    | "signIn"
+    | "signUpOrSignIn"
+    | "passwordReset"
+    | "profileUpdate"
+    | "resourceOwner"
+    | "unknownFutureValue";
+export type DlpAction = "notifyUser" | "blockAccess" | "deviceRestriction";
+export type AccessScope = "inOrganization" | "notInOrganization";
+export type Component = "Label";
+export type RuleMode = "audit" | "auditAndNotify" | "enforce" | "pendingDeletion" | "test";
+export type OverrideOption =
+    | "notAllowed"
+    | "allowFalsePositiveOverride"
+    | "allowWithJustification"
+    | "allowWithoutJustification";
+export type RestrictionAction = "warn" | "audit" | "block";
+export type RestrictionTrigger =
+    | "copyPaste"
+    | "copyToNetworkShare"
+    | "copyToRemovableMedia"
+    | "screenCapture"
+    | "print"
+    | "cloudEgress"
+    | "unallowedApps";
 export type ApplicationMode = "manual" | "automatic" | "recommended";
 export type Alignment = "left" | "right" | "center";
 export type PageOrientation = "horizontal" | "diagonal";
 export type GroupPrivacy = "public" | "private";
 export type SiteAccessType = "block" | "full" | "limited";
 export type EncryptWith = "template" | "userDefinedRights";
+export type PermissionClassificationType = "low" | "medium" | "high" | "unknownFutureValue";
 export type PhoneType =
     | "home"
     | "business"
@@ -424,7 +451,7 @@ export type RiskEventStatus =
     | "closedMfaAuto"
     | "closedMultipleReasons";
 export type UserRiskLevel = "unknown" | "none" | "low" | "medium" | "high";
-export type ConditionalAccessPolicyState = "enabled" | "disabled";
+export type ConditionalAccessPolicyState = "enabled" | "disabled" | "enabledForReportingButNotEnforced";
 export type ConditionalAccessClientApp = "browser" | "modern" | "easSupported" | "easUnsupported" | "other";
 export type ConditionalAccessGrantControl =
     | "block"
@@ -1905,6 +1932,48 @@ export type SetupStatus =
     | "registrationTimedOut"
     | "disabled";
 export type DataPolicyOperationStatus = "notStarted" | "running" | "complete" | "failed" | "unknownFutureValue";
+export type AllowedAudiences =
+    | "me"
+    | "family"
+    | "contacts"
+    | "groupMembers"
+    | "organization"
+    | "federatedOrganizations"
+    | "everyone"
+    | "unknownFutureValue";
+export type LanguageProficiencyLevel =
+    | "elementary"
+    | "conversational"
+    | "limitedWorking"
+    | "professionalWorking"
+    | "fullProfessional"
+    | "nativeOrBilingual"
+    | "unknownFutureValue";
+export type AnniversaryType = "birthday" | "wedding" | "unknownFutureValue";
+export type PersonRelationship =
+    | "manager"
+    | "colleague"
+    | "directReport"
+    | "dotLineReport"
+    | "assistant"
+    | "dotLineManager"
+    | "alternateContact"
+    | "friend"
+    | "spouse"
+    | "sibling"
+    | "child"
+    | "parent"
+    | "sponsor"
+    | "emergencyContact"
+    | "other"
+    | "unknownFutureValue";
+export type SkillProficiencyLevel =
+    | "elementary"
+    | "limitedWorking"
+    | "generalProfessional"
+    | "advancedProfessional"
+    | "expert"
+    | "unknownFutureValue";
 export type Status = "active" | "updated" | "deleted" | "ignored" | "unknownFutureValue";
 export type AccountStatus = "unknown" | "staged" | "active" | "suspended" | "deleted" | "unknownFutureValue";
 export type AlertFeedback = "unknown" | "truePositive" | "falsePositive" | "benignPositive" | "unknownFutureValue";
@@ -2014,14 +2083,24 @@ export type CallState =
     | "transferAccepted"
     | "redirecting"
     | "terminating"
-    | "terminated";
+    | "terminated"
+    | "unknownFutureValue";
 export type ChangeType = "created" | "updated" | "deleted";
-export type EndpointType = "default" | "voicemail";
+export type EndpointType =
+    | "default"
+    | "voicemail"
+    | "skypeForBusiness"
+    | "skypeForBusinessVoipPhone"
+    | "unknownFutureValue";
 export type MediaDirection = "inactive" | "sendOnly" | "receiveOnly" | "sendReceive";
-export type MediaState = "active" | "inactive";
+export type MediaState = "active" | "inactive" | "unknownFutureValue";
 export type MeetingCapabilities = "questionAndAnswer" | "unknownFutureValue";
-export type Modality = "unknown" | "audio" | "video" | "videoBasedScreenSharing" | "data";
-export type PlayPromptCompletionReason = "unknown" | "completedSuccessfully" | "mediaOperationCanceled";
+export type Modality = "unknown" | "audio" | "video" | "videoBasedScreenSharing" | "data" | "unknownFutureValue";
+export type PlayPromptCompletionReason =
+    | "unknown"
+    | "completedSuccessfully"
+    | "mediaOperationCanceled"
+    | "unknownFutureValue";
 export type RecordCompletionReason =
     | "operationCanceled"
     | "stopToneDetected"
@@ -2032,8 +2111,8 @@ export type RecordCompletionReason =
     | "playBeepFailed"
     | "mediaReceiveTimeout"
     | "unspecifiedError";
-export type RecordingStatus = "recordingCapable" | "notRecording" | "startedRecording";
-export type RejectReason = "none" | "busy" | "forbidden";
+export type RecordingStatus = "unknown" | "notRecording" | "recording" | "failed" | "unknownFutureValue";
+export type RejectReason = "none" | "busy" | "forbidden" | "unknownFutureValue";
 export type RoutingMode = "oneToOne" | "multicast";
 export type RoutingPolicy =
     | "none"
@@ -2062,6 +2141,19 @@ export type Tone =
     | "c"
     | "d"
     | "flash";
+export type AclType = "user" | "group" | "everyone" | "everyoneExceptGuests";
+export type AccessType = "grant" | "deny";
+export type PropertyType =
+    | "String"
+    | "Int64"
+    | "Double"
+    | "DateTime"
+    | "Boolean"
+    | "Collection(String)"
+    | "Collection(Int64)"
+    | "Collection(Double)"
+    | "Collection(DateTime)";
+export type ConnectionOperationStatus = "unspecified" | "inprogress" | "completed" | "failed";
 export type TeamSpecialization =
     | "none"
     | "educationStandard"
@@ -2143,7 +2235,13 @@ export type TimeOffReasonIconType =
 export type ScheduleChangeState = "pending" | "approved" | "declined" | "unknownFutureValue";
 export type ScheduleChangeRequestActor = "sender" | "recipient" | "manager" | "system" | "unknownFutureValue";
 export type WorkforceIntegrationEncryptionProtocol = "sharedSecret" | "unknownFutureValue";
-export type WorkforceIntegrationSupportedEntities = "none" | "shift" | "swapRequest";
+export type WorkforceIntegrationSupportedEntities =
+    | "none"
+    | "shift"
+    | "swapRequest"
+    | "userShiftPreferences"
+    | "openShift"
+    | "openShiftRequest";
 export interface Entity {
     // Read-only.
     id?: string;
@@ -2603,6 +2701,7 @@ export interface User extends DirectoryObject {
     settings?: UserSettings;
     // Read-only.
     onenote?: Onenote;
+    profile?: Profile;
     // The user's activities across devices. Read-only. Nullable.
     activities?: UserActivity[];
     devices?: Device[];
@@ -2621,6 +2720,7 @@ export interface InformationProtection extends Entity {
     policy?: InformationProtectionPolicy;
     sensitivityLabels?: SensitivityLabel[];
     sensitivityPolicySettings?: SensitivityPolicySettings;
+    dataLossPreventionPolicies?: DataLossPreventionPolicy[];
 }
 export interface AppRoleAssignment extends Entity {
     appRoleId?: string;
@@ -2825,13 +2925,31 @@ export interface Group extends DirectoryObject {
     membershipRule?: string;
     membershipRuleProcessingState?: string;
     /**
+     * Contains the on-premises domain FQDN, also called dnsDomainName synchronized from the on-premises directory. The
+     * property is only populated for customers who are synchronizing their on-premises directory to Azure Active Directory
+     * via Azure AD Connect.Returned by default. Read-only.
+     */
+    onPremisesDomainName?: string;
+    /**
      * Indicates the last time at which the group was synced with the on-premises directory.The Timestamp type represents date
      * and time information using ISO 8601 format and is always in UTC time. For example, midnight UTC on Jan 1, 2014 would
      * look like this: '2014-01-01T00:00:00Z'. Returned by default. Read-only. Supports $filter.
      */
     onPremisesLastSyncDateTime?: string;
+    /**
+     * Contains the on-premises netBios name synchronized from the on-premises directory. The property is only populated for
+     * customers who are synchronizing their on-premises directory to Azure Active Directory via Azure AD Connect.Returned by
+     * default. Read-only.
+     */
+    onPremisesNetBiosName?: string;
     // Errors when using Microsoft synchronization product during provisioning. Returned by default.
     onPremisesProvisioningErrors?: OnPremisesProvisioningError[];
+    /**
+     * Contains the on-premises SAM account name synchronized from the on-premises directory. The property is only populated
+     * for customers who are synchronizing their on-premises directory to Azure Active Directory via Azure AD Connect.Returned
+     * by default. Read-only.
+     */
+    onPremisesSamAccountName?: string;
     /**
      * Contains the on-premises security identifier (SID) for the group that was synchronized from on-premises to the cloud.
      * Returned by default. Read-only.
@@ -3730,6 +3848,21 @@ export interface Onenote extends Entity {
      */
     operations?: OnenoteOperation[];
 }
+export interface Profile extends Entity {
+    account?: UserAccountInformation[];
+    anniversaries?: PersonAnniversary[];
+    educationalActivities?: EducationalActivity[];
+    emails?: ItemEmail[];
+    interests?: PersonInterest[];
+    languages?: LanguageProficiency[];
+    names?: PersonName[];
+    phones?: ItemPhone[];
+    positions?: WorkPosition[];
+    projects?: ProjectParticipation[];
+    skills?: SkillProficiency[];
+    webAccounts?: WebAccount[];
+    websites?: PersonWebsite[];
+}
 export interface UserActivity extends Entity {
     // Required. The object containing information to render the activity in the UX.
     visualElements?: VisualInfo;
@@ -4068,6 +4201,7 @@ export interface Invitation extends Entity {
     inviteRedeemUrl?: string;
     // The status of the invitation. Possible values: PendingAcceptance, Completed, InProgress, and Error
     status?: string;
+    resetRedemption?: boolean;
     // The user created as part of the invitation creation. Read-Only
     invitedUser?: User;
 }
@@ -4100,39 +4234,115 @@ export interface CallActivityStatistics extends ActivityStatistics {
     afterHours?: string;
 }
 export interface Application extends DirectoryObject {
+    // Specifies settings for an application that implements a web API.
     api?: ApiApplication;
+    // The unique identifier for the application that is assigned to an application by Azure AD. Not nullable. Read-only.
     appId?: string;
+    /**
+     * The collection of application roles that an application may declare. These roles can be assigned to users, groups, or
+     * service principals. Not nullable.
+     */
     appRoles?: AppRole[];
+    // The date and time the application was registered. Read-only.
     createdDateTime?: string;
+    /**
+     * Specifies the fallback application type as public client, such as an installed application running on a mobile device.
+     * The default value is false which means the fallback application type is confidential client such as web app. There are
+     * certain scenarios where Azure AD cannot determine the client application type (e.g. ROPC flow where it is configured
+     * without specifying a redirect URI). In those cases Azure AD will interpret the application type based on the value of
+     * this property.
+     */
     isFallbackPublicClient?: boolean;
+    /**
+     * The URIs that identify the application within its Azure AD tenant, or within a verified custom domain if the
+     * application is multi-tenant. For more information see Application Objects and Service Principal Objects. The any
+     * operator is required for filter expressions on multi-valued properties. Not nullable.
+     */
     identifierUris?: string[];
+    // The display name for the application.
     displayName?: string;
+    /**
+     * Configures the groups claim issued in a user or OAuth 2.0 access token that the application expects. To set this
+     * attribute, use one of the following valid string values:NoneSecurityGroup: For security groups and Azure AD rolesAll:
+     * This will get all of the security groups, distribution groups, and Azure AD directory roles that the signed-in user is
+     * a member of
+     */
     groupMembershipClaims?: string;
+    /**
+     * Basic profile information of the application such as app's marketing, support, terms of service and privacy statement
+     * URLs. The terms of service and privacy statement are surfaced to users through the user consent experience. For more
+     * info, see How to: Add Terms of service and privacy statement for registered Azure AD apps.
+     */
     info?: InformationalUrl;
     isDeviceOnlyAuthSupported?: boolean;
+    // The collection of key credentials associated with the application Not nullable.
     keyCredentials?: KeyCredential[];
+    // The main logo for the application. Not nullable.
     logo?: any;
+    /**
+     * Application developers can configure optional claims in their Azure AD apps to specify which claims they want in tokens
+     * sent to their application by the Microsoft security token service. See provide optional claims to your Azure AD app for
+     * more information.
+     */
     optionalClaims?: OptionalClaims;
+    // Specifies parental control settings for an application.
     parentalControlSettings?: ParentalControlSettings;
+    // The collection of password credentials associated with the application. Not nullable.
     passwordCredentials?: PasswordCredential[];
+    // Specifies settings for installed clients such as desktop or mobile devices.
     publicClient?: PublicClientApplication;
+    // The verified publisher domain for the application. Read-only.
     publisherDomain?: string;
+    /**
+     * Specifies resources that this application requires access to and the set of OAuth permission scopes and application
+     * roles that it needs under each of those resources. This pre-configuration of required resource access drives the
+     * consent experience. Not nullable.
+     */
     requiredResourceAccess?: RequiredResourceAccess[];
+    /**
+     * Specifies what Microsoft accounts are supported for the current application. Supported values are:AzureADMyOrg: Users
+     * with a Microsoft work or school account in my organization’s Azure AD tenant (i.e. single tenant)AzureADMultipleOrgs:
+     * Users with a Microsoft work or school account in any organization’s Azure AD tenant (i.e. multi-tenant)
+     * AzureADandPersonalMicrosoftAccount: Users with a personal Microsoft account, or a work or school account in any
+     * organization’s Azure AD tenant
+     */
     signInAudience?: string;
+    // Custom strings that can be used to categorize and identify the application. Not nullable.
     tags?: string[];
+    /**
+     * Specifies the keyId of a public key from the keyCredentials collection. When configured, Azure AD encrypts all the
+     * tokens it emits by using the key this property points to. The application code that receives the encrypted token must
+     * use the matching private key to decrypt the token before it can be used for the signed-in user.
+     */
     tokenEncryptionKeyId?: string;
+    // Specifies settings for a web application.
     web?: WebApplication;
+    // Read-only. Nullable.
     extensionProperties?: ExtensionProperty[];
+    // Read-only.
     createdOnBehalfOf?: DirectoryObject;
+    /**
+     * Directory objects that are owners of the application. The owners are a set of non-admin users who are allowed to modify
+     * this object. Requires version 2013-11-08 or newer. Read-only. Nullable.
+     */
     owners?: DirectoryObject[];
     policies?: DirectoryObject[];
     synchronization?: Synchronization;
 }
 export interface ExtensionProperty extends DirectoryObject {
+    // Display name of the application object on which this extension property is defined. Read-only.
     appDisplayName?: string;
+    // Name of the extension property. Not nullable.
     name?: string;
+    /**
+     * Specifies the data type of the value the extension property can hold. Following values are supported. Not nullable.
+     * Binary - 256 bytes maximumBooleanDateTime - Must be specified in ISO 8601 format. Will be stored in UTC.Integer -
+     * 32-bit value.LargeInteger - 64-bit value.String - 256 characters maximum
+     */
     dataType?: string;
+    // Indicates if this extension property was sycned from onpremises directory using Azure AD Connect. Read-only.
     isSyncedFromOnPremises?: boolean;
+    // Following values are supported. Not nullable. UserGroupOrganizationDeviceApplication
     targetObjects?: string[];
 }
 export interface Synchronization extends Entity {
@@ -4145,14 +4355,17 @@ export interface ServicePrincipal extends DirectoryObject {
     addIns?: AddIn[];
     appDisplayName?: string;
     appId?: string;
+    applicationTemplateId?: string;
     appOwnerOrganizationId?: string;
     appRoleAssignmentRequired?: boolean;
     appRoles?: AppRole[];
     displayName?: string;
     homepage?: string;
     keyCredentials?: KeyCredential[];
+    info?: InformationalUrl;
     logoutUrl?: string;
-    oauth2Permissions?: OAuth2Permission[];
+    notificationEmailAddresses?: string[];
+    publishedPermissionScopes?: PermissionScope[];
     passwordCredentials?: PasswordCredential[];
     preferredTokenSigningKeyThumbprint?: string;
     publisherName?: string;
@@ -4294,6 +4507,15 @@ export interface BookingCurrency extends Entity {
     symbol?: string;
 }
 // tslint:disable-next-line: interface-name
+export interface IdentityContainer extends Entity {
+    userFlows?: IdentityUserFlow[];
+}
+// tslint:disable-next-line: interface-name
+export interface IdentityUserFlow extends Entity {
+    userFlowType?: UserFlowType;
+    userFlowTypeVersion?: number;
+}
+// tslint:disable-next-line: interface-name
 export interface IdentityProvider extends Entity {
     type?: string;
     name?: string;
@@ -4306,8 +4528,9 @@ export interface TrustFramework extends Entity {
 }
 // tslint:disable-next-line: no-empty-interface
 export interface TrustFrameworkPolicy extends Entity {}
-// tslint:disable-next-line: no-empty-interface
-export interface TrustFrameworkKeySet extends Entity {}
+export interface TrustFrameworkKeySet extends Entity {
+    keys?: TrustFrameworkKey[];
+}
 export interface DataClassificationService extends Entity {
     exactMatchDataStores?: ExactMatchDataStore[];
     sensitiveTypes?: SensitiveType[];
@@ -4315,6 +4538,8 @@ export interface DataClassificationService extends Entity {
     classifyFileJobs?: JobResponseBase[];
     classifyTextJobs?: JobResponseBase[];
     evaluateLabelJobs?: JobResponseBase[];
+    evaluateDlpPoliciesJobs?: JobResponseBase[];
+    labelsAndPoliciesEvaluationJobs?: JobResponseBase[];
     classifyText?: TextClassificationRequest[];
     classifyFile?: FileClassificationRequest[];
     sensitivityLabels?: SensitivityLabel[];
@@ -4362,11 +4587,16 @@ export interface SensitivityLabel extends Entity {
     labelActions?: LabelActionBase[];
     assignedPolicies?: LabelPolicy[];
     priority?: number;
+    autoLabeling?: AutoLabeling;
     sublabels?: SensitivityLabel[];
 }
 export interface ExactMatchUploadAgent extends Entity {
     description?: string;
     creationDateTime?: string;
+}
+export interface DataLossPreventionPolicy extends Entity {
+    name?: string;
+    id?: string;
 }
 // tslint:disable-next-line: interface-name
 export interface InformationProtectionPolicy extends Entity {
@@ -4379,6 +4609,12 @@ export interface SensitivityPolicySettings extends Entity {
 }
 export interface EvaluateLabelJobResponse extends JobResponseBase {
     result?: EvaluateLabelJobResultGroup;
+}
+export interface EvaluateLabelsAndPoliciesJobResponse extends JobResponseBase {
+    result?: EvaluateLabelsAndPoliciesResult;
+}
+export interface DlpEvaluatePoliciesJobResponse extends JobResponseBase {
+    result?: DlpPoliciesJobResult;
 }
 export interface ClassificationJobResponse extends JobResponseBase {
     result?: DetectedSensitiveContentWrapper;
@@ -4408,6 +4644,11 @@ export interface AllowedDataLocation extends Entity {
     location?: string;
     isDefault?: boolean;
     domain?: string;
+}
+export interface DelegatedPermissionClassification extends Entity {
+    permissionId?: string;
+    permissionName?: string;
+    classification?: PermissionClassificationType;
 }
 export interface ResourceSpecificPermissionGrant extends DirectoryObject {
     clientId?: string;
@@ -5096,8 +5337,6 @@ export interface EducationSubmission extends Entity {
     releasedDateTime?: string;
     returnedBy?: IdentitySet;
     returnedDateTime?: string;
-    grade?: EducationAssignmentGrade;
-    feedback?: EducationFeedback;
     resourcesFolderUrl?: string;
     resources?: EducationSubmissionResource[];
     submittedResources?: EducationSubmissionResource[];
@@ -5419,6 +5658,7 @@ export interface DriveItem extends BaseItem {
     thumbnails?: ThumbnailSet[];
     // The list of previous versions of the item. For more info, see [getting previous versions][]. Read-only. Nullable.
     versions?: DriveItemVersion[];
+    document?: Document;
 }
 export interface Workbook extends Entity {
     application?: WorkbookApplication;
@@ -5472,7 +5712,11 @@ export interface DriveItemVersion extends BaseItemVersion {
     // Indicates the size of the content stream for this version of the item.
     size?: number;
 }
+export interface Document extends Entity {
+    comments?: DocumentComment[];
+}
 export interface WorkbookApplication extends Entity {
+    // Returns the calculation mode used in the workbook. Possible values are: Automatic, AutomaticExceptTables, Manual.
     calculationMode?: string;
 }
 export interface WorkbookNamedItem extends Entity {
@@ -6039,6 +6283,7 @@ export interface Room extends Place {
     displayDeviceName?: string;
     isWheelChairAccessible?: boolean;
     tags?: string[];
+    floorLabel?: string;
 }
 export interface RoomList extends Place {
     emailAddress?: string;
@@ -6510,14 +6755,7 @@ export interface AccessPackageAssignmentPolicy extends Entity {
     displayName?: string;
     description?: string;
     isEnabled?: boolean;
-    isDenyPolicy?: boolean;
-    isAllUsersScope?: boolean;
     canExtend?: boolean;
-    isApprovalRequired?: boolean;
-    isApprovalRequiredForExtension?: boolean;
-    isApproverJustificationRequired?: boolean;
-    approvalTimeOutInDays?: number;
-    isRequestorJustificationRequired?: boolean;
     durationInDays?: number;
     expirationDateTime?: string;
     createdBy?: string;
@@ -18881,6 +19119,99 @@ export interface DataPolicyOperation extends Entity {
     // Specifies the progress of an operation.
     progress?: number;
 }
+// tslint:disable-next-line: interface-name
+export interface ItemFacet extends Entity {
+    allowedAudiences?: AllowedAudiences;
+    inference?: InferenceData;
+    createdDateTime?: string;
+    createdBy?: IdentitySet;
+    lastModifiedDateTime?: string;
+    lastModifiedBy?: IdentitySet;
+}
+export interface UserAccountInformation extends ItemFacet {
+    ageGroup?: string;
+    countryCode?: string;
+    preferredLanguageTag?: LocaleInfo;
+    userPrincipalName?: string;
+}
+export interface PersonAnniversary extends ItemFacet {
+    type?: AnniversaryType;
+    date?: string;
+}
+export interface EducationalActivity extends ItemFacet {
+    completionMonthYear?: string;
+    endMonthYear?: string;
+    institution?: InstitutionData;
+    program?: EducationalActivityDetail;
+    startMonthYear?: string;
+}
+// tslint:disable-next-line: interface-name
+export interface ItemEmail extends ItemFacet {
+    address?: string;
+    displayName?: string;
+    type?: EmailType;
+}
+export interface PersonInterest extends ItemFacet {
+    categories?: string[];
+    description?: string;
+    displayName?: string;
+    webUrl?: string;
+}
+export interface LanguageProficiency extends ItemFacet {
+    displayName?: string;
+    tag?: string;
+    proficiency?: LanguageProficiencyLevel;
+}
+export interface PersonName extends ItemFacet {
+    displayName?: string;
+    first?: string;
+    initials?: string;
+    last?: string;
+    languageTag?: string;
+    maiden?: string;
+    middle?: string;
+    nickname?: string;
+    suffix?: string;
+    title?: string;
+    pronunciation?: YomiPersonName;
+}
+// tslint:disable-next-line: interface-name
+export interface ItemPhone extends ItemFacet {
+    displayName?: string;
+    type?: PhoneType;
+    number?: string;
+}
+export interface WorkPosition extends ItemFacet {
+    categories?: string[];
+    detail?: PositionDetail;
+}
+export interface ProjectParticipation extends ItemFacet {
+    categories?: string[];
+    client?: CompanyDetail;
+    displayName?: string;
+    detail?: PositionDetail;
+    colleagues?: RelatedPerson[];
+    sponsors?: RelatedPerson[];
+}
+export interface SkillProficiency extends ItemFacet {
+    categories?: string[];
+    displayName?: string;
+    proficiency?: SkillProficiencyLevel;
+    webUrl?: string;
+}
+export interface WebAccount extends ItemFacet {
+    description?: string;
+    userId?: string;
+    service?: ServiceInformation;
+    statusMessage?: string;
+    webUrl?: string;
+}
+export interface PersonWebsite extends ItemFacet {
+    categories?: string[];
+    description?: string;
+    displayName?: string;
+    webUrl?: string;
+}
 export interface ActivityHistoryItem extends Entity {
     // Set by the server. A status code used to identify valid objects. Values: active, updated, deleted, ignored.
     status?: Status;
@@ -19293,7 +19624,7 @@ export interface Call extends Entity {
     callbackUri?: string;
     callRoutes?: CallRoute[];
     source?: ParticipantInfo;
-    targets?: ParticipantInfo[];
+    targets?: InvitationParticipantInfo[];
     answeredBy?: ParticipantInfo;
     requestedModalities?: Modality[];
     activeModalities?: Modality[];
@@ -19305,6 +19636,7 @@ export interface Call extends Entity {
     tenantId?: string;
     myParticipantId?: string;
     toneInfo?: ToneInfo;
+    incomingContext?: IncomingContext;
     participants?: Participant[];
     audioRoutingGroups?: AudioRoutingGroup[];
     operations?: CommsOperation[];
@@ -19354,10 +19686,12 @@ export interface RecordOperation extends CommsOperation {
 export interface SubscribeToToneOperation extends CommsOperation {}
 // tslint:disable-next-line: no-empty-interface
 export interface UnmuteParticipantOperation extends CommsOperation {}
+// tslint:disable-next-line: no-empty-interface
+export interface UpdateRecordingStatusOperation extends CommsOperation {}
 export interface External extends Entity {
-    connections?: Connections[];
+    connections?: ExternalConnection[];
 }
-export interface Connections extends Entity {
+export interface ExternalConnection extends Entity {
     name?: string;
     description?: string;
     configuration?: Configuration;
@@ -19375,6 +19709,7 @@ export interface ExternalItem extends Entity {
     acl?: Acl[];
 }
 export interface ConnectionOperation extends Entity {
+    status?: ConnectionOperationStatus;
     error?: ErrorDetail;
 }
 export interface ExternalFile extends ExternalItem {
@@ -19409,10 +19744,12 @@ export interface Schedule extends Entity {
     provisionStatusCode?: string;
     workforceIntegrationIds?: string[];
     shifts?: Shift[];
+    openShifts?: OpenShift[];
     timesOff?: TimeOff[];
     timeOffReasons?: TimeOffReason[];
     schedulingGroups?: SchedulingGroup[];
     swapShiftsChangeRequests?: SwapShiftsChangeRequest[];
+    openShiftChangeRequests?: OpenShiftChangeRequest[];
     timeOffRequests?: TimeOffRequest[];
 }
 // tslint:disable-next-line: no-empty-interface
@@ -19518,6 +19855,11 @@ export interface Shift extends ChangeTrackedEntity {
     userId?: string;
     schedulingGroupId?: string;
 }
+export interface OpenShift extends ChangeTrackedEntity {
+    sharedOpenShift?: OpenShiftItem;
+    draftOpenShift?: OpenShiftItem;
+    schedulingGroupId?: string;
+}
 export interface TimeOff extends ChangeTrackedEntity {
     sharedTimeOff?: TimeOffItem;
     draftTimeOff?: TimeOffItem;
@@ -19552,10 +19894,20 @@ export interface ShiftChangeRequest extends ScheduleChangeRequest {
 export interface SwapShiftsChangeRequest extends ShiftChangeRequest {
     recipientShiftId?: string;
 }
+export interface OpenShiftChangeRequest extends ScheduleChangeRequest {
+    openShiftId?: string;
+}
 export interface TimeOffRequest extends ScheduleChangeRequest {
     startDateTime?: string;
     endDateTime?: string;
     timeOffReasonId?: string;
+}
+export interface DocumentComment extends Entity {
+    content?: string;
+    replies?: DocumentCommentReply[];
+}
+export interface DocumentCommentReply extends Entity {
+    content?: string;
 }
 export interface AuditActivityInitiator {
     /**
@@ -20003,99 +20355,259 @@ export interface Settings {
     hasGraphMailbox?: boolean;
 }
 export interface ApiApplication {
+    // When true, allows an application to use claims mapping without specifying a custom signing key.
     acceptMappedClaims?: boolean;
+    /**
+     * Used for bundling consent if you have a solution that contains two parts: a client app and a custom web API app. If you
+     * set the appID of the client app to this value, the user only consents once to the client app. Azure AD knows that
+     * consenting to the client means implicitly consenting to the web API and automatically provisions service principals for
+     * both APIs at the same time. Both the client and the web API app must be registered in the same tenant.
+     */
     knownClientApplications?: string[];
+    /**
+     * Lists the client applications that are pre-authorized with the specified delegated permissions to access this
+     * application's APIs. Users are not required to consent to any pre-authorized application (for the permissions
+     * specified). However, any additional permissions not listed in preAuthorizedApplications (requested through incremental
+     * consent for example) will require user consent.
+     */
     preAuthorizedApplications?: PreAuthorizedApplication[];
+    /**
+     * Specifies the access token version expected by this resource. This changes the version and format of the JWT produced
+     * independent of the endpoint or client used to request the access token. The endpoint used, v1.0 or v2.0, is chosen by
+     * the client and only impacts the version of id_tokens. Resources need to explicitly configure
+     * requestedAccessTokenVersion to indicate the supported access token format. Possible values for
+     * requestedAccessTokenVersion are 1, 2, or null. If the value is null, this defaults to 1, which corresponds to the v1.0
+     * endpoint. If signInAudience on the application is configured as AzureADandPersonalMicrosoftAccount, the value for this
+     * property must be 2
+     */
     requestedAccessTokenVersion?: number;
+    /**
+     * The collection of OAuth 2.0 permission scopes that the web API (resource) application exposes to client applications.
+     * These permission scopes may be granted to client applications during consent.
+     */
     oauth2PermissionScopes?: PermissionScope[];
 }
 export interface PreAuthorizedApplication {
+    // The unique identifier for the application.
     appId?: string;
     permissionIds?: string[];
 }
 export interface PermissionScope {
+    // Permission help text that appears in the admin consent and app assignment experiences.
     adminConsentDescription?: string;
+    // Display name for the permission that appears in the admin consent and app assignment experiences.
     adminConsentDisplayName?: string;
+    // Unique scope permission identifier inside the oauth2Permissions collection.
     id?: string;
+    /**
+     * When creating or updating a permission, this property must be set to true (which is the default). To delete a
+     * permission, this property must first be set to false. At that point, in a subsequent call, the permission may be
+     * removed.
+     */
     isEnabled?: boolean;
+    // For internal use.
     origin?: string;
+    /**
+     * Specifies whether this scope permission can be consented to by an end user, or whether it is a tenant-wide permission
+     * that must be consented to by a company administrator. Possible values are User or Admin.
+     */
     type?: string;
+    // Permission help text that appears in the end-user consent experience.
     userConsentDescription?: string;
+    // Display name for the permission that appears in the end-user consent experience.
     userConsentDisplayName?: string;
+    // The value of the scope claim that the resource application should expect in the OAuth 2.0 access token.
     value?: string;
 }
 export interface AppRole {
+    /**
+     * Specifies whether this app role definition can be assigned to users and groups by setting to 'User', or to other
+     * applications (that are accessing this application in daemon service scenarios) by setting to 'Application', or to both.
+     */
     allowedMemberTypes?: string[];
+    // Permission help text that appears in the admin app assignment and consent experiences.
     description?: string;
+    // Display name for the permission that appears in the admin consent and app assignment experiences.
     displayName?: string;
+    /**
+     * Unique role identifier inside the appRoles collection. When creating a new app role, a new Guid identifier must be
+     * provided.
+     */
     id?: string;
+    /**
+     * When creating or updating an app role, this must be set to true (which is the default). To delete a role, this must
+     * first be set to false. At that point, in a subsequent call, this role may be removed.
+     */
     isEnabled?: boolean;
+    /**
+     * Read-only. Specifies if the app role is defined on the Application object . Must not be included in any POST or PATCH
+     * requests.
+     */
     origin?: string;
+    /**
+     * Specifies the value which will be included in the roles claim in authentication and access tokens. Must not exceed 120
+     * characters in length. Allowed characters are : ! # $ % &amp; ' ( ) * + , - . / : ; = ? @ [ ] ^ + _ { } ~, as well as
+     * characters in the ranges 0-9, A-Z and a-z. Any other character, including the space character, are not allowed.
+     */
     value?: string;
 }
 // tslint:disable-next-line: interface-name
 export interface InformationalUrl {
+    // CDN URL to the application's logo, Read-only.
     logoUrl?: string;
+    // Link to the application's marketing page. For example, https://www.contoso.com/app/marketing
     marketingUrl?: string;
+    // Link to the application's privacy statement. For example, https://www.contoso.com/app/privacy
     privacyStatementUrl?: string;
+    // Link to the application's support page. For example, https://www.contoso.com/app/support
     supportUrl?: string;
+    // Link to the application's terms of service statement. For example, https://www.contoso.com/app/termsofservice
     termsOfServiceUrl?: string;
 }
 export interface KeyCredential {
+    // Custom key identifier
     customKeyIdentifier?: number;
+    /**
+     * The date and time at which the credential expires.The Timestamp type represents date and time information using ISO
+     * 8601 format and is always in UTC time. For example, midnight UTC on Jan 1, 2014 would look like this:
+     * '2014-01-01T00:00:00Z'
+     */
     endDateTime?: string;
+    // The unique identifier (GUID) for the key.
     keyId?: string;
+    /**
+     * The date and time at which the credential becomes valid.The Timestamp type represents date and time information using
+     * ISO 8601 format and is always in UTC time. For example, midnight UTC on Jan 1, 2014 would look like this:
+     * '2014-01-01T00:00:00Z'
+     */
     startDateTime?: string;
+    // The type of key credential; for example, 'Symmetric'.
     type?: string;
+    // A string that describes the purpose for which the key can be used; for example, 'Verify'.
     usage?: string;
+    // Value for the key credential. Should be a base 64 encoded value.
     key?: number;
+    // Friendly name for the key. Optional.
     displayName?: string;
 }
 export interface OptionalClaims {
+    // The optional claims returned in the JWT ID token.
     idToken?: OptionalClaim[];
+    // The optional claims returned in the JWT access token.
     accessToken?: OptionalClaim[];
+    // The optional claims returned in the SAML token.
     saml2Token?: OptionalClaim[];
 }
 export interface OptionalClaim {
+    // The name of the optional claim.
     name?: string;
+    /**
+     * The source (directory object) of the claim. There are predefined claims and user-defined claims from extension
+     * properties. If the source value is null, the claim is a predefined optional claim. If the source value is user, the
+     * value in the name property is the extension property from the user object.
+     */
     source?: string;
+    /**
+     * If the value is true, the claim specified by the client is necessary to ensure a smooth authorization experience for
+     * the specific task requested by the end user. The default value is false.
+     */
     essential?: boolean;
+    /**
+     * Additional properties of the claim. If a property exists in this collection, it modifies the behavior of the optional
+     * claim specified in the name property.
+     */
     additionalProperties?: string[];
 }
 export interface ParentalControlSettings {
+    /**
+     * Specifies the two-letter ISO country codes. Access to the application will be blocked for minors from the countries
+     * specified in this list.
+     */
     countriesBlockedForMinors?: string[];
+    /**
+     * Specifies the legal age group rule that applies to users of the app. Can be set to one of the following values:
+     * ValueDescriptionAllowDefault. Enforces the legal minimum. This means parental consent is required for minors in the
+     * European Union and Korea.RequireConsentForPrivacyServicesEnforces the user to specify date of birth to comply with
+     * COPPA rules. RequireConsentForMinorsRequires parental consent for ages below 18, regardless of country minor
+     * rules.RequireConsentForKidsRequires parental consent for ages below 14, regardless of country minor
+     * rules.BlockMinorsBlocks minors from using the app.
+     */
     legalAgeGroupRule?: string;
 }
 export interface PasswordCredential {
+    // Do not use.
     customKeyIdentifier?: number;
+    /**
+     * The date and time at which the password expires represented using ISO 8601 format and is always in UTC time. For
+     * example, midnight UTC on Jan 1, 2014 would look like this: '2014-01-01T00:00:00Z'. Optional.
+     */
     endDateTime?: string;
+    // The unique identifier for the password.
     keyId?: string;
+    /**
+     * The date and time at which the password becomes valid. The Timestamp type represents date and time information using
+     * ISO 8601 format and is always in UTC time. For example, midnight UTC on Jan 1, 2014 would look like this:
+     * '2014-01-01T00:00:00Z'. Optional.
+     */
     startDateTime?: string;
+    /**
+     * Read-only; Contains the strong passwords generated by Azure AD that are 16-64 characters in length. The generated
+     * password value is only returned during the initial POST request to addPassword. There is no way to retrieve this
+     * password in the future.
+     */
     secretText?: string;
+    // Contains the first three characters of the password. Read-only.
     hint?: string;
+    // Friendly name for the password. Optional.
     displayName?: string;
 }
 export interface PublicClientApplication {
+    /**
+     * Specifies the URLs where user tokens are sent for sign-in, or the redirect URIs where OAuth 2.0 authorization codes and
+     * access tokens are sent.
+     */
     redirectUris?: string[];
 }
 export interface RequiredResourceAccess {
+    /**
+     * The unique identifier for the resource that the application requires access to. This should be equal to the appId
+     * declared on the target resource application.
+     */
     resourceAppId?: string;
+    // The list of OAuth2.0 permission scopes and app roles that the application requires from the specified resource.
     resourceAccess?: ResourceAccess[];
 }
 export interface ResourceAccess {
+    // The unique identifier for one of the oauth2PermissionScopes or appRole instances that the resource application exposes.
     id?: string;
+    /**
+     * Specifies whether the id property references an oauth2PermissionScopes or an appRole. Possible values are 'scope' or
+     * 'role'.
+     */
     type?: string;
 }
 export interface WebApplication {
+    // Home page or landing page of the application.
     homePageUrl?: string;
+    /**
+     * Specifies the URLs where user tokens are sent for sign-in, or the redirect URIs where OAuth 2.0 authorization codes and
+     * access tokens are sent.
+     */
     redirectUris?: string[];
     oauth2AllowImplicitFlow?: boolean;
+    /**
+     * Specifies the URL that will be used by Microsoft's authorization service to logout an user using front-channel,
+     * back-channel or SAML logout protocols.
+     */
     logoutUrl?: string;
+    // Specifies whether this web application can request tokens using the OAuth 2.0 implicit flow.
     implicitGrantSettings?: ImplicitGrantSettings;
 }
 // tslint:disable-next-line: interface-name
 export interface ImplicitGrantSettings {
+    // Specifies whether this web application can request an ID token using the OAuth 2.0 implicit flow.
     enableIdTokenIssuance?: boolean;
+    // Specifies whether this web application can request an access token using the OAuth 2.0 implicit flow.
     enableAccessTokenIssuance?: boolean;
 }
 export interface AddIn {
@@ -20103,16 +20615,14 @@ export interface AddIn {
     type?: string;
     properties?: KeyValue[];
 }
-export interface OAuth2Permission {
-    adminConsentDescription?: string;
-    adminConsentDisplayName?: string;
-    id?: string;
-    isEnabled?: boolean;
-    origin?: string;
-    type?: string;
-    userConsentDescription?: string;
-    userConsentDisplayName?: string;
+export interface Credential {
+    fieldId?: string;
     value?: string;
+    type?: string;
+}
+export interface PasswordSingleSignOnCredentialSet {
+    id?: string;
+    credentials?: Credential[];
 }
 export interface ApplicationServicePrincipal {
     application?: Application;
@@ -20204,6 +20714,24 @@ export interface BookingSchedulingPolicy {
     // Allow customers to choose a specific person for the booking.
     allowStaffSelection?: boolean;
 }
+export interface TrustFrameworkKey {
+    k?: string;
+    x5c?: string[];
+    x5t?: string;
+    kty?: string;
+    use?: string;
+    exp?: number;
+    nbf?: number;
+    kid?: string;
+    e?: string;
+    n?: string;
+    d?: string;
+    p?: string;
+    q?: string;
+    dp?: string;
+    dq?: string;
+    qi?: string;
+}
 export interface ClassifcationErrorBase {
     code?: string;
     message?: string;
@@ -20225,6 +20753,10 @@ export interface LabelActionBase {
 export interface LabelPolicy {
     id?: string;
     name?: string;
+}
+export interface AutoLabeling {
+    sensitiveTypeIds?: string[];
+    message?: string;
 }
 export interface EvaluateLabelJobResultGroup {
     automatic?: EvaluateLabelJobResult;
@@ -20258,6 +20790,27 @@ export interface ResponsibleSensitiveType {
 export interface ResponsiblePolicy {
     id?: string;
     name?: string;
+}
+export interface EvaluateLabelsAndPoliciesResult {
+    sensitivityLabelsResult?: EvaluateLabelJobResultGroup;
+    dataLossPreventionPoliciesResult?: DlpPoliciesJobResult;
+    classificationResult?: DetectedSensitiveContentWrapper;
+}
+export interface DlpPoliciesJobResult {
+    matchingRules?: MatchingDlpRule[];
+}
+export interface MatchingDlpRule {
+    ruleId?: string;
+    ruleName?: string;
+    policyId?: string;
+    policyName?: string;
+    isMostRestrictive?: boolean;
+    priority?: number;
+    actions?: DlpActionInfo[];
+    ruleMode?: RuleMode;
+}
+export interface DlpActionInfo {
+    action?: DlpAction;
 }
 export interface DetectedSensitiveContentWrapper {
     classification?: DetectedSensitiveContent[];
@@ -20321,6 +20874,57 @@ export interface ProtectGroup extends LabelActionBase {
 }
 export interface ProtectSite extends LabelActionBase {
     accessType?: SiteAccessType;
+}
+export interface CurrentLabel {
+    id?: string;
+    applicationMode?: ApplicationMode;
+}
+// tslint:disable-next-line: no-empty-interface
+export interface BlockAccessAction extends DlpActionInfo {}
+export interface NotifyUserAction extends DlpActionInfo {
+    recipients?: string[];
+    actionLastModifiedDateTime?: string;
+    overrideOption?: OverrideOption;
+    emailText?: string;
+    policyTip?: string;
+}
+export interface DeviceRestrictionAction extends DlpActionInfo {
+    restrictionAction?: RestrictionAction;
+    triggers?: RestrictionTrigger[];
+    message?: string;
+}
+export interface DlpEvaluationInput {
+    discoveredSensitiveTypes?: DiscoveredSensitiveType[];
+    currentLabel?: CurrentLabel;
+    accessScope?: AccessScope;
+}
+export interface DlpEvaluationWindowsDevicesInput extends DlpEvaluationInput {
+    contentProperties?: ContentProperties;
+    sharedBy?: string;
+}
+export interface ContentProperties {
+    extensions?: string[];
+    metadata?: ContentMetadata;
+    lastModifiedDateTime?: string;
+    lastModifiedBy?: string;
+}
+// tslint:disable-next-line: no-empty-interface
+export interface ContentMetadata {}
+export interface DlpNotification {
+    author?: string;
+}
+export interface DlpWindowsDevicesNotification extends DlpNotification {
+    lastModfiedBy?: string;
+    contentName?: string;
+}
+export interface DlpEvaluatePoliciesRequest {
+    target?: string;
+    evaluationInput?: DlpEvaluationInput;
+    notificationInfo?: DlpNotification;
+}
+export interface EvaluateSensitivityLabelsRequest {
+    discoveredSensitiveTypes?: DiscoveredSensitiveType[];
+    currentLabel?: CurrentLabel;
 }
 export interface CertificateAuthority {
     /**
@@ -21373,7 +21977,7 @@ export interface InternetMessageHeader {
 }
 // tslint:disable-next-line: interface-name
 export interface ItemBody {
-    // The type of the content. Possible values are text and HTML.
+    // The type of the content. Possible values are text and html.
     contentType?: BodyType;
     // The content of the item.
     content?: string;
@@ -21984,6 +22588,24 @@ export interface HybridAgentUpdaterConfiguration {
 export interface UpdateWindow {
     updateWindowStartTime?: string;
     updateWindowEndTime?: string;
+}
+export interface PropertyToEvaluate {
+    propertyName?: string;
+    propertyValue?: string;
+}
+export interface ExpressionEvaluationDetails {
+    expressionResult?: boolean;
+    expression?: string;
+    expressionEvaluationDetails?: ExpressionEvaluationDetails[];
+    propertyToEvaluate?: PropertyToEvaluate;
+}
+export interface MembershipRuleEvaluationDetails {
+    membershipRuleEvaluationDetails?: ExpressionEvaluationDetails;
+}
+export interface EvaluateDynamicMembershipResult {
+    membershipRule?: string;
+    membershipRuleEvaluationResult?: boolean;
+    membershipRuleEvaluationDetails?: ExpressionEvaluationDetails;
 }
 export interface SynchronizationSecretKeyStringValuePair {
     key?: SynchronizationSecret;
@@ -25197,25 +25819,9 @@ export interface SearchRequest {
 }
 export interface SearchQuery {
     query_string?: SearchQueryString;
-    filter?: FilterContainer;
 }
 export interface SearchQueryString {
     query?: string;
-}
-export interface FilterContainer {
-    bool?: FilterContainer[];
-    should?: FilterContainer[];
-    term?: TermFilter;
-    range?: RangeFilter;
-}
-export interface TermFilter {
-    value?: string;
-}
-export interface RangeFilter {
-    gt?: string;
-    gte?: string;
-    lt?: string;
-    lte?: string;
 }
 export interface SearchResponse {
     searchTerms?: string[];
@@ -25518,6 +26124,62 @@ export interface RoleSuccessStatistics {
     removeSuccess?: number;
     removeFail?: number;
     unknownFail?: number;
+}
+// tslint:disable-next-line: interface-name
+export interface InferenceData {
+    confidenceScore?: number;
+    userHasVerifiedAccuracy?: boolean;
+}
+export interface YomiPersonName {
+    displayName?: string;
+    first?: string;
+    maiden?: string;
+    middle?: string;
+    last?: string;
+}
+// tslint:disable-next-line: interface-name
+export interface InstitutionData {
+    description?: string;
+    displayName?: string;
+    location?: PhysicalAddress;
+    webUrl?: string;
+}
+export interface EducationalActivityDetail {
+    abbreviation?: string;
+    activities?: string;
+    awards?: string;
+    description?: string;
+    displayName?: string;
+    fieldsOfStudy?: string;
+    grade?: string;
+    notes?: string;
+    webUrl?: string;
+}
+export interface CompanyDetail {
+    displayName?: string;
+    pronunciation?: string;
+    department?: string;
+    officeLocation?: string;
+    address?: PhysicalAddress;
+    webUrl?: string;
+}
+export interface PositionDetail {
+    company?: CompanyDetail;
+    description?: string;
+    endMonthYear?: string;
+    jobTitle?: string;
+    role?: string;
+    startMonthYear?: string;
+    summary?: string;
+}
+export interface RelatedPerson {
+    displayName?: string;
+    relationship?: PersonRelationship;
+    userPrincipalName?: string;
+}
+export interface ServiceInformation {
+    name?: string;
+    webUrl?: string;
 }
 // tslint:disable-next-line: interface-name
 export interface ImageInfo {
@@ -25939,8 +26601,16 @@ export interface CallRoute {
 }
 export interface ParticipantInfo {
     identity?: IdentitySet;
+    endpointType?: EndpointType;
     region?: string;
     languageId?: string;
+    countryCode?: string;
+}
+// tslint:disable-next-line: interface-name
+export interface InvitationParticipantInfo {
+    identity?: IdentitySet;
+    endpointType?: EndpointType;
+    replacesCallId?: string;
 }
 export interface MediaConfig {
     removeFromDefaultAudioGroup?: boolean;
@@ -25963,9 +26633,11 @@ export interface ToneInfo {
     tone?: Tone;
 }
 // tslint:disable-next-line: interface-name
-export interface InvitationParticipantInfo extends ParticipantInfo {
-    endpointType?: EndpointType;
-    replacesCallId?: string;
+export interface IncomingContext {
+    sourceParticipantId?: string;
+    observedParticipantId?: string;
+    onBehalfOf?: IdentitySet;
+    transferor?: IdentitySet;
 }
 export interface MeetingParticipants {
     organizer?: MeetingParticipantInfo;
@@ -25984,7 +26656,7 @@ export interface AudioConferencing {
     dialinUrl?: string;
 }
 export interface RecordingInfo {
-    status?: RecordingStatus;
+    recordingStatus?: RecordingStatus;
     initiatedBy?: ParticipantInfo;
 }
 export interface MediaStream {
@@ -26029,11 +26701,14 @@ export interface Configuration {
 // tslint:disable-next-line: no-empty-interface
 export interface Properties {}
 export interface Acl {
+    type?: AclType;
     value?: string;
+    accessType?: AccessType;
     identitySource?: string;
 }
 export interface Property {
     name?: string;
+    type?: PropertyType;
     isSearchable?: boolean;
     isRetrievable?: boolean;
     isQueryable?: boolean;
@@ -26166,6 +26841,9 @@ export interface ShiftItem extends ScheduleEntity {
     displayName?: string;
     notes?: string;
     activities?: ShiftActivity[];
+}
+export interface OpenShiftItem extends ShiftItem {
+    openSlotCount?: number;
 }
 export interface TimeOffItem extends ScheduleEntity {
     timeOffReasonId?: string;
