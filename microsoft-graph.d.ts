@@ -157,12 +157,39 @@ export type BookingPriceType =
     | "notSet";
 export type BookingReminderRecipients = "allAttendees" | "staff" | "customer";
 export type BookingStaffRole = "guest" | "administrator" | "viewer" | "externalGuest";
+export type UserFlowType =
+    | "signUp"
+    | "signIn"
+    | "signUpOrSignIn"
+    | "passwordReset"
+    | "profileUpdate"
+    | "resourceOwner"
+    | "unknownFutureValue";
+export type DlpAction = "notifyUser" | "blockAccess" | "deviceRestriction";
+export type AccessScope = "inOrganization" | "notInOrganization";
+export type Component = "Label";
+export type RuleMode = "audit" | "auditAndNotify" | "enforce" | "pendingDeletion" | "test";
+export type OverrideOption =
+    | "notAllowed"
+    | "allowFalsePositiveOverride"
+    | "allowWithJustification"
+    | "allowWithoutJustification";
+export type RestrictionAction = "warn" | "audit" | "block";
+export type RestrictionTrigger =
+    | "copyPaste"
+    | "copyToNetworkShare"
+    | "copyToRemovableMedia"
+    | "screenCapture"
+    | "print"
+    | "cloudEgress"
+    | "unallowedApps";
 export type ApplicationMode = "manual" | "automatic" | "recommended";
 export type Alignment = "left" | "right" | "center";
 export type PageOrientation = "horizontal" | "diagonal";
 export type GroupPrivacy = "public" | "private";
 export type SiteAccessType = "block" | "full" | "limited";
 export type EncryptWith = "template" | "userDefinedRights";
+export type PermissionClassificationType = "low" | "medium" | "high" | "unknownFutureValue";
 export type PhoneType =
     | "home"
     | "business"
@@ -413,6 +440,7 @@ export type QuarantineReason =
 export type SynchronizationScheduleState = "Active" | "Disabled";
 export type ScopeOperatorMultiValuedComparisonType = "All" | "Any";
 export type ScopeOperatorType = "Binary" | "Unary";
+export type Modality = "unknown" | "audio" | "video" | "videoBasedScreenSharing" | "data" | "unknownFutureValue";
 export type AgreementAcceptanceState = "accepted" | "declined";
 export type RiskEventStatus =
     | "active"
@@ -424,7 +452,7 @@ export type RiskEventStatus =
     | "closedMfaAuto"
     | "closedMultipleReasons";
 export type UserRiskLevel = "unknown" | "none" | "low" | "medium" | "high";
-export type ConditionalAccessPolicyState = "enabled" | "disabled";
+export type ConditionalAccessPolicyState = "enabled" | "disabled" | "enabledForReportingButNotEnforced";
 export type ConditionalAccessClientApp = "browser" | "modern" | "easSupported" | "easUnsupported" | "other";
 export type ConditionalAccessGrantControl =
     | "block"
@@ -723,6 +751,8 @@ export type NonEapAuthenticationMethodForEapTtlsType =
     | "microsoftChap"
     | "microsoftChapVersionTwo";
 export type NonEapAuthenticationMethodForPeap = "none" | "microsoftChapVersionTwo";
+export type DeviceManagementDerivedCredentialIssuer = "intercede" | "entrustDatacard" | "purebred";
+export type DeviceManagementDerivedCredentialNotificationType = "none" | "companyPortal" | "email";
 export type EasAuthenticationMethod = "usernameAndPassword" | "certificate" | "derivedCredential";
 export type EmailSyncDuration =
     | "userDefined"
@@ -814,6 +844,14 @@ export type AndroidWorkProfileVpnConnectionType =
     | "citrix"
     | "paloAltoGlobalProtect";
 export type WiFiProxySetting = "none" | "manual" | "automatic";
+export type WiredNetworkInterface =
+    | "anyEthernet"
+    | "firstActiveEthernet"
+    | "secondActiveEthernet"
+    | "thirdActiveEthernet"
+    | "firstEthernet"
+    | "secondEthernet"
+    | "thirdEthernet";
 export type EapType = "eapTls" | "leap" | "eapSim" | "eapTtls" | "peap" | "eapFast";
 export type EapFastConfiguration =
     | "noProtectedAccessCredential"
@@ -827,8 +865,6 @@ export type AppleSubjectNameFormat =
     | "commonNameIncludingEmail"
     | "commonNameAsIMEI"
     | "commonNameAsSerialNumber";
-export type DeviceManagementDerivedCredentialIssuer = "intercede" | "entrustDatacard" | "purebred";
-export type DeviceManagementDerivedCredentialNotificationType = "none" | "companyPortal" | "email";
 export type RatingAustraliaMoviesType =
     | "allAllowed"
     | "allBlocked"
@@ -970,6 +1006,7 @@ export type MacOSGatekeeperAppSources =
     | "anywhere";
 export type MacOSFileVaultRecoveryKeyTypes = "notConfigured" | "institutionalRecoveryKey" | "personalRecoveryKey";
 export type UsernameSource = "userPrincipalName" | "primarySmtpAddress" | "samAccountName";
+export type EasServices = "none" | "calendars" | "contacts" | "email" | "notes" | "reminders";
 export type EmailCertificateType = "none" | "certificate" | "derivedCredential";
 export type IosNotificationAlertType = "deviceDefault" | "banner" | "modal" | "none";
 export type IosWallpaperDisplayLocation = "notConfigured" | "lockScreen" | "homeScreen" | "lockAndHomeScreens";
@@ -1112,24 +1149,6 @@ export type BitLockerRecoveryPasswordRotationType =
     | "disabled"
     | "enabledForAzureAd"
     | "enabledForAzureAdAndHybrid";
-export type PowerActionType = "notConfigured" | "noAction" | "sleep" | "hibernate" | "shutdown";
-export type Windows10AppsUpdateRecurrence = "none" | "daily" | "weekly" | "monthly";
-export type SignInAssistantOptions = "notConfigured" | "disabled";
-export type BrowserSyncSetting = "notConfigured" | "blockedWithUserOverride" | "blocked";
-export type DiagnosticDataSubmissionMode = "userDefined" | "none" | "basic" | "enhanced" | "full";
-export type EdgeTelemetryMode = "notConfigured" | "intranet" | "internet" | "intranetAndInternet";
-export type InkAccessSetting = "notConfigured" | "enabled" | "disabled";
-export type AppInstallControlType = "notConfigured" | "anywhere" | "storeOnly" | "recommendations" | "preferStore";
-export type EdgeCookiePolicy = "userDefined" | "allow" | "blockThirdParty" | "blockAll";
-export type EdgeOpenOptions = "notConfigured" | "startPage" | "newTabPage" | "previousPages" | "specificPages";
-export type VisibilitySetting = "notConfigured" | "hide" | "show";
-export type InternetExplorerMessageSetting = "notConfigured" | "disabled" | "enabled" | "keepGoing";
-export type EdgeKioskModeRestrictionType =
-    | "notConfigured"
-    | "digitalSignage"
-    | "normalMode"
-    | "publicBrowsingSingleApp"
-    | "publicBrowsingMultiApp";
 export type DefenderThreatAction =
     | "deviceDefault"
     | "clean"
@@ -1169,6 +1188,24 @@ export type DefenderSubmitSamplesConsentType =
     | "alwaysPrompt"
     | "neverSend"
     | "sendAllSamplesAutomatically";
+export type PowerActionType = "notConfigured" | "noAction" | "sleep" | "hibernate" | "shutdown";
+export type Windows10AppsUpdateRecurrence = "none" | "daily" | "weekly" | "monthly";
+export type SignInAssistantOptions = "notConfigured" | "disabled";
+export type BrowserSyncSetting = "notConfigured" | "blockedWithUserOverride" | "blocked";
+export type DiagnosticDataSubmissionMode = "userDefined" | "none" | "basic" | "enhanced" | "full";
+export type EdgeTelemetryMode = "notConfigured" | "intranet" | "internet" | "intranetAndInternet";
+export type InkAccessSetting = "notConfigured" | "enabled" | "disabled";
+export type AppInstallControlType = "notConfigured" | "anywhere" | "storeOnly" | "recommendations" | "preferStore";
+export type EdgeCookiePolicy = "userDefined" | "allow" | "blockThirdParty" | "blockAll";
+export type EdgeOpenOptions = "notConfigured" | "startPage" | "newTabPage" | "previousPages" | "specificPages";
+export type VisibilitySetting = "notConfigured" | "hide" | "show";
+export type InternetExplorerMessageSetting = "notConfigured" | "disabled" | "enabled" | "keepGoing";
+export type EdgeKioskModeRestrictionType =
+    | "notConfigured"
+    | "digitalSignage"
+    | "normalMode"
+    | "publicBrowsingSingleApp"
+    | "publicBrowsingMultiApp";
 export type WindowsPrivacyDataAccessLevel = "notConfigured" | "forceAllow" | "forceDeny" | "userInControl";
 export type WindowsPrivacyDataCategory =
     | "notConfigured"
@@ -1428,6 +1465,8 @@ export type FileVaultState = "success" | "driveEncryptedByUser" | "userDeferredE
 export type DeviceManagementExchangeConnectorSyncType = "fullSync" | "deltaSync";
 export type MdmAuthority = "unknown" | "intune" | "sccm" | "office365";
 export type WindowsHelloForBusinessPinUsage = "allowed" | "required" | "disallowed";
+export type OwnerType = "unknown" | "company" | "personal";
+export type CompanyPortalAction = "unknown" | "remove" | "reset";
 export type VppTokenState = "unknown" | "valid" | "expired" | "invalid" | "assignedToExternalMDM";
 export type VppTokenSyncStatus = "none" | "inProgress" | "completed" | "failed";
 export type MicrosoftStoreForBusinessPortalSelectionOptions = "none" | "companyPortal" | "privateStore";
@@ -1530,7 +1569,6 @@ export type DeviceGuardLocalSystemAuthorityCredentialGuardState =
     | "notLicensed"
     | "notConfigured"
     | "virtualizationBasedSecurityNotRunning";
-export type OwnerType = "unknown" | "company" | "personal";
 export type ManagedDeviceOwnerType = "unknown" | "company" | "personal";
 export type ManagementState =
     | "managed"
@@ -1790,6 +1828,7 @@ export type ManagedAppClipboardSharingLevel = "allApps" | "managedAppsWithPasteI
 export type ManagedAppRemediationAction = "block" | "wipe" | "warn";
 export type ManagedAppPinCharacterSet = "numeric" | "alphanumericAndSymbol";
 export type ManagedAppNotificationRestriction = "allow" | "blockOrganizationalData" | "block";
+export type ManagedBrowserType = "notConfigured" | "microsoftEdge";
 export type ManagedAppDeviceThreatLevel = "notConfigured" | "secured" | "low" | "medium" | "high";
 export type ManagedAppDataEncryptionType =
     | "useDeviceSettings"
@@ -1905,6 +1944,48 @@ export type SetupStatus =
     | "registrationTimedOut"
     | "disabled";
 export type DataPolicyOperationStatus = "notStarted" | "running" | "complete" | "failed" | "unknownFutureValue";
+export type AllowedAudiences =
+    | "me"
+    | "family"
+    | "contacts"
+    | "groupMembers"
+    | "organization"
+    | "federatedOrganizations"
+    | "everyone"
+    | "unknownFutureValue";
+export type LanguageProficiencyLevel =
+    | "elementary"
+    | "conversational"
+    | "limitedWorking"
+    | "professionalWorking"
+    | "fullProfessional"
+    | "nativeOrBilingual"
+    | "unknownFutureValue";
+export type AnniversaryType = "birthday" | "wedding" | "unknownFutureValue";
+export type PersonRelationship =
+    | "manager"
+    | "colleague"
+    | "directReport"
+    | "dotLineReport"
+    | "assistant"
+    | "dotLineManager"
+    | "alternateContact"
+    | "friend"
+    | "spouse"
+    | "sibling"
+    | "child"
+    | "parent"
+    | "sponsor"
+    | "emergencyContact"
+    | "other"
+    | "unknownFutureValue";
+export type SkillProficiencyLevel =
+    | "elementary"
+    | "limitedWorking"
+    | "generalProfessional"
+    | "advancedProfessional"
+    | "expert"
+    | "unknownFutureValue";
 export type Status = "active" | "updated" | "deleted" | "ignored" | "unknownFutureValue";
 export type AccountStatus = "unknown" | "staged" | "active" | "suspended" | "deleted" | "unknownFutureValue";
 export type AlertFeedback = "unknown" | "truePositive" | "falsePositive" | "benignPositive" | "unknownFutureValue";
@@ -2014,14 +2095,23 @@ export type CallState =
     | "transferAccepted"
     | "redirecting"
     | "terminating"
-    | "terminated";
+    | "terminated"
+    | "unknownFutureValue";
 export type ChangeType = "created" | "updated" | "deleted";
-export type EndpointType = "default" | "voicemail";
+export type EndpointType =
+    | "default"
+    | "voicemail"
+    | "skypeForBusiness"
+    | "skypeForBusinessVoipPhone"
+    | "unknownFutureValue";
 export type MediaDirection = "inactive" | "sendOnly" | "receiveOnly" | "sendReceive";
-export type MediaState = "active" | "inactive";
+export type MediaState = "active" | "inactive" | "unknownFutureValue";
 export type MeetingCapabilities = "questionAndAnswer" | "unknownFutureValue";
-export type Modality = "unknown" | "audio" | "video" | "videoBasedScreenSharing" | "data";
-export type PlayPromptCompletionReason = "unknown" | "completedSuccessfully" | "mediaOperationCanceled";
+export type PlayPromptCompletionReason =
+    | "unknown"
+    | "completedSuccessfully"
+    | "mediaOperationCanceled"
+    | "unknownFutureValue";
 export type RecordCompletionReason =
     | "operationCanceled"
     | "stopToneDetected"
@@ -2032,8 +2122,8 @@ export type RecordCompletionReason =
     | "playBeepFailed"
     | "mediaReceiveTimeout"
     | "unspecifiedError";
-export type RecordingStatus = "recordingCapable" | "notRecording" | "startedRecording";
-export type RejectReason = "none" | "busy" | "forbidden";
+export type RecordingStatus = "unknown" | "notRecording" | "recording" | "failed" | "unknownFutureValue";
+export type RejectReason = "none" | "busy" | "forbidden" | "unknownFutureValue";
 export type RoutingMode = "oneToOne" | "multicast";
 export type RoutingPolicy =
     | "none"
@@ -2062,6 +2152,24 @@ export type Tone =
     | "c"
     | "d"
     | "flash";
+export type AclType = "user" | "group" | "everyone" | "everyoneExceptGuests";
+export type AccessType = "grant" | "deny";
+export type PropertyType =
+    | "String"
+    | "Int64"
+    | "Double"
+    | "DateTime"
+    | "Boolean"
+    | "Collection(String)"
+    | "Collection(Int64)"
+    | "Collection(Double)"
+    | "Collection(DateTime)";
+export type ConnectionOperationStatus = "unspecified" | "inprogress" | "completed" | "failed";
+export type UserIdentityType = "aadUser" | "onPremiseAadUser" | "anonymousGuest" | "federatedUser";
+export type ApplicationIdentityType = "aadApplication" | "bot" | "tenantBot" | "office365Connector" | "outgoingWebhook";
+export type ConversationIdentityType = "team" | "channel";
+export type TeamVisibilityType = "private" | "public" | "hiddenMembership" | "unknownFutureValue";
+export type ClonableTeamParts = "apps" | "tabs" | "settings" | "channels" | "members";
 export type TeamSpecialization =
     | "none"
     | "educationStandard"
@@ -2071,10 +2179,17 @@ export type TeamSpecialization =
     | "healthcareStandard"
     | "healthcareCareCoordination"
     | "unknownFutureValue";
-export type TeamVisibilityType = "private" | "public" | "hiddenMembership" | "unknownFutureValue";
-export type ClonableTeamParts = "apps" | "tabs" | "settings" | "channels" | "members";
-export type GiphyRatingType = "moderate" | "strict" | "unknownFutureValue";
-export type ChatMessageBodyType = "text" | "html";
+export type GiphyRatingType = "strict" | "moderate" | "unknownFutureValue";
+export type ChatMessageType = "message" | "chatEvent" | "typing";
+export type ChatMessageImportance = "normal" | "high" | "urgent";
+export type ChatMessagePolicyViolationDlpActionTypes = "none" | "notifySender" | "blockAccess" | "blockAccessExternal";
+export type ChatMessagePolicyViolationUserActionTypes = "none" | "override" | "reportFalsePositive";
+export type ChatMessagePolicyViolationVerdictDetailsTypes =
+    | "none"
+    | "allowFalsePositiveOverride"
+    | "allowOverrideWithoutJustification"
+    | "allowOverrideWithJustification";
+export type TeamsAppDistributionMethod = "store" | "organization" | "sideloaded" | "unknownFutureValue";
 export type ChannelMembershipType = "standard" | "private" | "unknownFutureValue";
 export type TeamsAsyncOperationType =
     | "invalid"
@@ -2090,19 +2205,6 @@ export type TeamsAsyncOperationStatus =
     | "succeeded"
     | "failed"
     | "unknownFutureValue";
-export type TeamsAppDistributionMethod = "store" | "organization" | "sideloaded" | "unknownFutureValue";
-export type UserIdentityType = "aadUser" | "onPremiseAadUser" | "anonymousGuest" | "federatedUser";
-export type ApplicationIdentityType = "aadApplication" | "bot" | "tenantBot" | "office365Connector" | "outgoingWebhook";
-export type ConversationIdentityType = "team" | "channel";
-export type ChatMessageType = "message" | "chatEvent" | "typing";
-export type ChatMessageImportance = "normal" | "high" | "urgent";
-export type ChatMessagePolicyViolationDlpActionTypes = "none" | "notifySender" | "blockAccess" | "blockAccessExternal";
-export type ChatMessagePolicyViolationUserActionTypes = "none" | "override" | "reportFalsePositive";
-export type ChatMessagePolicyViolationVerdictDetailsTypes =
-    | "none"
-    | "allowFalsePositiveOverride"
-    | "allowOverrideWithoutJustification"
-    | "allowOverrideWithJustification";
 export type ScheduleEntityTheme =
     | "white"
     | "blue"
@@ -2143,7 +2245,13 @@ export type TimeOffReasonIconType =
 export type ScheduleChangeState = "pending" | "approved" | "declined" | "unknownFutureValue";
 export type ScheduleChangeRequestActor = "sender" | "recipient" | "manager" | "system" | "unknownFutureValue";
 export type WorkforceIntegrationEncryptionProtocol = "sharedSecret" | "unknownFutureValue";
-export type WorkforceIntegrationSupportedEntities = "none" | "shift" | "swapRequest";
+export type WorkforceIntegrationSupportedEntities =
+    | "none"
+    | "shift"
+    | "swapRequest"
+    | "userShiftPreferences"
+    | "openShift"
+    | "openShiftRequest";
 export interface Entity {
     // Read-only.
     id?: string;
@@ -2313,6 +2421,7 @@ export interface User extends DirectoryObject {
     country?: string;
     // The created date of the user object.
     createdDateTime?: string;
+    creationType?: string;
     // The name for the department in which the user works. Supports $filter.
     department?: string;
     deviceKeys?: DeviceKey[];
@@ -2603,14 +2712,15 @@ export interface User extends DirectoryObject {
     settings?: UserSettings;
     // Read-only.
     onenote?: Onenote;
+    profile?: Profile;
     // The user's activities across devices. Read-only. Nullable.
     activities?: UserActivity[];
     devices?: Device[];
     onlineMeetings?: OnlineMeeting[];
     presence?: Presence;
+    chats?: Chat[];
     joinedTeams?: Team[];
     teamwork?: UserTeamwork;
-    chats?: Chat[];
 }
 export interface UserAnalytics extends Entity {
     settings?: Settings;
@@ -2621,6 +2731,7 @@ export interface InformationProtection extends Entity {
     policy?: InformationProtectionPolicy;
     sensitivityLabels?: SensitivityLabel[];
     sensitivityPolicySettings?: SensitivityPolicySettings;
+    dataLossPreventionPolicies?: DataLossPreventionPolicy[];
 }
 export interface AppRoleAssignment extends Entity {
     appRoleId?: string;
@@ -2824,14 +2935,17 @@ export interface Group extends DirectoryObject {
     mdmAppId?: string;
     membershipRule?: string;
     membershipRuleProcessingState?: string;
+    onPremisesDomainName?: string;
     /**
      * Indicates the last time at which the group was synced with the on-premises directory.The Timestamp type represents date
      * and time information using ISO 8601 format and is always in UTC time. For example, midnight UTC on Jan 1, 2014 would
      * look like this: '2014-01-01T00:00:00Z'. Returned by default. Read-only. Supports $filter.
      */
     onPremisesLastSyncDateTime?: string;
+    onPremisesNetBiosName?: string;
     // Errors when using Microsoft synchronization product during provisioning. Returned by default.
     onPremisesProvisioningErrors?: OnPremisesProvisioningError[];
+    onPremisesSamAccountName?: string;
     /**
      * Contains the on-premises security identifier (SID) for the group that was synchronized from on-premises to the cloud.
      * Returned by default. Read-only.
@@ -2962,7 +3076,6 @@ export interface Group extends DirectoryObject {
     // Read-only.
     onenote?: Onenote;
     team?: Team;
-    channels?: Channel[];
 }
 export interface MailFolder extends Entity {
     // The mailFolder's display name.
@@ -3570,6 +3683,8 @@ export interface ManagedDevice extends Entity {
      * Agent
      */
     configurationManagerClientInformation?: ConfigurationManagerClientInformation;
+    // Ethernet MAC. This property is read-only.
+    ethernetMacAddress?: string;
     // Security baseline states for this device.
     securityBaselineStates?: SecurityBaselineState[];
     // Device configuration states for this device.
@@ -3730,6 +3845,21 @@ export interface Onenote extends Entity {
      */
     operations?: OnenoteOperation[];
 }
+export interface Profile extends Entity {
+    account?: UserAccountInformation[];
+    anniversaries?: PersonAnniversary[];
+    educationalActivities?: EducationalActivity[];
+    emails?: ItemEmail[];
+    interests?: PersonInterest[];
+    languages?: LanguageProficiency[];
+    names?: PersonName[];
+    phones?: ItemPhone[];
+    positions?: WorkPosition[];
+    projects?: ProjectParticipation[];
+    skills?: SkillProficiency[];
+    webAccounts?: WebAccount[];
+    websites?: PersonWebsite[];
+}
 export interface UserActivity extends Entity {
     // Required. The object containing information to render the activity in the UX.
     visualElements?: VisualInfo;
@@ -3886,6 +4016,14 @@ export interface Presence extends Entity {
     availability?: string;
     activity?: string;
 }
+export interface Chat extends Entity {
+    topic?: string;
+    createdDateTime?: string;
+    lastUpdatedDateTime?: string;
+    members?: ConversationMember[];
+    messages?: ChatMessage[];
+    installedApps?: TeamsAppInstallation[];
+}
 export interface Team extends Entity {
     displayName?: string;
     description?: string;
@@ -3915,28 +4053,20 @@ export interface Team extends Entity {
     // Whether this team is in read-only mode.
     isArchived?: boolean;
     schedule?: Schedule;
-    photo?: ProfilePhoto;
+    group?: Group;
     template?: TeamsTemplate;
+    photo?: ProfilePhoto;
+    owners?: User[];
     // The collection of channels &amp; messages associated with the team.
     channels?: Channel[];
+    primaryChannel?: Channel;
     apps?: TeamsCatalogApp[];
     // The apps installed in this team.
     installedApps?: TeamsAppInstallation[];
     operations?: TeamsAsyncOperation[];
-    owners?: User[];
-    primaryChannel?: Channel;
-    group?: Group;
 }
 export interface UserTeamwork extends Entity {
     installedApps?: TeamsAppInstallation[];
-}
-export interface Chat extends Entity {
-    topic?: string;
-    createdDateTime?: string;
-    lastUpdatedDateTime?: string;
-    installedApps?: TeamsAppInstallation[];
-    members?: ConversationMember[];
-    messages?: ChatMessage[];
 }
 export interface ProvisioningObjectSummary extends Entity {
     activityDateTime?: string;
@@ -4068,6 +4198,7 @@ export interface Invitation extends Entity {
     inviteRedeemUrl?: string;
     // The status of the invitation. Possible values: PendingAcceptance, Completed, InProgress, and Error
     status?: string;
+    resetRedemption?: boolean;
     // The user created as part of the invitation creation. Read-Only
     invitedUser?: User;
 }
@@ -4100,39 +4231,115 @@ export interface CallActivityStatistics extends ActivityStatistics {
     afterHours?: string;
 }
 export interface Application extends DirectoryObject {
+    // Specifies settings for an application that implements a web API.
     api?: ApiApplication;
+    // The unique identifier for the application that is assigned to an application by Azure AD. Not nullable. Read-only.
     appId?: string;
+    /**
+     * The collection of application roles that an application may declare. These roles can be assigned to users, groups, or
+     * service principals. Not nullable.
+     */
     appRoles?: AppRole[];
+    // The date and time the application was registered. Read-only.
     createdDateTime?: string;
+    /**
+     * Specifies the fallback application type as public client, such as an installed application running on a mobile device.
+     * The default value is false which means the fallback application type is confidential client such as web app. There are
+     * certain scenarios where Azure AD cannot determine the client application type (e.g. ROPC flow where it is configured
+     * without specifying a redirect URI). In those cases Azure AD will interpret the application type based on the value of
+     * this property.
+     */
     isFallbackPublicClient?: boolean;
+    /**
+     * The URIs that identify the application within its Azure AD tenant, or within a verified custom domain if the
+     * application is multi-tenant. For more information see Application Objects and Service Principal Objects. The any
+     * operator is required for filter expressions on multi-valued properties. Not nullable.
+     */
     identifierUris?: string[];
+    // The display name for the application.
     displayName?: string;
+    /**
+     * Configures the groups claim issued in a user or OAuth 2.0 access token that the application expects. To set this
+     * attribute, use one of the following valid string values:NoneSecurityGroup: For security groups and Azure AD rolesAll:
+     * This will get all of the security groups, distribution groups, and Azure AD directory roles that the signed-in user is
+     * a member of
+     */
     groupMembershipClaims?: string;
+    /**
+     * Basic profile information of the application such as app's marketing, support, terms of service and privacy statement
+     * URLs. The terms of service and privacy statement are surfaced to users through the user consent experience. For more
+     * info, see How to: Add Terms of service and privacy statement for registered Azure AD apps.
+     */
     info?: InformationalUrl;
     isDeviceOnlyAuthSupported?: boolean;
+    // The collection of key credentials associated with the application Not nullable.
     keyCredentials?: KeyCredential[];
+    // The main logo for the application. Not nullable.
     logo?: any;
+    /**
+     * Application developers can configure optional claims in their Azure AD apps to specify which claims they want in tokens
+     * sent to their application by the Microsoft security token service. See provide optional claims to your Azure AD app for
+     * more information.
+     */
     optionalClaims?: OptionalClaims;
+    // Specifies parental control settings for an application.
     parentalControlSettings?: ParentalControlSettings;
+    // The collection of password credentials associated with the application. Not nullable.
     passwordCredentials?: PasswordCredential[];
+    // Specifies settings for installed clients such as desktop or mobile devices.
     publicClient?: PublicClientApplication;
+    // The verified publisher domain for the application. Read-only.
     publisherDomain?: string;
+    /**
+     * Specifies resources that this application requires access to and the set of OAuth permission scopes and application
+     * roles that it needs under each of those resources. This pre-configuration of required resource access drives the
+     * consent experience. Not nullable.
+     */
     requiredResourceAccess?: RequiredResourceAccess[];
+    /**
+     * Specifies what Microsoft accounts are supported for the current application. Supported values are:AzureADMyOrg: Users
+     * with a Microsoft work or school account in my organization’s Azure AD tenant (i.e. single tenant)AzureADMultipleOrgs:
+     * Users with a Microsoft work or school account in any organization’s Azure AD tenant (i.e. multi-tenant)
+     * AzureADandPersonalMicrosoftAccount: Users with a personal Microsoft account, or a work or school account in any
+     * organization’s Azure AD tenant
+     */
     signInAudience?: string;
+    // Custom strings that can be used to categorize and identify the application. Not nullable.
     tags?: string[];
+    /**
+     * Specifies the keyId of a public key from the keyCredentials collection. When configured, Azure AD encrypts all the
+     * tokens it emits by using the key this property points to. The application code that receives the encrypted token must
+     * use the matching private key to decrypt the token before it can be used for the signed-in user.
+     */
     tokenEncryptionKeyId?: string;
+    // Specifies settings for a web application.
     web?: WebApplication;
+    // Read-only. Nullable.
     extensionProperties?: ExtensionProperty[];
+    // Read-only.
     createdOnBehalfOf?: DirectoryObject;
+    /**
+     * Directory objects that are owners of the application. The owners are a set of non-admin users who are allowed to modify
+     * this object. Requires version 2013-11-08 or newer. Read-only. Nullable.
+     */
     owners?: DirectoryObject[];
     policies?: DirectoryObject[];
     synchronization?: Synchronization;
 }
 export interface ExtensionProperty extends DirectoryObject {
+    // Display name of the application object on which this extension property is defined. Read-only.
     appDisplayName?: string;
+    // Name of the extension property. Not nullable.
     name?: string;
+    /**
+     * Specifies the data type of the value the extension property can hold. Following values are supported. Not nullable.
+     * Binary - 256 bytes maximumBooleanDateTime - Must be specified in ISO 8601 format. Will be stored in UTC.Integer -
+     * 32-bit value.LargeInteger - 64-bit value.String - 256 characters maximum
+     */
     dataType?: string;
+    // Indicates if this extension property was sycned from onpremises directory using Azure AD Connect. Read-only.
     isSyncedFromOnPremises?: boolean;
+    // Following values are supported. Not nullable. UserGroupOrganizationDeviceApplication
     targetObjects?: string[];
 }
 export interface Synchronization extends Entity {
@@ -4145,14 +4352,17 @@ export interface ServicePrincipal extends DirectoryObject {
     addIns?: AddIn[];
     appDisplayName?: string;
     appId?: string;
+    applicationTemplateId?: string;
     appOwnerOrganizationId?: string;
     appRoleAssignmentRequired?: boolean;
     appRoles?: AppRole[];
     displayName?: string;
     homepage?: string;
     keyCredentials?: KeyCredential[];
+    info?: InformationalUrl;
     logoutUrl?: string;
-    oauth2Permissions?: OAuth2Permission[];
+    notificationEmailAddresses?: string[];
+    publishedPermissionScopes?: PermissionScope[];
     passwordCredentials?: PasswordCredential[];
     preferredTokenSigningKeyThumbprint?: string;
     publisherName?: string;
@@ -4294,6 +4504,15 @@ export interface BookingCurrency extends Entity {
     symbol?: string;
 }
 // tslint:disable-next-line: interface-name
+export interface IdentityContainer extends Entity {
+    userFlows?: IdentityUserFlow[];
+}
+// tslint:disable-next-line: interface-name
+export interface IdentityUserFlow extends Entity {
+    userFlowType?: UserFlowType;
+    userFlowTypeVersion?: number;
+}
+// tslint:disable-next-line: interface-name
 export interface IdentityProvider extends Entity {
     type?: string;
     name?: string;
@@ -4306,8 +4525,9 @@ export interface TrustFramework extends Entity {
 }
 // tslint:disable-next-line: no-empty-interface
 export interface TrustFrameworkPolicy extends Entity {}
-// tslint:disable-next-line: no-empty-interface
-export interface TrustFrameworkKeySet extends Entity {}
+export interface TrustFrameworkKeySet extends Entity {
+    keys?: TrustFrameworkKey[];
+}
 export interface DataClassificationService extends Entity {
     exactMatchDataStores?: ExactMatchDataStore[];
     sensitiveTypes?: SensitiveType[];
@@ -4315,6 +4535,8 @@ export interface DataClassificationService extends Entity {
     classifyFileJobs?: JobResponseBase[];
     classifyTextJobs?: JobResponseBase[];
     evaluateLabelJobs?: JobResponseBase[];
+    evaluateDlpPoliciesJobs?: JobResponseBase[];
+    labelsAndPoliciesEvaluationJobs?: JobResponseBase[];
     classifyText?: TextClassificationRequest[];
     classifyFile?: FileClassificationRequest[];
     sensitivityLabels?: SensitivityLabel[];
@@ -4362,11 +4584,16 @@ export interface SensitivityLabel extends Entity {
     labelActions?: LabelActionBase[];
     assignedPolicies?: LabelPolicy[];
     priority?: number;
+    autoLabeling?: AutoLabeling;
     sublabels?: SensitivityLabel[];
 }
 export interface ExactMatchUploadAgent extends Entity {
     description?: string;
     creationDateTime?: string;
+}
+export interface DataLossPreventionPolicy extends Entity {
+    name?: string;
+    id?: string;
 }
 // tslint:disable-next-line: interface-name
 export interface InformationProtectionPolicy extends Entity {
@@ -4379,6 +4606,12 @@ export interface SensitivityPolicySettings extends Entity {
 }
 export interface EvaluateLabelJobResponse extends JobResponseBase {
     result?: EvaluateLabelJobResultGroup;
+}
+export interface EvaluateLabelsAndPoliciesJobResponse extends JobResponseBase {
+    result?: EvaluateLabelsAndPoliciesResult;
+}
+export interface DlpEvaluatePoliciesJobResponse extends JobResponseBase {
+    result?: DlpPoliciesJobResult;
 }
 export interface ClassificationJobResponse extends JobResponseBase {
     result?: DetectedSensitiveContentWrapper;
@@ -4408,6 +4641,11 @@ export interface AllowedDataLocation extends Entity {
     location?: string;
     isDefault?: boolean;
     domain?: string;
+}
+export interface DelegatedPermissionClassification extends Entity {
+    permissionId?: string;
+    permissionName?: string;
+    classification?: PermissionClassificationType;
 }
 export interface ResourceSpecificPermissionGrant extends DirectoryObject {
     clientId?: string;
@@ -4689,28 +4927,6 @@ export interface GroupLifecyclePolicy extends Entity {
 export interface PlannerGroup extends Entity {
     // Read-only. Nullable. Returns the plannerPlans owned by the group.
     plans?: PlannerPlan[];
-}
-export interface Channel extends Entity {
-    // Channel name as it will appear to the user in Microsoft Teams.
-    displayName?: string;
-    // Optional textual description for the channel.
-    description?: string;
-    isFavoriteByDefault?: boolean;
-    // The email address for sending messages to the channel. Read-only.
-    email?: string;
-    /**
-     * A hyperlink that will navigate to the channel in Microsoft Teams. This is the URL that you get when you right-click a
-     * channel in Microsoft Teams and select Get link to channel. This URL should be treated as an opaque blob, and not
-     * parsed. Read-only.
-     */
-    webUrl?: string;
-    membershipType?: ChannelMembershipType;
-    messages?: ChatMessage[];
-    chatThreads?: ChatThread[];
-    // A collection of all the tabs in the channel. A navigation property.
-    tabs?: TeamsTab[];
-    members?: ConversationMember[];
-    filesFolder?: DriveItem;
 }
 export interface OrganizationalBranding extends Entity {
     backgroundColor?: string;
@@ -5096,8 +5312,6 @@ export interface EducationSubmission extends Entity {
     releasedDateTime?: string;
     returnedBy?: IdentitySet;
     returnedDateTime?: string;
-    grade?: EducationAssignmentGrade;
-    feedback?: EducationFeedback;
     resourcesFolderUrl?: string;
     resources?: EducationSubmissionResource[];
     submittedResources?: EducationSubmissionResource[];
@@ -5419,6 +5633,7 @@ export interface DriveItem extends BaseItem {
     thumbnails?: ThumbnailSet[];
     // The list of previous versions of the item. For more info, see [getting previous versions][]. Read-only. Nullable.
     versions?: DriveItemVersion[];
+    document?: Document;
 }
 export interface Workbook extends Entity {
     application?: WorkbookApplication;
@@ -5472,7 +5687,11 @@ export interface DriveItemVersion extends BaseItemVersion {
     // Indicates the size of the content stream for this version of the item.
     size?: number;
 }
+export interface Document extends Entity {
+    comments?: DocumentComment[];
+}
 export interface WorkbookApplication extends Entity {
+    // Returns the calculation mode used in the workbook. Possible values are: Automatic, AutomaticExceptTables, Manual.
     calculationMode?: string;
 }
 export interface WorkbookNamedItem extends Entity {
@@ -6039,6 +6258,7 @@ export interface Room extends Place {
     displayDeviceName?: string;
     isWheelChairAccessible?: boolean;
     tags?: string[];
+    floorLabel?: string;
 }
 export interface RoomList extends Place {
     emailAddress?: string;
@@ -6427,6 +6647,39 @@ export interface FilterOperatorSchema extends Entity {
     multivaluedComparisonType?: ScopeOperatorMultiValuedComparisonType;
     supportedAttributeTypes?: AttributeType[];
 }
+export interface CloudCommunications extends Entity {
+    calls?: Call[];
+    onlineMeetings?: OnlineMeeting[];
+}
+export interface Call extends Entity {
+    state?: CallState;
+    mediaState?: CallMediaState;
+    resultInfo?: ResultInfo;
+    terminationReason?: string;
+    direction?: CallDirection;
+    ringingTimeoutInSeconds?: number;
+    subject?: string;
+    callbackUri?: string;
+    callRoutes?: CallRoute[];
+    source?: ParticipantInfo;
+    targets?: InvitationParticipantInfo[];
+    answeredBy?: ParticipantInfo;
+    requestedModalities?: Modality[];
+    activeModalities?: Modality[];
+    mediaConfig?: MediaConfig;
+    chatInfo?: ChatInfo;
+    callOptions?: CallOptions;
+    meetingInfo?: MeetingInfo;
+    meetingCapability?: MeetingCapability;
+    routingPolicies?: RoutingPolicy[];
+    tenantId?: string;
+    myParticipantId?: string;
+    toneInfo?: ToneInfo;
+    incomingContext?: IncomingContext;
+    participants?: Participant[];
+    audioRoutingGroups?: AudioRoutingGroup[];
+    operations?: CommsOperation[];
+}
 // tslint:disable-next-line: interface-name
 export interface IdentityGovernance extends Entity {
     entitlementManagement?: EntitlementManagement;
@@ -6510,14 +6763,7 @@ export interface AccessPackageAssignmentPolicy extends Entity {
     displayName?: string;
     description?: string;
     isEnabled?: boolean;
-    isDenyPolicy?: boolean;
-    isAllUsersScope?: boolean;
     canExtend?: boolean;
-    isApprovalRequired?: boolean;
-    isApprovalRequiredForExtension?: boolean;
-    isApproverJustificationRequired?: boolean;
-    approvalTimeOutInDays?: number;
-    isRequestorJustificationRequired?: boolean;
     durationInDays?: number;
     expirationDateTime?: string;
     createdBy?: string;
@@ -6912,6 +7158,8 @@ export interface DeviceManagement extends Entity {
     mobileThreatDefenseConnectors?: MobileThreatDefenseConnector[];
     // The list of Device Management Partners configured by the tenant.
     deviceManagementPartners?: DeviceManagementPartner[];
+    // The list of Compliance Management Partners configured by the tenant.
+    complianceManagementPartners?: ComplianceManagementPartner[];
     // The device management intents
     intents?: DeviceManagementIntent[];
     // The device management intent setting definitions
@@ -7542,6 +7790,8 @@ export interface DeviceCategory extends Entity {
     displayName?: string;
     // Optional description for the device category.
     description?: string;
+    // Optional role scope tags for the device category.
+    roleScopeTagIds?: string[];
 }
 export interface DeviceManagementExchangeConnector extends Entity {
     // Last sync time for the Exchange Connector
@@ -7659,6 +7909,32 @@ export interface DeviceManagementPartner extends Entity {
     whenPartnerDevicesWillBeRemovedDateTime?: string;
     // DateTime in UTC when PartnerDevices will be marked as NonCompliant
     whenPartnerDevicesWillBeMarkedAsNonCompliantDateTime?: string;
+    // User groups that specifies whether enrollment is through partner.
+    groupsRequiringPartnerEnrollment?: DeviceManagementPartnerAssignment[];
+}
+export interface ComplianceManagementPartner extends Entity {
+    // Timestamp of last heartbeat after admin onboarded to the compliance management partner
+    lastHeartbeatDateTime?: string;
+    // Partner state of this tenant
+    partnerState?: DeviceManagementPartnerTenantState;
+    // Partner display name
+    displayName?: string;
+    // Partner onboarded for Mac devices.
+    macOsOnboarded?: boolean;
+    // Partner onboarded for Windows devices.
+    windowsOnboarded?: boolean;
+    // Partner onboarded for Android devices.
+    androidOnboarded?: boolean;
+    // Partner onboarded for ios devices.
+    iosOnboarded?: boolean;
+    // User groups which enroll Mac devices through partner.
+    macOsEnrollmentAssignments?: ComplianceManagementPartnerAssignment[];
+    // User groups which enroll Windows devices through partner.
+    windowsEnrollmentAssignments?: ComplianceManagementPartnerAssignment[];
+    // User groups which enroll Android devices through partner.
+    androidEnrollmentAssignments?: ComplianceManagementPartnerAssignment[];
+    // User groups which enroll ios devices through partner.
+    iosEnrollmentAssignments?: ComplianceManagementPartnerAssignment[];
 }
 export interface DeviceManagementIntent extends Entity {
     // The user given display name
@@ -7841,7 +8117,7 @@ export interface DeviceHealthScript extends Entity {
     // List of Scope Tag IDs for the device health script
     roleScopeTagIds?: string[];
     // The list of group assignments for the device health script
-    assignments?: DeviceManagementScriptAssignment[];
+    assignments?: DeviceHealthScriptAssignment[];
     // High level run summary for device health script.
     runSummary?: DeviceHealthScriptRunSummary;
     // List of run states for the device health script across all devices
@@ -8043,6 +8319,8 @@ export interface WindowsAutopilotDeviceIdentity extends Entity {
     azureActiveDirectoryDeviceId?: string;
     // Managed Device ID
     managedDeviceId?: string;
+    // Display Name
+    displayName?: string;
     // Deployment profile currently assigned to the Windows autopilot device.
     deploymentProfile?: WindowsAutopilotDeploymentProfile;
     // Deployment profile intended to be assigned to the Windows autopilot device.
@@ -8251,6 +8529,8 @@ export interface GroupPolicyConfiguration extends Entity {
     displayName?: string;
     // User provided description for the resource object.
     description?: string;
+    // The list of scope tags for the configuration.
+    roleScopeTagIds?: string[];
     // The date and time the entity was last modified.
     lastModifiedDateTime?: string;
     // The list of enabled or disabled group policy definition values for the configuration.
@@ -8543,20 +8823,6 @@ export interface IntuneBrandingProfile extends Entity {
     lastModifiedDateTime?: string;
     // Company/organization name that is displayed to end users
     displayName?: string;
-    // Name of the person/organization responsible for IT support
-    contactITName?: string;
-    // Phone number of the person/organization responsible for IT support
-    contactITPhoneNumber?: string;
-    // E-mail address of the person/organization responsible for IT support
-    contactITEmailAddress?: string;
-    // Text comments regarding the person/organization responsible for IT support
-    contactITNotes?: string;
-    // URL to the company/organizationâ€™s privacy policy
-    privacyUrl?: string;
-    // URL to the company/organizationâ€™s IT helpdesk site
-    onlineSupportSiteUrl?: string;
-    // Display name of the company/organizationâ€™s IT helpdesk site
-    onlineSupportSiteName?: string;
     // Primary theme color used in the Company Portal applications and web portal
     themeColor?: RgbColor;
     // Boolean that represents whether the administrator-supplied logo images are shown or not
@@ -8569,12 +8835,32 @@ export interface IntuneBrandingProfile extends Entity {
     lightBackgroundLogo?: MimeContent;
     // Customized image displayed in Company Portal apps landing page
     landingPageCustomizedImage?: MimeContent;
+    // Name of the person/organization responsible for IT support
+    contactITName?: string;
+    // Phone number of the person/organization responsible for IT support
+    contactITPhoneNumber?: string;
+    // E-mail address of the person/organization responsible for IT support
+    contactITEmailAddress?: string;
+    // Text comments regarding the person/organization responsible for IT support
+    contactITNotes?: string;
+    // URL to the company/organizationâ€™s IT helpdesk site
+    onlineSupportSiteUrl?: string;
+    // Display name of the company/organizationâ€™s IT helpdesk site
+    onlineSupportSiteName?: string;
+    // URL to the company/organizationâ€™s privacy policy
+    privacyUrl?: string;
     // Text comments regarding what the admin has access to on the device
     customPrivacyMessage?: string;
     // Boolean that represents whether the adminsistrator has disabled the 'Remove Device' action on corporate owned devices.
     isRemoveDeviceDisabled?: boolean;
     // Boolean that represents whether the adminsistrator has disabled the 'Factory Reset' action on corporate owned devices.
     isFactoryResetDisabled?: boolean;
+    // Collection of blocked actions on the company portal as per platform and device ownership types.
+    companyPortalBlockedActions?: CompanyPortalBlockedAction[];
+    // Boolean that indicates if AzureAD Enterprise Apps will be shown in Company Portal
+    showAzureADEnterpriseApps?: boolean;
+    // Boolean that indicates if Office WebApps will be shown in Company Portal
+    showOfficeWebApps?: boolean;
     // The list of group assignments for the branding profile
     assignments?: IntuneBrandingProfileAssignment[];
 }
@@ -9045,6 +9331,8 @@ export interface ManagedAppProtection extends ManagedAppPolicy {
     notificationRestriction?: ManagedAppNotificationRestriction;
     // Requires a pin to be unique from the number specified in this property.
     previousPinBlockCount?: number;
+    // Indicates in which managed browser(s) that internet links should be opened.
+    managedBrowser?: ManagedBrowserType;
     // Maximum allowed device threat level, as reported by the MTD app
     maximumAllowedDeviceThreatLevel?: ManagedAppDeviceThreatLevel;
     /**
@@ -9082,6 +9370,8 @@ export interface IosManagedAppProtection extends TargetedManagedAppProtection {
     allowedIosDeviceModels?: string;
     // Defines a managed app behavior, either block or wipe, if the specified device model is not allowed.
     appActionIfIosDeviceModelNotAllowed?: ManagedAppRemediationAction;
+    // Defines if third party keyboards are allowed while accessing a managed app
+    thirdPartyKeyboardsBlocked?: boolean;
     /**
      * Defines if open-in operation is supported from the managed app to the filesharing locations selected. This setting only
      * applies when AllowedOutboundDataTransferDestinations is set to ManagedApps and
@@ -9147,6 +9437,13 @@ export interface AndroidManagedAppProtection extends TargetedManagedAppProtectio
     minimumWarningCompanyPortalVersion?: string;
     // Minimum version of the Company portal that must be installed on the device or the company data on the app will be wiped
     minimumWipeCompanyPortalVersion?: string;
+    // Indicates if keyboard restriction is enabled. If enabled list of approved keyboards must be provided as well.
+    keyboardsRestricted?: boolean;
+    /**
+     * If Keyboard Restriction is enabled, only keyboards in this approved list will be allowed. A key should be Android
+     * package id for a keyboard and value should be a friendly name
+     */
+    approvedKeyboards?: KeyValuePair[];
     // List of apps to which the policy is deployed.
     apps?: ManagedMobileApp[];
     // Navigation property to deployment summary of the configuration.
@@ -9204,6 +9501,8 @@ export interface DefaultManagedAppProtection extends ManagedAppProtection {
      * only)
      */
     appActionIfAndroidDeviceManufacturerNotAllowed?: ManagedAppRemediationAction;
+    // Defines if third party keyboards are allowed while accessing a managed app. (iOS Only)
+    thirdPartyKeyboardsBlocked?: boolean;
     /**
      * Defines if open-in operation is supported from the managed app to the filesharing locations selected. This setting only
      * applies when AllowedOutboundDataTransferDestinations is set to ManagedApps and
@@ -11060,6 +11359,8 @@ export interface AndroidDeviceOwnerGeneralDeviceConfiguration extends DeviceConf
     factoryResetBlocked?: boolean;
     // Proxy is set up directly with host, port and excluded hosts.
     globalProxy?: AndroidDeviceOwnerGlobalProxy;
+    // Indicates whether or not google accounts will be blocked.
+    googleAccountsBlocked?: boolean;
     // Whether or not to enable screen saver mode or not in Kiosk Mode.
     kioskModeScreenSaverConfigurationEnabled?: boolean;
     // URL for an image that will be the device's screen saver in Kiosk Mode.
@@ -11342,11 +11643,13 @@ export interface AndroidTrustedRootCertificate extends DeviceConfiguration {
     certFileName?: string;
 }
 export interface AndroidForWorkImportedPFXCertificateProfile extends AndroidCertificateProfileBase {
+    // Intended Purpose of the Certificate Profile - which could be Unassigned, SmimeEncryption, SmimeSigning etc.
     intendedPurpose?: IntendedPurpose;
     // Certificate state for devices
     managedDeviceCertificateStates?: ManagedDeviceCertificateState[];
 }
 export interface AndroidImportedPFXCertificateProfile extends AndroidCertificateProfileBase {
+    // Intended Purpose of the Certificate Profile - which could be Unassigned, SmimeEncryption, SmimeSigning etc.
     intendedPurpose?: IntendedPurpose;
     // Certificate state for devices
     managedDeviceCertificateStates?: ManagedDeviceCertificateState[];
@@ -11829,6 +12132,8 @@ export interface AndroidWorkProfilePkcsCertificateProfile extends AndroidWorkPro
     certificateTemplateName?: string;
     // Custom String that defines the AAD Attribute.
     subjectAlternativeNameFormatString?: string;
+    // Certificate state for devices
+    managedDeviceCertificateStates?: ManagedDeviceCertificateState[];
 }
 export interface AndroidWorkProfileScepCertificateProfile extends AndroidWorkProfileCertificateProfileBase {
     // SCEP Server Url(s)
@@ -12053,6 +12358,50 @@ export interface AndroidWorkProfileEnterpriseWiFiConfiguration extends AndroidWo
      */
     identityCertificateForClientAuthentication?: AndroidWorkProfileCertificateProfileBase;
 }
+export interface MacOSCustomAppConfiguration extends DeviceConfiguration {
+    // Bundle id for targeting.
+    bundleId?: string;
+    // Configuration file name (*.plist | *.xml).
+    fileName?: string;
+    // Configuration xml. (UTF8 encoded byte array)
+    configurationXml?: number;
+}
+export interface MacOSWiredNetworkConfiguration extends DeviceConfiguration {
+    // Network Name
+    networkName?: string;
+    // Network interface.
+    networkInterface?: WiredNetworkInterface;
+    // Extensible Authentication Protocol (EAP). Indicates the type of EAP protocol set on the wired network.
+    eapType?: EapType;
+    // EAP-FAST Configuration Option when EAP-FAST is the selected EAP Type.
+    eapFastConfiguration?: EapFastConfiguration;
+    /**
+     * Trusted server certificate names when EAP Type is configured to EAP-TLS/TTLS/FAST or PEAP. This is the common name used
+     * in the certificates issued by your trusted certificate authority (CA). If you provide this information, you can bypass
+     * the dynamic trust dialog that is displayed on end users devices when they connect to this wired network.
+     */
+    trustedServerCertificateNames?: string[];
+    // Authentication Method when EAP Type is configured to PEAP or EAP-TTLS.
+    authenticationMethod?: WiFiAuthenticationMethod;
+    /**
+     * Non-EAP Method for Authentication (Inner Identity) when EAP Type is EAP-TTLS and Authenticationmethod is Username and
+     * Password.
+     */
+    nonEapAuthenticationMethodForEapTtls?: NonEapAuthenticationMethodForEapTtlsType;
+    /**
+     * Enable identity privacy (Outer Identity) when EAP Type is configured to EAP-TTLS, EAP-FAST or PEAP. This property masks
+     * usernames with the text you enter. For example, if you use 'anonymous', each user that authenticates with this wired
+     * network using their real username is displayed as 'anonymous'.
+     */
+    enableOuterIdentityPrivacy?: string;
+    // Trusted Root Certificate for Server Validation when EAP Type is configured to EAP-TLS/TTLS/FAST or PEAP.
+    rootCertificateForServerValidation?: MacOSTrustedRootCertificate;
+    /**
+     * Identity Certificate for client authentication when EAP Type is configured to EAP-TLS, EAP-TTLS (with Certificate
+     * Authentication), or PEAP (with Certificate Authentication).
+     */
+    identityCertificateForClientAuthentication?: MacOSCertificateProfileBase;
+}
 export interface MacOSTrustedRootCertificate extends DeviceConfiguration {
     // Trusted Root Certificate.
     trustedRootCertificate?: number;
@@ -12072,6 +12421,7 @@ export interface MacOSCertificateProfileBase extends DeviceConfiguration {
     certificateValidityPeriodScale?: CertificateValidityPeriodScale;
 }
 export interface MacOSImportedPFXCertificateProfile extends MacOSCertificateProfileBase {
+    // Intended Purpose of the Certificate Profile - which could be Unassigned, SmimeEncryption, SmimeSigning etc.
     intendedPurpose?: IntendedPurpose;
     // Certificate state for devices
     managedDeviceCertificateStates?: ManagedDeviceCertificateState[];
@@ -12189,6 +12539,7 @@ export interface IosTrustedRootCertificate extends DeviceConfiguration {
 }
 // tslint:disable-next-line: interface-name
 export interface IosImportedPFXCertificateProfile extends IosCertificateProfile {
+    // Intended Purpose of the Certificate Profile - which could be Unassigned, SmimeEncryption, SmimeSigning etc.
     intendedPurpose?: IntendedPurpose;
     // Certificate state for devices
     managedDeviceCertificateStates?: ManagedDeviceCertificateState[];
@@ -12661,8 +13012,6 @@ export interface IosGeneralDeviceConfiguration extends DeviceConfiguration {
     contactsAllowUnmanagedToManagedRead?: boolean;
     // Indicates whether or not to block the user from modifying the personal hotspot setting (iOS 12.2 or later).
     cellularBlockPersonalHotspotModification?: boolean;
-    // Indicates whether or not server-side Siri logging is disabled (iOS 12.2 or later).
-    siriDisableServerLogging?: boolean;
     // Indicates whether or not to block the continuous path keyboard when the device is supervised (iOS 13 or later).
     continuousPathKeyboardBlocked?: boolean;
     // Indicates whether or not to block Find My Device when the device is supervised (iOS 13 or later).
@@ -13038,6 +13387,10 @@ export interface IosEasEmailProfileConfiguration extends EasEmailProfileConfigur
     durationOfEmailToSync?: EmailSyncDuration;
     // Email attribute that is picked from AAD and injected into this profile before installing on the device.
     emailAddressSource?: UserEmailSource;
+    // Exchange data to sync.
+    easServices?: EasServices;
+    // Allow users to change sync settings.
+    easServicesUserOverrideEnabled?: boolean;
     // Exchange location that (URL) that the native mail app connects to.
     hostName?: string;
     // Indicates whether or not to use S/MIME certificate.
@@ -15048,11 +15401,13 @@ export interface WindowsCertificateProfileBase extends DeviceConfiguration {
     certificateValidityPeriodScale?: CertificateValidityPeriodScale;
 }
 export interface Windows10ImportedPFXCertificateProfile extends WindowsCertificateProfileBase {
+    // Intended Purpose of the Certificate Profile - which could be Unassigned, SmimeEncryption, SmimeSigning etc.
     intendedPurpose?: IntendedPurpose;
     // Certificate state for devices
     managedDeviceCertificateStates?: ManagedDeviceCertificateState[];
 }
 export interface WindowsPhone81ImportedPFXCertificateProfile extends WindowsCertificateProfileBase {
+    // Intended Purpose of the Certificate Profile - which could be Unassigned, SmimeEncryption, SmimeSigning etc.
     intendedPurpose?: IntendedPurpose;
     // Certificate state for devices
     managedDeviceCertificateStates?: ManagedDeviceCertificateState[];
@@ -16245,6 +16600,14 @@ export interface UserExperienceAnalyticsMetric extends Entity {
     // The unit of the user experience analytics metric.
     unit?: string;
 }
+export interface DeviceHealthScriptAssignment extends Entity {
+    // The Azure Active Directory group we are targeting the script to
+    target?: DeviceAndAppManagementAssignmentTarget;
+    // Determine whether we want to run detection script only or run both detection script and remediation script
+    runRemediationScript?: boolean;
+    // Script run schedule for the target group
+    runSchedule?: RunSchedule;
+}
 export interface DeviceHealthScriptRunSummary extends Entity {
     // Number of devices for which the detection script did not find an issue and the device is healthy
     noIssueDetectedDeviceCount?: number;
@@ -16288,14 +16651,6 @@ export interface DeviceHealthScriptDeviceState extends Entity {
     remediationState?: RemediationState;
     // The managed device on which the device health script executed
     managedDevice?: ManagedDevice;
-}
-export interface DeviceHealthScriptAssignment extends Entity {
-    // The Azure Active Directory group we are targeting the script to
-    target?: DeviceAndAppManagementAssignmentTarget;
-    // Determine whether we want to run detection script only or run both detection script and remediation script
-    runRemediationScript?: boolean;
-    // Script run schedule for the target group
-    runSchedule?: RunSchedule;
 }
 export interface AppLogCollectionRequest extends Entity {
     // Log upload status
@@ -16916,8 +17271,6 @@ export interface DeviceManagementExportJob extends Entity {
     filter?: string;
     // Columns selected from the report
     select?: string[];
-    // Ordering of columns in the report
-    orderBy?: string[];
     // Format of the exported report
     format?: DeviceManagementReportFileFormat;
     /**
@@ -18881,6 +19234,99 @@ export interface DataPolicyOperation extends Entity {
     // Specifies the progress of an operation.
     progress?: number;
 }
+// tslint:disable-next-line: interface-name
+export interface ItemFacet extends Entity {
+    allowedAudiences?: AllowedAudiences;
+    inference?: InferenceData;
+    createdDateTime?: string;
+    createdBy?: IdentitySet;
+    lastModifiedDateTime?: string;
+    lastModifiedBy?: IdentitySet;
+}
+export interface UserAccountInformation extends ItemFacet {
+    ageGroup?: string;
+    countryCode?: string;
+    preferredLanguageTag?: LocaleInfo;
+    userPrincipalName?: string;
+}
+export interface PersonAnniversary extends ItemFacet {
+    type?: AnniversaryType;
+    date?: string;
+}
+export interface EducationalActivity extends ItemFacet {
+    completionMonthYear?: string;
+    endMonthYear?: string;
+    institution?: InstitutionData;
+    program?: EducationalActivityDetail;
+    startMonthYear?: string;
+}
+// tslint:disable-next-line: interface-name
+export interface ItemEmail extends ItemFacet {
+    address?: string;
+    displayName?: string;
+    type?: EmailType;
+}
+export interface PersonInterest extends ItemFacet {
+    categories?: string[];
+    description?: string;
+    displayName?: string;
+    webUrl?: string;
+}
+export interface LanguageProficiency extends ItemFacet {
+    displayName?: string;
+    tag?: string;
+    proficiency?: LanguageProficiencyLevel;
+}
+export interface PersonName extends ItemFacet {
+    displayName?: string;
+    first?: string;
+    initials?: string;
+    last?: string;
+    languageTag?: string;
+    maiden?: string;
+    middle?: string;
+    nickname?: string;
+    suffix?: string;
+    title?: string;
+    pronunciation?: YomiPersonName;
+}
+// tslint:disable-next-line: interface-name
+export interface ItemPhone extends ItemFacet {
+    displayName?: string;
+    type?: PhoneType;
+    number?: string;
+}
+export interface WorkPosition extends ItemFacet {
+    categories?: string[];
+    detail?: PositionDetail;
+}
+export interface ProjectParticipation extends ItemFacet {
+    categories?: string[];
+    client?: CompanyDetail;
+    displayName?: string;
+    detail?: PositionDetail;
+    colleagues?: RelatedPerson[];
+    sponsors?: RelatedPerson[];
+}
+export interface SkillProficiency extends ItemFacet {
+    categories?: string[];
+    displayName?: string;
+    proficiency?: SkillProficiencyLevel;
+    webUrl?: string;
+}
+export interface WebAccount extends ItemFacet {
+    description?: string;
+    userId?: string;
+    service?: ServiceInformation;
+    statusMessage?: string;
+    webUrl?: string;
+}
+export interface PersonWebsite extends ItemFacet {
+    categories?: string[];
+    description?: string;
+    displayName?: string;
+    webUrl?: string;
+}
 export interface ActivityHistoryItem extends Entity {
     // Set by the server. A status code used to identify valid objects. Values: active, updated, deleted, ignored.
     status?: Status;
@@ -19282,37 +19728,6 @@ export interface CommsApplication extends Entity {
     calls?: Call[];
     onlineMeetings?: OnlineMeeting[];
 }
-export interface Call extends Entity {
-    state?: CallState;
-    mediaState?: CallMediaState;
-    resultInfo?: ResultInfo;
-    terminationReason?: string;
-    direction?: CallDirection;
-    ringingTimeoutInSeconds?: number;
-    subject?: string;
-    callbackUri?: string;
-    callRoutes?: CallRoute[];
-    source?: ParticipantInfo;
-    targets?: ParticipantInfo[];
-    answeredBy?: ParticipantInfo;
-    requestedModalities?: Modality[];
-    activeModalities?: Modality[];
-    mediaConfig?: MediaConfig;
-    chatInfo?: ChatInfo;
-    meetingInfo?: MeetingInfo;
-    meetingCapability?: MeetingCapability;
-    routingPolicies?: RoutingPolicy[];
-    tenantId?: string;
-    myParticipantId?: string;
-    toneInfo?: ToneInfo;
-    participants?: Participant[];
-    audioRoutingGroups?: AudioRoutingGroup[];
-    operations?: CommsOperation[];
-}
-export interface CloudCommunications extends Entity {
-    calls?: Call[];
-    onlineMeetings?: OnlineMeeting[];
-}
 export interface AudioRoutingGroup extends Entity {
     routingMode?: RoutingMode;
     sources?: string[];
@@ -19354,10 +19769,12 @@ export interface RecordOperation extends CommsOperation {
 export interface SubscribeToToneOperation extends CommsOperation {}
 // tslint:disable-next-line: no-empty-interface
 export interface UnmuteParticipantOperation extends CommsOperation {}
+// tslint:disable-next-line: no-empty-interface
+export interface UpdateRecordingStatusOperation extends CommsOperation {}
 export interface External extends Entity {
-    connections?: Connections[];
+    connections?: ExternalConnection[];
 }
-export interface Connections extends Entity {
+export interface ExternalConnection extends Entity {
     name?: string;
     description?: string;
     configuration?: Configuration;
@@ -19375,6 +19792,7 @@ export interface ExternalItem extends Entity {
     acl?: Acl[];
 }
 export interface ConnectionOperation extends Entity {
+    status?: ConnectionOperationStatus;
     error?: ErrorDetail;
 }
 export interface ExternalFile extends ExternalItem {
@@ -19388,19 +19806,21 @@ export interface ExternalFile extends ExternalItem {
     extension?: string;
     size?: number;
 }
-export interface AppCatalogs extends Entity {
-    teamsApps?: TeamsApp[];
+export interface Teamwork extends Entity {
+    workforceIntegrations?: WorkforceIntegration[];
 }
-export interface TeamsApp extends Entity {
-    // The ID of the catalog provided by the app developer in the Microsoft Teams zip app package.
-    externalId?: string;
-    name?: string;
-    // The name of the catalog app provided by the app developer in the Microsoft Teams zip app package.
+export interface ChangeTrackedEntity extends Entity {
+    createdDateTime?: string;
+    lastModifiedDateTime?: string;
+    lastModifiedBy?: IdentitySet;
+}
+export interface WorkforceIntegration extends ChangeTrackedEntity {
     displayName?: string;
-    // The method of distribution for the app.
-    distributionMethod?: TeamsAppDistributionMethod;
-    // The details for each version of the app.
-    appDefinitions?: TeamsAppDefinition[];
+    apiVersion?: number;
+    encryption?: WorkforceIntegrationEncryption;
+    isActive?: boolean;
+    url?: string;
+    supports?: WorkforceIntegrationSupportedEntities;
 }
 export interface Schedule extends Entity {
     enabled?: boolean;
@@ -19408,19 +19828,46 @@ export interface Schedule extends Entity {
     provisionStatus?: OperationStatus;
     provisionStatusCode?: string;
     workforceIntegrationIds?: string[];
+    timeClockEnabled?: boolean;
+    openShiftsEnabled?: boolean;
+    swapShiftsRequestsEnabled?: boolean;
+    offerShiftRequestsEnabled?: boolean;
+    timeOffRequestsEnabled?: boolean;
     shifts?: Shift[];
+    openShifts?: OpenShift[];
     timesOff?: TimeOff[];
     timeOffReasons?: TimeOffReason[];
     schedulingGroups?: SchedulingGroup[];
     swapShiftsChangeRequests?: SwapShiftsChangeRequest[];
+    openShiftChangeRequests?: OpenShiftChangeRequest[];
     timeOffRequests?: TimeOffRequest[];
 }
 // tslint:disable-next-line: no-empty-interface
 export interface TeamsTemplate extends Entity {}
+export interface Channel extends Entity {
+    // Channel name as it will appear to the user in Microsoft Teams.
+    displayName?: string;
+    // Optional textual description for the channel.
+    description?: string;
+    isFavoriteByDefault?: boolean;
+    // The email address for sending messages to the channel. Read-only.
+    email?: string;
+    /**
+     * A hyperlink that will navigate to the channel in Microsoft Teams. This is the URL that you get when you right-click a
+     * channel in Microsoft Teams and select Get link to channel. This URL should be treated as an opaque blob, and not
+     * parsed. Read-only.
+     */
+    webUrl?: string;
+    membershipType?: ChannelMembershipType;
+    messages?: ChatMessage[];
+    // A collection of all the tabs in the channel. A navigation property.
+    tabs?: TeamsTab[];
+    members?: ConversationMember[];
+    filesFolder?: DriveItem;
+}
 export interface TeamsCatalogApp extends Entity {
     externalId?: string;
     name?: string;
-    version?: string;
     distributionMethod?: TeamsAppDistributionMethod;
 }
 export interface TeamsAppInstallation extends Entity {
@@ -19438,14 +19885,6 @@ export interface TeamsAsyncOperation extends Entity {
     targetResourceId?: string;
     targetResourceLocation?: string;
     error?: OperationError;
-}
-export interface TeamsAppDefinition extends Entity {
-    // The id from the Teams App manifest.
-    teamsAppId?: string;
-    // The name of the app provided by the app developer.
-    displayName?: string;
-    // The version number of the application.
-    version?: string;
 }
 export interface ChatMessage extends Entity {
     replyToId?: string;
@@ -19468,8 +19907,33 @@ export interface ChatMessage extends Entity {
     replies?: ChatMessage[];
     hostedContents?: ChatMessageHostedContent[];
 }
-export interface ChatThread extends Entity {
-    rootMessage?: ChatMessage;
+// tslint:disable-next-line: no-empty-interface
+export interface ChatMessageHostedContent extends Entity {}
+export interface ConversationMember extends Entity {
+    roles?: string[];
+    displayName?: string;
+}
+export interface AppCatalogs extends Entity {
+    teamsApps?: TeamsApp[];
+}
+export interface TeamsApp extends Entity {
+    // The ID of the catalog provided by the app developer in the Microsoft Teams zip app package.
+    externalId?: string;
+    name?: string;
+    // The name of the catalog app provided by the app developer in the Microsoft Teams zip app package.
+    displayName?: string;
+    // The method of distribution for the app.
+    distributionMethod?: TeamsAppDistributionMethod;
+    // The details for each version of the app.
+    appDefinitions?: TeamsAppDefinition[];
+}
+export interface TeamsAppDefinition extends Entity {
+    // The id from the Teams App manifest.
+    teamsAppId?: string;
+    // The name of the app provided by the app developer.
+    displayName?: string;
+    // The version number of the application.
+    version?: string;
 }
 export interface TeamsTab extends Entity {
     name?: string;
@@ -19485,37 +19949,22 @@ export interface TeamsTab extends Entity {
     // The application that is linked to the tab. This cannot be changed after tab creation.
     teamsApp?: TeamsApp;
 }
-export interface ConversationMember extends Entity {
-    roles?: string[];
-    displayName?: string;
-}
-// tslint:disable-next-line: no-empty-interface
-export interface ChatMessageHostedContent extends Entity {}
 export interface AadUserConversationMember extends ConversationMember {
     userId?: string;
     email?: string;
     user?: User;
 }
-export interface Teamwork extends Entity {
-    workforceIntegrations?: WorkforceIntegration[];
-}
-export interface ChangeTrackedEntity extends Entity {
-    createdDateTime?: string;
-    lastModifiedDateTime?: string;
-    lastModifiedBy?: IdentitySet;
-}
-export interface WorkforceIntegration extends ChangeTrackedEntity {
-    displayName?: string;
-    apiVersion?: number;
-    encryption?: WorkforceIntegrationEncryption;
-    isActive?: boolean;
-    url?: string;
-    supports?: WorkforceIntegrationSupportedEntities;
-}
+// tslint:disable-next-line: no-empty-interface
+export interface ChatMembersNotificationAudience {}
 export interface Shift extends ChangeTrackedEntity {
     sharedShift?: ShiftItem;
     draftShift?: ShiftItem;
     userId?: string;
+    schedulingGroupId?: string;
+}
+export interface OpenShift extends ChangeTrackedEntity {
+    sharedOpenShift?: OpenShiftItem;
+    draftOpenShift?: OpenShiftItem;
     schedulingGroupId?: string;
 }
 export interface TimeOff extends ChangeTrackedEntity {
@@ -19552,10 +20001,20 @@ export interface ShiftChangeRequest extends ScheduleChangeRequest {
 export interface SwapShiftsChangeRequest extends ShiftChangeRequest {
     recipientShiftId?: string;
 }
+export interface OpenShiftChangeRequest extends ScheduleChangeRequest {
+    openShiftId?: string;
+}
 export interface TimeOffRequest extends ScheduleChangeRequest {
     startDateTime?: string;
     endDateTime?: string;
     timeOffReasonId?: string;
+}
+export interface DocumentComment extends Entity {
+    content?: string;
+    replies?: DocumentCommentReply[];
+}
+export interface DocumentCommentReply extends Entity {
+    content?: string;
 }
 export interface AuditActivityInitiator {
     /**
@@ -20003,99 +20462,259 @@ export interface Settings {
     hasGraphMailbox?: boolean;
 }
 export interface ApiApplication {
+    // When true, allows an application to use claims mapping without specifying a custom signing key.
     acceptMappedClaims?: boolean;
+    /**
+     * Used for bundling consent if you have a solution that contains two parts: a client app and a custom web API app. If you
+     * set the appID of the client app to this value, the user only consents once to the client app. Azure AD knows that
+     * consenting to the client means implicitly consenting to the web API and automatically provisions service principals for
+     * both APIs at the same time. Both the client and the web API app must be registered in the same tenant.
+     */
     knownClientApplications?: string[];
+    /**
+     * Lists the client applications that are pre-authorized with the specified delegated permissions to access this
+     * application's APIs. Users are not required to consent to any pre-authorized application (for the permissions
+     * specified). However, any additional permissions not listed in preAuthorizedApplications (requested through incremental
+     * consent for example) will require user consent.
+     */
     preAuthorizedApplications?: PreAuthorizedApplication[];
+    /**
+     * Specifies the access token version expected by this resource. This changes the version and format of the JWT produced
+     * independent of the endpoint or client used to request the access token. The endpoint used, v1.0 or v2.0, is chosen by
+     * the client and only impacts the version of id_tokens. Resources need to explicitly configure
+     * requestedAccessTokenVersion to indicate the supported access token format. Possible values for
+     * requestedAccessTokenVersion are 1, 2, or null. If the value is null, this defaults to 1, which corresponds to the v1.0
+     * endpoint. If signInAudience on the application is configured as AzureADandPersonalMicrosoftAccount, the value for this
+     * property must be 2
+     */
     requestedAccessTokenVersion?: number;
+    /**
+     * The collection of OAuth 2.0 permission scopes that the web API (resource) application exposes to client applications.
+     * These permission scopes may be granted to client applications during consent.
+     */
     oauth2PermissionScopes?: PermissionScope[];
 }
 export interface PreAuthorizedApplication {
+    // The unique identifier for the application.
     appId?: string;
     permissionIds?: string[];
 }
 export interface PermissionScope {
+    // Permission help text that appears in the admin consent and app assignment experiences.
     adminConsentDescription?: string;
+    // Display name for the permission that appears in the admin consent and app assignment experiences.
     adminConsentDisplayName?: string;
+    // Unique scope permission identifier inside the oauth2Permissions collection.
     id?: string;
+    /**
+     * When creating or updating a permission, this property must be set to true (which is the default). To delete a
+     * permission, this property must first be set to false. At that point, in a subsequent call, the permission may be
+     * removed.
+     */
     isEnabled?: boolean;
+    // For internal use.
     origin?: string;
+    /**
+     * Specifies whether this scope permission can be consented to by an end user, or whether it is a tenant-wide permission
+     * that must be consented to by a company administrator. Possible values are User or Admin.
+     */
     type?: string;
+    // Permission help text that appears in the end-user consent experience.
     userConsentDescription?: string;
+    // Display name for the permission that appears in the end-user consent experience.
     userConsentDisplayName?: string;
+    // The value of the scope claim that the resource application should expect in the OAuth 2.0 access token.
     value?: string;
 }
 export interface AppRole {
+    /**
+     * Specifies whether this app role definition can be assigned to users and groups by setting to 'User', or to other
+     * applications (that are accessing this application in daemon service scenarios) by setting to 'Application', or to both.
+     */
     allowedMemberTypes?: string[];
+    // Permission help text that appears in the admin app assignment and consent experiences.
     description?: string;
+    // Display name for the permission that appears in the admin consent and app assignment experiences.
     displayName?: string;
+    /**
+     * Unique role identifier inside the appRoles collection. When creating a new app role, a new Guid identifier must be
+     * provided.
+     */
     id?: string;
+    /**
+     * When creating or updating an app role, this must be set to true (which is the default). To delete a role, this must
+     * first be set to false. At that point, in a subsequent call, this role may be removed.
+     */
     isEnabled?: boolean;
+    /**
+     * Read-only. Specifies if the app role is defined on the Application object . Must not be included in any POST or PATCH
+     * requests.
+     */
     origin?: string;
+    /**
+     * Specifies the value which will be included in the roles claim in authentication and access tokens. Must not exceed 120
+     * characters in length. Allowed characters are : ! # $ % &amp; ' ( ) * + , - . / : ; = ? @ [ ] ^ + _ { } ~, as well as
+     * characters in the ranges 0-9, A-Z and a-z. Any other character, including the space character, are not allowed.
+     */
     value?: string;
 }
 // tslint:disable-next-line: interface-name
 export interface InformationalUrl {
+    // CDN URL to the application's logo, Read-only.
     logoUrl?: string;
+    // Link to the application's marketing page. For example, https://www.contoso.com/app/marketing
     marketingUrl?: string;
+    // Link to the application's privacy statement. For example, https://www.contoso.com/app/privacy
     privacyStatementUrl?: string;
+    // Link to the application's support page. For example, https://www.contoso.com/app/support
     supportUrl?: string;
+    // Link to the application's terms of service statement. For example, https://www.contoso.com/app/termsofservice
     termsOfServiceUrl?: string;
 }
 export interface KeyCredential {
+    // Custom key identifier
     customKeyIdentifier?: number;
+    /**
+     * The date and time at which the credential expires.The Timestamp type represents date and time information using ISO
+     * 8601 format and is always in UTC time. For example, midnight UTC on Jan 1, 2014 would look like this:
+     * '2014-01-01T00:00:00Z'
+     */
     endDateTime?: string;
+    // The unique identifier (GUID) for the key.
     keyId?: string;
+    /**
+     * The date and time at which the credential becomes valid.The Timestamp type represents date and time information using
+     * ISO 8601 format and is always in UTC time. For example, midnight UTC on Jan 1, 2014 would look like this:
+     * '2014-01-01T00:00:00Z'
+     */
     startDateTime?: string;
+    // The type of key credential; for example, 'Symmetric'.
     type?: string;
+    // A string that describes the purpose for which the key can be used; for example, 'Verify'.
     usage?: string;
+    // Value for the key credential. Should be a base 64 encoded value.
     key?: number;
+    // Friendly name for the key. Optional.
     displayName?: string;
 }
 export interface OptionalClaims {
+    // The optional claims returned in the JWT ID token.
     idToken?: OptionalClaim[];
+    // The optional claims returned in the JWT access token.
     accessToken?: OptionalClaim[];
+    // The optional claims returned in the SAML token.
     saml2Token?: OptionalClaim[];
 }
 export interface OptionalClaim {
+    // The name of the optional claim.
     name?: string;
+    /**
+     * The source (directory object) of the claim. There are predefined claims and user-defined claims from extension
+     * properties. If the source value is null, the claim is a predefined optional claim. If the source value is user, the
+     * value in the name property is the extension property from the user object.
+     */
     source?: string;
+    /**
+     * If the value is true, the claim specified by the client is necessary to ensure a smooth authorization experience for
+     * the specific task requested by the end user. The default value is false.
+     */
     essential?: boolean;
+    /**
+     * Additional properties of the claim. If a property exists in this collection, it modifies the behavior of the optional
+     * claim specified in the name property.
+     */
     additionalProperties?: string[];
 }
 export interface ParentalControlSettings {
+    /**
+     * Specifies the two-letter ISO country codes. Access to the application will be blocked for minors from the countries
+     * specified in this list.
+     */
     countriesBlockedForMinors?: string[];
+    /**
+     * Specifies the legal age group rule that applies to users of the app. Can be set to one of the following values:
+     * ValueDescriptionAllowDefault. Enforces the legal minimum. This means parental consent is required for minors in the
+     * European Union and Korea.RequireConsentForPrivacyServicesEnforces the user to specify date of birth to comply with
+     * COPPA rules. RequireConsentForMinorsRequires parental consent for ages below 18, regardless of country minor
+     * rules.RequireConsentForKidsRequires parental consent for ages below 14, regardless of country minor
+     * rules.BlockMinorsBlocks minors from using the app.
+     */
     legalAgeGroupRule?: string;
 }
 export interface PasswordCredential {
+    // Do not use.
     customKeyIdentifier?: number;
+    /**
+     * The date and time at which the password expires represented using ISO 8601 format and is always in UTC time. For
+     * example, midnight UTC on Jan 1, 2014 would look like this: '2014-01-01T00:00:00Z'. Optional.
+     */
     endDateTime?: string;
+    // The unique identifier for the password.
     keyId?: string;
+    /**
+     * The date and time at which the password becomes valid. The Timestamp type represents date and time information using
+     * ISO 8601 format and is always in UTC time. For example, midnight UTC on Jan 1, 2014 would look like this:
+     * '2014-01-01T00:00:00Z'. Optional.
+     */
     startDateTime?: string;
+    /**
+     * Read-only; Contains the strong passwords generated by Azure AD that are 16-64 characters in length. The generated
+     * password value is only returned during the initial POST request to addPassword. There is no way to retrieve this
+     * password in the future.
+     */
     secretText?: string;
+    // Contains the first three characters of the password. Read-only.
     hint?: string;
+    // Friendly name for the password. Optional.
     displayName?: string;
 }
 export interface PublicClientApplication {
+    /**
+     * Specifies the URLs where user tokens are sent for sign-in, or the redirect URIs where OAuth 2.0 authorization codes and
+     * access tokens are sent.
+     */
     redirectUris?: string[];
 }
 export interface RequiredResourceAccess {
+    /**
+     * The unique identifier for the resource that the application requires access to. This should be equal to the appId
+     * declared on the target resource application.
+     */
     resourceAppId?: string;
+    // The list of OAuth2.0 permission scopes and app roles that the application requires from the specified resource.
     resourceAccess?: ResourceAccess[];
 }
 export interface ResourceAccess {
+    // The unique identifier for one of the oauth2PermissionScopes or appRole instances that the resource application exposes.
     id?: string;
+    /**
+     * Specifies whether the id property references an oauth2PermissionScopes or an appRole. Possible values are 'scope' or
+     * 'role'.
+     */
     type?: string;
 }
 export interface WebApplication {
+    // Home page or landing page of the application.
     homePageUrl?: string;
+    /**
+     * Specifies the URLs where user tokens are sent for sign-in, or the redirect URIs where OAuth 2.0 authorization codes and
+     * access tokens are sent.
+     */
     redirectUris?: string[];
     oauth2AllowImplicitFlow?: boolean;
+    /**
+     * Specifies the URL that will be used by Microsoft's authorization service to logout an user using front-channel,
+     * back-channel or SAML logout protocols.
+     */
     logoutUrl?: string;
+    // Specifies whether this web application can request tokens using the OAuth 2.0 implicit flow.
     implicitGrantSettings?: ImplicitGrantSettings;
 }
 // tslint:disable-next-line: interface-name
 export interface ImplicitGrantSettings {
+    // Specifies whether this web application can request an ID token using the OAuth 2.0 implicit flow.
     enableIdTokenIssuance?: boolean;
+    // Specifies whether this web application can request an access token using the OAuth 2.0 implicit flow.
     enableAccessTokenIssuance?: boolean;
 }
 export interface AddIn {
@@ -20103,16 +20722,14 @@ export interface AddIn {
     type?: string;
     properties?: KeyValue[];
 }
-export interface OAuth2Permission {
-    adminConsentDescription?: string;
-    adminConsentDisplayName?: string;
-    id?: string;
-    isEnabled?: boolean;
-    origin?: string;
-    type?: string;
-    userConsentDescription?: string;
-    userConsentDisplayName?: string;
+export interface Credential {
+    fieldId?: string;
     value?: string;
+    type?: string;
+}
+export interface PasswordSingleSignOnCredentialSet {
+    id?: string;
+    credentials?: Credential[];
 }
 export interface ApplicationServicePrincipal {
     application?: Application;
@@ -20204,6 +20821,24 @@ export interface BookingSchedulingPolicy {
     // Allow customers to choose a specific person for the booking.
     allowStaffSelection?: boolean;
 }
+export interface TrustFrameworkKey {
+    k?: string;
+    x5c?: string[];
+    x5t?: string;
+    kty?: string;
+    use?: string;
+    exp?: number;
+    nbf?: number;
+    kid?: string;
+    e?: string;
+    n?: string;
+    d?: string;
+    p?: string;
+    q?: string;
+    dp?: string;
+    dq?: string;
+    qi?: string;
+}
 export interface ClassifcationErrorBase {
     code?: string;
     message?: string;
@@ -20225,6 +20860,10 @@ export interface LabelActionBase {
 export interface LabelPolicy {
     id?: string;
     name?: string;
+}
+export interface AutoLabeling {
+    sensitiveTypeIds?: string[];
+    message?: string;
 }
 export interface EvaluateLabelJobResultGroup {
     automatic?: EvaluateLabelJobResult;
@@ -20258,6 +20897,27 @@ export interface ResponsibleSensitiveType {
 export interface ResponsiblePolicy {
     id?: string;
     name?: string;
+}
+export interface EvaluateLabelsAndPoliciesResult {
+    sensitivityLabelsResult?: EvaluateLabelJobResultGroup;
+    dataLossPreventionPoliciesResult?: DlpPoliciesJobResult;
+    classificationResult?: DetectedSensitiveContentWrapper;
+}
+export interface DlpPoliciesJobResult {
+    matchingRules?: MatchingDlpRule[];
+}
+export interface MatchingDlpRule {
+    ruleId?: string;
+    ruleName?: string;
+    policyId?: string;
+    policyName?: string;
+    isMostRestrictive?: boolean;
+    priority?: number;
+    actions?: DlpActionInfo[];
+    ruleMode?: RuleMode;
+}
+export interface DlpActionInfo {
+    action?: DlpAction;
 }
 export interface DetectedSensitiveContentWrapper {
     classification?: DetectedSensitiveContent[];
@@ -20321,6 +20981,57 @@ export interface ProtectGroup extends LabelActionBase {
 }
 export interface ProtectSite extends LabelActionBase {
     accessType?: SiteAccessType;
+}
+export interface CurrentLabel {
+    id?: string;
+    applicationMode?: ApplicationMode;
+}
+// tslint:disable-next-line: no-empty-interface
+export interface BlockAccessAction extends DlpActionInfo {}
+export interface NotifyUserAction extends DlpActionInfo {
+    recipients?: string[];
+    actionLastModifiedDateTime?: string;
+    overrideOption?: OverrideOption;
+    emailText?: string;
+    policyTip?: string;
+}
+export interface DeviceRestrictionAction extends DlpActionInfo {
+    restrictionAction?: RestrictionAction;
+    triggers?: RestrictionTrigger[];
+    message?: string;
+}
+export interface DlpEvaluationInput {
+    discoveredSensitiveTypes?: DiscoveredSensitiveType[];
+    currentLabel?: CurrentLabel;
+    accessScope?: AccessScope;
+}
+export interface DlpEvaluationWindowsDevicesInput extends DlpEvaluationInput {
+    contentProperties?: ContentProperties;
+    sharedBy?: string;
+}
+export interface ContentProperties {
+    extensions?: string[];
+    metadata?: ContentMetadata;
+    lastModifiedDateTime?: string;
+    lastModifiedBy?: string;
+}
+// tslint:disable-next-line: no-empty-interface
+export interface ContentMetadata {}
+export interface DlpNotification {
+    author?: string;
+}
+export interface DlpWindowsDevicesNotification extends DlpNotification {
+    lastModfiedBy?: string;
+    contentName?: string;
+}
+export interface DlpEvaluatePoliciesRequest {
+    target?: string;
+    evaluationInput?: DlpEvaluationInput;
+    notificationInfo?: DlpNotification;
+}
+export interface EvaluateSensitivityLabelsRequest {
+    discoveredSensitiveTypes?: DiscoveredSensitiveType[];
+    currentLabel?: CurrentLabel;
 }
 export interface CertificateAuthority {
     /**
@@ -21373,7 +22084,7 @@ export interface InternetMessageHeader {
 }
 // tslint:disable-next-line: interface-name
 export interface ItemBody {
-    // The type of the content. Possible values are text and HTML.
+    // The type of the content. Possible values are text and html.
     contentType?: BodyType;
     // The content of the item.
     content?: string;
@@ -21985,6 +22696,24 @@ export interface UpdateWindow {
     updateWindowStartTime?: string;
     updateWindowEndTime?: string;
 }
+export interface PropertyToEvaluate {
+    propertyName?: string;
+    propertyValue?: string;
+}
+export interface ExpressionEvaluationDetails {
+    expressionResult?: boolean;
+    expression?: string;
+    expressionEvaluationDetails?: ExpressionEvaluationDetails[];
+    propertyToEvaluate?: PropertyToEvaluate;
+}
+export interface MembershipRuleEvaluationDetails {
+    membershipRuleEvaluationDetails?: ExpressionEvaluationDetails;
+}
+export interface EvaluateDynamicMembershipResult {
+    membershipRule?: string;
+    membershipRuleEvaluationResult?: boolean;
+    membershipRuleEvaluationDetails?: ExpressionEvaluationDetails;
+}
 export interface SynchronizationSecretKeyStringValuePair {
     key?: SynchronizationSecret;
     value?: string;
@@ -22437,20 +23166,6 @@ export interface DeviceManagementSettings {
 export interface IntuneBrand {
     // Company/organization name that is displayed to end users.
     displayName?: string;
-    // Name of the person/organization responsible for IT support.
-    contactITName?: string;
-    // Phone number of the person/organization responsible for IT support.
-    contactITPhoneNumber?: string;
-    // Email address of the person/organization responsible for IT support.
-    contactITEmailAddress?: string;
-    // Text comments regarding the person/organization responsible for IT support.
-    contactITNotes?: string;
-    // URL to the company/organization’s privacy policy.
-    privacyUrl?: string;
-    // URL to the company/organization’s IT helpdesk site.
-    onlineSupportSiteUrl?: string;
-    // Display name of the company/organization’s IT helpdesk site.
-    onlineSupportSiteName?: string;
     // Primary theme color used in the Company Portal applications and web portal.
     themeColor?: RgbColor;
     // Boolean that represents whether the administrator-supplied logo images are shown or not shown.
@@ -22463,14 +23178,34 @@ export interface IntuneBrand {
     showNameNextToLogo?: boolean;
     // Customized image displayed in Company Portal app landing page
     landingPageCustomizedImage?: MimeContent;
+    // Boolean that represents whether the administrator-supplied display name will be shown next to the logo image.
+    showDisplayNameNextToLogo?: boolean;
+    // Name of the person/organization responsible for IT support.
+    contactITName?: string;
+    // Phone number of the person/organization responsible for IT support.
+    contactITPhoneNumber?: string;
+    // Email address of the person/organization responsible for IT support.
+    contactITEmailAddress?: string;
+    // Text comments regarding the person/organization responsible for IT support.
+    contactITNotes?: string;
+    // URL to the company/organization’s IT helpdesk site.
+    onlineSupportSiteUrl?: string;
+    // Display name of the company/organization’s IT helpdesk site.
+    onlineSupportSiteName?: string;
+    // URL to the company/organization’s privacy policy.
+    privacyUrl?: string;
     // Custom privacy message.
     customPrivacyMessage?: string;
     // Boolean that represents whether the adminsistrator has disabled the 'Remove Device' action on corporate owned devices.
     isRemoveDeviceDisabled?: boolean;
     // Boolean that represents whether the adminsistrator has disabled the 'Factory Reset' action on corporate owned devices.
     isFactoryResetDisabled?: boolean;
-    // Boolean that represents whether the administrator-supplied display name will be shown next to the logo image.
-    showDisplayNameNextToLogo?: boolean;
+    // Collection of blocked actions on the company portal as per platform and device ownership types.
+    companyPortalBlockedActions?: CompanyPortalBlockedAction[];
+    // Boolean that indicates if AzureAD Enterprise Apps will be shown in Company Portal
+    showAzureADEnterpriseApps?: boolean;
+    // Boolean that indicates if Office WebApps will be shown in Company Portal
+    showOfficeWebApps?: boolean;
 }
 export interface RgbColor {
     // Red value
@@ -22485,6 +23220,14 @@ export interface MimeContent {
     type?: string;
     // The byte array that contains the actual content.
     value?: number;
+}
+export interface CompanyPortalBlockedAction {
+    // Device OS/Platform
+    platform?: DevicePlatformType;
+    // Device ownership type
+    ownerType?: OwnerType;
+    // Device Action
+    action?: CompanyPortalAction;
 }
 export interface ManagedDeviceCleanupSettings {
     // Number of days when the device has not contacted Intune.
@@ -23092,13 +23835,13 @@ export interface AuditActor {
     // User Id.
     userId?: string;
     // List of user scope tags when the audit was performed.
-    scopeTags?: ScopeTagInfo[];
+    userRoleScopeTags?: RoleScopeTagInfo[];
 }
-export interface ScopeTagInfo {
+export interface RoleScopeTagInfo {
     // Scope Tag Display name.
-    scopeTagName?: string;
+    displayName?: string;
     // Scope Tag Id.
-    scopeTagId?: string;
+    roleScopeTagId?: string;
 }
 export interface AuditResource {
     // Display name.
@@ -24197,16 +24940,6 @@ export interface BitLockerRemovableDrivePolicy {
      */
     blockCrossOrganizationWriteAccess?: boolean;
 }
-export interface Windows10AppsForceUpdateSchedule {
-    // The start time for the force restart.
-    startDateTime?: string;
-    // Recurrence schedule.
-    recurrence?: Windows10AppsUpdateRecurrence;
-    // If true, runs the task immediately if StartDateTime is in the past, else, runs at the next recurrence.
-    runImmediatelyIfAfterStartDateTime?: boolean;
-}
-// tslint:disable-next-line: no-empty-interface
-export interface EdgeHomeButtonConfiguration {}
 export interface DefenderDetectedMalwareActions {
     /**
      * Indicates a Defender action to take for low severity Malware threat detected. Possible values are: deviceDefault,
@@ -24229,8 +24962,18 @@ export interface DefenderDetectedMalwareActions {
      */
     severeSeverity?: DefenderThreatAction;
 }
+export interface Windows10AppsForceUpdateSchedule {
+    // The start time for the force restart.
+    startDateTime?: string;
+    // Recurrence schedule.
+    recurrence?: Windows10AppsUpdateRecurrence;
+    // If true, runs the task immediately if StartDateTime is in the past, else, runs at the next recurrence.
+    runImmediatelyIfAfterStartDateTime?: boolean;
+}
+// tslint:disable-next-line: no-empty-interface
+export interface EdgeHomeButtonConfiguration {}
 export interface Windows10NetworkProxyServer {
-    // Address to the proxy server. Specify an address in the format [':']
+    // Address to the proxy server. Specify an address in the format &amp;lt;server&amp;gt;[:&amp;lt;port&amp;gt;]
     address?: string;
     /**
      * Addresses that should not use the proxy server. The system will not use the proxy server for addresses beginning with
@@ -24740,6 +25483,14 @@ export interface DeviceManagementExchangeDeviceClass {
     // Type of device which is impacted by this rule e.g. Model, Family
     type?: DeviceManagementExchangeAccessRuleType;
 }
+export interface DeviceManagementPartnerAssignment {
+    // User groups targeting for devices to be enrolled through partner.
+    target?: DeviceAndAppManagementAssignmentTarget;
+}
+export interface ComplianceManagementPartnerAssignment {
+    // Group assignment target.
+    target?: DeviceAndAppManagementAssignmentTarget;
+}
 export interface DeviceManagementSettingComparison {
     // The setting ID
     id?: string;
@@ -24854,9 +25605,9 @@ export interface WindowsDefenderScanActionResult extends DeviceActionResult {
     // Scan type either full scan or quick scan
     scanType?: string;
 }
-export interface DeleteUserFromSharedAppleDeviceActionResult extends DeviceActionResult {
-    // User principal name of the user to be deleted
-    userPrincipalName?: string;
+export interface RotateBitLockerKeysDeviceActionResult extends DeviceActionResult {
+    // RotateBitLockerKeys action error code
+    errorCode?: number;
 }
 export interface DeviceGeoLocation {
     // Time at which location was recorded, relative to UTC
@@ -24877,6 +25628,10 @@ export interface DeviceGeoLocation {
     heading?: number;
     // Speed the device is traveling in meters per second
     speed?: number;
+}
+export interface DeleteUserFromSharedAppleDeviceActionResult extends DeviceActionResult {
+    // User principal name of the user to be deleted
+    userPrincipalName?: string;
 }
 export interface LocateDeviceActionResult extends DeviceActionResult {
     // device location
@@ -25197,25 +25952,9 @@ export interface SearchRequest {
 }
 export interface SearchQuery {
     query_string?: SearchQueryString;
-    filter?: FilterContainer;
 }
 export interface SearchQueryString {
     query?: string;
-}
-export interface FilterContainer {
-    bool?: FilterContainer[];
-    should?: FilterContainer[];
-    term?: TermFilter;
-    range?: RangeFilter;
-}
-export interface TermFilter {
-    value?: string;
-}
-export interface RangeFilter {
-    gt?: string;
-    gte?: string;
-    lt?: string;
-    lte?: string;
 }
 export interface SearchResponse {
     searchTerms?: string[];
@@ -25518,6 +26257,62 @@ export interface RoleSuccessStatistics {
     removeSuccess?: number;
     removeFail?: number;
     unknownFail?: number;
+}
+// tslint:disable-next-line: interface-name
+export interface InferenceData {
+    confidenceScore?: number;
+    userHasVerifiedAccuracy?: boolean;
+}
+export interface YomiPersonName {
+    displayName?: string;
+    first?: string;
+    maiden?: string;
+    middle?: string;
+    last?: string;
+}
+// tslint:disable-next-line: interface-name
+export interface InstitutionData {
+    description?: string;
+    displayName?: string;
+    location?: PhysicalAddress;
+    webUrl?: string;
+}
+export interface EducationalActivityDetail {
+    abbreviation?: string;
+    activities?: string;
+    awards?: string;
+    description?: string;
+    displayName?: string;
+    fieldsOfStudy?: string;
+    grade?: string;
+    notes?: string;
+    webUrl?: string;
+}
+export interface CompanyDetail {
+    displayName?: string;
+    pronunciation?: string;
+    department?: string;
+    officeLocation?: string;
+    address?: PhysicalAddress;
+    webUrl?: string;
+}
+export interface PositionDetail {
+    company?: CompanyDetail;
+    description?: string;
+    endMonthYear?: string;
+    jobTitle?: string;
+    role?: string;
+    startMonthYear?: string;
+    summary?: string;
+}
+export interface RelatedPerson {
+    displayName?: string;
+    relationship?: PersonRelationship;
+    userPrincipalName?: string;
+}
+export interface ServiceInformation {
+    name?: string;
+    webUrl?: string;
 }
 // tslint:disable-next-line: interface-name
 export interface ImageInfo {
@@ -25939,8 +26734,16 @@ export interface CallRoute {
 }
 export interface ParticipantInfo {
     identity?: IdentitySet;
+    endpointType?: EndpointType;
     region?: string;
     languageId?: string;
+    countryCode?: string;
+}
+// tslint:disable-next-line: interface-name
+export interface InvitationParticipantInfo {
+    identity?: IdentitySet;
+    endpointType?: EndpointType;
+    replacesCallId?: string;
 }
 export interface MediaConfig {
     removeFromDefaultAudioGroup?: boolean;
@@ -25950,6 +26753,8 @@ export interface ChatInfo {
     messageId?: string;
     replyChainMessageId?: string;
 }
+// tslint:disable-next-line: no-empty-interface
+export interface CallOptions {}
 export interface MeetingInfo {
     allowConversationWithoutHost?: boolean;
 }
@@ -25963,9 +26768,11 @@ export interface ToneInfo {
     tone?: Tone;
 }
 // tslint:disable-next-line: interface-name
-export interface InvitationParticipantInfo extends ParticipantInfo {
-    endpointType?: EndpointType;
-    replacesCallId?: string;
+export interface IncomingContext {
+    sourceParticipantId?: string;
+    observedParticipantId?: string;
+    onBehalfOf?: IdentitySet;
+    transferor?: IdentitySet;
 }
 export interface MeetingParticipants {
     organizer?: MeetingParticipantInfo;
@@ -25984,7 +26791,7 @@ export interface AudioConferencing {
     dialinUrl?: string;
 }
 export interface RecordingInfo {
-    status?: RecordingStatus;
+    recordingStatus?: RecordingStatus;
     initiatedBy?: ParticipantInfo;
 }
 export interface MediaStream {
@@ -25993,6 +26800,9 @@ export interface MediaStream {
     sourceId?: string;
     direction?: MediaDirection;
     serverMuted?: boolean;
+}
+export interface OutgoingCallOptions extends CallOptions {
+    allowGuestToBypassLobby?: boolean;
 }
 export interface CommsNotification {
     changeType?: ChangeType;
@@ -26029,11 +26839,14 @@ export interface Configuration {
 // tslint:disable-next-line: no-empty-interface
 export interface Properties {}
 export interface Acl {
+    type?: AclType;
     value?: string;
+    accessType?: AccessType;
     identitySource?: string;
 }
 export interface Property {
     name?: string;
+    type?: PropertyType;
     isSearchable?: boolean;
     isRetrievable?: boolean;
     isQueryable?: boolean;
@@ -26048,12 +26861,38 @@ export interface InnerErrorDetail {
     source?: string;
     message?: string;
 }
+export interface TeamClassSettings {
+    notifyGuardiansAboutAssignments?: boolean;
+}
+export interface ChatMessageAttachment {
+    id?: string;
+    contentType?: string;
+    contentUrl?: string;
+    content?: string;
+    name?: string;
+    thumbnailUrl?: string;
+}
+export interface ChatMessageMention {
+    id?: number;
+    mentionText?: string;
+    mentioned?: IdentitySet;
+}
+export interface TeamsTabConfiguration {
+    // Identifier for the entity hosted by the tab provider.
+    entityId?: string;
+    // Url used for rendering tab contents in Teams. Required.
+    contentUrl?: string;
+    // Url called by Teams client when a Tab is removed using the Teams Client.
+    removeUrl?: string;
+    // Url for showing tab contents outside of Teams.
+    websiteUrl?: string;
+}
 export interface TeamMemberSettings {
     // If set to true, members can add and update channels.
     allowCreateUpdateChannels?: boolean;
+    allowCreatePrivateChannels?: boolean;
     // If set to true, members can delete channels.
     allowDeleteChannels?: boolean;
-    allowCreatePrivateChannels?: boolean;
     // If set to true, members can add and remove apps.
     allowAddRemoveApps?: boolean;
     // If set to true, members can add, update, and remove tabs.
@@ -26092,22 +26931,6 @@ export interface TeamFunSettings {
 export interface TeamDiscoverySettings {
     showInTeamsSearchAndSuggestions?: boolean;
 }
-export interface TeamClassSettings {
-    notifyGuardiansAboutAssignments?: boolean;
-}
-export interface ChatMessageAttachment {
-    id?: string;
-    contentType?: string;
-    contentUrl?: string;
-    content?: string;
-    name?: string;
-    thumbnailUrl?: string;
-}
-export interface ChatMessageMention {
-    id?: number;
-    mentionText?: string;
-    mentioned?: IdentitySet;
-}
 export interface ChatMessagePolicyViolation {
     dlpAction?: ChatMessagePolicyViolationDlpActionTypes;
     justificationText?: string;
@@ -26125,26 +26948,14 @@ export interface ChatMessageReaction {
     createdDateTime?: string;
     user?: IdentitySet;
 }
-export interface ChatMessageBody {
-    content?: string;
-    contentType?: ChatMessageBodyType;
-}
-export interface TeamsTabConfiguration {
-    // Identifier for the entity hosted by the tab provider.
-    entityId?: string;
-    // Url used for rendering tab contents in Teams. Required.
-    contentUrl?: string;
-    // Url called by Teams client when a Tab is removed using the Teams Client.
-    removeUrl?: string;
-    // Url for showing tab contents outside of Teams.
-    websiteUrl?: string;
-}
 export interface OperationError {
     // Operation error code.
     code?: string;
     // Operation error message.
     message?: string;
 }
+// tslint:disable-next-line: no-empty-interface
+export interface ConversationMemberRoles {}
 export interface WorkforceIntegrationEncryption {
     protocol?: WorkforceIntegrationEncryptionProtocol;
     secret?: string;
@@ -26166,6 +26977,9 @@ export interface ShiftItem extends ScheduleEntity {
     displayName?: string;
     notes?: string;
     activities?: ShiftActivity[];
+}
+export interface OpenShiftItem extends ShiftItem {
+    openSlotCount?: number;
 }
 export interface TimeOffItem extends ScheduleEntity {
     timeOffReasonId?: string;
