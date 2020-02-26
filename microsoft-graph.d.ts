@@ -1,4 +1,4 @@
-// Type definitions for non-npm package microsoft-graph 1.12
+// Type definitions for non-npm package microsoft-graph <VERSION_STRING>
 // Project: https://github.com/microsoftgraph/msgraph-typescript-typings
 // Definitions by: Microsoft Graph Team <https://github.com/microsoftgraph>
 //                 Muthurathinam Muthusamy <https://github.com/muthurathinam>
@@ -798,10 +798,18 @@ export type CallState =
     | "terminated"
     | "unknownFutureValue";
 export type ChangeType = "created" | "updated" | "deleted";
+export type EndpointType =
+    | "default"
+    | "voicemail"
+    | "skypeForBusiness"
+    | "skypeForBusinessVoipPhone"
+    | "unknownFutureValue";
 export type MediaDirection = "inactive" | "sendOnly" | "receiveOnly" | "sendReceive";
 export type MediaState = "active" | "inactive" | "unknownFutureValue";
 export type Modality = "audio" | "video" | "videoBasedScreenSharing" | "data" | "unknownFutureValue";
+export type RecordingStatus = "unknown" | "notRecording" | "recording" | "failed" | "unknownFutureValue";
 export type RejectReason = "none" | "busy" | "forbidden" | "unknownFutureValue";
+export type RoutingType = "forwarded" | "lookup" | "selfFork" | "unknownFutureValue";
 export type ScreenSharingRole = "viewer" | "sharer";
 export type Tone =
     | "tone0"
@@ -823,7 +831,8 @@ export type Tone =
     | "flash";
 export type TeamVisibilityType = "private" | "public" | "hiddenMembership" | "unknownFutureValue";
 export type ClonableTeamParts = "apps" | "tabs" | "settings" | "channels" | "members";
-export type GiphyRatingType = "moderate" | "strict" | "unknownFutureValue";
+export type GiphyRatingType = "strict" | "moderate" | "unknownFutureValue";
+export type TeamsAppDistributionMethod = "store" | "organization" | "sideloaded" | "unknownFutureValue";
 export type TeamsAsyncOperationType =
     | "invalid"
     | "cloneTeam"
@@ -838,7 +847,29 @@ export type TeamsAsyncOperationStatus =
     | "succeeded"
     | "failed"
     | "unknownFutureValue";
-export type TeamsAppDistributionMethod = "store" | "organization" | "sideloaded" | "unknownFutureValue";
+export type ThreatAssessmentContentType = "mail" | "url" | "file";
+export type ThreatExpectedAssessment = "block" | "unblock";
+export type ThreatCategory = "undefined" | "spam" | "phishing" | "malware" | "unknownFutureValue";
+export type ThreatAssessmentStatus = "pending" | "completed";
+export type ThreatAssessmentRequestSource = "undefined" | "user" | "administrator";
+export type ThreatAssessmentResultType = "checkPolicy" | "rescan" | "unknownFutureValue";
+export type MailDestinationRoutingReason =
+    | "none"
+    | "mailFlowRule"
+    | "safeSender"
+    | "blockedSender"
+    | "advancedSpamFiltering"
+    | "domainAllowList"
+    | "domainBlockList"
+    | "notInAddressBook"
+    | "firstTimeSender"
+    | "autoPurgeToInbox"
+    | "autoPurgeToJunk"
+    | "autoPurgeToDeleted"
+    | "outbound"
+    | "notJunk"
+    | "junk"
+    | "unknownFutureValue";
 export interface Entity {
     // Read-only.
     id?: string;
@@ -976,7 +1007,12 @@ export interface Invitation extends Entity {
      * administrator.
      */
     invitedUserType?: string;
-    // The email address of the user being invited. Required.
+    /**
+     * The email address of the user being invited. Required. The following special characters are not permitted in the email
+     * address:Tilde (~)Exclamation point (!)At sign (@)Number sign (#)Dollar sign ($)Percent (%)Circumflex (^)Ampersand
+     * (&amp;)Asterisk (*)Parentheses (( ))Hyphen (-)Plus sign (+)Equal sign (=)Brackets ([ ])Braces ({ })Backslash (/)Slash
+     * mark (/)Pipe (`
+     */
     invitedUserEmailAddress?: string;
     /**
      * Additional configuration for the message being sent to the invited user, including customizing message text, language
@@ -1028,6 +1064,12 @@ export interface User extends DirectoryObject {
     consentProvidedForMinor?: string;
     // The country/region in which the user is located; for example, 'US' or 'UK'. Supports $filter.
     country?: string;
+    /**
+     * Indicates whether the user account was created as a regular school or work account (null), an external account
+     * (Invitation), a local account for an Azure Active Directory B2C tenant (LocalAccount) or self-service sign-up using
+     * email verification (EmailVerified). Read-only.
+     */
+    creationType?: string;
     // The name for the department in which the user works. Supports $filter.
     department?: string;
     /**
@@ -1042,12 +1084,23 @@ export interface User extends DirectoryObject {
     faxNumber?: string;
     // The given name (first name) of the user. Supports $filter.
     givenName?: string;
+    /**
+     * Represents the identities that can be used to sign in to this user account. An identity can be provided by Microsoft
+     * (also known as a local account), by organizations, or by social identity providers such as Facebook, Google, and
+     * Microsoft, and tied to a user account. May contain multiple items with the same signInType value. Supports $filter.
+     */
+    identities?: ObjectIdentity[];
     // The instant message voice over IP (VOIP) session initiation protocol (SIP) addresses for the user. Read-only.
     imAddresses?: string[];
     // true if the user is a resource account; otherwise, false. Null value should be considered false.
     isResourceAccount?: boolean;
     // The user’s job title. Supports $filter.
     jobTitle?: string;
+    /**
+     * The time when this Azure AD user last changed their password. The date and time information uses ISO 8601 format and is
+     * always in UTC time. For example, midnight UTC on Jan 1, 2014 would look like this: '2014-01-01T00:00:00Z'
+     */
+    lastPasswordChangeDateTime?: string;
     /**
      * Used by enterprise applications to determine the legal age group of the user. This property is read-only and calculated
      * based on ageGroup and consentProvidedForMinor properties. Allowed values: null, minorWithOutParentalConsent,
@@ -1285,6 +1338,7 @@ export interface User extends DirectoryObject {
     deviceManagementTroubleshootingEvents?: DeviceManagementTroubleshootingEvent[];
     // Entry-point to the Planner resource that might exist for a user. Read-only.
     planner?: PlannerUser;
+    // Read-only. Nullable.
     insights?: OfficeGraphInsights;
     settings?: UserSettings;
     // Read-only.
@@ -1292,7 +1346,7 @@ export interface User extends DirectoryObject {
     // The user's activities across devices. Read-only. Nullable.
     activities?: UserActivity[];
     onlineMeetings?: OnlineMeeting[];
-    joinedTeams?: Group[];
+    joinedTeams?: Team[];
 }
 export interface LicenseDetails extends Entity {
     // Information about the service plans assigned with the license. Read-only, Not nullable
@@ -1362,13 +1416,14 @@ export interface Message extends OutlookItem {
     parentFolderId?: string;
     /**
      * The account that is actually used to generate the message. In most cases, this value is the same as the from property.
-     * You can set this property to a different value when sending a message from a shared mailbox, or sending a message as a
-     * delegate. In any case, the value must correspond to the actual mailbox used. Find out more about setting the from and
-     * sender properties of a message.
+     * You can set this property to a different value when sending a message from a shared mailbox, for a shared calendar, or
+     * as a delegate. In any case, the value must correspond to the actual mailbox used. Find out more about setting the from
+     * and sender properties of a message.
      */
     sender?: Recipient;
     /**
-     * The mailbox owner and sender of the message. The value must correspond to the actual mailbox used. Find out more about
+     * The owner of the mailbox from which the message is sent. In most cases, this value is the same as the sender property,
+     * except for sharing or delegation scenarios. The value must correspond to the actual mailbox used. Find out more about
      * setting the from and sender properties of a message.
      */
     from?: Recipient;
@@ -1382,6 +1437,8 @@ export interface Message extends OutlookItem {
     replyTo?: Recipient[];
     // The ID of the conversation the email belongs to.
     conversationId?: string;
+    // Indicates the position of the message within the conversation.
+    conversationIndex?: number;
     /**
      * The part of the body of the message that is unique to the current message. uniqueBody is not returned by default but
      * can be retrieved for a given message by use of the ?$select=uniqueBody query. It can be in HTML or text format.
@@ -1547,7 +1604,11 @@ export interface Event extends OutlookItem {
     isAllDay?: boolean;
     // Set to true if the event has been canceled.
     isCancelled?: boolean;
-    // Set to true if the message sender is also the organizer.
+    /**
+     * Set to true if the calendar owner (specified by the owner property of the calendar) is the organizer of the event
+     * (specified by the organizer property of the event). This also applies if a delegate organized the event on behalf of
+     * the owner.
+     */
     isOrganizer?: boolean;
     // The recurrence pattern for the event.
     recurrence?: PatternedRecurrence;
@@ -1963,8 +2024,21 @@ export interface PlannerUser extends Entity {
     plans?: PlannerPlan[];
 }
 export interface OfficeGraphInsights extends Entity {
+    /**
+     * Calculated relationship identifying trending documents. Trending documents can be stored in OneDrive or in SharePoint
+     * sites.
+     */
     trending?: Trending[];
+    /**
+     * Calculated relationship identifying documents shared with a user. Documents can be shared as email attachments or as
+     * OneDrive for Business links sent in emails.
+     */
     shared?: SharedInsight[];
+    /**
+     * Calculated relationship identifying documents viewed and modified by a user. Includes documents the user used in
+     * OneDrive for Business, SharePoint, opened as email attachments, and as link attachments from sources like Box, DropBox
+     * and Google Drive.
+     */
     used?: UsedInsight[];
 }
 export interface UserSettings extends Entity {
@@ -2041,189 +2115,52 @@ export interface UserActivity extends Entity {
     historyItems?: ActivityHistoryItem[];
 }
 export interface OnlineMeeting extends Entity {
+    // The meeting creation time in UTC. Read-only.
     creationDateTime?: string;
+    // The meeting start time in UTC.
     startDateTime?: string;
+    // The meeting end time in UTC.
     endDateTime?: string;
-    joinUrl?: string;
+    // The join URL of the online meeting. Read-only.
+    joinWebUrl?: string;
+    // The subject of the online meeting.
     subject?: string;
+    // The participants associated with the online meeting. This includes the organizer and the attendees.
     participants?: MeetingParticipants;
+    // The phone access (dial-in) information for an online meeting. Read-only.
     audioConferencing?: AudioConferencing;
+    // The chat information associated with this online meeting.
     chatInfo?: ChatInfo;
+    // The video teleconferencing ID. Read-only.
     videoTeleconferenceId?: string;
 }
-export interface Group extends DirectoryObject {
-    // The licenses that are assigned to the group. Returned only on $select. Read-only.
-    assignedLicenses?: AssignedLicense[];
+export interface Team extends Entity {
     /**
-     * Describes a classification for the group (such as low, medium or high business impact). Valid values for this property
-     * are defined by creating a ClassificationList setting value, based on the template definition.Returned by default.
+     * A hyperlink that will go to the team in the Microsoft Teams client. This is the URL that you get when you right-click a
+     * team in the Microsoft Teams client and select Get link to team. This URL should be treated as an opaque blob, and not
+     * parsed.
      */
-    classification?: string;
+    webUrl?: string;
     /**
-     * Timestamp of when the group was created. The value cannot be modified and is automatically populated when the group is
-     * created. The Timestamp type represents date and time information using ISO 8601 format and is always in UTC time. For
-     * example, midnight UTC on Jan 1, 2014 would look like this: '2014-01-01T00:00:00Z'. Returned by default. Read-only.
+     * Settings to configure whether members can perform certain actions, for example, create channels and add bots, in the
+     * team.
      */
-    createdDateTime?: string;
-    // An optional description for the group. Returned by default.
-    description?: string;
-    /**
-     * The display name for the group. This property is required when a group is created and cannot be cleared during updates.
-     * Returned by default. Supports $filter and $orderby.
-     */
-    displayName?: string;
-    /**
-     * Indicates whether there are members in this group that have license errors from its group-based license assignment.
-     * This property is never returned on a GET operation. You can use it as a $filter argument to get groups that have
-     * members with license errors (that is, filter for this property being true). See an example.
-     */
-    hasMembersWithLicenseErrors?: boolean;
-    /**
-     * Specifies the group type and its membership. If the collection contains Unified then the group is an Office 365 group;
-     * otherwise it's a security group. If the collection includes DynamicMembership, the group has dynamic membership;
-     * otherwise, membership is static. Returned by default. Supports $filter.
-     */
-    groupTypes?: string[];
-    /**
-     * Indicates status of the group license assignment to all members of the group. Default value is false. Read-only.
-     * Possible values: QueuedForProcessing, ProcessingInProgress, and ProcessingComplete.Returned only on $select. Read-only.
-     */
-    licenseProcessingState?: LicenseProcessingState;
-    /**
-     * The SMTP address for the group, for example, 'serviceadmins@contoso.onmicrosoft.com'. Returned by default. Read-only.
-     * Supports $filter.
-     */
-    mail?: string;
-    // Specifies whether the group is mail-enabled. Returned by default.
-    mailEnabled?: boolean;
-    /**
-     * The mail alias for the group, unique in the organization. This property must be specified when a group is created.
-     * Returned by default. Supports $filter.
-     */
-    mailNickname?: string;
-    /**
-     * Indicates the last time at which the group was synced with the on-premises directory.The Timestamp type represents date
-     * and time information using ISO 8601 format and is always in UTC time. For example, midnight UTC on Jan 1, 2014 would
-     * look like this: '2014-01-01T00:00:00Z'. Returned by default. Read-only. Supports $filter.
-     */
-    onPremisesLastSyncDateTime?: string;
-    // Errors when using Microsoft synchronization product during provisioning. Returned by default.
-    onPremisesProvisioningErrors?: OnPremisesProvisioningError[];
-    /**
-     * Contains the on-premises security identifier (SID) for the group that was synchronized from on-premises to the cloud.
-     * Returned by default. Read-only.
-     */
-    onPremisesSecurityIdentifier?: string;
-    /**
-     * true if this group is synced from an on-premises directory; false if this group was originally synced from an
-     * on-premises directory but is no longer synced; null if this object has never been synced from an on-premises directory
-     * (default). Returned by default. Read-only. Supports $filter.
-     */
-    onPremisesSyncEnabled?: boolean;
-    // The preferred data location for the group. For more information, see OneDrive Online Multi-Geo. Returned by default.
-    preferredDataLocation?: string;
-    /**
-     * Email addresses for the group that direct to the same group mailbox. For example: ['SMTP: bob@contoso.com', 'smtp:
-     * bob@sales.contoso.com']. The any operator is required to filter expressions on multi-valued properties. Returned by
-     * default. Read-only. Not nullable. Supports $filter.
-     */
-    proxyAddresses?: string[];
-    /**
-     * Timestamp of when the group was last renewed. This cannot be modified directly and is only updated via the renew
-     * service action. The Timestamp type represents date and time information using ISO 8601 format and is always in UTC
-     * time. For example, midnight UTC on Jan 1, 2014 would look like this: '2014-01-01T00:00:00Z'. Returned by default.
-     * Read-only.
-     */
-    renewedDateTime?: string;
-    // Specifies whether the group is a security group. Returned by default. Supports $filter.
-    securityEnabled?: boolean;
-    /**
-     * Specifies the visibility of an Office 365 group. Possible values are: Private, Public, or Hiddenmembership; blank
-     * values are treated as public. See group visibility options to learn more.Visibility can be set only when a group is
-     * created; it is not editable.Visibility is supported only for unified groups; it is not supported for security groups.
-     * Returned by default.
-     */
-    visibility?: string;
-    /**
-     * Indicates if people external to the organization can send messages to the group. Default value is false. Returned only
-     * on $select.
-     */
-    allowExternalSenders?: boolean;
-    /**
-     * Indicates if new members added to the group will be auto-subscribed to receive email notifications. You can set this
-     * property in a PATCH request for the group; do not set it in the initial POST request that creates the group. Default
-     * value is false. Returned only on $select.
-     */
-    autoSubscribeNewMembers?: boolean;
-    /**
-     * Indicates whether the signed-in user is subscribed to receive email conversations. Default value is true. Returned only
-     * on $select.
-     */
-    isSubscribedByMail?: boolean;
-    /**
-     * Count of conversations that have received new posts since the signed-in user last visited the group. Returned only on
-     * $select.
-     */
-    unseenCount?: number;
+    memberSettings?: TeamMemberSettings;
+    // Settings to configure whether guests can create, update, or delete channels in the team.
+    guestSettings?: TeamGuestSettings;
+    // Settings to configure messaging and mentions in the team.
+    messagingSettings?: TeamMessagingSettings;
+    // Settings to configure use of Giphy, memes, and stickers in the team.
+    funSettings?: TeamFunSettings;
+    // Whether this team is in read-only mode.
     isArchived?: boolean;
-    /**
-     * Users and groups that are members of this group. HTTP Methods: GET (supported for all groups), POST (supported for
-     * Office 365 groups, security groups and mail-enabled security groups), DELETE (supported for Office 365 groups and
-     * security groups) Nullable.
-     */
-    members?: DirectoryObject[];
-    // Groups that this group is a member of. HTTP Methods: GET (supported for all groups). Read-only. Nullable.
-    memberOf?: DirectoryObject[];
-    // A list of group members with license errors from this group-based license assignment. Read-only.
-    membersWithLicenseErrors?: DirectoryObject[];
-    transitiveMembers?: DirectoryObject[];
-    transitiveMemberOf?: DirectoryObject[];
-    // The user (or application) that created the group. NOTE: This is not set if the user is an administrator. Read-only.
-    createdOnBehalfOf?: DirectoryObject;
-    /**
-     * The owners of the group. The owners are a set of non-admin users who are allowed to modify this object. Limited to 10
-     * owners. HTTP Methods: GET (supported for all groups), POST (supported for Office 365 groups, security groups and
-     * mail-enabled security groups), DELETE (supported for Office 365 groups and security groups). Nullable.
-     */
-    owners?: DirectoryObject[];
-    // Read-only. Nullable.
-    settings?: GroupSetting[];
-    // The group's conversations.
-    conversations?: Conversation[];
-    // The profile photos owned by the group. Read-only. Nullable.
-    photos?: ProfilePhoto[];
-    /**
-     * The list of users or groups that are allowed to create post's or calendar events in this group. If this list is
-     * non-empty then only users or groups listed here are allowed to post.
-     */
-    acceptedSenders?: DirectoryObject[];
-    // The list of users or groups that are not allowed to create posts or calendar events in this group. Nullable
-    rejectedSenders?: DirectoryObject[];
-    // The group's conversation threads. Nullable.
-    threads?: ConversationThread[];
-    // The group's calendar. Read-only.
-    calendar?: Calendar;
-    // The calendar view for the calendar. Read-only.
-    calendarView?: Event[];
-    // The group's calendar events.
-    events?: Event[];
-    // The group's profile photo
-    photo?: ProfilePhoto;
-    // The group's default drive. Read-only.
-    drive?: Drive;
-    // The group's drives. Read-only.
-    drives?: Drive[];
-    // The list of SharePoint sites in this group. Access the default site with /sites/root.
-    sites?: Site[];
-    // The collection of open extensions defined for the group. Read-only. Nullable.
-    extensions?: Extension[];
-    // The collection of lifecycle policies for this group. Read-only. Nullable.
-    groupLifecyclePolicies?: GroupLifecyclePolicy[];
-    // Entry-point to Planner resource that might exist for a Unified Group.
-    planner?: PlannerGroup;
-    // Read-only.
-    onenote?: Onenote;
-    team?: Team;
+    // The collection of channels &amp; messages associated with the team.
+    channels?: Channel[];
+    // The general channel for the team.
+    primaryChannel?: Channel;
+    // The apps installed in this team.
+    installedApps?: TeamsAppInstallation[];
+    operations?: TeamsAsyncOperation[];
 }
 // tslint:disable-next-line: interface-name
 export interface IdentityProvider extends Entity {
@@ -2234,6 +2171,124 @@ export interface IdentityProvider extends Entity {
 }
 // tslint:disable-next-line: no-empty-interface
 export interface AdministrativeUnit extends DirectoryObject {}
+export interface Application extends DirectoryObject {
+    /**
+     * Defines custom behavior that a consuming service can use to call an app in specific contexts. For example, applications
+     * that can render file streams may set the addIns property for its 'FileHandler' functionality. This will let services
+     * like Office 365 call the application in the context of a document the user is working on.
+     */
+    addIns?: AddIn[];
+    // Specifies settings for an application that implements a web API.
+    api?: ApiApplication;
+    // The unique identifier for the application that is assigned to an application by Azure AD. Not nullable. Read-only.
+    appId?: string;
+    applicationTemplateId?: string;
+    /**
+     * The collection of application roles that an application may declare. These roles can be assigned to users, groups, or
+     * service principals. Not nullable.
+     */
+    appRoles?: AppRole[];
+    /**
+     * Specifies the fallback application type as public client, such as an installed application running on a mobile device.
+     * The default value is false which means the fallback application type is confidential client such as web app. There are
+     * certain scenarios where Azure AD cannot determine the client application type (e.g. ROPC flow where it is configured
+     * without specifying a redirect URI). In those cases Azure AD will interpret the application type based on the value of
+     * this property.
+     */
+    isFallbackPublicClient?: boolean;
+    /**
+     * The URIs that identify the application within its Azure AD tenant, or within a verified custom domain if the
+     * application is multi-tenant. For more information see Application Objects and Service Principal Objects. The any
+     * operator is required for filter expressions on multi-valued properties. Not nullable.
+     */
+    identifierUris?: string[];
+    // The date and time the application was registered. Read-only.
+    createdDateTime?: string;
+    // Specifies settings for installed clients such as desktop or mobile devices.
+    publicClient?: PublicClientApplication;
+    // The display name for the application.
+    displayName?: string;
+    /**
+     * Configures the groups claim issued in a user or OAuth 2.0 access token that the application expects. To set this
+     * attribute, use one of the following valid string values:NoneSecurityGroup: For security groups and Azure AD rolesAll:
+     * This will get all of the security groups, distribution groups, and Azure AD directory roles that the signed-in user is
+     * a member of
+     */
+    groupMembershipClaims?: string;
+    /**
+     * Basic profile information of the application such as app's marketing, support, terms of service and privacy statement
+     * URLs. The terms of service and privacy statement are surfaced to users through the user consent experience. For more
+     * info, see How to: Add Terms of service and privacy statement for registered Azure AD apps.
+     */
+    info?: InformationalUrl;
+    isDeviceOnlyAuthSupported?: boolean;
+    // The collection of key credentials associated with the application Not nullable.
+    keyCredentials?: KeyCredential[];
+    // The main logo for the application. Not nullable.
+    logo?: any;
+    oauth2RequirePostResponse?: boolean;
+    /**
+     * Application developers can configure optional claims in their Azure AD apps to specify which claims they want in tokens
+     * sent to their application by the Microsoft security token service. See provide optional claims to your Azure AD app for
+     * more information.
+     */
+    optionalClaims?: OptionalClaims;
+    // Specifies parental control settings for an application.
+    parentalControlSettings?: ParentalControlSettings;
+    // The collection of password credentials associated with the application. Not nullable.
+    passwordCredentials?: PasswordCredential[];
+    // The verified publisher domain for the application. Read-only.
+    publisherDomain?: string;
+    /**
+     * Specifies resources that this application requires access to and the set of OAuth permission scopes and application
+     * roles that it needs under each of those resources. This pre-configuration of required resource access drives the
+     * consent experience. Not nullable.
+     */
+    requiredResourceAccess?: RequiredResourceAccess[];
+    /**
+     * Specifies what Microsoft accounts are supported for the current application. Supported values are:AzureADMyOrg: Users
+     * with a Microsoft work or school account in my organization’s Azure AD tenant (i.e. single tenant)AzureADMultipleOrgs:
+     * Users with a Microsoft work or school account in any organization’s Azure AD tenant (i.e. multi-tenant)
+     * AzureADandPersonalMicrosoftAccount: Users with a personal Microsoft account, or a work or school account in any
+     * organization’s Azure AD tenant
+     */
+    signInAudience?: string;
+    // Custom strings that can be used to categorize and identify the application. Not nullable.
+    tags?: string[];
+    /**
+     * Specifies the keyId of a public key from the keyCredentials collection. When configured, Azure AD encrypts all the
+     * tokens it emits by using the key this property points to. The application code that receives the encrypted token must
+     * use the matching private key to decrypt the token before it can be used for the signed-in user.
+     */
+    tokenEncryptionKeyId?: string;
+    // Specifies settings for a web application.
+    web?: WebApplication;
+    // Read-only. Nullable.
+    extensionProperties?: ExtensionProperty[];
+    // Read-only.
+    createdOnBehalfOf?: DirectoryObject;
+    /**
+     * Directory objects that are owners of the application. The owners are a set of non-admin users who are allowed to modify
+     * this object. Requires version 2013-11-08 or newer. Read-only. Nullable.
+     */
+    owners?: DirectoryObject[];
+}
+export interface ExtensionProperty extends DirectoryObject {
+    // Display name of the application object on which this extension property is defined. Read-only.
+    appDisplayName?: string;
+    // Name of the extension property. Not nullable.
+    name?: string;
+    /**
+     * Specifies the data type of the value the extension property can hold. Following values are supported. Not nullable.
+     * Binary - 256 bytes maximumBooleanDateTime - Must be specified in ISO 8601 format. Will be stored in UTC.Integer -
+     * 32-bit value.LargeInteger - 64-bit value.String - 256 characters maximum
+     */
+    dataType?: string;
+    // Indicates if this extension property was sycned from onpremises directory using Azure AD Connect. Read-only.
+    isSyncedFromOnPremises?: boolean;
+    // Following values are supported. Not nullable. UserGroupOrganizationDeviceApplication
+    targetObjects?: string[];
+}
 export interface Directory extends Entity {
     // Recently deleted items. Read-only. Nullable.
     deletedItems?: DirectoryObject[];
@@ -2296,6 +2351,8 @@ export interface Device extends DirectoryObject {
      * Intune for any device OS type or by an approved MDM app for Windows OS devices.
      */
     isManaged?: boolean;
+    // Application identifier used to register device into MDM. Read-only. Supports $filter.
+    mdmAppId?: string;
     /**
      * The last time at which the object was synced with the on-premises directory.The Timestamp type represents date and time
      * information using ISO 8601 format and is always in UTC time. For example, midnight UTC on Jan 1, 2014 would look like
@@ -2403,6 +2460,8 @@ export interface Domain extends Entity {
     isRoot?: boolean;
     // True if the domain has completed domain ownership verification. Not nullable
     isVerified?: boolean;
+    manufacturer?: string;
+    model?: string;
     /**
      * Specifies the number of days before a user receives notification that their password will expire. If the property is
      * not set, a default value of 14 days will be used.
@@ -2485,6 +2544,187 @@ export interface DomainDnsTxtRecord extends DomainDnsRecord {
 export interface DomainDnsUnavailableRecord extends DomainDnsRecord {
     // Provides the reason why the DomainDnsUnavailableRecord entity is returned.
     description?: string;
+}
+export interface Group extends DirectoryObject {
+    // The licenses that are assigned to the group. Returned only on $select. Read-only.
+    assignedLicenses?: AssignedLicense[];
+    /**
+     * Describes a classification for the group (such as low, medium or high business impact). Valid values for this property
+     * are defined by creating a ClassificationList setting value, based on the template definition.Returned by default.
+     */
+    classification?: string;
+    /**
+     * Timestamp of when the group was created. The value cannot be modified and is automatically populated when the group is
+     * created. The Timestamp type represents date and time information using ISO 8601 format and is always in UTC time. For
+     * example, midnight UTC on Jan 1, 2014 would look like this: '2014-01-01T00:00:00Z'. Returned by default. Read-only.
+     */
+    createdDateTime?: string;
+    // An optional description for the group. Returned by default.
+    description?: string;
+    /**
+     * The display name for the group. This property is required when a group is created and cannot be cleared during updates.
+     * Returned by default. Supports $filter and $orderby.
+     */
+    displayName?: string;
+    /**
+     * Indicates whether there are members in this group that have license errors from its group-based license assignment.
+     * This property is never returned on a GET operation. You can use it as a $filter argument to get groups that have
+     * members with license errors (that is, filter for this property being true). See an example.
+     */
+    hasMembersWithLicenseErrors?: boolean;
+    /**
+     * Specifies the group type and its membership. If the collection contains Unified then the group is an Office 365 group;
+     * otherwise it's a security group. If the collection includes DynamicMembership, the group has dynamic membership;
+     * otherwise, membership is static. Returned by default. Supports $filter.
+     */
+    groupTypes?: string[];
+    /**
+     * Indicates status of the group license assignment to all members of the group. Default value is false. Read-only.
+     * Possible values: QueuedForProcessing, ProcessingInProgress, and ProcessingComplete.Returned only on $select. Read-only.
+     */
+    licenseProcessingState?: LicenseProcessingState;
+    /**
+     * The SMTP address for the group, for example, 'serviceadmins@contoso.onmicrosoft.com'. Returned by default. Read-only.
+     * Supports $filter.
+     */
+    mail?: string;
+    // Specifies whether the group is mail-enabled. Returned by default.
+    mailEnabled?: boolean;
+    /**
+     * The mail alias for the group, unique in the organization. This property must be specified when a group is created.
+     * Returned by default. Supports $filter.
+     */
+    mailNickname?: string;
+    onPremisesDomainName?: string;
+    /**
+     * Indicates the last time at which the group was synced with the on-premises directory.The Timestamp type represents date
+     * and time information using ISO 8601 format and is always in UTC time. For example, midnight UTC on Jan 1, 2014 would
+     * look like this: '2014-01-01T00:00:00Z'. Returned by default. Read-only. Supports $filter.
+     */
+    onPremisesLastSyncDateTime?: string;
+    onPremisesNetBiosName?: string;
+    // Errors when using Microsoft synchronization product during provisioning. Returned by default.
+    onPremisesProvisioningErrors?: OnPremisesProvisioningError[];
+    onPremisesSamAccountName?: string;
+    /**
+     * Contains the on-premises security identifier (SID) for the group that was synchronized from on-premises to the cloud.
+     * Returned by default. Read-only.
+     */
+    onPremisesSecurityIdentifier?: string;
+    /**
+     * true if this group is synced from an on-premises directory; false if this group was originally synced from an
+     * on-premises directory but is no longer synced; null if this object has never been synced from an on-premises directory
+     * (default). Returned by default. Read-only. Supports $filter.
+     */
+    onPremisesSyncEnabled?: boolean;
+    // The preferred data location for the group. For more information, see OneDrive Online Multi-Geo. Returned by default.
+    preferredDataLocation?: string;
+    /**
+     * Email addresses for the group that direct to the same group mailbox. For example: ['SMTP: bob@contoso.com', 'smtp:
+     * bob@sales.contoso.com']. The any operator is required to filter expressions on multi-valued properties. Returned by
+     * default. Read-only. Not nullable. Supports $filter.
+     */
+    proxyAddresses?: string[];
+    /**
+     * Timestamp of when the group was last renewed. This cannot be modified directly and is only updated via the renew
+     * service action. The Timestamp type represents date and time information using ISO 8601 format and is always in UTC
+     * time. For example, midnight UTC on Jan 1, 2014 would look like this: '2014-01-01T00:00:00Z'. Returned by default.
+     * Read-only.
+     */
+    renewedDateTime?: string;
+    // Specifies whether the group is a security group. Returned by default. Supports $filter.
+    securityEnabled?: boolean;
+    // Security identifier of the group, used in Windows scenarios. Returned by default.
+    securityIdentifier?: string;
+    /**
+     * Specifies the visibility of an Office 365 group. Possible values are: Private, Public, or Hiddenmembership; blank
+     * values are treated as public. See group visibility options to learn more.Visibility can be set only when a group is
+     * created; it is not editable.Visibility is supported only for unified groups; it is not supported for security groups.
+     * Returned by default.
+     */
+    visibility?: string;
+    /**
+     * Indicates if people external to the organization can send messages to the group. Default value is false. Returned only
+     * on $select.
+     */
+    allowExternalSenders?: boolean;
+    /**
+     * Indicates if new members added to the group will be auto-subscribed to receive email notifications. You can set this
+     * property in a PATCH request for the group; do not set it in the initial POST request that creates the group. Default
+     * value is false. Returned only on $select.
+     */
+    autoSubscribeNewMembers?: boolean;
+    /**
+     * Indicates whether the signed-in user is subscribed to receive email conversations. Default value is true. Returned only
+     * on $select.
+     */
+    isSubscribedByMail?: boolean;
+    /**
+     * Count of conversations that have received new posts since the signed-in user last visited the group. Returned only on
+     * $select.
+     */
+    unseenCount?: number;
+    hideFromOutlookClients?: boolean;
+    hideFromAddressLists?: boolean;
+    isArchived?: boolean;
+    /**
+     * Users and groups that are members of this group. HTTP Methods: GET (supported for all groups), POST (supported for
+     * Office 365 groups, security groups and mail-enabled security groups), DELETE (supported for Office 365 groups and
+     * security groups) Nullable.
+     */
+    members?: DirectoryObject[];
+    // Groups that this group is a member of. HTTP Methods: GET (supported for all groups). Read-only. Nullable.
+    memberOf?: DirectoryObject[];
+    // A list of group members with license errors from this group-based license assignment. Read-only.
+    membersWithLicenseErrors?: DirectoryObject[];
+    transitiveMembers?: DirectoryObject[];
+    transitiveMemberOf?: DirectoryObject[];
+    // The user (or application) that created the group. NOTE: This is not set if the user is an administrator. Read-only.
+    createdOnBehalfOf?: DirectoryObject;
+    /**
+     * The owners of the group. The owners are a set of non-admin users who are allowed to modify this object. Limited to 10
+     * owners. HTTP Methods: GET (supported for all groups), POST (supported for Office 365 groups, security groups and
+     * mail-enabled security groups), DELETE (supported for Office 365 groups and security groups). Nullable.
+     */
+    owners?: DirectoryObject[];
+    // Read-only. Nullable.
+    settings?: GroupSetting[];
+    // The group's conversations.
+    conversations?: Conversation[];
+    // The profile photos owned by the group. Read-only. Nullable.
+    photos?: ProfilePhoto[];
+    /**
+     * The list of users or groups that are allowed to create post's or calendar events in this group. If this list is
+     * non-empty then only users or groups listed here are allowed to post.
+     */
+    acceptedSenders?: DirectoryObject[];
+    // The list of users or groups that are not allowed to create posts or calendar events in this group. Nullable
+    rejectedSenders?: DirectoryObject[];
+    // The group's conversation threads. Nullable.
+    threads?: ConversationThread[];
+    // The group's calendar. Read-only.
+    calendar?: Calendar;
+    // The calendar view for the calendar. Read-only.
+    calendarView?: Event[];
+    // The group's calendar events.
+    events?: Event[];
+    // The group's profile photo
+    photo?: ProfilePhoto;
+    // The group's default drive. Read-only.
+    drive?: Drive;
+    // The group's drives. Read-only.
+    drives?: Drive[];
+    // The list of SharePoint sites in this group. Access the default site with /sites/root.
+    sites?: Site[];
+    // The collection of open extensions defined for the group. Read-only. Nullable.
+    extensions?: Extension[];
+    // The collection of lifecycle policies for this group. Read-only. Nullable.
+    groupLifecyclePolicies?: GroupLifecyclePolicy[];
+    // Entry-point to Planner resource that might exist for a Unified Group.
+    planner?: PlannerGroup;
+    // Read-only.
+    onenote?: Onenote;
+    team?: Team;
 }
 export interface GroupSetting extends Entity {
     // Display name of this group of settings, which comes from the associated template.
@@ -2579,32 +2819,6 @@ export interface GroupLifecyclePolicy extends Entity {
 export interface PlannerGroup extends Entity {
     // Read-only. Nullable. Returns the plannerPlans owned by the group.
     plans?: PlannerPlan[];
-}
-export interface Team extends Entity {
-    /**
-     * A hyperlink that will go to the team in the Microsoft Teams client. This is the URL that you get when you right-click a
-     * team in the Microsoft Teams client and select Get link to team. This URL should be treated as an opaque blob, and not
-     * parsed.
-     */
-    webUrl?: string;
-    /**
-     * Settings to configure whether members can perform certain actions, for example, create channels and add bots, in the
-     * team.
-     */
-    memberSettings?: TeamMemberSettings;
-    // Settings to configure whether guests can create, update, or delete channels in the team.
-    guestSettings?: TeamGuestSettings;
-    // Settings to configure messaging and mentions in the team.
-    messagingSettings?: TeamMessagingSettings;
-    // Settings to configure use of Giphy, memes, and stickers in the team.
-    funSettings?: TeamFunSettings;
-    // Whether this team is in read-only mode.
-    isArchived?: boolean;
-    // The collection of channels &amp; messages associated with the team.
-    channels?: Channel[];
-    // The apps installed in this team.
-    installedApps?: TeamsAppInstallation[];
-    operations?: TeamsAsyncOperation[];
 }
 export interface Contract extends DirectoryObject {
     /**
@@ -3105,7 +3319,7 @@ export interface Permission extends Entity {
 export interface Subscription extends Entity {
     /**
      * Required. Specifies the resource that will be monitored for changes. Do not include the base URL
-     * (https://graph.microsoft.com/v1.0/).
+     * (https://graph.microsoft.com/v1.0/). See the possible resource path values for each supported resource.
      */
     resource?: string;
     /**
@@ -3163,6 +3377,7 @@ export interface DriveItemVersion extends BaseItemVersion {
     size?: number;
 }
 export interface WorkbookApplication extends Entity {
+    // Returns the calculation mode used in the workbook. Possible values are: Automatic, AutomaticExceptTables, Manual.
     calculationMode?: string;
 }
 export interface WorkbookNamedItem extends Entity {
@@ -7762,24 +7977,45 @@ export interface PlannerPlanDetails extends Entity {
     categoryDescriptions?: PlannerCategoryDescriptions;
 }
 export interface Trending extends Entity {
+    /**
+     * Value indicating how much the document is currently trending. The larger the number, the more the document is currently
+     * trending around the user (the more relevant it is). Returned documents are sorted by this value.
+     */
     weight?: number;
+    // Properties that you can use to visualize the document in your experience.
     resourceVisualization?: ResourceVisualization;
+    // Reference properties of the trending document, such as the url and type of the document.
     resourceReference?: ResourceReference;
     lastModifiedDateTime?: string;
+    // Used for navigating to the trending document.
     resource?: Entity;
 }
 export interface SharedInsight extends Entity {
+    // Details about the shared item. Read only.
     lastShared?: SharingDetail;
     sharingHistory?: SharingDetail[];
+    // Properties that you can use to visualize the document in your experience. Read-only
     resourceVisualization?: ResourceVisualization;
+    // Reference properties of the shared document, such as the url and type of the document. Read-only
     resourceReference?: ResourceReference;
     lastSharedMethod?: Entity;
+    /**
+     * Used for navigating to the item that was shared. For file attachments, the type is fileAttachment. For linked
+     * attachments, the type is driveItem.
+     */
     resource?: Entity;
 }
 export interface UsedInsight extends Entity {
+    // Information about when the item was last viewed and modified by the user. Read only.
     lastUsed?: UsageDetails;
+    // Properties that you can use to visualize the document in your experience. Read-only
     resourceVisualization?: ResourceVisualization;
+    // Reference properties of the used document, such as the url and type of the document. Read-only
     resourceReference?: ResourceReference;
+    /**
+     * Used for navigating to the item that was used. For file attachments, the type is fileAttachment. For linked
+     * attachments, the type is driveItem.
+     */
     resource?: Entity;
 }
 export interface OnenoteEntityBaseModel extends Entity {
@@ -8149,37 +8385,67 @@ export interface CloudCommunications extends Entity {
     onlineMeetings?: OnlineMeeting[];
 }
 export interface Call extends Entity {
+    /**
+     * The call state. Possible values are: incoming, establishing, ringing, established, hold, transferring,
+     * transferAccepted, redirecting, terminating, terminated. Read-only.
+     */
     state?: CallState;
+    // Read-only. The call media state.
     mediaState?: CallMediaState;
+    // The result information. For example can hold termination reason. Read-only.
     resultInfo?: ResultInfo;
+    // The direction of the call. The possible value are incoming or outgoing. Read-only.
     direction?: CallDirection;
+    // The subject of the conversation.
     subject?: string;
+    // The callback URL on which callbacks will be delivered. Must be https.
     callbackUri?: string;
+    callRoutes?: CallRoute[];
+    // The originator of the call.
     source?: ParticipantInfo;
-    targets?: ParticipantInfo[];
+    // The targets of the call. Required information for creating peer to peer call.
+    targets?: InvitationParticipantInfo[];
+    // The list of requested modalities.
     requestedModalities?: Modality[];
+    // The media configuration. Required.
     mediaConfig?: MediaConfig;
+    // The chat information. Required information for joining a meeting.
     chatInfo?: ChatInfo;
+    callOptions?: CallOptions;
+    // The meeting information that's required for joining a meeting.
     meetingInfo?: MeetingInfo;
     tenantId?: string;
+    // Read-only.
     myParticipantId?: string;
     toneInfo?: ToneInfo;
+    incomingContext?: IncomingContext;
+    // Read-only. Nullable.
     participants?: Participant[];
+    // Read-only. Nullable.
     operations?: CommsOperation[];
 }
 export interface Participant extends Entity {
+    // The participant of the participant.
     info?: ParticipantInfo;
+    recordingInfo?: RecordingInfo;
+    // The list of media streams.
     mediaStreams?: MediaStream[];
+    // true if the participant is muted (client or server muted).
     isMuted?: boolean;
+    // true if the participant is in lobby.
     isInLobby?: boolean;
 }
 export interface CommsOperation extends Entity {
+    // Possible values are: notStarted, running, completed, failed. Read-only.
     status?: OperationStatus;
+    // Unique Client Context string. Max limit is 256 chars.
     clientContext?: string;
+    // The result information. Read-only.
     resultInfo?: ResultInfo;
 }
 // tslint:disable-next-line: interface-name
 export interface InviteParticipantsOperation extends CommsOperation {
+    // The participants to invite.
     participants?: InvitationParticipantInfo[];
 }
 // tslint:disable-next-line: no-empty-interface
@@ -8187,26 +8453,17 @@ export interface MuteParticipantOperation extends CommsOperation {}
 // tslint:disable-next-line: no-empty-interface
 export interface PlayPromptOperation extends CommsOperation {}
 export interface RecordOperation extends CommsOperation {
+    // The location where the recording is located.
     recordingLocation?: string;
+    // The access token required to retrieve the recording.
     recordingAccessToken?: string;
 }
 // tslint:disable-next-line: no-empty-interface
 export interface SubscribeToToneOperation extends CommsOperation {}
 // tslint:disable-next-line: no-empty-interface
 export interface UnmuteParticipantOperation extends CommsOperation {}
-export interface AppCatalogs extends Entity {
-    teamsApps?: TeamsApp[];
-}
-export interface TeamsApp extends Entity {
-    // The ID of the catalog provided by the app developer in the Microsoft Teams zip app package.
-    externalId?: string;
-    // The name of the catalog app provided by the app developer in the Microsoft Teams zip app package.
-    displayName?: string;
-    // The method of distribution for the app.
-    distributionMethod?: TeamsAppDistributionMethod;
-    // The details for each version of the app.
-    appDefinitions?: TeamsAppDefinition[];
-}
+// tslint:disable-next-line: no-empty-interface
+export interface UpdateRecordingStatusOperation extends CommsOperation {}
 export interface Channel extends Entity {
     // Channel name as it will appear to the user in Microsoft Teams.
     displayName?: string;
@@ -8239,6 +8496,19 @@ export interface TeamsAsyncOperation extends Entity {
     targetResourceLocation?: string;
     error?: OperationError;
 }
+export interface AppCatalogs extends Entity {
+    teamsApps?: TeamsApp[];
+}
+export interface TeamsApp extends Entity {
+    // The ID of the catalog provided by the app developer in the Microsoft Teams zip app package.
+    externalId?: string;
+    // The name of the catalog app provided by the app developer in the Microsoft Teams zip app package.
+    displayName?: string;
+    // The method of distribution for the app.
+    distributionMethod?: TeamsAppDistributionMethod;
+    // The details for each version of the app.
+    appDefinitions?: TeamsAppDefinition[];
+}
 export interface TeamsAppDefinition extends Entity {
     // The id from the Teams App manifest.
     teamsAppId?: string;
@@ -8256,6 +8526,42 @@ export interface TeamsTab extends Entity {
     configuration?: TeamsTabConfiguration;
     // The application that is linked to the tab. This cannot be changed after tab creation.
     teamsApp?: TeamsApp;
+}
+// tslint:disable-next-line: interface-name
+export interface InformationProtection extends Entity {
+    threatAssessmentRequests?: ThreatAssessmentRequest[];
+}
+export interface ThreatAssessmentRequest extends Entity {
+    createdDateTime?: string;
+    contentType?: ThreatAssessmentContentType;
+    expectedAssessment?: ThreatExpectedAssessment;
+    category?: ThreatCategory;
+    status?: ThreatAssessmentStatus;
+    requestSource?: ThreatAssessmentRequestSource;
+    createdBy?: IdentitySet;
+    results?: ThreatAssessmentResult[];
+}
+export interface ThreatAssessmentResult extends Entity {
+    createdDateTime?: string;
+    resultType?: ThreatAssessmentResultType;
+    message?: string;
+}
+export interface UrlAssessmentRequest extends ThreatAssessmentRequest {
+    url?: string;
+}
+export interface FileAssessmentRequest extends ThreatAssessmentRequest {
+    fileName?: string;
+    contentData?: string;
+}
+export interface EmailFileAssessmentRequest extends ThreatAssessmentRequest {
+    recipientEmail?: string;
+    destinationRoutingReason?: MailDestinationRoutingReason;
+    contentData?: string;
+}
+export interface MailAssessmentRequest extends ThreatAssessmentRequest {
+    recipientEmail?: string;
+    destinationRoutingReason?: MailDestinationRoutingReason;
+    messageUri?: string;
 }
 export interface AuditActivityInitiator {
     /**
@@ -8435,6 +8741,30 @@ export interface AssignedPlan {
     // A GUID that identifies the service plan.
     servicePlanId?: string;
 }
+export interface ObjectIdentity {
+    /**
+     * Specifies the user sign-in types in your directory, such as emailAddress, userName or federated. Here, federated
+     * represents a unique identifier for a user from an issuer, that can be in any format chosen by the issuer. Additional
+     * validation is enforced on issuerAssignedId when the sign-in type is set to emailAddress or userName. This property can
+     * also be set to any custom string.
+     */
+    signInType?: string;
+    /**
+     * Specifies the issuer of the identity, for example facebook.com.For local accounts (where signInType is not federated),
+     * this property is the local B2C tenant default domain name, for example contoso.onmicrosoft.com.For external users from
+     * other Azure AD organization, this will be the domain of the federated organization, for example contoso.com.Supports
+     * $filter. 512 character limit.
+     */
+    issuer?: string;
+    /**
+     * Specifies the unique identifier assigned to the user by the issuer. The combination of issuer and issuerAssignedId must
+     * be unique within the organization. Represents the sign-in name for the user, when signInType is set to emailAddress or
+     * userName (also known as local accounts).When signInType is set to: emailAddress, (or starts with emailAddress like
+     * emailAddress1) issuerAssignedId must be a valid email addressuserName, issuerAssignedId must be a valid local part of
+     * an email addressSupports $filter. 512 character limit.
+     */
+    issuerAssignedId?: string;
+}
 export interface LicenseAssignmentState {
     skuId?: string;
     disabledPlans?: string[];
@@ -8583,6 +8913,267 @@ export interface TimeZoneBase {
      * Time Zone' for a custom time zone.
      */
     name?: string;
+}
+export interface AddIn {
+    id?: string;
+    type?: string;
+    properties?: KeyValue[];
+}
+export interface ApiApplication {
+    // When true, allows an application to use claims mapping without specifying a custom signing key.
+    acceptMappedClaims?: boolean;
+    /**
+     * Used for bundling consent if you have a solution that contains two parts: a client app and a custom web API app. If you
+     * set the appID of the client app to this value, the user only consents once to the client app. Azure AD knows that
+     * consenting to the client means implicitly consenting to the web API and automatically provisions service principals for
+     * both APIs at the same time. Both the client and the web API app must be registered in the same tenant.
+     */
+    knownClientApplications?: string[];
+    /**
+     * Lists the client applications that are pre-authorized with the specified delegated permissions to access this
+     * application's APIs. Users are not required to consent to any pre-authorized application (for the permissions
+     * specified). However, any additional permissions not listed in preAuthorizedApplications (requested through incremental
+     * consent for example) will require user consent.
+     */
+    preAuthorizedApplications?: PreAuthorizedApplication[];
+    /**
+     * Specifies the access token version expected by this resource. This changes the version and format of the JWT produced
+     * independent of the endpoint or client used to request the access token. The endpoint used, v1.0 or v2.0, is chosen by
+     * the client and only impacts the version of id_tokens. Resources need to explicitly configure
+     * requestedAccessTokenVersion to indicate the supported access token format. Possible values for
+     * requestedAccessTokenVersion are 1, 2, or null. If the value is null, this defaults to 1, which corresponds to the v1.0
+     * endpoint. If signInAudience on the application is configured as AzureADandPersonalMicrosoftAccount, the value for this
+     * property must be 2
+     */
+    requestedAccessTokenVersion?: number;
+    /**
+     * The collection of OAuth 2.0 permission scopes that the web API (resource) application exposes to client applications.
+     * These permission scopes may be granted to client applications during consent.
+     */
+    oauth2PermissionScopes?: PermissionScope[];
+}
+export interface PreAuthorizedApplication {
+    // The unique identifier for the application.
+    appId?: string;
+    // The unique identifier for the oauth2PermissionScopes the application requires.
+    delegatedPermissionIds?: string[];
+}
+export interface PermissionScope {
+    // Permission help text that appears in the admin consent and app assignment experiences.
+    adminConsentDescription?: string;
+    // Display name for the permission that appears in the admin consent and app assignment experiences.
+    adminConsentDisplayName?: string;
+    // Unique scope permission identifier inside the oauth2Permissions collection.
+    id?: string;
+    /**
+     * When creating or updating a permission, this property must be set to true (which is the default). To delete a
+     * permission, this property must first be set to false. At that point, in a subsequent call, the permission may be
+     * removed.
+     */
+    isEnabled?: boolean;
+    // For internal use.
+    origin?: string;
+    /**
+     * Specifies whether this scope permission can be consented to by an end user, or whether it is a tenant-wide permission
+     * that must be consented to by a company administrator. Possible values are User or Admin.
+     */
+    type?: string;
+    // Permission help text that appears in the end-user consent experience.
+    userConsentDescription?: string;
+    // Display name for the permission that appears in the end-user consent experience.
+    userConsentDisplayName?: string;
+    // The value of the scope claim that the resource application should expect in the OAuth 2.0 access token.
+    value?: string;
+}
+export interface AppRole {
+    /**
+     * Specifies whether this app role definition can be assigned to users and groups by setting to 'User', or to other
+     * applications (that are accessing this application in daemon service scenarios) by setting to 'Application', or to both.
+     */
+    allowedMemberTypes?: string[];
+    // Permission help text that appears in the admin app assignment and consent experiences.
+    description?: string;
+    // Display name for the permission that appears in the admin consent and app assignment experiences.
+    displayName?: string;
+    /**
+     * Unique role identifier inside the appRoles collection. When creating a new app role, a new Guid identifier must be
+     * provided.
+     */
+    id?: string;
+    /**
+     * When creating or updating an app role, this must be set to true (which is the default). To delete a role, this must
+     * first be set to false. At that point, in a subsequent call, this role may be removed.
+     */
+    isEnabled?: boolean;
+    /**
+     * Read-only. Specifies if the app role is defined on the Application object . Must not be included in any POST or PATCH
+     * requests.
+     */
+    origin?: string;
+    /**
+     * Specifies the value which will be included in the roles claim in authentication and access tokens. Must not exceed 120
+     * characters in length. Allowed characters are : ! # $ % &amp; ' ( ) * + , - . / : ; = ? @ [ ] ^ + _ { } ~, as well as
+     * characters in the ranges 0-9, A-Z and a-z. Any other character, including the space character, are not allowed.
+     */
+    value?: string;
+}
+export interface PublicClientApplication {
+    /**
+     * Specifies the URLs where user tokens are sent for sign-in, or the redirect URIs where OAuth 2.0 authorization codes and
+     * access tokens are sent.
+     */
+    redirectUris?: string[];
+}
+// tslint:disable-next-line: interface-name
+export interface InformationalUrl {
+    // CDN URL to the application's logo, Read-only.
+    logoUrl?: string;
+    // Link to the application's marketing page. For example, https://www.contoso.com/app/marketing
+    marketingUrl?: string;
+    // Link to the application's privacy statement. For example, https://www.contoso.com/app/privacy
+    privacyStatementUrl?: string;
+    // Link to the application's support page. For example, https://www.contoso.com/app/support
+    supportUrl?: string;
+    // Link to the application's terms of service statement. For example, https://www.contoso.com/app/termsofservice
+    termsOfServiceUrl?: string;
+}
+export interface KeyCredential {
+    // Custom key identifier
+    customKeyIdentifier?: number;
+    // Friendly name for the key. Optional.
+    displayName?: string;
+    /**
+     * The date and time at which the credential expires.The Timestamp type represents date and time information using ISO
+     * 8601 format and is always in UTC time. For example, midnight UTC on Jan 1, 2014 would look like this:
+     * '2014-01-01T00:00:00Z'
+     */
+    endDateTime?: string;
+    // The unique identifier (GUID) for the key.
+    keyId?: string;
+    /**
+     * The date and time at which the credential becomes valid.The Timestamp type represents date and time information using
+     * ISO 8601 format and is always in UTC time. For example, midnight UTC on Jan 1, 2014 would look like this:
+     * '2014-01-01T00:00:00Z'
+     */
+    startDateTime?: string;
+    // The type of key credential; for example, 'Symmetric'.
+    type?: string;
+    // A string that describes the purpose for which the key can be used; for example, 'Verify'.
+    usage?: string;
+    // Value for the key credential. Should be a base 64 encoded value.
+    key?: number;
+}
+export interface OptionalClaims {
+    // The optional claims returned in the JWT ID token.
+    idToken?: OptionalClaim[];
+    // The optional claims returned in the JWT access token.
+    accessToken?: OptionalClaim[];
+    // The optional claims returned in the SAML token.
+    saml2Token?: OptionalClaim[];
+}
+export interface OptionalClaim {
+    // The name of the optional claim.
+    name?: string;
+    /**
+     * The source (directory object) of the claim. There are predefined claims and user-defined claims from extension
+     * properties. If the source value is null, the claim is a predefined optional claim. If the source value is user, the
+     * value in the name property is the extension property from the user object.
+     */
+    source?: string;
+    /**
+     * If the value is true, the claim specified by the client is necessary to ensure a smooth authorization experience for
+     * the specific task requested by the end user. The default value is false.
+     */
+    essential?: boolean;
+    /**
+     * Additional properties of the claim. If a property exists in this collection, it modifies the behavior of the optional
+     * claim specified in the name property.
+     */
+    additionalProperties?: string[];
+}
+export interface ParentalControlSettings {
+    /**
+     * Specifies the two-letter ISO country codes. Access to the application will be blocked for minors from the countries
+     * specified in this list.
+     */
+    countriesBlockedForMinors?: string[];
+    /**
+     * Specifies the legal age group rule that applies to users of the app. Can be set to one of the following values:
+     * ValueDescriptionAllowDefault. Enforces the legal minimum. This means parental consent is required for minors in the
+     * European Union and Korea.RequireConsentForPrivacyServicesEnforces the user to specify date of birth to comply with
+     * COPPA rules. RequireConsentForMinorsRequires parental consent for ages below 18, regardless of country minor
+     * rules.RequireConsentForKidsRequires parental consent for ages below 14, regardless of country minor
+     * rules.BlockMinorsBlocks minors from using the app.
+     */
+    legalAgeGroupRule?: string;
+}
+export interface PasswordCredential {
+    // Do not use.
+    customKeyIdentifier?: number;
+    // Friendly name for the password. Optional.
+    displayName?: string;
+    /**
+     * The date and time at which the password expires represented using ISO 8601 format and is always in UTC time. For
+     * example, midnight UTC on Jan 1, 2014 would look like this: '2014-01-01T00:00:00Z'. Optional.
+     */
+    endDateTime?: string;
+    // The unique identifier for the password.
+    keyId?: string;
+    /**
+     * The date and time at which the password becomes valid. The Timestamp type represents date and time information using
+     * ISO 8601 format and is always in UTC time. For example, midnight UTC on Jan 1, 2014 would look like this:
+     * '2014-01-01T00:00:00Z'. Optional.
+     */
+    startDateTime?: string;
+    /**
+     * Read-only; Contains the strong passwords generated by Azure AD that are 16-64 characters in length. The generated
+     * password value is only returned during the initial POST request to addPassword. There is no way to retrieve this
+     * password in the future.
+     */
+    secretText?: string;
+    // Contains the first three characters of the password. Read-only.
+    hint?: string;
+}
+export interface RequiredResourceAccess {
+    /**
+     * The unique identifier for the resource that the application requires access to. This should be equal to the appId
+     * declared on the target resource application.
+     */
+    resourceAppId?: string;
+    // The list of OAuth2.0 permission scopes and app roles that the application requires from the specified resource.
+    resourceAccess?: ResourceAccess[];
+}
+export interface ResourceAccess {
+    // The unique identifier for one of the oauth2PermissionScopes or appRole instances that the resource application exposes.
+    id?: string;
+    /**
+     * Specifies whether the id property references an oauth2PermissionScopes or an appRole. Possible values are 'scope' or
+     * 'role'.
+     */
+    type?: string;
+}
+export interface WebApplication {
+    // Home page or landing page of the application.
+    homePageUrl?: string;
+    /**
+     * Specifies the URLs where user tokens are sent for sign-in, or the redirect URIs where OAuth 2.0 authorization codes and
+     * access tokens are sent.
+     */
+    redirectUris?: string[];
+    /**
+     * Specifies the URL that will be used by Microsoft's authorization service to logout an user using front-channel,
+     * back-channel or SAML logout protocols.
+     */
+    logoutUrl?: string;
+    // Specifies whether this web application can request tokens using the OAuth 2.0 implicit flow.
+    implicitGrantSettings?: ImplicitGrantSettings;
+}
+// tslint:disable-next-line: interface-name
+export interface ImplicitGrantSettings {
+    // Specifies whether this web application can request an ID token using the OAuth 2.0 implicit flow.
+    enableIdTokenIssuance?: boolean;
+    // Specifies whether this web application can request an access token using the OAuth 2.0 implicit flow.
+    enableAccessTokenIssuance?: boolean;
 }
 export interface CertificateAuthority {
     /**
@@ -9388,7 +9979,7 @@ export interface InternetMessageHeader {
 }
 // tslint:disable-next-line: interface-name
 export interface ItemBody {
-    // The type of the content. Possible values are text and HTML.
+    // The type of the content. Possible values are text and html.
     contentType?: BodyType;
     // The content of the item.
     content?: string;
@@ -10372,7 +10963,7 @@ export interface DefenderDetectedMalwareActions {
     severeSeverity?: DefenderThreatAction;
 }
 export interface Windows10NetworkProxyServer {
-    // Address to the proxy server. Specify an address in the format [':']
+    // Address to the proxy server. Specify an address in the format &amp;lt;server&amp;gt;[:&amp;lt;port&amp;gt;]
     address?: string;
     /**
      * Addresses that should not use the proxy server. The system will not use the proxy server for addresses beginning with
@@ -10882,35 +11473,76 @@ export interface PlannerCategoryDescriptions {
     category6?: string;
 }
 export interface ResourceVisualization {
+    // The item's title text.
     title?: string;
+    /**
+     * The item's media type. Can be used for filtering for a specific file based on a specific type. See below for supported
+     * types.
+     */
     type?: string;
+    /**
+     * The item's media type. Can be used for filtering for a specific type of file based on supported IANA Media Mime Types.
+     * Note that not all Media Mime Types are supported.
+     */
     mediaType?: string;
+    // A URL leading to the preview image for the item.
     previewImageUrl?: string;
+    // A preview text for the item.
     previewText?: string;
+    // A path leading to the folder in which the item is stored.
     containerWebUrl?: string;
+    /**
+     * A string describing where the item is stored. For example, the name of a SharePoint site or the user name identifying
+     * the owner of the OneDrive storing the item.
+     */
     containerDisplayName?: string;
+    // Can be used for filtering by the type of container in which the file is stored. Such as Site or OneDriveBusiness.
     containerType?: string;
 }
 export interface ResourceReference {
+    // A URL leading to the referenced item.
     webUrl?: string;
+    // The item's unique identifier.
     id?: string;
+    // A string value that can be used to classify the item, such as 'microsoft.graph.driveItem'
     type?: string;
 }
 export interface SharingDetail {
+    // The user who shared the document.
     sharedBy?: InsightIdentity;
+    /**
+     * The date and time the file was last shared. The timestamp represents date and time information using ISO 8601 format
+     * and is always in UTC time. For example, midnight UTC on Jan 1, 2014 would look like this: 2014-01-01T00:00:00Z.
+     * Read-only.
+     */
     sharedDateTime?: string;
+    // The subject with which the document was shared.
     sharingSubject?: string;
+    // Determines the way the document was shared, can be by a 'Link', 'Attachment', 'Group', 'Site'.
     sharingType?: string;
     sharingReference?: ResourceReference;
 }
 // tslint:disable-next-line: interface-name
 export interface InsightIdentity {
+    // The display name of the user who shared the item.
     displayName?: string;
+    // The id of the user who shared the item.
     id?: string;
+    // The email address of the user who shared the item.
     address?: string;
 }
 export interface UsageDetails {
+    /**
+     * The date and time the resource was last accessed by the user. The timestamp represents date and time information using
+     * ISO 8601 format and is always in UTC time. For example, midnight UTC on Jan 1, 2014 would look like this:
+     * 2014-01-01T00:00:00Z. Read-only.
+     */
     lastAccessedDateTime?: string;
+    /**
+     * The date and time the resource was last modified by the user. The timestamp represents date and time information using
+     * ISO 8601 format and is always in UTC time. For example, midnight UTC on Jan 1, 2014 would look like this:
+     * 2014-01-01T00:00:00Z. Read-only.
+     */
     lastModifiedDateTime?: string;
 }
 export interface NotebookLinks {
@@ -11346,83 +11978,169 @@ export interface SecureScoreControlStateUpdate {
     updatedDateTime?: string;
 }
 export interface CallMediaState {
+    // The audio media state. Possible values are: active, inactive.
     audio?: MediaState;
 }
 export interface ResultInfo {
+    // The result code.
     code?: number;
+    // The result sub-code.
     subcode?: number;
+    // The message.
     message?: string;
 }
+export interface CallRoute {
+    routingType?: RoutingType;
+    original?: IdentitySet;
+    final?: IdentitySet;
+}
 export interface ParticipantInfo {
+    // The identitySet associated with this participant. Read-only.
     identity?: IdentitySet;
+    endpointType?: EndpointType;
+    /**
+     * The home region of the participant. This can be a country, a continent, or a larger geographic region. This does not
+     * change based on the participant's current physical location. Read-only.
+     */
     region?: string;
+    // The language culture string. Read-only.
     languageId?: string;
+    countryCode?: string;
+}
+// tslint:disable-next-line: interface-name
+export interface InvitationParticipantInfo {
+    // The identitySet associated with this invitation.
+    identity?: IdentitySet;
+    /**
+     * Optional. The call which the target identity is currently a part of. This call will be dropped once the participant is
+     * added.
+     */
+    replacesCallId?: string;
 }
 // tslint:disable-next-line: no-empty-interface
 export interface MediaConfig {}
 export interface ChatInfo {
+    // The unique identifier for a thread in Microsoft Teams.
     threadId?: string;
+    // The unique identifier of a message in a Microsoft Teams channel.
     messageId?: string;
+    // The ID of the reply message.
     replyChainMessageId?: string;
 }
 // tslint:disable-next-line: no-empty-interface
+export interface CallOptions {}
+// tslint:disable-next-line: no-empty-interface
 export interface MeetingInfo {}
 export interface ToneInfo {
+    // An incremental identifier used for ordering DTMF events.
     sequenceId?: number;
+    // Possible values are: tone0, tone1, tone2, tone3, tone4, tone5, tone6, tone7, tone8, tone9, star, pound
     tone?: Tone;
 }
 // tslint:disable-next-line: interface-name
-export interface InvitationParticipantInfo extends ParticipantInfo {
-    replacesCallId?: string;
+export interface IncomingContext {
+    sourceParticipantId?: string;
+    observedParticipantId?: string;
+    onBehalfOf?: IdentitySet;
+    transferor?: IdentitySet;
 }
 export interface MeetingParticipants {
     organizer?: MeetingParticipantInfo;
     attendees?: MeetingParticipantInfo[];
 }
 export interface MeetingParticipantInfo {
+    // Identity information of the participant.
     identity?: IdentitySet;
+    // User principal name of the participant.
     upn?: string;
 }
 export interface AudioConferencing {
     conferenceId?: string;
+    // The toll number that connects to the Audio Conference Provider.
     tollNumber?: string;
+    // The toll-free number that connects to the Audio Conference Provider.
     tollFreeNumber?: string;
+    // A URL to the externally-accessible web page that contains dial-in information.
     dialinUrl?: string;
 }
+export interface RecordingInfo {
+    recordingStatus?: RecordingStatus;
+    initiator?: IdentitySet;
+}
 export interface MediaStream {
+    // The media type. The possible value are unknown, audio, video, videoBasedScreenSharing, data.
     mediaType?: Modality;
+    // The media stream label.
     label?: string;
+    // The source ID.
     sourceId?: string;
+    // The direction. The possible values are inactive, sendOnly, receiveOnly, sendReceive.
     direction?: MediaDirection;
+    // If the media is muted by the server.
     serverMuted?: boolean;
 }
+// tslint:disable-next-line: no-empty-interface
+export interface OutgoingCallOptions extends CallOptions {}
 export interface CommsNotification {
+    // Possible values are: created, updated, deleted.
     changeType?: ChangeType;
+    // URI of the resource that was changed.
     resourceUrl?: string;
 }
 export interface CommsNotifications {
+    // The notification of a change in the resource.
     value?: CommsNotification[];
 }
 export interface AppHostedMediaConfig extends MediaConfig {
+    // The media configuration blob generated by smart media agent.
     blob?: string;
 }
 export interface ServiceHostedMediaConfig extends MediaConfig {
+    // The list of media to pre-fetch.
     preFetchMedia?: MediaInfo[];
 }
 export interface MediaInfo {
+    /**
+     * Path to the prompt that will be played. Currently supports only Wave file (.wav) format, single-channel, 16-bit samples
+     * with a 16,000 (16KHz) sampling rate.
+     */
     uri?: string;
+    /**
+     * Optional. Used to uniquely identity the resource. If passed in, the prompt uri will be cached against this resourceId
+     * as a key.
+     */
     resourceId?: string;
 }
 export interface OrganizerMeetingInfo extends MeetingInfo {
+    // The organizer Azure Active Directory identity.
     organizer?: IdentitySet;
 }
 export interface TokenMeetingInfo extends MeetingInfo {
+    // The token used to join the call.
     token?: string;
 }
 // tslint:disable-next-line: no-empty-interface
 export interface Prompt {}
 export interface MediaPrompt extends Prompt {
+    // The media information
     mediaInfo?: MediaInfo;
+}
+export interface TeamClassSettings {
+    /**
+     * If set to true, enables sending of weekly assignments digest emails to parents/guardians, provided the tenant admin has
+     * enabled the setting globally.
+     */
+    notifyGuardiansAboutAssignments?: boolean;
+}
+export interface TeamsTabConfiguration {
+    // Identifier for the entity hosted by the tab provider.
+    entityId?: string;
+    // Url used for rendering tab contents in Teams. Required.
+    contentUrl?: string;
+    // Url called by Teams client when a Tab is removed using the Teams Client.
+    removeUrl?: string;
+    // Url for showing tab contents outside of Teams.
+    websiteUrl?: string;
 }
 export interface TeamMemberSettings {
     // If set to true, members can add and update channels.
@@ -11463,19 +12181,6 @@ export interface TeamFunSettings {
     allowStickersAndMemes?: boolean;
     // If set to true, enables users to include custom memes.
     allowCustomMemes?: boolean;
-}
-export interface TeamClassSettings {
-    notifyGuardiansAboutAssignments?: boolean;
-}
-export interface TeamsTabConfiguration {
-    // Identifier for the entity hosted by the tab provider.
-    entityId?: string;
-    // Url used for rendering tab contents in Teams. Required.
-    contentUrl?: string;
-    // Url called by Teams client when a Tab is removed using the Teams Client.
-    removeUrl?: string;
-    // Url for showing tab contents outside of Teams.
-    websiteUrl?: string;
 }
 export interface OperationError {
     // Operation error code.
