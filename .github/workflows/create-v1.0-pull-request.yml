@@ -2,7 +2,7 @@
 # Licensed under the MIT License.
 
 # This action will automatically create a pull request against master if the pushed branch
-# has a branch path spec likev 1.0/pipelinebuild/*. Configure this action by updating the
+# has a branch path spec like 1.0/pipelinebuild/*. Configure this action by updating the
 # environment variable values[0]. 
 
 name: "create pull request"
@@ -32,7 +32,7 @@ jobs:
       shell: bash
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        MESSAGE_TITLE: Generated models and request builders using Typewriter
+        MESSAGE_TITLE: Generated v1.0 typings using Typewriter
         MESSAGE_BODY: "This pull request was automatically created by the GitHub Action, **${{github.workflow}}**. \n\n The commit hash is _${{github.sha}}_. \n\n **Important** Check for unexpected deletions or changes in this PR. \n\n cc: @darrelmiller"
         REVIEWERS: peombwa,ddyett
         ASSIGNEDTO: MIchaelMainer
