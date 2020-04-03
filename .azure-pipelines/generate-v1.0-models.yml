@@ -65,7 +65,7 @@ steps:
     targetType: inline
     workingDirectory: '$(Build.SourcesDirectory)/msgraph-typescript-typings'
     script: |
-      git checkout dev | Write-Host
+      git checkout master | Write-Host
 
 - task: PowerShell@2
   displayName: 'Git: branch from master named with the build id: $(Build.BuildId)'
@@ -125,7 +125,7 @@ steps:
       git add microsoft-graph.d.ts | Write-Host
       git commit -m "Update generated typings with build $env:Build_BuildId" | Write-Host
       Write-Host "Added and committed generated microsoft-graph.d.ts." -ForegroundColor Green
-      
+
 - task: PowerShell@2
   displayName: 'Git: push updates'
   env: # [2]
