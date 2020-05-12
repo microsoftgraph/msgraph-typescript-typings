@@ -13,7 +13,8 @@ on:
   push:
     branches:
       - "v1.0/pipelinebuild/*"
-
+    paths:
+      - 'microsoft-graph.d.ts'
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   # This workflow contains a single job called "create-pull-request"
@@ -36,7 +37,7 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         MESSAGE_TITLE: Generated v1.0 typings using Typewriter
         MESSAGE_BODY: "This pull request was automatically created by the GitHub Action, **${{github.workflow}}**. \n\n The commit hash is _${{github.sha}}_. \n\n **Important** Check for unexpected deletions or changes in this PR. \n\n cc: @darrelmiller"
-        REVIEWERS: peombwa,ddyett
+        REVIEWERS: peombwa,ddyett,zengin
         ASSIGNEDTO: MIchaelMainer
         LABELS: generated
         BASE: master
