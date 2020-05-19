@@ -126,6 +126,25 @@ export type MeetingMessageType =
     | "meetingAccepted"
     | "meetingTenativelyAccepted"
     | "meetingDeclined";
+export type EventType = "singleInstance" | "occurrence" | "exception" | "seriesMaster";
+export type RecurrencePatternType =
+    | "daily"
+    | "weekly"
+    | "absoluteMonthly"
+    | "relativeMonthly"
+    | "absoluteYearly"
+    | "relativeYearly";
+export type WeekIndex = "first" | "second" | "third" | "fourth" | "last";
+export type RecurrenceRangeType = "endDate" | "noEnd" | "numbered";
+export type MeetingRequestType =
+    | "none"
+    | "newMeetingRequest"
+    | "fullUpdate"
+    | "informationalUpdate"
+    | "silentUpdate"
+    | "outdated"
+    | "principalWantsCopy";
+export type ResponseType = "none" | "organizer" | "tentativelyAccepted" | "accepted" | "declined" | "notResponded";
 export type CalendarColor =
     | "lightBlue"
     | "lightGreen"
@@ -148,18 +167,7 @@ export type CalendarRoleType =
     | "delegateWithoutPrivateEventAccess"
     | "delegateWithPrivateEventAccess"
     | "custom";
-export type ResponseType = "none" | "organizer" | "tentativelyAccepted" | "accepted" | "declined" | "notResponded";
 export type Sensitivity = "normal" | "personal" | "private" | "confidential";
-export type RecurrencePatternType =
-    | "daily"
-    | "weekly"
-    | "absoluteMonthly"
-    | "relativeMonthly"
-    | "absoluteYearly"
-    | "relativeYearly";
-export type WeekIndex = "first" | "second" | "third" | "fourth" | "last";
-export type RecurrenceRangeType = "endDate" | "noEnd" | "numbered";
-export type EventType = "singleInstance" | "occurrence" | "exception" | "seriesMaster";
 export type SelectionLikelihoodInfo = "notSpecified" | "high";
 export type WebsiteType = "other" | "home" | "work" | "blog" | "profile";
 export type CategoryColor =
@@ -683,6 +691,7 @@ export type ManagedAppDataStorageLocation = "oneDriveForBusiness" | "sharePoint"
 export type ManagedAppDataTransferLevel = "allApps" | "managedApps" | "none";
 export type ManagedAppClipboardSharingLevel = "allApps" | "managedAppsWithPasteIn" | "managedApps" | "blocked";
 export type ManagedAppPinCharacterSet = "numeric" | "alphanumericAndSymbol";
+export type ManagedBrowserType = "notConfigured" | "microsoftEdge";
 export type ManagedAppDataEncryptionType =
     | "useDeviceSettings"
     | "afterDeviceRestart"
@@ -852,6 +861,15 @@ export type Tone =
 export type TeamVisibilityType = "private" | "public" | "hiddenMembership" | "unknownFutureValue";
 export type ClonableTeamParts = "apps" | "tabs" | "settings" | "channels" | "members";
 export type GiphyRatingType = "strict" | "moderate" | "unknownFutureValue";
+export type ChatMessageType = "message" | "chatEvent" | "typing" | "unknownFutureValue";
+export type ChatMessageImportance = "normal" | "high" | "urgent" | "unknownFutureValue";
+export type ChatMessagePolicyViolationDlpActionTypes = "none" | "notifySender" | "blockAccess" | "blockAccessExternal";
+export type ChatMessagePolicyViolationUserActionTypes = "none" | "override" | "reportFalsePositive";
+export type ChatMessagePolicyViolationVerdictDetailsTypes =
+    | "none"
+    | "allowFalsePositiveOverride"
+    | "allowOverrideWithoutJustification"
+    | "allowOverrideWithJustification";
 export type TeamsAppDistributionMethod = "store" | "organization" | "sideloaded" | "unknownFutureValue";
 export type TeamsAsyncOperationType =
     | "invalid"
@@ -1351,6 +1369,7 @@ export interface User extends DirectoryObject {
     schools?: string[];
     // A list for the user to enumerate their skills.
     skills?: string[];
+    appRoleAssignments?: AppRoleAssignment[];
     // Devices that are owned by the user. Read-only. Nullable.
     ownedDevices?: DirectoryObject[];
     // Devices that are registered for the user. Read-only. Nullable.
@@ -1366,6 +1385,7 @@ export interface User extends DirectoryObject {
     memberOf?: DirectoryObject[];
     // Directory objects that were created by the user. Read-only. Nullable.
     createdObjects?: DirectoryObject[];
+    oauth2PermissionGrants?: OAuth2PermissionGrant[];
     // Directory objects that are owned by the user. Read-only. Nullable.
     ownedObjects?: DirectoryObject[];
     // A collection of this user's license details. Read-only.
@@ -1425,6 +1445,69 @@ export interface User extends DirectoryObject {
     activities?: UserActivity[];
     onlineMeetings?: OnlineMeeting[];
     joinedTeams?: Team[];
+}
+export interface AppRoleAssignment extends DirectoryObject {
+    /**
+     * The identifier (id) for the app role which is assigned to the principal. This app role must be exposed in the appRoles
+     * property on the resource application's service principal (resourceId). If the resource application has not declared any
+     * app roles, a default app role ID of 00000000-0000-0000-0000-000000000000 can be specified to signal that the principal
+     * is assigned to the resource app without any specific app roles. Required on create. Does not support $filter.
+     */
+    appRoleId?: string;
+    createdDateTime?: string;
+    /**
+     * The display name of the user, group, or service principal that was granted the app role assignment. Read-only. Supports
+     * $filter (eq and startswith).
+     */
+    principalDisplayName?: string;
+    /**
+     * The unique identifier (id) for the user, group or service principal being granted the app role. Required on create.
+     * Does not support $filter.
+     */
+    principalId?: string;
+    /**
+     * The type of the assigned principal. This can either be 'User', 'Group' or 'ServicePrincipal'. Read-only. Does not
+     * support $filter.
+     */
+    principalType?: string;
+    // The display name of the resource app's service principal to which the assignment is made. Does not support $filter.
+    resourceDisplayName?: string;
+    /**
+     * The unique identifier (id) for the resource service principal for which the assignment is made. Required on create.
+     * Supports $filter (eq only).
+     */
+    resourceId?: string;
+}
+export interface OAuth2PermissionGrant extends Entity {
+    /**
+     * The id of the client service principal for the application which is authorized to act on behalf of a signed-in user
+     * when accessing an API. Required. Supports $filter (eq only).
+     */
+    clientId?: string;
+    /**
+     * Indicates if authorization is granted for the client application to impersonate all users or only a specific user.
+     * AllPrincipals indicates authorization to impersonate all users. Principal indicates authorization to impersonate a
+     * specific user. Consent on behalf of all users can be granted by an administrator. Non-admin users may be authorized to
+     * consent on behalf of themselves in some cases, for some delegated permissions. Required. Supports $filter (eq only).
+     */
+    consentType?: string;
+    /**
+     * The id of the user on behalf of whom the client is authorized to access the resource, when consentType is Principal. If
+     * consentType is AllPrincipals this value is null. Required when consentType is Principal.
+     */
+    principalId?: string;
+    /**
+     * The id of the resource service principal to which access is authorized. This identifies the API which the client is
+     * authorized to attempt to call on behalf of a signed-in user.
+     */
+    resourceId?: string;
+    /**
+     * A space-separated list of the claim values for delegated permissions which should be included in access tokens for the
+     * resource application (the API). For example, openid User.Read GroupMember.Read.All. Each claim value should match the
+     * value field of one of the delegated permissions defined by the API, listed in the publishedPermissionScopes property of
+     * the resource service principal.
+     */
+    scope?: string;
 }
 export interface LicenseDetails extends Entity {
     // Information about the service plans assigned with the license. Read-only, Not nullable
@@ -1740,6 +1823,7 @@ export interface Event extends OutlookItem {
     onlineMeetingProvider?: OnlineMeetingProviderType;
     // Details for an attendee to join the meeting online. Read-only.
     onlineMeeting?: OnlineMeetingInfo;
+    allowNewTimeProposals?: boolean;
     /**
      * The collection of fileAttachment and itemAttachment attachments for the event. Navigation property. Read-only.
      * Nullable.
@@ -2162,19 +2246,21 @@ export interface PlannerUser extends Entity {
 }
 export interface OfficeGraphInsights extends Entity {
     /**
-     * Calculated relationship identifying trending documents. Trending documents can be stored in OneDrive or in SharePoint
-     * sites.
+     * Calculated relationship identifying documents trending around a user. Trending documents are calculated based on
+     * activity of the user's closest network of people and include files stored in OneDrive for Business and SharePoint.
+     * Trending insights help the user to discover potentially useful content that the user has access to, but has never
+     * viewed before.
      */
     trending?: Trending[];
     /**
-     * Calculated relationship identifying documents shared with a user. Documents can be shared as email attachments or as
-     * OneDrive for Business links sent in emails.
+     * Calculated relationship identifying documents shared with or by the user. This includes URLs, file attachments, and
+     * reference attachments to OneDrive for Business and SharePoint files found in Outlook messages and meetings. This also
+     * includes URLs and reference attachments to Teams conversations. Ordered by recency of share.
      */
     shared?: SharedInsight[];
     /**
-     * Calculated relationship identifying documents viewed and modified by a user. Includes documents the user used in
-     * OneDrive for Business, SharePoint, opened as email attachments, and as link attachments from sources like Box, DropBox
-     * and Google Drive.
+     * Calculated relationship identifying the latest documents viewed or modified by a user, including OneDrive for Business
+     * and SharePoint documents, ranked by recency of use.
      */
     used?: UsedInsight[];
 }
@@ -2323,8 +2409,8 @@ export interface Application extends DirectoryObject {
     appId?: string;
     applicationTemplateId?: string;
     /**
-     * The collection of application roles that an application may declare. These roles can be assigned to users, groups, or
-     * service principals. Not nullable.
+     * The collection of roles the application declares. With app role assignments, these roles can be assigned to users,
+     * groups, or other applications' service principals. Not nullable.
      */
     appRoles?: AppRole[];
     /**
@@ -2709,6 +2795,24 @@ export interface DomainDnsUnavailableRecord extends DomainDnsRecord {
     // Provides the reason why the DomainDnsUnavailableRecord entity is returned.
     description?: string;
 }
+export interface Endpoint extends DirectoryObject {
+    /**
+     * Describes the capability that is associated with this resource. (e.g. Messages, Conversations, etc.) Not nullable.
+     * Read-only.
+     */
+    capability?: string;
+    // Application id of the publishing underlying service. Not nullable. Read-only.
+    providerId?: string;
+    // Name of the publishing underlying service. Read-only.
+    providerName?: string;
+    // URL of the published resource. Not nullable. Read-only.
+    uri?: string;
+    /**
+     * For Office 365 groups, this is set to a well-known name for the resource (e.g. Yammer.FeedURL etc.). Not nullable.
+     * Read-only.
+     */
+    providerResourceId?: string;
+}
 export interface Group extends DirectoryObject {
     // The licenses that are assigned to the group. Returned only on $select. Read-only.
     assignedLicenses?: AssignedLicense[];
@@ -2840,6 +2944,7 @@ export interface Group extends DirectoryObject {
      */
     hideFromAddressLists?: boolean;
     isArchived?: boolean;
+    appRoleAssignments?: AppRoleAssignment[];
     /**
      * Users and groups that are members of this group. HTTP Methods: GET (supported for all groups), POST (supported for
      * Office 365 groups, security groups and mail-enabled security groups), DELETE (supported for Office 365 groups and
@@ -3002,6 +3107,117 @@ export interface Contract extends DirectoryObject {
      * It is not automatically updated if the customer tenant's display name changes.
      */
     displayName?: string;
+}
+export interface ServicePrincipal extends DirectoryObject {
+    // true if the service principal account is enabled; otherwise, false.
+    accountEnabled?: boolean;
+    /**
+     * Defines custom behavior that a consuming service can use to call an app in specific contexts. For example, applications
+     * that can render file streams may set the addIns property for its 'FileHandler' functionality. This will let services
+     * like Office 365 call the application in the context of a document the user is working on.
+     */
+    addIns?: AddIn[];
+    /**
+     * Used to retrieve service principals by subscription, identify resource group and full resource ids for managed
+     * identities.
+     */
+    alternativeNames?: string[];
+    // The display name exposed by the associated application.
+    appDisplayName?: string;
+    // The unique identifier for the associated application (its appId property).
+    appId?: string;
+    /**
+     * Contains the tenant id where the application is registered. This is applicable only to service principals backed by
+     * applications.
+     */
+    appOwnerOrganizationId?: string;
+    /**
+     * Specifies whether users or other service principals need to be granted an app role assignment for this service
+     * principal before users can sign in or apps can get tokens. The default value is false. Not nullable.
+     */
+    appRoleAssignmentRequired?: boolean;
+    /**
+     * The roles exposed by the application which this service principal represents. For more information see the appRoles
+     * property definition on the application entity. Not nullable.
+     */
+    appRoles?: AppRole[];
+    // The display name for the service principal.
+    displayName?: string;
+    // Home page or landing page of the application.
+    homepage?: string;
+    /**
+     * Basic profile information of the acquired application such as app's marketing, support, terms of service and privacy
+     * statement URLs. The terms of service and privacy statement are surfaced to users through the user consent experience.
+     * For more info, see How to: Add Terms of service and privacy statement for registered Azure AD apps.
+     */
+    info?: InformationalUrl;
+    // The collection of key credentials associated with the service principal. Not nullable.
+    keyCredentials?: KeyCredential[];
+    /**
+     * Specifies the URL that will be used by Microsoft's authorization service to logout an user using OpenId Connect
+     * front-channel, back-channel or SAML logout protocols.
+     */
+    logoutUrl?: string;
+    /**
+     * The delegated permissions exposed by the application. For more information see the oauth2PermissionScopes property on
+     * the application entity's api property. Not nullable.
+     */
+    oauth2PermissionScopes?: PermissionScope[];
+    // The collection of password credentials associated with the service principal. Not nullable.
+    passwordCredentials?: PasswordCredential[];
+    /**
+     * The URLs that user tokens are sent to for sign in with the associated application, or the redirect URIs that OAuth 2.0
+     * authorization codes and access tokens are sent to for the associated application. Not nullable.
+     */
+    replyUrls?: string[];
+    /**
+     * Contains the list of identifiersUris, copied over from the associated application. Additional values can be added to
+     * hybrid applications. These values can be used to identify the permissions exposed by this app within Azure AD. For
+     * example,Client apps can specify a resource URI which is based on the values of this property to acquire an access
+     * token, which is the URI returned in the 'aud' claim.The any operator is required for filter expressions on multi-valued
+     * properties. Not nullable.
+     */
+    servicePrincipalNames?: string[];
+    /**
+     * Identifies if the service principal represents an application or a managed identity. This is set by Azure AD
+     * internally. For a service principal that represents an application this is set as Application. For a service principal
+     * that represent a managed identity this is set as ManagedIdentity.
+     */
+    servicePrincipalType?: string;
+    // Custom strings that can be used to categorize and identify the service principal. Not nullable.
+    tags?: string[];
+    /**
+     * Specifies the keyId of a public key from the keyCredentials collection. When configured, Azure AD issues tokens for
+     * this application encrypted using the key specified by this property. The application code that receives the encrypted
+     * token must use the matching private key to decrypt the token before it can be used for the signed-in user.
+     */
+    tokenEncryptionKeyId?: string;
+    // Principals (users, groups, and service principals) that are assigned to this service principal. Read-only.
+    appRoleAssignedTo?: AppRoleAssignment[];
+    // Applications that this service principal is assigned to. Read-only. Nullable.
+    appRoleAssignments?: AppRoleAssignment[];
+    /**
+     * Endpoints available for discovery. Services like Sharepoint populate this property with a tenant specific SharePoint
+     * endpoints that other applications can discover and use in their experiences.
+     */
+    endpoints?: Endpoint[];
+    /**
+     * Delegated permission grants authorizing this service principal to access an API on behalf of a signed-in user.
+     * Read-only. Nullable.
+     */
+    oauth2PermissionGrants?: OAuth2PermissionGrant[];
+    // Roles that this service principal is a member of. HTTP Methods: GET Read-only. Nullable.
+    memberOf?: DirectoryObject[];
+    transitiveMemberOf?: DirectoryObject[];
+    // Directory objects created by this service principal. Read-only. Nullable.
+    createdObjects?: DirectoryObject[];
+    /**
+     * Directory objects that are owners of this servicePrincipal. The owners are a set of non-admin users or
+     * servicePrincipals who are allowed to modify this object. Read-only. Nullable.
+     */
+    owners?: DirectoryObject[];
+    // Directory objects that are owned by this service principal. Read-only. Nullable.
+    ownedObjects?: DirectoryObject[];
 }
 export interface SubscribedSku extends Entity {
     // Possible values are: Enabled, Warning, Suspended, Deleted, LockedOut.
@@ -4112,28 +4328,46 @@ export interface WorkbookWorksheetProtection extends Entity {
     protected?: boolean;
 }
 export interface Place extends Entity {
+    // The name associated with the place.
     displayName?: string;
+    // Specifies the place location in latitude, longitude and (optionally) altitude coordinates.
     geoCoordinates?: OutlookGeoCoordinates;
+    // The phone number of the place.
     phone?: string;
+    // The street address of the place.
     address?: PhysicalAddress;
 }
 export interface Room extends Place {
+    // Email address of the room.
     emailAddress?: string;
+    // Specifies a nickname for the room, for example, 'conf room'.
     nickname?: string;
+    // Specifies the building name or building number that the room is in.
     building?: string;
+    // Specifies the floor number that the room is on.
     floorNumber?: number;
+    // Specifies a descriptive label for the room, for example, a number or name.
     label?: string;
+    // Specifies the capacity of the room.
     capacity?: number;
+    // Type of room. Possible values are standard, and reserved.
     bookingType?: BookingType;
+    // Specifies the name of the audio device in the room.
     audioDeviceName?: string;
+    // Specifies the name of the video device in the room.
     videoDeviceName?: string;
+    // Specifies the name of the display device in the room.
     displayDeviceName?: string;
     isWheelChairAccessible?: boolean;
+    // Specifies additional features of the room, for example, details like the type of view or furniture type.
     tags?: string[];
+    // Specifies a descriptive label for the floor, for example, P.
     floorLabel?: string;
 }
 export interface RoomList extends Place {
+    // The email address of the room list.
     emailAddress?: string;
+    // Read-only. Nullable.
     rooms?: Room[];
 }
 export interface OutlookCategory extends Entity {
@@ -4183,12 +4417,32 @@ export interface EventMessage extends Message {
      * meetingDeclined.
      */
     meetingMessageType?: MeetingMessageType;
+    startDateTime?: DateTimeTimeZone;
+    endDateTime?: DateTimeTimeZone;
+    location?: Location;
+    type?: EventType;
+    recurrence?: PatternedRecurrence;
+    isOutOfDate?: boolean;
+    isAllDay?: boolean;
+    isDelegated?: boolean;
     /**
      * The event associated with the event message. The assumption for attendees or room resources is that the Calendar
      * Attendant is set to automatically update the calendar with an event when meeting request event messages arrive.
      * Navigation property. Read-only.
      */
     event?: Event;
+}
+export interface EventMessageRequest extends EventMessage {
+    previousLocation?: Location;
+    previousStartDateTime?: DateTimeTimeZone;
+    previousEndDateTime?: DateTimeTimeZone;
+    responseRequested?: boolean;
+    allowNewTimeProposals?: boolean;
+    meetingRequestType?: MeetingRequestType;
+}
+export interface EventMessageResponse extends EventMessage {
+    proposedNewTime?: TimeSlot;
+    responseType?: ResponseType;
 }
 export interface MessageRule extends Entity {
     // The display name of the rule.
@@ -4642,6 +4896,11 @@ export interface ManagedAppProtection extends ManagedAppPolicy {
     minimumRequiredAppVersion?: string;
     // Versions less than the specified version will result in warning message on the managed app.
     minimumWarningAppVersion?: string;
+    /**
+     * Indicates in which managed browser(s) that internet links should be opened. When this property is configured,
+     * ManagedBrowserToOpenLinksRequired should be true. Possible values are: notConfigured, microsoftEdge.
+     */
+    managedBrowser?: ManagedBrowserType;
 }
 export interface TargetedManagedAppProtection extends ManagedAppProtection {
     // Indicates if the policy is deployed to any inclusion groups or not.
@@ -4662,6 +4921,11 @@ export interface IosManagedAppProtection extends TargetedManagedAppProtection {
     deployedAppCount?: number;
     // Indicates whether use of the FaceID is allowed in place of a pin if PinRequired is set to True.
     faceIdBlocked?: boolean;
+    /**
+     * A custom browser protocol to open weblink on iOS. When this property is configured, ManagedBrowserToOpenLinksRequired
+     * should be true.
+     */
+    customBrowserProtocol?: string;
     // List of apps to which the policy is deployed.
     apps?: ManagedMobileApp[];
     // Navigation property to deployment summary of the configuration.
@@ -4680,6 +4944,16 @@ export interface AndroidManagedAppProtection extends TargetedManagedAppProtectio
     minimumRequiredPatchVersion?: string;
     // Define the oldest recommended Android security patch level a user can have for secure access to the app.
     minimumWarningPatchVersion?: string;
+    /**
+     * Unique identifier of the preferred custom browser to open weblink on Android. When this property is configured,
+     * ManagedBrowserToOpenLinksRequired should be true.
+     */
+    customBrowserPackageId?: string;
+    /**
+     * Friendly name of the preferred custom browser to open weblink on Android. When this property is configured,
+     * ManagedBrowserToOpenLinksRequired should be true.
+     */
+    customBrowserDisplayName?: string;
     // List of apps to which the policy is deployed.
     apps?: ManagedMobileApp[];
     // Navigation property to deployment summary of the configuration.
@@ -8272,7 +8546,7 @@ export interface SharedInsight extends Entity {
     resource?: Entity;
 }
 export interface UsedInsight extends Entity {
-    // Information about when the item was last viewed and modified by the user. Read only.
+    // Information about when the item was last viewed or modified by the user. Read only.
     lastUsed?: UsageDetails;
     // Properties that you can use to visualize the document in your experience. Read-only
     resourceVisualization?: ResourceVisualization;
@@ -8805,8 +9079,12 @@ export interface Channel extends Entity {
      * parsed. Read-only.
      */
     webUrl?: string;
+    // A collection of all the messages in the channel. A navigation property. Nullable.
+    messages?: ChatMessage[];
     // A collection of all the tabs in the channel. A navigation property.
     tabs?: TeamsTab[];
+    // Metadata for the location where the channel's files are stored.
+    filesFolder?: DriveItem;
 }
 export interface TeamsAppInstallation extends Entity {
     // The app that is installed.
@@ -8824,6 +9102,55 @@ export interface TeamsAsyncOperation extends Entity {
     targetResourceLocation?: string;
     error?: OperationError;
 }
+export interface ChatMessage extends Entity {
+    /**
+     * Read-only. Id of the parent chat message or root chat message of the thread. (Only applies to chat messages in channels
+     * not chats)
+     */
+    replyToId?: string;
+    // Read only. Details of the sender of the chat message.
+    from?: IdentitySet;
+    // Read-only. Version number of the chat message.
+    etag?: string;
+    // The type of chat message. The possible values are: message.
+    messageType?: ChatMessageType;
+    // Read only. Timestamp of when the chat message was created.
+    createdDateTime?: string;
+    /**
+     * Read only. Timestamp of when the chat message is created or edited, including when a reply is made (if it's a root chat
+     * message in a channel) or a reaction is added or removed.
+     */
+    lastModifiedDateTime?: string;
+    // Read only. Timestamp at which the chat message was deleted, or null if not deleted.
+    deletedDateTime?: string;
+    // The subject of the chat message, in plaintext.
+    subject?: string;
+    /**
+     * Plaintext/HTML representation of the content of the chat message. Representation is specified by the contentType inside
+     * the body. The content is always in HTML if the chat message contains a chatMessageMention.
+     */
+    body?: ItemBody;
+    /**
+     * Summary text of the chat message that could be used for push notifications and summary views or fall back views. Only
+     * applies to channel chat messages, not chat messages in a chat.
+     */
+    summary?: string;
+    // Attached files. Attachments are currently read-only – sending attachments is not supported.
+    attachments?: ChatMessageAttachment[];
+    // List of entities mentioned in the chat message. Currently supports user, bot, team, channel.
+    mentions?: ChatMessageMention[];
+    // The importance of the chat message. The possible values are: normal, high, urgent.
+    importance?: ChatMessageImportance;
+    policyViolation?: ChatMessagePolicyViolation;
+    reactions?: ChatMessageReaction[];
+    // Locale of the chat message set by the client.
+    locale?: string;
+    webUrl?: string;
+    replies?: ChatMessage[];
+    hostedContents?: ChatMessageHostedContent[];
+}
+// tslint:disable-next-line: no-empty-interface
+export interface ChatMessageHostedContent extends Entity {}
 export interface AppCatalogs extends Entity {
     teamsApps?: TeamsApp[];
 }
@@ -9408,8 +9735,9 @@ export interface ApiApplication {
      */
     requestedAccessTokenVersion?: number;
     /**
-     * The collection of OAuth 2.0 permission scopes that the web API (resource) application exposes to client applications.
-     * These permission scopes may be granted to client applications during consent.
+     * The definition of the delegated permissions exposed by the web API represented by this application registration. These
+     * delegated permissions may be requested by a client application, and may be granted by users or administrators during
+     * consent. Delegated permissions are sometimes referred to as OAuth 2.0 scopes.
      */
     oauth2PermissionScopes?: PermissionScope[];
 }
@@ -9420,11 +9748,17 @@ export interface PreAuthorizedApplication {
     delegatedPermissionIds?: string[];
 }
 export interface PermissionScope {
-    // Permission help text that appears in the admin consent and app assignment experiences.
+    /**
+     * A description of the delegated permissions, intended to be read by an administrator granting the permission on behalf
+     * of all users. This text appears in tenant-wide admin consent experiences.
+     */
     adminConsentDescription?: string;
-    // Display name for the permission that appears in the admin consent and app assignment experiences.
+    // The permission's title, intended to be read by an administrator granting the permission on behalf of all users.
     adminConsentDisplayName?: string;
-    // Unique scope permission identifier inside the oauth2Permissions collection.
+    /**
+     * Unique delegated permission identifier inside the collection of delegated permissions defined for a resource
+     * application.
+     */
     id?: string;
     /**
      * When creating or updating a permission, this property must be set to true (which is the default). To delete a
@@ -9432,29 +9766,44 @@ export interface PermissionScope {
      * removed.
      */
     isEnabled?: boolean;
-    // For internal use.
     origin?: string;
     /**
-     * Specifies whether this scope permission can be consented to by an end user, or whether it is a tenant-wide permission
-     * that must be consented to by a company administrator. Possible values are User or Admin.
+     * Specifies whether this delegated permission should be considered safe for non-admin users to consent to on behalf of
+     * themselves, or whether an administrator should be required for consent to the permissions. This will be the default
+     * behavior, but each customer can choose to customize the behavior in their organization (by allowing, restricting or
+     * limiting user consent to this delegated permission.)
      */
     type?: string;
-    // Permission help text that appears in the end-user consent experience.
+    /**
+     * A description of the delegated permissions, intended to be read by a user granting the permission on their own behalf.
+     * This text appears in consent experiences where the user is consenting only on behalf of themselves.
+     */
     userConsentDescription?: string;
-    // Display name for the permission that appears in the end-user consent experience.
+    /**
+     * A title for the permission, intended to be read by a user granting the permission on their own behalf. This text
+     * appears in consent experiences where the user is consenting only on behalf of themselves.
+     */
     userConsentDisplayName?: string;
-    // The value of the scope claim that the resource application should expect in the OAuth 2.0 access token.
+    /**
+     * Specifies the value to include in the scp (scope) claim in access tokens. Must not exceed 120 characters in length.
+     * Allowed characters are : ! # $ % &amp; ' ( ) * + , - . / : ; = ? @ [ ] ^ + _ { } ~, as well as characters in the ranges
+     * 0-9, A-Z and a-z. Any other character, including the space character, are not allowed.
+     */
     value?: string;
 }
 export interface AppRole {
     /**
-     * Specifies whether this app role definition can be assigned to users and groups by setting to 'User', or to other
-     * applications (that are accessing this application in daemon service scenarios) by setting to 'Application', or to both.
+     * Specifies whether this app role can be assigned to users and groups (by setting to ['User']), to other application's
+     * (by setting to ['Application'], or both (by setting to ['User', 'Application']). App roles supporting assignment of
+     * other applications' service principals are also known as application permissions.
      */
     allowedMemberTypes?: string[];
-    // Permission help text that appears in the admin app assignment and consent experiences.
+    /**
+     * The description for the app role. This is displayed when the app role is being assigned and, if the app role functions
+     * as an application permission, during consent experiences.
+     */
     description?: string;
-    // Display name for the permission that appears in the admin consent and app assignment experiences.
+    // Display name for the permission that appears in the app role assignment and consent experiences.
     displayName?: string;
     /**
      * Unique role identifier inside the appRoles collection. When creating a new app role, a new Guid identifier must be
@@ -9467,14 +9816,15 @@ export interface AppRole {
      */
     isEnabled?: boolean;
     /**
-     * Read-only. Specifies if the app role is defined on the Application object . Must not be included in any POST or PATCH
-     * requests.
+     * Specifies if the app role is defined on the application object or on the servicePrincipal entity. Must not be included
+     * in any POST or PATCH requests. Read-only.
      */
     origin?: string;
     /**
-     * Specifies the value which will be included in the roles claim in authentication and access tokens. Must not exceed 120
-     * characters in length. Allowed characters are : ! # $ % &amp; ' ( ) * + , - . / : ; = ? @ [ ] ^ + _ { } ~, as well as
-     * characters in the ranges 0-9, A-Z and a-z. Any other character, including the space character, are not allowed.
+     * Specifies the value to include in the roles claim in ID tokens and access tokens authenticating an assigned user or
+     * service principal. Must not exceed 120 characters in length. Allowed characters are : ! # $ % &amp; ' ( ) * + , - . / :
+     * ; = ? @ [ ] ^ + _ { } ~, as well as characters in the ranges 0-9, A-Z and a-z. Any other character, including the space
+     * character, are not allowed.
      */
     value?: string;
 }
@@ -10489,57 +10839,6 @@ export interface CalendarSharingMessageAction {
     actionType?: CalendarSharingActionType;
     action?: CalendarSharingAction;
 }
-export interface ScheduleInformation {
-    // An SMTP address of the user, distribution list, or resource, identifying an instance of scheduleInformation.
-    scheduleId?: string;
-    // Contains the items that describe the availability of the user or resource.
-    scheduleItems?: ScheduleItem[];
-    /**
-     * Represents a merged view of availability of all the items in scheduleItems. The view consists of time slots.
-     * Availability during each time slot is indicated with: 0= free, 1= tentative, 2= busy, 3= out of office, 4= working
-     * elsewhere.
-     */
-    availabilityView?: string;
-    // Error information from attempting to get the availability of the user, distribution list, or resource.
-    error?: FreeBusyError;
-    /**
-     * The days of the week and hours in a specific time zone that the user works. These are set as part of the user's
-     * mailboxSettings.
-     */
-    workingHours?: WorkingHours;
-}
-export interface ScheduleItem {
-    // The date, time, and time zone that the corresponding event starts.
-    start?: DateTimeTimeZone;
-    // The date, time, and time zone that the corresponding event ends.
-    end?: DateTimeTimeZone;
-    // The sensitivity of the corresponding event. True if the event is marked private, false otherwise. Optional.
-    isPrivate?: boolean;
-    /**
-     * The availability status of the user or resource during the corresponding event. The possible values are: free,
-     * tentative, busy, oof, workingElsewhere, unknown.
-     */
-    status?: FreeBusyStatus;
-    // The corresponding event's subject line. Optional.
-    subject?: string;
-    // The location where the corresponding event is held or attended from. Optional.
-    location?: string;
-}
-export interface FreeBusyError {
-    // Describes the error.
-    message?: string;
-    // The response code from querying for the availability of the user, distribution list, or resource.
-    responseCode?: string;
-}
-export interface ResponseStatus {
-    // The response type. The possible values are: None, Organizer, TentativelyAccepted, Accepted, Declined, NotResponded.
-    response?: ResponseType;
-    /**
-     * The date and time that the response was returned. It uses ISO 8601 format and is always in UTC time. For example,
-     * midnight UTC on Jan 1, 2014 would look like this: '2014-01-01T00:00:00Z'
-     */
-    time?: string;
-}
 export interface PatternedRecurrence {
     // The frequency of an event.
     pattern?: RecurrencePattern;
@@ -10596,9 +10895,61 @@ export interface RecurrenceRange {
     // The number of times to repeat the event. Required and must be positive if type is numbered.
     numberOfOccurrences?: number;
 }
+export interface ScheduleInformation {
+    // An SMTP address of the user, distribution list, or resource, identifying an instance of scheduleInformation.
+    scheduleId?: string;
+    // Contains the items that describe the availability of the user or resource.
+    scheduleItems?: ScheduleItem[];
+    /**
+     * Represents a merged view of availability of all the items in scheduleItems. The view consists of time slots.
+     * Availability during each time slot is indicated with: 0= free, 1= tentative, 2= busy, 3= out of office, 4= working
+     * elsewhere.
+     */
+    availabilityView?: string;
+    // Error information from attempting to get the availability of the user, distribution list, or resource.
+    error?: FreeBusyError;
+    /**
+     * The days of the week and hours in a specific time zone that the user works. These are set as part of the user's
+     * mailboxSettings.
+     */
+    workingHours?: WorkingHours;
+}
+export interface ScheduleItem {
+    // The date, time, and time zone that the corresponding event starts.
+    start?: DateTimeTimeZone;
+    // The date, time, and time zone that the corresponding event ends.
+    end?: DateTimeTimeZone;
+    // The sensitivity of the corresponding event. True if the event is marked private, false otherwise. Optional.
+    isPrivate?: boolean;
+    /**
+     * The availability status of the user or resource during the corresponding event. The possible values are: free,
+     * tentative, busy, oof, workingElsewhere, unknown.
+     */
+    status?: FreeBusyStatus;
+    // The corresponding event's subject line. Optional.
+    subject?: string;
+    // The location where the corresponding event is held or attended from. Optional.
+    location?: string;
+}
+export interface FreeBusyError {
+    // Describes the error.
+    message?: string;
+    // The response code from querying for the availability of the user, distribution list, or resource.
+    responseCode?: string;
+}
+export interface ResponseStatus {
+    // The response type. The possible values are: None, Organizer, TentativelyAccepted, Accepted, Declined, NotResponded.
+    response?: ResponseType;
+    /**
+     * The date and time that the response was returned. It uses ISO 8601 format and is always in UTC time. For example,
+     * midnight UTC on Jan 1, 2014 would look like this: '2014-01-01T00:00:00Z'
+     */
+    time?: string;
+}
 export interface Attendee extends AttendeeBase {
     // The attendee's response (none, accepted, declined, etc.) for the event and date-time that the response was sent.
     status?: ResponseStatus;
+    proposedNewTime?: TimeSlot;
 }
 export interface OnlineMeetingInfo {
     /**
@@ -12786,6 +13137,57 @@ export interface TeamClassSettings {
      */
     notifyGuardiansAboutAssignments?: boolean;
 }
+export interface ChatMessageAttachment {
+    // Read-only. Unique id of the attachment.
+    id?: string;
+    /**
+     * The media type of the content attachment. It can have the following values: reference: Attachment is a link to another
+     * file. Populate the contentURL with the link to the object.file: Raw file attachment. Populate the contenturl field with
+     * the base64 encoding of the file in data: format.image/: Image type with the type of the image specified ex: image/png,
+     * image/jpeg, image/gif. Populate the contentUrl field with the base64 encoding of the file in data: format.video/: Video
+     * type with the format specified. Ex: video/mp4. Populate the contentUrl field with the base64 encoding of the file in
+     * data: format.audio/: Audio type with the format specified. Ex: audio/wmw. Populate the contentUrl field with the base64
+     * encoding of the file in data: format.application/card type: Rich card attachment type with the card type specifying the
+     * exact card format to use. Set content with the json format of the card. Supported values for card type
+     * include:application/vnd.microsoft.card.adaptive: A rich card that can contain any combination of text, speech,
+     * images,,buttons, and input fields. Set the content property to,an AdaptiveCard
+     * object.application/vnd.microsoft.card.animation: A rich card that plays animation. Set the content property,to an
+     * AnimationCardobject.application/vnd.microsoft.card.audio: A rich card that plays audio files. Set the content
+     * property,to an AudioCard object.application/vnd.microsoft.card.video: A rich card that plays videos. Set the content
+     * property,to a VideoCard object.application/vnd.microsoft.card.hero: A Hero card. Set the content property to a HeroCard
+     * object.application/vnd.microsoft.card.thumbnail: A Thumbnail card. Set the content property to a ThumbnailCard
+     * object.application/vnd.microsoft.com.card.receipt: A Receipt card. Set the content property to a ReceiptCard
+     * object.application/vnd.microsoft.com.card.signin: A user Sign In card. Set the content property to a SignInCard object.
+     */
+    contentType?: string;
+    // URL for the content of the attachment. Supported protocols: http, https, file and data.
+    contentUrl?: string;
+    /**
+     * The content of the attachment. If the attachment is a rich card, set the property to the rich card object. This
+     * property and contentUrl are mutually exclusive.
+     */
+    content?: string;
+    // Name of the attachment.
+    name?: string;
+    /**
+     * URL to a thumbnail image that the channel can use if it supports using an alternative, smaller form of content or
+     * contentUrl. For example, if you set contentType to application/word and set contentUrl to the location of the Word
+     * document, you might include a thumbnail image that represents the document. The channel could display the thumbnail
+     * image instead of the document. When the user clicks the image, the channel would open the document.
+     */
+    thumbnailUrl?: string;
+}
+export interface ChatMessageMention extends Entity {
+    id?: number;
+    // String used to represent the mention. For example, a user's display name, a team name.
+    mentionText?: string;
+    /**
+     * The entity (user, application, team, or channel) that was mentioned. If it was a channel or team that was @mentioned,
+     * the identitySet contains a conversation property giving the ID of the team/channel, and a conversationIdentityType
+     * property that represents either the team or channel.
+     */
+    mentioned?: IdentitySet;
+}
 export interface TeamsTabConfiguration {
     // Identifier for the entity hosted by the tab provider.
     entityId?: string;
@@ -12835,6 +13237,23 @@ export interface TeamFunSettings {
     allowStickersAndMemes?: boolean;
     // If set to true, enables users to include custom memes.
     allowCustomMemes?: boolean;
+}
+export interface ChatMessagePolicyViolation {
+    dlpAction?: ChatMessagePolicyViolationDlpActionTypes;
+    justificationText?: string;
+    policyTip?: ChatMessagePolicyViolationPolicyTip;
+    userAction?: ChatMessagePolicyViolationUserActionTypes;
+    verdictDetails?: ChatMessagePolicyViolationVerdictDetailsTypes;
+}
+export interface ChatMessagePolicyViolationPolicyTip {
+    generalText?: string;
+    complianceUrl?: string;
+    matchedConditionDescriptions?: string[];
+}
+export interface ChatMessageReaction {
+    reactionType?: string;
+    createdDateTime?: string;
+    user?: IdentitySet;
 }
 export interface OperationError {
     // Operation error code.
