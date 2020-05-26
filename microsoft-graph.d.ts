@@ -3599,20 +3599,23 @@ export interface Subscription extends Entity {
      */
     resource?: string;
     /**
-     * Required. Indicates the type of change in the subscribed resource that will raise a notification. The supported values
-     * are: created, updated, deleted. Multiple values can be combined using a comma-separated list.Note: Drive root item and
-     * list notifications support only the updated changeType. User and group notifications support updated and deleted
-     * changeType.
+     * Required. Indicates the type of change in the subscribed resource that will raise a change notification. The supported
+     * values are: created, updated, deleted. Multiple values can be combined using a comma-separated list.Note: Drive root
+     * item and list change notifications support only the updated changeType. User and group change notifications support
+     * updated and deleted changeType.
      */
     changeType?: string;
     /**
-     * Optional. Specifies the value of the clientState property sent by the service in each notification. The maximum length
-     * is 128 characters. The client can check that the notification came from the service by comparing the value of the
-     * clientState property sent with the subscription with the value of the clientState property received with each
-     * notification.
+     * Optional. Specifies the value of the clientState property sent by the service in each change notification. The maximum
+     * length is 128 characters. The client can check that the change notification came from the service by comparing the
+     * value of the clientState property sent with the subscription with the value of the clientState property received with
+     * each change notification.
      */
     clientState?: string;
-    // Required. The URL of the endpoint that will receive the notifications. This URL must make use of the HTTPS protocol.
+    /**
+     * Required. The URL of the endpoint that will receive the change notifications. This URL must make use of the HTTPS
+     * protocol.
+     */
     notificationUrl?: string;
     /**
      * Required. Specifies the date and time when the webhook subscription expires. The time is in UTC, and can be an amount
