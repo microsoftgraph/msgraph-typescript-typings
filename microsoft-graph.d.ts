@@ -210,6 +210,9 @@ export type MessageActionFlag =
     | "reply"
     | "replyToAll"
     | "review";
+export type RiskDetectionTimingType = "notDefined" | "realtime" | "nearRealtime" | "offline" | "unknownFutureValue";
+export type ActivityType = "signin" | "user" | "unknownFutureValue";
+export type TokenIssuerType = "AzureAD" | "ADFederationServices" | "UnknownFutureValue";
 export type InstallIntent = "available" | "required" | "uninstall" | "availableWithoutEnrollment";
 export type MobileAppPublishingState = "notPublished" | "processing" | "published";
 export type WindowsArchitecture = "none" | "x86" | "x64" | "arm" | "neutral";
@@ -813,6 +816,7 @@ export type SecurityNetworkProtocol =
     | "spxII"
     | "unknownFutureValue"
     | "unknown";
+export type SecurityResourceType = "unknown" | "attacked" | "related" | "unknownFutureValue";
 export type UserAccountSecurityType = "unknown" | "standard" | "power" | "administrator" | "unknownFutureValue";
 export type CallDirection = "incoming" | "outgoing";
 export type CallState =
@@ -1175,6 +1179,15 @@ export interface User extends DirectoryObject {
     displayName?: string;
     // The employee identifier assigned to the user by the organization. Supports $filter.
     employeeId?: string;
+    /**
+     * For an external user invited to the tenant using the invitation API, this property represents the invited user's
+     * invitation status. For invited users, the state can be PendingAcceptance or Accepted, or null for all other users.
+     * Returned only on $select. Supports $filter with the supported values. For example: $filter=externalUserState eq
+     * 'PendingAcceptance'.
+     */
+    externalUserState?: string;
+    // Shows the timestamp for the latest change to the externalUserState property. Returned only on $select.
+    externalUserStateChangeDateTime?: string;
     // The fax number of the user.
     faxNumber?: string;
     // The given name (first name) of the user. Supports $filter.
@@ -2357,6 +2370,8 @@ export interface OnlineMeeting extends Entity {
     chatInfo?: ChatInfo;
     // The video teleconferencing ID. Read-only.
     videoTeleconferenceId?: string;
+    externalId?: string;
+    joinInformation?: ItemBody;
 }
 export interface Team extends Entity {
     /**
@@ -2814,6 +2829,7 @@ export interface Endpoint extends DirectoryObject {
     providerResourceId?: string;
 }
 export interface Group extends DirectoryObject {
+    assignedLabels?: AssignedLabel[];
     // The licenses that are assigned to the group. Returned only on $select. Read-only.
     assignedLicenses?: AssignedLicense[];
     /**
@@ -2834,6 +2850,7 @@ export interface Group extends DirectoryObject {
      * Returned by default. Supports $filter and $orderby.
      */
     displayName?: string;
+    expirationDateTime?: string;
     /**
      * Indicates whether there are members in this group that have license errors from its group-based license assignment.
      * This property is never returned on a GET operation. You can use it as a $filter argument to get groups that have
@@ -2863,6 +2880,8 @@ export interface Group extends DirectoryObject {
      * Returned by default. Supports $filter.
      */
     mailNickname?: string;
+    membershipRule?: string;
+    membershipRuleProcessingState?: string;
     onPremisesDomainName?: string;
     /**
      * Indicates the last time at which the group was synced with the on-premises directory.The Timestamp type represents date
@@ -2887,6 +2906,7 @@ export interface Group extends DirectoryObject {
     onPremisesSyncEnabled?: boolean;
     // The preferred data location for the group. For more information, see OneDrive Online Multi-Geo. Returned by default.
     preferredDataLocation?: string;
+    preferredLanguage?: string;
     /**
      * Email addresses for the group that direct to the same group mailbox. For example: ['SMTP: bob@contoso.com', 'smtp:
      * bob@sales.contoso.com']. The any operator is required to filter expressions on multi-valued properties. Returned by
@@ -2904,6 +2924,7 @@ export interface Group extends DirectoryObject {
     securityEnabled?: boolean;
     // Security identifier of the group, used in Windows scenarios. Returned by default.
     securityIdentifier?: string;
+    theme?: string;
     /**
      * Specifies the visibility of an Office 365 group. Possible values are: Private, Public, or Hiddenmembership; blank
      * values are treated as public. See group visibility options to learn more.Visibility can be set only when a group is
@@ -3599,20 +3620,23 @@ export interface Subscription extends Entity {
      */
     resource?: string;
     /**
-     * Required. Indicates the type of change in the subscribed resource that will raise a notification. The supported values
-     * are: created, updated, deleted. Multiple values can be combined using a comma-separated list.Note: Drive root item and
-     * list notifications support only the updated changeType. User and group notifications support updated and deleted
-     * changeType.
+     * Required. Indicates the type of change in the subscribed resource that will raise a change notification. The supported
+     * values are: created, updated, deleted. Multiple values can be combined using a comma-separated list.Note: Drive root
+     * item and list change notifications support only the updated changeType. User and group change notifications support
+     * updated and deleted changeType.
      */
     changeType?: string;
     /**
-     * Optional. Specifies the value of the clientState property sent by the service in each notification. The maximum length
-     * is 128 characters. The client can check that the notification came from the service by comparing the value of the
-     * clientState property sent with the subscription with the value of the clientState property received with each
-     * notification.
+     * Optional. Specifies the value of the clientState property sent by the service in each change notification. The maximum
+     * length is 128 characters. The client can check that the change notification came from the service by comparing the
+     * value of the clientState property sent with the subscription with the value of the clientState property received with
+     * each change notification.
      */
     clientState?: string;
-    // Required. The URL of the endpoint that will receive the notifications. This URL must make use of the HTTPS protocol.
+    /**
+     * Required. The URL of the endpoint that will receive the change notifications. This URL must make use of the HTTPS
+     * protocol.
+     */
     notificationUrl?: string;
     /**
      * Required. Specifies the date and time when the webhook subscription expires. The time is in UTC, and can be an amount
@@ -4648,6 +4672,93 @@ export interface SchemaExtension extends Entity {
      * signed-in user must be the owner of the application. Once set, this property is read-only and cannot be changed.
      */
     owner?: string;
+}
+export interface CloudCommunications extends Entity {
+    calls?: Call[];
+    onlineMeetings?: OnlineMeeting[];
+}
+export interface Call extends Entity {
+    /**
+     * The call state. Possible values are: incoming, establishing, ringing, established, hold, transferring,
+     * transferAccepted, redirecting, terminating, terminated. Read-only.
+     */
+    state?: CallState;
+    // Read-only. The call media state.
+    mediaState?: CallMediaState;
+    // The result information. For example can hold termination reason. Read-only.
+    resultInfo?: ResultInfo;
+    // The direction of the call. The possible value are incoming or outgoing. Read-only.
+    direction?: CallDirection;
+    // The subject of the conversation.
+    subject?: string;
+    // The callback URL on which callbacks will be delivered. Must be https.
+    callbackUri?: string;
+    // The routing information on how the call was retargeted. Read-only.
+    callRoutes?: CallRoute[];
+    // The originator of the call.
+    source?: ParticipantInfo;
+    // The targets of the call. Required information for creating peer to peer call.
+    targets?: InvitationParticipantInfo[];
+    // The list of requested modalities. Possible values are: unknown, audio, video, videoBasedScreenSharing, data.
+    requestedModalities?: Modality[];
+    // The media configuration. Required.
+    mediaConfig?: MediaConfig;
+    // The chat information. Required information for joining a meeting.
+    chatInfo?: ChatInfo;
+    callOptions?: CallOptions;
+    // The meeting information that's required for joining a meeting.
+    meetingInfo?: MeetingInfo;
+    tenantId?: string;
+    // Read-only.
+    myParticipantId?: string;
+    toneInfo?: ToneInfo;
+    /**
+     * A unique identifier for all the participant calls in a conference or a unique identifier for two participant calls in a
+     * P2P call. This needs to be copied over from Microsoft.Graph.Call.CallChainId.
+     */
+    callChainId?: string;
+    incomingContext?: IncomingContext;
+    // Read-only. Nullable.
+    participants?: Participant[];
+    // Read-only. Nullable.
+    operations?: CommsOperation[];
+}
+export interface RiskDetection extends Entity {
+    requestId?: string;
+    correlationId?: string;
+    riskEventType?: string;
+    riskState?: RiskState;
+    riskLevel?: RiskLevel;
+    riskDetail?: RiskDetail;
+    source?: string;
+    detectionTimingType?: RiskDetectionTimingType;
+    activity?: ActivityType;
+    tokenIssuerType?: TokenIssuerType;
+    ipAddress?: string;
+    location?: SignInLocation;
+    activityDateTime?: string;
+    detectedDateTime?: string;
+    lastUpdatedDateTime?: string;
+    userId?: string;
+    userDisplayName?: string;
+    userPrincipalName?: string;
+    additionalInfo?: string;
+}
+export interface RiskyUser extends Entity {
+    isDeleted?: boolean;
+    isProcessing?: boolean;
+    riskLastUpdatedDateTime?: string;
+    riskLevel?: RiskLevel;
+    riskState?: RiskState;
+    riskDetail?: RiskDetail;
+    userDisplayName?: string;
+    userPrincipalName?: string;
+    history?: RiskyUserHistoryItem[];
+}
+export interface RiskyUserHistoryItem extends RiskyUser {
+    userId?: string;
+    initiatedBy?: string;
+    activity?: RiskUserActivity;
 }
 export interface DeviceAppManagement extends Entity {
     // The last time the apps from the Microsoft Store for Business were synced successfully for the account.
@@ -8803,6 +8914,7 @@ export interface Alert extends Entity {
     historyStates?: AlertHistoryState[];
     // Security-related stateful information generated by the provider about the host(s) related to this alert.
     hostStates?: HostSecurityState[];
+    incidentIds?: string[];
     /**
      * Time at which the alert entity was last modified. The Timestamp type represents date and time information using ISO
      * 8601 format and is always in UTC time. For example, midnight UTC on Jan 1, 2014 would look like this:
@@ -8822,6 +8934,7 @@ export interface Alert extends Entity {
     recommendedActions?: string[];
     // Security-related stateful information generated by the provider about the registry keys related to this alert.
     registryKeyStates?: RegistryKeyState[];
+    securityResources?: SecurityResource[];
     // Alert severity - set by vendor/provider. Possible values are: unknown, informational, low, medium, high. Required.
     severity?: AlertSeverity;
     /**
@@ -8919,56 +9032,6 @@ export interface SecureScore extends Entity {
      * vendor=Microsoft; provider=SecureScore). Required.
      */
     vendorInformation?: SecurityVendorInformation;
-}
-export interface CloudCommunications extends Entity {
-    calls?: Call[];
-    onlineMeetings?: OnlineMeeting[];
-}
-export interface Call extends Entity {
-    /**
-     * The call state. Possible values are: incoming, establishing, ringing, established, hold, transferring,
-     * transferAccepted, redirecting, terminating, terminated. Read-only.
-     */
-    state?: CallState;
-    // Read-only. The call media state.
-    mediaState?: CallMediaState;
-    // The result information. For example can hold termination reason. Read-only.
-    resultInfo?: ResultInfo;
-    // The direction of the call. The possible value are incoming or outgoing. Read-only.
-    direction?: CallDirection;
-    // The subject of the conversation.
-    subject?: string;
-    // The callback URL on which callbacks will be delivered. Must be https.
-    callbackUri?: string;
-    // The routing information on how the call was retargeted. Read-only.
-    callRoutes?: CallRoute[];
-    // The originator of the call.
-    source?: ParticipantInfo;
-    // The targets of the call. Required information for creating peer to peer call.
-    targets?: InvitationParticipantInfo[];
-    // The list of requested modalities. Possible values are: unknown, audio, video, videoBasedScreenSharing, data.
-    requestedModalities?: Modality[];
-    // The media configuration. Required.
-    mediaConfig?: MediaConfig;
-    // The chat information. Required information for joining a meeting.
-    chatInfo?: ChatInfo;
-    callOptions?: CallOptions;
-    // The meeting information that's required for joining a meeting.
-    meetingInfo?: MeetingInfo;
-    tenantId?: string;
-    // Read-only.
-    myParticipantId?: string;
-    toneInfo?: ToneInfo;
-    /**
-     * A unique identifier for all the participant calls in a conference or a unique identifier for two participant calls in a
-     * P2P call. This needs to be copied over from Microsoft.Graph.Call.CallChainId.
-     */
-    callChainId?: string;
-    incomingContext?: IncomingContext;
-    // Read-only. Nullable.
-    participants?: Participant[];
-    // Read-only. Nullable.
-    operations?: CommsOperation[];
 }
 export interface Participant extends Entity {
     // The participant of the participant.
@@ -10071,6 +10134,10 @@ export interface ServicePlanInfo {
      * users.'Company' - service plan can be assigned to the entire tenant.
      */
     appliesTo?: string;
+}
+export interface AssignedLabel {
+    labelId?: string;
+    displayName?: string;
 }
 export interface LicenseProcessingState {
     state?: string;
@@ -11361,6 +11428,10 @@ export interface ExtensionSchemaProperty {
      */
     type?: string;
 }
+export interface RiskUserActivity {
+    riskEventTypes?: string[];
+    detail?: RiskDetail;
+}
 // tslint:disable-next-line: no-empty-interface
 export interface DeviceAndAppManagementAssignmentTarget {}
 // tslint:disable-next-line: no-empty-interface
@@ -12649,6 +12720,7 @@ export interface NetworkConnection {
     destinationAddress?: string;
     // Destination domain portion of the destination URL. (for example 'www.contoso.com').
     destinationDomain?: string;
+    destinationLocation?: string;
     // Destination port (of the network connection).
     destinationPort?: string;
     // Network connection URL/URI string - excluding parameters. (for example 'www.contoso.com/products/default.html')
@@ -12686,6 +12758,7 @@ export interface NetworkConnection {
     riskScore?: string;
     // Source (i.e. origin) IP address (of the network connection).
     sourceAddress?: string;
+    sourceLocation?: string;
     // Source (i.e. origin) IP port (of the network connection).
     sourcePort?: string;
     // Network connection status. Possible values are: unknown, attempted, succeeded, blocked, failed.
@@ -12758,6 +12831,10 @@ export interface RegistryKeyState {
      * dwordLittleEndian, dwordBigEndian, expandSz, link, multiSz, none, qword, qwordlittleEndian, sz.
      */
     valueType?: RegistryValueType;
+}
+export interface SecurityResource {
+    resource?: string;
+    resourceType?: SecurityResourceType;
 }
 export interface AlertTrigger {
     // Name of the property serving as a detection trigger.
