@@ -813,6 +813,7 @@ export type SecurityNetworkProtocol =
     | "spxII"
     | "unknownFutureValue"
     | "unknown";
+export type SecurityResourceType = "unknown" | "attacked" | "related" | "unknownFutureValue";
 export type UserAccountSecurityType = "unknown" | "standard" | "power" | "administrator" | "unknownFutureValue";
 export type CallDirection = "incoming" | "outgoing";
 export type CallState =
@@ -1175,6 +1176,15 @@ export interface User extends DirectoryObject {
     displayName?: string;
     // The employee identifier assigned to the user by the organization. Supports $filter.
     employeeId?: string;
+    /**
+     * For an external user invited to the tenant using the invitation API, this property represents the invited user's
+     * invitation status. For invited users, the state can be PendingAcceptance or Accepted, or null for all other users.
+     * Returned only on $select. Supports $filter with the supported values. For example: $filter=externalUserState eq
+     * 'PendingAcceptance'.
+     */
+    externalUserState?: string;
+    // Shows the timestamp for the latest change to the externalUserState property. Returned only on $select.
+    externalUserStateChangeDateTime?: string;
     // The fax number of the user.
     faxNumber?: string;
     // The given name (first name) of the user. Supports $filter.
@@ -2357,6 +2367,12 @@ export interface OnlineMeeting extends Entity {
     chatInfo?: ChatInfo;
     // The video teleconferencing ID. Read-only.
     videoTeleconferenceId?: string;
+    externalId?: string;
+    /**
+     * The join information in the language and locale variant specified in the Accept-Language request HTTP header.
+     * Read-only.
+     */
+    joinInformation?: ItemBody;
 }
 export interface Team extends Entity {
     /**
@@ -2814,6 +2830,7 @@ export interface Endpoint extends DirectoryObject {
     providerResourceId?: string;
 }
 export interface Group extends DirectoryObject {
+    assignedLabels?: AssignedLabel[];
     // The licenses that are assigned to the group. Returned only on $select. Read-only.
     assignedLicenses?: AssignedLicense[];
     /**
@@ -2834,6 +2851,7 @@ export interface Group extends DirectoryObject {
      * Returned by default. Supports $filter and $orderby.
      */
     displayName?: string;
+    expirationDateTime?: string;
     /**
      * Indicates whether there are members in this group that have license errors from its group-based license assignment.
      * This property is never returned on a GET operation. You can use it as a $filter argument to get groups that have
@@ -2863,6 +2881,13 @@ export interface Group extends DirectoryObject {
      * Returned by default. Supports $filter.
      */
     mailNickname?: string;
+    membershipRule?: string;
+    membershipRuleProcessingState?: string;
+    /**
+     * Contains the on-premises domain FQDN, also called dnsDomainName synchronized from the on-premises directory. The
+     * property is only populated for customers who are synchronizing their on-premises directory to Azure Active Directory
+     * via Azure AD Connect.Returned by default. Read-only.
+     */
     onPremisesDomainName?: string;
     /**
      * Indicates the last time at which the group was synced with the on-premises directory.The Timestamp type represents date
@@ -2870,9 +2895,19 @@ export interface Group extends DirectoryObject {
      * look like this: '2014-01-01T00:00:00Z'. Returned by default. Read-only. Supports $filter.
      */
     onPremisesLastSyncDateTime?: string;
+    /**
+     * Contains the on-premises netBios name synchronized from the on-premises directory. The property is only populated for
+     * customers who are synchronizing their on-premises directory to Azure Active Directory via Azure AD Connect.Returned by
+     * default. Read-only.
+     */
     onPremisesNetBiosName?: string;
     // Errors when using Microsoft synchronization product during provisioning. Returned by default.
     onPremisesProvisioningErrors?: OnPremisesProvisioningError[];
+    /**
+     * Contains the on-premises SAM account name synchronized from the on-premises directory. The property is only populated
+     * for customers who are synchronizing their on-premises directory to Azure Active Directory via Azure AD Connect.Returned
+     * by default. Read-only.
+     */
     onPremisesSamAccountName?: string;
     /**
      * Contains the on-premises security identifier (SID) for the group that was synchronized from on-premises to the cloud.
@@ -2887,6 +2922,7 @@ export interface Group extends DirectoryObject {
     onPremisesSyncEnabled?: boolean;
     // The preferred data location for the group. For more information, see OneDrive Online Multi-Geo. Returned by default.
     preferredDataLocation?: string;
+    preferredLanguage?: string;
     /**
      * Email addresses for the group that direct to the same group mailbox. For example: ['SMTP: bob@contoso.com', 'smtp:
      * bob@sales.contoso.com']. The any operator is required to filter expressions on multi-valued properties. Returned by
@@ -2904,6 +2940,7 @@ export interface Group extends DirectoryObject {
     securityEnabled?: boolean;
     // Security identifier of the group, used in Windows scenarios. Returned by default.
     securityIdentifier?: string;
+    theme?: string;
     /**
      * Specifies the visibility of an Office 365 group. Possible values are: Private, Public, or Hiddenmembership; blank
      * values are treated as public. See group visibility options to learn more.Visibility can be set only when a group is
@@ -3126,6 +3163,8 @@ export interface ServicePrincipal extends DirectoryObject {
     appDisplayName?: string;
     // The unique identifier for the associated application (its appId property).
     appId?: string;
+    // Unique identifier of the applicationTemplate that the servicePrincipal was created from. Read-only.
+    applicationTemplateId?: string;
     /**
      * Contains the tenant id where the application is registered. This is applicable only to service principals backed by
      * applications.
@@ -3154,10 +3193,23 @@ export interface ServicePrincipal extends DirectoryObject {
     // The collection of key credentials associated with the service principal. Not nullable.
     keyCredentials?: KeyCredential[];
     /**
+     * Specifies the URL where the service provider redirects the user to Azure AD to authenticate. Azure AD uses the URL to
+     * launch the application from Office 365 or the Azure AD My Apps. When blank, Azure AD performs IdP-initiated sign-on for
+     * applications configured with SAML-based single sign-on. The user launches the application from Office 365, the Azure AD
+     * My Apps, or the Azure AD SSO URL.
+     */
+    loginUrl?: string;
+    /**
      * Specifies the URL that will be used by Microsoft's authorization service to logout an user using OpenId Connect
      * front-channel, back-channel or SAML logout protocols.
      */
     logoutUrl?: string;
+    /**
+     * Specifies the list of email addresses where Azure AD sends a notification when the active certificate is near the
+     * expiration date. This is only for the certificates used to sign the SAML token issued for Azure AD Gallery
+     * applications.
+     */
+    notificationEmailAddresses?: string[];
     /**
      * The delegated permissions exposed by the application. For more information see the oauth2PermissionScopes property on
      * the application entity's api property. Not nullable.
@@ -3165,6 +3217,12 @@ export interface ServicePrincipal extends DirectoryObject {
     oauth2PermissionScopes?: PermissionScope[];
     // The collection of password credentials associated with the service principal. Not nullable.
     passwordCredentials?: PasswordCredential[];
+    /**
+     * Specifies the single sign-on mode configured for this application. Azure AD uses the preferred single sign-on mode to
+     * launch the application from Office 365 or the Azure AD My Apps. The supported values are password, saml, external, and
+     * oidc.
+     */
+    preferredSingleSignOnMode?: string;
     /**
      * The URLs that user tokens are sent to for sign in with the associated application, or the redirect URIs that OAuth 2.0
      * authorization codes and access tokens are sent to for the associated application. Not nullable.
@@ -3178,6 +3236,8 @@ export interface ServicePrincipal extends DirectoryObject {
      * properties. Not nullable.
      */
     servicePrincipalNames?: string[];
+    // The collection for settings related to saml single sign-on.
+    samlSingleSignOnSettings?: SamlSingleSignOnSettings;
     /**
      * Identifies if the service principal represents an application or a managed identity. This is set by Azure AD
      * internally. For a service principal that represents an application this is set as Application. For a service principal
@@ -3599,20 +3659,23 @@ export interface Subscription extends Entity {
      */
     resource?: string;
     /**
-     * Required. Indicates the type of change in the subscribed resource that will raise a notification. The supported values
-     * are: created, updated, deleted. Multiple values can be combined using a comma-separated list.Note: Drive root item and
-     * list notifications support only the updated changeType. User and group notifications support updated and deleted
-     * changeType.
+     * Required. Indicates the type of change in the subscribed resource that will raise a change notification. The supported
+     * values are: created, updated, deleted. Multiple values can be combined using a comma-separated list.Note: Drive root
+     * item and list change notifications support only the updated changeType. User and group change notifications support
+     * updated and deleted changeType.
      */
     changeType?: string;
     /**
-     * Optional. Specifies the value of the clientState property sent by the service in each notification. The maximum length
-     * is 128 characters. The client can check that the notification came from the service by comparing the value of the
-     * clientState property sent with the subscription with the value of the clientState property received with each
-     * notification.
+     * Optional. Specifies the value of the clientState property sent by the service in each change notification. The maximum
+     * length is 128 characters. The client can check that the change notification came from the service by comparing the
+     * value of the clientState property sent with the subscription with the value of the clientState property received with
+     * each change notification.
      */
     clientState?: string;
-    // Required. The URL of the endpoint that will receive the notifications. This URL must make use of the HTTPS protocol.
+    /**
+     * Required. The URL of the endpoint that will receive the change notifications. This URL must make use of the HTTPS
+     * protocol.
+     */
     notificationUrl?: string;
     /**
      * Required. Specifies the date and time when the webhook subscription expires. The time is in UTC, and can be an amount
@@ -4648,6 +4711,56 @@ export interface SchemaExtension extends Entity {
      * signed-in user must be the owner of the application. Once set, this property is read-only and cannot be changed.
      */
     owner?: string;
+}
+export interface CloudCommunications extends Entity {
+    calls?: Call[];
+    onlineMeetings?: OnlineMeeting[];
+}
+export interface Call extends Entity {
+    /**
+     * The call state. Possible values are: incoming, establishing, ringing, established, hold, transferring,
+     * transferAccepted, redirecting, terminating, terminated. Read-only.
+     */
+    state?: CallState;
+    // Read-only. The call media state.
+    mediaState?: CallMediaState;
+    // The result information. For example can hold termination reason. Read-only.
+    resultInfo?: ResultInfo;
+    // The direction of the call. The possible value are incoming or outgoing. Read-only.
+    direction?: CallDirection;
+    // The subject of the conversation.
+    subject?: string;
+    // The callback URL on which callbacks will be delivered. Must be https.
+    callbackUri?: string;
+    // The routing information on how the call was retargeted. Read-only.
+    callRoutes?: CallRoute[];
+    // The originator of the call.
+    source?: ParticipantInfo;
+    // The targets of the call. Required information for creating peer to peer call.
+    targets?: InvitationParticipantInfo[];
+    // The list of requested modalities. Possible values are: unknown, audio, video, videoBasedScreenSharing, data.
+    requestedModalities?: Modality[];
+    // The media configuration. Required.
+    mediaConfig?: MediaConfig;
+    // The chat information. Required information for joining a meeting.
+    chatInfo?: ChatInfo;
+    callOptions?: CallOptions;
+    // The meeting information that's required for joining a meeting.
+    meetingInfo?: MeetingInfo;
+    tenantId?: string;
+    // Read-only.
+    myParticipantId?: string;
+    toneInfo?: ToneInfo;
+    /**
+     * A unique identifier for all the participant calls in a conference or a unique identifier for two participant calls in a
+     * P2P call. This needs to be copied over from Microsoft.Graph.Call.CallChainId.
+     */
+    callChainId?: string;
+    incomingContext?: IncomingContext;
+    // Read-only. Nullable.
+    participants?: Participant[];
+    // Read-only. Nullable.
+    operations?: CommsOperation[];
 }
 export interface DeviceAppManagement extends Entity {
     // The last time the apps from the Microsoft Store for Business were synced successfully for the account.
@@ -8803,6 +8916,8 @@ export interface Alert extends Entity {
     historyStates?: AlertHistoryState[];
     // Security-related stateful information generated by the provider about the host(s) related to this alert.
     hostStates?: HostSecurityState[];
+    // IDs of incidents related to current alert. (new)
+    incidentIds?: string[];
     /**
      * Time at which the alert entity was last modified. The Timestamp type represents date and time information using ISO
      * 8601 format and is always in UTC time. For example, midnight UTC on Jan 1, 2014 would look like this:
@@ -8811,7 +8926,10 @@ export interface Alert extends Entity {
     lastModifiedDateTime?: string;
     // Threat Intelligence pertaining to malware related to this alert.
     malwareStates?: MalwareState[];
-    // Security-related stateful information generated by the provider about the network connection(s) related to this alert.
+    /**
+     * Security-related stateful information generated by the provider about the network connection(s) related to this alert.
+     * (updated)
+     */
     networkConnections?: NetworkConnection[];
     // Security-related stateful information generated by the provider about the process or processes related to this alert.
     processes?: Process[];
@@ -8822,6 +8940,8 @@ export interface Alert extends Entity {
     recommendedActions?: string[];
     // Security-related stateful information generated by the provider about the registry keys related to this alert.
     registryKeyStates?: RegistryKeyState[];
+    // Resources related to current alert. For example, for some alerts this can have the Azure Resource value. (new)
+    securityResources?: SecurityResource[];
     // Alert severity - set by vendor/provider. Possible values are: unknown, informational, low, medium, high. Required.
     severity?: AlertSeverity;
     /**
@@ -8919,56 +9039,6 @@ export interface SecureScore extends Entity {
      * vendor=Microsoft; provider=SecureScore). Required.
      */
     vendorInformation?: SecurityVendorInformation;
-}
-export interface CloudCommunications extends Entity {
-    calls?: Call[];
-    onlineMeetings?: OnlineMeeting[];
-}
-export interface Call extends Entity {
-    /**
-     * The call state. Possible values are: incoming, establishing, ringing, established, hold, transferring,
-     * transferAccepted, redirecting, terminating, terminated. Read-only.
-     */
-    state?: CallState;
-    // Read-only. The call media state.
-    mediaState?: CallMediaState;
-    // The result information. For example can hold termination reason. Read-only.
-    resultInfo?: ResultInfo;
-    // The direction of the call. The possible value are incoming or outgoing. Read-only.
-    direction?: CallDirection;
-    // The subject of the conversation.
-    subject?: string;
-    // The callback URL on which callbacks will be delivered. Must be https.
-    callbackUri?: string;
-    // The routing information on how the call was retargeted. Read-only.
-    callRoutes?: CallRoute[];
-    // The originator of the call.
-    source?: ParticipantInfo;
-    // The targets of the call. Required information for creating peer to peer call.
-    targets?: InvitationParticipantInfo[];
-    // The list of requested modalities. Possible values are: unknown, audio, video, videoBasedScreenSharing, data.
-    requestedModalities?: Modality[];
-    // The media configuration. Required.
-    mediaConfig?: MediaConfig;
-    // The chat information. Required information for joining a meeting.
-    chatInfo?: ChatInfo;
-    callOptions?: CallOptions;
-    // The meeting information that's required for joining a meeting.
-    meetingInfo?: MeetingInfo;
-    tenantId?: string;
-    // Read-only.
-    myParticipantId?: string;
-    toneInfo?: ToneInfo;
-    /**
-     * A unique identifier for all the participant calls in a conference or a unique identifier for two participant calls in a
-     * P2P call. This needs to be copied over from Microsoft.Graph.Call.CallChainId.
-     */
-    callChainId?: string;
-    incomingContext?: IncomingContext;
-    // Read-only. Nullable.
-    participants?: Participant[];
-    // Read-only. Nullable.
-    operations?: CommsOperation[];
 }
 export interface Participant extends Entity {
     // The participant of the participant.
@@ -9958,8 +10028,8 @@ export interface ResourceAccess {
     // The unique identifier for one of the oauth2PermissionScopes or appRole instances that the resource application exposes.
     id?: string;
     /**
-     * Specifies whether the id property references an oauth2PermissionScopes or an appRole. Possible values are 'scope' or
-     * 'role'.
+     * Specifies whether the id property references an oauth2PermissionScopes or an appRole. Possible values are Scope or
+     * Role.
      */
     type?: string;
 }
@@ -10072,8 +10142,16 @@ export interface ServicePlanInfo {
      */
     appliesTo?: string;
 }
+export interface AssignedLabel {
+    labelId?: string;
+    displayName?: string;
+}
 export interface LicenseProcessingState {
     state?: string;
+}
+export interface SamlSingleSignOnSettings {
+    // The relative URI the service provider would redirect to after completion of the single sign-on flow.
+    relayState?: string;
 }
 export interface LicenseUnitsDetail {
     // The number of units that are enabled.
@@ -12643,12 +12721,14 @@ export interface MalwareState {
     wasRunning?: boolean;
 }
 export interface NetworkConnection {
-    // Name of the application managing the network connection (for example, Facebook, SMTP, etc.).
+    // Name of the application managing the network connection (for example, Facebook or SMTP).
     applicationName?: string;
     // Destination IP address (of the network connection).
     destinationAddress?: string;
     // Destination domain portion of the destination URL. (for example 'www.contoso.com').
     destinationDomain?: string;
+    // Location (by IP address mapping) associated with the destination of a network connection.
+    destinationLocation?: string;
     // Destination port (of the network connection).
     destinationPort?: string;
     // Network connection URL/URI string - excluding parameters. (for example 'www.contoso.com/products/default.html')
@@ -12686,6 +12766,8 @@ export interface NetworkConnection {
     riskScore?: string;
     // Source (i.e. origin) IP address (of the network connection).
     sourceAddress?: string;
+    // Location (by IP address mapping) associated with the source of a network connection.
+    sourceLocation?: string;
     // Source (i.e. origin) IP port (of the network connection).
     sourcePort?: string;
     // Network connection status. Possible values are: unknown, attempted, succeeded, blocked, failed.
@@ -12758,6 +12840,12 @@ export interface RegistryKeyState {
      * dwordLittleEndian, dwordBigEndian, expandSz, link, multiSz, none, qword, qwordlittleEndian, sz.
      */
     valueType?: RegistryValueType;
+}
+export interface SecurityResource {
+    // Name of the resource that is related to current alert. Required.
+    resource?: string;
+    // Represents type of security resources related to an alert. Possible values are: attacked, related.
+    resourceType?: SecurityResourceType;
 }
 export interface AlertTrigger {
     // Name of the property serving as a detection trigger.
