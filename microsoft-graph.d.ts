@@ -13401,7 +13401,7 @@ export interface ChatMessageAttachment {
      */
     thumbnailUrl?: string;
 }
-export interface ChatMessageMention extends Entity {
+export interface ChatMessageMention {
     id?: number;
     // String used to represent the mention. For example, a user's display name, a team name.
     mentionText?: string;
