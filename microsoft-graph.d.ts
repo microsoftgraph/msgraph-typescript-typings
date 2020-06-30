@@ -210,38 +210,6 @@ export type MessageActionFlag =
     | "reply"
     | "replyToAll"
     | "review";
-export type ConditionalAccessPolicyState = "enabled" | "disabled" | "enabledForReportingButNotEnforced";
-export type ConditionalAccessClientApp =
-    | "all"
-    | "browser"
-    | "mobileAppsAndDesktopClients"
-    | "exchangeActiveSync"
-    | "easSupported"
-    | "other"
-    | "unknownFutureValue";
-export type ConditionalAccessGrantControl =
-    | "block"
-    | "mfa"
-    | "compliantDevice"
-    | "domainJoinedDevice"
-    | "approvedApplication"
-    | "compliantApplication"
-    | "unknownFutureValue";
-export type CloudAppSecuritySessionControlType =
-    | "mcasConfigured"
-    | "monitorOnly"
-    | "blockDownloads"
-    | "unknownFutureValue";
-export type SigninFrequencyType = "days" | "hours";
-export type PersistentBrowserSessionMode = "always" | "never";
-export type ConditionalAccessDevicePlatform =
-    | "android"
-    | "iOS"
-    | "windows"
-    | "windowsPhone"
-    | "macOS"
-    | "all"
-    | "unknownFutureValue";
 export type InstallIntent = "available" | "required" | "uninstall" | "availableWithoutEnrollment";
 export type MobileAppPublishingState = "notPublished" | "processing" | "published";
 export type WindowsArchitecture = "none" | "x86" | "x64" | "arm" | "neutral";
@@ -1229,7 +1197,7 @@ export interface User extends DirectoryObject {
     identities?: ObjectIdentity[];
     // The instant message voice over IP (VOIP) session initiation protocol (SIP) addresses for the user. Read-only.
     imAddresses?: string[];
-    // true if the user is a resource account; otherwise, false. Null value should be considered false.
+    // Do not use – reserved for future use.
     isResourceAccount?: boolean;
     // The user’s job title. Supports $filter.
     jobTitle?: string;
@@ -1260,8 +1228,9 @@ export interface User extends DirectoryObject {
     onPremisesDistinguishedName?: string;
     /**
      * Contains extensionAttributes 1-15 for the user. Note that the individual extension attributes are neither selectable
-     * nor filterable. For an onPremisesSyncEnabled user, this set of properties is mastered on-premises and is read-only. For
-     * a cloud-only user (where onPremisesSyncEnabled is false), these properties may be set during creation or update.
+     * nor filterable. For an onPremisesSyncEnabled user, the source of authority for this set of properties is the
+     * on-premises and is read-only. For a cloud-only user (where onPremisesSyncEnabled is false), these properties may be set
+     * during creation or update. These extension attributes are also known as Exchange custom attributes 1-15.
      */
     onPremisesExtensionAttributes?: OnPremisesExtensionAttributes;
     /**
@@ -2435,14 +2404,8 @@ export interface Team extends Entity {
     installedApps?: TeamsAppInstallation[];
     operations?: TeamsAsyncOperation[];
 }
-// tslint:disable-next-line: interface-name
-export interface IdentityContainer extends Entity {
-    conditionalAccess?: ConditionalAccessRoot;
-}
-export interface ConditionalAccessRoot extends Entity {
-    policies?: ConditionalAccessPolicy[];
-    namedLocations?: NamedLocation[];
-}
+// tslint:disable-next-line: interface-name no-empty-interface
+export interface IdentityContainer extends Entity {}
 // tslint:disable-next-line: interface-name
 export interface IdentityProvider extends Entity {
     type?: string;
@@ -2456,7 +2419,7 @@ export interface Application extends DirectoryObject {
     /**
      * Defines custom behavior that a consuming service can use to call an app in specific contexts. For example, applications
      * that can render file streams may set the addIns property for its 'FileHandler' functionality. This will let services
-     * like Office 365 call the application in the context of a document the user is working on.
+     * like Microsoft 365 call the application in the context of a document the user is working on.
      */
     addIns?: AddIn[];
     // Specifies settings for an application that implements a web API.
@@ -2548,6 +2511,7 @@ export interface Application extends DirectoryObject {
     extensionProperties?: ExtensionProperty[];
     // Read-only.
     createdOnBehalfOf?: DirectoryObject;
+    homeRealmDiscoveryPolicies?: HomeRealmDiscoveryPolicy[];
     /**
      * Directory objects that are owners of the application. The owners are a set of non-admin users who are allowed to modify
      * this object. Requires version 2013-11-08 or newer. Read-only. Nullable.
@@ -2591,6 +2555,8 @@ export interface StsPolicy extends PolicyBase {
     isOrganizationDefault?: boolean;
     appliesTo?: DirectoryObject[];
 }
+// tslint:disable-next-line: no-empty-interface
+export interface HomeRealmDiscoveryPolicy extends StsPolicy {}
 // tslint:disable-next-line: no-empty-interface
 export interface TokenLifetimePolicy extends StsPolicy {}
 // tslint:disable-next-line: no-empty-interface
@@ -2748,7 +2714,7 @@ export interface Domain extends Entity {
      */
     availabilityStatus?: string;
     /**
-     * The value of the property is false if the DNS record management of the domain has been delegated to Office 365.
+     * The value of the property is false if the DNS record management of the domain has been delegated to Microsoft 365.
      * Otherwise, the value is true. Not nullable
      */
     isAdminManaged?: boolean;
@@ -2864,7 +2830,7 @@ export interface Endpoint extends DirectoryObject {
     // URL of the published resource. Not nullable. Read-only.
     uri?: string;
     /**
-     * For Office 365 groups, this is set to a well-known name for the resource (e.g. Yammer.FeedURL etc.). Not nullable.
+     * For Microsoft 365 groups, this is set to a well-known name for the resource (e.g. Yammer.FeedURL etc.). Not nullable.
      * Read-only.
      */
     providerResourceId?: string;
@@ -2899,8 +2865,8 @@ export interface Group extends DirectoryObject {
      */
     hasMembersWithLicenseErrors?: boolean;
     /**
-     * Specifies the group type and its membership. If the collection contains Unified then the group is an Office 365 group;
-     * otherwise it's a security group. If the collection includes DynamicMembership, the group has dynamic membership;
+     * Specifies the group type and its membership. If the collection contains Unified then the group is a Microsoft 365
+     * group; otherwise it's a security group. If the collection includes DynamicMembership, the group has dynamic membership;
      * otherwise, membership is static. Returned by default. Supports $filter.
      */
     groupTypes?: string[];
@@ -2982,7 +2948,7 @@ export interface Group extends DirectoryObject {
     securityIdentifier?: string;
     theme?: string;
     /**
-     * Specifies the visibility of an Office 365 group. Possible values are: Private, Public, or Hiddenmembership; blank
+     * Specifies the visibility of a Microsoft 365 group. Possible values are: Private, Public, or Hiddenmembership; blank
      * values are treated as public. See group visibility options to learn more.Visibility can be set only when a group is
      * created; it is not editable.Visibility is supported only for unified groups; it is not supported for security groups.
      * Returned by default.
@@ -3024,7 +2990,7 @@ export interface Group extends DirectoryObject {
     appRoleAssignments?: AppRoleAssignment[];
     /**
      * Users and groups that are members of this group. HTTP Methods: GET (supported for all groups), POST (supported for
-     * Office 365 groups, security groups and mail-enabled security groups), DELETE (supported for Office 365 groups and
+     * Microsoft 365 groups, security groups and mail-enabled security groups), DELETE (supported for Microsoft 365 groups and
      * security groups) Nullable.
      */
     members?: DirectoryObject[];
@@ -3038,8 +3004,8 @@ export interface Group extends DirectoryObject {
     createdOnBehalfOf?: DirectoryObject;
     /**
      * The owners of the group. The owners are a set of non-admin users who are allowed to modify this object. Limited to 100
-     * owners. HTTP Methods: GET (supported for all groups), POST (supported for Office 365 groups, security groups and
-     * mail-enabled security groups), DELETE (supported for Office 365 groups and security groups). Nullable.
+     * owners. HTTP Methods: GET (supported for all groups), POST (supported for Microsoft 365 groups, security groups and
+     * mail-enabled security groups), DELETE (supported for Microsoft 365 groups and security groups). Nullable.
      */
     owners?: DirectoryObject[];
     // Read-only. Nullable.
@@ -3122,7 +3088,7 @@ export interface ConversationThread extends Entity {
     uniqueSenders?: string[];
     // The Cc: recipients for the thread.
     ccRecipients?: Recipient[];
-    // A short summary from the body of the latest post in this converstaion.
+    // A short summary from the body of the latest post in this conversation.
     preview?: string;
     // Indicates if the thread is locked.
     isLocked?: boolean;
@@ -3153,29 +3119,11 @@ export interface PolicyRoot extends Entity {
     homeRealmDiscoveryPolicies?: HomeRealmDiscoveryPolicy[];
     tokenIssuancePolicies?: TokenIssuancePolicy[];
     tokenLifetimePolicies?: TokenLifetimePolicy[];
-    identitySecurityDefaultsEnforcementPolicy?: IdentitySecurityDefaultsEnforcementPolicy;
-    conditionalAccessPolicies?: ConditionalAccessPolicy[];
 }
 // tslint:disable-next-line: no-empty-interface
 export interface ActivityBasedTimeoutPolicy extends StsPolicy {}
 // tslint:disable-next-line: no-empty-interface
 export interface ClaimsMappingPolicy extends StsPolicy {}
-// tslint:disable-next-line: no-empty-interface
-export interface HomeRealmDiscoveryPolicy extends StsPolicy {}
-// tslint:disable-next-line: interface-name
-export interface IdentitySecurityDefaultsEnforcementPolicy extends PolicyBase {
-    isEnabled?: boolean;
-}
-export interface ConditionalAccessPolicy extends Entity {
-    createdDateTime?: string;
-    modifiedDateTime?: string;
-    displayName?: string;
-    description?: string;
-    state?: ConditionalAccessPolicyState;
-    conditions?: ConditionalAccessConditionSet;
-    grantControls?: ConditionalAccessGrantControls;
-    sessionControls?: ConditionalAccessSessionControls;
-}
 export interface Contract extends DirectoryObject {
     /**
      * Type of contract.Possible values are: SyndicationPartner - Partner that exclusively resells and manages O365 and Intune
@@ -3207,7 +3155,7 @@ export interface ServicePrincipal extends DirectoryObject {
     /**
      * Defines custom behavior that a consuming service can use to call an app in specific contexts. For example, applications
      * that can render file streams may set the addIns property for its 'FileHandler' functionality. This will let services
-     * like Office 365 call the application in the context of a document the user is working on.
+     * like Microsoft 365 call the application in the context of a document the user is working on.
      */
     addIns?: AddIn[];
     /**
@@ -3250,9 +3198,9 @@ export interface ServicePrincipal extends DirectoryObject {
     keyCredentials?: KeyCredential[];
     /**
      * Specifies the URL where the service provider redirects the user to Azure AD to authenticate. Azure AD uses the URL to
-     * launch the application from Office 365 or the Azure AD My Apps. When blank, Azure AD performs IdP-initiated sign-on for
-     * applications configured with SAML-based single sign-on. The user launches the application from Office 365, the Azure AD
-     * My Apps, or the Azure AD SSO URL.
+     * launch the application from Microsoft 365 or the Azure AD My Apps. When blank, Azure AD performs IdP-initiated sign-on
+     * for applications configured with SAML-based single sign-on. The user launches the application from Microsoft 365, the
+     * Azure AD My Apps, or the Azure AD SSO URL.
      */
     loginUrl?: string;
     /**
@@ -3275,8 +3223,8 @@ export interface ServicePrincipal extends DirectoryObject {
     passwordCredentials?: PasswordCredential[];
     /**
      * Specifies the single sign-on mode configured for this application. Azure AD uses the preferred single sign-on mode to
-     * launch the application from Office 365 or the Azure AD My Apps. The supported values are password, saml, external, and
-     * oidc.
+     * launch the application from Microsoft 365 or the Azure AD My Apps. The supported values are password, saml, external,
+     * and oidc.
      */
     preferredSingleSignOnMode?: string;
     /**
@@ -3312,11 +3260,13 @@ export interface ServicePrincipal extends DirectoryObject {
     appRoleAssignedTo?: AppRoleAssignment[];
     // Applications that this service principal is assigned to. Read-only. Nullable.
     appRoleAssignments?: AppRoleAssignment[];
+    claimsMappingPolicies?: ClaimsMappingPolicy[];
     /**
      * Endpoints available for discovery. Services like Sharepoint populate this property with a tenant specific SharePoint
      * endpoints that other applications can discover and use in their experiences.
      */
     endpoints?: Endpoint[];
+    homeRealmDiscoveryPolicies?: HomeRealmDiscoveryPolicy[];
     /**
      * Delegated permission grants authorizing this service principal to access an API on behalf of a signed-in user.
      * Read-only. Nullable.
@@ -3334,6 +3284,8 @@ export interface ServicePrincipal extends DirectoryObject {
     owners?: DirectoryObject[];
     // Directory objects that are owned by this service principal. Read-only. Nullable.
     ownedObjects?: DirectoryObject[];
+    tokenIssuancePolicies?: TokenIssuancePolicy[];
+    tokenLifetimePolicies?: TokenLifetimePolicy[];
 }
 export interface SubscribedSku extends Entity {
     // Possible values are: Enabled, Warning, Suspended, Deleted, LockedOut.
@@ -3557,7 +3509,7 @@ export interface EducationUser extends Entity {
      */
     passwordPolicies?: string;
     /**
-     * Specifies the password profile for the user. The profile contains the user’s password. This property is required when a
+     * Specifies the password profile for the user. The profile contains the user's password. This property is required when a
      * user is created. The password in the profile must satisfy minimum requirements as specified by the passwordPolicies
      * property. By default, a strong password is required.
      */
@@ -3580,7 +3532,7 @@ export interface EducationUser extends Entity {
     /**
      * The user principal name (UPN) of the user. The UPN is an Internet-style login name for the user based on the Internet
      * standard RFC 822. By convention, this should map to the user's email name. The general format is alias@domain, where
-     * domain must be present in the tenant’s collection of verified domains. This property is required when a user is
+     * domain must be present in the tenant's collection of verified domains. This property is required when a user is
      * created. The verified domains for the tenant can be accessed from the verifiedDomains property of organization.
      * Supports $filter and $orderby.
      */
@@ -3624,6 +3576,8 @@ export interface ColumnDefinition extends Entity {
     displayName?: string;
     // If true, no two list items may have the same value for this column.
     enforceUniqueValues?: boolean;
+    // This column stores a geolocation.
+    geolocation?: GeolocationColumn;
     // Specifies whether the column is displayed in the user interface.
     hidden?: boolean;
     // Specifies whether the column values can used for sorting and searching.
@@ -3785,6 +3739,11 @@ export interface DriveItem extends BaseItem {
      * contexts and folders in others. Read-only.
      */
     package?: Package;
+    /**
+     * If present, indicates that one or more operations that might affect the state of the driveItem are pending completion.
+     * Read-only.
+     */
+    pendingOperations?: PendingOperations;
     // Photo metadata, if the item is a photo. Read-only.
     photo?: Photo;
     /**
@@ -4818,20 +4777,6 @@ export interface Call extends Entity {
     // Read-only. Nullable.
     operations?: CommsOperation[];
 }
-export interface NamedLocation extends Entity {
-    displayName?: string;
-    createdDateTime?: string;
-    modifiedDateTime?: string;
-}
-export interface CountryNamedLocation extends NamedLocation {
-    countriesAndRegions?: string[];
-    includeUnknownCountriesAndRegions?: boolean;
-}
-// tslint:disable-next-line: interface-name
-export interface IpNamedLocation extends NamedLocation {
-    ipRanges?: IpRange[];
-    isTrusted?: boolean;
-}
 export interface DeviceAppManagement extends Entity {
     // The last time the apps from the Microsoft Store for Business were synced successfully for the account.
     microsoftStoreForBusinessLastSuccessfulSyncDateTime?: string;
@@ -5790,6 +5735,8 @@ export interface DeviceManagement extends Entity {
     mobileThreatDefenseConnectors?: MobileThreatDefenseConnector[];
     // The list of Device Management Partners configured by the tenant.
     deviceManagementPartners?: DeviceManagementPartner[];
+    // The list of Compliance Management Partners configured by the tenant.
+    complianceManagementPartners?: ComplianceManagementPartner[];
     // Apple push notification certificate.
     applePushNotificationCertificate?: ApplePushNotificationCertificate;
     // Device overview
@@ -6125,6 +6072,26 @@ export interface DeviceManagementPartner extends Entity {
     whenPartnerDevicesWillBeRemovedDateTime?: string;
     // DateTime in UTC when PartnerDevices will be marked as NonCompliant
     whenPartnerDevicesWillBeMarkedAsNonCompliantDateTime?: string;
+}
+export interface ComplianceManagementPartner extends Entity {
+    // Timestamp of last heartbeat after admin onboarded to the compliance management partner
+    lastHeartbeatDateTime?: string;
+    // Partner state of this tenant. Possible values are: unknown, unavailable, enabled, terminated, rejected, unresponsive.
+    partnerState?: DeviceManagementPartnerTenantState;
+    // Partner display name
+    displayName?: string;
+    // Partner onboarded for Mac devices.
+    macOsOnboarded?: boolean;
+    // Partner onboarded for Android devices.
+    androidOnboarded?: boolean;
+    // Partner onboarded for ios devices.
+    iosOnboarded?: boolean;
+    // User groups which enroll Mac devices through partner.
+    macOsEnrollmentAssignments?: ComplianceManagementPartnerAssignment[];
+    // User groups which enroll Android devices through partner.
+    androidEnrollmentAssignments?: ComplianceManagementPartnerAssignment[];
+    // User groups which enroll ios devices through partner.
+    iosEnrollmentAssignments?: ComplianceManagementPartnerAssignment[];
 }
 export interface ApplePushNotificationCertificate extends Entity {
     // Apple Id of the account used to create the MDM push certificate.
@@ -8673,7 +8640,7 @@ export interface PlannerBucketTaskBoardTaskFormat extends Entity {
 }
 export interface PlannerPlanDetails extends Entity {
     /**
-     * Set of user ids that this plan is shared with. If you are leveraging Office 365 Groups, use the Groups API to manage
+     * Set of user ids that this plan is shared with. If you are leveraging Microsoft 365 groups, use the Groups API to manage
      * group membership to share the group's plan. You can also add existing members of the group to this collection though it
      * is not required for them to access the plan owned by the group.
      */
@@ -9312,7 +9279,7 @@ export interface TeamsAppDefinition extends Entity {
 export interface TeamsTab extends Entity {
     // Name of the tab.
     displayName?: string;
-    // Deep link url of the tab instance. Read only.
+    // Deep link URL of the tab instance. Read only.
     webUrl?: string;
     // Container for custom settings applied to a tab. The tab is considered configured only once this property is set.
     configuration?: TeamsTabConfiguration;
@@ -9600,7 +9567,7 @@ export interface GeoCoordinates {
     longitude?: number;
 }
 export interface AppliedConditionalAccessPolicy {
-    // Unique GUID of the conditional access polic.y
+    // Unique GUID of the conditional access policy.
     id?: string;
     // Refers to the Name of the conditional access policy (example: 'Require MFA for Salesforce').
     displayName?: string;
@@ -10397,6 +10364,12 @@ export interface Quota {
     total?: number;
     // Total space used, in bytes. Read-only.
     used?: number;
+    // Information about the drive's storage quota plans. Only in Personal OneDrive.
+    storagePlanInformation?: StoragePlanInformation;
+}
+export interface StoragePlanInformation {
+    // Indicates whether there are higher storage quota plans available. Read-only.
+    upgradeAvailable?: boolean;
 }
 export interface Audio {
     // The title of the album for this audio file.
@@ -10456,6 +10429,8 @@ export interface Hashes {
     quickXorHash?: string;
     // SHA1 hash for the contents of the file (if available). Read-only.
     sha1Hash?: string;
+    // SHA256 hash for the contents of the file (if available). Read-only.
+    sha256Hash?: string;
 }
 export interface FileSystemInfo {
     // The UTC date and time the file was created on a client.
@@ -10493,6 +10468,14 @@ export interface Package {
      */
     type?: string;
 }
+export interface PendingOperations {
+    // A property that indicates that an operation that might update the binary content of a file is pending completion.
+    pendingContentUpdate?: PendingContentUpdate;
+}
+export interface PendingContentUpdate {
+    // Date and time the pending binary operation was queued in UTC time. Read-only.
+    queuedDateTime?: string;
+}
 export interface Photo {
     // Camera manufacturer. Read-only.
     cameraMake?: string;
@@ -10508,6 +10491,8 @@ export interface Photo {
     focalLength?: number;
     // The ISO value from the camera. Read-only.
     iso?: number;
+    // The orientation value from the camera. Writable on OneDrive Personal.
+    orientation?: number;
     // Represents the date and time the photo was taken. Read-only.
     takenDateTime?: string;
 }
@@ -11354,6 +11339,8 @@ export interface DefaultColumnValue {
     // The direct value to use as the default value for this column.
     value?: string;
 }
+// tslint:disable-next-line: no-empty-interface
+export interface GeolocationColumn {}
 export interface LookupColumn {
     // Indicates whether multiple values can be selected from the source.
     allowMultipleValues?: boolean;
@@ -11424,6 +11411,8 @@ export interface IncompleteData {
 export interface ContentTypeInfo {
     // The id of the content type.
     id?: string;
+    // The name of the content type.
+    name?: string;
 }
 export interface SharingInvitation {
     // The email address provided for the recipient of the sharing invitation. Read-only.
@@ -11476,12 +11465,14 @@ export interface Thumbnail {
     width?: number;
 }
 export interface DriveItemUploadableProperties {
-    // Provides a user-visible description of the item. Read-write. Only on OneDrive Personal
+    // Provides a user-visible description of the item. Read-write. Only on OneDrive Personal.
     description?: string;
     // File system information on client. Read-write.
     fileSystemInfo?: FileSystemInfo;
     // The name of the item (filename and extension). Read-write.
     name?: string;
+    // Provides an expected file size to perform a quota check prior to upload. Only on OneDrive Personal.
+    fileSize?: number;
 }
 export interface DriveRecipient {
     // The alias of the domain object, for cases where an email address is unavailable (e.g. security groups).
@@ -11509,74 +11500,8 @@ export interface ExtensionSchemaProperty {
 export interface ConditionalAccessSessionControl {
     isEnabled?: boolean;
 }
-// tslint:disable-next-line: no-empty-interface
-export interface ApplicationEnforcedRestrictionsSessionControl extends ConditionalAccessSessionControl {}
-export interface CloudAppSecuritySessionControl extends ConditionalAccessSessionControl {
-    cloudAppSecurityType?: CloudAppSecuritySessionControlType;
-}
-export interface SignInFrequencySessionControl extends ConditionalAccessSessionControl {
-    value?: number;
-    type?: SigninFrequencyType;
-}
-export interface PersistentBrowserSessionControl extends ConditionalAccessSessionControl {
-    mode?: PersistentBrowserSessionMode;
-}
-export interface ConditionalAccessSessionControls {
-    applicationEnforcedRestrictions?: ApplicationEnforcedRestrictionsSessionControl;
-    cloudAppSecurity?: CloudAppSecuritySessionControl;
-    signInFrequency?: SignInFrequencySessionControl;
-    persistentBrowser?: PersistentBrowserSessionControl;
-}
 // tslint:disable-next-line: interface-name no-empty-interface
 export interface IpRange {}
-// tslint:disable-next-line: interface-name
-export interface IPv4CidrRange extends IpRange {
-    cidrAddress?: string;
-}
-// tslint:disable-next-line: interface-name
-export interface IPv6CidrRange extends IpRange {
-    cidrAddress?: string;
-}
-export interface ConditionalAccessApplications {
-    includeApplications?: string[];
-    excludeApplications?: string[];
-    includeUserActions?: string[];
-}
-export interface ConditionalAccessUsers {
-    includeUsers?: string[];
-    excludeUsers?: string[];
-    includeGroups?: string[];
-    excludeGroups?: string[];
-    includeRoles?: string[];
-    excludeRoles?: string[];
-}
-export interface ConditionalAccessPlatforms {
-    includePlatforms?: ConditionalAccessDevicePlatform[];
-    excludePlatforms?: ConditionalAccessDevicePlatform[];
-}
-export interface ConditionalAccessLocations {
-    includeLocations?: string[];
-    excludeLocations?: string[];
-}
-export interface ConditionalAccessDevices {
-    includeDeviceStates?: string[];
-    excludeDeviceStates?: string[];
-}
-export interface ConditionalAccessConditionSet {
-    applications?: ConditionalAccessApplications;
-    users?: ConditionalAccessUsers;
-    signInRiskLevels?: RiskLevel[];
-    platforms?: ConditionalAccessPlatforms;
-    locations?: ConditionalAccessLocations;
-    clientAppTypes?: ConditionalAccessClientApp[];
-    devices?: ConditionalAccessDevices;
-}
-export interface ConditionalAccessGrantControls {
-    operator?: string;
-    builtInControls?: ConditionalAccessGrantControl[];
-    customAuthenticationFactors?: string[];
-    termsOfUse?: string[];
-}
 // tslint:disable-next-line: no-empty-interface
 export interface DeviceAndAppManagementAssignmentTarget {}
 // tslint:disable-next-line: no-empty-interface
@@ -12303,6 +12228,10 @@ export interface DeviceEnrollmentPlatformRestriction {
     osMinimumVersion?: string;
     // Max OS version supported
     osMaximumVersion?: string;
+}
+export interface ComplianceManagementPartnerAssignment {
+    // Group assignment target.
+    target?: DeviceAndAppManagementAssignmentTarget;
 }
 export interface UpdateWindowsDeviceAccountActionParameter {
     // Not yet documented
@@ -13401,7 +13330,11 @@ export interface ChatMessageAttachment {
      */
     thumbnailUrl?: string;
 }
-export interface ChatMessageMention extends Entity {
+export interface ChatMessageMention {
+    /**
+     * Index of an entity being mentioned in the specified chatMessage. Matches the {index} value in the corresponding
+     * &amp;lt;at id='{index}'&amp;gt; tag in the message body.
+     */
     id?: number;
     // String used to represent the mention. For example, a user's display name, a team name.
     mentionText?: string;
