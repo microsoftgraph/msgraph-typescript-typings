@@ -1,12 +1,10 @@
-// Type definitions for non-npm package microsoft-graph <VERSION_STRING>
+// Type definitions for non-npm package microsoft-graph 1.13.0
 // Project: https://github.com/microsoftgraph/msgraph-typescript-typings
 // Definitions by: Microsoft Graph Team <https://github.com/microsoftgraph>
-//                 Muthurathinam Muthusamy <https://github.com/muthurathinam>
-//                 Darrel Miller <https://github.com/darrelmiller>
-//                 Nimeesh Patel <https://github.com/nimeesh-msft>
 //                 Michael Mainer <https://github.com/MIchaelMainer>
-//                 Nakul Sabharwal <https://github.com/NakulSabharwal>
 //                 Peter Ombwa <https://github.com/peombwa>
+//                 Mustafa Zengin <https://github.com/zengin>
+//                 DeVere Dyett <https://github/dyett>
 // Definitions: https://github.com/DefinitelyTyped/DefinitelyTyped
 // TypeScript Version: 2.1
 
