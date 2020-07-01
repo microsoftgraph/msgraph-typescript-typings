@@ -4,7 +4,7 @@
 //                 Michael Mainer <https://github.com/MIchaelMainer>
 //                 Peter Ombwa <https://github.com/peombwa>
 //                 Mustafa Zengin <https://github.com/zengin>
-//                 DeVere Dyett <https://github/dyett>
+//                 DeVere Dyett <https://github.com/dyett>
 // Definitions: https://github.com/DefinitelyTyped/DefinitelyTyped
 // TypeScript Version: 2.1
 
