@@ -1,10 +1,10 @@
-// Type definitions for non-npm package microsoft-graph 1.13.0
+// Type definitions for non-npm package microsoft-graph <VERSION_STRING>
 // Project: https://github.com/microsoftgraph/msgraph-typescript-typings
 // Definitions by: Microsoft Graph Team <https://github.com/microsoftgraph>
 //                 Michael Mainer <https://github.com/MIchaelMainer>
 //                 Peter Ombwa <https://github.com/peombwa>
 //                 Mustafa Zengin <https://github.com/zengin>
-//                 DeVere Dyett <https://github.com/dyett>
+//                 DeVere Dyett <https://github.com/ddyett>
 // Definitions: https://github.com/DefinitelyTyped/DefinitelyTyped
 // TypeScript Version: 2.1
 
@@ -3219,6 +3219,7 @@ export interface ServicePrincipal extends DirectoryObject {
     oauth2PermissionScopes?: PermissionScope[];
     // The collection of password credentials associated with the service principal. Not nullable.
     passwordCredentials?: PasswordCredential[];
+    preferredTokenSigningKeyThumbprint?: string;
     /**
      * Specifies the single sign-on mode configured for this application. Azure AD uses the preferred single sign-on mode to
      * launch the application from Microsoft 365 or the Azure AD My Apps. The supported values are password, saml, external,
@@ -13280,6 +13281,39 @@ export interface TeleconferenceDeviceQuality {
      * quality.
      */
     mediaQualityList?: TeleconferenceDeviceMediaQuality[];
+}
+export interface ChangeNotification {
+    // Unique ID for the notification. Optional.
+    id?: string;
+    sequenceNumber?: number;
+    // The unique identifier of the subscription that generated the notification.
+    subscriptionId?: string;
+    // The expiration time for the subscription. Required.
+    subscriptionExpirationDateTime?: string;
+    /**
+     * Value of the clientState property sent in the subscription request (if any). The maximum length is 255 characters. The
+     * client can check whether the change notification came from the service by comparing the values of the clientState
+     * property. The value of the clientState property sent with the subscription is compared with the value of the
+     * clientState property received with each change notification. Optional.
+     */
+    clientState?: string;
+    /**
+     * Indicates the type of change that will raise the change notification. The supported values are: created, updated,
+     * deleted. Required.
+     */
+    changeType?: ChangeType;
+    // The URI of the resource that emitted the change notification relative to https://graph.microsoft.com. Required.
+    resource?: string;
+    // The unique identifier of the tenant from which the change notification originated.
+    tenantId?: string;
+    // The content of this property depends on the type of resource being subscribed to. Required.
+    resourceData?: ResourceData;
+}
+// tslint:disable-next-line: no-empty-interface
+export interface ResourceData {}
+export interface ChangeNotificationCollection {
+    // The set of notifications being sent to the notification URL. Required.
+    value?: ChangeNotification[];
 }
 export interface TeamClassSettings {
     /**
