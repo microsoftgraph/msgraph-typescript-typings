@@ -1,4 +1,4 @@
-// Type definitions for non-npm package microsoft-graph <VERSION_STRING>
+// Type definitions for non-npm package microsoft-graph 1.14
 // Project: https://github.com/microsoftgraph/msgraph-typescript-typings
 // Definitions by: Microsoft Graph Team <https://github.com/microsoftgraph>
 //                 Michael Mainer <https://github.com/MIchaelMainer>
