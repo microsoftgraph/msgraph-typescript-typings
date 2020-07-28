@@ -1,10 +1,10 @@
-// Type definitions for non-npm package microsoft-graph 1.13.0
+// Type definitions for non-npm package microsoft-graph <VERSION_STRING>
 // Project: https://github.com/microsoftgraph/msgraph-typescript-typings
 // Definitions by: Microsoft Graph Team <https://github.com/microsoftgraph>
 //                 Michael Mainer <https://github.com/MIchaelMainer>
 //                 Peter Ombwa <https://github.com/peombwa>
 //                 Mustafa Zengin <https://github.com/zengin>
-//                 DeVere Dyett <https://github.com/dyett>
+//                 DeVere Dyett <https://github.com/ddyett>
 // Definitions: https://github.com/DefinitelyTyped/DefinitelyTyped
 // TypeScript Version: 2.1
 
@@ -72,6 +72,7 @@ export type PhoneType =
 export type EducationUserRole = "student" | "teacher" | "none" | "unknownFutureValue";
 export type EducationExternalSource = "sis" | "manual" | "unknownFutureValue";
 export type EducationGender = "female" | "male" | "other" | "unknownFutureValue";
+export type WorkbookOperationStatus = "notStarted" | "running" | "succeeded" | "failed";
 export type AttendeeType = "required" | "optional" | "resource";
 export type ActivityDomain = "unknown" | "work" | "personal" | "unrestricted";
 export type FreeBusyStatus = "free" | "tentative" | "busy" | "oof" | "workingElsewhere" | "unknown";
@@ -208,6 +209,38 @@ export type MessageActionFlag =
     | "reply"
     | "replyToAll"
     | "review";
+export type ConditionalAccessPolicyState = "enabled" | "disabled" | "enabledForReportingButNotEnforced";
+export type ConditionalAccessClientApp =
+    | "all"
+    | "browser"
+    | "mobileAppsAndDesktopClients"
+    | "exchangeActiveSync"
+    | "easSupported"
+    | "other"
+    | "unknownFutureValue";
+export type ConditionalAccessGrantControl =
+    | "block"
+    | "mfa"
+    | "compliantDevice"
+    | "domainJoinedDevice"
+    | "approvedApplication"
+    | "compliantApplication"
+    | "unknownFutureValue";
+export type CloudAppSecuritySessionControlType =
+    | "mcasConfigured"
+    | "monitorOnly"
+    | "blockDownloads"
+    | "unknownFutureValue";
+export type SigninFrequencyType = "days" | "hours";
+export type PersistentBrowserSessionMode = "always" | "never";
+export type ConditionalAccessDevicePlatform =
+    | "android"
+    | "iOS"
+    | "windows"
+    | "windowsPhone"
+    | "macOS"
+    | "all"
+    | "unknownFutureValue";
 export type InstallIntent = "available" | "required" | "uninstall" | "availableWithoutEnrollment";
 export type MobileAppPublishingState = "notPublished" | "processing" | "published";
 export type WindowsArchitecture = "none" | "x86" | "x64" | "arm" | "neutral";
@@ -859,6 +892,15 @@ export type Tone =
     | "flash";
 export type TeamVisibilityType = "private" | "public" | "hiddenMembership" | "unknownFutureValue";
 export type ClonableTeamParts = "apps" | "tabs" | "settings" | "channels" | "members";
+export type TeamSpecialization =
+    | "none"
+    | "educationStandard"
+    | "educationClass"
+    | "educationProfessionalLearningCommunity"
+    | "educationStaff"
+    | "healthcareStandard"
+    | "healthcareCareCoordination"
+    | "unknownFutureValue";
 export type GiphyRatingType = "strict" | "moderate" | "unknownFutureValue";
 export type ChatMessageType = "message" | "chatEvent" | "typing" | "unknownFutureValue";
 export type ChatMessageImportance = "normal" | "high" | "urgent" | "unknownFutureValue";
@@ -1801,7 +1843,7 @@ export interface Event extends OutlookItem {
     isOrganizer?: boolean;
     // The recurrence pattern for the event.
     recurrence?: PatternedRecurrence;
-    // Set to true if the sender would like a response when the event is accepted or declined.
+    // Default is true, which represents the organizer would like an invitee to send a response to the event.
     responseRequested?: boolean;
     // The ID for the recurring series master item, if this event is part of a recurring series.
     seriesMasterId?: string;
@@ -1832,6 +1874,10 @@ export interface Event extends OutlookItem {
     onlineMeetingProvider?: OnlineMeetingProviderType;
     // Details for an attendee to join the meeting online. Read-only.
     onlineMeeting?: OnlineMeetingInfo;
+    /**
+     * True if the meeting organizer allows invitees to propose a new time when responding, false otherwise. Optional. Default
+     * is true.
+     */
     allowNewTimeProposals?: boolean;
     /**
      * The collection of fileAttachment and itemAttachment attachments for the event. Navigation property. Read-only.
@@ -2374,6 +2420,13 @@ export interface OnlineMeeting extends Entity {
     joinInformation?: ItemBody;
 }
 export interface Team extends Entity {
+    displayName?: string;
+    description?: string;
+    // A unique ID for the team that has been used in a few places such as the audit log/Office 365 Management Activity API.
+    internalId?: string;
+    classification?: string;
+    specialization?: TeamSpecialization;
+    visibility?: TeamVisibilityType;
     /**
      * A hyperlink that will go to the team in the Microsoft Teams client. This is the URL that you get when you right-click a
      * team in the Microsoft Teams client and select Get link to team. This URL should be treated as an opaque blob, and not
@@ -2394,6 +2447,9 @@ export interface Team extends Entity {
     // Whether this team is in read-only mode.
     isArchived?: boolean;
     schedule?: Schedule;
+    group?: Group;
+    template?: TeamsTemplate;
+    members?: ConversationMember[];
     // The collection of channels &amp; messages associated with the team.
     channels?: Channel[];
     // The general channel for the team.
@@ -2402,8 +2458,14 @@ export interface Team extends Entity {
     installedApps?: TeamsAppInstallation[];
     operations?: TeamsAsyncOperation[];
 }
-// tslint:disable-next-line: interface-name no-empty-interface
-export interface IdentityContainer extends Entity {}
+// tslint:disable-next-line: interface-name
+export interface IdentityContainer extends Entity {
+    conditionalAccess?: ConditionalAccessRoot;
+}
+export interface ConditionalAccessRoot extends Entity {
+    policies?: ConditionalAccessPolicy[];
+    namedLocations?: NamedLocation[];
+}
 // tslint:disable-next-line: interface-name
 export interface IdentityProvider extends Entity {
     type?: string;
@@ -2834,6 +2896,10 @@ export interface Endpoint extends DirectoryObject {
     providerResourceId?: string;
 }
 export interface Group extends DirectoryObject {
+    /**
+     * The list of sensitivity label pairs (label ID, label name) associated with an Microsoft 365 group. Returned only on
+     * $select. Read-only.
+     */
     assignedLabels?: AssignedLabel[];
     // The licenses that are assigned to the group. Returned only on $select. Read-only.
     assignedLicenses?: AssignedLicense[];
@@ -2855,6 +2921,12 @@ export interface Group extends DirectoryObject {
      * Returned by default. Supports $filter and $orderby.
      */
     displayName?: string;
+    /**
+     * Timestamp of when the group is set to expire. The value cannot be modified and is automatically populated when the
+     * group is created. The Timestamp type represents date and time information using ISO 8601 format and is always in UTC
+     * time. For example, midnight UTC on Jan 1, 2014 would look like this: '2014-01-01T00:00:00Z'. Returned by default.
+     * Read-only.
+     */
     expirationDateTime?: string;
     /**
      * Indicates whether there are members in this group that have license errors from its group-based license assignment.
@@ -2863,9 +2935,10 @@ export interface Group extends DirectoryObject {
      */
     hasMembersWithLicenseErrors?: boolean;
     /**
-     * Specifies the group type and its membership. If the collection contains Unified then the group is a Microsoft 365
-     * group; otherwise it's a security group. If the collection includes DynamicMembership, the group has dynamic membership;
-     * otherwise, membership is static. Returned by default. Supports $filter.
+     * Specifies the group type and its membership. If the collection contains Unified, the group is a Microsoft 365 group;
+     * otherwise, it's either a security group or distribution group. For details, see groups overview.If the collection
+     * includes DynamicMembership, the group has dynamic membership; otherwise, membership is static. Returned by default.
+     * Supports $filter.
      */
     groupTypes?: string[];
     /**
@@ -2885,7 +2958,16 @@ export interface Group extends DirectoryObject {
      * Returned by default. Supports $filter.
      */
     mailNickname?: string;
+    /**
+     * The rule that determines members for this group if the group is a dynamic group (groupTypes contains
+     * DynamicMembership). For more information about the syntax of the membership rule, see Membership Rules syntax. Returned
+     * by default.
+     */
     membershipRule?: string;
+    /**
+     * Indicates whether the dynamic membership processing is on or paused. Possible values are 'On' or 'Paused'. Returned by
+     * default.
+     */
     membershipRuleProcessingState?: string;
     /**
      * Contains the on-premises domain FQDN, also called dnsDomainName synchronized from the on-premises directory. The
@@ -2926,6 +3008,10 @@ export interface Group extends DirectoryObject {
     onPremisesSyncEnabled?: boolean;
     // The preferred data location for the group. For more information, see OneDrive Online Multi-Geo. Returned by default.
     preferredDataLocation?: string;
+    /**
+     * The preferred language for an Microsoft 365 group. Should follow ISO 639-1 Code; for example 'en-US'. Returned by
+     * default.
+     */
     preferredLanguage?: string;
     /**
      * Email addresses for the group that direct to the same group mailbox. For example: ['SMTP: bob@contoso.com', 'smtp:
@@ -2944,6 +3030,10 @@ export interface Group extends DirectoryObject {
     securityEnabled?: boolean;
     // Security identifier of the group, used in Windows scenarios. Returned by default.
     securityIdentifier?: string;
+    /**
+     * Specifies an Microsoft 365 group's color theme. Possible values are Teal, Purple, Green, Blue, Pink, Orange or Red.
+     * Returned by default.
+     */
     theme?: string;
     /**
      * Specifies the visibility of a Microsoft 365 group. Possible values are: Private, Public, or Hiddenmembership; blank
@@ -3117,11 +3207,44 @@ export interface PolicyRoot extends Entity {
     homeRealmDiscoveryPolicies?: HomeRealmDiscoveryPolicy[];
     tokenIssuancePolicies?: TokenIssuancePolicy[];
     tokenLifetimePolicies?: TokenLifetimePolicy[];
+    identitySecurityDefaultsEnforcementPolicy?: IdentitySecurityDefaultsEnforcementPolicy;
+    conditionalAccessPolicies?: ConditionalAccessPolicy[];
 }
 // tslint:disable-next-line: no-empty-interface
 export interface ActivityBasedTimeoutPolicy extends StsPolicy {}
 // tslint:disable-next-line: no-empty-interface
 export interface ClaimsMappingPolicy extends StsPolicy {}
+// tslint:disable-next-line: interface-name
+export interface IdentitySecurityDefaultsEnforcementPolicy extends PolicyBase {
+    // If set to true, Azure Active Directory security defaults is enabled for the tenant.
+    isEnabled?: boolean;
+}
+export interface ConditionalAccessPolicy extends Entity {
+    /**
+     * The Timestamp type represents date and time information using ISO 8601 format and is always in UTC time. For example,
+     * midnight UTC on Jan 1, 2014 would look like this: '2014-01-01T00:00:00Z'. Readonly.
+     */
+    createdDateTime?: string;
+    /**
+     * The Timestamp type represents date and time information using ISO 8601 format and is always in UTC time. For example,
+     * midnight UTC on Jan 1, 2014 would look like this: '2014-01-01T00:00:00Z'. Readonly.
+     */
+    modifiedDateTime?: string;
+    // Specifies a display name for the conditionalAccessPolicy object.
+    displayName?: string;
+    description?: string;
+    /**
+     * Specifies the state of the conditionalAccessPolicy object. Possible values are: enabled, disabled,
+     * enabledForReportingButNotEnforced. Required.
+     */
+    state?: ConditionalAccessPolicyState;
+    // Specifies the rules that must be met for the policy to apply. Required.
+    conditions?: ConditionalAccessConditionSet;
+    // Specifies the grant controls that must be fulfilled to pass the policy.
+    grantControls?: ConditionalAccessGrantControls;
+    // Specifies the session controls that are enforced after sign-in.
+    sessionControls?: ConditionalAccessSessionControls;
+}
 export interface Contract extends DirectoryObject {
     /**
      * Type of contract.Possible values are: SyndicationPartner - Partner that exclusively resells and manages O365 and Intune
@@ -3219,6 +3342,7 @@ export interface ServicePrincipal extends DirectoryObject {
     oauth2PermissionScopes?: PermissionScope[];
     // The collection of password credentials associated with the service principal. Not nullable.
     passwordCredentials?: PasswordCredential[];
+    preferredTokenSigningKeyThumbprint?: string;
     /**
      * Specifies the single sign-on mode configured for this application. Azure AD uses the preferred single sign-on mode to
      * launch the application from Microsoft 365 or the Azure AD My Apps. The supported values are password, saml, external,
@@ -3258,12 +3382,14 @@ export interface ServicePrincipal extends DirectoryObject {
     appRoleAssignedTo?: AppRoleAssignment[];
     // Applications that this service principal is assigned to. Read-only. Nullable.
     appRoleAssignments?: AppRoleAssignment[];
+    // The claimsMappingPolicies assigned to this service principal.
     claimsMappingPolicies?: ClaimsMappingPolicy[];
     /**
      * Endpoints available for discovery. Services like Sharepoint populate this property with a tenant specific SharePoint
      * endpoints that other applications can discover and use in their experiences.
      */
     endpoints?: Endpoint[];
+    // The homeRealmDiscoveryPolicies assigned to this service principal.
     homeRealmDiscoveryPolicies?: HomeRealmDiscoveryPolicy[];
     /**
      * Delegated permission grants authorizing this service principal to access an API on behalf of a signed-in user.
@@ -3282,7 +3408,9 @@ export interface ServicePrincipal extends DirectoryObject {
     owners?: DirectoryObject[];
     // Directory objects that are owned by this service principal. Read-only. Nullable.
     ownedObjects?: DirectoryObject[];
+    // The tokenIssuancePolicies assigned to this service principal.
     tokenIssuancePolicies?: TokenIssuancePolicy[];
+    // The tokenLifetimePolicies assigned to this service principal.
     tokenLifetimePolicies?: TokenLifetimePolicy[];
 }
 export interface SubscribedSku extends Entity {
@@ -3803,6 +3931,11 @@ export interface Workbook extends Entity {
     worksheets?: WorkbookWorksheet[];
     comments?: WorkbookComment[];
     functions?: WorkbookFunctions;
+    /**
+     * The status of workbook operations. Getting an operation collection is not supported, but you can get the status of a
+     * long-running operation if the Location header is returned in the response. Read-only.
+     */
+    operations?: WorkbookOperation[];
 }
 export interface Permission extends Entity {
     /**
@@ -3954,6 +4087,14 @@ export interface WorkbookComment extends Entity {
 }
 // tslint:disable-next-line: no-empty-interface
 export interface WorkbookFunctions extends Entity {}
+export interface WorkbookOperation extends Entity {
+    // The current status of the operation. Possible values are: NotStarted, Running, Completed, Failed.
+    status?: WorkbookOperationStatus;
+    // The resource URI for the result.
+    resourceLocation?: string;
+    // The error returned by the operation.
+    error?: WorkbookOperationError;
+}
 export interface WorkbookChart extends Entity {
     // Represents the height, in points, of the chart object.
     height?: number;
@@ -4500,6 +4641,7 @@ export interface EventMessage extends Message {
     recurrence?: PatternedRecurrence;
     isOutOfDate?: boolean;
     isAllDay?: boolean;
+    // True if this meeting request is accessible to a delegate, false otherwise. Default is false.
     isDelegated?: boolean;
     /**
      * The event associated with the event message. The assumption for attendees or room resources is that the Calendar
@@ -4509,10 +4651,18 @@ export interface EventMessage extends Message {
     event?: Event;
 }
 export interface EventMessageRequest extends EventMessage {
+    // If the meeting update changes the meeting location, this property specifies the previous meeting location.
     previousLocation?: Location;
+    // If the meeting update changes the meeting start time, this property specifies the previous meeting start time.
     previousStartDateTime?: DateTimeTimeZone;
+    // If the meeting update changes the meeting end time, this property specifies the previous meeting end time.
     previousEndDateTime?: DateTimeTimeZone;
+    // Set to true if the sender would like the invitee to send a response to the requested meeting.
     responseRequested?: boolean;
+    /**
+     * True if the meeting organizer allows invitees to propose a new time when responding, false otherwise. Optional. Default
+     * is true.
+     */
     allowNewTimeProposals?: boolean;
     meetingRequestType?: MeetingRequestType;
 }
@@ -4774,6 +4924,33 @@ export interface Call extends Entity {
     participants?: Participant[];
     // Read-only. Nullable.
     operations?: CommsOperation[];
+}
+export interface NamedLocation extends Entity {
+    // Human-readable name of the location.
+    displayName?: string;
+    /**
+     * The Timestamp type represents creation date and time of the location using ISO 8601 format and is always in UTC time.
+     * For example, midnight UTC on Jan 1, 2014 would look like this: '2014-01-01T00:00:00Z'. Read-only.
+     */
+    createdDateTime?: string;
+    /**
+     * The Timestamp type represents last modified date and time of the location using ISO 8601 format and is always in UTC
+     * time. For example, midnight UTC on Jan 1, 2014 would look like this: '2014-01-01T00:00:00Z'. Read-only.
+     */
+    modifiedDateTime?: string;
+}
+export interface CountryNamedLocation extends NamedLocation {
+    // List of countries and/or regions in two-letter format specified by ISO 3166-2.
+    countriesAndRegions?: string[];
+    // True if IP addresses that don't map to a country or region should be included in the named location.
+    includeUnknownCountriesAndRegions?: boolean;
+}
+// tslint:disable-next-line: interface-name
+export interface IpNamedLocation extends NamedLocation {
+    // List of IP address ranges in IPv4 CIDR format (e.g. 1.2.3.4/32) or any allowable IPv6 format from IETF RFC596.
+    ipRanges?: IpRange[];
+    // True if this location is explicitly trusted.
+    isTrusted?: boolean;
 }
 export interface DeviceAppManagement extends Entity {
     // The last time the apps from the Microsoft Store for Business were synced successfully for the account.
@@ -9168,6 +9345,12 @@ export interface Schedule extends Entity {
     offerShiftRequests?: OfferShiftRequest[];
     timeOffRequests?: TimeOffRequest[];
 }
+// tslint:disable-next-line: no-empty-interface
+export interface TeamsTemplate extends Entity {}
+export interface ConversationMember extends Entity {
+    roles?: string[];
+    displayName?: string;
+}
 export interface Channel extends Entity {
     // Channel name as it will appear to the user in Microsoft Teams.
     displayName?: string;
@@ -9283,6 +9466,11 @@ export interface TeamsTab extends Entity {
     configuration?: TeamsTabConfiguration;
     // The application that is linked to the tab. This cannot be changed after tab creation.
     teamsApp?: TeamsApp;
+}
+export interface AadUserConversationMember extends ConversationMember {
+    userId?: string;
+    email?: string;
+    user?: User;
 }
 export interface Shift extends ChangeTrackedEntity {
     // The shared version of this shift that is viewable by both employees and managers. Required.
@@ -10175,7 +10363,9 @@ export interface ServicePlanInfo {
     appliesTo?: string;
 }
 export interface AssignedLabel {
+    // The unique identifier of the label.
     labelId?: string;
+    // The display name of the label. Read-only.
     displayName?: string;
 }
 export interface LicenseProcessingState {
@@ -10615,6 +10805,13 @@ export interface WorkbookSessionInfo {
     id?: string;
     // true for persistent session. false for non-persistent session (view mode)
     persistChanges?: boolean;
+}
+export interface WorkbookOperationError {
+    // The error code.
+    code?: string;
+    // The error message.
+    message?: string;
+    innerError?: WorkbookOperationError;
 }
 export interface WorkbookFilterCriteria {
     color?: string;
@@ -11077,6 +11274,10 @@ export interface ResponseStatus {
 export interface Attendee extends AttendeeBase {
     // The attendee's response (none, accepted, declined, etc.) for the event and date-time that the response was sent.
     status?: ResponseStatus;
+    /**
+     * An alternate date/time proposed by the attendee for a meeting request to start and end. If the attendee hasn't proposed
+     * another time, then this property is not included in a response of a GET event.
+     */
     proposedNewTime?: TimeSlot;
 }
 export interface OnlineMeetingInfo {
@@ -11496,10 +11697,123 @@ export interface ExtensionSchemaProperty {
     type?: string;
 }
 export interface ConditionalAccessSessionControl {
+    // Specifies whether the session control is enabled.
     isEnabled?: boolean;
+}
+// tslint:disable-next-line: no-empty-interface
+export interface ApplicationEnforcedRestrictionsSessionControl extends ConditionalAccessSessionControl {}
+export interface CloudAppSecuritySessionControl extends ConditionalAccessSessionControl {
+    /**
+     * Possible values are: mcasConfigured, monitorOnly, blockDownloads, unknownFutureValue. For more information, see Deploy
+     * Conditional Access App Control for featured apps.
+     */
+    cloudAppSecurityType?: CloudAppSecuritySessionControlType;
+}
+export interface SignInFrequencySessionControl extends ConditionalAccessSessionControl {
+    // The number of days or hours.
+    value?: number;
+    // Possible values are: days, hours.
+    type?: SigninFrequencyType;
+}
+export interface PersistentBrowserSessionControl extends ConditionalAccessSessionControl {
+    // Possible values are: always, never.
+    mode?: PersistentBrowserSessionMode;
+}
+export interface ConditionalAccessSessionControls {
+    /**
+     * Session control to enforce application restrictions. Only Exchange Online and Sharepoint Online support this session
+     * control.
+     */
+    applicationEnforcedRestrictions?: ApplicationEnforcedRestrictionsSessionControl;
+    // Session control to apply cloud app security.
+    cloudAppSecurity?: CloudAppSecuritySessionControl;
+    // Session control to enforce signin frequency.
+    signInFrequency?: SignInFrequencySessionControl;
+    /**
+     * Session control to define whether to persist cookies or not. All apps should be selected for this session control to
+     * work correctly.
+     */
+    persistentBrowser?: PersistentBrowserSessionControl;
 }
 // tslint:disable-next-line: interface-name no-empty-interface
 export interface IpRange {}
+// tslint:disable-next-line: interface-name
+export interface IPv4CidrRange extends IpRange {
+    // IPv4 address in CIDR notation
+    cidrAddress?: string;
+}
+// tslint:disable-next-line: interface-name
+export interface IPv6CidrRange extends IpRange {
+    // IPv6 address in CIDR notation
+    cidrAddress?: string;
+}
+export interface ConditionalAccessApplications {
+    /**
+     * The list of application IDs the policy applies to, unless explicitly excluded (in excludeApplications). Can also be set
+     * to All.
+     */
+    includeApplications?: string[];
+    // The list of application IDs explicitly excluded from the policy.
+    excludeApplications?: string[];
+    // User actions to include. For example, urn:user:registersecurityinfo
+    includeUserActions?: string[];
+}
+export interface ConditionalAccessUsers {
+    // User IDs in scope of policy unless explicitly excluded, or None or All or GuestsOrExternalUsers.
+    includeUsers?: string[];
+    // User IDs excluded from scope of policy and/or GuestsOrExternalUsers.
+    excludeUsers?: string[];
+    // Group IDs in scope of policy unless explicitly excluded, or All.
+    includeGroups?: string[];
+    // Group IDs excluded from scope of policy.
+    excludeGroups?: string[];
+    // Role IDs in scope of policy unless explicitly excluded, or All.
+    includeRoles?: string[];
+    // Role IDs excluded from scope of policy.
+    excludeRoles?: string[];
+}
+export interface ConditionalAccessPlatforms {
+    // Possible values are: android, iOS, windows, windowsPhone, macOS, all, unknownFutureValue.
+    includePlatforms?: ConditionalAccessDevicePlatform[];
+    // Possible values are: android, iOS, windows, windowsPhone, macOS, unknownFutureValue.
+    excludePlatforms?: ConditionalAccessDevicePlatform[];
+}
+export interface ConditionalAccessLocations {
+    // Location IDs in scope of policy unless explicitly excluded, All, or AllTrusted.
+    includeLocations?: string[];
+    // Location IDs excluded from scope of policy.
+    excludeLocations?: string[];
+}
+export interface ConditionalAccessConditionSet {
+    // Applications and user actions included in and excluded from the policy. Required.
+    applications?: ConditionalAccessApplications;
+    // Users, groups, and roles included in and excluded from the policy. Required.
+    users?: ConditionalAccessUsers;
+    // Risk levels included in the policy. Possible values are: low, medium, high, none.
+    signInRiskLevels?: RiskLevel[];
+    // Platforms included in and excluded from the policy.
+    platforms?: ConditionalAccessPlatforms;
+    // Locations included in and excluded from the policy.
+    locations?: ConditionalAccessLocations;
+    /**
+     * Client application types included in the policy. Possible values are: all, browser, mobileAppsAndDesktopClients,
+     * exchangeActiveSync, easSupported, other.
+     */
+    clientAppTypes?: ConditionalAccessClientApp[];
+}
+export interface ConditionalAccessGrantControls {
+    // Defines the relationship of the grant controls. Possible values: AND, OR.
+    operator?: string;
+    /**
+     * List of values of built-in controls required by the policy. Possible values: Block, Mfa, CompliantDevice,
+     * DomainJoinedDevice, ApprovedApplication, CompliantApplication
+     */
+    builtInControls?: ConditionalAccessGrantControl[];
+    // List of custom controls IDs required by the policy. For more information, see Custom controls.
+    customAuthenticationFactors?: string[];
+    // List of terms of use IDs required by the policy.
+    termsOfUse?: string[];
+}
 // tslint:disable-next-line: no-empty-interface
 export interface DeviceAndAppManagementAssignmentTarget {}
 // tslint:disable-next-line: no-empty-interface
@@ -13280,6 +13594,38 @@ export interface TeleconferenceDeviceQuality {
      * quality.
      */
     mediaQualityList?: TeleconferenceDeviceMediaQuality[];
+}
+export interface ChangeNotification {
+    // Unique ID for the notification. Optional.
+    id?: string;
+    // The unique identifier of the subscription that generated the notification.
+    subscriptionId?: string;
+    // The expiration time for the subscription. Required.
+    subscriptionExpirationDateTime?: string;
+    /**
+     * Value of the clientState property sent in the subscription request (if any). The maximum length is 255 characters. The
+     * client can check whether the change notification came from the service by comparing the values of the clientState
+     * property. The value of the clientState property sent with the subscription is compared with the value of the
+     * clientState property received with each change notification. Optional.
+     */
+    clientState?: string;
+    /**
+     * Indicates the type of change that will raise the change notification. The supported values are: created, updated,
+     * deleted. Required.
+     */
+    changeType?: ChangeType;
+    // The URI of the resource that emitted the change notification relative to https://graph.microsoft.com. Required.
+    resource?: string;
+    // The unique identifier of the tenant from which the change notification originated.
+    tenantId?: string;
+    // The content of this property depends on the type of resource being subscribed to. Required.
+    resourceData?: ResourceData;
+}
+// tslint:disable-next-line: no-empty-interface
+export interface ResourceData {}
+export interface ChangeNotificationCollection {
+    // The set of notifications being sent to the notification URL. Required.
+    value?: ChangeNotification[];
 }
 export interface TeamClassSettings {
     /**
