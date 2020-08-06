@@ -2130,7 +2130,7 @@ export interface Site extends BaseItem {
     onenote?: NullableOption<Onenote>;
 }
 // tslint:disable-next-line: no-empty-interface
-export interface Extension extends Entity {}
+export interface Extension extends Entity { }
 export interface ManagedDevice extends Entity {
     // Unique Identifier for the user associated with the device
     userId?: NullableOption<string>;
@@ -2476,7 +2476,7 @@ export interface IdentityProvider extends Entity {
     clientSecret?: NullableOption<string>;
 }
 // tslint:disable-next-line: no-empty-interface
-export interface AdministrativeUnit extends DirectoryObject {}
+export interface AdministrativeUnit extends DirectoryObject { }
 export interface Application extends DirectoryObject {
     /**
      * Defines custom behavior that a consuming service can use to call an app in specific contexts. For example, applications
@@ -2618,11 +2618,11 @@ export interface StsPolicy extends PolicyBase {
     appliesTo?: NullableOption<DirectoryObject[]>;
 }
 // tslint:disable-next-line: no-empty-interface
-export interface HomeRealmDiscoveryPolicy extends StsPolicy {}
+export interface HomeRealmDiscoveryPolicy extends StsPolicy { }
 // tslint:disable-next-line: no-empty-interface
-export interface TokenLifetimePolicy extends StsPolicy {}
+export interface TokenLifetimePolicy extends StsPolicy { }
 // tslint:disable-next-line: no-empty-interface
-export interface TokenIssuancePolicy extends StsPolicy {}
+export interface TokenIssuancePolicy extends StsPolicy { }
 export interface Directory extends Entity {
     // Recently deleted items. Read-only. Nullable.
     deletedItems?: NullableOption<DirectoryObject[]>;
@@ -3213,9 +3213,9 @@ export interface PolicyRoot extends Entity {
     conditionalAccessPolicies?: NullableOption<ConditionalAccessPolicy[]>;
 }
 // tslint:disable-next-line: no-empty-interface
-export interface ActivityBasedTimeoutPolicy extends StsPolicy {}
+export interface ActivityBasedTimeoutPolicy extends StsPolicy { }
 // tslint:disable-next-line: no-empty-interface
-export interface ClaimsMappingPolicy extends StsPolicy {}
+export interface ClaimsMappingPolicy extends StsPolicy { }
 // tslint:disable-next-line: interface-name
 export interface IdentitySecurityDefaultsEnforcementPolicy extends PolicyBase {
     // If set to true, Azure Active Directory security defaults is enabled for the tenant.
@@ -4088,7 +4088,7 @@ export interface WorkbookComment extends Entity {
     replies?: NullableOption<WorkbookCommentReply[]>;
 }
 // tslint:disable-next-line: no-empty-interface
-export interface WorkbookFunctions extends Entity {}
+export interface WorkbookFunctions extends Entity { }
 export interface WorkbookOperation extends Entity {
     // The current status of the operation. Possible values are: NotStarted, Running, Completed, Failed.
     status?: WorkbookOperationStatus;
@@ -4195,7 +4195,7 @@ export interface WorkbookChartTitle extends Entity {
     format?: NullableOption<WorkbookChartTitleFormat>;
 }
 // tslint:disable-next-line: no-empty-interface
-export interface WorkbookChartFill extends Entity {}
+export interface WorkbookChartFill extends Entity { }
 export interface WorkbookChartFont extends Entity {
     // Represents the bold status of font.
     bold?: NullableOption<boolean>;
@@ -4425,7 +4425,7 @@ export interface WorkbookRangeFormat extends Entity {
     protection?: NullableOption<WorkbookFormatProtection>;
 }
 // tslint:disable-next-line: no-empty-interface
-export interface WorkbookRangeSort extends Entity {}
+export interface WorkbookRangeSort extends Entity { }
 export interface WorkbookRangeBorder extends Entity {
     /**
      * HTML color code representing the color of the border line, of the form #RRGGBB (e.g. 'FFA500') or as a named HTML color
@@ -4787,7 +4787,7 @@ export interface ItemAttachment extends Attachment {
     item?: NullableOption<OutlookItem>;
 }
 // tslint:disable-next-line: no-empty-interface
-export interface ReferenceAttachment extends Attachment {}
+export interface ReferenceAttachment extends Attachment { }
 export interface OpenTypeExtension extends Extension {
     // A unique text identifier for an open type open extension. Required.
     extensionName?: string;
@@ -4797,7 +4797,7 @@ export interface ColumnLink extends Entity {
     name?: NullableOption<string>;
 }
 // tslint:disable-next-line: no-empty-interface
-export interface FieldValueSet extends Entity {}
+export interface FieldValueSet extends Entity { }
 // tslint:disable-next-line: interface-name
 export interface ItemActivity extends Entity {
     // An item was accessed.
@@ -5418,7 +5418,7 @@ export interface WindowsInformationProtection extends ManagedAppPolicy {
     assignments?: NullableOption<TargetedManagedAppPolicyAssignment[]>;
 }
 // tslint:disable-next-line: no-empty-interface
-export interface MdmWindowsInformationProtectionPolicy extends WindowsInformationProtection {}
+export interface MdmWindowsInformationProtectionPolicy extends WindowsInformationProtection { }
 export interface WindowsInformationProtectionPolicy extends WindowsInformationProtection {
     // New property in RS2, pending documentation
     revokeOnMdmHandoffDisabled?: boolean;
@@ -5590,7 +5590,7 @@ export interface ManagedDeviceMobileAppConfigurationUserSummary extends Entity {
     configurationVersion?: number;
 }
 // tslint:disable-next-line: no-empty-interface
-export interface MacOSOfficeSuiteApp extends MobileApp {}
+export interface MacOSOfficeSuiteApp extends MobileApp { }
 export interface ManagedApp extends MobileApp {
     // The Application's availability. Possible values are: global, lineOfBusiness.
     appAvailability?: ManagedAppAvailability;
@@ -5846,7 +5846,7 @@ export interface UserInstallStateSummary extends Entity {
     deviceStates?: NullableOption<DeviceInstallState[]>;
 }
 // tslint:disable-next-line: interface-name no-empty-interface
-export interface IosVppEBookAssignment extends ManagedEBookAssignment {}
+export interface IosVppEBookAssignment extends ManagedEBookAssignment { }
 // tslint:disable-next-line: interface-name
 export interface IosVppEBook extends ManagedEBook {
     // The Vpp token ID.
@@ -6417,7 +6417,7 @@ export interface TermsAndConditionsAcceptanceStatus extends Entity {
     termsAndConditions?: NullableOption<TermsAndConditions>;
 }
 // tslint:disable-next-line: no-empty-interface
-export interface ReportRoot extends Entity {}
+export interface ReportRoot extends Entity { }
 export interface DeviceConfigurationAssignment extends Entity {
     // The assignment target for the device configuration.
     target?: NullableOption<DeviceAndAppManagementAssignmentTarget>;
@@ -6798,7 +6798,7 @@ export interface AndroidWorkProfileGeneralDeviceConfiguration extends DeviceConf
     securityRequireVerifyApps?: boolean;
 }
 // tslint:disable-next-line: interface-name no-empty-interface
-export interface IosCertificateProfile extends DeviceConfiguration {}
+export interface IosCertificateProfile extends DeviceConfiguration { }
 // tslint:disable-next-line: interface-name
 export interface IosCustomConfiguration extends DeviceConfiguration {
     // Name that is displayed to the user.
@@ -7188,9 +7188,9 @@ export interface MacOSGeneralDeviceConfiguration extends DeviceConfiguration {
     passwordRequired?: boolean;
 }
 // tslint:disable-next-line: no-empty-interface
-export interface AppleDeviceFeaturesConfigurationBase extends DeviceConfiguration {}
+export interface AppleDeviceFeaturesConfigurationBase extends DeviceConfiguration { }
 // tslint:disable-next-line: no-empty-interface
-export interface MacOSDeviceFeaturesConfiguration extends AppleDeviceFeaturesConfigurationBase {}
+export interface MacOSDeviceFeaturesConfiguration extends AppleDeviceFeaturesConfigurationBase { }
 // tslint:disable-next-line: interface-name
 export interface IosDeviceFeaturesConfiguration extends AppleDeviceFeaturesConfigurationBase {
     // Asset tag information for the device, displayed on the login window and lock screen.
@@ -8620,9 +8620,9 @@ export interface WindowsInformationProtectionAppLockerFile extends Entity {
     version?: NullableOption<string>;
 }
 // tslint:disable-next-line: interface-name no-empty-interface
-export interface IosManagedAppRegistration extends ManagedAppRegistration {}
+export interface IosManagedAppRegistration extends ManagedAppRegistration { }
 // tslint:disable-next-line: no-empty-interface
-export interface AndroidManagedAppRegistration extends ManagedAppRegistration {}
+export interface AndroidManagedAppRegistration extends ManagedAppRegistration { }
 export interface ManagedAppStatusRaw extends ManagedAppStatus {
     // Status report content.
     content?: NullableOption<any>;
@@ -8643,7 +8643,7 @@ export interface LocalizedNotificationMessage extends Entity {
     isDefault?: boolean;
 }
 // tslint:disable-next-line: no-empty-interface
-export interface DeviceAndAppManagementRoleDefinition extends RoleDefinition {}
+export interface DeviceAndAppManagementRoleDefinition extends RoleDefinition { }
 export interface EnrollmentTroubleshootingEvent extends DeviceManagementTroubleshootingEvent {
     // Device identifier created or collected by Intune.
     managedDeviceIdentifier?: NullableOption<string>;
@@ -9277,9 +9277,9 @@ export interface InviteParticipantsOperation extends CommsOperation {
     participants?: InvitationParticipantInfo[];
 }
 // tslint:disable-next-line: no-empty-interface
-export interface MuteParticipantOperation extends CommsOperation {}
+export interface MuteParticipantOperation extends CommsOperation { }
 // tslint:disable-next-line: no-empty-interface
-export interface PlayPromptOperation extends CommsOperation {}
+export interface PlayPromptOperation extends CommsOperation { }
 export interface RecordOperation extends CommsOperation {
     // The location where the recording is located.
     recordingLocation?: NullableOption<string>;
@@ -9287,11 +9287,11 @@ export interface RecordOperation extends CommsOperation {
     recordingAccessToken?: NullableOption<string>;
 }
 // tslint:disable-next-line: no-empty-interface
-export interface SubscribeToToneOperation extends CommsOperation {}
+export interface SubscribeToToneOperation extends CommsOperation { }
 // tslint:disable-next-line: no-empty-interface
-export interface UnmuteParticipantOperation extends CommsOperation {}
+export interface UnmuteParticipantOperation extends CommsOperation { }
 // tslint:disable-next-line: no-empty-interface
-export interface UpdateRecordingStatusOperation extends CommsOperation {}
+export interface UpdateRecordingStatusOperation extends CommsOperation { }
 export interface Teamwork extends Entity {
     workforceIntegrations?: NullableOption<WorkforceIntegration[]>;
 }
@@ -9348,7 +9348,7 @@ export interface Schedule extends Entity {
     timeOffRequests?: NullableOption<TimeOffRequest[]>;
 }
 // tslint:disable-next-line: no-empty-interface
-export interface TeamsTemplate extends Entity {}
+export interface TeamsTemplate extends Entity { }
 export interface ConversationMember extends Entity {
     roles?: NullableOption<string[]>;
     displayName?: NullableOption<string>;
@@ -9437,7 +9437,7 @@ export interface ChatMessage extends Entity {
     hostedContents?: NullableOption<ChatMessageHostedContent[]>;
 }
 // tslint:disable-next-line: no-empty-interface
-export interface ChatMessageHostedContent extends Entity {}
+export interface ChatMessageHostedContent extends Entity { }
 export interface AppCatalogs extends Entity {
     teamsApps?: NullableOption<TeamsApp[]>;
 }
@@ -10423,7 +10423,7 @@ export interface SettingTemplateValue {
     description?: NullableOption<string>;
 }
 // tslint:disable-next-line: no-empty-interface
-export interface ComplexExtensionValue {}
+export interface ComplexExtensionValue { }
 export interface PhysicalAddress {
     // The street.
     street?: NullableOption<string>;
@@ -10505,7 +10505,7 @@ export interface PublicInnerError {
     target?: NullableOption<string>;
 }
 // tslint:disable-next-line: no-empty-interface
-export interface Root {}
+export interface Root { }
 export interface SharepointIds {
     // The unique identifier (guid) for the item's list in SharePoint.
     listId?: NullableOption<string>;
@@ -10542,7 +10542,7 @@ export interface ListInfo {
     template?: NullableOption<string>;
 }
 // tslint:disable-next-line: no-empty-interface
-export interface SystemFacet {}
+export interface SystemFacet { }
 export interface Quota {
     // Total space consumed by files in the recycle bin, in bytes. Read-only.
     deleted?: NullableOption<number>;
@@ -11504,7 +11504,7 @@ export interface MessageRuleActions {
     stopProcessingRules?: NullableOption<boolean>;
 }
 // tslint:disable-next-line: no-empty-interface
-export interface BooleanColumn {}
+export interface BooleanColumn { }
 export interface CalculatedColumn {
     // For dateTime output types, the format of the value. Must be one of dateOnly or dateTime.
     format?: NullableOption<string>;
@@ -11541,7 +11541,7 @@ export interface DefaultColumnValue {
     value?: NullableOption<string>;
 }
 // tslint:disable-next-line: no-empty-interface
-export interface GeolocationColumn {}
+export interface GeolocationColumn { }
 export interface LookupColumn {
     // Indicates whether multiple values can be selected from the source.
     allowMultipleValues?: NullableOption<boolean>;
@@ -11594,7 +11594,7 @@ export interface ContentTypeOrder {
     position?: NullableOption<number>;
 }
 // tslint:disable-next-line: no-empty-interface
-export interface AccessAction {}
+export interface AccessAction { }
 // tslint:disable-next-line: interface-name
 export interface ItemActionStat {
     // The number of times the action took place. Read-only.
@@ -11703,7 +11703,7 @@ export interface ConditionalAccessSessionControl {
     isEnabled?: NullableOption<boolean>;
 }
 // tslint:disable-next-line: no-empty-interface
-export interface ApplicationEnforcedRestrictionsSessionControl extends ConditionalAccessSessionControl {}
+export interface ApplicationEnforcedRestrictionsSessionControl extends ConditionalAccessSessionControl { }
 export interface CloudAppSecuritySessionControl extends ConditionalAccessSessionControl {
     /**
      * Possible values are: mcasConfigured, monitorOnly, blockDownloads, unknownFutureValue. For more information, see Deploy
@@ -11738,7 +11738,7 @@ export interface ConditionalAccessSessionControls {
     persistentBrowser?: NullableOption<PersistentBrowserSessionControl>;
 }
 // tslint:disable-next-line: interface-name no-empty-interface
-export interface IpRange {}
+export interface IpRange { }
 // tslint:disable-next-line: interface-name
 export interface IPv4CidrRange extends IpRange {
     // IPv4 address in CIDR notation
@@ -11817,9 +11817,9 @@ export interface ConditionalAccessGrantControls {
     termsOfUse?: string[];
 }
 // tslint:disable-next-line: no-empty-interface
-export interface DeviceAndAppManagementAssignmentTarget {}
+export interface DeviceAndAppManagementAssignmentTarget { }
 // tslint:disable-next-line: no-empty-interface
-export interface MobileAppAssignmentSettings {}
+export interface MobileAppAssignmentSettings { }
 export interface MimeContent {
     // Indicates the content mime type.
     type?: NullableOption<string>;
@@ -11843,15 +11843,15 @@ export interface FileEncryptionInfo {
     fileDigestAlgorithm?: NullableOption<string>;
 }
 // tslint:disable-next-line: no-empty-interface
-export interface AllLicensedUsersAssignmentTarget extends DeviceAndAppManagementAssignmentTarget {}
+export interface AllLicensedUsersAssignmentTarget extends DeviceAndAppManagementAssignmentTarget { }
 export interface GroupAssignmentTarget extends DeviceAndAppManagementAssignmentTarget {
     // The group Id that is the target of the assignment.
     groupId?: NullableOption<string>;
 }
 // tslint:disable-next-line: no-empty-interface
-export interface ExclusionGroupAssignmentTarget extends GroupAssignmentTarget {}
+export interface ExclusionGroupAssignmentTarget extends GroupAssignmentTarget { }
 // tslint:disable-next-line: no-empty-interface
-export interface AllDevicesAssignmentTarget extends DeviceAndAppManagementAssignmentTarget {}
+export interface AllDevicesAssignmentTarget extends DeviceAndAppManagementAssignmentTarget { }
 // tslint:disable-next-line: interface-name
 export interface IosLobAppAssignmentSettings extends MobileAppAssignmentSettings {
     // The VPN Configuration Id to apply for this app.
@@ -12319,7 +12319,7 @@ export interface Windows10NetworkProxyServer {
     useForLocalAddresses?: boolean;
 }
 // tslint:disable-next-line: no-empty-interface
-export interface EdgeSearchEngineBase {}
+export interface EdgeSearchEngineBase { }
 export interface EdgeSearchEngineCustom extends EdgeSearchEngineBase {
     /**
      * Points to a https link containing the OpenSearch xml file that contains, at minimum, the short name and the URL to the
@@ -12360,7 +12360,7 @@ export interface SharedPCAccountManagerPolicy {
     removeAccountsBelowDiskFreePercentage?: NullableOption<number>;
 }
 // tslint:disable-next-line: no-empty-interface
-export interface WindowsUpdateInstallScheduleType {}
+export interface WindowsUpdateInstallScheduleType { }
 export interface WindowsUpdateScheduledInstall extends WindowsUpdateInstallScheduleType {
     /**
      * Scheduled Install Day in week. Possible values are: userDefined, everyday, sunday, monday, tuesday, wednesday,
@@ -12640,7 +12640,7 @@ export interface WindowsDeviceAzureADAccount extends WindowsDeviceAccount {
     userPrincipalName?: NullableOption<string>;
 }
 // tslint:disable-next-line: no-empty-interface
-export interface MobileAppIdentifier {}
+export interface MobileAppIdentifier { }
 export interface ManagedAppDiagnosticStatus {
     // The validation friendly name
     validationName?: NullableOption<string>;
@@ -12717,7 +12717,7 @@ export interface ManagedAppPolicyDeploymentSummaryPerApp {
     configurationAppliedUserCount?: number;
 }
 // tslint:disable-next-line: no-empty-interface
-export interface WindowsInformationProtectionStoreApp extends WindowsInformationProtectionApp {}
+export interface WindowsInformationProtectionStoreApp extends WindowsInformationProtectionApp { }
 export interface WindowsInformationProtectionDesktopApp extends WindowsInformationProtectionApp {
     // The binary name.
     binaryName?: string;
@@ -12751,9 +12751,9 @@ export interface ResourceAction {
     notAllowedResourceActions?: NullableOption<string[]>;
 }
 // tslint:disable-next-line: no-empty-interface
-export interface PlannerAppliedCategories {}
+export interface PlannerAppliedCategories { }
 // tslint:disable-next-line: no-empty-interface
-export interface PlannerAssignments {}
+export interface PlannerAssignments { }
 export interface PlannerExternalReference {
     // A name alias to describe the reference.
     alias?: NullableOption<string>;
@@ -12798,13 +12798,13 @@ export interface PlannerAssignment {
     orderHint?: NullableOption<string>;
 }
 // tslint:disable-next-line: no-empty-interface
-export interface PlannerExternalReferences {}
+export interface PlannerExternalReferences { }
 // tslint:disable-next-line: no-empty-interface
-export interface PlannerChecklistItems {}
+export interface PlannerChecklistItems { }
 // tslint:disable-next-line: no-empty-interface
-export interface PlannerOrderHintsByAssignee {}
+export interface PlannerOrderHintsByAssignee { }
 // tslint:disable-next-line: no-empty-interface
-export interface PlannerUserIds {}
+export interface PlannerUserIds { }
 export interface PlannerCategoryDescriptions {
     // The label associated with Category 1
     category1?: NullableOption<string>;
@@ -13386,7 +13386,7 @@ export interface InvitationParticipantInfo {
     replacesCallId?: NullableOption<string>;
 }
 // tslint:disable-next-line: no-empty-interface
-export interface MediaConfig {}
+export interface MediaConfig { }
 export interface ChatInfo {
     // The unique identifier for a thread in Microsoft Teams.
     threadId?: NullableOption<string>;
@@ -13396,9 +13396,9 @@ export interface ChatInfo {
     replyChainMessageId?: NullableOption<string>;
 }
 // tslint:disable-next-line: no-empty-interface
-export interface CallOptions {}
+export interface CallOptions { }
 // tslint:disable-next-line: no-empty-interface
-export interface MeetingInfo {}
+export interface MeetingInfo { }
 export interface ToneInfo {
     // An incremental identifier used for ordering DTMF events.
     sequenceId?: number;
@@ -13454,7 +13454,7 @@ export interface MediaStream {
     serverMuted?: boolean;
 }
 // tslint:disable-next-line: no-empty-interface
-export interface OutgoingCallOptions extends CallOptions {}
+export interface OutgoingCallOptions extends CallOptions { }
 export interface CommsNotification {
     // Possible values are: created, updated, deleted.
     changeType?: ChangeType;
@@ -13494,7 +13494,7 @@ export interface TokenMeetingInfo extends MeetingInfo {
     token?: string;
 }
 // tslint:disable-next-line: no-empty-interface
-export interface Prompt {}
+export interface Prompt { }
 export interface MediaPrompt extends Prompt {
     // The media information
     mediaInfo?: MediaInfo;
@@ -13550,7 +13550,7 @@ export interface TeleconferenceDeviceMediaQuality {
     maximumOutboundJitter?: NullableOption<string>;
 }
 // tslint:disable-next-line: no-empty-interface
-export interface TeleconferenceDeviceAudioQuality extends TeleconferenceDeviceMediaQuality {}
+export interface TeleconferenceDeviceAudioQuality extends TeleconferenceDeviceMediaQuality { }
 export interface TeleconferenceDeviceVideoQuality extends TeleconferenceDeviceMediaQuality {
     // The average inbound stream video frame rate per second.
     averageInboundFrameRate?: NullableOption<number>;
@@ -13562,7 +13562,7 @@ export interface TeleconferenceDeviceVideoQuality extends TeleconferenceDeviceMe
     averageOutboundBitRate?: NullableOption<number>;
 }
 // tslint:disable-next-line: no-empty-interface
-export interface TeleconferenceDeviceScreenSharingQuality extends TeleconferenceDeviceVideoQuality {}
+export interface TeleconferenceDeviceScreenSharingQuality extends TeleconferenceDeviceVideoQuality { }
 export interface TeleconferenceDeviceQuality {
     /**
      * A unique identifier for all the participant calls in a conference or a unique identifier for two participant calls in
@@ -13624,7 +13624,7 @@ export interface ChangeNotification {
     resourceData?: NullableOption<ResourceData>;
 }
 // tslint:disable-next-line: no-empty-interface
-export interface ResourceData {}
+export interface ResourceData { }
 export interface ChangeNotificationCollection {
     // The set of notifications being sent to the notification URL. Required.
     value?: ChangeNotification[];
