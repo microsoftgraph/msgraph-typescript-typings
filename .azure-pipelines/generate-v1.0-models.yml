@@ -12,7 +12,7 @@ resources:
     type: github
     endpoint: microsoftgraph
     name: microsoftgraph/msgraph-typescript-typings
-    ref: master # checkout the master branch
+    ref: dtslint # checkout the master branch
   - repository: msgraph-metadata
     type: github
     endpoint: microsoftgraph
@@ -68,10 +68,10 @@ steps:
     targetType: inline
     workingDirectory: '$(Build.SourcesDirectory)/msgraph-typescript-typings'
     script: |
-      git checkout master | Write-Host
+      git checkout dtslint | Write-Host
 
 - task: PowerShell@2
-  displayName: 'Git: branch from master named with the build id: $(Build.BuildId)'
+  displayName: 'Git: branch from dtslint named with the build id: $(Build.BuildId)'
   inputs:
     targetType: inline
     workingDirectory: '$(Build.SourcesDirectory)/msgraph-typescript-typings'
@@ -94,7 +94,7 @@ steps:
   inputs:
     targetType: inline
     script: |
-      $filePath = Join-Path $env:repoModelsDir "microsoft-graph.d.ts"
+      $filePath = Join-Path $env:repoModelsDir "index.d.ts"
       Remove-Item $filePath | Write-Host
       Write-Host "Removed the existing typings files in the repo." -ForegroundColor Green
 
@@ -112,7 +112,7 @@ steps:
   inputs:
     targetType: inline
     script: |
-      $modelsDirectory = Join-Path $env:outputPath "\com\microsoft\graph\src\microsoft-graph.d.ts"
+      $modelsDirectory = Join-Path $env:outputPath "\com\microsoft\graph\src\index.d.ts"
       Move-Item $modelsDirectory $env:repoModelsDir
       Write-Host "Moved the typings from $modelsDirectory into the local repo." -ForegroundColor Green
 
