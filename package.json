@@ -6,7 +6,7 @@
   "types": "microsoft-graph.d.ts",
   "scripts": {
     "test": "tsc && mocha spec/**.ts",
-    "dtslint": "dtslint types"
+    "dtslint": "dtslint"
   },
   "typescript": {
     "definition": "microsoft-graph.d.ts"
@@ -23,5 +23,6 @@
     "dtslint": "^3.6.14",
     "mocha": "^6.2.3",
     "typescript": "^3.9.6"
-  }
+  },
+  "dependencies": {}
 }
