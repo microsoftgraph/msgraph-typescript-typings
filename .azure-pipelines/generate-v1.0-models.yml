@@ -115,6 +115,7 @@ steps:
       $modelsDirectory = Join-Path $env:outputPath "\com\microsoft\graph\src\microsoft-graph.d.ts"
       Rename-Item -Path $modelsDirectory -NewName "index.d.ts"
       $renamedsModelsDirectory = Join-Path $env:outputPath "\com\microsoft\graph\src\index.d.ts"
+      Test-Path $renamedsModelsDirectory
       Move-Item $renamedsModelsDirectory $env:repoModelsDir
       Write-Host "Moved the typings from $renamedsModelsDirectory into the local repo." -ForegroundColor Green
 
