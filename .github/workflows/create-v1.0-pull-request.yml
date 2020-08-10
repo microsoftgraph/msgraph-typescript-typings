@@ -14,7 +14,7 @@ on:
     branches:
       - "v1.0/pipelinebuild/*"
     paths:
-      - 'microsoft-graph.d.ts'
+      - 'index.d.ts'
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   # This workflow contains a single job called "create-pull-request"
@@ -37,10 +37,10 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         MESSAGE_TITLE: Generated v1.0 typings using Typewriter
         MESSAGE_BODY: "This pull request was automatically created by the GitHub Action, **${{github.workflow}}**. \n\n The commit hash is _${{github.sha}}_. \n\n **Important** Check for unexpected deletions or changes in this PR. Make sure to bump the version. Create a GitHub release after releasing on npm and [DefinatelyTyped](http://definitelytyped.org/guides/contributing.html). \n\n cc: @darrelmiller"
-        REVIEWERS: peombwa,ddyett,zengin,MIchaelMainer
+        REVIEWERS: nikithauc
         ASSIGNEDTO: nikithauc
         LABELS: generated
-        BASE: master
+        BASE: dtslint
       run: |
         curl -fsSL https://github.com/github/hub/raw/master/script/get | bash -s 2.14.1
         bin/hub pull-request -b "$BASE" -h "$GITHUB_REF" -m "$MESSAGE_TITLE" -m "$MESSAGE_BODY" -r "$REVIEWERS" -a "$ASSIGNEDTO" -l "$LABELS"
