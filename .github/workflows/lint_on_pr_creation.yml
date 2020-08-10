@@ -3,8 +3,9 @@
 
 name: validate pull request
 on:
-  push:
+  pull_request:
     branches: [ dtslint ]
+    types: created
 jobs:
   build:
 
