@@ -1,3 +1,12 @@
+// Project: https://github.com/microsoftgraph/msgraph-typescript-typings
+// Definitions by: Microsoft Graph Team <https://github.com/microsoftgraph>
+//                 Michael Mainer <https://github.com/MIchaelMainer>
+//                 Peter Ombwa <https://github.com/peombwa>
+//                 Mustafa Zengin <https://github.com/zengin>
+//                 DeVere Dyett <https://github.com/ddyett>
+//                 Nikitha Udaykumar Chettiar <https://github.com/nikithauc>
+// Definitions: https://github.com/DefinitelyTyped/DefinitelyTyped
+// TypeScript Version: 2.1
 
 export as namespace microsoftgraph;
 
