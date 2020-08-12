@@ -4,8 +4,8 @@
 name: validate pull request
 on:
   pull_request:
-    branches: [ dtslint ]
-    types: [created,published, edited]
+    #branches: [ dtslint ]
+    types: [opened, reopened]
 jobs:
   build:
 
