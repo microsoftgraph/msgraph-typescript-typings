@@ -5,7 +5,7 @@ name: validate pull request
 on:
   pull_request:
     branches: [ dtslint ]
-    types: created
+    types: [created,published, edited]
 jobs:
   build:
 
