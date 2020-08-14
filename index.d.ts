@@ -1,4 +1,3 @@
-
 export as namespace microsoftgraph;
 
 export type NullableOption<T> = T | null;
