@@ -1,5 +1,5 @@
 # Validate the index.d.ts typings using dtslint
-
+# Duplicate file generated for testing
 trigger:
 - none
 pr:
