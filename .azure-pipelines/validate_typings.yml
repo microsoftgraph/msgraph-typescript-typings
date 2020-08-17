@@ -1,4 +1,4 @@
-# Validate the index.d.ts typings using dtslint
+# Validate the index.d.ts typings using dtslint test
 
 trigger:
 - none
