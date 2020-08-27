@@ -13874,10 +13874,9 @@ export interface TimeRange {
     endTime?: NullableOption<string>;
 }
 
-
 export namespace CallRecords {
-    export type CallType = "unknown" | "groupCall" | "peerToPeer" | "unknownFutureValue";
-    export type ClientPlatform =
+    type CallType = "unknown" | "groupCall" | "peerToPeer" | "unknownFutureValue";
+    type ClientPlatform =
         | "unknown"
         | "windows"
         | "macOS"
@@ -13889,11 +13888,11 @@ export namespace CallRecords {
         | "surfaceHub"
         | "holoLens"
         | "unknownFutureValue";
-    export type FailureStage = "unknown" | "callSetup" | "midcall" | "unknownFutureValue";
-    export type MediaStreamDirection = "callerToCallee" | "calleeToCaller";
-    export type NetworkConnectionType = "unknown" | "wired" | "wifi" | "mobile" | "tunnel" | "unknownFutureValue";
-    export type ProductFamily = "unknown" | "teams" | "skypeForBusiness" | "lync" | "unknownFutureValue";
-    export type ServiceRole =
+    type FailureStage = "unknown" | "callSetup" | "midcall" | "unknownFutureValue";
+    type MediaStreamDirection = "callerToCallee" | "calleeToCaller";
+    type NetworkConnectionType = "unknown" | "wired" | "wifi" | "mobile" | "tunnel" | "unknownFutureValue";
+    type ProductFamily = "unknown" | "teams" | "skypeForBusiness" | "lync" | "unknownFutureValue";
+    type ServiceRole =
         | "unknown"
         | "customBot"
         | "skypeForBusinessMicrosoftTeamsGateway"
@@ -13916,9 +13915,9 @@ export namespace CallRecords {
         | "responseGroupService"
         | "voicemail"
         | "unknownFutureValue";
-    export type UserFeedbackRating = "notRated" | "bad" | "poor" | "fair" | "good" | "excellent" | "unknownFutureValue";
-    export type WifiBand = "unknown" | "frequency24GHz" | "frequency50GHz" | "frequency60GHz" | "unknownFutureValue";
-    export type WifiRadioType =
+    type UserFeedbackRating = "notRated" | "bad" | "poor" | "fair" | "good" | "excellent" | "unknownFutureValue";
+    type WifiBand = "unknown" | "frequency24GHz" | "frequency50GHz" | "frequency60GHz" | "unknownFutureValue";
+    type WifiRadioType =
         | "unknown"
         | "wifi80211a"
         | "wifi80211b"
@@ -13927,8 +13926,8 @@ export namespace CallRecords {
         | "wifi80211ac"
         | "wifi80211ax"
         | "unknownFutureValue";
-    export type Modality = "audio" | "video" | "videoBasedScreenSharing" | "data" | "screenSharing" | "unknownFutureValue";
-    export interface CallRecord extends microsoftgraph.Entity {
+    type Modality = "audio" | "video" | "videoBasedScreenSharing" | "data" | "screenSharing" | "unknownFutureValue";
+    interface CallRecord extends microsoftgraph.Entity {
         /**
          * Monotonically increasing version of the call record. Higher version call records with the same id includes additional
          * data compared to the lower version.
@@ -13969,7 +13968,7 @@ export namespace CallRecords {
          */
         sessions?: NullableOption<Session[]>;
     }
-    export interface Session extends microsoftgraph.Entity {
+    interface Session extends microsoftgraph.Entity {
         /**
          * List of modalities present in the session. Possible values are: unknown, audio, video, videoBasedScreenSharing, data,
          * screenSharing, unknownFutureValue.
@@ -13996,7 +13995,7 @@ export namespace CallRecords {
         // The list of segments involved in the session. Read-only. Nullable.
         segments?: NullableOption<Segment[]>;
     }
-    export interface Segment extends microsoftgraph.Entity {
+    interface Segment extends microsoftgraph.Entity {
         /**
          * UTC time when the segment started. The DateTimeOffset type represents date and time information using ISO 8601 format
          * and is always in UTC time. For example, midnight UTC on Jan 1, 2014 would look like this: '2014-01-01T00:00:00Z'
@@ -14016,23 +14015,23 @@ export namespace CallRecords {
         // Media associated with this segment.
         media?: NullableOption<Media[]>;
     }
-    export interface Endpoint {
+    interface Endpoint {
         // User-agent reported by this endpoint.
         userAgent?: NullableOption<UserAgent>;
     }
-    export interface UserAgent {
+    interface UserAgent {
         // User-agent header value reported by this endpoint.
         headerValue?: NullableOption<string>;
         // Identifies the version of application software used by this endpoint.
         applicationVersion?: NullableOption<string>;
     }
-    export interface FailureInfo {
+    interface FailureInfo {
         // The stage when the failure occurred. Possible values are: unknown, callSetup, midcall, unknownFutureValue.
         stage?: FailureStage;
         // Classification of why a call or portion of a call failed.
         reason?: NullableOption<string>;
     }
-    export interface Media {
+    interface Media {
         // How the media was identified during media negotiation stage.
         label?: NullableOption<string>;
         // Network information associated with the caller endpoint of this media.
@@ -14046,7 +14045,7 @@ export namespace CallRecords {
         // Network streams associated with this media.
         streams?: NullableOption<MediaStream[]>;
     }
-    export interface NetworkInfo {
+    interface NetworkInfo {
         // IP address of the media endpoint.
         ipAddress?: NullableOption<string>;
         // Subnet used for media stream by the media endpoint.
@@ -14117,7 +14116,7 @@ export namespace CallRecords {
          */
         bandwidthLowEventRatio?: NullableOption<number>;
     }
-    export interface DeviceInfo {
+    interface DeviceInfo {
         // Name of the capture device used by the media endpoint.
         captureDeviceName?: NullableOption<string>;
         // Name of the capture device driver used by the media endpoint.
@@ -14188,7 +14187,7 @@ export namespace CallRecords {
         // Glitches per 5 minute internal for the media endpoint's loudspeaker.
         speakerGlitchRate?: NullableOption<number>;
     }
-    export interface MediaStream {
+    interface MediaStream {
         // Unique identifier for the stream.
         streamId?: NullableOption<string>;
         /**
@@ -14279,13 +14278,13 @@ export namespace CallRecords {
          */
         maxAudioNetworkJitter?: NullableOption<string>;
     }
-    export interface ParticipantEndpoint extends Endpoint {
+    interface ParticipantEndpoint extends Endpoint {
         // Identity associated with the endpoint.
         identity?: NullableOption<microsoftgraph.IdentitySet>;
         // The feedback provided by the user of this endpoint about the quality of the session.
         feedback?: NullableOption<UserFeedback>;
     }
-    export interface UserFeedback {
+    interface UserFeedback {
         // The feedback text provided by the user of this endpoint for the session.
         text?: NullableOption<string>;
         /**
@@ -14300,10 +14299,10 @@ export namespace CallRecords {
         tokens?: NullableOption<FeedbackTokenSet>;
     }
 // tslint:disable-next-line: no-empty-interface
-    export interface FeedbackTokenSet {}
+    interface FeedbackTokenSet {}
 // tslint:disable-next-line: no-empty-interface
-    export interface ServiceEndpoint extends Endpoint {}
-    export interface ClientUserAgent extends UserAgent {
+    interface ServiceEndpoint extends Endpoint {}
+    interface ClientUserAgent extends UserAgent {
         /**
          * Identifies the platform used by this endpoint. Possible values are: unknown, windows, macOS, iOS, android, web,
          * ipPhone, roomSystem, surfaceHub, holoLens, unknownFutureValue.
@@ -14315,7 +14314,7 @@ export namespace CallRecords {
          */
         productFamily?: ProductFamily;
     }
-    export interface ServiceUserAgent extends UserAgent {
+    interface ServiceUserAgent extends UserAgent {
         /**
          * Identifies the role of the service used by this endpoint. Possible values are: unknown, customBot,
          * skypeForBusinessMicrosoftTeamsGateway, skypeForBusinessAudioVideoMcu, skypeForBusinessApplicationSharingMcu,
@@ -14328,4 +14327,3 @@ export namespace CallRecords {
         role?: ServiceRole;
     }
 }
-
