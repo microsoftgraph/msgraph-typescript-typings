@@ -1194,7 +1194,7 @@ export interface User extends DirectoryObject {
     city?: NullableOption<string>;
     /**
      * The company name which the user is associated. This property can be useful for describing the company that an external
-     * user comes from.
+     * user comes from. The maximum length of the company name is 64 chararcters.Returned only on $select.
      */
     companyName?: NullableOption<string>;
     /**
@@ -1204,6 +1204,8 @@ export interface User extends DirectoryObject {
     consentProvidedForMinor?: NullableOption<string>;
     // The country/region in which the user is located; for example, 'US' or 'UK'. Supports $filter.
     country?: NullableOption<string>;
+    // The created date of the user object.
+    createdDateTime?: NullableOption<string>;
     /**
      * Indicates whether the user account was created as a regular school or work account (null), an external account
      * (Invitation), a local account for an Azure Active Directory B2C tenant (LocalAccount) or self-service sign-up using
@@ -1259,7 +1261,7 @@ export interface User extends DirectoryObject {
     legalAgeGroupClassification?: NullableOption<string>;
     // State of license assignments for this user. Read-only.
     licenseAssignmentStates?: NullableOption<LicenseAssignmentState[]>;
-    // The SMTP address for the user, for example, 'jeff@contoso.onmicrosoft.com'. Read-Only. Supports $filter.
+    // The SMTP address for the user, for example, 'jeff@contoso.onmicrosoft.com'. Supports $filter.
     mail?: NullableOption<string>;
     // The mail alias for the user. This property must be specified when a user is created. Supports $filter.
     mailNickname?: NullableOption<string>;
@@ -1759,6 +1761,7 @@ export interface Event extends OutlookItem {
     start?: NullableOption<DateTimeTimeZone>;
     // The text of the event's subject line.
     subject?: NullableOption<string>;
+    transactionId?: NullableOption<string>;
     // The event type. The possible values are: singleInstance, occurrence, exception, seriesMaster. Read-only.
     type?: NullableOption<EventType>;
     /**
@@ -2453,7 +2456,7 @@ export interface Team extends Entity {
      * unique behaviors and experiences targeted to its use case.
      */
     specialization?: NullableOption<TeamSpecialization>;
-    // The visibility of a the group and team. Defaults to Public.
+    // The visibility of the group and team. Defaults to Public.
     visibility?: NullableOption<TeamVisibilityType>;
     /**
      * A hyperlink that will go to the team in the Microsoft Teams client. This is the URL that you get when you right-click a
