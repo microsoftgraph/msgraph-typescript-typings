@@ -10,8 +10,8 @@ resources:
   repositories:
   - repository: msgraph-typescript-typings # The name used to reference this repository in the checkout step
     type: github
-    endpoint: nikithauc
-    name: nikithauc/msgraph-typescript-typings
+    endpoint: microsoftgraph
+    name: microsoftgraph/msgraph-typescript-typings
     ref: beta # checkout the beta branch
   - repository: msgraph-metadata
     type: github
