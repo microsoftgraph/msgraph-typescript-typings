@@ -1,6 +1,6 @@
 # Copyright (c) Microsoft Corporation. All rights reserved.
 # Licensed under the MIT License.
-
+# This pipeline contains steps to generate the typings from microsoft-graph meta-data using the TypeWriter. 
 name: $(BuildDefinitionName)_$(SourceBranchName)_$(Date:yyyyMMdd)$(Rev:.r)
 
 trigger: none # disable triggers based on commits.
@@ -150,15 +150,15 @@ steps:
 # Send a notification to our Graph Tooling channel to let us know that
 # that automated build failed. This won't notify on manual builds.
 
-# - task: YodLabs.O365PostMessage.O365PostMessageBuild.O365PostMessageBuild@0
-#   displayName: 'Graph Client Tooling pipeline fail notification'
-#   inputs:
-#     addressType: serviceEndpoint
-#     serviceEndpointName: 'microsoftgraph pipeline status'
-#     title: '$(Build.DefinitionName) failure notification'
-#     text: 'This automated pipeline has failed. View the build details for further information. This is a blocking failure.'
-#   condition: and(failed(), ne(variables['Build.Reason'], 'Manual')) # Only notify if the automated build failed.
-#   enabled: true
+- task: YodLabs.O365PostMessage.O365PostMessageBuild.O365PostMessageBuild@0
+  displayName: 'Graph Beta Typings Generation pipeline fail notification'
+  inputs:
+    addressType: serviceEndpoint
+    serviceEndpointName: 'microsoftgraph pipeline status'
+    title: '$(Build.DefinitionName) failure notification'
+    text: 'This automated pipeline has failed. View the build details for further information. This is a blocking failure.'
+  condition: and(failed(), ne(variables['Build.Reason'], 'Manual')) # Only notify if the automated build failed.
+  enabled: true
 
 # References
 # [0] https://docs.microsoft.com/en-us/azure/devops/pipelines/agents/hosted?view=azure-devops#use-a-microsoft-hosted-agent
