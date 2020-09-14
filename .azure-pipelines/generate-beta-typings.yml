@@ -62,14 +62,6 @@ steps:
       Write-Host "##vso[task.setvariable variable=branchName]$branchName"
 
 - task: PowerShell@2
-  displayName: 'Git: checkout beta'
-  inputs:
-    targetType: inline
-    workingDirectory: '$(Build.SourcesDirectory)/msgraph-typescript-typings'
-    script: |
-      git checkout beta | Write-Host
-
-- task: PowerShell@2
   displayName: 'Git: branch from beta named with the build id: $(Build.BuildId)'
   inputs:
     targetType: inline
