@@ -57,7 +57,7 @@ steps:
       Write-Host "Path to clean metadata $cleanMetadata"
       Write-Host "##vso[task.setvariable variable=cleanMetadata]$cleanMetadata"
 
-      $branchName = "beta/pipelinebuild/$env:Build_BuildId" # Match the spec in the GH Action
+      $branchName = "pipelinebuild/beta/$env:Build_BuildId" # Match the spec in the GH Action
       Write-Host "Branch path spec for the pull request will be $branchName"
       Write-Host "##vso[task.setvariable variable=branchName]$branchName"
 
