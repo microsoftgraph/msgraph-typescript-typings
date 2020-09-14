@@ -94,7 +94,7 @@ steps:
     script: |
       $filePath = Join-Path $env:repoModelsDir "microsoft-graph.d.ts"
       Remove-Item $filePath | Write-Host
-      Write-Host "Removed the existing typings files in the repo." -ForegroundColor Green
+      Write-Host "Removed the existing typings files $filePath in the repo." -ForegroundColor Green
 
 - task: PowerShell@2
   displayName: 'Typewriter: generate beta typings files'
@@ -110,9 +110,9 @@ steps:
   inputs:
     targetType: inline
     script: |
-      $modelsDirectory = Join-Path $env:outputPath "\com\microsoft\graph\src\microsoft-graph.d.ts"
-      Move-Item $modelsDirectory $env:repoModelsDir
-      Write-Host "Moved the typings from $modelsDirectory into the local repo." -ForegroundColor Green
+      $generatedModelsFile = Join-Path $env:outputPath "\com\microsoft\graph\src\microsoft-graph.d.ts"
+      Move-Item $generatedModelsFile $env:repoModelsDir
+      Write-Host "Moved the typings from $generatedModelsFile into the local repo." -ForegroundColor Green
 
 - task: PowerShell@2
   displayName: 'Git: stage and commit generated files'
