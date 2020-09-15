@@ -60,6 +60,8 @@ export type RiskState =
     | "atRisk"
     | "confirmedCompromised"
     | "unknownFutureValue";
+export type PermissionClassificationType = "low" | "medium" | "high" | "unknownFutureValue";
+export type PermissionType = "application" | "delegated" | "delegatedUserConsentable";
 export type PhoneType =
     | "home"
     | "business"
@@ -1447,6 +1449,7 @@ export interface User extends DirectoryObject {
     ownedObjects?: NullableOption<DirectoryObject[]>;
     // Devices that are registered for the user. Read-only. Nullable.
     registeredDevices?: NullableOption<DirectoryObject[]>;
+    scopedRoleMemberOf?: NullableOption<ScopedRoleMembership[]>;
     transitiveMemberOf?: NullableOption<DirectoryObject[]>;
     // The user's primary calendar. Read-only.
     calendar?: NullableOption<Calendar>;
@@ -1579,6 +1582,11 @@ export interface OAuth2PermissionGrant extends Entity {
      * the resource service principal.
      */
     scope?: NullableOption<string>;
+}
+export interface ScopedRoleMembership extends Entity {
+    administrativeUnitId?: string;
+    roleId?: string;
+    roleMemberInfo?: Identity;
 }
 export interface Calendar extends Entity {
     /**
@@ -2480,44 +2488,6 @@ export interface Team extends Entity {
     // The template this team was created from. See available templates.
     template?: NullableOption<TeamsTemplate>;
 }
-// tslint:disable-next-line: interface-name
-export interface IdentityContainer extends Entity {
-    conditionalAccess?: NullableOption<ConditionalAccessRoot>;
-}
-export interface ConditionalAccessRoot extends Entity {
-    namedLocations?: NullableOption<NamedLocation[]>;
-    policies?: NullableOption<ConditionalAccessPolicy[]>;
-}
-// tslint:disable-next-line: interface-name
-export interface IdentityProvider extends Entity {
-    clientId?: NullableOption<string>;
-    clientSecret?: NullableOption<string>;
-    name?: NullableOption<string>;
-    type?: NullableOption<string>;
-}
-export interface PolicyBase extends DirectoryObject {
-    // Description for this policy.
-    description?: NullableOption<string>;
-    // Display name for this policy.
-    displayName?: NullableOption<string>;
-}
-export interface StsPolicy extends PolicyBase {
-    /**
-     * A string collection containing a JSON string that defines the rules and settings for a policy. The syntax for the
-     * definition differs for each derived policy type. Required.
-     */
-    definition?: string[];
-    /**
-     * If set to true, activates this policy. There can be many policies for the same policy type, but only one can be
-     * activated as the organization default. Optional, default value is false.
-     */
-    isOrganizationDefault?: NullableOption<boolean>;
-    appliesTo?: NullableOption<DirectoryObject[]>;
-}
-// tslint:disable-next-line: no-empty-interface
-export interface ActivityBasedTimeoutPolicy extends StsPolicy {}
-// tslint:disable-next-line: no-empty-interface
-export interface AdministrativeUnit extends DirectoryObject {}
 export interface Application extends DirectoryObject {
     /**
      * Defines custom behavior that a consuming service can use to call an app in specific contexts. For example, applications
@@ -2641,12 +2611,56 @@ export interface ExtensionProperty extends DirectoryObject {
     // Following values are supported. Not nullable. UserGroupOrganizationDeviceApplication
     targetObjects?: string[];
 }
+export interface PolicyBase extends DirectoryObject {
+    // Description for this policy.
+    description?: NullableOption<string>;
+    // Display name for this policy.
+    displayName?: NullableOption<string>;
+}
+export interface StsPolicy extends PolicyBase {
+    /**
+     * A string collection containing a JSON string that defines the rules and settings for a policy. The syntax for the
+     * definition differs for each derived policy type. Required.
+     */
+    definition?: string[];
+    /**
+     * If set to true, activates this policy. There can be many policies for the same policy type, but only one can be
+     * activated as the organization default. Optional, default value is false.
+     */
+    isOrganizationDefault?: NullableOption<boolean>;
+    appliesTo?: NullableOption<DirectoryObject[]>;
+}
 // tslint:disable-next-line: no-empty-interface
 export interface HomeRealmDiscoveryPolicy extends StsPolicy {}
 // tslint:disable-next-line: no-empty-interface
 export interface TokenIssuancePolicy extends StsPolicy {}
 // tslint:disable-next-line: no-empty-interface
 export interface TokenLifetimePolicy extends StsPolicy {}
+// tslint:disable-next-line: interface-name
+export interface IdentityContainer extends Entity {
+    conditionalAccess?: NullableOption<ConditionalAccessRoot>;
+}
+export interface ConditionalAccessRoot extends Entity {
+    namedLocations?: NullableOption<NamedLocation[]>;
+    policies?: NullableOption<ConditionalAccessPolicy[]>;
+}
+// tslint:disable-next-line: interface-name
+export interface IdentityProvider extends Entity {
+    clientId?: NullableOption<string>;
+    clientSecret?: NullableOption<string>;
+    name?: NullableOption<string>;
+    type?: NullableOption<string>;
+}
+// tslint:disable-next-line: no-empty-interface
+export interface ActivityBasedTimeoutPolicy extends StsPolicy {}
+export interface AdministrativeUnit extends DirectoryObject {
+    description?: NullableOption<string>;
+    displayName?: NullableOption<string>;
+    visibility?: NullableOption<string>;
+    members?: NullableOption<DirectoryObject[]>;
+    scopedRoleMembers?: NullableOption<ScopedRoleMembership[]>;
+    extensions?: NullableOption<Extension[]>;
+}
 export interface CertificateBasedAuthConfiguration extends Entity {
     // Collection of certificate authorities which creates a trusted certificate chain.
     certificateAuthorities?: CertificateAuthority[];
@@ -2677,6 +2691,11 @@ export interface Contract extends DirectoryObject {
      * It is not automatically updated if the customer tenant's display name changes.
      */
     displayName?: NullableOption<string>;
+}
+export interface DelegatedPermissionClassification extends Entity {
+    classification?: NullableOption<PermissionClassificationType>;
+    permissionId?: NullableOption<string>;
+    permissionName?: NullableOption<string>;
 }
 export interface Device extends DirectoryObject {
     // true if the account is enabled; otherwise, false. Required.
@@ -2759,6 +2778,7 @@ export interface Device extends DirectoryObject {
     extensions?: NullableOption<Extension[]>;
 }
 export interface Directory extends Entity {
+    administrativeUnits?: NullableOption<AdministrativeUnit[]>;
     // Recently deleted items. Read-only. Nullable.
     deletedItems?: NullableOption<DirectoryObject[]>;
 }
@@ -2785,6 +2805,7 @@ export interface DirectoryRole extends DirectoryObject {
     roleTemplateId?: NullableOption<string>;
     // Users that are members of this directory role. HTTP Methods: GET, POST, DELETE. Read-only. Nullable.
     members?: NullableOption<DirectoryObject[]>;
+    scopedMembers?: NullableOption<ScopedRoleMembership[]>;
 }
 export interface DirectoryRoleTemplate extends DirectoryObject {
     // The description to set for the directory role. Read-only.
@@ -3330,10 +3351,25 @@ export interface OrgContact extends DirectoryObject {
     memberOf?: NullableOption<DirectoryObject[]>;
     transitiveMemberOf?: NullableOption<DirectoryObject[]>;
 }
+export interface PermissionGrantConditionSet extends Entity {
+    clientApplicationIds?: NullableOption<string[]>;
+    clientApplicationPublisherIds?: NullableOption<string[]>;
+    clientApplicationsFromVerifiedPublisherOnly?: NullableOption<boolean>;
+    clientApplicationTenantIds?: NullableOption<string[]>;
+    permissionClassification?: NullableOption<string>;
+    permissions?: NullableOption<string[]>;
+    permissionType?: NullableOption<PermissionType>;
+    resourceApplication?: NullableOption<string>;
+}
+export interface PermissionGrantPolicy extends PolicyBase {
+    excludes?: NullableOption<PermissionGrantConditionSet[]>;
+    includes?: NullableOption<PermissionGrantConditionSet[]>;
+}
 export interface PolicyRoot extends Entity {
     activityBasedTimeoutPolicies?: NullableOption<ActivityBasedTimeoutPolicy[]>;
     claimsMappingPolicies?: NullableOption<ClaimsMappingPolicy[]>;
     homeRealmDiscoveryPolicies?: NullableOption<HomeRealmDiscoveryPolicy[]>;
+    permissionGrantPolicies?: NullableOption<PermissionGrantPolicy[]>;
     tokenIssuancePolicies?: NullableOption<TokenIssuancePolicy[]>;
     tokenLifetimePolicies?: NullableOption<TokenLifetimePolicy[]>;
     conditionalAccessPolicies?: NullableOption<ConditionalAccessPolicy[]>;
@@ -10036,14 +10072,6 @@ export interface AddIn {
     properties?: KeyValue[];
     type?: string;
 }
-export interface AlternativeSecurityId {
-    // For internal use only
-    identityProvider?: NullableOption<string>;
-    // For internal use only
-    key?: NullableOption<number>;
-    // For internal use only
-    type?: NullableOption<number>;
-}
 export interface ApiApplication {
     // When true, allows an application to use claims mapping without specifying a custom signing key.
     acceptMappedClaims?: NullableOption<boolean>;
@@ -10165,55 +10193,6 @@ export interface AppRole {
      */
     value?: NullableOption<string>;
 }
-export interface AssignedLabel {
-    // The display name of the label. Read-only.
-    displayName?: NullableOption<string>;
-    // The unique identifier of the label.
-    labelId?: NullableOption<string>;
-}
-export interface CertificateAuthority {
-    // Required. The base64 encoded string representing the public certificate.
-    certificate?: number;
-    // The URL of the certificate revocation list.
-    certificateRevocationListUrl?: NullableOption<string>;
-    /**
-     * The URL contains the list of all revoked certificates since the last time a full certificate revocaton list was
-     * created.
-     */
-    deltaCertificateRevocationListUrl?: NullableOption<string>;
-    /**
-     * Required. true if the trusted certificate is a root authority, false if the trusted certificate is an intermediate
-     * authority.
-     */
-    isRootAuthority?: boolean;
-    // The issuer of the certificate, calculated from the certificate value. Read-only.
-    issuer?: string;
-    // The subject key identifier of the certificate, calculated from the certificate value. Read-only.
-    issuerSki?: string;
-}
-// tslint:disable-next-line: no-empty-interface
-export interface ComplexExtensionValue {}
-export interface DomainState {
-    /**
-     * Timestamp for when the last activity occurred. The value is updated when an operation is scheduled, the asynchronous
-     * task starts, and when the operation completes.
-     */
-    lastActionDateTime?: NullableOption<string>;
-    // Type of asynchronous operation. The values can be ForceDelete or Verification
-    operation?: NullableOption<string>;
-    /**
-     * Current status of the operation. Scheduled - Operation has been scheduled but has not started. InProgress - Task has
-     * started and is in progress. Failed - Operation has failed.
-     */
-    status?: NullableOption<string>;
-}
-// tslint:disable-next-line: interface-name
-export interface ImplicitGrantSettings {
-    // Specifies whether this web application can request an access token using the OAuth 2.0 implicit flow.
-    enableAccessTokenIssuance?: NullableOption<boolean>;
-    // Specifies whether this web application can request an ID token using the OAuth 2.0 implicit flow.
-    enableIdTokenIssuance?: NullableOption<boolean>;
-}
 // tslint:disable-next-line: interface-name
 export interface InformationalUrl {
     // CDN URL to the application's logo, Read-only.
@@ -10253,16 +10232,13 @@ export interface KeyCredential {
     // A string that describes the purpose for which the key can be used; for example, 'Verify'.
     usage?: NullableOption<string>;
 }
-export interface LicenseProcessingState {
-    state?: NullableOption<string>;
-}
-export interface LicenseUnitsDetail {
-    // The number of units that are enabled.
-    enabled?: NullableOption<number>;
-    // The number of units that are suspended.
-    suspended?: NullableOption<number>;
-    // The number of units that are in warning status.
-    warning?: NullableOption<number>;
+export interface OptionalClaims {
+    // The optional claims returned in the JWT access token.
+    accessToken?: NullableOption<OptionalClaim[]>;
+    // The optional claims returned in the JWT ID token.
+    idToken?: NullableOption<OptionalClaim[]>;
+    // The optional claims returned in the SAML token.
+    saml2Token?: NullableOption<OptionalClaim[]>;
 }
 export interface OptionalClaim {
     /**
@@ -10283,14 +10259,6 @@ export interface OptionalClaim {
      * value in the name property is the extension property from the user object.
      */
     source?: NullableOption<string>;
-}
-export interface OptionalClaims {
-    // The optional claims returned in the JWT access token.
-    accessToken?: NullableOption<OptionalClaim[]>;
-    // The optional claims returned in the JWT ID token.
-    idToken?: NullableOption<OptionalClaim[]>;
-    // The optional claims returned in the SAML token.
-    saml2Token?: NullableOption<OptionalClaim[]>;
 }
 export interface ParentalControlSettings {
     /**
@@ -10335,6 +10303,126 @@ export interface PasswordCredential {
      */
     startDateTime?: NullableOption<string>;
 }
+export interface PublicClientApplication {
+    /**
+     * Specifies the URLs where user tokens are sent for sign-in, or the redirect URIs where OAuth 2.0 authorization codes and
+     * access tokens are sent.
+     */
+    redirectUris?: string[];
+}
+export interface RequiredResourceAccess {
+    // The list of OAuth2.0 permission scopes and app roles that the application requires from the specified resource.
+    resourceAccess?: ResourceAccess[];
+    /**
+     * The unique identifier for the resource that the application requires access to. This should be equal to the appId
+     * declared on the target resource application.
+     */
+    resourceAppId?: string;
+}
+export interface ResourceAccess {
+    // The unique identifier for one of the oauth2PermissionScopes or appRole instances that the resource application exposes.
+    id?: string;
+    /**
+     * Specifies whether the id property references an oauth2PermissionScopes or an appRole. Possible values are Scope or
+     * Role.
+     */
+    type?: NullableOption<string>;
+}
+export interface WebApplication {
+    // Home page or landing page of the application.
+    homePageUrl?: NullableOption<string>;
+    // Specifies whether this web application can request tokens using the OAuth 2.0 implicit flow.
+    implicitGrantSettings?: NullableOption<ImplicitGrantSettings>;
+    /**
+     * Specifies the URL that will be used by Microsoft's authorization service to logout an user using front-channel,
+     * back-channel or SAML logout protocols.
+     */
+    logoutUrl?: NullableOption<string>;
+    /**
+     * Specifies the URLs where user tokens are sent for sign-in, or the redirect URIs where OAuth 2.0 authorization codes and
+     * access tokens are sent.
+     */
+    redirectUris?: string[];
+}
+// tslint:disable-next-line: interface-name
+export interface ImplicitGrantSettings {
+    // Specifies whether this web application can request an access token using the OAuth 2.0 implicit flow.
+    enableAccessTokenIssuance?: NullableOption<boolean>;
+    // Specifies whether this web application can request an ID token using the OAuth 2.0 implicit flow.
+    enableIdTokenIssuance?: NullableOption<boolean>;
+}
+export interface AlternativeSecurityId {
+    // For internal use only
+    identityProvider?: NullableOption<string>;
+    // For internal use only
+    key?: NullableOption<number>;
+    // For internal use only
+    type?: NullableOption<number>;
+}
+export interface AssignedLabel {
+    // The display name of the label. Read-only.
+    displayName?: NullableOption<string>;
+    // The unique identifier of the label.
+    labelId?: NullableOption<string>;
+}
+export interface CertificateAuthority {
+    // Required. The base64 encoded string representing the public certificate.
+    certificate?: number;
+    // The URL of the certificate revocation list.
+    certificateRevocationListUrl?: NullableOption<string>;
+    /**
+     * The URL contains the list of all revoked certificates since the last time a full certificate revocaton list was
+     * created.
+     */
+    deltaCertificateRevocationListUrl?: NullableOption<string>;
+    /**
+     * Required. true if the trusted certificate is a root authority, false if the trusted certificate is an intermediate
+     * authority.
+     */
+    isRootAuthority?: boolean;
+    // The issuer of the certificate, calculated from the certificate value. Read-only.
+    issuer?: string;
+    // The subject key identifier of the certificate, calculated from the certificate value. Read-only.
+    issuerSki?: string;
+}
+// tslint:disable-next-line: no-empty-interface
+export interface ComplexExtensionValue {}
+export interface DomainState {
+    /**
+     * Timestamp for when the last activity occurred. The value is updated when an operation is scheduled, the asynchronous
+     * task starts, and when the operation completes.
+     */
+    lastActionDateTime?: NullableOption<string>;
+    // Type of asynchronous operation. The values can be ForceDelete or Verification
+    operation?: NullableOption<string>;
+    /**
+     * Current status of the operation. Scheduled - Operation has been scheduled but has not started. InProgress - Task has
+     * started and is in progress. Failed - Operation has failed.
+     */
+    status?: NullableOption<string>;
+}
+// tslint:disable-next-line: interface-name
+export interface Identity {
+    /**
+     * The identity's display name. Note that this may not always be available or up to date. For example, if a user changes
+     * their display name, the API may show the new value in a future response, but the items associated with the user won't
+     * show up as having changed when using delta.
+     */
+    displayName?: NullableOption<string>;
+    // Unique identifier for the identity.
+    id?: NullableOption<string>;
+}
+export interface LicenseProcessingState {
+    state?: NullableOption<string>;
+}
+export interface LicenseUnitsDetail {
+    // The number of units that are enabled.
+    enabled?: NullableOption<number>;
+    // The number of units that are suspended.
+    suspended?: NullableOption<number>;
+    // The number of units that are in warning status.
+    warning?: NullableOption<number>;
+}
 export interface Phone {
     language?: NullableOption<string>;
     // The phone number.
@@ -10368,31 +10456,6 @@ export interface PrivacyProfile {
      * company's privacy statement. Not required.
      */
     statementUrl?: NullableOption<string>;
-}
-export interface PublicClientApplication {
-    /**
-     * Specifies the URLs where user tokens are sent for sign-in, or the redirect URIs where OAuth 2.0 authorization codes and
-     * access tokens are sent.
-     */
-    redirectUris?: string[];
-}
-export interface RequiredResourceAccess {
-    // The list of OAuth2.0 permission scopes and app roles that the application requires from the specified resource.
-    resourceAccess?: ResourceAccess[];
-    /**
-     * The unique identifier for the resource that the application requires access to. This should be equal to the appId
-     * declared on the target resource application.
-     */
-    resourceAppId?: string;
-}
-export interface ResourceAccess {
-    // The unique identifier for one of the oauth2PermissionScopes or appRole instances that the resource application exposes.
-    id?: string;
-    /**
-     * Specifies whether the id property references an oauth2PermissionScopes or an appRole. Possible values are Scope or
-     * Role.
-     */
-    type?: NullableOption<string>;
 }
 export interface SamlSingleSignOnSettings {
     // The relative URI the service provider would redirect to after completion of the single sign-on flow.
@@ -10445,22 +10508,6 @@ export interface VerifiedDomain {
     // For example, 'Managed'.
     type?: NullableOption<string>;
 }
-export interface WebApplication {
-    // Home page or landing page of the application.
-    homePageUrl?: NullableOption<string>;
-    // Specifies whether this web application can request tokens using the OAuth 2.0 implicit flow.
-    implicitGrantSettings?: NullableOption<ImplicitGrantSettings>;
-    /**
-     * Specifies the URL that will be used by Microsoft's authorization service to logout an user using front-channel,
-     * back-channel or SAML logout protocols.
-     */
-    logoutUrl?: NullableOption<string>;
-    /**
-     * Specifies the URLs where user tokens are sent for sign-in, or the redirect URIs where OAuth 2.0 authorization codes and
-     * access tokens are sent.
-     */
-    redirectUris?: string[];
-}
 export interface EducationStudent {
     // Birth date of the student.
     birthDate?: NullableOption<string>;
@@ -10490,17 +10537,6 @@ export interface EducationTerm {
     externalId?: NullableOption<string>;
     // Start of the term.
     startDate?: NullableOption<string>;
-}
-// tslint:disable-next-line: interface-name
-export interface Identity {
-    /**
-     * The identity's display name. Note that this may not always be available or up to date. For example, if a user changes
-     * their display name, the API may show the new value in a future response, but the items associated with the user won't
-     * show up as having changed when using delta.
-     */
-    displayName?: NullableOption<string>;
-    // Unique identifier for the identity.
-    id?: NullableOption<string>;
 }
 // tslint:disable-next-line: interface-name
 export interface IdentitySet {
