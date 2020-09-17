@@ -8,7 +8,7 @@
 // Definitions: https://github.com/DefinitelyTyped/DefinitelyTyped
 // TypeScript Version: 2.1
 
-export as namespace microsoftgraph;
+export as namespace microsoftgraphbeta;
 
 export type NullableOption<T> = T | null;
 
@@ -2602,6 +2602,13 @@ export type MediaDirection = "inactive" | "sendOnly" | "receiveOnly" | "sendRece
 export type MediaState = "active" | "inactive" | "unknownFutureValue";
 export type MeetingCapabilities = "questionAndAnswer" | "unknownFutureValue";
 export type Modality = "unknown" | "audio" | "video" | "videoBasedScreenSharing" | "data" | "unknownFutureValue";
+export type OnlineMeetingPresenters =
+    | "everyone"
+    | "organization"
+    | "roleIsPresenter"
+    | "organizer"
+    | "unknownFutureValue";
+export type OnlineMeetingRole = "attendee" | "presenter" | "unknownFutureValue";
 export type PlayPromptCompletionReason =
     | "unknown"
     | "completedSuccessfully"
@@ -3129,8 +3136,11 @@ export interface User extends DirectoryObject {
      * Supports $filter and $orderby.
      */
     displayName?: NullableOption<string>;
+    employeeHireDate?: NullableOption<string>;
     // The employee identifier assigned to the user by the organization. Supports $filter.
     employeeId?: NullableOption<string>;
+    employeeOrgData?: NullableOption<EmployeeOrgData>;
+    employeeType?: NullableOption<string>;
     /**
      * For an external user invited to the tenant using the invitation API, this property represents the invited user's
      * invitation status. For invited users, the state can be PendingAcceptance or Accepted, or null for all other users.
@@ -4301,6 +4311,7 @@ export interface Drive extends BaseItem {
     special?: NullableOption<DriveItem[]>;
 }
 export interface Site extends BaseItem {
+    deleted?: NullableOption<Deleted>;
     // The full title for the site. Read-only.
     displayName?: NullableOption<string>;
     // If present, indicates that this is the root site in the site collection. Read-only.
@@ -4344,6 +4355,7 @@ export interface Approval extends Entity {
 }
 export interface AccessReviewInstance extends Entity {
     endDateTime?: NullableOption<string>;
+    scope?: NullableOption<AccessReviewScope>;
     startDateTime?: NullableOption<string>;
     status?: NullableOption<string>;
     decisions?: NullableOption<AccessReviewInstanceDecisionItem[]>;
@@ -4910,6 +4922,7 @@ export interface Device extends DirectoryObject {
 }
 export interface OnlineMeeting extends Entity {
     accessLevel?: NullableOption<AccessLevel>;
+    allowedPresenters?: NullableOption<OnlineMeetingPresenters>;
     // The phone access (dial-in) information for an online meeting. Read-only.
     audioConferencing?: NullableOption<AudioConferencing>;
     canceledDateTime?: NullableOption<string>;
@@ -5781,6 +5794,7 @@ export interface DataClassificationService extends Entity {
     exactMatchUploadAgents?: NullableOption<ExactMatchUploadAgent[]>;
 }
 export interface ExactMatchDataStore extends Entity {
+    columns?: NullableOption<ExactDataMatchStoreColumn[]>;
     dataLastUpdatedDateTime?: NullableOption<string>;
     description?: NullableOption<string>;
     displayName?: NullableOption<string>;
@@ -5932,6 +5946,7 @@ export interface Command extends Entity {
     responsepayload?: NullableOption<PayloadResponse>;
 }
 export interface Directory extends Entity {
+    administrativeUnits?: NullableOption<AdministrativeUnit[]>;
     // Recently deleted items. Read-only. Nullable.
     deletedItems?: NullableOption<DirectoryObject[]>;
     featureRolloutPolicies?: NullableOption<FeatureRolloutPolicy[]>;
@@ -8138,6 +8153,7 @@ export interface AccessReviewScheduleDefinition extends Entity {
     descriptionForAdmins?: NullableOption<string>;
     descriptionForReviewers?: NullableOption<string>;
     displayName?: NullableOption<string>;
+    instanceEnumerationScope?: NullableOption<AccessReviewScope>;
     lastModifiedDateTime?: NullableOption<string>;
     reviewers?: NullableOption<AccessReviewReviewerScope[]>;
     scope?: NullableOption<AccessReviewScope>;
@@ -20599,6 +20615,8 @@ export interface EmailAppUsageVersionsUserCounts extends Entity {
     outlook2010?: NullableOption<number>;
     outlook2013?: NullableOption<number>;
     outlook2016?: NullableOption<number>;
+    outlook2019?: NullableOption<number>;
+    outlookM365?: NullableOption<number>;
     reportPeriod?: NullableOption<string>;
     reportRefreshDate?: NullableOption<string>;
     undetermined?: NullableOption<number>;
@@ -23229,6 +23247,10 @@ export interface DeviceKey {
     keyMaterial?: NullableOption<number>;
     keyType?: NullableOption<string>;
 }
+export interface EmployeeOrgData {
+    costCenter?: NullableOption<string>;
+    division?: NullableOption<string>;
+}
 export interface ObjectIdentity {
     /**
      * Specifies the issuer of the identity, for example facebook.com.For local accounts (where signInType is not federated),
@@ -24554,6 +24576,12 @@ export interface DataStoreField {
     name?: NullableOption<string>;
     searchable?: NullableOption<boolean>;
     unique?: NullableOption<boolean>;
+}
+export interface ExactDataMatchStoreColumn {
+    ignoredDelimiters?: NullableOption<string[]>;
+    isCaseInsensitive?: NullableOption<boolean>;
+    isSearchable?: NullableOption<boolean>;
+    name?: NullableOption<string>;
 }
 export interface ExactMatchClassificationRequest {
     contentClassifications?: NullableOption<ContentClassification[]>;
@@ -28932,8 +28960,7 @@ export interface WindowsFirewallRule {
      * List of tokens specifying the remote addresses covered by the rule. Tokens are case insensitive. Default is any
      * address. Valid tokens include:&amp;lt;ul&amp;gt;&amp;lt;li&amp;gt;"*" indicates any remote address. If present, this
      * must be the only token
-     * included.&amp;lt;/li&amp;gt;&amp;lt;li&amp;gt;"Defaultgateway"&amp;lt;/li&amp;gt;&amp;lt;li&amp;gt;
-     * "DHCP"&amp;lt;/li&amp;gt;&amp;lt;li&amp;gt;"DNS"&amp;lt;/li&amp;gt;&amp;lt;li&amp;gt;"WINS"&amp;lt;/li&amp;gt;&amp;lt;li&amp;gt;"Intranet"
+     * included.&amp;lt;/li&amp;gt;&amp;lt;li&amp;gt;"Defaultgateway"&amp;lt;/li&amp;gt;&amp;lt;li&amp;gt;"DHCP"&amp;lt;/li&amp;gt;&amp;lt;li&amp;gt;"DNS"&amp;lt;/li&amp;gt;&amp;lt;li&amp;gt;"WINS"&amp;lt;/li&amp;gt;&amp;lt;li&amp;gt;"Intranet"
      * (supported on Windows versions 1809+)&amp;lt;/li&amp;gt;&amp;lt;li&amp;gt;"RmtIntranet" (supported on Windows versions
      * 1809+)&amp;lt;/li&amp;gt;&amp;lt;li&amp;gt;"Internet" (supported on Windows versions
      * 1809+)&amp;lt;/li&amp;gt;&amp;lt;li&amp;gt;"Ply2Renders" (supported on Windows versions
@@ -31168,6 +31195,7 @@ export interface MeetingInfo {
 export interface MeetingParticipantInfo {
     // Identity information of the participant.
     identity?: NullableOption<IdentitySet>;
+    role?: NullableOption<OnlineMeetingRole>;
     // User principal name of the participant.
     upn?: NullableOption<string>;
 }
@@ -31643,40 +31671,40 @@ export interface ThreatAssessmentRequestsCount {
 export namespace TermStore {
     type RelationType = "pin" | "reuse";
     type TermGroupScope = "global" | "system" | "siteCollection";
-    interface Group extends microsoftgraph.Entity {
+    interface Group extends microsoftgraphbeta.Entity {
         createdDateTime?: NullableOption<string>;
         description?: NullableOption<string>;
         displayName?: NullableOption<string>;
         scope?: NullableOption<TermGroupScope>;
         sets?: NullableOption<Set[]>;
     }
-    interface Set extends microsoftgraph.Entity {
+    interface Set extends microsoftgraphbeta.Entity {
         createdDateTime?: NullableOption<string>;
         description?: NullableOption<string>;
         localizedNames?: NullableOption<LocalizedName[]>;
-        properties?: NullableOption<microsoftgraph.KeyValue[]>;
+        properties?: NullableOption<microsoftgraphbeta.KeyValue[]>;
         children?: NullableOption<Term[]>;
         parentGroup?: Group;
         relations?: NullableOption<Relation[]>;
         terms?: NullableOption<Term[]>;
     }
-    interface Relation extends microsoftgraph.Entity {
+    interface Relation extends microsoftgraphbeta.Entity {
         relationship?: NullableOption<RelationType>;
         fromTerm?: NullableOption<Term>;
         set?: NullableOption<Set>;
         toTerm?: NullableOption<Term>;
     }
-    interface Term extends microsoftgraph.Entity {
+    interface Term extends microsoftgraphbeta.Entity {
         createdDateTime?: NullableOption<string>;
         descriptions?: NullableOption<LocalizedDescription[]>;
         labels?: NullableOption<LocalizedLabel[]>;
         lastModifiedDateTime?: NullableOption<string>;
-        properties?: NullableOption<microsoftgraph.KeyValue[]>;
+        properties?: NullableOption<microsoftgraphbeta.KeyValue[]>;
         children?: NullableOption<Term[]>;
         relations?: NullableOption<Relation[]>;
         set?: NullableOption<Set>;
     }
-    interface Store extends microsoftgraph.Entity {
+    interface Store extends microsoftgraphbeta.Entity {
         defaultLanguageTag?: string;
         languageTags?: string[];
         groups?: NullableOption<Group[]>;
@@ -31749,7 +31777,7 @@ export namespace CallRecords {
         | "wifi80211ac"
         | "wifi80211ax"
         | "unknownFutureValue";
-    interface CallRecord extends microsoftgraph.Entity {
+    interface CallRecord extends microsoftgraphbeta.Entity {
         /**
          * UTC time when the last user left the call. The DateTimeOffset type represents date and time information using ISO 8601
          * format and is always in UTC time. For example, midnight UTC on Jan 1, 2014 would look like this: '2014-01-01T00:00:00Z'
@@ -31768,9 +31796,9 @@ export namespace CallRecords {
          */
         modalities?: Modality[];
         // The organizing party's identity.
-        organizer?: NullableOption<microsoftgraph.IdentitySet>;
+        organizer?: NullableOption<microsoftgraphbeta.IdentitySet>;
         // List of distinct identities involved in the call.
-        participants?: NullableOption<microsoftgraph.IdentitySet[]>;
+        participants?: NullableOption<microsoftgraphbeta.IdentitySet[]>;
         /**
          * UTC time when the first user joined the call. The DatetimeOffset type represents date and time information using ISO
          * 8601 format and is always in UTC time. For example, midnight UTC on Jan 1, 2014 would look like this:
@@ -31790,7 +31818,7 @@ export namespace CallRecords {
          */
         sessions?: NullableOption<Session[]>;
     }
-    interface Session extends microsoftgraph.Entity {
+    interface Session extends microsoftgraphbeta.Entity {
         // Endpoint that answered the session.
         callee?: NullableOption<Endpoint>;
         // Endpoint that initiated the session.
@@ -31817,7 +31845,7 @@ export namespace CallRecords {
         // The list of segments involved in the session. Read-only. Nullable.
         segments?: NullableOption<Segment[]>;
     }
-    interface Segment extends microsoftgraph.Entity {
+    interface Segment extends microsoftgraphbeta.Entity {
         // Endpoint that answered this segment.
         callee?: NullableOption<Endpoint>;
         // Endpoint that initiated this segment.
@@ -32141,7 +32169,7 @@ export namespace CallRecords {
         // The feedback provided by the user of this endpoint about the quality of the session.
         feedback?: NullableOption<UserFeedback>;
         // Identity associated with the endpoint.
-        identity?: NullableOption<microsoftgraph.IdentitySet>;
+        identity?: NullableOption<microsoftgraphbeta.IdentitySet>;
     }
     interface UserFeedback {
         /**
