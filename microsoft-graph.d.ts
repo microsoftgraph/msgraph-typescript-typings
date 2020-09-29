@@ -1736,7 +1736,10 @@ export interface Event extends OutlookItem {
     end?: NullableOption<DateTimeTimeZone>;
     // Set to true if the event has attachments.
     hasAttachments?: NullableOption<boolean>;
-    // A unique identifier that is shared by all instances of an event across different calendars. Read-only.
+    /**
+     * A unique identifier for an event across calendars. This ID is different for each occurrence in a recurring series.
+     * Read-only.
+     */
     iCalUId?: NullableOption<string>;
     // The importance of the event. The possible values are: low, normal, high.
     importance?: NullableOption<Importance>;
@@ -2684,7 +2687,7 @@ export interface TokenIssuancePolicy extends StsPolicy {}
 // tslint:disable-next-line: no-empty-interface
 export interface TokenLifetimePolicy extends StsPolicy {}
 // tslint:disable-next-line: interface-name
-export interface IdentityContainer extends Entity {
+export interface IdentityContainer {
     conditionalAccess?: NullableOption<ConditionalAccessRoot>;
 }
 export interface ConditionalAccessRoot extends Entity {
@@ -3427,7 +3430,7 @@ export interface PermissionGrantPolicy extends PolicyBase {
     excludes?: NullableOption<PermissionGrantConditionSet[]>;
     includes?: NullableOption<PermissionGrantConditionSet[]>;
 }
-export interface PolicyRoot extends Entity {
+export interface PolicyRoot {
     activityBasedTimeoutPolicies?: NullableOption<ActivityBasedTimeoutPolicy[]>;
     claimsMappingPolicies?: NullableOption<ClaimsMappingPolicy[]>;
     homeRealmDiscoveryPolicies?: NullableOption<HomeRealmDiscoveryPolicy[]>;
@@ -5002,7 +5005,7 @@ export interface SchemaExtension extends Entity {
      */
     targetTypes?: string[];
 }
-export interface CloudCommunications extends Entity {
+export interface CloudCommunications {
     calls?: NullableOption<Call[]>;
     callRecords?: NullableOption<CallRecords.CallRecord[]>;
     onlineMeetings?: NullableOption<OnlineMeeting[]>;
@@ -9452,7 +9455,7 @@ export interface AadUserConversationMember extends ConversationMember {
     userId?: NullableOption<string>;
     user?: NullableOption<User>;
 }
-export interface AppCatalogs extends Entity {
+export interface AppCatalogs {
     teamsApps?: NullableOption<TeamsApp[]>;
 }
 export interface TeamsApp extends Entity {
@@ -9521,6 +9524,7 @@ export interface ChatMessage extends Entity {
     mentions?: NullableOption<ChatMessageMention[]>;
     // The type of chat message. The possible values are: message.
     messageType?: ChatMessageType;
+    // Defines the properties of a policy violation set by a data loss prevention (DLP) application.
     policyViolation?: NullableOption<ChatMessagePolicyViolation>;
     reactions?: NullableOption<ChatMessageReaction[]>;
     /**
@@ -9778,7 +9782,7 @@ export interface FileAssessmentRequest extends ThreatAssessmentRequest {
     fileName?: string;
 }
 // tslint:disable-next-line: interface-name
-export interface InformationProtection extends Entity {
+export interface InformationProtection {
     threatAssessmentRequests?: NullableOption<ThreatAssessmentRequest[]>;
 }
 export interface MailAssessmentRequest extends ThreatAssessmentRequest {
@@ -14026,15 +14030,47 @@ export interface ChatMessageMention {
     mentionText?: NullableOption<string>;
 }
 export interface ChatMessagePolicyViolation {
+    /**
+     * The action taken by the DLP provider on the message with sensitive content. Supported values are: NoneNotifySender --
+     * Inform the sender of the violation but allow readers to read the message.BlockAccess -- Block readers from reading the
+     * message.BlockAccessExternal -- Block users outside the organization from reading the message, while allowing users
+     * within the organization to read the message.
+     */
     dlpAction?: NullableOption<ChatMessagePolicyViolationDlpActionTypes>;
+    // Justification text provided by the sender of the message when overriding a policy violation.
     justificationText?: NullableOption<string>;
+    // Information to display to the message sender about why the message was flagged as a violation.
     policyTip?: NullableOption<ChatMessagePolicyViolationPolicyTip>;
+    /**
+     * Indicates the action taken by the user on a message blocked by the DLP provider. Supported values are:
+     * NoneOverrideReportFalsePositiveWhen the DLP provider is updating the message for blocking sensitive content, userAction
+     * is not required.
+     */
     userAction?: NullableOption<ChatMessagePolicyViolationUserActionTypes>;
+    /**
+     * Indicates what actions the sender may take in response to the policy violation. Supported values are:
+     * NoneAllowFalsePositiveOverride -- Allows the sender to declare the policyViolation to be an error in the DLP app and
+     * its rules, and allow readers to see the message again if the dlpAction had hidden it.AllowOverrideWithoutJustification
+     * -- Allows the sender to overriide the DLP violation and allow readers to see the message again if the dlpAction had
+     * hidden it, without needing to provide an explanation for doing so. AllowOverrideWithJustification -- Allows the sender
+     * to overriide the DLP violation and allow readers to see the message again if the dlpAction had hidden it, after
+     * providing an explanation for doing so.AllowOverrideWithoutJustification and AllowOverrideWithJustification are mutually
+     * exclusive.
+     */
     verdictDetails?: NullableOption<ChatMessagePolicyViolationVerdictDetailsTypes>;
 }
 export interface ChatMessagePolicyViolationPolicyTip {
+    /**
+     * The URL a user can visit to read about the data loss prevention policies for the organization. (ie, policies about what
+     * users shouldn't say in chats)
+     */
     complianceUrl?: NullableOption<string>;
+    // Explanatory text shown to the sender of the message.
     generalText?: NullableOption<string>;
+    /**
+     * The list of improper data in the message that was detected by the data loss prevention app. Each DLP app defines its
+     * own conditions, examples include 'Credit Card Number' and 'Social Security Number'.
+     */
     matchedConditionDescriptions?: NullableOption<string[]>;
 }
 export interface ChatMessageReaction {
