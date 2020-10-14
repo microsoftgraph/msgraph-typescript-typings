@@ -1041,7 +1041,6 @@ export type ThreatAssessmentResultType = "checkPolicy" | "rescan" | "unknownFutu
 export type ThreatAssessmentStatus = "pending" | "completed";
 export type ThreatCategory = "undefined" | "spam" | "phishing" | "malware" | "unknownFutureValue";
 export type ThreatExpectedAssessment = "block" | "unblock";
-export type TaskStatus = "notStarted" | "inProgress" | "completed" | "waitingOnOthers" | "deferred";
 export interface Entity {
     // Read-only.
     id?: string;
@@ -2626,8 +2625,8 @@ export interface Application extends DirectoryObject {
      * Specifies the Microsoft accounts that are supported for the current application. Supported values are:AzureADMyOrg:
      * Users with a Microsoft work or school account in my organization’s Azure AD tenant (single tenant)AzureADMultipleOrgs:
      * Users with a Microsoft work or school account in any organization’s Azure AD tenant
-     * (multi-tenant)AzureADandPersonalMicrosoftAccount: Users with a personal Microsoft account, or a work or school account
-     * in any organization’s Azure AD tenant.
+     * (multi-tenant).AzureADandPersonalMicrosoftAccount: Users with a personal Microsoft account, or a work or school account
+     * in any organization’s Azure AD tenant.PersonalMicrosoftAccount: Users with a personal Microsoft account only.
      */
     signInAudience?: NullableOption<string>;
     // Custom strings that can be used to categorize and identify the application. Not nullable.
