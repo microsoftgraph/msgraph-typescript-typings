@@ -397,7 +397,13 @@ export type OnPremisesPublishingType =
     | "intunePfx"
     | "oflineDomainJoin"
     | "unknownFutureValue";
-export type SingleSignOnMode = "none" | "onPremisesKerberos" | "saml";
+export type SingleSignOnMode =
+    | "none"
+    | "onPremisesKerberos"
+    | "saml"
+    | "pingHeaderBased"
+    | "aadHeaderBased"
+    | "unknownFutureValue";
 export type StagedFeatureName =
     | "passthroughAuthentication"
     | "seamlessSso"
@@ -2405,7 +2411,30 @@ export type PrintColorMode = "blackAndWhite" | "grayscale" | "color" | "auto";
 export type PrintDuplexConfiguration = "twoSidedLongEdge" | "twoSidedShortEdge" | "oneSided";
 export type PrintDuplexMode = "flipOnLongEdge" | "flipOnShortEdge" | "oneSided";
 export type PrinterFeedDirection = "longEdgeFirst" | "shortEdgeFirst";
+export type PrinterFeedOrientation = "longEdgeFirst" | "shortEdgeFirst";
 export type PrinterProcessingState = "unknown" | "idle" | "processing" | "stopped" | "unknownFutureValue";
+export type PrinterProcessingStateDetail =
+    | "paused"
+    | "disconnected"
+    | "mediaJam"
+    | "mediaNeeded"
+    | "mediaLow"
+    | "mediaEmpty"
+    | "coverOpen"
+    | "interlockOpen"
+    | "queueFull"
+    | "outputTrayMissing"
+    | "outputAreaFull"
+    | "markerSupplyLow"
+    | "markerSupplyEmpty"
+    | "inputTrayMissing"
+    | "outputAlmostFull"
+    | "markerWasteAlmostFull"
+    | "markerWasteFull"
+    | "fuserOverTemp"
+    | "fuserUnderTemp"
+    | "other"
+    | "unknownFutureValue";
 export type PrinterProcessingStateReason =
     | "paused"
     | "disconnected"
@@ -2453,13 +2482,21 @@ export type PrintFinishing =
 export type PrintJobProcessingState =
     | "unknown"
     | "pending"
-    | "pendingHeld"
     | "processing"
     | "paused"
     | "stopped"
     | "completed"
     | "canceled"
     | "aborted";
+export type PrintJobStateDetail =
+    | "uploadPending"
+    | "transforming"
+    | "completedSuccessfully"
+    | "completedWithWarnings"
+    | "completedWithErrors"
+    | "releaseWait"
+    | "interpreting"
+    | "unknownFutureValue";
 export type PrintMediaType =
     | "stationery"
     | "transparency"
@@ -3668,6 +3705,7 @@ export interface Event extends OutlookItem {
     end?: NullableOption<DateTimeTimeZone>;
     // Set to true if the event has attachments.
     hasAttachments?: NullableOption<boolean>;
+    hideAttendees?: NullableOption<boolean>;
     // The importance of the event. The possible values are: low, normal, high.
     importance?: NullableOption<Importance>;
     // Set to true if the event lasts all day.
@@ -3936,7 +3974,8 @@ export interface Group extends DirectoryObject {
     mailEnabled?: NullableOption<boolean>;
     /**
      * The mail alias for the group, unique in the organization. This property must be specified when a group is created.
-     * Returned by default. Supports $filter.
+     * These characters cannot be used in the mailNickName: @()/[]';:.&amp;lt;&amp;gt;,SPACE. Returned by default. Supports
+     * $filter.
      */
     mailNickname?: NullableOption<string>;
     mdmAppId?: NullableOption<string>;
@@ -4008,7 +4047,17 @@ export interface Group extends DirectoryObject {
      * Read-only.
      */
     renewedDateTime?: NullableOption<string>;
+    /**
+     * Specifies the group behaviors that can be set for a Microsoft 365 group during creation. This can be set only as part
+     * of creation (POST). Possible values are AllowOnlyMembersToPost, HideGroupInOutlook, SubscribeNewGroupMembers,
+     * WelcomeEmailDisabled. For more information, see Set Microsoft 365 group behaviors and provisioning options.
+     */
     resourceBehaviorOptions?: string[];
+    /**
+     * Specifies the group resources that are provisioned as part of Microsoft 365 group creation, that are not normally part
+     * of default group creation. Possible value is Team. For more information, see Set Microsoft 365 group behaviors and
+     * provisioning options.
+     */
     resourceProvisioningOptions?: string[];
     // Specifies whether the group is a security group. Returned by default. Supports $filter.
     securityEnabled?: NullableOption<boolean>;
@@ -4944,12 +4993,14 @@ export interface Device extends DirectoryObject {
      * details, see Introduction to device management in Azure Active Directory
      */
     trustType?: NullableOption<string>;
-    Kind?: NullableOption<string>;
-    Manufacturer?: NullableOption<string>;
-    Model?: NullableOption<string>;
-    Name?: NullableOption<string>;
-    Platform?: NullableOption<string>;
-    Status?: NullableOption<string>;
+    kind?: NullableOption<string>;
+    // Manufacturer of the device. Read-only.
+    manufacturer?: NullableOption<string>;
+    // Model of the device. Read-only.
+    model?: NullableOption<string>;
+    name?: NullableOption<string>;
+    platform?: NullableOption<string>;
+    status?: NullableOption<string>;
     // Groups that this group is a member of. HTTP Methods: GET (supported for all groups). Read-only. Nullable.
     memberOf?: NullableOption<DirectoryObject[]>;
     /**
@@ -5228,8 +5279,8 @@ export interface Application extends DirectoryObject {
      * Specifies the Microsoft accounts that are supported for the current application. Supported values are:AzureADMyOrg:
      * Users with a Microsoft work or school account in my organization’s Azure AD tenant (single tenant)AzureADMultipleOrgs:
      * Users with a Microsoft work or school account in any organization’s Azure AD tenant
-     * (multi-tenant)AzureADandPersonalMicrosoftAccount: Users with a personal Microsoft account, or a work or school account
-     * in any organization’s Azure AD tenant.
+     * (multi-tenant).AzureADandPersonalMicrosoftAccount: Users with a personal Microsoft account, or a work or school account
+     * in any organization’s Azure AD tenant.PersonalMicrosoftAccount: Users with a personal Microsoft account only.
      */
     signInAudience?: NullableOption<string>;
     spa?: NullableOption<SpaApplication>;
@@ -5536,7 +5587,7 @@ export interface MicrosoftAuthenticatorAuthenticationMethodTarget extends Authen
 export interface PasswordlessMicrosoftAuthenticatorAuthenticationMethodTarget extends AuthenticationMethodTarget {
     shownContext?: NullableOption<AuthenticatorAppContextType>;
 }
-export interface PolicyRoot extends Entity {
+export interface PolicyRoot {
     authenticationFlowsPolicy?: NullableOption<AuthenticationFlowsPolicy>;
     b2cAuthenticationMethodsPolicy?: NullableOption<B2cAuthenticationMethodsPolicy>;
     deviceRegistrationPolicy?: NullableOption<DeviceRegistrationPolicy>;
@@ -5545,6 +5596,7 @@ export interface PolicyRoot extends Entity {
     claimsMappingPolicies?: NullableOption<ClaimsMappingPolicy[]>;
     homeRealmDiscoveryPolicies?: NullableOption<HomeRealmDiscoveryPolicy[]>;
     permissionGrantPolicies?: NullableOption<PermissionGrantPolicy[]>;
+    privateLinkResourcePolicies?: NullableOption<PrivateLinkResource[]>;
     tokenIssuancePolicies?: NullableOption<TokenIssuancePolicy[]>;
     tokenLifetimePolicies?: NullableOption<TokenLifetimePolicy[]>;
     adminConsentRequestPolicy?: NullableOption<AdminConsentRequestPolicy>;
@@ -5580,6 +5632,10 @@ export interface AuthorizationPolicy extends PolicyBase {
 export interface PermissionGrantPolicy extends PolicyBase {
     excludes?: NullableOption<PermissionGrantConditionSet[]>;
     includes?: NullableOption<PermissionGrantConditionSet[]>;
+}
+export interface PrivateLinkResource extends Entity {
+    allowedTenantIds?: string[];
+    armResourceId?: string;
 }
 export interface AdminConsentRequestPolicy extends Entity {
     isEnabled?: boolean;
@@ -5623,7 +5679,7 @@ export interface IdentitySecurityDefaultsEnforcementPolicy extends PolicyBase {
     // If set to true, Azure Active Directory security defaults is enabled for the tenant.
     isEnabled?: boolean;
 }
-export interface Bitlocker extends Entity {
+export interface Bitlocker {
     recoveryKeys?: NullableOption<BitlockerRecoveryKey[]>;
 }
 export interface BitlockerRecoveryKey extends Entity {
@@ -5633,6 +5689,7 @@ export interface BitlockerRecoveryKey extends Entity {
     volumeType?: NullableOption<VolumeType>;
 }
 export interface BookingAppointment extends Entity {
+    additionalInformation?: NullableOption<string>;
     customerEmailAddress?: NullableOption<string>;
     /**
      * If CustomerId is not specified when an appointment is created then a new customer is created based on the appointment
@@ -5655,6 +5712,8 @@ export interface BookingAppointment extends Entity {
     invoiceId?: NullableOption<string>;
     invoiceStatus?: BookingInvoiceStatus;
     invoiceUrl?: NullableOption<string>;
+    isLocationOnline?: boolean;
+    onlineMeetingUrl?: NullableOption<string>;
     optOutOfCustomerEmail?: boolean;
     postBuffer?: string;
     preBuffer?: string;
@@ -5710,6 +5769,7 @@ export interface BookingPerson extends BookingNamedEntity {
 // tslint:disable-next-line: no-empty-interface
 export interface BookingCustomer extends BookingPerson {}
 export interface BookingService extends BookingNamedEntity {
+    additionalInformation?: NullableOption<string>;
     defaultDuration?: string;
     defaultLocation?: NullableOption<Location>;
     defaultPrice?: number;
@@ -5718,6 +5778,7 @@ export interface BookingService extends BookingNamedEntity {
     defaultReminders?: NullableOption<BookingReminder[]>;
     description?: NullableOption<string>;
     isHiddenFromCustomers?: boolean;
+    isLocationOnline?: boolean;
     notes?: NullableOption<string>;
     postBuffer?: string;
     preBuffer?: string;
@@ -5734,35 +5795,35 @@ export interface BookingStaffMember extends BookingPerson {
 export interface BookingCurrency extends Entity {
     symbol?: string;
 }
-export interface Compliance extends Entity {
+export interface Compliance {
     ediscovery?: NullableOption<Ediscovery>;
 }
 export interface Ediscovery extends Entity {
     cases?: NullableOption<EdiscoveryCase[]>;
 }
 export interface EdiscoveryCase extends Entity {
-    closedBy?: NullableOption<string>;
+    closedBy?: NullableOption<IdentitySet>;
     closedDateTime?: NullableOption<string>;
     createdDateTime?: NullableOption<string>;
     description?: NullableOption<string>;
     displayName?: NullableOption<string>;
     externalId?: NullableOption<string>;
-    lastModifiedBy?: NullableOption<string>;
+    lastModifiedBy?: NullableOption<IdentitySet>;
     lastModifiedDateTime?: NullableOption<string>;
     status?: NullableOption<CaseStatus>;
     reviewSets?: NullableOption<ReviewSet[]>;
 }
 export interface ReviewSet extends Entity {
-    createdBy?: NullableOption<string>;
+    createdBy?: NullableOption<IdentitySet>;
     createdDateTime?: NullableOption<string>;
     displayName?: NullableOption<string>;
     queries?: NullableOption<ReviewSetQuery[]>;
 }
 export interface ReviewSetQuery extends Entity {
-    createdBy?: NullableOption<string>;
+    createdBy?: NullableOption<IdentitySet>;
     createdDateTime?: NullableOption<string>;
     displayName?: NullableOption<string>;
-    lastModifiedBy?: NullableOption<string>;
+    lastModifiedBy?: NullableOption<IdentitySet>;
     lastModifiedDateTime?: NullableOption<string>;
     query?: NullableOption<string>;
 }
@@ -5785,7 +5846,7 @@ export interface B2xIdentityUserFlow extends IdentityUserFlow {
     identityProviders?: NullableOption<IdentityProvider[]>;
 }
 // tslint:disable-next-line: interface-name
-export interface IdentityContainer extends Entity {
+export interface IdentityContainer {
     conditionalAccess?: NullableOption<ConditionalAccessRoot>;
     b2cUserFlows?: NullableOption<B2cIdentityUserFlow[]>;
     b2xUserFlows?: NullableOption<B2xIdentityUserFlow[]>;
@@ -5811,7 +5872,7 @@ export interface OpenIdConnectProvider extends IdentityProvider {
     responseType?: OpenIdConnectResponseTypes;
     scope?: NullableOption<string>;
 }
-export interface TrustFramework extends Entity {
+export interface TrustFramework {
     keySets?: NullableOption<TrustFrameworkKeySet[]>;
     policies?: NullableOption<TrustFrameworkPolicy[]>;
 }
@@ -6003,14 +6064,14 @@ export interface DelegatedPermissionClassification extends Entity {
     permissionName?: NullableOption<string>;
 }
 export interface Command extends Entity {
-    AppServiceName?: NullableOption<string>;
-    Error?: NullableOption<string>;
-    PackageFamilyName?: NullableOption<string>;
-    Payload?: NullableOption<PayloadRequest>;
-    PermissionTicket?: NullableOption<string>;
-    PostBackUri?: NullableOption<string>;
-    Status?: NullableOption<string>;
-    Type?: NullableOption<string>;
+    appServiceName?: NullableOption<string>;
+    error?: NullableOption<string>;
+    packageFamilyName?: NullableOption<string>;
+    payload?: NullableOption<PayloadRequest>;
+    permissionTicket?: NullableOption<string>;
+    postBackUri?: NullableOption<string>;
+    status?: NullableOption<string>;
+    type?: NullableOption<string>;
     responsepayload?: NullableOption<PayloadResponse>;
 }
 export interface Directory extends Entity {
@@ -6371,8 +6432,13 @@ export interface PermissionGrantConditionSet extends Entity {
     resourceApplication?: NullableOption<string>;
 }
 export interface RbacApplication extends Entity {
+    resourceNamespaces?: NullableOption<UnifiedRbacResourceNamespace[]>;
     roleAssignments?: NullableOption<UnifiedRoleAssignment[]>;
     roleDefinitions?: NullableOption<UnifiedRoleDefinition[]>;
+}
+export interface UnifiedRbacResourceNamespace extends Entity {
+    name?: string;
+    resourceActions?: NullableOption<UnifiedRbacResourceAction[]>;
 }
 export interface UnifiedRoleAssignment extends Entity {
     appScopeId?: NullableOption<string>;
@@ -6397,12 +6463,13 @@ export interface UnifiedRoleDefinition extends Entity {
     version?: NullableOption<string>;
     inheritsPermissionsFrom?: NullableOption<UnifiedRoleDefinition[]>;
 }
-export interface RoleManagement extends Entity {
+export interface RoleManagement {
     directory?: NullableOption<RbacApplication>;
     // The RbacApplication for Device Management
     deviceManagement?: NullableOption<RbacApplicationMultiple>;
 }
 export interface RbacApplicationMultiple extends Entity {
+    resourceNamespaces?: NullableOption<UnifiedRbacResourceNamespace[]>;
     roleAssignments?: NullableOption<UnifiedRoleAssignmentMultiple[]>;
     roleDefinitions?: NullableOption<UnifiedRoleDefinition[]>;
 }
@@ -6730,6 +6797,18 @@ export interface UnifiedRoleAssignmentMultiple extends Entity {
     principals?: NullableOption<DirectoryObject[]>;
     roleDefinition?: NullableOption<UnifiedRoleDefinition>;
 }
+export interface UnifiedRbacResourceAction extends Entity {
+    actionVerb?: NullableOption<string>;
+    description?: NullableOption<string>;
+    name?: string;
+    resourceScopeId?: NullableOption<string>;
+    resourceScope?: NullableOption<UnifiedRbacResourceScope>;
+}
+export interface UnifiedRbacResourceScope extends Entity {
+    displayName?: NullableOption<string>;
+    scope?: string;
+    type?: NullableOption<string>;
+}
 export interface ExactMatchJobBase extends Entity {
     completionDateTime?: NullableOption<string>;
     creationDateTime?: NullableOption<string>;
@@ -6980,6 +7059,15 @@ export interface Subscription extends Entity {
     includeProperties?: NullableOption<boolean>;
     // When set to true, change notifications include resource data (such as content of a chat message). Optional.
     includeResourceData?: NullableOption<boolean>;
+    /**
+     * Specifies the latest version of Transport Layer Security (TLS) that the notification endpoint, specified by
+     * notificationUrl, supports. The possible values are: v1_0, v1_1, v1_2, v1_3. For subscribers whose notification endpoint
+     * supports a version lower than the currently recommended version (TLS 1.2), specifying this property by a set timeline
+     * allows them to temporarily use their deprecated version of TLS before completing their upgrade to TLS 1.2. For these
+     * subscribers, not setting this property per the timeline would result in subscription operations failing. For
+     * subscribers whose notification endpoint already supports TLS 1.2, setting this property is optional. In such cases,
+     * Microsoft Graph defaults the property to v1_2.
+     */
     latestSupportedTlsVersion?: NullableOption<string>;
     lifecycleNotificationUrl?: NullableOption<string>;
     /**
@@ -8233,13 +8321,17 @@ export interface AccessReviewScheduleDefinition extends Entity {
 export interface AccessReviewSet extends Entity {
     definitions?: NullableOption<AccessReviewScheduleDefinition[]>;
 }
+export interface AppConsentApprovalRoute extends Entity {
+    appConsentRequests?: NullableOption<AppConsentRequest[]>;
+}
 export interface Request extends Entity {
     approval?: NullableOption<Approval>;
 }
 export interface UserConsentRequest extends Request {
-    createdBy?: NullableOption<UserIdentity>;
+    createdBy?: NullableOption<IdentitySet>;
     createdDateTime?: NullableOption<string>;
     reason?: NullableOption<string>;
+    status?: string;
 }
 export interface ApprovalStep extends Entity {
     displayName?: NullableOption<string>;
@@ -8274,8 +8366,9 @@ export interface BusinessFlowTemplate extends Entity {
     displayName?: NullableOption<string>;
 }
 // tslint:disable-next-line: interface-name
-export interface IdentityGovernance extends Entity {
+export interface IdentityGovernance {
     accessReviews?: NullableOption<AccessReviewSet>;
+    appConsent?: NullableOption<AppConsentApprovalRoute>;
     termsOfUse?: NullableOption<TermsOfUseContainer>;
     entitlementManagement?: NullableOption<EntitlementManagement>;
 }
@@ -8358,7 +8451,7 @@ export interface CountryNamedLocation extends NamedLocation {
     includeUnknownCountriesAndRegions?: boolean;
 }
 // tslint:disable-next-line: interface-name
-export interface IdentityProtectionRoot extends Entity {
+export interface IdentityProtectionRoot {
     riskDetections?: NullableOption<RiskDetection[]>;
     riskyUsers?: NullableOption<RiskyUser[]>;
 }
@@ -13182,7 +13275,7 @@ export interface OfficeClientConfiguration extends Entity {
 export interface OfficeClientConfigurationAssignment extends Entity {
     target?: NullableOption<OfficeConfigurationAssignmentTarget>;
 }
-export interface OfficeConfiguration extends Entity {
+export interface OfficeConfiguration {
     tenantCheckinStatuses?: NullableOption<OfficeClientCheckinStatus[]>;
     tenantUserCheckinSummary?: NullableOption<OfficeUserCheckinSummary>;
     clientConfigurations?: NullableOption<OfficeClientConfiguration[]>;
@@ -20897,7 +20990,7 @@ export interface Vendor extends Entity {
     paymentTerm?: NullableOption<PaymentTerm>;
     picture?: NullableOption<Picture[]>;
 }
-export interface Financials extends Entity {
+export interface Financials {
     companies?: NullableOption<Company[]>;
 }
 export interface EmailActivitySummary extends Entity {
@@ -22308,7 +22401,7 @@ export interface DocumentCommentReply extends Entity {
 export interface Presentation extends Entity {
     comments?: NullableOption<DocumentComment[]>;
 }
-export interface Print extends Entity {
+export interface Print {
     settings?: NullableOption<PrintSettings>;
     connectors?: NullableOption<PrintConnector[]>;
     operations?: NullableOption<PrintOperation[]>;
@@ -22322,6 +22415,7 @@ export interface Print extends Entity {
 export interface PrintConnector extends Entity {
     appVersion?: NullableOption<string>;
     deviceHealth?: NullableOption<DeviceHealth>;
+    displayName?: NullableOption<string>;
     fullyQualifiedDomainName?: NullableOption<string>;
     location?: NullableOption<PrinterLocation>;
     name?: NullableOption<string>;
@@ -22335,6 +22429,7 @@ export interface PrintOperation extends Entity {
 export interface PrinterBase extends Entity {
     capabilities?: NullableOption<PrinterCapabilities>;
     defaults?: NullableOption<PrinterDefaults>;
+    displayName?: NullableOption<string>;
     isAcceptingJobs?: NullableOption<boolean>;
     location?: NullableOption<PrinterLocation>;
     manufacturer?: NullableOption<string>;
@@ -22351,6 +22446,7 @@ export interface Printer extends PrinterBase {
     allowedUsers?: NullableOption<PrintUserIdentity[]>;
     connectors?: NullableOption<PrintConnector[]>;
     share?: NullableOption<PrinterShare>;
+    shares?: NullableOption<PrinterShare[]>;
     taskTriggers?: NullableOption<PrintTaskTrigger[]>;
 }
 export interface PrinterShare extends PrinterBase {
@@ -22370,8 +22466,8 @@ export interface PrintTaskDefinition extends Entity {
 }
 export interface PrintDocument extends Entity {
     configuration?: PrinterDocumentConfiguration;
-    contentType?: string;
-    displayName?: string;
+    contentType?: NullableOption<string>;
+    displayName?: NullableOption<string>;
     size?: number;
 }
 export interface PrintIdentity extends Entity {
@@ -22387,8 +22483,12 @@ export interface PrintTaskTrigger extends Entity {
     definition?: PrintTaskDefinition;
 }
 export interface PrintJob extends Entity {
+    configuration?: NullableOption<PrintJobConfiguration>;
     createdBy?: NullableOption<UserIdentity>;
     createdDateTime?: string;
+    isFetchable?: NullableOption<boolean>;
+    redirectedFrom?: NullableOption<string>;
+    redirectedTo?: NullableOption<string>;
     status?: NullableOption<PrintJobStatus>;
     documents?: NullableOption<PrintDocument[]>;
     tasks?: NullableOption<PrintTask[]>;
@@ -22856,7 +22956,7 @@ export interface Participant extends Entity {
 }
 // tslint:disable-next-line: no-empty-interface
 export interface CancelMediaProcessingOperation extends CommsOperation {}
-export interface CommsApplication extends Entity {
+export interface CommsApplication {
     calls?: NullableOption<Call[]>;
     onlineMeetings?: NullableOption<OnlineMeeting[]>;
 }
@@ -22922,7 +23022,7 @@ export interface ConnectionOperation extends Entity {
     error?: NullableOption<ErrorDetail>;
     status?: NullableOption<ConnectionOperationStatus>;
 }
-export interface External extends Entity {
+export interface External {
     connections?: NullableOption<ExternalConnection[]>;
 }
 export interface ExternalConnection extends Entity {
@@ -22966,7 +23066,7 @@ export interface AadUserConversationMember extends ConversationMember {
     userId?: NullableOption<string>;
     user?: NullableOption<User>;
 }
-export interface AppCatalogs extends Entity {
+export interface AppCatalogs {
     teamsApps?: NullableOption<TeamsApp[]>;
 }
 export interface TeamsApp extends Entity {
@@ -22980,6 +23080,7 @@ export interface TeamsApp extends Entity {
     appDefinitions?: NullableOption<TeamsAppDefinition[]>;
 }
 export interface Channel extends Entity {
+    // Read only. Timestamp at which the channel was created.
     createdDateTime?: NullableOption<string>;
     // Optional textual description for the channel.
     description?: NullableOption<string>;
@@ -22987,13 +23088,17 @@ export interface Channel extends Entity {
     displayName?: string;
     // The email address for sending messages to the channel. Read-only.
     email?: NullableOption<string>;
+    /**
+     * Indicates whether the channel should automatically be marked 'favorite' for all members of the team. Can only be set
+     * programmatically with Create team. Default: false.
+     */
     isFavoriteByDefault?: NullableOption<boolean>;
     membershipType?: NullableOption<ChannelMembershipType>;
     moderationSettings?: NullableOption<ChannelModerationSettings>;
     /**
-     * A hyperlink that will navigate to the channel in Microsoft Teams. This is the URL that you get when you right-click a
-     * channel in Microsoft Teams and select Get link to channel. This URL should be treated as an opaque blob, and not
-     * parsed. Read-only.
+     * A hyperlink that will go to the channel in Microsoft Teams. This is the URL that you get when you right-click a channel
+     * in Microsoft Teams and select Get link to channel. This URL should be treated as an opaque blob, and not parsed.
+     * Read-only.
      */
     webUrl?: NullableOption<string>;
     // Metadata for the location where the channel's files are stored.
@@ -23040,6 +23145,7 @@ export interface ChatMessage extends Entity {
     mentions?: NullableOption<ChatMessageMention[]>;
     // The type of chat message. The possible values are: message.
     messageType?: ChatMessageType;
+    // Defines the properties of a policy violation set by a data loss prevention (DLP) application.
     policyViolation?: NullableOption<ChatMessagePolicyViolation>;
     reactions?: NullableOption<ChatMessageReaction[]>;
     /**
@@ -23946,8 +24052,9 @@ export interface PreAuthorizedApplication {
 export interface AppRole {
     /**
      * Specifies whether this app role can be assigned to users and groups (by setting to ['User']), to other application's
-     * (by setting to ['Application'], or both (by setting to ['User', 'Application']). App roles supporting assignment of
-     * other applications' service principals are also known as application permissions.
+     * (by setting to ['Application'], or both (by setting to ['User', 'Application']). App roles supporting assignment to
+     * other applications' service principals are also known as application permissions. The 'Application' value is only
+     * supported for app roles defined on application entities.
      */
     allowedMemberTypes?: string[];
     /**
@@ -24162,12 +24269,12 @@ export interface OnPremisesPublishing {
     verifiedCustomDomainPasswordCredential?: NullableOption<PasswordCredential>;
 }
 export interface OnPremisesPublishingSingleSignOn {
-    KerberosSignOnSettings?: NullableOption<KerberosSignOnSettings>;
-    SingleSignOnMode?: NullableOption<SingleSignOnMode>;
+    kerberosSignOnSettings?: NullableOption<KerberosSignOnSettings>;
+    singleSignOnMode?: NullableOption<SingleSignOnMode>;
 }
 export interface KerberosSignOnSettings {
-    KerberosServicePrincipalName?: NullableOption<string>;
-    KerberosSignOnMappingAttributeType?: NullableOption<KerberosSignOnMappingAttributeType>;
+    kerberosServicePrincipalName?: NullableOption<string>;
+    kerberosSignOnMappingAttributeType?: NullableOption<KerberosSignOnMappingAttributeType>;
 }
 export interface VerifiedCustomDomainCertificatesMetadata {
     expiryDate?: NullableOption<string>;
@@ -24286,6 +24393,15 @@ export interface TimeSlot {
     // The date, time, and time zone that a period ends.
     start?: DateTimeTimeZone;
 }
+// tslint:disable-next-line: interface-name
+export interface IdentitySet {
+    // Optional. The application associated with this action.
+    application?: NullableOption<Identity>;
+    // Optional. The device associated with this action.
+    device?: NullableOption<Identity>;
+    // Optional. The user associated with this action.
+    user?: NullableOption<Identity>;
+}
 export interface ClaimsMapping {
     displayName?: NullableOption<string>;
     email?: NullableOption<string>;
@@ -24354,6 +24470,10 @@ export interface ClassificationInnerError {
     code?: NullableOption<string>;
     errorDateTime?: NullableOption<string>;
 }
+export interface ClassificationAttribute {
+    confidence?: NullableOption<number>;
+    count?: NullableOption<number>;
+}
 export interface ClassificationError extends ClassifcationErrorBase {
     details?: NullableOption<ClassifcationErrorBase[]>;
 }
@@ -24373,11 +24493,17 @@ export interface DetectedSensitiveContentBase {
     confidence?: NullableOption<number>;
     displayName?: NullableOption<string>;
     id?: NullableOption<string>;
-    matches?: NullableOption<SensitiveContentLocation[]>;
     recommendedConfidence?: NullableOption<number>;
     uniqueCount?: NullableOption<number>;
 }
-export interface SensitiveContentLocation {
+export interface DetectedSensitiveContent extends DetectedSensitiveContentBase {
+    classificationAttributes?: NullableOption<ClassificationAttribute[]>;
+    classificationMethod?: NullableOption<ClassificationMethod>;
+    matches?: NullableOption<SensitiveContentLocation[]>;
+    scope?: NullableOption<SensitiveTypeScope>;
+    sensitiveTypeSource?: NullableOption<SensitiveTypeSource>;
+}
+export interface SensitiveContentLocationBase {
     evidences?: NullableOption<SensitiveContentEvidence[]>;
     idMatch?: NullableOption<string>;
     length?: NullableOption<number>;
@@ -24388,8 +24514,8 @@ export interface SensitiveContentEvidence {
     match?: NullableOption<string>;
     offset?: NullableOption<number>;
 }
-export interface DetectedSensitiveContent extends DetectedSensitiveContentBase {
-    scope?: NullableOption<SensitiveTypeScope>;
+export interface SensitiveContentLocation extends SensitiveContentLocationBase {
+    confidence?: NullableOption<number>;
 }
 export interface DetectedSensitiveContentWrapper {
     classification?: NullableOption<DetectedSensitiveContent[]>;
@@ -24400,6 +24526,7 @@ export interface DeviceRestrictionAction extends DlpActionInfo {
     triggers?: NullableOption<RestrictionTrigger[]>;
 }
 export interface DiscoveredSensitiveType {
+    classificationAttributes?: NullableOption<ClassificationAttribute[]>;
     confidence?: NullableOption<number>;
     count?: NullableOption<number>;
     id?: string;
@@ -24709,15 +24836,6 @@ export interface EducationAssignmentGrade {
     gradedBy?: NullableOption<IdentitySet>;
     gradedDateTime?: NullableOption<string>;
 }
-// tslint:disable-next-line: interface-name
-export interface IdentitySet {
-    // Optional. The application associated with this action.
-    application?: NullableOption<Identity>;
-    // Optional. The device associated with this action.
-    device?: NullableOption<Identity>;
-    // Optional. The user associated with this action.
-    user?: NullableOption<Identity>;
-}
 // tslint:disable-next-line: no-empty-interface
 export interface EducationAssignmentGradeType {}
 // tslint:disable-next-line: no-empty-interface
@@ -24969,8 +25087,11 @@ export interface ExactMatchClassificationResult {
     classification?: NullableOption<ExactMatchDetectedSensitiveContent[]>;
     errors?: NullableOption<ClassificationError[]>;
 }
+export interface ExactMatchDetectedSensitiveContent extends DetectedSensitiveContentBase {
+    matches?: NullableOption<ExactMatchSensitiveContentLocation[]>;
+}
 // tslint:disable-next-line: no-empty-interface
-export interface ExactMatchDetectedSensitiveContent extends DetectedSensitiveContentBase {}
+export interface ExactMatchSensitiveContentLocation extends SensitiveContentLocationBase {}
 export interface WorkbookFilterCriteria {
     color?: NullableOption<string>;
     criterion1?: NullableOption<string>;
@@ -29415,8 +29536,7 @@ export interface WindowsFirewallRule {
      * List of tokens specifying the remote addresses covered by the rule. Tokens are case insensitive. Default is any
      * address. Valid tokens include:&amp;lt;ul&amp;gt;&amp;lt;li&amp;gt;"*" indicates any remote address. If present, this
      * must be the only token
-     * included.&amp;lt;/li&amp;gt;&amp;lt;li&amp;gt;"Defaultgateway"&amp;lt;/li&amp;gt;&amp;lt;li&amp;gt;
-     * "DHCP"&amp;lt;/li&amp;gt;&amp;lt;li&amp;gt;"DNS"&amp;lt;/li&amp;gt;&amp;lt;li&amp;gt;"WINS"&amp;lt;/li&amp;gt;&amp;lt;li&amp;gt;"Intranet"
+     * included.&amp;lt;/li&amp;gt;&amp;lt;li&amp;gt;"Defaultgateway"&amp;lt;/li&amp;gt;&amp;lt;li&amp;gt;"DHCP"&amp;lt;/li&amp;gt;&amp;lt;li&amp;gt;"DNS"&amp;lt;/li&amp;gt;&amp;lt;li&amp;gt;"WINS"&amp;lt;/li&amp;gt;&amp;lt;li&amp;gt;"Intranet"
      * (supported on Windows versions 1809+)&amp;lt;/li&amp;gt;&amp;lt;li&amp;gt;"RmtIntranet" (supported on Windows versions
      * 1809+)&amp;lt;/li&amp;gt;&amp;lt;li&amp;gt;"Internet" (supported on Windows versions
      * 1809+)&amp;lt;/li&amp;gt;&amp;lt;li&amp;gt;"Ply2Renders" (supported on Windows versions
@@ -31027,6 +31147,11 @@ export interface PrintCertificateSigningRequest {
     content?: string;
     transportKey?: string;
 }
+export interface PrintDocumentUploadProperties {
+    contentType?: string;
+    documentName?: string;
+    size?: number;
+}
 export interface PrinterCapabilities {
     bottomMargins?: NullableOption<number[]>;
     collation?: NullableOption<boolean>;
@@ -31036,6 +31161,7 @@ export interface PrinterCapabilities {
     dpis?: NullableOption<number[]>;
     duplexModes?: NullableOption<PrintDuplexMode[]>;
     feedDirections?: NullableOption<PrinterFeedDirection[]>;
+    feedOrientations?: NullableOption<PrinterFeedOrientation[]>;
     finishings?: NullableOption<PrintFinishing[]>;
     inputBins?: NullableOption<string[]>;
     isColorPrintingSupported?: NullableOption<boolean>;
@@ -31098,6 +31224,7 @@ export interface PrinterDocumentConfiguration {
     dpi?: NullableOption<number>;
     duplexMode?: NullableOption<PrintDuplexMode>;
     feedDirection?: NullableOption<PrinterFeedDirection>;
+    feedOrientation?: NullableOption<PrinterFeedOrientation>;
     finishings?: NullableOption<PrintFinishing[]>;
     fitPdfToPage?: NullableOption<boolean>;
     inputBin?: NullableOption<string>;
@@ -31138,14 +31265,42 @@ export interface PrinterLocation {
     subunit?: NullableOption<string[]>;
 }
 export interface PrinterStatus {
+    description?: NullableOption<string>;
+    details?: PrinterProcessingStateDetail[];
     processingState?: PrinterProcessingState;
     processingStateDescription?: NullableOption<string>;
     processingStateReasons?: PrinterProcessingStateReason[];
+    state?: PrinterProcessingState;
+}
+export interface PrintJobConfiguration {
+    collate?: NullableOption<boolean>;
+    colorMode?: NullableOption<PrintColorMode>;
+    copies?: NullableOption<number>;
+    dpi?: NullableOption<number>;
+    duplexMode?: NullableOption<PrintDuplexMode>;
+    feedOrientation?: NullableOption<PrinterFeedOrientation>;
+    finishings?: NullableOption<PrintFinishing[]>;
+    fitPdfToPage?: NullableOption<boolean>;
+    inputBin?: NullableOption<string>;
+    margin?: NullableOption<PrintMargin>;
+    mediaSize?: NullableOption<string>;
+    mediaType?: NullableOption<string>;
+    multipageLayout?: NullableOption<PrintMultipageLayout>;
+    orientation?: NullableOption<PrintOrientation>;
+    outputBin?: NullableOption<string>;
+    pageRanges?: NullableOption<IntegerRange[]>;
+    pagesPerSheet?: NullableOption<number>;
+    quality?: NullableOption<PrintQuality>;
+    scaling?: NullableOption<PrintScaling>;
 }
 export interface PrintJobStatus {
     acquiredByPrinter?: boolean;
+    description?: NullableOption<string>;
+    details?: NullableOption<PrintJobStateDetail[]>;
+    isAcquiredByPrinter?: boolean;
     processingState?: PrintJobProcessingState;
     processingStateDescription?: NullableOption<string>;
+    state?: PrintJobProcessingState;
 }
 export interface PrintOperationStatus {
     description?: string;
@@ -31971,11 +32126,6 @@ export interface AadUserConversationMemberResult extends ActionResultPart {
     userId?: NullableOption<string>;
 }
 // tslint:disable-next-line: no-empty-interface
-export interface TeamworkNotificationAudience {}
-export interface AadUserNotificationAudience extends TeamworkNotificationAudience {
-    userId?: string;
-}
-// tslint:disable-next-line: no-empty-interface
 export interface TeamworkNotificationRecipient {}
 export interface AadUserNotificationRecipient extends TeamworkNotificationRecipient {
     userId?: string;
@@ -32046,15 +32196,47 @@ export interface ChatMessageMention {
     mentionText?: NullableOption<string>;
 }
 export interface ChatMessagePolicyViolation {
+    /**
+     * The action taken by the DLP provider on the message with sensitive content. Supported values are: NoneNotifySender --
+     * Inform the sender of the violation but allow readers to read the message.BlockAccess -- Block readers from reading the
+     * message.BlockAccessExternal -- Block users outside the organization from reading the message, while allowing users
+     * within the organization to read the message.
+     */
     dlpAction?: NullableOption<ChatMessagePolicyViolationDlpActionTypes>;
+    // Justification text provided by the sender of the message when overriding a policy violation.
     justificationText?: NullableOption<string>;
+    // Information to display to the message sender about why the message was flagged as a violation.
     policyTip?: NullableOption<ChatMessagePolicyViolationPolicyTip>;
+    /**
+     * Indicates the action taken by the user on a message blocked by the DLP provider. Supported values are:
+     * NoneOverrideReportFalsePositiveWhen the DLP provider is updating the message for blocking sensitive content, userAction
+     * is not required.
+     */
     userAction?: NullableOption<ChatMessagePolicyViolationUserActionTypes>;
+    /**
+     * Indicates what actions the sender may take in response to the policy violation. Supported values are:
+     * NoneAllowFalsePositiveOverride -- Allows the sender to declare the policyViolation to be an error in the DLP app and
+     * its rules, and allow readers to see the message again if the dlpAction had hidden it.AllowOverrideWithoutJustification
+     * -- Allows the sender to overriide the DLP violation and allow readers to see the message again if the dlpAction had
+     * hidden it, without needing to provide an explanation for doing so. AllowOverrideWithJustification -- Allows the sender
+     * to overriide the DLP violation and allow readers to see the message again if the dlpAction had hidden it, after
+     * providing an explanation for doing so.AllowOverrideWithoutJustification and AllowOverrideWithJustification are mutually
+     * exclusive.
+     */
     verdictDetails?: NullableOption<ChatMessagePolicyViolationVerdictDetailsTypes>;
 }
 export interface ChatMessagePolicyViolationPolicyTip {
+    /**
+     * The URL a user can visit to read about the data loss prevention policies for the organization. (ie, policies about what
+     * users shouldn't say in chats)
+     */
     complianceUrl?: NullableOption<string>;
+    // Explanatory text shown to the sender of the message.
     generalText?: NullableOption<string>;
+    /**
+     * The list of improper data in the message that was detected by the data loss prevention app. Each DLP app defines its
+     * own conditions, examples include 'Credit Card Number' and 'Social Security Number'.
+     */
     matchedConditionDescriptions?: NullableOption<string[]>;
 }
 export interface ChatMessageReaction {
@@ -32261,7 +32443,7 @@ export namespace TermStore {
         relations?: NullableOption<Relation[]>;
         set?: NullableOption<Set>;
     }
-    interface Store extends microsoftgraphbeta.Entity {
+    interface Store {
         defaultLanguageTag?: string;
         languageTags?: string[];
         groups?: NullableOption<Group[]>;
