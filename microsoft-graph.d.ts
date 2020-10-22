@@ -3202,10 +3202,19 @@ export interface User extends DirectoryObject {
      * Supports $filter and $orderby.
      */
     displayName?: NullableOption<string>;
+    /**
+     * The date and time when the user was hired or will start work in case of a future hire. Returned only on $select.
+     * Supports $filter.
+     */
     employeeHireDate?: NullableOption<string>;
-    // The employee identifier assigned to the user by the organization. Supports $filter.
+    // The employee identifier assigned to the user by the organization. Returned only on $select. Supports $filter.
     employeeId?: NullableOption<string>;
+    // Represents organization data (e.g. division and costCenter) associated with a user. Returned only on $select.
     employeeOrgData?: NullableOption<EmployeeOrgData>;
+    /**
+     * Captures enterprise worker type: Employee, Contractor, Consultant, Vendor, etc. Returned only on $select. Supports
+     * $filter.
+     */
     employeeType?: NullableOption<string>;
     /**
      * For an external user invited to the tenant using the invitation API, this property represents the invited user's
@@ -3231,7 +3240,7 @@ export interface User extends DirectoryObject {
     infoCatalogs?: string[];
     // Do not use – reserved for future use.
     isResourceAccount?: NullableOption<boolean>;
-    // The user’s job title. Supports $filter.
+    // The user's job title. Supports $filter.
     jobTitle?: NullableOption<string>;
     /**
      * The time when this Azure AD user last changed their password. The date and time information uses ISO 8601 format and is
@@ -3276,7 +3285,7 @@ export interface User extends DirectoryObject {
     /**
      * This property is used to associate an on-premises Active Directory user account to their Azure AD user object. This
      * property must be specified when creating a new user account in the Graph if you are using a federated domain for the
-     * user’s userPrincipalName (UPN) property. Important: The $ and _ characters cannot be used when specifying this
+     * user's userPrincipalName (UPN) property. Important: The $ and _ characters cannot be used when specifying this
      * property. Supports $filter.
      */
     onPremisesImmutableId?: NullableOption<string>;
@@ -3323,7 +3332,7 @@ export interface User extends DirectoryObject {
      */
     passwordPolicies?: NullableOption<string>;
     /**
-     * Specifies the password profile for the user. The profile contains the user’s password. This property is required when a
+     * Specifies the password profile for the user. The profile contains the user's password. This property is required when a
      * user is created. The password in the profile must satisfy minimum requirements as specified by the passwordPolicies
      * property. By default, a strong password is required.
      */
@@ -3377,7 +3386,7 @@ export interface User extends DirectoryObject {
     /**
      * The user principal name (UPN) of the user. The UPN is an Internet-style login name for the user based on the Internet
      * standard RFC 822. By convention, this should map to the user's email name. The general format is alias@domain, where
-     * domain must be present in the tenant’s collection of verified domains. This property is required when a user is
+     * domain must be present in the tenant's collection of verified domains. This property is required when a user is
      * created. The verified domains for the tenant can be accessed from the verifiedDomains property of organization.
      * Supports $filter and $orderby.
      */
@@ -3403,7 +3412,9 @@ export interface User extends DirectoryObject {
     birthday?: string;
     /**
      * The hire date of the user. The Timestamp type represents date and time information using ISO 8601 format and is always
-     * in UTC time. For example, midnight UTC on Jan 1, 2014 would look like this: '2014-01-01T00:00:00Z'
+     * in UTC time. For example, midnight UTC on Jan 1, 2014 would look like this: '2014-01-01T00:00:00Z'. Returned only on
+     * $select. Note: This property is specific to SharePoint Online. We recommend using the native employeeHireDate property
+     * to set and update hire date values using Microsoft Graph APIs.
      */
     hireDate?: string;
     // A list for the user to describe their interests.
@@ -3432,7 +3443,7 @@ export interface User extends DirectoryObject {
     directReports?: NullableOption<DirectoryObject[]>;
     // A collection of this user's license details. Read-only.
     licenseDetails?: NullableOption<LicenseDetails[]>;
-    // The user or contact that is this user’s manager. Read-only. (HTTP Methods: GET, PUT, DELETE.)
+    // The user or contact that is this user's manager. Read-only. (HTTP Methods: GET, PUT, DELETE.)
     manager?: NullableOption<DirectoryObject>;
     // The groups and directory roles that the user is a member of. Read-only. Nullable.
     memberOf?: NullableOption<DirectoryObject[]>;
@@ -3972,11 +3983,6 @@ export interface Group extends DirectoryObject {
     mail?: NullableOption<string>;
     // Specifies whether the group is mail-enabled. Returned by default.
     mailEnabled?: NullableOption<boolean>;
-    /**
-     * The mail alias for the group, unique in the organization. This property must be specified when a group is created.
-     * These characters cannot be used in the mailNickName: @()/[]';:.&amp;lt;&amp;gt;,SPACE. Returned by default. Supports
-     * $filter.
-     */
     mailNickname?: NullableOption<string>;
     mdmAppId?: NullableOption<string>;
     /**
@@ -3990,25 +3996,9 @@ export interface Group extends DirectoryObject {
      * default.
      */
     membershipRuleProcessingState?: NullableOption<string>;
-    /**
-     * Contains the on-premises domain FQDN, also called dnsDomainName synchronized from the on-premises directory. The
-     * property is only populated for customers who are synchronizing their on-premises directory to Azure Active Directory
-     * via Azure AD Connect.Returned by default. Read-only.
-     */
     onPremisesDomainName?: NullableOption<string>;
-    /**
-     * Indicates the last time at which the group was synced with the on-premises directory.The Timestamp type represents date
-     * and time information using ISO 8601 format and is always in UTC time. For example, midnight UTC on Jan 1, 2014 would
-     * look like this: '2014-01-01T00:00:00Z'. Returned by default. Read-only. Supports $filter.
-     */
     onPremisesLastSyncDateTime?: NullableOption<string>;
-    /**
-     * Contains the on-premises netBios name synchronized from the on-premises directory. The property is only populated for
-     * customers who are synchronizing their on-premises directory to Azure Active Directory via Azure AD Connect.Returned by
-     * default. Read-only.
-     */
     onPremisesNetBiosName?: NullableOption<string>;
-    // Errors when using Microsoft synchronization product during provisioning. Returned by default.
     onPremisesProvisioningErrors?: NullableOption<OnPremisesProvisioningError[]>;
     /**
      * Contains the on-premises SAM account name synchronized from the on-premises directory. The property is only populated
@@ -6006,9 +5996,9 @@ export interface AdministrativeUnit extends DirectoryObject {
     // Display name for the administrative unit.
     displayName?: NullableOption<string>;
     /**
-     * Controls whether the adminstrative unit and its members are hidden or public. Can be set to HiddenMembership or Public.
-     * If not set, default behavior is Public. When set to HiddenMembership, only members of the administrative unit can list
-     * other members of the adminstrative unit.
+     * Controls whether the administrative unit and its members are hidden or public. Can be set to HiddenMembership or
+     * Public. If not set, default behavior is Public. When set to HiddenMembership, only members of the administrative unit
+     * can list other members of the adminstrative unit.
      */
     visibility?: NullableOption<string>;
     /**
@@ -23729,7 +23719,9 @@ export interface DeviceKey {
     keyType?: NullableOption<string>;
 }
 export interface EmployeeOrgData {
+    // The cost center associated with the user. Returned only on $select. Supports $filter.
     costCenter?: NullableOption<string>;
+    // The name of the division in which the user works. Returned only on $select. Supports $filter.
     division?: NullableOption<string>;
 }
 export interface ObjectIdentity {
@@ -29536,8 +29528,7 @@ export interface WindowsFirewallRule {
      * List of tokens specifying the remote addresses covered by the rule. Tokens are case insensitive. Default is any
      * address. Valid tokens include:&amp;lt;ul&amp;gt;&amp;lt;li&amp;gt;"*" indicates any remote address. If present, this
      * must be the only token
-     * included.&amp;lt;/li&amp;gt;&amp;lt;li&amp;gt;"Defaultgateway"&amp;lt;/li&amp;gt;&amp;lt;li&amp;gt;"DHCP"&amp;lt;
-     * /li&amp;gt;&amp;lt;li&amp;gt;"DNS"&amp;lt;/li&amp;gt;&amp;lt;li&amp;gt;"WINS"&amp;lt;/li&amp;gt;&amp;lt;li&amp;gt;"Intranet"
+     * included.&amp;lt;/li&amp;gt;&amp;lt;li&amp;gt;"Defaultgateway"&amp;lt;/li&amp;gt;&amp;lt;li&amp;gt;"DHCP"&amp;lt;/li&amp;gt;&amp;lt;li&amp;gt;"DNS"&amp;lt;/li&amp;gt;&amp;lt;li&amp;gt;"WINS"&amp;lt;/li&amp;gt;&amp;lt;li&amp;gt;"Intranet"
      * (supported on Windows versions 1809+)&amp;lt;/li&amp;gt;&amp;lt;li&amp;gt;"RmtIntranet" (supported on Windows versions
      * 1809+)&amp;lt;/li&amp;gt;&amp;lt;li&amp;gt;"Internet" (supported on Windows versions
      * 1809+)&amp;lt;/li&amp;gt;&amp;lt;li&amp;gt;"Ply2Renders" (supported on Windows versions
