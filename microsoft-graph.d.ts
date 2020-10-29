@@ -164,7 +164,25 @@ export type LocationType =
     | "postalAddress";
 export type LocationUniqueIdType = "unknown" | "locationStore" | "directory" | "private" | "bing";
 export type PhysicalAddressType = "unknown" | "home" | "business" | "other";
+export type CaseAction = "contentExport" | "tag" | "convertToPdf" | "index" | "search" | "addDataToReviewSet";
+export type CaseOperationStatus =
+    | "notStarted"
+    | "submissionFailed"
+    | "running"
+    | "succeeded"
+    | "partiallySucceeded"
+    | "failed";
 export type CaseStatus = "unknown" | "active" | "pendingDelete" | "closing" | "closed" | "closedWithError";
+export type CustodianStatus = "active" | "released";
+export type SourceType = "mailbox" | "site";
+export type IdentityUserFlowAttributeDataType =
+    | "string"
+    | "boolean"
+    | "int64"
+    | "stringCollection"
+    | "dateTime"
+    | "unknownFutureValue";
+export type IdentityUserFlowAttributeType = "builtIn" | "custom" | "required" | "unknownFutureValue";
 export type OpenIdConnectResponseMode = "form_post" | "query" | "unknownFutureValue";
 export type OpenIdConnectResponseTypes = "code" | "id_token" | "token";
 export type UserFlowType =
@@ -183,6 +201,7 @@ export type Component = "Label";
 export type DlpAction = "notifyUser" | "blockAccess" | "deviceRestriction";
 export type EncryptWith = "template" | "userDefinedRights";
 export type GroupPrivacy = "unspecified" | "public" | "private" | "unknownFutureValue";
+export type MlClassificationMatchTolerance = "exact" | "near";
 export type OverrideOption =
     | "notAllowed"
     | "allowFalsePositiveOverride"
@@ -537,6 +556,7 @@ export type AndroidDeviceOwnerEnrollmentMode =
     | "corporateOwnedDedicatedDevice"
     | "corporateOwnedFullyManaged"
     | "corporateOwnedWorkProfile";
+export type AndroidDeviceOwnerEnrollmentTokenType = "default" | "corporateOwnedDedicatedDeviceWithAzureADSharedMode";
 export type AndroidForWorkAppConfigurationSchemaItemDataType =
     | "bool"
     | "integer"
@@ -855,7 +875,8 @@ export type AndroidVpnConnectionType =
     | "dellSonicWallMobileConnect"
     | "checkPointCapsuleVpn"
     | "citrix"
-    | "microsoftTunnel";
+    | "microsoftTunnel"
+    | "netMotionMobility";
 export type AndroidWiFiSecurityType = "open" | "wpaEnterprise" | "wpa2Enterprise";
 export type AndroidWorkProfileCrossProfileDataSharingType =
     | "deviceDefault"
@@ -1325,7 +1346,26 @@ export type MacOSGatekeeperAppSources =
     | "macAppStoreAndIdentifiedDevelopers"
     | "anywhere";
 export type MacOSProcessIdentifierType = "bundleID" | "path";
+export type MacOSSoftwareUpdateBehavior = "notConfigured" | "default";
+export type MacOSSoftwareUpdateCategory = "critical" | "configurationDataFile" | "firmware" | "other";
 export type MacOSSoftwareUpdateDelayPolicy = "none" | "delayOSUpdateVisibility" | "delayAppUpdateVisibility";
+export type MacOSSoftwareUpdateScheduleType = "alwaysUpdate" | "updateDuringTimeWindows" | "updateOutsideOfTimeWindows";
+export type MacOSSoftwareUpdateState =
+    | "success"
+    | "downloading"
+    | "downloaded"
+    | "installing"
+    | "idle"
+    | "available"
+    | "scheduled"
+    | "downloadFailed"
+    | "downloadInsufficientSpace"
+    | "downloadInsufficientPower"
+    | "downloadInsufficientNetwork"
+    | "installInsufficientSpace"
+    | "installInsufficientPower"
+    | "installFailed"
+    | "commandFailed";
 export type MacOSSystemExtensionType =
     | "driverExtensionsAllowed"
     | "networkExtensionsAllowed"
@@ -1571,7 +1611,8 @@ export type SubjectAlternativeNameType =
     | "emailAddress"
     | "userPrincipalName"
     | "customAzureADAttribute"
-    | "domainNameService";
+    | "domainNameService"
+    | "universalResourceIdentifier";
 export type SubjectNameFormat =
     | "commonName"
     | "commonNameIncludingEmail"
@@ -1866,6 +1907,7 @@ export type ConfigurationManagerClientState =
     | "installFailed"
     | "updateFailed"
     | "communicationError";
+export type DeviceCustomAttributeValueType = "integer" | "string" | "dateTime";
 export type DeviceEnrollmentType =
     | "unknown"
     | "userEnrollment"
@@ -2120,6 +2162,7 @@ export type WindowsMalwareThreatState =
     | "noStatusCleared";
 export type DeviceManagementDerivedCredentialIssuer = "intercede" | "entrustDatacard" | "purebred" | "xTec";
 export type DeviceManagementDerivedCredentialNotificationType = "none" | "companyPortal" | "email";
+export type DeviceManagementResourceAccessProfileIntent = "apply" | "remove";
 export type AppleUserInitiatedEnrollmentType = "unknown" | "device" | "user";
 export type DepTokenType = "none" | "dep" | "appleSchoolManager";
 export type DiscoverySource = "unknown" | "adminImport" | "deviceEnrollmentProgram";
@@ -4266,11 +4309,11 @@ export interface Message extends OutlookItem {
     unsubscribeData?: NullableOption<string[]>;
     unsubscribeEnabled?: NullableOption<boolean>;
     /**
-     * The URL to open the message in Outlook Web App.You can append an ispopout argument to the end of the URL to change how
-     * the message is displayed. If ispopout is not present or if it is set to 1, then the message is shown in a popout
-     * window. If ispopout is set to 0, then the browser will show the message in the Outlook Web App review pane.The message
-     * will open in the browser if you are logged in to your mailbox via Outlook Web App. You will be prompted to login if you
-     * are not already logged in with the browser.This URL can be accessed from within an iFrame.
+     * The URL to open the message in Outlook on the web.You can append an ispopout argument to the end of the URL to change
+     * how the message is displayed. If ispopout is not present or if it is set to 1, then the message is shown in a popout
+     * window. If ispopout is set to 0, then the browser will show the message in the Outlook on the web review pane.The
+     * message will open in the browser if you are logged in to your mailbox via Outlook on the web. You will be prompted to
+     * login if you are not already logged in with the browser.This URL cannot be accessed from within an iFrame.
      */
     webLink?: NullableOption<string>;
     // The fileAttachment and itemAttachment attachments for the message.
@@ -4931,10 +4974,10 @@ export interface Device extends DirectoryObject {
     deviceCategory?: NullableOption<string>;
     // Unique identifier set by Azure Device Registration Service at the time of registration.
     deviceId?: NullableOption<string>;
-    // For interal use only. Set to null.
+    // For internal use only. Set to null.
     deviceMetadata?: NullableOption<string>;
     deviceOwnership?: NullableOption<string>;
-    // For interal use only.
+    // For internal use only.
     deviceVersion?: NullableOption<number>;
     // The display name for the device. Required.
     displayName?: NullableOption<string>;
@@ -4955,9 +4998,9 @@ export interface Device extends DirectoryObject {
     isRooted?: NullableOption<boolean>;
     managementType?: NullableOption<string>;
     /**
-     * The last time at which the object was synced with the on-premises directory.The Timestamp type represents date and time
-     * information using ISO 8601 format and is always in UTC time. For example, midnight UTC on Jan 1, 2014 would look like
-     * this: '2014-01-01T00:00:00Z' Read-only.
+     * The last time at which the object was synced with the on-premises directory. The Timestamp type represents date and
+     * time information using ISO 8601 format and is always in UTC time. For example, midnight UTC on Jan 1, 2014 would look
+     * like this: '2014-01-01T00:00:00Z' Read-only.
      */
     onPremisesLastSyncDateTime?: NullableOption<string>;
     /**
@@ -4970,7 +5013,7 @@ export interface Device extends DirectoryObject {
     operatingSystem?: NullableOption<string>;
     // The version of the operating system on the device. Required.
     operatingSystemVersion?: NullableOption<string>;
-    // For interal use only. Not nullable.
+    // For internal use only. Not nullable.
     physicalIds?: string[];
     // The profile type of the device. Possible values:RegisteredDevice (default)SecureVMPrinterSharedIoT
     profileType?: NullableOption<string>;
@@ -5067,6 +5110,7 @@ export interface Chat extends Entity {
     installedApps?: NullableOption<TeamsAppInstallation[]>;
     members?: NullableOption<ConversationMember[]>;
     messages?: NullableOption<ChatMessage[]>;
+    tabs?: NullableOption<TeamsTab[]>;
 }
 export interface Team extends Entity {
     /**
@@ -5422,6 +5466,7 @@ export interface ServicePrincipal extends DirectoryObject {
     claimsMappingPolicies?: NullableOption<ClaimsMappingPolicy[]>;
     // Directory objects created by this service principal. Read-only. Nullable.
     createdObjects?: NullableOption<DirectoryObject[]>;
+    delegatedPermissionClassifications?: NullableOption<DelegatedPermissionClassification[]>;
     /**
      * Endpoints available for discovery. Services like Sharepoint populate this property with a tenant specific SharePoint
      * endpoints that other applications can discover and use in their experiences.
@@ -5517,6 +5562,11 @@ export interface ApplicationTemplate extends Entity {
 }
 // tslint:disable-next-line: no-empty-interface
 export interface ClaimsMappingPolicy extends StsPolicy {}
+export interface DelegatedPermissionClassification extends Entity {
+    classification?: NullableOption<PermissionClassificationType>;
+    permissionId?: NullableOption<string>;
+    permissionName?: NullableOption<string>;
+}
 export interface Endpoint extends DirectoryObject {
     /**
      * Describes the capability that is associated with this resource. (e.g. Messages, Conversations, etc.) Not nullable.
@@ -5785,11 +5835,49 @@ export interface BookingStaffMember extends BookingPerson {
 export interface BookingCurrency extends Entity {
     symbol?: string;
 }
+export interface CaseIndexOperation extends Entity {
+    action?: NullableOption<CaseAction>;
+    completedDateTime?: NullableOption<string>;
+    createdDateTime?: NullableOption<string>;
+    displayName?: NullableOption<string>;
+    percentProgress?: NullableOption<number>;
+    status?: NullableOption<CaseOperationStatus>;
+}
 export interface Compliance {
     ediscovery?: NullableOption<Ediscovery>;
 }
 export interface Ediscovery extends Entity {
     cases?: NullableOption<EdiscoveryCase[]>;
+}
+export interface Custodian extends Entity {
+    acknowledgedDateTime?: NullableOption<string>;
+    applyHoldToSources?: NullableOption<boolean>;
+    createdDateTime?: NullableOption<string>;
+    displayName?: NullableOption<string>;
+    email?: string;
+    lastModifiedDateTime?: NullableOption<string>;
+    releasedDateTime?: NullableOption<string>;
+    status?: NullableOption<CustodianStatus>;
+    lastIndexOperation?: NullableOption<CaseIndexOperation>;
+    siteSources?: NullableOption<SiteSource[]>;
+    unifiedGroupSources?: NullableOption<UnifiedGroupSource[]>;
+    userSources?: NullableOption<UserSource[]>;
+}
+export interface DataSource extends Entity {
+    createdBy?: NullableOption<IdentitySet>;
+    createdDateTime?: NullableOption<string>;
+    displayName?: NullableOption<string>;
+}
+export interface SiteSource extends DataSource {
+    site?: Site;
+}
+export interface UnifiedGroupSource extends DataSource {
+    includedSources?: NullableOption<SourceType>;
+    group?: Group;
+}
+export interface UserSource extends DataSource {
+    email?: string;
+    includedSources?: NullableOption<SourceType>;
 }
 export interface EdiscoveryCase extends Entity {
     closedBy?: NullableOption<IdentitySet>;
@@ -5801,6 +5889,7 @@ export interface EdiscoveryCase extends Entity {
     lastModifiedBy?: NullableOption<IdentitySet>;
     lastModifiedDateTime?: NullableOption<string>;
     status?: NullableOption<CaseStatus>;
+    custodians?: NullableOption<Custodian[]>;
     reviewSets?: NullableOption<ReviewSet[]>;
 }
 export interface ReviewSet extends Entity {
@@ -5836,10 +5925,20 @@ export interface B2xIdentityUserFlow extends IdentityUserFlow {
     identityProviders?: NullableOption<IdentityProvider[]>;
 }
 // tslint:disable-next-line: interface-name
+export interface IdentityUserFlowAttribute extends Entity {
+    dataType?: IdentityUserFlowAttributeDataType;
+    description?: NullableOption<string>;
+    displayName?: NullableOption<string>;
+    userFlowAttributeType?: IdentityUserFlowAttributeType;
+}
+// tslint:disable-next-line: interface-name no-empty-interface
+export interface IdentityBuiltInUserFlowAttribute extends IdentityUserFlowAttribute {}
+// tslint:disable-next-line: interface-name
 export interface IdentityContainer {
     conditionalAccess?: NullableOption<ConditionalAccessRoot>;
     b2cUserFlows?: NullableOption<B2cIdentityUserFlow[]>;
     b2xUserFlows?: NullableOption<B2xIdentityUserFlow[]>;
+    userFlowAttributes?: NullableOption<IdentityUserFlowAttribute[]>;
     userFlows?: NullableOption<IdentityUserFlow[]>;
     continuousAccessEvaluationPolicy?: NullableOption<ContinuousAccessEvaluationPolicy>;
 }
@@ -5854,6 +5953,8 @@ export interface ContinuousAccessEvaluationPolicy extends Entity {
     isEnabled?: boolean;
     users?: string[];
 }
+// tslint:disable-next-line: interface-name no-empty-interface
+export interface IdentityCustomUserFlowAttribute extends IdentityUserFlowAttribute {}
 export interface OpenIdConnectProvider extends IdentityProvider {
     claimsMapping?: NullableOption<ClaimsMapping>;
     domainHint?: NullableOption<string>;
@@ -5910,6 +6011,7 @@ export interface FileClassificationRequest extends Entity {
 }
 export interface TextClassificationRequest extends Entity {
     fileExtension?: NullableOption<string>;
+    matchTolerancesToInclude?: NullableOption<MlClassificationMatchTolerance>;
     scopesToRun?: NullableOption<SensitiveTypeScope>;
     sensitiveTypeIds?: NullableOption<string[]>;
     text?: NullableOption<string>;
@@ -6047,11 +6149,6 @@ export interface Contract extends DirectoryObject {
      * It is not automatically updated if the customer tenant's display name changes.
      */
     displayName?: NullableOption<string>;
-}
-export interface DelegatedPermissionClassification extends Entity {
-    classification?: NullableOption<PermissionClassificationType>;
-    permissionId?: NullableOption<string>;
-    permissionName?: NullableOption<string>;
 }
 export interface Command extends Entity {
     appServiceName?: NullableOption<string>;
@@ -7059,6 +7156,11 @@ export interface Subscription extends Entity {
      * Microsoft Graph defaults the property to v1_2.
      */
     latestSupportedTlsVersion?: NullableOption<string>;
+    /**
+     * The URL of the endpoint that receives lifecycle notifications, including subscriptionRemoved and missed notifications.
+     * This URL must make use of the HTTPS protocol. Optional. Read more about how Outlook resources use lifecycle
+     * notifications.
+     */
     lifecycleNotificationUrl?: NullableOption<string>;
     /**
      * Required. The URL of the endpoint that will receive the change notifications. This URL must make use of the HTTPS
@@ -8726,6 +8828,7 @@ export interface InformationProtectionLabel extends Entity {
     description?: NullableOption<string>;
     isActive?: boolean;
     name?: NullableOption<string>;
+    parent?: NullableOption<ParentLabelDetails>;
     sensitivity?: number;
     tooltip?: NullableOption<string>;
 }
@@ -8742,6 +8845,8 @@ export interface AndroidDeviceOwnerEnrollmentProfile extends Entity {
     enrolledDeviceCount?: number;
     // The enrollment mode of devices that use this enrollment profile.
     enrollmentMode?: AndroidDeviceOwnerEnrollmentMode;
+    // The enrollment token type for an enrollment profile.
+    enrollmentTokenType?: AndroidDeviceOwnerEnrollmentTokenType;
     // Date time the enrollment profile was last modified.
     lastModifiedDateTime?: string;
     // String used to generate a QR code for the token.
@@ -8943,6 +9048,8 @@ export interface DeviceManagement extends Entity {
     deviceConfigurationUserStateSummaries?: NullableOption<DeviceConfigurationUserStateSummary>;
     // The IOS software update installation statuses for this account.
     iosUpdateStatuses?: NullableOption<IosUpdateDeviceStatus[]>;
+    // The MacOS software update account summaries for this account.
+    macOSSoftwareUpdateAccountSummaries?: NullableOption<MacOSSoftwareUpdateAccountSummary[]>;
     // Encryption report for devices in this account
     managedDeviceEncryptionStates?: NullableOption<ManagedDeviceEncryptionState[]>;
     // The collection of Ndes connectors for this account.
@@ -8990,6 +9097,8 @@ export interface DeviceManagement extends Entity {
     detectedApps?: NullableOption<DetectedApp[]>;
     // The list of device compliance scripts associated with the tenant.
     deviceComplianceScripts?: NullableOption<DeviceComplianceScript[]>;
+    // The list of device custom attribute shell scripts associated with the tenant.
+    deviceCustomAttributeShellScripts?: NullableOption<DeviceCustomAttributeShellScript[]>;
     // The list of device health scripts associated with the tenant.
     deviceHealthScripts?: NullableOption<DeviceHealthScript[]>;
     // The list of device management scripts associated with the tenant.
@@ -9044,6 +9153,8 @@ export interface DeviceManagement extends Entity {
     windowsMalwareInformation?: NullableOption<WindowsMalwareInformation[]>;
     // Collection of Derived credential settings associated with account.
     derivedCredentials?: NullableOption<DeviceManagementDerivedCredentialSettings[]>;
+    // Collection of resource access settings associated with account.
+    resourceAccessProfiles?: NullableOption<DeviceManagementResourceAccessProfileBase[]>;
     // Apple user initiated enrollment profiles
     appleUserInitiatedEnrollmentProfiles?: NullableOption<AppleUserInitiatedEnrollmentProfile[]>;
     // This collections of multiple DEP tokens per-tenant.
@@ -9467,6 +9578,30 @@ export interface IosUpdateDeviceStatus extends Entity {
     // UserPrincipalName.
     userPrincipalName?: NullableOption<string>;
 }
+export interface MacOSSoftwareUpdateAccountSummary extends Entity {
+    // The device ID.
+    deviceId?: NullableOption<string>;
+    // The device name.
+    deviceName?: NullableOption<string>;
+    // The name of the report
+    displayName?: string;
+    // Number of failed updates on the device.
+    failedUpdateCount?: number;
+    // Last date time the report for this device was updated.
+    lastUpdatedDateTime?: string;
+    // The OS version.
+    osVersion?: NullableOption<string>;
+    // Number of successful updates on the device.
+    successfulUpdateCount?: number;
+    // Number of total updates on the device.
+    totalUpdateCount?: number;
+    // The user ID.
+    userId?: NullableOption<string>;
+    // The user principal name
+    userPrincipalName?: NullableOption<string>;
+    // Summary of the updates by category.
+    categorySummaries?: NullableOption<MacOSSoftwareUpdateCategorySummary[]>;
+}
 export interface ManagedDeviceEncryptionState extends Entity {
     // Advanced BitLocker State
     advancedBitLockerStates?: NullableOption<AdvancedBitLockerState>;
@@ -9740,6 +9875,10 @@ export interface DeviceManagementSettingDefinition extends Entity {
     displayName?: string;
     // Url to setting documentation
     documentationUrl?: NullableOption<string>;
+    // subtitle of the setting header for more details about the category/section
+    headerSubtitle?: NullableOption<string>;
+    // title of the setting header represents a category/section of a setting/settings
+    headerTitle?: NullableOption<string>;
     // If the setting is top level, it can be configured without the need to be wrapped in a collection or complex setting
     isTopLevel?: boolean;
     // Keywords associated with the setting
@@ -9888,6 +10027,38 @@ export interface DeviceComplianceScript extends Entity {
     deviceRunStates?: NullableOption<DeviceComplianceScriptDeviceState[]>;
     // High level run summary for device compliance script.
     runSummary?: NullableOption<DeviceComplianceScriptRunSummary>;
+}
+export interface DeviceCustomAttributeShellScript extends Entity {
+    // The date and time the device management script was created. This property is read-only.
+    createdDateTime?: string;
+    // The name of the custom attribute.
+    customAttributeName?: NullableOption<string>;
+    // The expected type of the custom attribute's value.
+    customAttributeType?: DeviceCustomAttributeValueType;
+    // Optional description for the device management script.
+    description?: NullableOption<string>;
+    // Name of the device management script.
+    displayName?: NullableOption<string>;
+    // Script file name.
+    fileName?: NullableOption<string>;
+    // The date and time the device management script was last modified. This property is read-only.
+    lastModifiedDateTime?: string;
+    // List of Scope Tag IDs for this PowerShellScript instance.
+    roleScopeTagIds?: NullableOption<string[]>;
+    // Indicates the type of execution context.
+    runAsAccount?: RunAsAccountType;
+    // The script content.
+    scriptContent?: NullableOption<number>;
+    // The list of group assignments for the device management script.
+    assignments?: NullableOption<DeviceManagementScriptAssignment[]>;
+    // List of run states for this script across all devices.
+    deviceRunStates?: NullableOption<DeviceManagementScriptDeviceState[]>;
+    // The list of group assignments for the device management script.
+    groupAssignments?: NullableOption<DeviceManagementScriptGroupAssignment[]>;
+    // Run summary for device management script.
+    runSummary?: NullableOption<DeviceManagementScriptRunSummary>;
+    // List of run states for this script across all users.
+    userRunStates?: NullableOption<DeviceManagementScriptUserState[]>;
 }
 export interface DeviceHealthScript extends Entity {
     // The timestamp of when the device health script was created. This property is read-only.
@@ -10317,6 +10488,22 @@ export interface DeviceManagementDerivedCredentialSettings extends Entity {
      * certificates to the device.
      */
     notificationType?: DeviceManagementDerivedCredentialNotificationType;
+}
+export interface DeviceManagementResourceAccessProfileBase extends Entity {
+    // DateTime profile was created
+    creationDateTime?: NullableOption<string>;
+    // Profile description
+    description?: NullableOption<string>;
+    // Profile display name
+    displayName?: string;
+    // DateTime profile was last modified
+    lastModifiedDateTime?: NullableOption<string>;
+    // Scope Tags
+    roleScopeTagIds?: NullableOption<string[]>;
+    // Version of the profile
+    version?: number;
+    // The list of assignments for the device configuration profile.
+    assignments?: NullableOption<DeviceManagementResourceAccessProfileAssignment[]>;
 }
 export interface AppleUserInitiatedEnrollmentProfile extends Entity {
     // List of available enrollment type options
@@ -11636,12 +11823,19 @@ export interface AndroidManagedAppProtection extends TargetedManagedAppProtectio
     // Defines a managed app behavior, either warn or block, if the specified Android SafetyNet Attestation requirment fails.
     appActionIfAndroidSafetyNetDeviceAttestationFailed?: ManagedAppRemediationAction;
     /**
+     * Defines a managed app behavior, either warn, block or wipe, if the screen lock is required on android device but is not
+     * set.
+     */
+    appActionIfDeviceLockNotSet?: ManagedAppRemediationAction;
+    /**
      * If Keyboard Restriction is enabled, only keyboards in this approved list will be allowed. A key should be Android
      * package id for a keyboard and value should be a friendly name
      */
     approvedKeyboards?: NullableOption<KeyValuePair[]>;
     // Indicates whether use of the biometric authentication is allowed in place of a pin if PinRequired is set to True.
     biometricAuthenticationBlocked?: boolean;
+    // Maximum number of days Company Portal update can be deferred on the device or app access will be blocked.
+    blockAfterCompanyPortalUpdateDeferralInDays?: number;
     /**
      * Friendly name of the preferred custom browser to open weblink on Android. When this property is configured,
      * ManagedBrowserToOpenLinksRequired should be true.
@@ -11658,6 +11852,8 @@ export interface AndroidManagedAppProtection extends TargetedManagedAppProtectio
     customDialerAppPackageId?: NullableOption<string>;
     // Count of apps to which the current policy is deployed.
     deployedAppCount?: number;
+    // Defines if any kind of lock must be required on android device
+    deviceLockRequired?: boolean;
     // When this setting is enabled, app level encryption is disabled if device level encryption is enabled
     disableAppEncryptionIfDeviceEncryptionIsEnabled?: boolean;
     // Indicates whether application data for managed apps should be encrypted
@@ -11689,6 +11885,10 @@ export interface AndroidManagedAppProtection extends TargetedManagedAppProtectio
     requiredAndroidSafetyNetEvaluationType?: AndroidManagedAppSafetyNetEvaluationType;
     // Indicates whether a managed user can take screen captures of managed apps
     screenCaptureBlocked?: boolean;
+    // Maximum number of days Company Portal update can be deferred on the device or the user will receive the warning
+    warnAfterCompanyPortalUpdateDeferralInDays?: number;
+    // Maximum number of days Company Portal update can be deferred on the device or the company data on the app will be wiped
+    wipeAfterCompanyPortalUpdateDeferralInDays?: number;
     // List of apps to which the policy is deployed.
     apps?: NullableOption<ManagedMobileApp[]>;
     // Navigation property to deployment summary of the configuration.
@@ -11712,6 +11912,11 @@ export interface DefaultManagedAppProtection extends ManagedAppProtection {
     appActionIfAndroidSafetyNetAppsVerificationFailed?: ManagedAppRemediationAction;
     // Defines a managed app behavior, either warn or block, if the specified Android SafetyNet Attestation requirment fails.
     appActionIfAndroidSafetyNetDeviceAttestationFailed?: ManagedAppRemediationAction;
+    /**
+     * Defines a managed app behavior, either warn, block or wipe, if the screen lock is required on device but is not set.
+     * (android only)
+     */
+    appActionIfDeviceLockNotSet?: ManagedAppRemediationAction;
     // Defines a managed app behavior, either block or wipe, if the specified device model is not allowed. (iOS Only)
     appActionIfIosDeviceModelNotAllowed?: ManagedAppRemediationAction;
     /**
@@ -11724,6 +11929,8 @@ export interface DefaultManagedAppProtection extends ManagedAppProtection {
      * (Android Only)
      */
     biometricAuthenticationBlocked?: boolean;
+    // Maximum number of days Company Portal update can be deferred on the device or app access will be blocked.
+    blockAfterCompanyPortalUpdateDeferralInDays?: number;
     // Friendly name of the preferred custom browser to open weblink on Android. (Android only)
     customBrowserDisplayName?: NullableOption<string>;
     // Unique identifier of a custom browser to open weblink on Android. (Android only)
@@ -11740,6 +11947,8 @@ export interface DefaultManagedAppProtection extends ManagedAppProtection {
     customSettings?: KeyValuePair[];
     // Count of apps to which the current policy is deployed.
     deployedAppCount?: number;
+    // Defines if any kind of lock must be required on device. (android only)
+    deviceLockRequired?: boolean;
     // When this setting is enabled, app level encryption is disabled if device level encryption is enabled. (Android only)
     disableAppEncryptionIfDeviceEncryptionIsEnabled?: boolean;
     /**
@@ -11801,6 +12010,10 @@ export interface DefaultManagedAppProtection extends ManagedAppProtection {
     screenCaptureBlocked?: boolean;
     // Defines if third party keyboards are allowed while accessing a managed app. (iOS Only)
     thirdPartyKeyboardsBlocked?: boolean;
+    // Maximum number of days Company Portal update can be deferred on the device or the user will receive the warning
+    warnAfterCompanyPortalUpdateDeferralInDays?: number;
+    // Maximum number of days Company Portal update can be deferred on the device or the company data on the app will be wiped
+    wipeAfterCompanyPortalUpdateDeferralInDays?: number;
     // List of apps to which the policy is deployed.
     apps?: NullableOption<ManagedMobileApp[]>;
     // Navigation property to deployment summary of the configuration.
@@ -12318,6 +12531,8 @@ export interface MacOSLobApp extends MobileLobApp {
      * this to true for macOS Line of Business (LoB) apps that use a self update feature.
      */
     ignoreVersionDetection?: boolean;
+    // A boolean to control whether the app will be installed as managed (requires macOS 11.0 and other PKG restrictions).
+    installAsManaged?: boolean;
     // The MD5 hash codes
     md5Hash?: NullableOption<string[]>;
     // The chunk size for MD5 hash
@@ -13915,6 +14130,10 @@ export interface AndroidDeviceOwnerVpnConfiguration extends VpnConfiguration {
     alwaysOnLockdown?: NullableOption<boolean>;
     // Connection type.
     connectionType?: AndroidVpnConnectionType;
+    // Custom data to define key/value pairs specific to a VPN provider. This collection can contain a maximum of 25 elements.
+    customData?: NullableOption<KeyValue[]>;
+    // Custom data to define key/value pairs specific to a VPN provider. This collection can contain a maximum of 25 elements.
+    customKeyValueData?: NullableOption<KeyValuePair[]>;
     // Microsoft Tunnel site ID.
     microsoftTunnelSiteId?: NullableOption<string>;
     // Proxy server.
@@ -15085,6 +15304,8 @@ export interface IosCertificateProfileBase extends IosCertificateProfile {
 }
 // tslint:disable-next-line: interface-name
 export interface IosCompliancePolicy extends DeviceCompliancePolicy {
+    // MDATP Require Mobile Threat Protection minimum risk level to report noncompliance.
+    advancedThreatProtectionRequiredSecurityLevel?: DeviceThreatProtectionLevel;
     // Require that devices have enabled device threat protection .
     deviceThreatProtectionEnabled?: boolean;
     /**
@@ -16018,9 +16239,14 @@ export interface MacOSDeviceFeaturesConfiguration extends AppleDeviceFeaturesCon
     // Whether to show admin host information on the login window.
     adminShowHostInfo?: boolean;
     /**
-     * Gets or sets a list that maps apps to their associated domains. The key should match the app's ID, and the value should
-     * be a string in the form of "service:domain" where domain is a fully qualified hostname (e.g.
-     * webcredentials:example.com). This collection can contain a maximum of 500 elements.
+     * Gets or sets a list that maps apps to their associated domains. Application identifiers must be unique. This collection
+     * can contain a maximum of 500 elements.
+     */
+    appAssociatedDomains?: NullableOption<MacOSAssociatedDomainsItem[]>;
+    /**
+     * DEPRECATED: use appAssociatedDomains instead. Gets or sets a list that maps apps to their associated domains. The key
+     * should match the app's ID, and the value should be a string in the form of "service:domain" where domain is a fully
+     * qualified hostname (e.g. webcredentials:example.com). This collection can contain a maximum of 500 elements.
      */
     associatedDomains?: NullableOption<KeyValuePair[]>;
     // Whether to show the name and password dialog or a list of users on the login window.
@@ -16402,6 +16628,8 @@ export interface MacOSGeneralDeviceConfiguration extends DeviceConfiguration {
     passwordBlockSimple?: boolean;
     // Number of days before the password expires.
     passwordExpirationDays?: NullableOption<number>;
+    // The number of allowed failed attempts to enter the passcode at the device's lock screen. Valid values 2 to 11
+    passwordMaximumAttemptCount?: NullableOption<number>;
     // Number of character sets a password must contain. Valid values 0 to 4
     passwordMinimumCharacterSetCount?: NullableOption<number>;
     // Minimum length of passwords.
@@ -16410,6 +16638,8 @@ export interface MacOSGeneralDeviceConfiguration extends DeviceConfiguration {
     passwordMinutesOfInactivityBeforeLock?: NullableOption<number>;
     // Minutes of inactivity required before the screen times out.
     passwordMinutesOfInactivityBeforeScreenTimeout?: NullableOption<number>;
+    // The number of minutes before the login is reset after the maximum number of unsuccessful login attempts is reached.
+    passwordMinutesUntilFailedLoginReset?: NullableOption<number>;
     // Number of previous passwords to block.
     passwordPreviousPasswordBlockCount?: NullableOption<number>;
     // Whether or not to require a password.
@@ -16487,6 +16717,56 @@ export interface MacOSScepCertificateProfile extends MacOSCertificateProfileBase
     // Trusted Root Certificate.
     rootCertificate?: NullableOption<MacOSTrustedRootCertificate>;
 }
+export interface MacOSSoftwareUpdateCategorySummary extends Entity {
+    // The device ID.
+    deviceId?: NullableOption<string>;
+    // The name of the report
+    displayName?: string;
+    // Number of failed updates on the device
+    failedUpdateCount?: number;
+    // Last date time the report for this device was updated.
+    lastUpdatedDateTime?: string;
+    // Number of successful updates on the device
+    successfulUpdateCount?: number;
+    // Number of total updates on the device
+    totalUpdateCount?: number;
+    // Software update type
+    updateCategory?: MacOSSoftwareUpdateCategory;
+    // The user ID.
+    userId?: NullableOption<string>;
+    // Summary of the update states.
+    updateStateSummaries?: NullableOption<MacOSSoftwareUpdateStateSummary[]>;
+}
+export interface MacOSSoftwareUpdateStateSummary extends Entity {
+    // Human readable name of the software update
+    displayName?: string;
+    // Last date time the report for this device and product key was updated.
+    lastUpdatedDateTime?: string;
+    // Product key of the software update.
+    productKey?: NullableOption<string>;
+    // State of the software update
+    state?: MacOSSoftwareUpdateState;
+    // Software update category
+    updateCategory?: MacOSSoftwareUpdateCategory;
+    // Version of the software update
+    updateVersion?: NullableOption<string>;
+}
+export interface MacOSSoftwareUpdateConfiguration extends DeviceConfiguration {
+    // Update behavior for all other updates.
+    allOtherUpdateBehavior?: MacOSSoftwareUpdateBehavior;
+    // Update behavior for configuration data file updates.
+    configDataUpdateBehavior?: MacOSSoftwareUpdateBehavior;
+    // Update behavior for critical updates.
+    criticalUpdateBehavior?: MacOSSoftwareUpdateBehavior;
+    // Custom Time windows when updates will be allowed or blocked. This collection can contain a maximum of 20 elements.
+    customUpdateTimeWindows?: NullableOption<CustomUpdateTimeWindow[]>;
+    // Update behavior for firmware updates.
+    firmwareUpdateBehavior?: MacOSSoftwareUpdateBehavior;
+    // Update schedule type
+    updateScheduleType?: MacOSSoftwareUpdateScheduleType;
+    // Minutes indicating UTC offset for each update time window
+    updateTimeWindowUtcOffsetInMinutes?: NullableOption<number>;
+}
 export interface MacOSVpnConfiguration extends AppleVpnConfiguration {
     // Identity certificate for client authentication when authentication method is certificate.
     identityCertificate?: NullableOption<MacOSCertificateProfileBase>;
@@ -16532,6 +16812,8 @@ export interface SecurityBaselineState extends Entity {
     displayName?: string;
     // The security baseline template id
     securityBaselineTemplateId?: NullableOption<string>;
+    // Security baseline compliance state
+    state?: SecurityBaselineComplianceState;
     // User Principal Name
     userPrincipalName?: NullableOption<string>;
     // The security baseline state for different settings for a device
@@ -17051,34 +17333,34 @@ export interface Windows10EndpointProtectionConfiguration extends DeviceConfigur
     // Indicates whether or not to block user from overriding Exploit Protection settings.
     defenderSecurityCenterBlockExploitProtectionOverride?: boolean;
     // Used to disable the display of the account protection area.
-    defenderSecurityCenterDisableAccountUI?: boolean;
+    defenderSecurityCenterDisableAccountUI?: NullableOption<boolean>;
     // Used to disable the display of the app and browser protection area.
-    defenderSecurityCenterDisableAppBrowserUI?: boolean;
+    defenderSecurityCenterDisableAppBrowserUI?: NullableOption<boolean>;
     // Used to disable the display of the Clear TPM button.
-    defenderSecurityCenterDisableClearTpmUI?: boolean;
+    defenderSecurityCenterDisableClearTpmUI?: NullableOption<boolean>;
     // Used to disable the display of the family options area.
-    defenderSecurityCenterDisableFamilyUI?: boolean;
+    defenderSecurityCenterDisableFamilyUI?: NullableOption<boolean>;
     // Used to disable the display of the hardware protection area.
-    defenderSecurityCenterDisableHardwareUI?: boolean;
+    defenderSecurityCenterDisableHardwareUI?: NullableOption<boolean>;
     // Used to disable the display of the device performance and health area.
-    defenderSecurityCenterDisableHealthUI?: boolean;
+    defenderSecurityCenterDisableHealthUI?: NullableOption<boolean>;
     // Used to disable the display of the firewall and network protection area.
-    defenderSecurityCenterDisableNetworkUI?: boolean;
+    defenderSecurityCenterDisableNetworkUI?: NullableOption<boolean>;
     /**
      * Used to disable the display of the notification area control. The user needs to either sign out and sign in or reboot
      * the computer for this setting to take effect.
      */
-    defenderSecurityCenterDisableNotificationAreaUI?: boolean;
+    defenderSecurityCenterDisableNotificationAreaUI?: NullableOption<boolean>;
     // Used to disable the display of the ransomware protection area.
-    defenderSecurityCenterDisableRansomwareUI?: boolean;
+    defenderSecurityCenterDisableRansomwareUI?: NullableOption<boolean>;
     // Used to disable the display of the secure boot area under Device security.
-    defenderSecurityCenterDisableSecureBootUI?: boolean;
+    defenderSecurityCenterDisableSecureBootUI?: NullableOption<boolean>;
     // Used to disable the display of the security process troubleshooting under Device security.
-    defenderSecurityCenterDisableTroubleshootingUI?: boolean;
+    defenderSecurityCenterDisableTroubleshootingUI?: NullableOption<boolean>;
     // Used to disable the display of the virus and threat protection area.
-    defenderSecurityCenterDisableVirusUI?: boolean;
+    defenderSecurityCenterDisableVirusUI?: NullableOption<boolean>;
     // Used to disable the display of update TPM Firmware when a vulnerable firmware is detected.
-    defenderSecurityCenterDisableVulnerableTpmFirmwareUpdateUI?: boolean;
+    defenderSecurityCenterDisableVulnerableTpmFirmwareUpdateUI?: NullableOption<boolean>;
     // The email address that is displayed to users.
     defenderSecurityCenterHelpEmail?: NullableOption<string>;
     // The phone number or Skype ID that is displayed to users.
@@ -19653,6 +19935,71 @@ export interface WindowsManagementAppHealthSummary extends Entity {
     // Unknown device count.
     unknownDeviceCount?: number;
 }
+export interface DeviceManagementResourceAccessProfileAssignment extends Entity {
+    // The assignment intent for the resource access profile.
+    intent?: DeviceManagementResourceAccessProfileIntent;
+    // The identifier of the source of the assignment.
+    sourceId?: NullableOption<string>;
+    // The assignment target for the resource access profile.
+    target?: DeviceAndAppManagementAssignmentTarget;
+}
+// tslint:disable-next-line: no-empty-interface
+export interface Windows10XCertificateProfile extends DeviceManagementResourceAccessProfileBase {}
+export interface Windows10XSCEPCertificateProfile extends Windows10XCertificateProfile {
+    // Target store certificate
+    certificateStore?: CertificateStore;
+    // Scale for the Certificate Validity Period
+    certificateValidityPeriodScale?: CertificateValidityPeriodScale;
+    // Value for the Certificate Validity Period
+    certificateValidityPeriodValue?: number;
+    // Extended Key Usage (EKU) settings.
+    extendedKeyUsages?: ExtendedKeyUsage[];
+    // SCEP Hash Algorithm.
+    hashAlgorithm?: HashAlgorithms[];
+    // SCEP Key Size.
+    keySize?: KeySize;
+    // Key Storage Provider (KSP)
+    keyStorageProvider?: KeyStorageProviderOption;
+    // SCEP Key Usage.
+    keyUsage?: KeyUsages;
+    // Certificate renewal threshold percentage
+    renewalThresholdPercentage?: number;
+    // Trusted Root Certificate ID
+    rootCertificateId?: NullableOption<string>;
+    // SCEP Server Url(s).
+    scepServerUrls?: NullableOption<string[]>;
+    // Custom AAD Attributes.
+    subjectAlternativeNameFormats?: NullableOption<Windows10XCustomSubjectAlternativeName[]>;
+    /**
+     * Custom format to use with SubjectNameFormat = Custom. Example: CN={{EmailAddress}},E={{EmailAddress}},OU=Enterprise
+     * Users,O=Contoso Corporation,L=Redmond,ST=WA,C=US
+     */
+    subjectNameFormatString?: NullableOption<string>;
+}
+export interface Windows10XTrustedRootCertificate extends DeviceManagementResourceAccessProfileBase {
+    // File name to display in UI.
+    certFileName?: NullableOption<string>;
+    // Destination store location for the Trusted Root Certificate.
+    destinationStore?: CertificateDestinationStore;
+    // Trusted Root Certificate
+    trustedRootCertificate?: number;
+}
+export interface Windows10XVpnConfiguration extends DeviceManagementResourceAccessProfileBase {
+    // ID to the Authentication Certificate
+    authenticationCertificateId?: NullableOption<string>;
+    // Custom XML commands that configures the VPN connection. (UTF8 byte encoding)
+    customXml?: number;
+    // Custom Xml file name.
+    customXmlFileName?: NullableOption<string>;
+}
+export interface Windows10XWifiConfiguration extends DeviceManagementResourceAccessProfileBase {
+    // ID to the Authentication Certificate
+    authenticationCertificateId?: NullableOption<string>;
+    // Custom XML commands that configures the VPN connection. (UTF8 byte encoding)
+    customXml?: number;
+    // Custom Xml file name.
+    customXmlFileName?: NullableOption<string>;
+}
 export interface ActiveDirectoryWindowsAutopilotDeploymentProfile extends WindowsAutopilotDeploymentProfile {
     /**
      * The Autopilot Hybrid Azure AD join flow will continue even if it does not establish domain controller connectivity
@@ -19701,8 +20048,6 @@ export interface DepEnrollmentBaseProfile extends EnrollmentProfile {
     isMandatory?: boolean;
     // Indicates if Location service setup pane is disabled
     locationDisabled?: boolean;
-    // Indicates if Passcode setup pane is disabled
-    passCodeDisabled?: boolean;
     // Indicates if privacy screen is disabled
     privacyPaneDisabled?: boolean;
     // Indicates if the profile removal option is disabled
@@ -19726,8 +20071,6 @@ export interface DepEnrollmentBaseProfile extends EnrollmentProfile {
     termsAndConditionsDisabled?: boolean;
     // Indicates if touch id setup pane is disabled
     touchIdDisabled?: boolean;
-    // Indicates if zoom setup pane is disabled
-    zoomDisabled?: boolean;
 }
 export interface DepEnrollmentProfile extends EnrollmentProfile {
     // Indicates if Apple id setup pane is disabled
@@ -19819,8 +20162,12 @@ export interface DepIOSEnrollmentProfile extends DepEnrollmentBaseProfile {
     managementCertificates?: NullableOption<ManagementCertificateWithThumbprint[]>;
     // Indicates if onboarding setup screen is disabled
     onBoardingScreenDisabled?: boolean;
+    // Indicates if Passcode setup pane is disabled
+    passCodeDisabled?: boolean;
     // Indicates if Preferred language screen is disabled
     preferredLanguageScreenDisabled?: boolean;
+    // Indicates if Weclome screen is disabled
+    restoreCompletedScreenDisabled?: boolean;
     // Indicates if Restore from Android is disabled
     restoreFromAndroidDisabled?: boolean;
     // This specifies the maximum number of users that can use a shared iPad. Only applicable in shared iPad mode.
@@ -19829,12 +20176,18 @@ export interface DepIOSEnrollmentProfile extends DepEnrollmentBaseProfile {
     simSetupScreenDisabled?: boolean;
     // Indicates if the mandatory sofware update screen is disabled
     softwareUpdateScreenDisabled?: boolean;
+    // Indicates if Weclome screen is disabled
+    updateCompleteScreenDisabled?: boolean;
     // Indicates if the watch migration screen is disabled
     watchMigrationScreenDisabled?: boolean;
     // Indicates if Weclome screen is disabled
     welcomeScreenDisabled?: boolean;
+    // Indicates if zoom setup pane is disabled
+    zoomDisabled?: boolean;
 }
 export interface DepMacOSEnrollmentProfile extends DepEnrollmentBaseProfile {
+    // Indicates if Accessibility screen is disabled
+    accessibilityScreenDisabled?: boolean;
     // Indicates if iCloud Documents and Desktop screen is disabled
     chooseYourLockScreenDisabled?: boolean;
     // Indicates if file vault is disabled
@@ -19843,8 +20196,12 @@ export interface DepMacOSEnrollmentProfile extends DepEnrollmentBaseProfile {
     iCloudDiagnosticsDisabled?: boolean;
     // Indicates if iCloud Documents and Desktop screen is disabled
     iCloudStorageDisabled?: boolean;
+    // Indicates if Passcode setup pane is disabled
+    passCodeDisabled?: boolean;
     // Indicates if registration is disabled
     registrationDisabled?: boolean;
+    // Indicates if zoom setup pane is disabled
+    zoomDisabled?: boolean;
 }
 // tslint:disable-next-line: interface-name
 export interface ImportedAppleDeviceIdentity extends Entity {
@@ -22054,7 +22411,7 @@ export interface ItemFacet extends Entity {
     inference?: NullableOption<InferenceData>;
     lastModifiedBy?: IdentitySet;
     lastModifiedDateTime?: string;
-    source?: NullableOption<PersonDataSource>;
+    source?: NullableOption<PersonDataSources>;
 }
 export interface EducationalActivity extends ItemFacet {
     completionMonthYear?: NullableOption<string>;
@@ -22145,6 +22502,8 @@ export interface PersonCertification extends ItemFacet {
     thumbnailUrl?: NullableOption<string>;
     webUrl?: NullableOption<string>;
 }
+// tslint:disable-next-line: no-empty-interface
+export interface PersonExtension extends Extension {}
 export interface PersonInterest extends ItemFacet {
     categories?: NullableOption<string[]>;
     collaborationTags?: NullableOption<string[]>;
@@ -24615,6 +24974,10 @@ export interface LabelPolicy {
     id?: string;
     name?: NullableOption<string>;
 }
+export interface MachineLearningDetectedSensitiveContent extends DetectedSensitiveContent {
+    matchTolerance?: NullableOption<MlClassificationMatchTolerance>;
+    modelVersion?: NullableOption<string>;
+}
 export interface NotifyUserAction extends DlpActionInfo {
     actionLastModifiedDateTime?: NullableOption<string>;
     emailText?: NullableOption<string>;
@@ -26676,9 +27039,14 @@ export interface ConditionalAccessApplications {
     // User actions to include. For example, urn:user:registersecurityinfo
     includeUserActions?: string[];
 }
+export interface ConditionalAccessClientApplications {
+    excludeServicePrincipals?: string[];
+    includeServicePrincipals?: string[];
+}
 export interface ConditionalAccessConditionSet {
     // Applications and user actions included in and excluded from the policy. Required.
     applications?: NullableOption<ConditionalAccessApplications>;
+    clientApplications?: NullableOption<ConditionalAccessClientApplications>;
     /**
      * Client application types included in the policy. Possible values are: all, browser, mobileAppsAndDesktopClients,
      * exchangeActiveSync, easSupported, other.
@@ -26694,7 +27062,7 @@ export interface ConditionalAccessConditionSet {
     signInRiskLevels?: RiskLevel[];
     userRiskLevels?: RiskLevel[];
     // Users, groups, and roles included in and excluded from the policy. Required.
-    users?: ConditionalAccessUsers;
+    users?: NullableOption<ConditionalAccessUsers>;
 }
 export interface ConditionalAccessDevices {
     excludeDeviceStates?: string[];
@@ -26948,15 +27316,18 @@ export interface ApplyLabelAction extends InformationProtectionAction {
     label?: NullableOption<LabelDetails>;
     responsibleSensitiveTypeIds?: string[];
 }
-export interface LabelDetails {
+export interface ParentLabelDetails {
     color?: NullableOption<string>;
     description?: NullableOption<string>;
     id?: NullableOption<string>;
     isActive?: boolean;
     name?: NullableOption<string>;
+    parent?: NullableOption<ParentLabelDetails>;
     sensitivity?: number;
     tooltip?: NullableOption<string>;
 }
+// tslint:disable-next-line: no-empty-interface
+export interface LabelDetails extends ParentLabelDetails {}
 export interface ClassificationResult {
     confidenceLevel?: number;
     count?: number;
@@ -27519,6 +27890,8 @@ export interface MacOSMinimumOperatingSystem {
     v10_9?: boolean;
 }
 export interface MacOsVppAppAssignmentSettings extends MobileAppAssignmentSettings {
+    // Whether or not to uninstall the app when device is removed from Intune.
+    uninstallOnDeviceRemoval?: NullableOption<boolean>;
     // Whether or not to use device licensing.
     useDeviceLicensing?: boolean;
 }
@@ -28763,8 +29136,14 @@ export interface MacOSAppleEventReceiver {
     // Use bundle ID for an app or path for a process or executable that receives the Apple Event.
     identifierType?: MacOSProcessIdentifierType;
 }
-// tslint:disable-next-line: no-empty-interface
-export interface MacOSAssociatedDomainsKeyValuePair extends KeyValuePair {}
+export interface MacOSAssociatedDomainsItem {
+    // The application identifier of the app to associate domains with.
+    applicationIdentifier?: string;
+    // Determines whether data should be downloaded directly or via a CDN.
+    directDownloadsEnabled?: boolean;
+    // The list of domains to associate.
+    domains?: NullableOption<string[]>;
+}
 // tslint:disable-next-line: no-empty-interface
 export interface MacOSSingleSignOnExtension extends SingleSignOnExtension {}
 export interface MacOSAzureAdSingleSignOnExtension extends MacOSSingleSignOnExtension {
@@ -29528,8 +29907,7 @@ export interface WindowsFirewallRule {
      * List of tokens specifying the remote addresses covered by the rule. Tokens are case insensitive. Default is any
      * address. Valid tokens include:&amp;lt;ul&amp;gt;&amp;lt;li&amp;gt;"*" indicates any remote address. If present, this
      * must be the only token
-     * included.&amp;lt;/li&amp;gt;&amp;lt;li&amp;gt;"Defaultgateway"&amp;lt;/li&amp;gt;&amp;lt;li&amp;gt;"DHCP"&amp;lt;
-     * /li&amp;gt;&amp;lt;li&amp;gt;"DNS"&amp;lt;/li&amp;gt;&amp;lt;li&amp;gt;"WINS"&amp;lt;/li&amp;gt;&amp;lt;li&amp;gt;"Intranet"
+     * included.&amp;lt;/li&amp;gt;&amp;lt;li&amp;gt;"Defaultgateway"&amp;lt;/li&amp;gt;&amp;lt;li&amp;gt;"DHCP"&amp;lt;/li&amp;gt;&amp;lt;li&amp;gt;"DNS"&amp;lt;/li&amp;gt;&amp;lt;li&amp;gt;"WINS"&amp;lt;/li&amp;gt;&amp;lt;li&amp;gt;"Intranet"
      * (supported on Windows versions 1809+)&amp;lt;/li&amp;gt;&amp;lt;li&amp;gt;"RmtIntranet" (supported on Windows versions
      * 1809+)&amp;lt;/li&amp;gt;&amp;lt;li&amp;gt;"Internet" (supported on Windows versions
      * 1809+)&amp;lt;/li&amp;gt;&amp;lt;li&amp;gt;"Ply2Renders" (supported on Windows versions
@@ -29852,6 +30230,8 @@ export interface HardwareInformation {
     freeStorageSpace?: number;
     // IMEI
     imei?: NullableOption<string>;
+    // IPAddressV4
+    ipAddressV4?: NullableOption<string>;
     // Encryption status of the device
     isEncrypted?: boolean;
     // Shared iPad
@@ -29881,6 +30261,8 @@ export interface HardwareInformation {
     serialNumber?: NullableOption<string>;
     // All users on the shared Apple device
     sharedDeviceCachedUsers?: NullableOption<SharedAppleDeviceUser[]>;
+    // SubnetAddress
+    subnetAddress?: NullableOption<string>;
     // Subscriber carrier of the device
     subscriberCarrier?: NullableOption<string>;
     // Total storage space of the device.
@@ -30367,6 +30749,12 @@ export interface DeviceManagementTroubleshootingErrorResource {
     // The link to the web resource. Can contain any of the following formatters: {{UPN}}, {{DeviceGUID}}, {{UserGUID}}
     link?: NullableOption<string>;
     text?: NullableOption<string>;
+}
+export interface Windows10XCustomSubjectAlternativeName {
+    // Custom SAN Name
+    name?: NullableOption<string>;
+    // Custom SAN Type.
+    sanType?: SubjectAlternativeNameType;
 }
 export interface AppleOwnerTypeEnrollmentType {
     // The enrollment type.
@@ -30988,11 +31376,11 @@ export interface DisplayNameLocalization {
 }
 export interface EducationalActivityDetail {
     abbreviation?: NullableOption<string>;
-    activities?: NullableOption<string>;
-    awards?: NullableOption<string>;
+    activities?: NullableOption<string[]>;
+    awards?: NullableOption<string[]>;
     description?: NullableOption<string>;
     displayName?: string;
-    fieldsOfStudy?: NullableOption<string>;
+    fieldsOfStudy?: NullableOption<string[]>;
     grade?: NullableOption<string>;
     notes?: NullableOption<string>;
     webUrl?: NullableOption<string>;
@@ -31008,6 +31396,9 @@ export interface InstitutionData {
     displayName?: string;
     location?: NullableOption<PhysicalAddress>;
     webUrl?: NullableOption<string>;
+}
+export interface PersonDataSources {
+    type?: NullableOption<string[]>;
 }
 export interface PositionDetail {
     company?: CompanyDetail;
@@ -32031,6 +32422,10 @@ export interface ChangeNotification {
     encryptedContent?: NullableOption<ChangeNotificationEncryptedContent>;
     // Unique ID for the notification. Optional.
     id?: NullableOption<string>;
+    /**
+     * The type of lifecycle notification if the current notification is a lifecycle notification. Optional. Supported values
+     * are missed, removed, reauthorizationRequired.
+     */
     lifecycleEvent?: NullableOption<LifecycleEventType>;
     // The URI of the resource that emitted the change notification relative to https://graph.microsoft.com. Required.
     resource?: string;
