@@ -68,6 +68,7 @@ steps:
     targetType: inline
     workingDirectory: '$(Build.SourcesDirectory)/msgraph-typescript-typings'
     script: |
+      git fetch origin master | Write-Host
       git checkout master | Write-Host
 
 - task: PowerShell@2
