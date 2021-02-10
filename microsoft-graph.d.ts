@@ -280,7 +280,7 @@ export type PhoneType =
     | "radio";
 export type BodyType = "text" | "html";
 export type EducationAddedStudentAction = "none" | "assignIfOpen" | "unknownFutureValue";
-export type EducationAssignmentStatus = "draft" | "published" | "assigned" | "unknownFutureValue";
+export type EducationAssignmentStatus = "draft" | "published" | "assigned" | "scheduled" | "unknownFutureValue";
 export type EducationSubmissionStatus = "working" | "submitted" | "released" | "returned" | "unknownFutureValue";
 export type ContactRelationship =
     | "parent"
