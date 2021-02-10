@@ -23,6 +23,12 @@ export type AppliedConditionalAccessPolicyResult =
     | "reportOnlyFailure"
     | "reportOnlyNotApplied"
     | "reportOnlyInterrupted";
+export type AuthenticationMethodFeature =
+    | "ssprRegistered"
+    | "ssprEnabled"
+    | "ssprCapable"
+    | "passwordlessCapable"
+    | "mfaCapable";
 export type AuthMethodsType =
     | "email"
     | "mobileSMS"
@@ -53,6 +59,8 @@ export type ConditionalAccessConditions =
 export type ConditionalAccessStatus = "success" | "failure" | "notApplied" | "unknownFutureValue";
 export type FeatureType = "registration" | "reset" | "unknownFutureValue";
 export type GroupType = "unifiedGroups" | "azureAD" | "unknownFutureValue";
+export type IncludedUserRoles = "all" | "privilegedAdmin" | "admin" | "user" | "unknownFutureValue";
+export type IncludedUserTypes = "all" | "member" | "guest" | "unknownFutureValue";
 export type InitiatorType = "user" | "app" | "system" | "unknownFutureValue";
 export type MigrationStatus = "ready" | "needsReview" | "additionalStepsRequired" | "unknownFutureValue";
 export type NetworkType = "intranet" | "extranet" | "namedNetwork" | "trusted" | "unknownFutureValue";
@@ -78,7 +86,28 @@ export type RegistrationAuthMethod =
     | "appPassword"
     | "unknownFutureValue";
 export type RegistrationStatusType = "registered" | "enabled" | "capable" | "mfaRegistered" | "unknownFutureValue";
-export type RequirementProvider = "MFA" | "CA" | "unknownFutureValue";
+export type RequirementProvider =
+    | "user"
+    | "request"
+    | "servicePrincipal"
+    | "v1ConditionalAccess"
+    | "multiConditionalAccess"
+    | "tenantSessionRiskPolicy"
+    | "accountCompromisePolicies"
+    | "v1ConditionalAccessDependency"
+    | "v1ConditionalAccessPolicyIdRequested"
+    | "mfaRegistrationRequiredByIdentityProtectionPolicy"
+    | "baselineProtection"
+    | "mfaRegistrationRequiredByBaselineProtection"
+    | "mfaRegistrationRequiredByMultiConditionalAccess"
+    | "enforcedForCspAdmins"
+    | "securityDefaults"
+    | "mfaRegistrationRequiredBySecurityDefaults"
+    | "proofUpCodeRequest"
+    | "crossTenantOutboundRule"
+    | "gpsLocationCondition"
+    | "riskBasedPolicy"
+    | "unknownFutureValue";
 export type RiskDetail =
     | "none"
     | "adminGeneratedTemporaryPassword"
@@ -117,6 +146,14 @@ export type RiskState =
     | "atRisk"
     | "confirmedCompromised"
     | "unknownFutureValue";
+export type SignInIdentifierType =
+    | "userPrincipalName"
+    | "phoneNumber"
+    | "proxyAddress"
+    | "qrCode"
+    | "onPremisesUserPrincipalName"
+    | "unknownFutureValue";
+export type SignInUserType = "member" | "guest" | "unknownFutureValue";
 export type TokenIssuerType = "AzureAD" | "ADFederationServices" | "UnknownFutureValue";
 export type UsageAuthMethod =
     | "email"
@@ -179,7 +216,12 @@ export type CloudPcOnPremisesConnectionHealthCheckErrorType =
     | "endpointConnectivityCheckUnknownError"
     | "aadConnectivityCheckUnknownError"
     | "resourceAvailabilityCheckNoSubnetIP"
+    | "resourceAvailabilityCheckSubscriptionDisabled"
     | "resourceAvailabilityCheckUnknownError"
+    | "permissionCheckNoSubscriptionReaderRole"
+    | "permissionCheckNoResourceGroupOwnerRole"
+    | "permissionCheckNoVNetContributorRole"
+    | "permissionCheckUnknownError"
     | "internalServerUnknownError";
 export type CloudPcOnPremisesConnectionStatus = "pending" | "running" | "passed" | "failed" | "unknownFutureValue";
 export type CloudPcProvisioningPolicyImageType = "gallery" | "custom";
@@ -191,20 +233,7 @@ export type CloudPcStatus =
     | "inGracePeriod"
     | "deprovisioning"
     | "failed";
-export type CaseAction = "contentExport" | "tag" | "convertToPdf" | "index" | "search" | "addDataToReviewSet";
-export type CaseOperationStatus =
-    | "notStarted"
-    | "submissionFailed"
-    | "running"
-    | "succeeded"
-    | "partiallySucceeded"
-    | "failed";
-export type CaseStatus = "unknown" | "active" | "pendingDelete" | "closing" | "closed" | "closedWithError";
-export type CustodianStatus = "active" | "released";
-export type ExportFileStructure = "none" | "directory" | "pst" | "unknownFutureValue";
-export type ExportOptions = "originalFiles" | "text" | "pdfReplacement" | "fileInfo" | "tags" | "unknownFutureValue";
-export type LegalHoldStatus = "Pending" | "Error" | "Success" | "UnknownFutureValue";
-export type SourceType = "mailbox" | "site";
+export type UsageRightState = "active" | "inactive" | "warning" | "suspended" | "unknownFutureValue";
 export type IdentityUserFlowAttributeDataType =
     | "string"
     | "boolean"
@@ -238,7 +267,20 @@ export type Component = "Label";
 export type DlpAction = "notifyUser" | "blockAccess" | "deviceRestriction";
 export type EncryptWith = "template" | "userDefinedRights";
 export type GroupPrivacy = "unspecified" | "public" | "private" | "unknownFutureValue";
+export type LobbyBypassScope =
+    | "organizer"
+    | "organization"
+    | "organizationAndFederated"
+    | "everyone"
+    | "unknownFutureValue";
 export type MlClassificationMatchTolerance = "exact" | "near";
+export type OnlineMeetingForwarders = "everyone" | "organizer" | "unknownFutureValue";
+export type OnlineMeetingPresenters =
+    | "everyone"
+    | "organization"
+    | "roleIsPresenter"
+    | "organizer"
+    | "unknownFutureValue";
 export type OverrideOption =
     | "notAllowed"
     | "allowFalsePositiveOverride"
@@ -599,8 +641,7 @@ export type WatermarkLayout = "horizontal" | "diagonal";
 export type AndroidDeviceOwnerEnrollmentMode =
     | "corporateOwnedDedicatedDevice"
     | "corporateOwnedFullyManaged"
-    | "corporateOwnedWorkProfile"
-    | "corporateOwnedAOSPUserlessDevice";
+    | "corporateOwnedWorkProfile";
 export type AndroidDeviceOwnerEnrollmentTokenType = "default" | "corporateOwnedDedicatedDeviceWithAzureADSharedMode";
 export type AndroidForWorkAppConfigurationSchemaItemDataType =
     | "bool"
@@ -807,6 +848,13 @@ export type Win32LobAppRuleType = "detection" | "requirement";
 export type WindowsArchitecture = "none" | "x86" | "x64" | "arm" | "neutral" | "arm64";
 export type WindowsDeviceType = "none" | "desktop" | "mobile" | "holographic" | "team";
 export type InstallState = "notApplicable" | "installed" | "failed" | "notInstalled" | "uninstallFailed" | "unknown";
+export type AssignmentFilterEvaluationResult =
+    | "unknown"
+    | "match"
+    | "notMatch"
+    | "inconclusive"
+    | "failure"
+    | "notEvaluated";
 export type DevicePlatformType =
     | "android"
     | "androidForWork"
@@ -823,13 +871,13 @@ export type AdministratorConfiguredDeviceComplianceState = "basedOnDeviceComplia
 export type AdvancedBitLockerState =
     | "success"
     | "noUserConsent"
-    | "osVolumeEncryptionMethodMismatch"
+    | "osVolumeUnprotected"
     | "osVolumeTpmRequired"
     | "osVolumeTpmOnlyRequired"
     | "osVolumeTpmPinRequired"
     | "osVolumeTpmStartupKeyRequired"
     | "osVolumeTpmPinStartupKeyRequired"
-    | "osVolumeUnprotected"
+    | "osVolumeEncryptionMethodMismatch"
     | "recoveryKeyBackupFailed"
     | "fixedDriveNotEncrypted"
     | "fixedDriveEncryptionMethodMismatch"
@@ -929,7 +977,8 @@ export type AndroidVpnConnectionType =
     | "checkPointCapsuleVpn"
     | "citrix"
     | "microsoftTunnel"
-    | "netMotionMobility";
+    | "netMotionMobility"
+    | "microsoftProtect";
 export type AndroidWiFiSecurityType = "open" | "wpaEnterprise" | "wpa2Enterprise";
 export type AndroidWorkProfileCrossProfileDataSharingType =
     | "deviceDefault"
@@ -955,7 +1004,8 @@ export type AndroidWorkProfileVpnConnectionType =
     | "citrix"
     | "paloAltoGlobalProtect"
     | "microsoftTunnel"
-    | "netMotionMobility";
+    | "netMotionMobility"
+    | "microsoftProtect";
 export type AppInstallControlType = "notConfigured" | "anywhere" | "storeOnly" | "recommendations" | "preferStore";
 export type AppleSubjectNameFormat =
     | "commonName"
@@ -982,7 +1032,8 @@ export type AppleVpnConnectionType =
     | "ikEv2"
     | "alwaysOn"
     | "microsoftTunnel"
-    | "netMotionMobility";
+    | "netMotionMobility"
+    | "microsoftProtect";
 export type ApplicationGuardBlockClipboardSharingType =
     | "notConfigured"
     | "blockBoth"
@@ -1170,6 +1221,81 @@ export type DeviceComplianceActionType =
     | "removeResourceAccessProfiles"
     | "pushNotification"
     | "remoteLock";
+export type DeviceComplianceScriptRuleDataType =
+    | "none"
+    | "boolean"
+    | "int64"
+    | "double"
+    | "string"
+    | "dateTime"
+    | "version"
+    | "base64"
+    | "xml"
+    | "booleanArray"
+    | "int64Array"
+    | "doubleArray"
+    | "stringArray"
+    | "dateTimeArray"
+    | "versionArray";
+export type DeviceComplianceScriptRulesValidationError =
+    | "none"
+    | "jsonFileInvalid"
+    | "jsonFileMissing"
+    | "jsonFileTooLarge"
+    | "rulesMissing"
+    | "duplicateRules"
+    | "tooManyRulesSpecified"
+    | "operatorMissing"
+    | "operatorNotSupported"
+    | "datatypeMissing"
+    | "datatypeNotSupported"
+    | "operatorDataTypeCombinationNotSupported"
+    | "moreInfoUriMissing"
+    | "moreInfoUriInvalid"
+    | "moreInfoUriTooLarge"
+    | "descriptionMissing"
+    | "descriptionInvalid"
+    | "descriptionTooLarge"
+    | "titleMissing"
+    | "titleInvalid"
+    | "titleTooLarge"
+    | "operandMissing"
+    | "operandInvalid"
+    | "operandTooLarge"
+    | "settingNameMissing"
+    | "settingNameInvalid"
+    | "settingNameTooLarge"
+    | "englishLocaleMissing"
+    | "duplicateLocales"
+    | "unrecognizedLocale"
+    | "unknown"
+    | "remediationStringsMissing";
+export type DeviceComplianceScriptRulOperator =
+    | "none"
+    | "and"
+    | "or"
+    | "isEquals"
+    | "notEquals"
+    | "greaterThan"
+    | "lessThan"
+    | "between"
+    | "notBetween"
+    | "greaterEquals"
+    | "lessEquals"
+    | "dayTimeBetween"
+    | "beginsWith"
+    | "notBeginsWith"
+    | "endsWith"
+    | "notEndsWith"
+    | "contains"
+    | "notContains"
+    | "allOf"
+    | "oneOf"
+    | "noneOf"
+    | "setEquals"
+    | "orderedSetEquals"
+    | "subsetOf"
+    | "excludesAll";
 export type DeviceGuardLocalSystemAuthorityCredentialGuardType =
     | "notConfigured"
     | "enableWithUEFILock"
@@ -1201,6 +1327,7 @@ export type DeviceType =
     | "windows10x"
     | "androidnGMS"
     | "cloudPC"
+    | "linux"
     | "blackberry"
     | "palm"
     | "unknown";
@@ -1854,6 +1981,14 @@ export type WiredNetworkInterface =
     | "secondEthernet"
     | "thirdEthernet";
 export type DeviceManagementConfigurationAzureAdTrustType = "none" | "azureAdJoined" | "addWorkAccount" | "mdmOnly";
+export type DeviceManagementConfigurationControlType =
+    | "default"
+    | "dropdown"
+    | "smallTextBox"
+    | "largeTextBox"
+    | "toggle"
+    | "multiheaderGrid"
+    | "contextPane";
 export type DeviceManagementConfigurationDeviceMode = "none" | "kiosk";
 export type DeviceManagementConfigurationPlatforms = "none" | "macOS" | "windows10X" | "windows10";
 export type DeviceManagementConfigurationSettingAccessTypes =
@@ -2023,6 +2158,7 @@ export type DeviceEnrollmentType =
     | "windowsAutoEnrollment"
     | "windowsBulkAzureDomainJoin"
     | "windowsCoManagement"
+    | "windowsAzureADJoinUsingDeviceAuth"
     | "appleUserEnrollment"
     | "appleUserEnrollmentWithServiceAccount"
     | "azureAdJoinUsingAzureVmExtension"
@@ -2170,7 +2306,8 @@ export type UserExperienceAnalyticsOperatingSystemRestartCategory =
     | "shutdownWithUpdate"
     | "shutdownWithoutUpdate"
     | "longPowerButtonPress"
-    | "bootError";
+    | "bootError"
+    | "update";
 export type UserExperienceAnalyticsSummarizedBy =
     | "none"
     | "model"
@@ -2373,7 +2510,7 @@ export type ManagedAppDataEncryptionType =
     | "whenDeviceLockedExceptOpenFiles"
     | "whenDeviceLocked";
 export type ManagedAppDataIngestionLocation = "oneDriveForBusiness" | "sharePoint" | "camera";
-export type ManagedAppDataStorageLocation = "oneDriveForBusiness" | "sharePoint" | "localStorage";
+export type ManagedAppDataStorageLocation = "oneDriveForBusiness" | "sharePoint" | "box" | "localStorage";
 export type ManagedAppDataTransferLevel = "allApps" | "managedApps" | "none";
 export type ManagedAppDeviceThreatLevel = "notConfigured" | "secured" | "low" | "medium" | "high";
 export type ManagedAppFlaggedReason =
@@ -2392,6 +2529,7 @@ export type WindowsInformationProtectionEnforcementLevel =
     | "encryptAuditAndPrompt"
     | "encryptAuditAndBlock";
 export type WindowsInformationProtectionPinCharacterRequirements = "notAllow" | "requireAtLeastOne" | "allow";
+export type MicrosoftTunnelLogCollectionStatus = "pending" | "completed" | "failed";
 export type MicrosoftTunnelServerHealthStatus =
     | "unknown"
     | "healthy"
@@ -2489,7 +2627,14 @@ export type MobileAppIntent =
     | "requiredAndAvailableInstall"
     | "availableInstallWithoutEnrollment"
     | "exclude";
-export type WindowsAutopilotDeploymentState = "unknown" | "success" | "inProgress" | "failure" | "successWithTimeout";
+export type WindowsAutopilotDeploymentState =
+    | "unknown"
+    | "success"
+    | "inProgress"
+    | "failure"
+    | "successWithTimeout"
+    | "notAttempted"
+    | "disabled";
 export type WindowsAutopilotEnrollmentType =
     | "unknown"
     | "azureADJoinedWithAutopilotProfile"
@@ -2506,6 +2651,7 @@ export type WindowsDefenderApplicationControlSupplementalPolicyStatuses =
     | "tokenError"
     | "notAuthorizedByToken"
     | "policyNotFound";
+export type WindowsQualityUpdateClassification = "all" | "security" | "nonSecurity";
 export type ApplicationType = "universal" | "desktop";
 export type UserPfxIntendedPurpose = "unassigned" | "smimeEncryption" | "smimeSigning" | "vpn" | "wifi";
 export type UserPfxPaddingScheme = "none" | "pkcs1" | "oaepSha1" | "oaepSha256" | "oaepSha384" | "oaepSha512";
@@ -2521,6 +2667,8 @@ export type EntityType =
     | "drive"
     | "unknownfuturevalue";
 export type Priority = "None" | "High" | "Low";
+export type PlannerContainerType = "group" | "unknownFutureValue" | "roster";
+export type PlannerPlanContextType = "teamsTab" | "sharePointPage" | "meetingNotes" | "other" | "unknownFutureValue";
 export type PlannerPreviewType = "automatic" | "noPreview" | "checklist" | "description" | "reference";
 export type OnenotePatchActionType = "Replace" | "Append" | "Delete" | "Insert" | "Prepend";
 export type OnenotePatchInsertPosition = "After" | "Before";
@@ -2569,6 +2717,7 @@ export type SkillProficiencyLevel =
     | "advancedProfessional"
     | "expert"
     | "unknownFutureValue";
+export type TranslationBehavior = "Ask" | "Yes" | "No";
 export type ApprovalState = "pending" | "approved" | "denied" | "aborted" | "canceled";
 export type RoleSummaryStatus = "ok" | "bad";
 export type SetupStatus =
@@ -2590,25 +2739,39 @@ export type PrinterFeedOrientation = "longEdgeFirst" | "shortEdgeFirst";
 export type PrinterProcessingState = "unknown" | "idle" | "processing" | "stopped" | "unknownFutureValue";
 export type PrinterProcessingStateDetail =
     | "paused"
-    | "disconnected"
     | "mediaJam"
     | "mediaNeeded"
     | "mediaLow"
     | "mediaEmpty"
     | "coverOpen"
     | "interlockOpen"
-    | "queueFull"
     | "outputTrayMissing"
     | "outputAreaFull"
     | "markerSupplyLow"
     | "markerSupplyEmpty"
     | "inputTrayMissing"
-    | "outputAlmostFull"
+    | "outputAreaAlmostFull"
     | "markerWasteAlmostFull"
     | "markerWasteFull"
     | "fuserOverTemp"
     | "fuserUnderTemp"
     | "other"
+    | "none"
+    | "movingToPaused"
+    | "shutdown"
+    | "connectingToDevice"
+    | "timedOut"
+    | "stopping"
+    | "stoppedPartially"
+    | "tonerLow"
+    | "tonerEmpty"
+    | "spoolAreaFull"
+    | "doorOpen"
+    | "opticalPhotoConductorNearEndOfLife"
+    | "opticalPhotoConductorLifeOver"
+    | "developerLow"
+    | "developerEmpty"
+    | "interpreterResourceUnavailable"
     | "unknownFutureValue";
 export type PrinterProcessingStateReason =
     | "paused"
@@ -2845,23 +3008,11 @@ export type EndpointType =
     | "skypeForBusiness"
     | "skypeForBusinessVoipPhone"
     | "unknownFutureValue";
-export type LobbyBypassScope =
-    | "organizer"
-    | "organization"
-    | "organizationAndFederated"
-    | "everyone"
-    | "unknownFutureValue";
 export type MediaDirection = "inactive" | "sendOnly" | "receiveOnly" | "sendReceive";
 export type MediaState = "active" | "inactive" | "unknownFutureValue";
 export type MeetingCapabilities = "questionAndAnswer" | "unknownFutureValue";
 export type Modality = "unknown" | "audio" | "video" | "videoBasedScreenSharing" | "data" | "unknownFutureValue";
-export type OnlineMeetingPresenters =
-    | "everyone"
-    | "organization"
-    | "roleIsPresenter"
-    | "organizer"
-    | "unknownFutureValue";
-export type OnlineMeetingRole = "attendee" | "presenter" | "producer" | "unknownFutureValue";
+export type OnlineMeetingRole = "attendee" | "presenter" | "unknownFutureValue" | "producer";
 export type PlayPromptCompletionReason =
     | "unknown"
     | "completedSuccessfully"
@@ -2949,7 +3100,7 @@ export type PropertyType =
     | "DateTimeCollection";
 export type ApplicationIdentityType = "aadApplication" | "bot" | "tenantBot" | "office365Connector" | "outgoingWebhook";
 export type ChannelCreationMode = "migration";
-export type ChannelMembershipType = "standard" | "private" | "unknownFutureValue";
+export type ChannelMembershipType = "standard" | "private" | "unknownFutureValue" | "shared";
 export type ChatMessageImportance = "normal" | "high" | "urgent";
 export type ChatMessagePolicyViolationDlpActionTypes = "none" | "notifySender" | "blockAccess" | "blockAccessExternal";
 export type ChatMessagePolicyViolationUserActionTypes = "none" | "override" | "reportFalsePositive";
@@ -2980,7 +3131,9 @@ export type TeamsAsyncOperationType =
     | "archiveTeam"
     | "unarchiveTeam"
     | "createTeam"
-    | "unknownFutureValue";
+    | "unknownFutureValue"
+    | "teamifyGroup"
+    | "createChannel";
 export type TeamSpecialization =
     | "none"
     | "educationStandard"
@@ -2992,6 +3145,7 @@ export type TeamSpecialization =
     | "unknownFutureValue";
 export type TeamVisibilityType = "private" | "public" | "hiddenMembership" | "unknownFutureValue";
 export type TeamworkActivityTopicSource = "entityUrl" | "text";
+export type TeamworkTagType = "standard";
 export type UserIdentityType =
     | "aadUser"
     | "onPremiseAadUser"
@@ -3106,13 +3260,11 @@ export interface ApplicationSignInSummary extends Entity {
     // Percentage of successful sign-ins made by the application.
     successPercentage?: NullableOption<number>;
 }
-export interface AuditLogRoot extends Entity {
-    // Read-only. Nullable.
+export interface AuditLogRoot {
     directoryAudits?: NullableOption<DirectoryAudit[]>;
     directoryProvisioning?: NullableOption<ProvisioningObjectSummary[]>;
     provisioning?: NullableOption<ProvisioningObjectSummary[]>;
     restrictedSignIns?: NullableOption<RestrictedSignIn[]>;
-    // Read-only. Nullable.
     signIns?: NullableOption<SignIn[]>;
 }
 export interface DirectoryAudit extends Entity {
@@ -3242,8 +3394,11 @@ export interface SignIn extends Entity {
     createdDateTime?: string;
     // The device information from where the sign-in occurred. Includes information such as deviceId, OS, and browser.
     deviceDetail?: NullableOption<DeviceDetail>;
+    flaggedForReview?: NullableOption<boolean>;
+    homeTenantId?: NullableOption<string>;
     // The IP address of the client from where the sign-in occurred.
     ipAddress?: NullableOption<string>;
+    ipAddressFromResourceProvider?: NullableOption<string>;
     // Indicates whether a sign-in is interactive or not.
     isInteractive?: NullableOption<boolean>;
     // The city, state, and 2 letter country code from where the sign-in occurred.
@@ -3306,6 +3461,8 @@ export interface SignIn extends Entity {
     // The application name used for sign-in. This field is populated when you are signing in using an application.
     servicePrincipalName?: NullableOption<string>;
     signInEventTypes?: NullableOption<string[]>;
+    signInIdentifier?: NullableOption<string>;
+    signInIdentifierType?: NullableOption<SignInIdentifierType>;
     // The sign-in status. Includes the error code and description of the error (in case of a sign-in failure).
     status?: NullableOption<SignInStatus>;
     // The name of the identity provider. For example, sts.microsoft.com.
@@ -3320,10 +3477,13 @@ export interface SignIn extends Entity {
     userId?: string;
     // The UPN of the user.
     userPrincipalName?: NullableOption<string>;
+    userType?: NullableOption<SignInUserType>;
 }
 export interface RestrictedSignIn extends SignIn {
     targetTenantId?: NullableOption<string>;
 }
+// tslint:disable-next-line: no-empty-interface
+export interface AuthenticationMethodsRoot extends Entity {}
 export interface AzureADFeatureUsage extends Entity {
     featureName?: string;
     snapshotDateTime?: string;
@@ -3430,6 +3590,7 @@ export interface RelyingPartyDetailedSummary extends Entity {
 }
 export interface ReportRoot extends Entity {
     applicationSignInDetailedSummary?: NullableOption<ApplicationSignInDetailedSummary[]>;
+    authenticationMethods?: NullableOption<AuthenticationMethodsRoot>;
     credentialUserRegistrationDetails?: NullableOption<CredentialUserRegistrationDetails[]>;
     userCredentialUsageDetails?: NullableOption<UserCredentialUsageDetails[]>;
     dailyPrintUsageSummariesByPrinter?: NullableOption<PrintUsageSummaryByPrinter[]>;
@@ -3596,7 +3757,10 @@ export interface User extends DirectoryObject {
     legalAgeGroupClassification?: NullableOption<string>;
     // State of license assignments for this user. Returned only on $select. Read-only.
     licenseAssignmentStates?: NullableOption<LicenseAssignmentState[]>;
-    // The SMTP address for the user, for example, 'jeff@contoso.onmicrosoft.com'. Returned by default. Supports $filter.
+    /**
+     * The SMTP address for the user, for example, 'jeff@contoso.onmicrosoft.com'. Returned by default. Supports $filter and
+     * endsWith.
+     */
     mail?: NullableOption<string>;
     /**
      * The mail alias for the user. This property must be specified when a user is created. Returned only on $select. Supports
@@ -3742,7 +3906,7 @@ export interface User extends DirectoryObject {
      * standard RFC 822. By convention, this should map to the user's email name. The general format is alias@domain, where
      * domain must be present in the tenant's collection of verified domains. This property is required when a user is
      * created. The verified domains for the tenant can be accessed from the verifiedDomains property of organization.
-     * Returned by default. Supports $filter and $orderby.
+     * Returned by default. Supports $filter, $orderby, and endsWith.
      */
     userPrincipalName?: NullableOption<string>;
     /**
@@ -3787,6 +3951,7 @@ export interface User extends DirectoryObject {
     // A list for the user to enumerate their skills. Returned only on $select.
     skills?: NullableOption<string[]>;
     analytics?: NullableOption<UserAnalytics>;
+    usageRights?: NullableOption<UsageRight[]>;
     informationProtection?: NullableOption<InformationProtection>;
     appRoleAssignments?: NullableOption<AppRoleAssignment[]>;
     // Directory objects that were created by the user. Read-only. Nullable.
@@ -3796,7 +3961,6 @@ export interface User extends DirectoryObject {
      * user.) Read-only. Nullable.
      */
     directReports?: NullableOption<DirectoryObject[]>;
-    // A collection of this user's license details. Read-only.
     licenseDetails?: NullableOption<LicenseDetails[]>;
     // The user or contact that is this user's manager. Read-only. (HTTP Methods: GET, PUT, DELETE.)
     manager?: NullableOption<DirectoryObject>;
@@ -3886,7 +4050,6 @@ export interface User extends DirectoryObject {
     onenote?: NullableOption<Onenote>;
     // Represents properties that are descriptive of a user in a tenant.
     profile?: NullableOption<Profile>;
-    // The user's activities across devices. Read-only. Nullable.
     activities?: NullableOption<UserActivity[]>;
     devices?: NullableOption<Device[]>;
     onlineMeetings?: NullableOption<OnlineMeeting[]>;
@@ -3905,6 +4068,14 @@ export interface UserAnalytics extends Entity {
     settings?: NullableOption<Settings>;
     // The collection of work activities that a user spent time on during and outside of working hours. Read-only. Nullable.
     activityStatistics?: NullableOption<ActivityStatistics[]>;
+}
+export interface UsageRight extends Entity {
+    // Product id corresponding to the usage right.
+    catalogId?: string;
+    // Identifier of the service corresponding to the usage right.
+    serviceIdentifier?: string;
+    // The state of the usage right. Possible values are: active, inactive, warning, suspended.
+    state?: UsageRightState;
 }
 // tslint:disable-next-line: interface-name
 export interface InformationProtection extends Entity {
@@ -4078,12 +4249,7 @@ export interface CalendarGroup extends Entity {
     calendars?: NullableOption<Calendar[]>;
 }
 export interface OutlookItem extends Entity {
-    // The categories associated with the item
     categories?: NullableOption<string[]>;
-    /**
-     * Identifies the version of the item. Every time the item is changed, changeKey changes as well. This allows Exchange to
-     * apply changes to the correct version of the object. Read-only.
-     */
     changeKey?: NullableOption<string>;
     /**
      * The Timestamp type represents date and time information using ISO 8601 format and is always in UTC time. For example,
@@ -4123,99 +4289,35 @@ export interface Event extends OutlookItem {
      * false.
      */
     hideAttendees?: NullableOption<boolean>;
-    // The importance of the event. The possible values are: low, normal, high.
     importance?: NullableOption<Importance>;
-    // Set to true if the event lasts all day.
     isAllDay?: NullableOption<boolean>;
-    // Set to true if the event has been canceled.
     isCancelled?: NullableOption<boolean>;
-    /**
-     * Set to true if the user has updated the meeting in Outlook but has not sent the updates to attendees. Set to false if
-     * all changes have been sent, or if the event is an appointment without any attendees.
-     */
     isDraft?: NullableOption<boolean>;
-    // True if this event has online meeting information, false otherwise. Default is false. Optional.
     isOnlineMeeting?: NullableOption<boolean>;
-    /**
-     * Set to true if the calendar owner (specified by the owner property of the calendar) is the organizer of the event
-     * (specified by the organizer property of the event). This also applies if a delegate organized the event on behalf of
-     * the owner.
-     */
     isOrganizer?: NullableOption<boolean>;
-    // Set to true if an alert is set to remind the user of the event.
     isReminderOn?: NullableOption<boolean>;
-    // The location of the event.
     location?: NullableOption<Location>;
-    /**
-     * The locations where the event is held or attended from. The location and locations properties always correspond with
-     * each other. If you update the location property, any prior locations in the locations collection would be removed and
-     * replaced by the new location value.
-     */
     locations?: NullableOption<Location[]>;
     occurrenceId?: NullableOption<string>;
-    // Details for an attendee to join the meeting online. Read-only.
     onlineMeeting?: NullableOption<OnlineMeetingInfo>;
-    /**
-     * Represents the online meeting service provider. The possible values are teamsForBusiness, skypeForBusiness, and
-     * skypeForConsumer. Optional.
-     */
     onlineMeetingProvider?: NullableOption<OnlineMeetingProviderType>;
-    /**
-     * A URL for an online meeting. The property is set only when an organizer specifies an event as an online meeting such as
-     * a Skype meeting. Read-only.
-     */
     onlineMeetingUrl?: NullableOption<string>;
-    // The organizer of the event.
     organizer?: NullableOption<Recipient>;
-    /**
-     * The end time zone that was set when the event was created. A value of tzone://Microsoft/Custom indicates that a legacy
-     * custom time zone was set in desktop Outlook.
-     */
     originalEndTimeZone?: NullableOption<string>;
-    /**
-     * The Timestamp type represents date and time information using ISO 8601 format and is always in UTC time. For example,
-     * midnight UTC on Jan 1, 2014 would look like this: '2014-01-01T00:00:00Z'
-     */
     originalStart?: NullableOption<string>;
-    /**
-     * The start time zone that was set when the event was created. A value of tzone://Microsoft/Custom indicates that a
-     * legacy custom time zone was set in desktop Outlook.
-     */
     originalStartTimeZone?: NullableOption<string>;
-    // The recurrence pattern for the event.
     recurrence?: NullableOption<PatternedRecurrence>;
-    // The number of minutes before the event start time that the reminder alert occurs.
     reminderMinutesBeforeStart?: NullableOption<number>;
-    // Default is true, which represents the organizer would like an invitee to send a response to the event.
     responseRequested?: NullableOption<boolean>;
-    // Indicates the type of response sent in response to an event message.
     responseStatus?: NullableOption<ResponseStatus>;
-    // The possible values are: normal, personal, private, confidential.
     sensitivity?: NullableOption<Sensitivity>;
-    // The ID for the recurring series master item, if this event is part of a recurring series.
     seriesMasterId?: NullableOption<string>;
-    // The status to show. The possible values are: free, tentative, busy, oof, workingElsewhere, unknown.
     showAs?: NullableOption<FreeBusyStatus>;
-    // The date, time, and time zone that the event starts. By default, the start time is in UTC.
     start?: NullableOption<DateTimeTimeZone>;
-    // The text of the event's subject line.
     subject?: NullableOption<string>;
-    /**
-     * A custom identifier specified by a client app for the server to avoid redundant POST operations in case of client
-     * retries to create the same event. This is useful when low network connectivity causes the client to time out before
-     * receiving a response from the server for the client's prior create-event request. After you set transactionId when
-     * creating an event, you cannot change transactionId in a subsequent update. This property is only returned in a response
-     * payload if an app has set it. Optional.
-     */
     transactionId?: NullableOption<string>;
-    // The event type. The possible values are: singleInstance, occurrence, exception, seriesMaster. Read-only.
     type?: NullableOption<EventType>;
     uid?: NullableOption<string>;
-    /**
-     * The URL to open the event in Outlook on the web.Outlook on the web opens the event in the browser if you are signed in
-     * to your mailbox. Otherwise, Outlook on the web prompts you to sign in.This URL cannot be accessed from within an
-     * iFrame.
-     */
     webLink?: NullableOption<string>;
     /**
      * The collection of FileAttachment, ItemAttachment, and referenceAttachment attachments for the event. Navigation
@@ -4286,42 +4388,26 @@ export interface Contact extends OutlookItem {
     generation?: NullableOption<string>;
     // The contact's given name.
     givenName?: NullableOption<string>;
-    // The contact's instant messaging (IM) addresses.
     imAddresses?: NullableOption<string[]>;
-    // The contact's initials.
     initials?: NullableOption<string>;
     isFavorite?: NullableOption<boolean>;
-    // The contact’s job title.
     jobTitle?: NullableOption<string>;
-    // The name of the contact's manager.
     manager?: NullableOption<string>;
-    // The contact's middle name.
     middleName?: NullableOption<string>;
-    // The contact's nickname.
     nickName?: NullableOption<string>;
-    // The location of the contact's office.
     officeLocation?: NullableOption<string>;
-    // The ID of the contact's parent folder.
     parentFolderId?: NullableOption<string>;
-    // The user's notes about the contact.
     personalNotes?: NullableOption<string>;
     phones?: NullableOption<Phone[]>;
     postalAddresses?: NullableOption<PhysicalAddress[]>;
-    // The contact's profession.
     profession?: NullableOption<string>;
-    // The name of the contact's spouse/partner.
     spouseName?: NullableOption<string>;
-    // The contact's surname.
     surname?: NullableOption<string>;
-    // The contact's title.
     title?: NullableOption<string>;
     websites?: NullableOption<Website[]>;
     weddingAnniversary?: NullableOption<string>;
-    // The phonetic Japanese company name of the contact.
     yomiCompanyName?: NullableOption<string>;
-    // The phonetic Japanese given name (first name) of the contact.
     yomiGivenName?: NullableOption<string>;
-    // The phonetic Japanese surname (last name) of the contact.
     yomiSurname?: NullableOption<string>;
     // The collection of open extensions defined for the contact. Nullable.
     extensions?: NullableOption<Extension[]>;
@@ -4558,6 +4644,10 @@ export interface Group extends DirectoryObject {
      * group. Returned only on $select.
      */
     unseenMessagesCount?: NullableOption<number>;
+    /**
+     * Describes the processing status for rules-based dynamic groups. The property is null for non-rule based dynamic groups
+     * or if the dynamic group processing has been paused. Returned only on $select. Supports $filter. Read-only.
+     */
     membershipRuleProcessingStatus?: NullableOption<MembershipRuleProcessingStatus>;
     isArchived?: NullableOption<boolean>;
     appRoleAssignments?: NullableOption<AppRoleAssignment[]>;
@@ -4689,69 +4779,25 @@ export interface Message extends OutlookItem {
      * property to look for a src attribute, such as &amp;lt;IMG src='cid:image001.jpg@01D26CD8.6C05F070'&amp;gt;.
      */
     hasAttachments?: NullableOption<boolean>;
-    // The importance of the message: Low, Normal, High.
     importance?: NullableOption<Importance>;
-    /**
-     * The classification of the message for the user, based on inferred relevance or importance, or on an explicit override.
-     * The possible values are: focused or other.
-     */
     inferenceClassification?: NullableOption<InferenceClassificationType>;
-    /**
-     * A collection of message headers defined by RFC5322. The set includes message headers indicating the network path taken
-     * by a message from the sender to the recipient. It can also contain custom message headers that hold app data for the
-     * message. Returned only on applying a $select query option. Read-only.
-     */
     internetMessageHeaders?: NullableOption<InternetMessageHeader[]>;
-    // The message ID in the format specified by RFC2822.
     internetMessageId?: NullableOption<string>;
-    // Indicates whether a read receipt is requested for the message.
     isDeliveryReceiptRequested?: NullableOption<boolean>;
-    // Indicates whether the message is a draft. A message is a draft if it hasn't been sent yet.
     isDraft?: NullableOption<boolean>;
-    // Indicates whether the message has been read.
     isRead?: NullableOption<boolean>;
-    // Indicates whether a read receipt is requested for the message.
     isReadReceiptRequested?: NullableOption<boolean>;
     mentionsPreview?: NullableOption<MentionsPreview>;
-    // The unique identifier for the message's parent mailFolder.
     parentFolderId?: NullableOption<string>;
-    /**
-     * The date and time the message was received. The date and time information uses ISO 8601 format and is always in UTC
-     * time. For example, midnight UTC on Jan 1, 2014 would look like this: '2014-01-01T00:00:00Z'.
-     */
     receivedDateTime?: NullableOption<string>;
-    // The email addresses to use when replying.
     replyTo?: NullableOption<Recipient[]>;
-    /**
-     * The account that is actually used to generate the message. In most cases, this value is the same as the from property.
-     * You can set this property to a different value when sending a message from a shared mailbox, for a shared calendar, or
-     * as a delegate. In any case, the value must correspond to the actual mailbox used. Find out more about setting the from
-     * and sender properties of a message.
-     */
     sender?: NullableOption<Recipient>;
-    /**
-     * The date and time the message was sent. The date and time information uses ISO 8601 format and is always in UTC time.
-     * For example, midnight UTC on Jan 1, 2014 would look like this: '2014-01-01T00:00:00Z'.
-     */
     sentDateTime?: NullableOption<string>;
-    // The subject of the message.
     subject?: NullableOption<string>;
-    // The To: recipients for the message.
     toRecipients?: NullableOption<Recipient[]>;
-    /**
-     * The part of the body of the message that is unique to the current message. uniqueBody is not returned by default but
-     * can be retrieved for a given message by use of the ?$select=uniqueBody query. It can be in HTML or text format.
-     */
     uniqueBody?: NullableOption<ItemBody>;
     unsubscribeData?: NullableOption<string[]>;
     unsubscribeEnabled?: NullableOption<boolean>;
-    /**
-     * The URL to open the message in Outlook on the web.You can append an ispopout argument to the end of the URL to change
-     * how the message is displayed. If ispopout is not present or if it is set to 1, then the message is shown in a popout
-     * window. If ispopout is set to 0, then the browser will show the message in the Outlook on the web review pane.The
-     * message will open in the browser if you are logged in to your mailbox via Outlook on the web. You will be prompted to
-     * login if you are not already logged in with the browser.This URL cannot be accessed from within an iFrame.
-     */
     webLink?: NullableOption<string>;
     // The fileAttachment and itemAttachment attachments for the message.
     attachments?: NullableOption<Attachment[]>;
@@ -4831,7 +4877,6 @@ export interface BaseItem extends Entity {
     createdBy?: NullableOption<IdentitySet>;
     // Date and time of item creation. Read-only.
     createdDateTime?: string;
-    // Provides a user-visible description of the item. Optional.
     description?: NullableOption<string>;
     // ETag for the item. Read-only.
     eTag?: NullableOption<string>;
@@ -4845,9 +4890,7 @@ export interface BaseItem extends Entity {
     parentReference?: NullableOption<ItemReference>;
     // URL that displays the resource in the browser. Read-only.
     webUrl?: NullableOption<string>;
-    // Identity of the user who created the item. Read-only.
     createdByUser?: NullableOption<User>;
-    // Identity of the user who last modified the item. Read-only.
     lastModifiedByUser?: NullableOption<User>;
 }
 export interface Drive extends BaseItem {
@@ -4871,7 +4914,6 @@ export interface Drive extends BaseItem {
     following?: NullableOption<DriveItem[]>;
     // All items contained in the drive. Read-only. Nullable.
     items?: NullableOption<DriveItem[]>;
-    // For drives in SharePoint, the underlying document library list. Read-only. Nullable.
     list?: NullableOption<List>;
     // The root folder of the drive. Read-only.
     root?: NullableOption<DriveItem>;
@@ -4904,9 +4946,10 @@ export interface Site extends BaseItem {
     lists?: NullableOption<List[]>;
     // The collection of pages in the SitePages list in this site.
     pages?: NullableOption<SitePage[]>;
+    // The permissions associated with the site. Nullable.
+    permissions?: NullableOption<Permission[]>;
     // The collection of the sub-sites under this site.
     sites?: NullableOption<Site[]>;
-    // Calls the OneNote service for notebook related operations.
     onenote?: NullableOption<Onenote>;
 }
 // tslint:disable-next-line: no-empty-interface
@@ -5066,7 +5109,7 @@ export interface ManagedDevice extends Entity {
     /**
      * Platform of the device. This property is read-only. Possible values are: desktop, windowsRT, winMO6, nokia,
      * windowsPhone, mac, winCE, winEmbedded, iPhone, iPad, iPod, android, iSocConsumer, unix, macMDM, holoLens, surfaceHub,
-     * androidForWork, androidEnterprise, windows10x, androidnGMS, blackberry, palm, unknown, cloudPC.
+     * androidForWork, androidEnterprise, windows10x, androidnGMS, linux, blackberry, palm, unknown, cloudPC.
      */
     deviceType?: DeviceType;
     // Whether the device is Exchange ActiveSync activated. This property is read-only.
@@ -5209,14 +5252,16 @@ export interface ManagedDevice extends Entity {
     windowsActiveMalwareCount?: number;
     // Count of remediated malware for this windows device. This property is read-only.
     windowsRemediatedMalwareCount?: number;
-    // Security baseline states for this device.
-    securityBaselineStates?: NullableOption<SecurityBaselineState[]>;
     // Device compliance policy states for this device.
     deviceCompliancePolicyStates?: NullableOption<DeviceCompliancePolicyState[]>;
+    // Managed device mobile app configuration states for this device.
+    assignmentFilterEvaluationStatusDetails?: NullableOption<AssignmentFilterEvaluationStatusDetails[]>;
     // Device configuration states for this device.
     deviceConfigurationStates?: NullableOption<DeviceConfigurationState[]>;
     // Managed device mobile app configuration states for this device.
     managedDeviceMobileAppConfigurationStates?: NullableOption<ManagedDeviceMobileAppConfigurationState[]>;
+    // Security baseline states for this device.
+    securityBaselineStates?: NullableOption<SecurityBaselineState[]>;
     // All applications currently installed on the device
     detectedApps?: NullableOption<DetectedApp[]>;
     // Device category
@@ -5374,13 +5419,13 @@ export interface PlannerUser extends PlannerDelta {
     all?: NullableOption<PlannerDelta[]>;
     // Read-only. Nullable. Returns the plannerPlans that the user marked as favorites.
     favoritePlans?: NullableOption<PlannerPlan[]>;
-    // Read-only. Nullable. Returns the plannerTasks assigned to the user.
     plans?: NullableOption<PlannerPlan[]>;
     /**
      * Read-only. Nullable. Returns the plannerPlans that have been recently viewed by the user in apps that support recent
      * plans.
      */
     recentPlans?: NullableOption<PlannerPlan[]>;
+    rosterPlans?: NullableOption<PlannerPlan[]>;
     // Read-only. Nullable. Returns the plannerTasks assigned to the user.
     tasks?: NullableOption<PlannerTask[]>;
 }
@@ -5477,52 +5522,19 @@ export interface Profile extends Entity {
     websites?: NullableOption<PersonWebsite[]>;
 }
 export interface UserActivity extends Entity {
-    /**
-     * Required. URL used to launch the activity in the best native experience represented by the appId. Might launch a
-     * web-based app if no native app exists.
-     */
     activationUrl?: string;
-    /**
-     * Required. URL for the domain representing the cross-platform identity mapping for the app. Mapping is stored either as
-     * a JSON file hosted on the domain or configurable via Windows Dev Center. The JSON file is named
-     * cross-platform-app-identifiers and is hosted at root of your HTTPS domain, either at the top level domain or include a
-     * sub domain. For example: https://contoso.com or https://myapp.contoso.com but NOT https://myapp.contoso.com/somepath.
-     * You must have a unique file and domain (or sub domain) per cross-platform app identity. For example, a separate file
-     * and domain is needed for Word vs. PowerPoint.
-     */
     activitySourceHost?: string;
-    // Required. The unique activity ID in the context of the app - supplied by caller and immutable thereafter.
     appActivityId?: string;
-    /**
-     * Optional. Short text description of the app used to generate the activity for use in cases when the app is not
-     * installed on the user’s local device.
-     */
     appDisplayName?: NullableOption<string>;
-    // Optional. A custom piece of data - JSON-LD extensible description of content according to schema.org syntax.
     contentInfo?: NullableOption<any>;
-    /**
-     * Optional. Used in the event the content can be rendered outside of a native or web-based app experience (for example, a
-     * pointer to an item in an RSS feed).
-     */
     contentUrl?: NullableOption<string>;
-    // Set by the server. DateTime in UTC when the object was created on the server.
     createdDateTime?: NullableOption<string>;
-    // Set by the server. DateTime in UTC when the object expired on the server.
     expirationDateTime?: NullableOption<string>;
-    // Optional. URL used to launch the activity in a web-based app, if available.
     fallbackUrl?: NullableOption<string>;
-    // Set by the server. DateTime in UTC when the object was modified on the server.
     lastModifiedDateTime?: NullableOption<string>;
-    // Set by the server. A status code used to identify valid objects. Values: active, updated, deleted, ignored.
     status?: NullableOption<Status>;
-    /**
-     * Optional. The timezone in which the user's device used to generate the activity was located at activity creation time;
-     * values supplied as Olson IDs in order to support cross-platform representation.
-     */
     userTimezone?: NullableOption<string>;
-    // Required. The object containing information to render the activity in the UX.
     visualElements?: VisualInfo;
-    // Optional. NavigationProperty/Containment; navigation property to the activity's historyItems.
     historyItems?: NullableOption<ActivityHistoryItem[]>;
 }
 export interface Device extends DirectoryObject {
@@ -5555,6 +5567,7 @@ export interface Device extends DirectoryObject {
     enrollmentProfileName?: NullableOption<string>;
     enrollmentType?: NullableOption<string>;
     extensionAttributes?: NullableOption<OnPremisesExtensionAttributes>;
+    hostnames?: NullableOption<string[]>;
     /**
      * true if the device complies with Mobile Device Management (MDM) policies; otherwise, false. Read-only. This can only be
      * updated by Intune for any device OS type or by an approved MDM app for Windows OS devices.
@@ -5604,7 +5617,7 @@ export interface Device extends DirectoryObject {
     name?: NullableOption<string>;
     platform?: NullableOption<string>;
     status?: NullableOption<string>;
-    // Groups that this group is a member of. HTTP Methods: GET (supported for all groups). Read-only. Nullable.
+    usageRights?: NullableOption<UsageRight[]>;
     memberOf?: NullableOption<DirectoryObject[]>;
     /**
      * The user that cloud joined the device or registered their personal device. The registered owner is set at the time of
@@ -5629,10 +5642,13 @@ export interface OnlineMeeting extends Entity {
      * and unknownFutureValue.
      */
     allowedPresenters?: NullableOption<OnlineMeetingPresenters>;
+    // The content stream of the alternative recording of a live event. Read-only.
     alternativeRecording?: NullableOption<any>;
+    // The content stream of the attendee report of a live event. Read-only.
     attendeeReport?: NullableOption<any>;
     // The phone access (dial-in) information for an online meeting. Read-only.
     audioConferencing?: NullableOption<AudioConferencing>;
+    // Settings related to a live event
     broadcastSettings?: NullableOption<BroadcastMeetingSettings>;
     canceledDateTime?: NullableOption<string>;
     // The list of meeting capabilities. Possible values are: questionAndAnswer.
@@ -5647,6 +5663,7 @@ export interface OnlineMeeting extends Entity {
     expirationDateTime?: NullableOption<string>;
     // The external ID. A custom ID. Optional.
     externalId?: NullableOption<string>;
+    // Indicates if this is a live event.
     isBroadcast?: NullableOption<boolean>;
     isCancelled?: NullableOption<boolean>;
     // Whether or not to announce when callers join or leave.
@@ -5658,6 +5675,7 @@ export interface OnlineMeeting extends Entity {
     lobbyBypassSettings?: NullableOption<LobbyBypassSettings>;
     // The participants associated with the online meeting. This includes the organizer and the attendees.
     participants?: NullableOption<MeetingParticipants>;
+    // The content stream of the recording of a live event. Read-only.
     recording?: NullableOption<any>;
     // The meeting start time in UTC.
     startDateTime?: NullableOption<string>;
@@ -5669,8 +5687,8 @@ export interface OnlineMeeting extends Entity {
 export interface Presence extends Entity {
     /**
      * The supplemental information to a user's availability. Possible values are Available, Away, BeRightBack, Busy,
-     * DoNotDisturb, InACall, InAConferenceCall, Inactive, InAMeeting, Offline, OffWork, OutOfOffice, PresenceUnknown,
-     * Presenting, UrgentInterruptionsOnly.
+     * DoNotDisturb, InACall, InAConferenceCall, Inactive,InAMeeting, Offline, OffWork,OutOfOffice,
+     * PresenceUnknown,Presenting, UrgentInterruptionsOnly.
      */
     activity?: NullableOption<string>;
     /**
@@ -5678,6 +5696,8 @@ export interface Presence extends Entity {
      * BusyIdle, DoNotDisturb, Offline, PresenceUnknown
      */
     availability?: NullableOption<string>;
+    // The out of office settings for a user.
+    outOfOfficeSettings?: NullableOption<OutOfOfficeSettings>;
 }
 export interface Authentication extends Entity {
     emailMethods?: NullableOption<EmailAuthenticationMethod[]>;
@@ -5773,6 +5793,7 @@ export interface Team extends Entity {
     photo?: NullableOption<ProfilePhoto>;
     // The general channel for the team.
     primaryChannel?: NullableOption<Channel>;
+    tags?: NullableOption<TeamworkTag[]>;
     // The template this team was created from. See available templates.
     template?: NullableOption<TeamsTemplate>;
 }
@@ -5992,10 +6013,7 @@ export interface Application extends DirectoryObject {
     // Read-only. Nullable.
     extensionProperties?: NullableOption<ExtensionProperty[]>;
     homeRealmDiscoveryPolicies?: NullableOption<HomeRealmDiscoveryPolicy[]>;
-    /**
-     * Directory objects that are owners of the application. The owners are a set of non-admin users who are allowed to modify
-     * this object. Requires version 2013-11-08 or newer. Read-only. Nullable.
-     */
+    // Directory objects that are owners of the application. Read-only. Nullable.
     owners?: NullableOption<DirectoryObject[]>;
     tokenIssuancePolicies?: NullableOption<TokenIssuancePolicy[]>;
     // The tokenLifetimePolicies assigned to this application.
@@ -6083,8 +6101,8 @@ export interface ServicePrincipal extends DirectoryObject {
     passwordCredentials?: PasswordCredential[];
     /**
      * Specifies the single sign-on mode configured for this application. Azure AD uses the preferred single sign-on mode to
-     * launch the application from Microsoft 365 or the Azure AD My Apps. The supported values are password, saml, external,
-     * and oidc.
+     * launch the application from Microsoft 365 or the Azure AD My Apps. The supported values are password, saml,
+     * notSupported, and oidc.
      */
     preferredSingleSignOnMode?: NullableOption<string>;
     /**
@@ -6334,16 +6352,9 @@ export interface OAuth2PermissionGrant extends Entity {
     // Currently, the start time value is ignored, but a value is required when creating an oAuth2PermissionGrant. Required.
     startTime?: NullableOption<string>;
 }
-// tslint:disable-next-line: no-empty-interface
-export interface AuthenticationMethodTarget extends Entity {}
-export interface MicrosoftAuthenticatorAuthenticationMethodTarget extends AuthenticationMethodTarget {
-    authenticationMode?: MicrosoftAuthenticatorAuthenticationMode;
-    featureSettings?: NullableOption<AuthenticatorAppFeatureSettings>;
-}
 export interface PolicyRoot {
     authenticationFlowsPolicy?: NullableOption<AuthenticationFlowsPolicy>;
     b2cAuthenticationMethodsPolicy?: NullableOption<B2cAuthenticationMethodsPolicy>;
-    deviceRegistrationPolicy?: NullableOption<DeviceRegistrationPolicy>;
     activityBasedTimeoutPolicies?: NullableOption<ActivityBasedTimeoutPolicy[]>;
     authorizationPolicy?: NullableOption<AuthorizationPolicy[]>;
     claimsMappingPolicies?: NullableOption<ClaimsMappingPolicy[]>;
@@ -6378,8 +6389,6 @@ export interface B2cAuthenticationMethodsPolicy extends Entity {
      */
     isUserNameAuthenticationEnabled?: boolean;
 }
-// tslint:disable-next-line: no-empty-interface
-export interface DeviceRegistrationPolicy extends Entity {}
 // tslint:disable-next-line: no-empty-interface
 export interface ActivityBasedTimeoutPolicy extends StsPolicy {}
 export interface AuthorizationPolicy extends PolicyBase {
@@ -6473,9 +6482,6 @@ export interface ConditionalAccessPolicy extends Entity {
 export interface IdentitySecurityDefaultsEnforcementPolicy extends PolicyBase {
     // If set to true, Azure Active Directory security defaults is enabled for the tenant.
     isEnabled?: boolean;
-}
-export interface SmsAuthenticationMethodTarget extends AuthenticationMethodTarget {
-    isUsableForSignIn?: boolean;
 }
 export interface Bitlocker extends Entity {
     // The recovery keys associated with the bitlocker entity.
@@ -6792,10 +6798,7 @@ export interface CloudPcDeviceImage extends Entity {
      * '/subscriptions/{subscription-id}/resourceGroups/{resourceGroupName}/providers/Microsoft.Compute/images/{imageName}'.
      */
     sourceImageResourceId?: NullableOption<string>;
-    /**
-     * The status of the image on cloud PC. Possible status include upload pending, failed to upload, or ready to use.
-     * Possible values are: pending, ready, failed.
-     */
+    // The status of the image on cloud PC. Possible values are: pending, ready, failed.
     status?: NullableOption<CloudPcDeviceImageStatus>;
     /**
      * The details of the image's status, which indicates why the upload failed, if applicable. Possible values are:
@@ -6812,25 +6815,27 @@ export interface CloudPcOnPremisesConnection extends Entity {
     adDomainPassword?: NullableOption<string>;
     /**
      * The username of an Active Directory account (user or service account) that has permissions to create computer objects
-     * in Active Directory. Required format: contoso@microsoft.com.
+     * in Active Directory. Required format: admin@contoso.com.
      */
     adDomainUsername?: string;
     // The display name for the on-premises connection.
     displayName?: string;
     /**
      * The status of the most recent health check done on the on-premises connection. For example, if status is 'passed', the
-     * on-premises connection has passed all checks run by the service. Read-only. Possible values are: Pending, Running,
-     * Passed, Failed, UnknownFutureValue.
+     * on-premises connection has passed all checks run by the service. Possible values are: pending, running, passed, failed,
+     * unknownFutureValue. Read-only.
      */
     healthCheckStatus?: CloudPcOnPremisesConnectionStatus;
     /**
-     * The details of the connection's health checks and the corresponding results. Returned only on $select. See an example
-     * of getting the healthCheckStatusDetails property.Read-only.
+     * The details of the connection's health checks and the corresponding results. Returned only on $select.For an example
+     * that shows how to get the inUse property, see Example 2: Get the selected properties of an on-premises connection,
+     * including healthCheckStatusDetails. Read-only.
      */
     healthCheckStatusDetails?: NullableOption<CloudPcOnPremisesConnectionStatusDetails>;
     /**
      * When true, the on-premises connection is in use. When false, the connection is not in use. You cannot delete a
-     * connection that’s in use. Read-only.
+     * connection that’s in use. Returned only on $select. For an example that shows how to get the inUse property, see
+     * Example 2: Get the selected properties of an on-premises connection, including healthCheckStatusDetails. Read-only.
      */
     inUse?: boolean;
     /**
@@ -7078,12 +7083,16 @@ export interface DeviceManagement extends Entity {
     userExperienceAnalyticsDeviceStartupProcesses?: NullableOption<UserExperienceAnalyticsDeviceStartupProcess[]>;
     // User experience analytics device Startup Process Performance
     userExperienceAnalyticsDeviceStartupProcessPerformance?: NullableOption<UserExperienceAnalyticsDeviceStartupProcessPerformance[]>;
+    // User experience analytics devices without cloud identity.
+    userExperienceAnalyticsDevicesWithoutCloudIdentity?: NullableOption<UserExperienceAnalyticsDeviceWithoutCloudIdentity[]>;
     // User experience analytics metric history
     userExperienceAnalyticsMetricHistory?: NullableOption<UserExperienceAnalyticsMetricHistory[]>;
     // User experience analytics overview
     userExperienceAnalyticsOverview?: NullableOption<UserExperienceAnalyticsOverview>;
     // User experience analytics regression summary
     userExperienceAnalyticsRegressionSummary?: NullableOption<UserExperienceAnalyticsRegressionSummary>;
+    // User experience analytics resource performance
+    userExperienceAnalyticsResourcePerformance?: NullableOption<UserExperienceAnalyticsResourcePerformance[]>;
     // User experience analytics device Startup Score History
     userExperienceAnalyticsScoreHistory?: NullableOption<UserExperienceAnalyticsScoreHistory[]>;
     // The list of affected malware in the tenant.
@@ -7126,6 +7135,10 @@ export interface DeviceManagement extends Entity {
     groupPolicyUploadedDefinitionFiles?: NullableOption<GroupPolicyUploadedDefinitionFile[]>;
     // Collection of MicrosoftTunnelConfiguration settings associated with account.
     microsoftTunnelConfigurations?: NullableOption<MicrosoftTunnelConfiguration[]>;
+    // Collection of MicrosoftTunnelHealthThreshold settings associated with account.
+    microsoftTunnelHealthThresholds?: NullableOption<MicrosoftTunnelHealthThreshold[]>;
+    // Collection of MicrosoftTunnelServerLogCollectionResponse settings associated with account.
+    microsoftTunnelServerLogCollectionResponses?: NullableOption<MicrosoftTunnelServerLogCollectionResponse[]>;
     // Collection of MicrosoftTunnelSite settings associated with account.
     microsoftTunnelSites?: NullableOption<MicrosoftTunnelSite[]>;
     // The Notification Message Templates.
@@ -7156,6 +7169,10 @@ export interface DeviceManagement extends Entity {
     troubleshootingEvents?: NullableOption<DeviceManagementTroubleshootingEvent[]>;
     // A collection of windows feature update profiles
     windowsFeatureUpdateProfiles?: NullableOption<WindowsFeatureUpdateProfile[]>;
+    // A collection of windows quality update profiles
+    windowsQualityUpdateProfiles?: NullableOption<WindowsQualityUpdateProfile[]>;
+    // A collection of windows update catalog items (fetaure updates item , quality updates item)
+    windowsUpdateCatalogItems?: NullableOption<WindowsUpdateCatalogItem[]>;
     // Intune branding profiles targeted to AAD groups
     intuneBrandingProfiles?: NullableOption<IntuneBrandingProfile[]>;
     // The windows information protection app learning summaries.
@@ -7178,7 +7195,7 @@ export interface AndroidDeviceOwnerEnrollmentProfile extends Entity {
     enrolledDeviceCount?: number;
     /**
      * The enrollment mode of devices that use this enrollment profile. Possible values are: corporateOwnedDedicatedDevice,
-     * corporateOwnedFullyManaged, corporateOwnedWorkProfile, corporateOwnedAOSPUserlessDevice.
+     * corporateOwnedFullyManaged, corporateOwnedWorkProfile.
      */
     enrollmentMode?: AndroidDeviceOwnerEnrollmentMode;
     /**
@@ -7710,11 +7727,10 @@ export interface MacOSSoftwareUpdateAccountSummary extends Entity {
 }
 export interface ManagedDeviceEncryptionState extends Entity {
     /**
-     * Advanced BitLocker State. Possible values are: success, noUserConsent, osVolumeEncryptionMethodMismatch,
-     * osVolumeTpmRequired, osVolumeTpmOnlyRequired, osVolumeTpmPinRequired, osVolumeTpmStartupKeyRequired,
-     * osVolumeTpmPinStartupKeyRequired, osVolumeUnprotected, recoveryKeyBackupFailed, fixedDriveNotEncrypted,
-     * fixedDriveEncryptionMethodMismatch, loggedOnUserNonAdmin, windowsRecoveryEnvironmentNotConfigured, tpmNotAvailable,
-     * tpmNotReady, networkError.
+     * Advanced BitLocker State. Possible values are: success, noUserConsent, osVolumeUnprotected, osVolumeTpmRequired,
+     * osVolumeTpmOnlyRequired, osVolumeTpmPinRequired, osVolumeTpmStartupKeyRequired, osVolumeTpmPinStartupKeyRequired,
+     * osVolumeEncryptionMethodMismatch, recoveryKeyBackupFailed, fixedDriveNotEncrypted, fixedDriveEncryptionMethodMismatch,
+     * loggedOnUserNonAdmin, windowsRecoveryEnvironmentNotConfigured, tpmNotAvailable, tpmNotReady, networkError.
      */
     advancedBitLockerStates?: NullableOption<AdvancedBitLockerState>;
     // Device name
@@ -7857,6 +7873,11 @@ export interface DeviceManagementConfigurationSettingDefinition extends Entity {
     rootDefinitionId?: NullableOption<string>;
     // Setting type, for example, configuration and compliance. Possible values are: none, configuration.
     settingUsage?: DeviceManagementConfigurationSettingUsage;
+    /**
+     * Setting control type representation in the UX. Possible values are: default, dropdown, smallTextBox, largeTextBox,
+     * toggle, multiheaderGrid, contextPane.
+     */
+    uxBehavior?: DeviceManagementConfigurationControlType;
     // Item Version
     version?: NullableOption<string>;
 }
@@ -8152,7 +8173,7 @@ export interface ComanagementEligibleDevice extends Entity {
     /**
      * DeviceType. Possible values are: desktop, windowsRT, winMO6, nokia, windowsPhone, mac, winCE, winEmbedded, iPhone,
      * iPad, iPod, android, iSocConsumer, unix, macMDM, holoLens, surfaceHub, androidForWork, androidEnterprise, windows10x,
-     * androidnGMS, blackberry, palm, unknown, cloudPC.
+     * androidnGMS, linux, blackberry, palm, unknown, cloudPC.
      */
     deviceType?: DeviceType;
     // EntitySource
@@ -8567,12 +8588,16 @@ export interface UserExperienceAnalyticsBaseline extends Entity {
     displayName?: NullableOption<string>;
     // Signifies if the current baseline is the commercial median baseline or a custom baseline.
     isBuiltIn?: boolean;
+    // The user experience analytics app health metrics.
+    appHealthMetrics?: NullableOption<UserExperienceAnalyticsCategory>;
     // The user experience analytics best practices metrics.
     bestPracticesMetrics?: NullableOption<UserExperienceAnalyticsCategory>;
     // The user experience analytics device boot performance metrics.
     deviceBootPerformanceMetrics?: NullableOption<UserExperienceAnalyticsCategory>;
     // The user experience analytics reboot analytics metrics.
     rebootAnalyticsMetrics?: NullableOption<UserExperienceAnalyticsCategory>;
+    // The user experience analytics resource performance metrics.
+    resourcePerformanceMetrics?: NullableOption<UserExperienceAnalyticsCategory>;
 }
 export interface UserExperienceAnalyticsDevicePerformance extends Entity {
     // Average (mean) number of Blue Screens per device in the last 14 days. Valid values 0 to 9999999
@@ -8638,7 +8663,7 @@ export interface UserExperienceAnalyticsDeviceStartupHistory extends Entity {
     responsiveDesktopTimeInMs?: number;
     /**
      * OS restart category. Possible values are: unknown, restartWithUpdate, restartWithoutUpdate, blueScreen,
-     * shutdownWithUpdate, shutdownWithoutUpdate, longPowerButtonPress, bootError.
+     * shutdownWithUpdate, shutdownWithoutUpdate, longPowerButtonPress, bootError, update.
      */
     restartCategory?: UserExperienceAnalyticsOperatingSystemRestartCategory;
     // OS restart fault bucket. The fault bucket is used to find additional information about a system crash.
@@ -8678,9 +8703,17 @@ export interface UserExperienceAnalyticsDeviceStartupProcessPerformance extends 
     // User experience analytics device startup process total impact in milliseconds.
     totalImpactInMs?: number;
 }
+export interface UserExperienceAnalyticsDeviceWithoutCloudIdentity extends Entity {
+    // Azure Active Directory Device Id
+    azureAdDeviceId?: NullableOption<string>;
+    // The tenant attach device's name.
+    deviceName?: NullableOption<string>;
+}
 export interface UserExperienceAnalyticsMetricHistory extends Entity {
     // The user experience analytics metric date time.
     metricDateTime?: string;
+    // The user experience analytics metric type.
+    metricType?: NullableOption<string>;
     // User experience analytics metric.
     userExperienceAnalyticsMetric?: NullableOption<UserExperienceAnalyticsMetric>;
 }
@@ -8695,6 +8728,32 @@ export interface UserExperienceAnalyticsRegressionSummary extends Entity {
     modelRegression?: NullableOption<UserExperienceAnalyticsMetric[]>;
     // The metric values for the user experience analytics operating system regression.
     operatingSystemRegression?: NullableOption<UserExperienceAnalyticsMetric[]>;
+}
+export interface UserExperienceAnalyticsResourcePerformance extends Entity {
+    // CPU spike time in percentage. Valid values 0 to 100
+    cpuSpikeTimePercentage?: number;
+    // Threshold of cpuSpikeTimeScore. Valid values 0 to 100
+    cpuSpikeTimePercentageThreshold?: number;
+    // The user experience analytics device CPU spike time score. Valid values 0 to 100
+    cpuSpikeTimeScore?: number;
+    // User experience analytics summarized device count.
+    deviceCount?: number;
+    // The id of the device.
+    deviceId?: NullableOption<string>;
+    // The name of the device.
+    deviceName?: NullableOption<string>;
+    // Resource performance score of a specific device. Valid values 0 to 100
+    deviceResourcePerformanceScore?: number;
+    // The user experience analytics device manufacturer.
+    manufacturer?: NullableOption<string>;
+    // The user experience analytics device model.
+    model?: NullableOption<string>;
+    // RAM spike time in percentage. Valid values 0 to 100
+    ramSpikeTimePercentage?: number;
+    // Threshold of ramSpikeTimeScore. Valid values 0 to 100
+    ramSpikeTimePercentageThreshold?: number;
+    // The user experience analytics device RAM spike time score. Valid values 0 to 100
+    ramSpikeTimeScore?: number;
 }
 export interface UserExperienceAnalyticsScoreHistory extends Entity {
     // The user experience analytics device startup date time.
@@ -9154,6 +9213,32 @@ export interface MicrosoftTunnelConfiguration extends Entity {
     // The domains that will be resolved using the provided dns servers
     splitDNS?: NullableOption<string[]>;
 }
+export interface MicrosoftTunnelHealthThreshold extends Entity {
+    // The default threshold for being healthy
+    defaultHealthyThreshold?: number;
+    // The default threshold for being unhealthy
+    defaultUnhealthyThreshold?: number;
+    // The threshold for being healthy
+    healthyThreshold?: number;
+    // The threshold for being unhealthy
+    unhealthyThreshold?: number;
+}
+export interface MicrosoftTunnelServerLogCollectionResponse extends Entity {
+    // The end time of the logs collected
+    endDateTime?: string;
+    // The time when the log collection is expired
+    expiryDateTime?: string;
+    // The time when the log collection was requested
+    requestDateTime?: string;
+    // ID of the server the log collection is requested upon
+    serverId?: NullableOption<string>;
+    // The size of the logs in bytes
+    sizeInBytes?: number;
+    // The start time of the logs collected
+    startDateTime?: string;
+    // The status of log collection. Possible values are: pending, completed, failed.
+    status?: MicrosoftTunnelLogCollectionStatus;
+}
 export interface MicrosoftTunnelSite extends Entity {
     // The MicrosoftTunnelSite's description
     description?: NullableOption<string>;
@@ -9342,6 +9427,11 @@ export interface TelecomExpenseManagementPartner extends Entity {
 export interface DeviceManagementAutopilotEvent extends Entity {
     // Time spent in user ESP.
     accountSetupDuration?: string;
+    /**
+     * Deployment status for the enrollment status page account setup phase. Possible values are: unknown, success,
+     * inProgress, failure, successWithTimeout, notAttempted, disabled.
+     */
+    accountSetupStatus?: WindowsAutopilotDeploymentState;
     // Autopilot deployment duration including enrollment.
     deploymentDuration?: string;
     // Deployment end time.
@@ -9350,7 +9440,7 @@ export interface DeviceManagementAutopilotEvent extends Entity {
     deploymentStartDateTime?: string;
     /**
      * Deployment state like Success, Failure, InProgress, SuccessWithTimeout. Possible values are: unknown, success,
-     * inProgress, failure, successWithTimeout.
+     * inProgress, failure, successWithTimeout, notAttempted, disabled.
      */
     deploymentState?: WindowsAutopilotDeploymentState;
     // Total deployment duration from enrollment to Desktop screen.
@@ -9365,6 +9455,11 @@ export interface DeviceManagementAutopilotEvent extends Entity {
     deviceSerialNumber?: NullableOption<string>;
     // Time spent in device ESP.
     deviceSetupDuration?: string;
+    /**
+     * Deployment status for the enrollment status page device setup phase. Possible values are: unknown, success, inProgress,
+     * failure, successWithTimeout, notAttempted, disabled.
+     */
+    deviceSetupStatus?: WindowsAutopilotDeploymentState;
     // Enrollment failure details.
     enrollmentFailureDetails?: NullableOption<string>;
     // Device enrollment start date.
@@ -9395,6 +9490,8 @@ export interface DeviceManagementAutopilotEvent extends Entity {
     userPrincipalName?: NullableOption<string>;
     // Enrollment Status Page profile name
     windows10EnrollmentCompletionPageConfigurationDisplayName?: NullableOption<string>;
+    // Enrollment Status Page profile ID
+    windows10EnrollmentCompletionPageConfigurationId?: NullableOption<string>;
     // Autopilot profile name.
     windowsAutopilotDeploymentProfileDisplayName?: NullableOption<string>;
     // Policy and application status details for this device.
@@ -9420,6 +9517,28 @@ export interface WindowsFeatureUpdateProfile extends Entity {
     assignments?: NullableOption<WindowsFeatureUpdateProfileAssignment[]>;
     // The list of device states this profile targeted to
     deviceUpdateStates?: NullableOption<WindowsUpdateState[]>;
+}
+export interface WindowsQualityUpdateProfile extends Entity {
+    // The date time that the profile was created.
+    createdDateTime?: string;
+    // The description of the profile which is specified by the user.
+    description?: NullableOption<string>;
+    // The display name for the profile.
+    displayName?: string;
+    // Expedited update settings.
+    expeditedUpdateSettings?: NullableOption<ExpeditedWindowsQualityUpdateSettings>;
+    // The date time that the profile was last modified.
+    lastModifiedDateTime?: string;
+    // List of Scope Tags for this Quality Update entity.
+    roleScopeTagIds?: NullableOption<string[]>;
+    // The list of group assignments of the profile.
+    assignments?: NullableOption<WindowsQualityUpdateProfileAssignment[]>;
+}
+export interface WindowsUpdateCatalogItem extends Entity {
+    // The display name for the catalog item.
+    displayName?: string;
+    // The date the catalog item was released
+    releaseDateTime?: string;
 }
 // tslint:disable-next-line: interface-name
 export interface IntuneBrandingProfile extends Entity {
@@ -9543,124 +9662,19 @@ export interface UserPFXCertificate extends Entity {
     // User Principal Name of the PFX certificate.
     userPrincipalName?: NullableOption<string>;
 }
-export interface Case extends Entity {
-    closedBy?: NullableOption<IdentitySet>;
-    closedDateTime?: NullableOption<string>;
-    createdDateTime?: NullableOption<string>;
-    description?: NullableOption<string>;
-    displayName?: NullableOption<string>;
-    externalId?: NullableOption<string>;
-    lastModifiedBy?: NullableOption<IdentitySet>;
-    lastModifiedDateTime?: NullableOption<string>;
-    status?: NullableOption<CaseStatus>;
-    custodians?: NullableOption<Custodian[]>;
-    legalholds?: NullableOption<Legalhold[]>;
-    operations?: NullableOption<CaseOperation[]>;
-    reviewSets?: NullableOption<ReviewSet[]>;
+export interface Command extends Entity {
+    appServiceName?: NullableOption<string>;
+    error?: NullableOption<string>;
+    packageFamilyName?: NullableOption<string>;
+    payload?: NullableOption<PayloadRequest>;
+    permissionTicket?: NullableOption<string>;
+    postBackUri?: NullableOption<string>;
+    status?: NullableOption<string>;
+    type?: NullableOption<string>;
+    responsepayload?: NullableOption<PayloadResponse>;
 }
-export interface Custodian extends Entity {
-    // Date and time the custodian acknowledged a hold notification.
-    acknowledgedDateTime?: NullableOption<string>;
-    // Identifies whether a custodian's sources were placed on hold during creation.
-    applyHoldToSources?: NullableOption<boolean>;
-    // Date and time when the custodian was added to the case.
-    createdDateTime?: NullableOption<string>;
-    // Display name of the custodian.
-    displayName?: NullableOption<string>;
-    // Email address of the custodian.
-    email?: string;
-    // Date and time the custodian object was last modified
-    lastModifiedDateTime?: NullableOption<string>;
-    // Date and time the custodian was released from the case.
-    releasedDateTime?: NullableOption<string>;
-    // Status of the custodian. Possible values are: active, released.
-    status?: NullableOption<CustodianStatus>;
-    lastIndexOperation?: NullableOption<CaseIndexOperation>;
-    // Data source entity for SharePoint sites associated with the custodian.
-    siteSources?: NullableOption<SiteSource[]>;
-    // Data source entity for groups associated with the custodian.
-    unifiedGroupSources?: NullableOption<UnifiedGroupSource[]>;
-    // Data source entity for a the custodian. This is the container for a custodian's mailbox and OneDrive for Business site.
-    userSources?: NullableOption<UserSource[]>;
-}
-export interface Legalhold extends Entity {
-    contentQuery?: NullableOption<string>;
-    createdBy?: NullableOption<IdentitySet>;
-    createdDateTime?: NullableOption<string>;
-    description?: NullableOption<string>;
-    displayName?: NullableOption<string>;
-    errors?: NullableOption<string[]>;
-    isEnabled?: NullableOption<boolean>;
-    lastModifiedBy?: NullableOption<IdentitySet>;
-    lastModifiedDateTime?: NullableOption<string>;
-    status?: NullableOption<LegalHoldStatus>;
-    siteSources?: NullableOption<SiteSource[]>;
-    unifiedGroupSources?: NullableOption<UnifiedGroupSource[]>;
-    userSources?: NullableOption<UserSource[]>;
-}
-export interface CaseOperation extends Entity {
-    action?: NullableOption<CaseAction>;
-    completedDateTime?: NullableOption<string>;
-    createdBy?: NullableOption<IdentitySet>;
-    createdDateTime?: NullableOption<string>;
-    percentProgress?: NullableOption<number>;
-    resultInfo?: NullableOption<ResultInfo>;
-    status?: NullableOption<CaseOperationStatus>;
-}
-export interface ReviewSet extends Entity {
-    // The user who created the review set. Read-only.
-    createdBy?: NullableOption<IdentitySet>;
-    /**
-     * The datetime when the review set was created. The Timestamp type represents date and time information using ISO 8601
-     * format and is always in UTC time. For example, midnight UTC on Jan 1, 2014 would look like this:
-     * '2014-01-01T00:00:00Z'. Read-only.
-     */
-    createdDateTime?: NullableOption<string>;
-    // The review set name. Name is unique with a maximum limit of 64 characters.
-    displayName?: NullableOption<string>;
-    queries?: NullableOption<ReviewSetQuery[]>;
-}
-export interface CaseExportOperation extends CaseOperation {
-    azureBlobContainer?: NullableOption<string>;
-    azureBlobToken?: NullableOption<string>;
-    description?: NullableOption<string>;
-    exportOptions?: NullableOption<ExportOptions>;
-    exportStructure?: NullableOption<ExportFileStructure>;
-    outputFolderId?: NullableOption<string>;
-    outputName?: NullableOption<string>;
-    reviewSet?: NullableOption<ReviewSet>;
-}
-// tslint:disable-next-line: no-empty-interface
-export interface CaseIndexOperation extends CaseOperation {}
 export interface Compliance {
-    ediscovery?: NullableOption<Ediscovery>;
-}
-export interface Ediscovery extends Entity {
-    cases?: NullableOption<Case[]>;
-}
-export interface DataSource extends Entity {
-    // The user who created the dataSource.
-    createdBy?: NullableOption<IdentitySet>;
-    // The date and time the dataSource was created.
-    createdDateTime?: NullableOption<string>;
-    // The display name of the dataSource. This will be the name of the SharePoint site.
-    displayName?: NullableOption<string>;
-}
-export interface SiteSource extends DataSource {
-    // The SharePoint site associated with the siteSource.
-    site?: Site;
-}
-export interface UnifiedGroupSource extends DataSource {
-    // Specifies which sources are included in this group. Possible values are: mailbox, site.
-    includedSources?: NullableOption<SourceType>;
-    // The group associated with the unifiedGroupSource.
-    group?: Group;
-}
-export interface UserSource extends DataSource {
-    // Email address of the user's mailbox.
-    email?: string;
-    // Specifies which sources are included in this group. Possible values are: mailbox, site.
-    includedSources?: NullableOption<SourceType>;
+    ediscovery?: NullableOption<Ediscovery.Ediscoveryroot>;
 }
 export interface ResourceSpecificPermissionGrant extends DirectoryObject {
     clientAppId?: NullableOption<string>;
@@ -9734,31 +9748,6 @@ export interface GroupLifecyclePolicy extends Entity {
 export interface PlannerGroup extends Entity {
     // Read-only. Nullable. Returns the plannerPlans owned by the group.
     plans?: NullableOption<PlannerPlan[]>;
-}
-export interface ReviewSetQuery extends Entity {
-    // The user who created the query.
-    createdBy?: NullableOption<IdentitySet>;
-    /**
-     * The time and date when the query was created. The Timestamp type represents date and time information using ISO 8601
-     * format and is always in UTC time. For example, midnight UTC on Jan 1, 2014 would look like this: '2014-01-01T00:00:00Z'
-     */
-    createdDateTime?: NullableOption<string>;
-    // The name of the query
-    displayName?: NullableOption<string>;
-    // The user who last modified the query.
-    lastModifiedBy?: NullableOption<IdentitySet>;
-    /**
-     * The date and time the query was last modified. The Timestamp type represents date and time information using ISO 8601
-     * format and is always in UTC time. For example, midnight UTC on Jan 1, 2014 would look like this: '2014-01-01T00:00:00Z'
-     */
-    lastModifiedDateTime?: NullableOption<string>;
-    /**
-     * The query string in KQL (Keyword Query Language) query. For details, see Document metadata fields in Advanced
-     * eDiscovery. This field maps directly to the keywords condition. You can refine searches by using fields listed in the
-     * searchable field name paired with values; for example, subject:'Quarterly Financials' AND Date&amp;gt;=06/01/2016 AND
-     * Date&amp;lt;=07/01/2016
-     */
-    query?: NullableOption<string>;
 }
 // tslint:disable-next-line: interface-name
 export interface ItemAnalytics extends Entity {
@@ -9844,15 +9833,12 @@ export interface List extends BaseItem {
     displayName?: NullableOption<string>;
     // Provides additional details about the list.
     list?: NullableOption<ListInfo>;
-    // Returns identifiers useful for SharePoint REST compatibility. Read-only.
     sharepointIds?: NullableOption<SharepointIds>;
     // If present, indicates that this is a system-managed list. Read-only.
     system?: NullableOption<SystemFacet>;
     // The recent activities that took place within this list.
     activities?: NullableOption<ItemActivityOLD[]>;
-    // The collection of field definitions for this list.
     columns?: NullableOption<ColumnDefinition[]>;
-    // The collection of content types present in this list.
     contentTypes?: NullableOption<ContentType[]>;
     // Only present on document libraries. Allows access to the list as a [drive][] resource with [driveItems][driveItem].
     drive?: NullableOption<Drive>;
@@ -9868,6 +9854,32 @@ export interface SitePage extends BaseItem {
     publishingState?: NullableOption<PublicationFacet>;
     title?: NullableOption<string>;
     webParts?: NullableOption<WebPart[]>;
+}
+export interface Permission extends Entity {
+    /**
+     * A format of yyyy-MM-ddTHH:mm:ssZ of DateTimeOffset indicates the expiration time of the permission. DateTime.MinValue
+     * indicates there is no expiration set for this permission. Optional.
+     */
+    expirationDateTime?: NullableOption<string>;
+    // For user type permissions, the details of the users &amp; applications for this permission. Read-only.
+    grantedTo?: NullableOption<IdentitySet>;
+    // For link type permissions, the details of the users to whom permission was granted. Read-only.
+    grantedToIdentities?: NullableOption<IdentitySet[]>;
+    /**
+     * This indicates whether password is set for this permission, it's only showing in response. Optional and Read-only and
+     * for OneDrive Personal only.
+     */
+    hasPassword?: NullableOption<boolean>;
+    // Provides a reference to the ancestor of the current permission, if it is inherited from an ancestor. Read-only.
+    inheritedFrom?: NullableOption<ItemReference>;
+    // Details of any associated sharing invitation for this permission. Read-only.
+    invitation?: NullableOption<SharingInvitation>;
+    // Provides the link details of the current permission, if it is a link type permissions. Read-only.
+    link?: NullableOption<SharingLink>;
+    // The type of permission, e.g. read. See below for the full list of roles. Read-only.
+    roles?: NullableOption<string[]>;
+    // A unique token that can be used to access this shared item via the [shares API][]. Read-only.
+    shareId?: NullableOption<string>;
 }
 // tslint:disable-next-line: interface-name
 export interface IdentityApiConnector extends Entity {
@@ -10124,7 +10136,6 @@ export interface DataClassificationService extends Entity {
     evaluateDlpPoliciesJobs?: NullableOption<JobResponseBase[]>;
     evaluateLabelJobs?: NullableOption<JobResponseBase[]>;
     jobs?: NullableOption<JobResponseBase[]>;
-    labelsAndPoliciesEvaluationJobs?: NullableOption<JobResponseBase[]>;
     sensitiveTypes?: NullableOption<SensitiveType[]>;
     sensitivityLabels?: NullableOption<SensitivityLabel[]>;
     exactMatchUploadAgents?: NullableOption<ExactMatchUploadAgent[]>;
@@ -10168,9 +10179,6 @@ export interface DlpEvaluatePoliciesJobResponse extends JobResponseBase {
 export interface EvaluateLabelJobResponse extends JobResponseBase {
     result?: NullableOption<EvaluateLabelJobResultGroup>;
 }
-export interface EvaluateLabelsAndPoliciesJobResponse extends JobResponseBase {
-    result?: NullableOption<EvaluateLabelsAndPoliciesResult>;
-}
 export interface AdministrativeUnit extends DirectoryObject {
     // An optional description for the administrative unit.
     description?: NullableOption<string>;
@@ -10206,44 +10214,13 @@ export interface CertificateBasedAuthConfiguration extends Entity {
     certificateAuthorities?: CertificateAuthority[];
 }
 export interface Contract extends DirectoryObject {
-    /**
-     * Type of contract.Possible values are: SyndicationPartner - Partner that exclusively resells and manages O365 and Intune
-     * for this customer. They resell and support their customers. BreadthPartner - Partner has the ability to provide
-     * administrative support for this customer. However, the partner is not allowed to resell to the customer.ResellerPartner
-     * - Partner that is similar to a syndication partner, except that the partner doesn’t have exclusive access to a tenant.
-     * In the syndication case, the customer cannot buy additional direct subscriptions from Microsoft or from other partners.
-     */
     contractType?: NullableOption<string>;
-    /**
-     * The unique identifier for the customer tenant referenced by this partnership. Corresponds to the id property of the
-     * customer tenant's organization resource.
-     */
     customerId?: NullableOption<string>;
-    /**
-     * A copy of the customer tenant's default domain name. The copy is made when the partnership with the customer is
-     * established. It is not automatically updated if the customer tenant's default domain name changes.
-     */
     defaultDomainName?: NullableOption<string>;
-    /**
-     * A copy of the customer tenant's display name. The copy is made when the partnership with the customer is established.
-     * It is not automatically updated if the customer tenant's display name changes.
-     */
     displayName?: NullableOption<string>;
 }
-export interface Command extends Entity {
-    appServiceName?: NullableOption<string>;
-    error?: NullableOption<string>;
-    packageFamilyName?: NullableOption<string>;
-    payload?: NullableOption<PayloadRequest>;
-    permissionTicket?: NullableOption<string>;
-    postBackUri?: NullableOption<string>;
-    status?: NullableOption<string>;
-    type?: NullableOption<string>;
-    responsepayload?: NullableOption<PayloadResponse>;
-}
-export interface Directory extends Entity {
+export interface Directory {
     administrativeUnits?: NullableOption<AdministrativeUnit[]>;
-    // Recently deleted items. Read-only. Nullable.
     deletedItems?: NullableOption<DirectoryObject[]>;
     sharedEmailDomains?: NullableOption<SharedEmailDomain[]>;
     // Nullable.
@@ -10944,6 +10921,13 @@ export interface EducationSubmission extends Entity {
     // Read-only. Nullable.
     submittedResources?: NullableOption<EducationSubmissionResource[]>;
 }
+export interface EducationAssignmentSettings extends Entity {
+    /**
+     * Indicates whether turn-in celebration animation will be shown. A value of true indicates that the animation will not be
+     * shown. Default value is false.
+     */
+    submissionAnimationDisabled?: NullableOption<boolean>;
+}
 export interface EducationClass extends Entity {
     // Class code used by the school to identify the class.
     classCode?: NullableOption<string>;
@@ -10975,7 +10959,7 @@ export interface EducationClass extends Entity {
     assignmentCategories?: NullableOption<EducationCategory[]>;
     // All assignments associated with this class. Nullable.
     assignments?: NullableOption<EducationAssignment[]>;
-    // The directory group corresponding to this class.
+    assignmentSettings?: NullableOption<EducationAssignmentSettings>;
     group?: NullableOption<Group>;
     // All users in the class. Nullable.
     members?: NullableOption<EducationUser[]>;
@@ -11079,7 +11063,6 @@ export interface EducationUser extends Entity {
     schools?: NullableOption<EducationSchool[]>;
     // Classes for which the user is a teacher.
     taughtClasses?: NullableOption<EducationClass[]>;
-    // The directory user corresponding to this user.
     user?: NullableOption<User>;
 }
 export interface EducationOrganization extends Entity {
@@ -11135,15 +11118,11 @@ export interface EducationPointsOutcome extends EducationOutcome {
     // A copy of the points property that is made when the grade is released to the student.
     publishedPoints?: NullableOption<EducationAssignmentPointsGrade>;
 }
-export interface EducationRoot extends Entity {
+export interface EducationRoot {
     synchronizationProfiles?: NullableOption<EducationSynchronizationProfile[]>;
-    // Read-only. Nullable.
     classes?: NullableOption<EducationClass[]>;
-    // Read-only. Nullable.
     me?: NullableOption<EducationUser>;
-    // Read-only. Nullable.
     schools?: NullableOption<EducationSchool[]>;
-    // Read-only. Nullable.
     users?: NullableOption<EducationUser[]>;
 }
 export interface EducationSynchronizationProfile extends Entity {
@@ -11398,32 +11377,6 @@ export interface ListItem extends BaseItem {
     // The list of previous versions of the list item.
     versions?: NullableOption<ListItemVersion[]>;
 }
-export interface Permission extends Entity {
-    /**
-     * A format of yyyy-MM-ddTHH:mm:ssZ of DateTimeOffset indicates the expiration time of the permission. DateTime.MinValue
-     * indicates there is no expiration set for this permission. Optional.
-     */
-    expirationDateTime?: NullableOption<string>;
-    // For user type permissions, the details of the users &amp; applications for this permission. Read-only.
-    grantedTo?: NullableOption<IdentitySet>;
-    // For link type permissions, the details of the users to whom permission was granted. Read-only.
-    grantedToIdentities?: NullableOption<IdentitySet[]>;
-    /**
-     * This indicates whether password is set for this permission, it's only showing in response. Optional and Read-only and
-     * for OneDrive Personal only.
-     */
-    hasPassword?: NullableOption<boolean>;
-    // Provides a reference to the ancestor of the current permission, if it is inherited from an ancestor. Read-only.
-    inheritedFrom?: NullableOption<ItemReference>;
-    // Details of any associated sharing invitation for this permission. Read-only.
-    invitation?: NullableOption<SharingInvitation>;
-    // Provides the link details of the current permission, if it is a link type permissions. Read-only.
-    link?: NullableOption<SharingLink>;
-    // The type of permission, e.g. read. See below for the full list of roles. Read-only.
-    roles?: NullableOption<string[]>;
-    // A unique token that can be used to access this shared item via the [shares API][]. Read-only.
-    shareId?: NullableOption<string>;
-}
 export interface Subscription extends Entity {
     // Identifier of the application used to create the subscription. Read-only.
     applicationId?: NullableOption<string>;
@@ -11463,7 +11416,6 @@ export interface Subscription extends Entity {
      * subscription length of time. Required.
      */
     expirationDateTime?: string;
-    includeProperties?: NullableOption<boolean>;
     // When set to true, change notifications include resource data (such as content of a chat message). Optional.
     includeResourceData?: NullableOption<boolean>;
     /**
@@ -11482,6 +11434,7 @@ export interface Subscription extends Entity {
      * notifications.
      */
     lifecycleNotificationUrl?: NullableOption<string>;
+    notificationContentType?: NullableOption<string>;
     notificationQueryOptions?: NullableOption<string>;
     // The URL of the endpoint that receives the change notifications. This URL must make use of the HTTPS protocol. Required.
     notificationUrl?: string;
@@ -11838,19 +11791,10 @@ export interface WorkbookCommentReply extends Entity {
     contentType?: string;
 }
 export interface WorkbookFilter extends Entity {
-    // The currently applied filter on the given column. Read-only.
     criteria?: NullableOption<WorkbookFilterCriteria>;
 }
 export interface WorkbookFormatProtection extends Entity {
-    /**
-     * Indicates if Excel hides the formula for the cells in the range. A null value indicates that the entire range doesn't
-     * have uniform formula hidden setting.
-     */
     formulaHidden?: NullableOption<boolean>;
-    /**
-     * Indicates if Excel locks the cells in the object. A null value indicates that the entire range doesn't have uniform
-     * lock setting.
-     */
     locked?: NullableOption<boolean>;
 }
 export interface WorkbookFunctionResult extends Entity {
@@ -11992,7 +11936,6 @@ export interface WorkbookRangeFont extends Entity {
     underline?: NullableOption<string>;
 }
 export interface WorkbookRangeView extends Entity {
-    // Represents the cell addresses
     cellAddresses?: NullableOption<any>;
     // Returns the number of visible columns. Read-only.
     columnCount?: number;
@@ -12052,7 +11995,6 @@ export interface WorkbookTableRow extends Entity {
     values?: NullableOption<any>;
 }
 export interface WorkbookTableSort extends Entity {
-    // Represents the current conditions used to last sort the table. Read-only.
     fields?: NullableOption<WorkbookSortField[]>;
     // Represents whether the casing impacted the last sort of the table. Read-only.
     matchCase?: boolean;
@@ -12095,6 +12037,7 @@ export interface Room extends Place {
     floorLabel?: NullableOption<string>;
     // Specifies the floor number that the room is on.
     floorNumber?: NullableOption<number>;
+    // Specifies whether the room is wheelchair accessible.
     isWheelChairAccessible?: NullableOption<boolean>;
     // Specifies a descriptive label for the room, for example, a number or name.
     label?: NullableOption<string>;
@@ -12110,10 +12053,7 @@ export interface RoomList extends Place {
     emailAddress?: NullableOption<string>;
     // Read-only. Nullable.
     rooms?: NullableOption<Room[]>;
-    spaces?: NullableOption<Space[]>;
 }
-// tslint:disable-next-line: no-empty-interface
-export interface Space extends Place {}
 export interface Attachment extends Entity {
     // The MIME type.
     contentType?: NullableOption<string>;
@@ -12212,14 +12152,9 @@ export interface EventMessage extends Message {
     // The end time of the requested meeting.
     endDateTime?: NullableOption<DateTimeTimeZone>;
     isAllDay?: NullableOption<boolean>;
-    // True if this meeting request is accessible to a delegate, false otherwise. Default is false.
     isDelegated?: NullableOption<boolean>;
     isOutOfDate?: NullableOption<boolean>;
     location?: NullableOption<Location>;
-    /**
-     * The type of event message: none, meetingRequest, meetingCancelled, meetingAccepted, meetingTenativelyAccepted,
-     * meetingDeclined.
-     */
     meetingMessageType?: NullableOption<MeetingMessageType>;
     recurrence?: NullableOption<PatternedRecurrence>;
     startDateTime?: NullableOption<DateTimeTimeZone>;
@@ -12462,7 +12397,6 @@ export interface FieldValueSet extends Entity {}
 export interface ItemActivity extends Entity {
     // An item was accessed.
     access?: NullableOption<AccessAction>;
-    // Details about when the activity took place. Read-only.
     activityDateTime?: NullableOption<string>;
     // Identity of who performed the action. Read-only.
     actor?: NullableOption<IdentitySet>;
@@ -12509,7 +12443,6 @@ export interface SharedDriveItem extends BaseItem {
     listItem?: NullableOption<ListItem>;
     // Used to access the permission representing the underlying sharing link
     permission?: NullableOption<Permission>;
-    // Used to access the underlying driveItem. Deprecated -- use driveItem instead.
     root?: NullableOption<DriveItem>;
     // Used to access the underlying site
     site?: NullableOption<Site>;
@@ -12936,6 +12869,7 @@ export interface EntitlementManagement extends Entity {
     accessPackageAssignmentResourceRoles?: NullableOption<AccessPackageAssignmentResourceRole[]>;
     accessPackageAssignments?: NullableOption<AccessPackageAssignment[]>;
     accessPackageCatalogs?: NullableOption<AccessPackageCatalog[]>;
+    accessPackageResourceEnvironments?: NullableOption<AccessPackageResourceEnvironment[]>;
     accessPackageResourceRequests?: NullableOption<AccessPackageResourceRequest[]>;
     accessPackageResourceRoleScopes?: NullableOption<AccessPackageResourceRoleScope[]>;
     accessPackageResources?: NullableOption<AccessPackageResource[]>;
@@ -13148,7 +13082,6 @@ export interface RiskyUser extends Entity {
     userDisplayName?: NullableOption<string>;
     // Risky user principal name.
     userPrincipalName?: NullableOption<string>;
-    // The activity related to user risk level change
     history?: NullableOption<RiskyUserHistoryItem[]>;
 }
 // tslint:disable-next-line: interface-name
@@ -13467,10 +13400,48 @@ export interface AccessPackageResource extends Entity {
     resourceType?: NullableOption<string>;
     // A unique resource locator for the resource, such as the URL for signing a user into an application.
     url?: NullableOption<string>;
+    /**
+     * Contains the environment information for the resource. This can be set using either the @odata.bind annotation or the
+     * environment's originId.
+     */
+    accessPackageResourceEnvironment?: NullableOption<AccessPackageResourceEnvironment>;
     // Read-only. Nullable.
     accessPackageResourceRoles?: NullableOption<AccessPackageResourceRole[]>;
     // Read-only. Nullable.
     accessPackageResourceScopes?: NullableOption<AccessPackageResourceScope[]>;
+}
+export interface AccessPackageResourceEnvironment extends Entity {
+    // Connection information of an environment used to connect to a resource.
+    connectionInfo?: NullableOption<ConnectionInfo>;
+    // The display name of the user that created this object.
+    createdBy?: NullableOption<string>;
+    /**
+     * The date and time that this object was created. The DateTimeOffset type represents date and time information using ISO
+     * 8601 format and is always in UTC time. For example, midnight UTC on Jan 1, 2014 is '2014-01-01T00:00:00Z'.
+     */
+    createdDateTime?: NullableOption<string>;
+    // The description of this accessPackageResourceEnvironment object.
+    description?: NullableOption<string>;
+    // The display name of this object.
+    displayName?: NullableOption<string>;
+    /**
+     * Determines whether this is default environment or not. It is set to true for all static origin systems, such as Azure
+     * AD groups and Azure AD Applications.
+     */
+    isDefaultEnvironment?: NullableOption<boolean>;
+    // The display name of the entity that last modified this object.
+    modifiedBy?: NullableOption<string>;
+    /**
+     * The date and time that this object was last modified. The DateTimeOffset type represents date and time information
+     * using ISO 8601 format and is always in UTC time. For example, midnight UTC on Jan 1, 2014 is '2014-01-01T00:00:00Z'.
+     */
+    modifiedDateTime?: NullableOption<string>;
+    // The unique identifier of this environment in the origin system.
+    originId?: string;
+    // The type of the resource in the origin system such as SharePointOnline. Supports $filter.
+    originSystem?: string;
+    // Read-only. Required.
+    accessPackageResources?: NullableOption<AccessPackageResource[]>;
 }
 export interface AccessPackageResourceRequest extends Entity {
     // The unique ID of the access package catalog.
@@ -13483,16 +13454,19 @@ export interface AccessPackageResourceRequest extends Entity {
     expirationDateTime?: NullableOption<string>;
     // If set, does not add the resource.
     isValidationOnly?: NullableOption<boolean>;
-    // The requestor's justification for adding the resource.
+    // The requestor's justification for adding or removing the resource.
     justification?: NullableOption<string>;
     /**
      * The outcome of whether the service was able to add the resource to the catalog. The value is Delivered if the resource
-     * was added. Read-Only.
+     * was added or removed. Read-Only.
      */
     requestState?: NullableOption<string>;
     // Read-only.
     requestStatus?: NullableOption<string>;
-    // Use AdminAdd to add a resource, if the caller is an administrator or resource owner.
+    /**
+     * Use AdminAdd to add a resource, if the caller is an administrator or resource owner, or AdminRemove to remove a
+     * resource.
+     */
     requestType?: NullableOption<string>;
     // Nullable.
     accessPackageResource?: NullableOption<AccessPackageResource>;
@@ -14087,6 +14061,12 @@ export interface ManagedAppProtection extends ManagedAppPolicy {
     maximumAllowedDeviceThreatLevel?: ManagedAppDeviceThreatLevel;
     // Maximum number of incorrect pin retry attempts before the managed app is either blocked or wiped.
     maximumPinRetries?: number;
+    // Versions bigger than the specified version will block the managed app from accessing company data.
+    maximumRequiredOsVersion?: NullableOption<string>;
+    // Versions bigger than the specified version will block the managed app from accessing company data.
+    maximumWarningOsVersion?: NullableOption<string>;
+    // Versions bigger than the specified version will block the managed app from accessing company data.
+    maximumWipeOsVersion?: NullableOption<string>;
     // Minimum pin length required for an app-level pin if PinRequired is set to True
     minimumPinLength?: number;
     // Versions less than the specified version will block the managed app from accessing company data.
@@ -14160,12 +14140,12 @@ export interface AndroidManagedAppProtection extends TargetedManagedAppProtectio
     // Defines a managed app behavior, either block or wipe, if the specified device model is not allowed.
     appActionIfAndroidDeviceModelNotAllowed?: ManagedAppRemediationAction;
     /**
-     * Defines a managed app behavior, either warn or block, if the specified Android App Verification requirment fails.
+     * Defines a managed app behavior, either warn or block, if the specified Android App Verification requirement fails.
      * Possible values are: block, wipe, warn.
      */
     appActionIfAndroidSafetyNetAppsVerificationFailed?: ManagedAppRemediationAction;
     /**
-     * Defines a managed app behavior, either warn or block, if the specified Android SafetyNet Attestation requirment fails.
+     * Defines a managed app behavior, either warn or block, if the specified Android SafetyNet Attestation requirement fails.
      * Possible values are: block, wipe, warn.
      */
     appActionIfAndroidSafetyNetDeviceAttestationFailed?: ManagedAppRemediationAction;
@@ -15235,8 +15215,10 @@ export interface MobileAppContentFile extends Entity {
 export interface MobileAppDependency extends MobileAppRelationship {
     // The type of dependency relationship between the parent and child apps. Possible values are: detect, autoInstall.
     dependencyType?: MobileAppDependencyType;
-    // The total number of dependencies the child app has.
+    // The total number of apps that directly or indirectly depend on the parent app.
     dependentAppCount?: number;
+    // The total number of apps the child app directly or indirectly depends on.
+    dependsOnAppCount?: number;
 }
 export interface MobileAppSupersedence extends MobileAppRelationship {
     // The total number of apps directly or indirectly superseded by the child app.
@@ -15535,6 +15517,10 @@ export interface ManagedAppPolicyDeploymentSummary extends Entity {
     // Version of the entity.
     version?: NullableOption<string>;
 }
+export interface AssignmentFilterEvaluationStatusDetails extends Entity {
+    // PayloadId on which filter has been applied.
+    payloadId?: NullableOption<string>;
+}
 export interface DeviceCompliancePolicyAssignment extends Entity {
     /**
      * The assignment source for the device compliance policy, direct or parcel/policySet. Possible values are: direct,
@@ -15827,6 +15813,144 @@ export interface IosLobAppProvisioningConfigurationPolicySetItem extends PolicyS
 export interface ManagedAppProtectionPolicySetItem extends PolicySetItem {
     // TargetedAppManagementLevels of the ManagedAppPolicySetItem.
     targetedAppManagementLevels?: NullableOption<string>;
+}
+export interface DeviceCompliancePolicyState extends Entity {
+    // The name of the policy for this policyBase
+    displayName?: NullableOption<string>;
+    // Platform type that the policy applies to
+    platformType?: PolicyPlatformType;
+    // Count of how many setting a policy holds
+    settingCount?: number;
+    settingStates?: NullableOption<DeviceCompliancePolicySettingState[]>;
+    // The compliance state of the policy
+    state?: ComplianceStatus;
+    // User unique identifier, must be Guid
+    userId?: NullableOption<string>;
+    // User Principal Name
+    userPrincipalName?: NullableOption<string>;
+    // The version of the policy
+    version?: number;
+}
+export interface DeviceConfigurationState extends Entity {
+    // The name of the policy for this policyBase
+    displayName?: NullableOption<string>;
+    // Platform type that the policy applies to
+    platformType?: PolicyPlatformType;
+    // Count of how many setting a policy holds
+    settingCount?: number;
+    settingStates?: NullableOption<DeviceConfigurationSettingState[]>;
+    // The compliance state of the policy
+    state?: ComplianceStatus;
+    // User unique identifier, must be Guid
+    userId?: NullableOption<string>;
+    // User Principal Name
+    userPrincipalName?: NullableOption<string>;
+    // The version of the policy
+    version?: number;
+}
+export interface ManagedDeviceMobileAppConfigurationState extends Entity {
+    // The name of the policy for this policyBase
+    displayName?: NullableOption<string>;
+    // Platform type that the policy applies to
+    platformType?: PolicyPlatformType;
+    // Count of how many setting a policy holds
+    settingCount?: number;
+    settingStates?: NullableOption<ManagedDeviceMobileAppConfigurationSettingState[]>;
+    // The compliance state of the policy
+    state?: ComplianceStatus;
+    // User unique identifier, must be Guid
+    userId?: NullableOption<string>;
+    // User Principal Name
+    userPrincipalName?: NullableOption<string>;
+    // The version of the policy
+    version?: number;
+}
+export interface SecurityBaselineState extends Entity {
+    // The display name of the security baseline
+    displayName?: string;
+    // The security baseline template id
+    securityBaselineTemplateId?: NullableOption<string>;
+    // Security baseline compliance state
+    state?: SecurityBaselineComplianceState;
+    // User Principal Name
+    userPrincipalName?: NullableOption<string>;
+    // The security baseline state for different settings for a device
+    settingStates?: NullableOption<SecurityBaselineSettingState[]>;
+}
+export interface DeviceLogCollectionResponse extends Entity {
+    // The error code, if any. Valid values -9.22337203685478E+18 to 9.22337203685478E+18
+    errorCode?: number;
+    // The DateTime of the expiration of the logs
+    expirationDateTimeUTC?: NullableOption<string>;
+    // The UPN for who initiated the request
+    initiatedByUserPrincipalName?: NullableOption<string>;
+    // The device Id
+    managedDeviceId?: string;
+    // The DateTime the request was received
+    receivedDateTimeUTC?: NullableOption<string>;
+    // The DateTime of the request
+    requestedDateTimeUTC?: NullableOption<string>;
+    // The size of the logs. Valid values -1.79769313486232E+308 to 1.79769313486232E+308
+    size?: number;
+    // The status of the log collection request
+    status?: NullableOption<string>;
+}
+export interface WindowsProtectionState extends Entity {
+    // Current anti malware version
+    antiMalwareVersion?: NullableOption<string>;
+    /**
+     * Computer's state (like clean or pending full scan or pending reboot etc). Possible values are: clean, fullScanPending,
+     * rebootPending, manualStepsPending, offlineScanPending, critical.
+     */
+    deviceState?: NullableOption<WindowsDeviceHealthState>;
+    // Current endpoint protection engine's version
+    engineVersion?: NullableOption<string>;
+    // Full scan overdue or not?
+    fullScanOverdue?: NullableOption<boolean>;
+    // Full scan required or not?
+    fullScanRequired?: NullableOption<boolean>;
+    // Indicates whether the device is a virtual machine.
+    isVirtualMachine?: NullableOption<boolean>;
+    // Last quick scan datetime
+    lastFullScanDateTime?: NullableOption<string>;
+    // Last full scan signature version
+    lastFullScanSignatureVersion?: NullableOption<string>;
+    // Last quick scan datetime
+    lastQuickScanDateTime?: NullableOption<string>;
+    // Last quick scan signature version
+    lastQuickScanSignatureVersion?: NullableOption<string>;
+    // Last device health status reported time
+    lastReportedDateTime?: NullableOption<string>;
+    // Anti malware is enabled or not
+    malwareProtectionEnabled?: NullableOption<boolean>;
+    // Network inspection system enabled or not?
+    networkInspectionSystemEnabled?: NullableOption<boolean>;
+    /**
+     * Product Status of Windows Defender Antivirus. Possible values are: noStatus, serviceNotRunning,
+     * serviceStartedWithoutMalwareProtection, pendingFullScanDueToThreatAction, pendingRebootDueToThreatAction,
+     * pendingManualStepsDueToThreatAction, avSignaturesOutOfDate, asSignaturesOutOfDate,
+     * noQuickScanHappenedForSpecifiedPeriod, noFullScanHappenedForSpecifiedPeriod, systemInitiatedScanInProgress,
+     * systemInitiatedCleanInProgress, samplesPendingSubmission, productRunningInEvaluationMode,
+     * productRunningInNonGenuineMode, productExpired, offlineScanRequired, serviceShutdownAsPartOfSystemShutdown,
+     * threatRemediationFailedCritically, threatRemediationFailedNonCritically, noStatusFlagsSet, platformOutOfDate,
+     * platformUpdateInProgress, platformAboutToBeOutdated, signatureOrPlatformEndOfLifeIsPastOrIsImpending,
+     * windowsSModeSignaturesInUseOnNonWin10SInstall.
+     */
+    productStatus?: NullableOption<WindowsDefenderProductStatus>;
+    // Quick scan overdue or not?
+    quickScanOverdue?: NullableOption<boolean>;
+    // Real time protection is enabled or not?
+    realTimeProtectionEnabled?: NullableOption<boolean>;
+    // Reboot required or not?
+    rebootRequired?: NullableOption<boolean>;
+    // Signature out of date or not?
+    signatureUpdateOverdue?: NullableOption<boolean>;
+    // Current malware definitions version
+    signatureVersion?: NullableOption<string>;
+    // Indicates whether the Windows Defender tamper protection feature is enabled.
+    tamperProtectionEnabled?: NullableOption<boolean>;
+    // Device malware list
+    detectedMalwareState?: NullableOption<WindowsDeviceMalwareState[]>;
 }
 // tslint:disable-next-line: no-empty-interface
 export interface ManagedDeviceMobileAppConfigurationPolicySetItem extends PolicySetItem {}
@@ -16293,11 +16417,17 @@ export interface AndroidDeviceOwnerGeneralDeviceConfiguration extends DeviceConf
      * homeButtonOnly.
      */
     kioskCustomizationSystemNavigation?: NullableOption<AndroidDeviceOwnerKioskCustomizationSystemNavigation>;
+    // Whether or not to enable app ordering in Kiosk Mode.
+    kioskModeAppOrderEnabled?: NullableOption<boolean>;
+    // The ordering of items on Kiosk Mode Managed Home Screen. This collection can contain a maximum of 500 elements.
+    kioskModeAppPositions?: NullableOption<AndroidDeviceOwnerKioskModeAppPositionItem[]>;
     /**
      * A list of managed apps that will be shown when the device is in Kiosk Mode. This collection can contain a maximum of
      * 500 elements.
      */
     kioskModeApps?: NullableOption<AppListItem[]>;
+    // Whether or not to alphabetize applications within a folder in Kiosk Mode.
+    kioskModeAppsInFolderOrderedByName?: NullableOption<boolean>;
     // Whether or not to allow a user to configure Bluetooth settings in Kiosk Mode.
     kioskModeBluetoothConfigurationEnabled?: NullableOption<boolean>;
     // Whether or not to allow a user to easy access to the debug menu in Kiosk Mode.
@@ -16311,11 +16441,19 @@ export interface AndroidDeviceOwnerGeneralDeviceConfiguration extends DeviceConf
      * darkCircle, lightSquare, lightCircle.
      */
     kioskModeFolderIcon?: NullableOption<AndroidDeviceOwnerKioskModeFolderIcon>;
+    // Number of rows for Managed Home Screen grid with app ordering enabled in Kiosk Mode. Valid values 1 to 9999999
+    kioskModeGridHeight?: NullableOption<number>;
+    // Number of columns for Managed Home Screen grid with app ordering enabled in Kiosk Mode. Valid values 1 to 9999999
+    kioskModeGridWidth?: NullableOption<number>;
     /**
      * Icon size configuration for managed home screen in Kiosk Mode. Possible values are: notConfigured, smallest, small,
      * regular, large, largest.
      */
     kioskModeIconSize?: NullableOption<AndroidDeviceOwnerKioskModeIconSize>;
+    // Whether or not to lock home screen to the end user in Kiosk Mode.
+    kioskModeLockHomeScreen?: NullableOption<boolean>;
+    // A list of managed folders for a device in Kiosk Mode. This collection can contain a maximum of 500 elements.
+    kioskModeManagedFolders?: NullableOption<AndroidDeviceOwnerKioskModeManagedFolder[]>;
     // Whether or not to display the Managed Settings entry point on the managed home screen in Kiosk Mode.
     kioskModeManagedSettingsEntryDisabled?: NullableOption<boolean>;
     // Whether or not to allow a user to change the media volume in Kiosk Mode.
@@ -16654,7 +16792,7 @@ export interface AndroidDeviceOwnerVpnConfiguration extends VpnConfiguration {
     alwaysOnLockdown?: NullableOption<boolean>;
     /**
      * Connection type. Possible values are: ciscoAnyConnect, pulseSecure, f5EdgeClient, dellSonicWallMobileConnect,
-     * checkPointCapsuleVpn, citrix, microsoftTunnel, netMotionMobility.
+     * checkPointCapsuleVpn, citrix, microsoftTunnel, netMotionMobility, microsoftProtect.
      */
     connectionType?: AndroidVpnConnectionType;
     // Custom data to define key/value pairs specific to a VPN provider. This collection can contain a maximum of 25 elements.
@@ -17322,7 +17460,7 @@ export interface AndroidVpnConfiguration extends DeviceConfiguration {
     connectionName?: string;
     /**
      * Connection type. Possible values are: ciscoAnyConnect, pulseSecure, f5EdgeClient, dellSonicWallMobileConnect,
-     * checkPointCapsuleVpn, citrix, microsoftTunnel, netMotionMobility.
+     * checkPointCapsuleVpn, citrix, microsoftTunnel, netMotionMobility, microsoftProtect.
      */
     connectionType?: AndroidVpnConnectionType;
     // Custom data when connection type is set to Citrix. This collection can contain a maximum of 25 elements.
@@ -17563,6 +17701,8 @@ export interface AndroidWorkProfileGeneralDeviceConfiguration extends DeviceConf
     vpnAlwaysOnPackageIdentifier?: NullableOption<string>;
     // Enable lockdown mode for always-on VPN.
     vpnEnableAlwaysOnLockdownMode?: boolean;
+    // Indicates whether to allow installation of apps from unknown sources.
+    workProfileAllowAppInstallsFromUnknownSources?: boolean;
     // Allow widgets from work profile apps.
     workProfileAllowWidgets?: boolean;
     // Block users from adding/removing accounts in work profile.
@@ -17693,7 +17833,7 @@ export interface AndroidWorkProfileVpnConfiguration extends DeviceConfiguration 
     connectionName?: string;
     /**
      * Connection type. Possible values are: ciscoAnyConnect, pulseSecure, f5EdgeClient, dellSonicWallMobileConnect,
-     * checkPointCapsuleVpn, citrix, paloAltoGlobalProtect, microsoftTunnel, netMotionMobility.
+     * checkPointCapsuleVpn, citrix, paloAltoGlobalProtect, microsoftTunnel, netMotionMobility, microsoftProtect.
      */
     connectionType?: AndroidWorkProfileVpnConnectionType;
     // Custom data when connection type is set to Citrix. This collection can contain a maximum of 25 elements.
@@ -17734,6 +17874,8 @@ export interface AppleExpeditedCheckinConfigurationBase extends DeviceConfigurat
     enableExpeditedCheckin?: boolean;
 }
 export interface AppleVpnConfiguration extends DeviceConfiguration {
+    // Associated Domains
+    associatedDomains?: NullableOption<string[]>;
     /**
      * Authentication method for this VPN connection. Possible values are: certificate, usernameAndPassword, sharedSecret,
      * derivedCredential, azureAD.
@@ -17744,7 +17886,8 @@ export interface AppleVpnConfiguration extends DeviceConfiguration {
     /**
      * Connection type. Possible values are: ciscoAnyConnect, pulseSecure, f5EdgeClient, dellSonicWallMobileConnect,
      * checkPointCapsuleVpn, customVpn, ciscoIPSec, citrix, ciscoAnyConnectV2, paloAltoGlobalProtect, zscalerPrivateAccess,
-     * f5Access2018, citrixSso, paloAltoGlobalProtectV2, ikEv2, alwaysOn, microsoftTunnel, netMotionMobility.
+     * f5Access2018, citrixSso, paloAltoGlobalProtectV2, ikEv2, alwaysOn, microsoftTunnel, netMotionMobility,
+     * microsoftProtect.
      */
     connectionType?: AppleVpnConnectionType;
     /**
@@ -17852,40 +17995,6 @@ export interface DeviceComplianceSettingState extends Entity {
     userName?: NullableOption<string>;
     // The User PrincipalName that is being reported
     userPrincipalName?: NullableOption<string>;
-}
-export interface DeviceCompliancePolicyState extends Entity {
-    // The name of the policy for this policyBase
-    displayName?: NullableOption<string>;
-    // Platform type that the policy applies to
-    platformType?: PolicyPlatformType;
-    // Count of how many setting a policy holds
-    settingCount?: number;
-    settingStates?: NullableOption<DeviceCompliancePolicySettingState[]>;
-    // The compliance state of the policy
-    state?: ComplianceStatus;
-    // User unique identifier, must be Guid
-    userId?: NullableOption<string>;
-    // User Principal Name
-    userPrincipalName?: NullableOption<string>;
-    // The version of the policy
-    version?: number;
-}
-export interface DeviceConfigurationState extends Entity {
-    // The name of the policy for this policyBase
-    displayName?: NullableOption<string>;
-    // Platform type that the policy applies to
-    platformType?: PolicyPlatformType;
-    // Count of how many setting a policy holds
-    settingCount?: number;
-    settingStates?: NullableOption<DeviceConfigurationSettingState[]>;
-    // The compliance state of the policy
-    state?: ComplianceStatus;
-    // User unique identifier, must be Guid
-    userId?: NullableOption<string>;
-    // User Principal Name
-    userPrincipalName?: NullableOption<string>;
-    // The version of the policy
-    version?: number;
 }
 export interface DeviceSetupConfiguration extends Entity {
     // DateTime the object was created.
@@ -18057,11 +18166,11 @@ export interface IosEasEmailProfileConfiguration extends EasEmailProfileConfigur
     // Authentication method for this Email profile. Possible values are: usernameAndPassword, certificate, derivedCredential.
     authenticationMethod?: NullableOption<EasAuthenticationMethod>;
     // Indicates whether or not to block moving messages to other email accounts.
-    blockMovingMessagesToOtherEmailAccounts?: boolean;
+    blockMovingMessagesToOtherEmailAccounts?: NullableOption<boolean>;
     // Indicates whether or not to block sending email from third party apps.
-    blockSendingEmailFromThirdPartyApps?: boolean;
+    blockSendingEmailFromThirdPartyApps?: NullableOption<boolean>;
     // Indicates whether or not to block syncing recently used email addresses, for instance - when composing new email.
-    blockSyncingRecentlyUsedEmailAddresses?: boolean;
+    blockSyncingRecentlyUsedEmailAddresses?: NullableOption<boolean>;
     /**
      * Duration of time email should be synced back to. . Possible values are: userDefined, oneDay, threeDays, oneWeek,
      * twoWeeks, oneMonth, unlimited.
@@ -18083,7 +18192,7 @@ export interface IosEasEmailProfileConfiguration extends EasEmailProfileConfigur
     // Profile ID of the Per-App VPN policy to be used to access emails from the native Mail client
     perAppVPNProfileId?: NullableOption<string>;
     // Indicates whether or not to use S/MIME certificate.
-    requireSmime?: boolean;
+    requireSmime?: NullableOption<boolean>;
     // Indicates whether or not to use SSL.
     requireSsl?: boolean;
     // Signing Certificate type for this Email profile. Possible values are: none, certificate, derivedCredential.
@@ -18252,6 +18361,8 @@ export interface IosGeneralDeviceConfiguration extends DeviceConfiguration {
     appClipsBlocked?: boolean;
     // Indicates whether or not to block the user from using News when the device is in supervised mode (iOS 9.0 and later).
     appleNewsBlocked?: boolean;
+    // Limits Apple personalized advertising when true. Available in iOS 14 and later.
+    applePersonalizedAdsBlocked?: boolean;
     // Indicates whether or not to allow Apple Watch pairing when the device is in supervised mode (iOS 9.0 and later).
     appleWatchBlockPairing?: boolean;
     // Indicates whether or not to force a paired Apple Watch to use Wrist Detection (iOS 8.2 and later).
@@ -18777,7 +18888,7 @@ export interface IosikEv2VpnConfiguration extends IosVpnConfiguration {
      * clientCertificateSubjectName.
      */
     localIdentifier?: VpnLocalIdentifier;
-    // Maximum transmission unit. Valid values 1 to 65536
+    // Maximum transmission unit. Valid values 1280 to 1400
     mtuSizeInBytes?: NullableOption<number>;
     // Address of the IKEv2 server. Must be a FQDN, UserFQDN, network address, or ASN1DN
     remoteIdentifier?: string;
@@ -19600,110 +19711,6 @@ export interface MacOSWiredNetworkConfiguration extends DeviceConfiguration {
     // Trusted Root Certificate for Server Validation when EAP Type is configured to EAP-TLS/TTLS/FAST or PEAP.
     rootCertificateForServerValidation?: NullableOption<MacOSTrustedRootCertificate>;
 }
-export interface SecurityBaselineState extends Entity {
-    // The display name of the security baseline
-    displayName?: string;
-    // The security baseline template id
-    securityBaselineTemplateId?: NullableOption<string>;
-    // Security baseline compliance state
-    state?: SecurityBaselineComplianceState;
-    // User Principal Name
-    userPrincipalName?: NullableOption<string>;
-    // The security baseline state for different settings for a device
-    settingStates?: NullableOption<SecurityBaselineSettingState[]>;
-}
-export interface ManagedDeviceMobileAppConfigurationState extends Entity {
-    // The name of the policy for this policyBase
-    displayName?: NullableOption<string>;
-    // Platform type that the policy applies to
-    platformType?: PolicyPlatformType;
-    // Count of how many setting a policy holds
-    settingCount?: number;
-    settingStates?: NullableOption<ManagedDeviceMobileAppConfigurationSettingState[]>;
-    // The compliance state of the policy
-    state?: ComplianceStatus;
-    // User unique identifier, must be Guid
-    userId?: NullableOption<string>;
-    // User Principal Name
-    userPrincipalName?: NullableOption<string>;
-    // The version of the policy
-    version?: number;
-}
-export interface DeviceLogCollectionResponse extends Entity {
-    // The error code, if any. Valid values -9.22337203685478E+18 to 9.22337203685478E+18
-    errorCode?: number;
-    // The DateTime of the expiration of the logs
-    expirationDateTimeUTC?: NullableOption<string>;
-    // The UPN for who initiated the request
-    initiatedByUserPrincipalName?: NullableOption<string>;
-    // The device Id
-    managedDeviceId?: string;
-    // The DateTime the request was received
-    receivedDateTimeUTC?: NullableOption<string>;
-    // The DateTime of the request
-    requestedDateTimeUTC?: NullableOption<string>;
-    // The size of the logs. Valid values -1.79769313486232E+308 to 1.79769313486232E+308
-    size?: number;
-    // The status of the log collection request
-    status?: NullableOption<string>;
-}
-export interface WindowsProtectionState extends Entity {
-    // Current anti malware version
-    antiMalwareVersion?: NullableOption<string>;
-    /**
-     * Computer's state (like clean or pending full scan or pending reboot etc). Possible values are: clean, fullScanPending,
-     * rebootPending, manualStepsPending, offlineScanPending, critical.
-     */
-    deviceState?: NullableOption<WindowsDeviceHealthState>;
-    // Current endpoint protection engine's version
-    engineVersion?: NullableOption<string>;
-    // Full scan overdue or not?
-    fullScanOverdue?: NullableOption<boolean>;
-    // Full scan required or not?
-    fullScanRequired?: NullableOption<boolean>;
-    // Indicates whether the device is a virtual machine.
-    isVirtualMachine?: NullableOption<boolean>;
-    // Last quick scan datetime
-    lastFullScanDateTime?: NullableOption<string>;
-    // Last full scan signature version
-    lastFullScanSignatureVersion?: NullableOption<string>;
-    // Last quick scan datetime
-    lastQuickScanDateTime?: NullableOption<string>;
-    // Last quick scan signature version
-    lastQuickScanSignatureVersion?: NullableOption<string>;
-    // Last device health status reported time
-    lastReportedDateTime?: NullableOption<string>;
-    // Anti malware is enabled or not
-    malwareProtectionEnabled?: NullableOption<boolean>;
-    // Network inspection system enabled or not?
-    networkInspectionSystemEnabled?: NullableOption<boolean>;
-    /**
-     * Product Status of Windows Defender Antivirus. Possible values are: noStatus, serviceNotRunning,
-     * serviceStartedWithoutMalwareProtection, pendingFullScanDueToThreatAction, pendingRebootDueToThreatAction,
-     * pendingManualStepsDueToThreatAction, avSignaturesOutOfDate, asSignaturesOutOfDate,
-     * noQuickScanHappenedForSpecifiedPeriod, noFullScanHappenedForSpecifiedPeriod, systemInitiatedScanInProgress,
-     * systemInitiatedCleanInProgress, samplesPendingSubmission, productRunningInEvaluationMode,
-     * productRunningInNonGenuineMode, productExpired, offlineScanRequired, serviceShutdownAsPartOfSystemShutdown,
-     * threatRemediationFailedCritically, threatRemediationFailedNonCritically, noStatusFlagsSet, platformOutOfDate,
-     * platformUpdateInProgress, platformAboutToBeOutdated, signatureOrPlatformEndOfLifeIsPastOrIsImpending,
-     * windowsSModeSignaturesInUseOnNonWin10SInstall.
-     */
-    productStatus?: NullableOption<WindowsDefenderProductStatus>;
-    // Quick scan overdue or not?
-    quickScanOverdue?: NullableOption<boolean>;
-    // Real time protection is enabled or not?
-    realTimeProtectionEnabled?: NullableOption<boolean>;
-    // Reboot required or not?
-    rebootRequired?: NullableOption<boolean>;
-    // Signature out of date or not?
-    signatureUpdateOverdue?: NullableOption<boolean>;
-    // Current malware definitions version
-    signatureVersion?: NullableOption<string>;
-    // Indicates whether the Windows Defender tamper protection feature is enabled.
-    tamperProtectionEnabled?: NullableOption<boolean>;
-    // Device malware list
-    detectedMalwareState?: NullableOption<WindowsDeviceMalwareState[]>;
-}
 export interface SharedPCConfiguration extends DeviceConfiguration {
     // Specifies how accounts are managed on a shared PC. Only applies when disableAccountManager is false.
     accountManagerPolicy?: NullableOption<SharedPCAccountManagerPolicy>;
@@ -19927,6 +19934,11 @@ export interface Windows10EasEmailProfileConfiguration extends EasEmailProfileCo
     syncTasks?: boolean;
 }
 export interface Windows10EndpointProtectionConfiguration extends DeviceConfiguration {
+    /**
+     * Gets or sets whether applications inside Microsoft Defender Application Guard can access the device’s camera and
+     * microphone.
+     */
+    applicationGuardAllowCameraMicrophoneRedirection?: NullableOption<boolean>;
     // Allow users to download files from Edge in the application guard container and save them on the host file system
     applicationGuardAllowFileSaveOnHost?: boolean;
     // Allow persisting user generated data inside the App Guard Containter (favorites, cookies, web passwords, etc.)
@@ -19953,6 +19965,8 @@ export interface Windows10EndpointProtectionConfiguration extends DeviceConfigur
     applicationGuardBlockFileTransfer?: ApplicationGuardBlockFileTransferType;
     // Block enterprise sites to load non-enterprise content, such as third party plug-ins
     applicationGuardBlockNonEnterpriseContent?: boolean;
+    // Allows certain device level Root Certificates to be shared with the Microsoft Defender Application Guard container.
+    applicationGuardCertificateThumbprints?: NullableOption<string[]>;
     // Enable Windows Defender Application Guard
     applicationGuardEnabled?: boolean;
     /**
@@ -20038,6 +20052,11 @@ export interface Windows10EndpointProtectionConfiguration extends DeviceConfigur
      * be suppressed.
      */
     defenderBlockEndUserAccess?: NullableOption<boolean>;
+    /**
+     * Value indicating the behavior of Block persistence through WMI event subscription. Possible values are: userDefined,
+     * block, auditMode, warn, disable.
+     */
+    defenderBlockPersistenceThroughWmiType?: DefenderAttackSurfaceType;
     /**
      * This policy setting allows you to manage whether a check for new virus and spyware definitions will occur before
      * running a scan.
@@ -22037,7 +22056,7 @@ export interface WindowsDeliveryOptimizationConfiguration extends DeviceConfigur
     cacheServerBackgroundDownloadFallbackToHttpDelayInSeconds?: number;
     /**
      * Specifies number of seconds to delay a fall back from cache servers to an HTTP source for a foreground download. Valid
-     * values 0 to 2592000.???
+     * values 0 to 2592000.?
      */
     cacheServerForegroundDownloadFallbackToHttpDelayInSeconds?: number;
     // Specifies cache servers host names.
@@ -23524,7 +23543,7 @@ export interface ImportedDeviceIdentityResult extends ImportedDeviceIdentity {
 export interface ImportedWindowsAutopilotDeviceIdentityUpload extends Entity {
     // DateTime when the entity is created.
     createdDateTimeUtc?: string;
-    // Upload status. Possible values are: noUpload, pending, complete, error.
+    // Upload status.
     status?: ImportedWindowsAutopilotDeviceIdentityUploadStatus;
     // Collection of all Autopilot devices as a part of this upload.
     deviceIdentities?: NullableOption<ImportedWindowsAutopilotDeviceIdentity[]>;
@@ -23904,6 +23923,10 @@ export interface VulnerableManagedDevice extends Entity {
     // The Intune managed device ID.
     managedDeviceId?: NullableOption<string>;
 }
+export interface UnmanagedDeviceDiscoveryTask extends DeviceAppManagementTask {
+    // Unmanaged devices discovered in the network.
+    unmanagedDevices?: NullableOption<UnmanagedDevice[]>;
+}
 // tslint:disable-next-line: no-empty-interface
 export interface DeviceAndAppManagementRoleDefinition extends RoleDefinition {}
 export interface RoleScopeTagAutoAssignment extends Entity {
@@ -23947,6 +23970,11 @@ export interface DeviceManagementAutopilotPolicyStatusDetail extends Entity {
     complianceStatus?: DeviceManagementAutopilotPolicyComplianceStatus;
     // The friendly name of the policy.
     displayName?: NullableOption<string>;
+    /**
+     * The errorode associated with the compliance or enforcement status of the policy. Error code for enforcement status
+     * takes precedence if it exists.
+     */
+    errorCode?: number;
     // Timestamp of the reported policy status
     lastReportedDateTime?: string;
     // The type of policy. Possible values are: unknown, application, appModel, configurationPolicy.
@@ -24016,7 +24044,23 @@ export interface WindowsDefenderApplicationControlSupplementalPolicyDeploymentSt
     // The navigation link to the WindowsDefenderApplicationControl supplemental policy.
     policy?: NullableOption<WindowsDefenderApplicationControlSupplementalPolicy>;
 }
+export interface WindowsFeatureUpdateCatalogItem extends WindowsUpdateCatalogItem {
+    // The feature update version
+    version?: string;
+}
 export interface WindowsFeatureUpdateProfileAssignment extends Entity {
+    // The assignment target that the feature update profile is assigned to.
+    target?: NullableOption<DeviceAndAppManagementAssignmentTarget>;
+}
+export interface WindowsQualityUpdateCatalogItem extends WindowsUpdateCatalogItem {
+    // Classification of the quality update. Possible values are: all, security, nonSecurity.
+    classification?: WindowsQualityUpdateClassification;
+    // Flag indicating if update qualifies for expedite
+    isExpeditable?: boolean;
+    // Knowledge base article id
+    kbArticleId?: string;
+}
+export interface WindowsQualityUpdateProfileAssignment extends Entity {
     // The assignment target that the feature update profile is assigned to.
     target?: NullableOption<DeviceAndAppManagementAssignmentTarget>;
 }
@@ -25517,6 +25561,7 @@ export interface Planner extends Entity {
     buckets?: NullableOption<PlannerBucket[]>;
     // Read-only. Nullable. Returns a collection of the specified plans
     plans?: NullableOption<PlannerPlan[]>;
+    rosters?: NullableOption<PlannerRoster[]>;
     // Read-only. Nullable. Returns a collection of the specified tasks
     tasks?: NullableOption<PlannerTask[]>;
 }
@@ -25531,6 +25576,8 @@ export interface PlannerBucket extends PlannerDelta {
     tasks?: NullableOption<PlannerTask[]>;
 }
 export interface PlannerPlan extends PlannerDelta {
+    // Identifies the container of the plan. After it is set, this property can’t be updated. Required.
+    container?: NullableOption<PlannerPlanContainer>;
     // Read-only. Additional user experiences in which this plan is used, represented as plannerPlanContext entries.
     contexts?: NullableOption<PlannerPlanContextCollection>;
     // Read-only. The user who created the plan.
@@ -25541,19 +25588,19 @@ export interface PlannerPlan extends PlannerDelta {
      * '2014-01-01T00:00:00Z'
      */
     createdDateTime?: NullableOption<string>;
-    /**
-     * ID of the Group that owns the plan. A valid group must exist before this field can be set. After it is set, this
-     * property can’t be updated.
-     */
     owner?: NullableOption<string>;
     // Required. Title of the plan.
     title?: string;
-    // Read-only. Nullable. Collection of buckets in the plan.
+    // Collection of buckets in the plan. Read-only. Nullable.
     buckets?: NullableOption<PlannerBucket[]>;
-    // Read-only. Nullable. Additional details about the plan.
+    // Additional details about the plan. Read-only. Nullable.
     details?: NullableOption<PlannerPlanDetails>;
-    // Read-only. Nullable. Collection of tasks in the plan.
+    // Collection of tasks in the plan. Read-only. Nullable.
     tasks?: NullableOption<PlannerTask[]>;
+}
+export interface PlannerRoster extends Entity {
+    members?: NullableOption<PlannerRosterMember[]>;
+    plans?: NullableOption<PlannerPlan[]>;
 }
 export interface PlannerTask extends PlannerDelta {
     // Number of checklist items with value set to false, representing incomplete items.
@@ -25589,6 +25636,8 @@ export interface PlannerTask extends PlannerDelta {
      * '2014-01-01T00:00:00Z'
      */
     createdDateTime?: NullableOption<string>;
+    // Contains information about the origin of the task.
+    creationSource?: NullableOption<PlannerTaskCreation>;
     /**
      * Date and time at which the task is due. The Timestamp type represents date and time information using ISO 8601 format
      * and is always in UTC time. For example, midnight UTC on Jan 1, 2014 would look like this: '2014-01-01T00:00:00Z'
@@ -25668,6 +25717,11 @@ export interface PlannerProgressTaskBoardTaskFormat extends PlannerDelta {
     // Hint value used to order the task on the Progress view of the Task Board. The format is defined as outlined here.
     orderHint?: NullableOption<string>;
 }
+export interface PlannerRosterMember extends Entity {
+    roles?: NullableOption<string[]>;
+    tenantId?: NullableOption<string>;
+    userId?: NullableOption<string>;
+}
 export interface PlannerTaskDetails extends PlannerDelta {
     // The collection of checklist items on the task.
     checklist?: NullableOption<PlannerChecklistItems>;
@@ -25739,6 +25793,7 @@ export interface RegionalAndLanguageSettings extends Entity {
     defaultTranslationLanguage?: NullableOption<LocaleInfo>;
     // Allows a user to override their defaultRegionalFormat with field specific formats.Returned by default.
     regionalFormatOverrides?: NullableOption<RegionalFormatOverrides>;
+    translationPreferences?: NullableOption<TranslationPreferences>;
 }
 export interface ChangeTrackedEntity extends Entity {
     createdBy?: NullableOption<IdentitySet>;
@@ -25760,29 +25815,15 @@ export interface ShiftPreferences extends ChangeTrackedEntity {
     availability?: NullableOption<ShiftAvailability[]>;
 }
 export interface OnenoteEntityBaseModel extends Entity {
-    // The endpoint where you can get details about the page. Read-only.
     self?: NullableOption<string>;
 }
 export interface OnenoteEntitySchemaObjectModel extends OnenoteEntityBaseModel {
-    /**
-     * The date and time when the page was created. The timestamp represents date and time information using ISO 8601 format
-     * and is always in UTC time. For example, midnight UTC on Jan 1, 2014 would look like this: '2014-01-01T00:00:00Z'.
-     * Read-only.
-     */
     createdDateTime?: NullableOption<string>;
 }
 export interface OnenoteEntityHierarchyModel extends OnenoteEntitySchemaObjectModel {
-    // Identity of the user, device, and application which created the item. Read-only.
     createdBy?: NullableOption<IdentitySet>;
-    // The name of the notebook.
     displayName?: NullableOption<string>;
-    // Identity of the user, device, and application which created the item. Read-only.
     lastModifiedBy?: NullableOption<IdentitySet>;
-    /**
-     * The date and time when the notebook was last modified. The timestamp represents date and time information using ISO
-     * 8601 format and is always in UTC time. For example, midnight UTC on Jan 1, 2014 would look like this:
-     * '2014-01-01T00:00:00Z'. Read-only.
-     */
     lastModifiedDateTime?: NullableOption<string>;
 }
 export interface Notebook extends OnenoteEntityHierarchyModel {
@@ -25895,9 +25936,7 @@ export interface OnenotePage extends OnenoteEntitySchemaObjectModel {
     parentSection?: NullableOption<OnenoteSection>;
 }
 export interface OnenoteResource extends OnenoteEntityBaseModel {
-    // The content stream
     content?: NullableOption<any>;
-    // The URL for downloading the content
     contentUrl?: NullableOption<string>;
 }
 // tslint:disable-next-line: interface-name
@@ -26792,32 +26831,14 @@ export interface PrintServiceEndpoint extends Entity {
     uri?: NullableOption<string>;
 }
 export interface ActivityHistoryItem extends Entity {
-    /**
-     * Optional. The duration of active user engagement. if not supplied, this is calculated from the startedDateTime and
-     * lastActiveDateTime.
-     */
     activeDurationSeconds?: NullableOption<number>;
-    // Set by the server. DateTime in UTC when the object was created on the server.
     createdDateTime?: NullableOption<string>;
-    // Optional. UTC DateTime when the historyItem will undergo hard-delete. Can be set by the client.
     expirationDateTime?: NullableOption<string>;
-    /**
-     * Optional. UTC DateTime when the historyItem (activity session) was last understood as active or finished - if null,
-     * historyItem status should be Ongoing.
-     */
     lastActiveDateTime?: NullableOption<string>;
-    // Set by the server. DateTime in UTC when the object was modified on the server.
     lastModifiedDateTime?: NullableOption<string>;
-    // Required. UTC DateTime when the historyItem (activity session) was started. Required for timeline history.
     startedDateTime?: string;
-    // Set by the server. A status code used to identify valid objects. Values: active, updated, deleted, ignored.
     status?: NullableOption<Status>;
-    /**
-     * Optional. The timezone in which the user's device used to generate the activity was located at activity creation time.
-     * Values supplied as Olson IDs in order to support cross-platform representation.
-     */
     userTimezone?: NullableOption<string>;
-    // Optional. NavigationProperty/Containment; navigation property to the associated activity.
     activity?: UserActivity;
 }
 // tslint:disable-next-line: no-empty-interface
@@ -27073,10 +27094,6 @@ export interface SecureScore extends Entity {
     licensedUserCount?: NullableOption<number>;
     // Tenant maximum possible score on specified date.
     maxScore?: NullableOption<number>;
-    /**
-     * Complex type containing details about the security product/service vendor, provider, and subprovider (for example,
-     * vendor=Microsoft; provider=SecureScore). Required.
-     */
     vendorInformation?: NullableOption<SecurityVendorInformation>;
 }
 export interface SecureScoreControlProfile extends Entity {
@@ -27096,7 +27113,6 @@ export interface SecureScoreControlProfile extends Entity {
     deprecated?: NullableOption<boolean>;
     // Resource cost of implemmentating control (low, moderate, high).
     implementationCost?: NullableOption<string>;
-    // Time at which the control profile entity was last modified. The Timestamp type represents date and time
     lastModifiedDateTime?: NullableOption<string>;
     // Current obtained max score on specified date.
     maxScore?: NullableOption<number>;
@@ -27121,9 +27137,8 @@ export interface SecureScoreControlProfile extends Entity {
     userImpact?: NullableOption<string>;
     vendorInformation?: NullableOption<SecurityVendorInformation>;
 }
-export interface Security extends Entity {
+export interface Security {
     providerStatus?: NullableOption<SecurityProviderStatus[]>;
-    // Read-only. Nullable.
     alerts?: NullableOption<Alert[]>;
     cloudAppSecurityProfiles?: NullableOption<CloudAppSecurityProfile[]>;
     domainSecurityProfiles?: NullableOption<DomainSecurityProfile[]>;
@@ -27351,7 +27366,7 @@ export interface CommsOperation extends Entity {
     status?: OperationStatus;
 }
 export interface Participant extends Entity {
-    // The participant of the participant.
+    // Information about the participant.
     info?: ParticipantInfo;
     // true if the participant is in lobby.
     isInLobby?: boolean;
@@ -27747,6 +27762,14 @@ export interface TeamsAsyncOperation extends Entity {
      */
     targetResourceLocation?: NullableOption<string>;
 }
+export interface TeamworkTag extends Entity {
+    description?: NullableOption<string>;
+    displayName?: NullableOption<string>;
+    memberCount?: NullableOption<number>;
+    tagType?: NullableOption<TeamworkTagType>;
+    teamId?: NullableOption<string>;
+    members?: NullableOption<TeamworkTagMember[]>;
+}
 // tslint:disable-next-line: no-empty-interface
 export interface TeamsTemplate extends Entity {}
 export interface TeamsAppDefinition extends Entity {
@@ -27802,6 +27825,11 @@ export interface WorkforceIntegration extends ChangeTrackedEntity {
     supports?: NullableOption<WorkforceIntegrationSupportedEntities>;
     // Workforce Integration URL for callbacks from the Shifts service.
     url?: NullableOption<string>;
+}
+export interface TeamworkTagMember extends Entity {
+    displayName?: NullableOption<string>;
+    tenantId?: NullableOption<string>;
+    userId?: NullableOption<string>;
 }
 export interface UserScopeTeamsAppInstallation extends TeamsAppInstallation {
     // The chat between the user and Teams app.
@@ -28043,21 +28071,10 @@ export interface AppIdentity {
 export interface AppliedConditionalAccessPolicy {
     conditionsNotSatisfied?: NullableOption<ConditionalAccessConditions>;
     conditionsSatisfied?: NullableOption<ConditionalAccessConditions>;
-    // Refers to the Name of the conditional access policy (example: 'Require MFA for Salesforce').
     displayName?: NullableOption<string>;
-    /**
-     * Refers to the grant controls enforced by the conditional access policy (example: 'Require multi-factor
-     * authentication').
-     */
     enforcedGrantControls?: NullableOption<string[]>;
-    // Refers to the session controls enforced by the conditional access policy (example: 'Require app enforced controls').
     enforcedSessionControls?: NullableOption<string[]>;
-    // Unique GUID of the conditional access policy.
     id?: NullableOption<string>;
-    /**
-     * Indicates the result of the CA policy that was triggered. Possible values are:successfailurenotApplied - Policy isn't
-     * applied because policy conditions were not met.notEnabled - This is due to the policy in disabled state.
-     */
     result?: NullableOption<AppliedConditionalAccessPolicyResult>;
 }
 export interface AuditActivityInitiator {
@@ -28322,6 +28339,44 @@ export interface UserRegistrationCount {
     // Represents the status of user registration. Possible values are: registered, enabled, capable, and mfaRegistered.
     registrationStatus?: RegistrationStatusType;
 }
+export interface UserRegistrationFeatureCount {
+    /**
+     * Number of users registered or capable for Multi-Factor Authentication, Self-Service Password Reset and Passwordless
+     * Authentication. Possible values are: ssprRegistered, ssprEnabled, ssprCapable, passwordlessCapable, mfaCapable.
+     */
+    feature?: AuthenticationMethodFeature;
+    // Number of users.
+    userCount?: number;
+}
+export interface UserRegistrationFeatureSummary {
+    // Total number of users accounts, excluding those that are blocked
+    totalUserCount?: number;
+    /**
+     * Number of users registered or capable for Multi-Factor Authentication, Self-Service Password Reset and Passwordless
+     * Authentication.
+     */
+    userRegistrationFeatureCounts?: UserRegistrationFeatureCount[];
+    // User role type. Possible values are: all, privilegedAdmin, admin, user.
+    userRoles?: NullableOption<IncludedUserRoles>;
+    // User type. Possible values are: all, member, guest.
+    userTypes?: NullableOption<IncludedUserTypes>;
+}
+export interface UserRegistrationMethodCount {
+    // Name of authentication method.
+    authenticationMethod?: string;
+    // Number of users registered.
+    userCount?: number;
+}
+export interface UserRegistrationMethodSummary {
+    // Total number of users in the tenant.
+    totalUserCount?: number;
+    // Number of users registered for each authentication method.
+    userRegistrationMethodCounts?: UserRegistrationMethodCount[];
+    // User role type. Possible values are: all, privilegedAdmin, admin, user.
+    userRoles?: NullableOption<IncludedUserRoles>;
+    // User type. Possible values are: all, member, guest.
+    userTypes?: NullableOption<IncludedUserTypes>;
+}
 export interface AssignedLicense {
     // A collection of the unique identifiers for plans that have been disabled.
     disabledPlans?: string[];
@@ -28498,66 +28553,6 @@ export interface MailboxSettings {
     // The days of the week and hours in a specific time zone that the user works.
     workingHours?: NullableOption<WorkingHours>;
 }
-export interface AutomaticRepliesSetting {
-    /**
-     * The set of audience external to the signed-in user's organization who will receive the ExternalReplyMessage, if Status
-     * is AlwaysEnabled or Scheduled. Possible values are: none, contactsOnly, all.
-     */
-    externalAudience?: NullableOption<ExternalAudienceScope>;
-    // The automatic reply to send to the specified external audience, if Status is AlwaysEnabled or Scheduled.
-    externalReplyMessage?: NullableOption<string>;
-    /**
-     * The automatic reply to send to the audience internal to the signed-in user's organization, if Status is AlwaysEnabled
-     * or Scheduled.
-     */
-    internalReplyMessage?: NullableOption<string>;
-    // The date and time that automatic replies are set to end, if Status is set to Scheduled.
-    scheduledEndDateTime?: NullableOption<DateTimeTimeZone>;
-    // The date and time that automatic replies are set to begin, if Status is set to Scheduled.
-    scheduledStartDateTime?: NullableOption<DateTimeTimeZone>;
-    // Configurations status for automatic replies. Possible values are: disabled, alwaysEnabled, scheduled.
-    status?: NullableOption<AutomaticRepliesStatus>;
-}
-export interface DateTimeTimeZone {
-    // A single point of time in a combined date and time representation ({date}T{time}). For example, '2019-04-16T09:00:00'.
-    dateTime?: string;
-    // Represents a time zone, for example, 'Pacific Standard Time'. See below for possible values.
-    timeZone?: NullableOption<string>;
-}
-export interface LocaleInfo {
-    // A name representing the user's locale in natural language, for example, 'English (United States)'.
-    displayName?: NullableOption<string>;
-    /**
-     * A locale representation for the user, which includes the user's preferred language and country/region. For example,
-     * 'en-us'. The language component follows 2-letter codes as defined in ISO 639-1, and the country component follows
-     * 2-letter codes as defined in ISO 3166-1 alpha-2.
-     */
-    locale?: NullableOption<string>;
-}
-export interface UserPurpose {
-    /**
-     * Represents the user's recipient or mailbox type in Exchange Online. Possible values are: unknown, user, linked, shared,
-     * room, equipment, and others. See the next section for more information.
-     */
-    value?: NullableOption<MailboxRecipientType>;
-}
-export interface WorkingHours {
-    // The days of the week on which the user works.
-    daysOfWeek?: NullableOption<DayOfWeek[]>;
-    // The time of the day that the user stops working.
-    endTime?: NullableOption<string>;
-    // The time of the day that the user starts working.
-    startTime?: NullableOption<string>;
-    // The time zone to which the working hours apply.
-    timeZone?: NullableOption<TimeZoneBase>;
-}
-export interface TimeZoneBase {
-    /**
-     * The name of a time zone. It can be a standard time zone name such as 'Hawaii-Aleutian Standard Time', or 'Customized
-     * Time Zone' for a custom time zone.
-     */
-    name?: NullableOption<string>;
-}
 export interface EmailAddress {
     // The email address of an entity instance.
     address?: NullableOption<string>;
@@ -28663,56 +28658,6 @@ export interface ApiApplication {
      */
     requestedAccessTokenVersion?: NullableOption<number>;
 }
-export interface PermissionScope {
-    /**
-     * A description of the delegated permissions, intended to be read by an administrator granting the permission on behalf
-     * of all users. This text appears in tenant-wide admin consent experiences.
-     */
-    adminConsentDescription?: NullableOption<string>;
-    // The permission's title, intended to be read by an administrator granting the permission on behalf of all users.
-    adminConsentDisplayName?: NullableOption<string>;
-    /**
-     * Unique delegated permission identifier inside the collection of delegated permissions defined for a resource
-     * application.
-     */
-    id?: string;
-    /**
-     * When creating or updating a permission, this property must be set to true (which is the default). To delete a
-     * permission, this property must first be set to false. At that point, in a subsequent call, the permission may be
-     * removed.
-     */
-    isEnabled?: boolean;
-    origin?: NullableOption<string>;
-    /**
-     * Specifies whether this delegated permission should be considered safe for non-admin users to consent to on behalf of
-     * themselves, or whether an administrator should be required for consent to the permissions. This will be the default
-     * behavior, but each customer can choose to customize the behavior in their organization (by allowing, restricting or
-     * limiting user consent to this delegated permission.)
-     */
-    type?: NullableOption<string>;
-    /**
-     * A description of the delegated permissions, intended to be read by a user granting the permission on their own behalf.
-     * This text appears in consent experiences where the user is consenting only on behalf of themselves.
-     */
-    userConsentDescription?: NullableOption<string>;
-    /**
-     * A title for the permission, intended to be read by a user granting the permission on their own behalf. This text
-     * appears in consent experiences where the user is consenting only on behalf of themselves.
-     */
-    userConsentDisplayName?: NullableOption<string>;
-    /**
-     * Specifies the value to include in the scp (scope) claim in access tokens. Must not exceed 120 characters in length.
-     * Allowed characters are : ! # $ % &amp; ' ( ) * + , - . / : ; = ? @ [ ] ^ + _ { } ~, as well as characters in the ranges
-     * 0-9, A-Z and a-z. Any other character, including the space character, are not allowed.
-     */
-    value?: NullableOption<string>;
-}
-export interface PreAuthorizedApplication {
-    // The unique identifier for the application.
-    appId?: string;
-    // The unique identifier for the oauth2PermissionScopes the application requires.
-    permissionIds?: string[];
-}
 export interface AppRole {
     /**
      * Specifies whether this app role can be assigned to users and groups (by setting to ['User']), to other application's
@@ -28798,26 +28743,6 @@ export interface OptionalClaims {
     // The optional claims returned in the SAML token.
     saml2Token?: NullableOption<OptionalClaim[]>;
 }
-export interface OptionalClaim {
-    /**
-     * Additional properties of the claim. If a property exists in this collection, it modifies the behavior of the optional
-     * claim specified in the name property.
-     */
-    additionalProperties?: NullableOption<string[]>;
-    /**
-     * If the value is true, the claim specified by the client is necessary to ensure a smooth authorization experience for
-     * the specific task requested by the end user. The default value is false.
-     */
-    essential?: boolean;
-    // The name of the optional claim.
-    name?: string;
-    /**
-     * The source (directory object) of the claim. There are predefined claims and user-defined claims from extension
-     * properties. If the source value is null, the claim is a predefined optional claim. If the source value is user, the
-     * value in the name property is the extension property from the user object.
-     */
-    source?: NullableOption<string>;
-}
 export interface ParentalControlSettings {
     /**
      * Specifies the two-letter ISO country codes. Access to the application will be blocked for minors from the countries
@@ -28877,15 +28802,6 @@ export interface RequiredResourceAccess {
      */
     resourceAppId?: string;
 }
-export interface ResourceAccess {
-    // The unique identifier for one of the oauth2PermissionScopes or appRole instances that the resource application exposes.
-    id?: string;
-    /**
-     * Specifies whether the id property references an oauth2PermissionScopes or an appRole. Possible values are Scope or
-     * Role.
-     */
-    type?: NullableOption<string>;
-}
 export interface SpaApplication {
     /**
      * Specifies the URLs where user tokens are sent for sign-in, or the redirect URIs where OAuth 2.0 authorization codes and
@@ -28909,13 +28825,6 @@ export interface WebApplication {
      * access tokens are sent.
      */
     redirectUris?: string[];
-}
-// tslint:disable-next-line: interface-name
-export interface ImplicitGrantSettings {
-    // Specifies whether this web application can request an access token using the OAuth 2.0 implicit flow.
-    enableAccessTokenIssuance?: NullableOption<boolean>;
-    // Specifies whether this web application can request an ID token using the OAuth 2.0 implicit flow.
-    enableIdTokenIssuance?: NullableOption<boolean>;
 }
 export interface OnPremisesPublishing {
     /**
@@ -28989,48 +28898,54 @@ export interface OnPremisesPublishing {
     // The associated password credential for the custom domain used.
     verifiedCustomDomainPasswordCredential?: NullableOption<PasswordCredential>;
 }
-export interface OnPremisesPublishingSingleSignOn {
-    // The Kerberos Constrained Delegation settings for applications that use Integrated Window Authentication.
-    kerberosSignOnSettings?: NullableOption<KerberosSignOnSettings>;
-    // The preferred single-sign on mode for the application. Possible values are: none, onPremisesKerberos, headerBased.
-    singleSignOnMode?: NullableOption<SingleSignOnMode>;
-}
-export interface KerberosSignOnSettings {
-    /**
-     * The Internal Application SPN of the application server. This SPN needs to be in the list of services to which the
-     * connector can present delegated credentials.
-     */
-    kerberosServicePrincipalName?: NullableOption<string>;
-    /**
-     * The Delegated Login Identity for the connector to use on behalf of your users. For more information, see Working with
-     * different on-premises and cloud identities . Possible values are: userPrincipalName, onPremisesUserPrincipalName,
-     * userPrincipalUsername, onPremisesUserPrincipalUsername, onPremisesSAMAccountName.
-     */
-    kerberosSignOnMappingAttributeType?: NullableOption<KerberosSignOnMappingAttributeType>;
-}
-export interface VerifiedCustomDomainCertificatesMetadata {
-    /**
-     * The expiry date of the custom domain certificate. The Timestamp type represents date and time information using ISO
-     * 8601 format and is always in UTC time. For example, midnight UTC on Jan 1, 2014 would look like this:
-     * '2014-01-01T00:00:00Z'.
-     */
-    expiryDate?: NullableOption<string>;
-    /**
-     * The issue date of the custom domain. The Timestamp type represents date and time information using ISO 8601 format and
-     * is always in UTC time. For example, midnight UTC on Jan 1, 2014 would look like this: '2014-01-01T00:00:00Z'.
-     */
-    issueDate?: NullableOption<string>;
-    // The issuer name of the custom domain certificate.
-    issuerName?: NullableOption<string>;
-    // The subject name of the custom domain certificate.
-    subjectName?: NullableOption<string>;
-    // The thumbprint associated with the custom domain certificate.
-    thumbprint?: NullableOption<string>;
-}
 export interface AddIn {
     id?: NullableOption<string>;
     properties?: KeyValue[];
     type?: string;
+}
+export interface PermissionScope {
+    /**
+     * A description of the delegated permissions, intended to be read by an administrator granting the permission on behalf
+     * of all users. This text appears in tenant-wide admin consent experiences.
+     */
+    adminConsentDescription?: NullableOption<string>;
+    // The permission's title, intended to be read by an administrator granting the permission on behalf of all users.
+    adminConsentDisplayName?: NullableOption<string>;
+    /**
+     * Unique delegated permission identifier inside the collection of delegated permissions defined for a resource
+     * application.
+     */
+    id?: string;
+    /**
+     * When creating or updating a permission, this property must be set to true (which is the default). To delete a
+     * permission, this property must first be set to false. At that point, in a subsequent call, the permission may be
+     * removed.
+     */
+    isEnabled?: boolean;
+    origin?: NullableOption<string>;
+    /**
+     * Specifies whether this delegated permission should be considered safe for non-admin users to consent to on behalf of
+     * themselves, or whether an administrator should be required for consent to the permissions. This will be the default
+     * behavior, but each customer can choose to customize the behavior in their organization (by allowing, restricting or
+     * limiting user consent to this delegated permission.)
+     */
+    type?: NullableOption<string>;
+    /**
+     * A description of the delegated permissions, intended to be read by a user granting the permission on their own behalf.
+     * This text appears in consent experiences where the user is consenting only on behalf of themselves.
+     */
+    userConsentDescription?: NullableOption<string>;
+    /**
+     * A title for the permission, intended to be read by a user granting the permission on their own behalf. This text
+     * appears in consent experiences where the user is consenting only on behalf of themselves.
+     */
+    userConsentDisplayName?: NullableOption<string>;
+    /**
+     * Specifies the value to include in the scp (scope) claim in access tokens. Must not exceed 120 characters in length.
+     * Allowed characters are : ! # $ % &amp; ' ( ) * + , - . / : ; = ? @ [ ] ^ + _ { } ~, as well as characters in the ranges
+     * 0-9, A-Z and a-z. Any other character, including the space character, are not allowed.
+     */
+    value?: NullableOption<string>;
 }
 export interface SamlSingleSignOnSettings {
     // The relative URI the service provider would redirect to after completion of the single sign-on flow.
@@ -29043,16 +28958,6 @@ export interface Fido2KeyRestrictions {
     enforcementType?: NullableOption<Fido2RestrictionEnforcementType>;
     // Determines if the configured key enforcement is enabled.
     isEnforced?: NullableOption<boolean>;
-}
-export interface RegistrationAndResetTarget {
-    id?: NullableOption<string>;
-    minAuthMethodsToRegister?: NullableOption<number>;
-    minAuthMethodsToReset?: NullableOption<number>;
-    targetType?: NullableOption<AuthenticationMethodTargetType>;
-}
-export interface RegistrationEnforcement {
-    isAllowedToSkipRegistration?: NullableOption<boolean>;
-    registrationSkipDurationInDays?: NullableOption<number>;
 }
 export interface BookingReminder {
     // The message in the reminder.
@@ -29094,6 +28999,12 @@ export interface BookingWorkTimeSlot {
     end?: string;
     // The time of the day that work stops. For example, 17:00:00.0000000.
     start?: string;
+}
+export interface DateTimeTimeZone {
+    // A single point of time in a combined date and time representation ({date}T{time}). For example, '2019-04-16T09:00:00'.
+    dateTime?: string;
+    // Represents a time zone, for example, 'Pacific Standard Time'. See below for possible values.
+    timeZone?: NullableOption<string>;
 }
 export interface Location {
     // The street address of the location.
@@ -29166,20 +29077,15 @@ export interface CloudPcOnPremisesConnectionHealthCheck {
     displayName?: NullableOption<string>;
     // The end time of the health check item. Read-only.
     endDateTime?: string;
-    /**
-     * The type of error that occurred during this health check. Possible values are: DnsCheckFqdnNotFound,
-     * DnsCheckUnknownError, AdJoinCheckFqdnNotFound, AdJoinCheckIncorrectCredentials, AdJoinCheckOrganizationalUnitNotFound,
-     * AdJoinCheckOrganizationalUnitIncorrectFormat, AdJoinCheckUnknownError, EndpointConnectivityCheckUrlNotWhitelisted,
-     * EndpointConnectivityCheckUnknownError, AadConnectivityCheckUnknownError.
-     */
+    // The type of error that occurred during this health check.
     errorType?: NullableOption<CloudPcOnPremisesConnectionHealthCheckErrorType>;
     // The recommended action to fix the corresponding error.
     recommendedAction?: NullableOption<string>;
     // The start time of the health check item. Read-only.
     startDateTime?: string;
     /**
-     * The status of the health check item. Read-only. Possible values are: Pending, Running, Passed, Failed,
-     * UnknownFutureValue.
+     * The status of the health check item. Possible values are: pending, running, passed, failed, unknownFutureValue.
+     * Read-only.
      */
     status?: CloudPcOnPremisesConnectionStatus;
 }
@@ -29307,31 +29213,6 @@ export interface IntuneBrand {
     // Primary theme color used in the Company Portal applications and web portal.
     themeColor?: NullableOption<RgbColor>;
 }
-export interface CompanyPortalBlockedAction {
-    // Device Action. Possible values are: unknown, remove, reset.
-    action?: CompanyPortalAction;
-    // Device ownership type. Possible values are: unknown, company, personal.
-    ownerType?: OwnerType;
-    /**
-     * Device OS/Platform. Possible values are: android, androidForWork, iOS, macOS, windowsPhone81, windows81AndLater,
-     * windows10AndLater, androidWorkProfile, unknown.
-     */
-    platform?: DevicePlatformType;
-}
-export interface MimeContent {
-    // Indicates the content mime type.
-    type?: NullableOption<string>;
-    // The byte array that contains the actual content.
-    value?: NullableOption<number>;
-}
-export interface RgbColor {
-    // Blue value
-    b?: number;
-    // Green value
-    g?: number;
-    // Red value
-    r?: number;
-}
 export interface AdminConsent {
     /**
      * The admin consent state of sharing user and device data to Apple. Possible values are: notConfigured, granted,
@@ -29396,76 +29277,13 @@ export interface WindowsMalwareOverview {
     // Count of all malware detections across all devices. Valid values -2147483648 to 2147483647
     totalMalwareCount?: number;
 }
-export interface WindowsMalwareCategoryCount {
-    // Count of active malware detections for this malware category. Valid values -2147483648 to 2147483647
-    activeMalwareDetectionCount?: number;
-    /**
-     * Malware category. Possible values are: invalid, adware, spyware, passwordStealer, trojanDownloader, worm, backdoor,
-     * remoteAccessTrojan, trojan, emailFlooder, keylogger, dialer, monitoringSoftware, browserModifier, cookie,
-     * browserPlugin, aolExploit, nuker, securityDisabler, jokeProgram, hostileActiveXControl, softwareBundler,
-     * stealthNotifier, settingsModifier, toolBar, remoteControlSoftware, trojanFtp, potentialUnwantedSoftware, icqExploit,
-     * trojanTelnet, exploit, filesharingProgram, malwareCreationTool, remote_Control_Software, tool, trojanDenialOfService,
-     * trojanDropper, trojanMassMailer, trojanMonitoringSoftware, trojanProxyServer, virus, known, unknown, spp, behavior,
-     * vulnerability, policy, enterpriseUnwantedSoftware, ransom, hipsRule.
-     */
-    category?: WindowsMalwareCategory;
-    // Count of devices with malware detections for this malware category
-    deviceCount?: number;
-    // Count of distinct active malwares for this malware category. Valid values -2147483648 to 2147483647
-    distinctActiveMalwareCount?: number;
-    // The Timestamp of the last update for the device count in UTC
-    lastUpdateDateTime?: string;
-}
-export interface WindowsMalwareExecutionStateCount {
-    // Count of devices with malware detections for this malware execution state
-    deviceCount?: number;
-    // Malware execution state. Possible values are: unknown, blocked, allowed, running, notRunning.
-    executionState?: WindowsMalwareExecutionState;
-    // The Timestamp of the last update for the device count in UTC
-    lastUpdateDateTime?: string;
-}
-export interface WindowsMalwareNameCount {
-    // Count of devices with malware dectected for this malware
-    deviceCount?: number;
-    // The Timestamp of the last update for the device count in UTC
-    lastUpdateDateTime?: string;
-    // The unique identifier. This is malware identifier
-    malwareIdentifier?: NullableOption<string>;
-    // Malware name
-    name?: NullableOption<string>;
-}
-export interface WindowsMalwareSeverityCount {
-    // Count of distinct malwares for this malware State. Valid values -2147483648 to 2147483647
-    distinctMalwareCount?: number;
-    // The Timestamp of the last update for the WindowsMalwareSeverityCount in UTC
-    lastUpdateDateTime?: string;
-    // Count of threats detections for this malware severity. Valid values -2147483648 to 2147483647
-    malwareDetectionCount?: number;
-    // Malware Threat Severity. Possible values are: unknown, low, moderate, high, severe.
-    severity?: WindowsMalwareSeverity;
-}
-export interface WindowsMalwareStateCount {
-    // Count of devices with malware detections for this malware State
-    deviceCount?: number;
-    // Count of distinct malwares for this malware State. Valid values -2147483648 to 2147483647
-    distinctMalwareCount?: number;
-    // The Timestamp of the last update for the device count in UTC
-    lastUpdateDateTime?: string;
-    // Count of total malware detections for this malware State. Valid values -2147483648 to 2147483647
-    malwareDetectionCount?: number;
-    /**
-     * Malware Threat State. Possible values are: active, actionFailed, manualStepsRequired, fullScanRequired, rebootRequired,
-     * remediatedWithNonCriticalFailures, quarantined, removed, cleaned, allowed, noStatusCleared.
-     */
-    state?: WindowsMalwareThreatState;
-}
-export interface OsVersionCount {
-    // Count of devices with malware for the OS version
-    deviceCount?: number;
-    // The Timestamp of the last update for the device count in UTC
-    lastUpdateDateTime?: string;
-    // OS version
-    osVersion?: NullableOption<string>;
+export interface AlternativeSecurityId {
+    // For internal use only
+    identityProvider?: NullableOption<string>;
+    // For internal use only
+    key?: NullableOption<number>;
+    // For internal use only
+    type?: NullableOption<number>;
 }
 // tslint:disable-next-line: interface-name
 export interface IdentitySet {
@@ -29494,8 +29312,14 @@ export interface LicenseProcessingState {
     state?: NullableOption<string>;
 }
 export interface MembershipRuleProcessingStatus {
+    // Detailed error message if dynamic group processing ran into an error. Optional. Read-only.
     errorMessage?: NullableOption<string>;
+    // Most recent date and time when membership of a dynamic group was updated. Optional. Read-only.
     lastMembershipUpdated?: NullableOption<string>;
+    /**
+     * Current status of a dynamic group processing. Possible values are: NotStarted, Running, Succeeded, Failed, and
+     * UnknownFutureValue. Required. Read-only.
+     */
     status?: NullableOption<MembershipRuleProcessingStatusDetails>;
 }
 export interface Deleted {
@@ -29703,11 +29527,6 @@ export interface SensitiveContentLocationBase {
     length?: NullableOption<number>;
     offset?: NullableOption<number>;
 }
-export interface SensitiveContentEvidence {
-    length?: NullableOption<number>;
-    match?: NullableOption<string>;
-    offset?: NullableOption<number>;
-}
 export interface SensitiveContentLocation extends SensitiveContentLocationBase {
     confidence?: NullableOption<number>;
 }
@@ -29804,11 +29623,6 @@ export interface EvaluateLabelJobResultGroup {
     automatic?: NullableOption<EvaluateLabelJobResult>;
     recommended?: NullableOption<EvaluateLabelJobResult>;
 }
-export interface EvaluateLabelsAndPoliciesResult {
-    classificationResult?: NullableOption<DetectedSensitiveContentWrapper>;
-    dataLossPreventionPoliciesResult?: NullableOption<DlpPoliciesJobResult>;
-    sensitivityLabelsResult?: NullableOption<EvaluateLabelJobResultGroup>;
-}
 export interface EvaluateSensitivityLabelsRequest {
     currentLabel?: NullableOption<CurrentLabel>;
     discoveredSensitiveTypes?: NullableOption<DiscoveredSensitiveType[]>;
@@ -29816,6 +29630,15 @@ export interface EvaluateSensitivityLabelsRequest {
 export interface LabelPolicy {
     id?: string;
     name?: NullableOption<string>;
+}
+export interface LobbyBypassSettings {
+    // Specifies whether or not to always let dial-in callers bypass the lobby. Optional.
+    isDialInBypassEnabled?: NullableOption<boolean>;
+    /**
+     * Specifies the type of participants that are automatically admitted into a meeting, bypassing the lobby. Possible values
+     * are listed in the following table. Optional.
+     */
+    scope?: NullableOption<LobbyBypassScope>;
 }
 export interface MachineLearningDetectedSensitiveContent extends DetectedSensitiveContent {
     matchTolerance?: NullableOption<MlClassificationMatchTolerance>;
@@ -29833,19 +29656,29 @@ export interface ProtectGroup extends LabelActionBase {
     allowGuestUsers?: NullableOption<boolean>;
     privacy?: NullableOption<GroupPrivacy>;
 }
+export interface ProtectOnlineMeetingAction extends LabelActionBase {
+    allowedForwarders?: NullableOption<OnlineMeetingForwarders>;
+    allowedPresenters?: NullableOption<OnlineMeetingPresenters>;
+    isCopyToClipboardEnabled?: NullableOption<boolean>;
+    isLobbyEnabled?: NullableOption<boolean>;
+    lobbyBypassSettings?: NullableOption<LobbyBypassSettings>;
+}
 export interface ProtectSite extends LabelActionBase {
     accessType?: NullableOption<SiteAccessType>;
     conditionalAccessProtectionLevelId?: NullableOption<string>;
 }
+export interface SensitiveContentEvidence {
+    length?: NullableOption<number>;
+    match?: NullableOption<string>;
+    offset?: NullableOption<number>;
+}
 // tslint:disable-next-line: no-empty-interface
 export interface AllowedDataLocationInfo {}
-export interface AlternativeSecurityId {
-    // For internal use only
-    identityProvider?: NullableOption<string>;
-    // For internal use only
-    key?: NullableOption<number>;
-    // For internal use only
-    type?: NullableOption<number>;
+export interface PreAuthorizedApplication {
+    // The unique identifier for the application.
+    appId?: string;
+    // The unique identifier for the oauth2PermissionScopes the application requires.
+    permissionIds?: NullableOption<string[]>;
 }
 export interface ApiServicePrincipal {
     resourceSpecificApplicationPermissions?: ResourceSpecificPermission[];
@@ -29856,6 +29689,14 @@ export interface ResourceSpecificPermission {
     id?: string;
     isEnabled?: boolean;
     value?: NullableOption<string>;
+}
+export interface AppMetadata {
+    data?: NullableOption<AppMetadataEntry[]>;
+    version?: number;
+}
+export interface AppMetadataEntry {
+    key?: NullableOption<string>;
+    value?: NullableOption<number>;
 }
 export interface CertificateAuthority {
     // Required. The base64 encoded string representing the public certificate.
@@ -29908,6 +29749,13 @@ export interface DomainState {
     status?: NullableOption<string>;
 }
 // tslint:disable-next-line: interface-name
+export interface ImplicitGrantSettings {
+    // Specifies whether this web application can request an access token using the OAuth 2.0 implicit flow.
+    enableAccessTokenIssuance?: NullableOption<boolean>;
+    // Specifies whether this web application can request an ID token using the OAuth 2.0 implicit flow.
+    enableIdTokenIssuance?: NullableOption<boolean>;
+}
+// tslint:disable-next-line: interface-name
 export interface InstanceResourceAccess {
     permissions?: ResourcePermission[];
     resourceAppId?: string;
@@ -29923,6 +29771,26 @@ export interface LicenseUnitsDetail {
     suspended?: NullableOption<number>;
     // The number of units that are in warning status.
     warning?: NullableOption<number>;
+}
+export interface OptionalClaim {
+    /**
+     * Additional properties of the claim. If a property exists in this collection, it modifies the behavior of the optional
+     * claim specified in the name property.
+     */
+    additionalProperties?: NullableOption<string[]>;
+    /**
+     * If the value is true, the claim specified by the client is necessary to ensure a smooth authorization experience for
+     * the specific task requested by the end user. The default value is false.
+     */
+    essential?: boolean;
+    // The name of the optional claim.
+    name?: string;
+    /**
+     * The source (directory object) of the claim. There are predefined claims and user-defined claims from extension
+     * properties. If the source value is null, the claim is a predefined optional claim. If the source value is user, the
+     * value in the name property is the extension property from the user object.
+     */
+    source?: NullableOption<string>;
 }
 export interface Phone {
     // The phone number.
@@ -29955,6 +29823,15 @@ export interface PrivacyProfile {
      * company's privacy statement. Not required.
      */
     statementUrl?: NullableOption<string>;
+}
+export interface ResourceAccess {
+    // The unique identifier for one of the oauth2PermissionScopes or appRole instances that the resource application exposes.
+    id?: string;
+    /**
+     * Specifies whether the id property references an oauth2PermissionScopes or an appRole. Possible values are Scope or
+     * Role.
+     */
+    type?: NullableOption<string>;
 }
 export interface ServicePlanInfo {
     /**
@@ -29996,7 +29873,7 @@ export interface TenantApprovals {
     tenantId?: NullableOption<string>;
 }
 export interface UnifiedRolePermission {
-    // Set of tasks that can be perfomed on a resource.
+    // Set of tasks that can be performed on a resource.
     allowedResourceActions?: string[];
     // Optional constraints that must be met for the permission to be effective.
     condition?: NullableOption<string>;
@@ -30262,22 +30139,6 @@ export interface EducationSynchronizationCustomizations extends EducationSynchro
     // Customizations for Teacher Rosters.
     teacherRoster?: NullableOption<EducationSynchronizationCustomization>;
 }
-export interface EducationSynchronizationCustomization {
-    // Indicates whether the display name of the resource can be overwritten by the sync.
-    allowDisplayNameUpdate?: NullableOption<boolean>;
-    // Indicates whether synchronization of the parent entity is deferred to a later date.
-    isSyncDeferred?: NullableOption<boolean>;
-    /**
-     * The collection of property names to sync. If set to null, all properties will be synchronized. Does not apply to
-     * Student Enrollments or Teacher Rosters
-     */
-    optionalPropertiesToSync?: NullableOption<string[]>;
-    /**
-     * The date that the synchronization should start. This value should be set to a future date. If set to null, the resource
-     * will be synchronized when the profile setup completes. Only applies to Student Enrollments
-     */
-    synchronizationStartDate?: NullableOption<string>;
-}
 export interface EducationFileSynchronizationVerificationMessage {
     // Detailed information about the message type.
     description?: NullableOption<string>;
@@ -30340,6 +30201,22 @@ export interface EducationPowerSchoolDataProvider extends EducationSynchronizati
     schoolsIds?: NullableOption<string[]>;
     // The school year to sync.
     schoolYear?: NullableOption<string>;
+}
+export interface EducationSynchronizationCustomization {
+    // Indicates whether the display name of the resource can be overwritten by the sync.
+    allowDisplayNameUpdate?: NullableOption<boolean>;
+    // Indicates whether synchronization of the parent entity is deferred to a later date.
+    isSyncDeferred?: NullableOption<boolean>;
+    /**
+     * The collection of property names to sync. If set to null, all properties will be synchronized. Does not apply to
+     * Student Enrollments or Teacher Rosters
+     */
+    optionalPropertiesToSync?: NullableOption<string[]>;
+    /**
+     * The date that the synchronization should start. This value should be set to a future date. If set to null, the resource
+     * will be synchronized when the profile setup completes. Only applies to Student Enrollments
+     */
+    synchronizationStartDate?: NullableOption<string>;
 }
 export interface EducationSynchronizationLicenseAssignment {
     // The user role type to assign to license. Possible values are: student, teacher, faculty.
@@ -30487,10 +30364,6 @@ export interface Quota {
     // Total space used, in bytes. Read-only.
     used?: NullableOption<number>;
 }
-export interface StoragePlanInformation {
-    // Indicates if there are higher storage quota plans available. Read-only.
-    upgradeAvailable?: NullableOption<boolean>;
-}
 // tslint:disable-next-line: no-empty-interface
 export interface SystemFacet {}
 export interface Audio {
@@ -30533,10 +30406,6 @@ export interface Bundle {
     // Number of children contained immediately within this container.
     childCount?: NullableOption<number>;
 }
-export interface Album {
-    // Unique identifier of the [driveItem][] that is the cover of the album.
-    coverImageItemId?: NullableOption<string>;
-}
 export interface File {
     // Hashes of the file's binary content, if available. Read-only.
     hashes?: NullableOption<Hashes>;
@@ -30546,19 +30415,6 @@ export interface File {
      */
     mimeType?: NullableOption<string>;
     processingMetadata?: NullableOption<boolean>;
-}
-export interface Hashes {
-    // The CRC32 value of the file (if available). Read-only.
-    crc32Hash?: NullableOption<string>;
-    /**
-     * A proprietary hash of the file that can be used to determine if the contents of the file have changed (if available).
-     * Read-only.
-     */
-    quickXorHash?: NullableOption<string>;
-    // SHA1 hash for the contents of the file (if available). Read-only.
-    sha1Hash?: NullableOption<string>;
-    // SHA256 hash for the contents of the file (if available). Read-only.
-    sha256Hash?: NullableOption<string>;
 }
 export interface FileSystemInfo {
     // The UTC date and time the file was created on a client.
@@ -30574,14 +30430,6 @@ export interface Folder {
     // A collection of properties defining the recommended view for the folder.
     view?: NullableOption<FolderView>;
 }
-export interface FolderView {
-    // The method by which the folder should be sorted.
-    sortBy?: NullableOption<string>;
-    // If true, indicates that items should be sorted in descending order. Otherwise, items should be sorted ascending.
-    sortOrder?: NullableOption<string>;
-    // The type of view that should be used to represent the folder.
-    viewType?: NullableOption<string>;
-}
 // tslint:disable-next-line: interface-name
 export interface Image {
     // Optional. Height of the image, in pixels. Read-only.
@@ -30590,19 +30438,11 @@ export interface Image {
     width?: NullableOption<number>;
 }
 export interface Package {
-    /**
-     * A string indicating the type of package. While oneNote is the only currently defined value, you should expect other
-     * package types to be returned and handle them accordingly.
-     */
     type?: NullableOption<string>;
 }
 export interface PendingOperations {
     // A property that indicates that an operation that might update the binary content of a file is pending completion.
     pendingContentUpdate?: NullableOption<PendingContentUpdate>;
-}
-export interface PendingContentUpdate {
-    // Date and time the pending binary operation was queued in UTC time. Read-only.
-    queuedDateTime?: NullableOption<string>;
 }
 export interface Photo {
     // Camera manufacturer. Read-only.
@@ -30670,7 +30510,6 @@ export interface RemoteItem {
     sharepointIds?: NullableOption<SharepointIds>;
     // Size of the remote item. Read-only.
     size?: NullableOption<number>;
-    // If the current item is also available as a special folder, this facet is returned. Read-only.
     specialFolder?: NullableOption<SpecialFolder>;
     // Video metadata, if the item is a video. Read-only.
     video?: NullableOption<Video>;
@@ -30679,28 +30518,12 @@ export interface RemoteItem {
     // URL that displays the resource in the browser. Read-only.
     webUrl?: NullableOption<string>;
 }
-// tslint:disable-next-line: interface-name
-export interface ItemReference {
-    // Unique identifier of the drive instance that contains the item. Read-only.
-    driveId?: NullableOption<string>;
-    // Identifies the type of drive. See [drive][] resource for values.
-    driveType?: NullableOption<string>;
-    // Unique identifier of the item in the drive. Read-only.
-    id?: NullableOption<string>;
-    // The name of the item being referenced. Read-only.
-    name?: NullableOption<string>;
-    // Path that can be used to navigate to the item. Read-only.
-    path?: NullableOption<string>;
-    // A unique identifier for a shared resource that can be accessed via the [Shares][] API.
-    shareId?: NullableOption<string>;
-    // Returns identifiers useful for SharePoint REST compatibility. Read-only.
-    sharepointIds?: NullableOption<SharepointIds>;
+export interface SearchResult {
     /**
-     * For OneDrive for Business and SharePoint, this property represents the ID of the site that contains the parent document
-     * library of the driveItem resource. The value is the same as the id property of that [site][] resource. It is an opaque
-     * string that consists of three identifiers of the site. For OneDrive, this property is not populated.
+     * A callback URL that can be used to record telemetry information. The application should issue a GET on this URL if the
+     * user interacts with this item to improve the quality of results.
      */
-    siteId?: NullableOption<string>;
+    onClickTelemetryUrl?: NullableOption<string>;
 }
 export interface Shared {
     // The identity of the owner of the shared item. Read-only.
@@ -30731,19 +30554,11 @@ export interface Video {
     duration?: NullableOption<number>;
     // 'Four character code' name of the video format.
     fourCC?: NullableOption<string>;
-    // Frame rate of the video.
     frameRate?: NullableOption<number>;
     // Height of the video, in pixels.
     height?: NullableOption<number>;
     // Width of the video, in pixels.
     width?: NullableOption<number>;
-}
-export interface SearchResult {
-    /**
-     * A callback URL that can be used to record telemetry information. The application should issue a GET on this URL if the
-     * user interacts with this item to improve the quality of results.
-     */
-    onClickTelemetryUrl?: NullableOption<string>;
 }
 export interface ListInfo {
     // If true, indicates that content types are enabled for this list.
@@ -30872,6 +30687,36 @@ export interface AutomaticRepliesMailTips {
     // The date and time that automatic replies are set to begin.
     scheduledStartTime?: NullableOption<DateTimeTimeZone>;
 }
+export interface LocaleInfo {
+    // A name representing the user's locale in natural language, for example, 'English (United States)'.
+    displayName?: NullableOption<string>;
+    /**
+     * A locale representation for the user, which includes the user's preferred language and country/region. For example,
+     * 'en-us'. The language component follows 2-letter codes as defined in ISO 639-1, and the country component follows
+     * 2-letter codes as defined in ISO 3166-1 alpha-2.
+     */
+    locale?: NullableOption<string>;
+}
+export interface AutomaticRepliesSetting {
+    /**
+     * The set of audience external to the signed-in user's organization who will receive the ExternalReplyMessage, if Status
+     * is AlwaysEnabled or Scheduled. Possible values are: none, contactsOnly, all.
+     */
+    externalAudience?: NullableOption<ExternalAudienceScope>;
+    // The automatic reply to send to the specified external audience, if Status is AlwaysEnabled or Scheduled.
+    externalReplyMessage?: NullableOption<string>;
+    /**
+     * The automatic reply to send to the audience internal to the signed-in user's organization, if Status is AlwaysEnabled
+     * or Scheduled.
+     */
+    internalReplyMessage?: NullableOption<string>;
+    // The date and time that automatic replies are set to end, if Status is set to Scheduled.
+    scheduledEndDateTime?: NullableOption<DateTimeTimeZone>;
+    // The date and time that automatic replies are set to begin, if Status is set to Scheduled.
+    scheduledStartDateTime?: NullableOption<DateTimeTimeZone>;
+    // Configurations status for automatic replies. Possible values are: disabled, alwaysEnabled, scheduled.
+    status?: NullableOption<AutomaticRepliesStatus>;
+}
 export interface CalendarSharingMessageAction {
     action?: NullableOption<CalendarSharingAction>;
     actionType?: NullableOption<CalendarSharingActionType>;
@@ -30893,6 +30738,13 @@ export interface GenericError {
     code?: NullableOption<string>;
     // The error message.
     message?: NullableOption<string>;
+}
+export interface TimeZoneBase {
+    /**
+     * The name of a time zone. It can be a standard time zone name such as 'Hawaii-Aleutian Standard Time', or 'Customized
+     * Time Zone' for a custom time zone.
+     */
+    name?: NullableOption<string>;
 }
 export interface CustomTimeZone extends TimeZoneBase {
     /**
@@ -30956,6 +30808,23 @@ export interface ItemBody {
     content?: NullableOption<string>;
     // The type of the content. Possible values are text and html.
     contentType?: NullableOption<BodyType>;
+}
+export interface UserPurpose {
+    /**
+     * Represents the user's recipient or mailbox type in Exchange Online. Possible values are: unknown, user, linked, shared,
+     * room, equipment, and others. See the next section for more information.
+     */
+    value?: NullableOption<MailboxRecipientType>;
+}
+export interface WorkingHours {
+    // The days of the week on which the user works.
+    daysOfWeek?: NullableOption<DayOfWeek[]>;
+    // The time of the day that the user stops working.
+    endTime?: NullableOption<string>;
+    // The time of the day that the user starts working.
+    startTime?: NullableOption<string>;
+    // The time zone to which the working hours apply.
+    timeZone?: NullableOption<TimeZoneBase>;
 }
 export interface MailTips {
     // Mail tips for automatic reply if it has been set up by the recipient.
@@ -31345,6 +31214,10 @@ export interface Website {
 }
 // tslint:disable-next-line: no-empty-interface
 export interface AccessAction {}
+export interface Album {
+    // Unique identifier of the [driveItem][] that is the cover of the album.
+    coverImageItemId?: NullableOption<string>;
+}
 // tslint:disable-next-line: no-empty-interface
 export interface BooleanColumn {}
 export interface CalculatedColumn {
@@ -31430,8 +31303,29 @@ export interface DriveRecipient {
 }
 // tslint:disable-next-line: no-empty-interface
 export interface EditAction {}
+export interface Hashes {
+    // The CRC32 value of the file (if available). Read-only.
+    crc32Hash?: NullableOption<string>;
+    /**
+     * A proprietary hash of the file that can be used to determine if the contents of the file have changed (if available).
+     * Read-only.
+     */
+    quickXorHash?: NullableOption<string>;
+    // SHA1 hash for the contents of the file (if available). Read-only.
+    sha1Hash?: NullableOption<string>;
+    // SHA256 hash for the contents of the file (if available). Read-only.
+    sha256Hash?: NullableOption<string>;
+}
 // tslint:disable-next-line: no-empty-interface
 export interface FlexSchemaContainer {}
+export interface FolderView {
+    // The method by which the folder should be sorted.
+    sortBy?: NullableOption<string>;
+    // If true, indicates that items should be sorted in descending order. Otherwise, items should be sorted ascending.
+    sortOrder?: NullableOption<string>;
+    // The type of view that should be used to represent the folder.
+    viewType?: NullableOption<string>;
+}
 // tslint:disable-next-line: no-empty-interface
 export interface GeolocationColumn {}
 // tslint:disable-next-line: interface-name
@@ -31511,6 +31405,29 @@ export interface ItemPreviewInfo {
     postParameters?: NullableOption<string>;
     postUrl?: NullableOption<string>;
 }
+// tslint:disable-next-line: interface-name
+export interface ItemReference {
+    // Unique identifier of the drive instance that contains the item. Read-only.
+    driveId?: NullableOption<string>;
+    // Identifies the type of drive. See [drive][] resource for values.
+    driveType?: NullableOption<string>;
+    // Unique identifier of the item in the drive. Read-only.
+    id?: NullableOption<string>;
+    // The name of the item being referenced. Read-only.
+    name?: NullableOption<string>;
+    // Path that can be used to navigate to the item. Read-only.
+    path?: NullableOption<string>;
+    // A unique identifier for a shared resource that can be accessed via the [Shares][] API.
+    shareId?: NullableOption<string>;
+    // Returns identifiers useful for SharePoint REST compatibility. Read-only.
+    sharepointIds?: NullableOption<SharepointIds>;
+    /**
+     * For OneDrive for Business and SharePoint, this property represents the ID of the site that contains the parent document
+     * library of the driveItem resource. The value is the same as the id property of that [site][] resource. It is an opaque
+     * string that consists of three identifiers of the site. For OneDrive, this property is not populated.
+     */
+    siteId?: NullableOption<string>;
+}
 export interface LookupColumn {
     // Indicates whether multiple values can be selected from the source.
     allowMultipleValues?: NullableOption<boolean>;
@@ -31536,6 +31453,10 @@ export interface NumberColumn {
     // The minimum permitted value.
     minimum?: NullableOption<number>;
 }
+export interface PendingContentUpdate {
+    // Date and time the pending binary operation was queued in UTC time. Read-only.
+    queuedDateTime?: NullableOption<string>;
+}
 export interface PersonOrGroupColumn {
     // Indicates whether multiple values can be selected from the source.
     allowMultipleSelection?: NullableOption<boolean>;
@@ -31543,6 +31464,10 @@ export interface PersonOrGroupColumn {
     chooseFromType?: NullableOption<string>;
     // How to display the information about the person or group chosen. See below.
     displayAs?: NullableOption<string>;
+}
+export interface StoragePlanInformation {
+    // Indicates if there are higher storage quota plans available. Read-only.
+    upgradeAvailable?: NullableOption<boolean>;
 }
 export interface SharingInvitation {
     // The email address provided for the recipient of the sharing invitation. Read-only.
@@ -31642,6 +31567,44 @@ export interface UpdateWindow {
     updateWindowEndTime?: NullableOption<string>;
     // Start of a time window during which agents can receive updates
     updateWindowStartTime?: NullableOption<string>;
+}
+export interface KerberosSignOnSettings {
+    /**
+     * The Internal Application SPN of the application server. This SPN needs to be in the list of services to which the
+     * connector can present delegated credentials.
+     */
+    kerberosServicePrincipalName?: NullableOption<string>;
+    /**
+     * The Delegated Login Identity for the connector to use on behalf of your users. For more information, see Working with
+     * different on-premises and cloud identities . Possible values are: userPrincipalName, onPremisesUserPrincipalName,
+     * userPrincipalUsername, onPremisesUserPrincipalUsername, onPremisesSAMAccountName.
+     */
+    kerberosSignOnMappingAttributeType?: NullableOption<KerberosSignOnMappingAttributeType>;
+}
+export interface OnPremisesPublishingSingleSignOn {
+    // The Kerberos Constrained Delegation settings for applications that use Integrated Window Authentication.
+    kerberosSignOnSettings?: NullableOption<KerberosSignOnSettings>;
+    // The preferred single-sign on mode for the application. Possible values are: none, onPremisesKerberos, headerBased.
+    singleSignOnMode?: NullableOption<SingleSignOnMode>;
+}
+export interface VerifiedCustomDomainCertificatesMetadata {
+    /**
+     * The expiry date of the custom domain certificate. The Timestamp type represents date and time information using ISO
+     * 8601 format and is always in UTC time. For example, midnight UTC on Jan 1, 2014 would look like this:
+     * '2014-01-01T00:00:00Z'.
+     */
+    expiryDate?: NullableOption<string>;
+    /**
+     * The issue date of the custom domain. The Timestamp type represents date and time information using ISO 8601 format and
+     * is always in UTC time. For example, midnight UTC on Jan 1, 2014 would look like this: '2014-01-01T00:00:00Z'.
+     */
+    issueDate?: NullableOption<string>;
+    // The issuer name of the custom domain certificate.
+    issuerName?: NullableOption<string>;
+    // The subject name of the custom domain certificate.
+    subjectName?: NullableOption<string>;
+    // The thumbprint associated with the custom domain certificate.
+    thumbprint?: NullableOption<string>;
 }
 export interface EvaluateDynamicMembershipResult {
     /**
@@ -31768,12 +31731,6 @@ export interface AttributeMappingSource {
     parameters?: NullableOption<StringKeyAttributeMappingSourceValuePair[]>;
     type?: AttributeMappingSourceType;
 }
-export interface StringKeyAttributeMappingSourceValuePair {
-    // The name of the parameter.
-    key?: NullableOption<string>;
-    // The value of the parameter.
-    value?: NullableOption<AttributeMappingSource>;
-}
 export interface AttributeMappingParameterSchema {
     /**
      * The given parameter can be provided multiple times (for example, multiple input strings in the
@@ -31786,6 +31743,12 @@ export interface AttributeMappingParameterSchema {
     required?: boolean;
     // Possible values are: Boolean, Binary, Reference, Integer, String. Default is String.
     type?: AttributeType;
+}
+export interface StringKeyAttributeMappingSourceValuePair {
+    // The name of the parameter.
+    key?: NullableOption<string>;
+    // The value of the parameter.
+    value?: NullableOption<AttributeMappingSource>;
 }
 export interface ExpressionInputObject {
     // Definition of the test object.
@@ -32352,8 +32315,10 @@ export interface ConditionalAccessConditionSet {
     users?: NullableOption<ConditionalAccessUsers>;
 }
 export interface ConditionalAccessDevices {
+    excludeDevices?: string[];
     // States excluded from the scope of the policy. Possible values: Compliant, DomainJoined.
     excludeDeviceStates?: string[];
+    includeDevices?: string[];
     // States in the scope of the policy. All is the only allowed value.
     includeDeviceStates?: string[];
 }
@@ -32453,7 +32418,6 @@ export interface RiskUserActivity {
     detail?: NullableOption<RiskDetail>;
     // List of risk event types. Deprecated. Use riskEventType instead.
     eventTypes?: NullableOption<RiskEventType[]>;
-    // The type of risk event detected.
     riskEventTypes?: NullableOption<string[]>;
 }
 export interface AccessPackageAnswer {
@@ -32472,18 +32436,6 @@ export interface AccessPackageQuestion {
     // The text of the question to show to the requestor.
     text?: NullableOption<AccessPackageLocalizedContent>;
 }
-export interface AccessPackageLocalizedContent {
-    // The fallback string, which is used when a requested localization is not available. Required.
-    defaultText?: NullableOption<string>;
-    // Content represented in a format for a specific locale.
-    localizedTexts?: NullableOption<AccessPackageLocalizedText[]>;
-}
-export interface AccessPackageLocalizedText {
-    // The ISO code for the intended language. Required.
-    languageCode?: NullableOption<string>;
-    // The text in the specific language. Required.
-    text?: NullableOption<string>;
-}
 export interface AccessPackageAnswerChoice {
     /**
      * The actual value of the selected choice. This is typically a string value which is understandable by applications.
@@ -32493,9 +32445,21 @@ export interface AccessPackageAnswerChoice {
     // The localized display values shown to the requestor and approvers. Required.
     displayValue?: NullableOption<AccessPackageLocalizedContent>;
 }
+export interface AccessPackageLocalizedContent {
+    // The fallback string, which is used when a requested localization is not available. Required.
+    defaultText?: NullableOption<string>;
+    // Content represented in a format for a specific locale.
+    localizedTexts?: NullableOption<AccessPackageLocalizedText[]>;
+}
 export interface AccessPackageAnswerString extends AccessPackageAnswer {
     // The value stored on the requestor's user profile, if this answer is configured to be stored as a specific attribute.
     value?: NullableOption<string>;
+}
+export interface AccessPackageLocalizedText {
+    // The ISO code for the intended language. Required.
+    languageCode?: NullableOption<string>;
+    // The text in the specific language. Required.
+    text?: NullableOption<string>;
 }
 export interface AccessPackageMultipleChoiceQuestion extends AccessPackageQuestion {
     // Indicates whether requestor can select multiple choices as their answer.
@@ -32584,6 +32548,10 @@ export interface ConnectedOrganizationMembers extends UserSet {
     description?: NullableOption<string>;
     // The ID of the connected organization in entitlement management.
     id?: NullableOption<string>;
+}
+export interface ConnectionInfo {
+    // The endpoint that is used by Entitlement Management to communicate with the access package resource.
+    url?: NullableOption<string>;
 }
 export interface ExpirationPattern {
     // The requestor's desired duration of access. If specified in a request, endDateTime should not be present.
@@ -32850,6 +32818,12 @@ export interface AndroidEnrollmentCompanyCode {
     // Generated QR code for the token.
     qrCodeImage?: NullableOption<MimeContent>;
 }
+export interface MimeContent {
+    // Indicates the content mime type.
+    type?: NullableOption<string>;
+    // The byte array that contains the actual content.
+    value?: NullableOption<number>;
+}
 export interface AndroidForWorkAppConfigurationSchemaItem {
     /**
      * The type of value this item describes. Possible values are: bool, integer, string, choice, multiselect, bundle,
@@ -32909,7 +32883,7 @@ export interface AndroidManagedStoreAppConfigurationSchemaItem {
 export interface DeviceAndAppManagementAssignmentTarget {
     // The Id of the filter for the target assignment.
     deviceAndAppManagementAssignmentFilterId?: NullableOption<string>;
-    // The type of filter of the target assignment i.e. Exclude or Include. Possible values are: none, include.
+    // The type of filter of the target assignment i.e. Exclude or Include. Possible values are: none, include, exclude.
     deviceAndAppManagementAssignmentFilterType?: DeviceAndAppManagementAssignmentFilterType;
 }
 // tslint:disable-next-line: no-empty-interface
@@ -32929,6 +32903,10 @@ export interface AndroidManagedStoreAppTrack {
     trackId?: NullableOption<string>;
 }
 export interface AndroidMinimumOperatingSystem {
+    // Version 10.0 or later.
+    v10_0?: boolean;
+    // Version 11.0 or later.
+    v11_0?: boolean;
     // Version 4.0 or later.
     v4_0?: boolean;
     // Version 4.0.3 or later.
@@ -32971,6 +32949,10 @@ export interface AppConfigurationSettingItem {
     appConfigKeyType?: MdmAppConfigKeyType;
     // app configuration key value.
     appConfigKeyValue?: string;
+}
+export interface ConfigurationManagerCollectionAssignmentTarget extends DeviceAndAppManagementAssignmentTarget {
+    // The collection Id that is the target of the assignment.
+    collectionId?: NullableOption<string>;
 }
 export interface ExcludedApps {
     // The value for if MS Office Access should be excluded or not.
@@ -33035,6 +33017,8 @@ export interface IosDeviceType {
 }
 // tslint:disable-next-line: interface-name
 export interface IosLobAppAssignmentSettings extends MobileAppAssignmentSettings {
+    // Whether or not the app can be removed by the user.
+    isRemovable?: NullableOption<boolean>;
     // Whether or not to uninstall the app when device is removed from Intune.
     uninstallOnDeviceRemoval?: NullableOption<boolean>;
     // The VPN Configuration Id to apply for this app.
@@ -33050,6 +33034,8 @@ export interface IosMinimumOperatingSystem {
     v12_0?: boolean;
     // Version 13.0 or later.
     v13_0?: boolean;
+    // Version 14.0 or later.
+    v14_0?: boolean;
     // Version 8.0 or later.
     v8_0?: boolean;
     // Version 9.0 or later.
@@ -33057,6 +33043,8 @@ export interface IosMinimumOperatingSystem {
 }
 // tslint:disable-next-line: interface-name
 export interface IosStoreAppAssignmentSettings extends MobileAppAssignmentSettings {
+    // Whether or not the app can be removed by the user.
+    isRemovable?: NullableOption<boolean>;
     // Whether or not to uninstall the app when device is removed from Intune.
     uninstallOnDeviceRemoval?: NullableOption<boolean>;
     // The VPN Configuration Id to apply for this app.
@@ -33064,6 +33052,8 @@ export interface IosStoreAppAssignmentSettings extends MobileAppAssignmentSettin
 }
 // tslint:disable-next-line: interface-name
 export interface IosVppAppAssignmentSettings extends MobileAppAssignmentSettings {
+    // Whether or not the app can be removed by the user.
+    isRemovable?: NullableOption<boolean>;
     // Whether or not to uninstall the app when device is removed from Intune.
     uninstallOnDeviceRemoval?: NullableOption<boolean>;
     // Whether or not to use device licensing.
@@ -33462,6 +33452,10 @@ export interface WindowsMinimumOperatingSystem {
     v10_1809?: boolean;
     // Windows 10 1903 or later.
     v10_1903?: boolean;
+    // Windows 10 1909 or later.
+    v10_1909?: boolean;
+    // Windows 10 2004 or later.
+    v10_2004?: boolean;
     // Windows version 8.0 or later.
     v8_0?: boolean;
     // Windows version 8.1 or later.
@@ -33535,6 +33529,44 @@ export interface AuditResource {
     // Audit resource's type.
     type?: NullableOption<string>;
 }
+export interface AssignmentFilterEvaluationSummary {
+    // The admin defined name for assignment filter.
+    assignmentFilterDisplayName?: NullableOption<string>;
+    // Unique identifier for the assignment filter object
+    assignmentFilterId?: NullableOption<string>;
+    // The time the assignment filter was last modified.
+    assignmentFilterLastModifiedDateTime?: string;
+    /**
+     * The platform for which this assignment filter is created. Possible values are: android, androidForWork, iOS, macOS,
+     * windowsPhone81, windows81AndLater, windows10AndLater, androidWorkProfile, unknown.
+     */
+    assignmentFilterPlatform?: DevicePlatformType;
+    // Indicate filter type either include or exclude. Possible values are: none, include, exclude.
+    assignmentFilterType?: DeviceAndAppManagementAssignmentFilterType;
+    // The time assignment filter was evaluated.
+    evaluationDateTime?: string;
+    /**
+     * Assignment filter evaluation result. Possible values are: unknown, match, notMatch, inconclusive, failure,
+     * notEvaluated.
+     */
+    evaluationResult?: AssignmentFilterEvaluationResult;
+}
+export interface AssignmentFilterStatusDetails {
+    // Device properties used for filter evaluation during device check-in time.
+    deviceProperties?: NullableOption<KeyValuePair[]>;
+    // Evaluation result summaries for each filter associated to device and payload
+    evalutionSummaries?: NullableOption<AssignmentFilterEvaluationSummary[]>;
+    // Unique identifier for the device object.
+    managedDeviceId?: NullableOption<string>;
+    // Unique identifier for payload object.
+    payloadId?: NullableOption<string>;
+    // Unique identifier for UserId object. Can be null
+    userId?: NullableOption<string>;
+}
+export interface AssignmentFilterValidationResult {
+    // Indicator to valid or invalid rule.
+    isValidRule?: boolean;
+}
 export interface HasPayloadLinkResultItem {
     // Exception information indicates if check for this item was successful or not.Empty string for no error.
     error?: NullableOption<string>;
@@ -33570,6 +33602,201 @@ export interface DeviceManagementApplicabilityRuleOsVersion {
     name?: NullableOption<string>;
     // Applicability Rule type. Possible values are: include, exclude.
     ruleType?: DeviceManagementApplicabilityRuleType;
+}
+export interface ConfigurationManagerClientEnabledFeatures {
+    // Whether compliance policy is managed by Intune
+    compliancePolicy?: boolean;
+    // Whether device configuration is managed by Intune
+    deviceConfiguration?: boolean;
+    // Whether Endpoint Protection is managed by Intune
+    endpointProtection?: boolean;
+    // Whether inventory is managed by Intune
+    inventory?: boolean;
+    // Whether modern application is managed by Intune
+    modernApps?: boolean;
+    // Whether Office application is managed by Intune
+    officeApps?: boolean;
+    // Whether resource access is managed by Intune
+    resourceAccess?: boolean;
+    // Whether Windows Update for Business is managed by Intune
+    windowsUpdateForBusiness?: boolean;
+}
+export interface ConfigurationManagerClientHealthState {
+    // Error code for failed state.
+    errorCode?: number;
+    // Datetime for last sync with configuration manager management point.
+    lastSyncDateTime?: string;
+    /**
+     * Current configuration manager client state. Possible values are: unknown, installed, healthy, installFailed,
+     * updateFailed, communicationError.
+     */
+    state?: ConfigurationManagerClientState;
+}
+export interface ConfigurationManagerClientInformation {
+    // Configuration Manager Client Id from SCCM
+    clientIdentifier?: NullableOption<string>;
+    // Configuration Manager Client blocked status from SCCM
+    isBlocked?: boolean;
+}
+export interface DeviceActionResult {
+    // Action name
+    actionName?: NullableOption<string>;
+    // State of the action. Possible values are: none, pending, canceled, active, done, failed, notSupported.
+    actionState?: ActionState;
+    // Time the action state was last updated
+    lastUpdatedDateTime?: string;
+    // Time the action was initiated
+    startDateTime?: string;
+}
+export interface DeviceHealthAttestationState {
+    /**
+     * TWhen an Attestation Identity Key (AIK) is present on a device, it indicates that the device has an endorsement key
+     * (EK) certificate.
+     */
+    attestationIdentityKey?: NullableOption<string>;
+    // On or Off of BitLocker Drive Encryption
+    bitLockerStatus?: NullableOption<string>;
+    // The security version number of the Boot Application
+    bootAppSecurityVersion?: NullableOption<string>;
+    // When bootDebugging is enabled, the device is used in development and testing
+    bootDebugging?: NullableOption<string>;
+    // The security version number of the Boot Application
+    bootManagerSecurityVersion?: NullableOption<string>;
+    // The version of the Boot Manager
+    bootManagerVersion?: NullableOption<string>;
+    // The Boot Revision List that was loaded during initial boot on the attested device
+    bootRevisionListInfo?: NullableOption<string>;
+    // When code integrity is enabled, code execution is restricted to integrity verified code
+    codeIntegrity?: NullableOption<string>;
+    // The version of the Boot Manager
+    codeIntegrityCheckVersion?: NullableOption<string>;
+    // The Code Integrity policy that is controlling the security of the boot environment
+    codeIntegrityPolicy?: NullableOption<string>;
+    // The DHA report version. (Namespace version)
+    contentNamespaceUrl?: NullableOption<string>;
+    // The HealthAttestation state schema version
+    contentVersion?: NullableOption<string>;
+    // DEP Policy defines a set of hardware and software technologies that perform additional checks on memory
+    dataExcutionPolicy?: NullableOption<string>;
+    // The DHA report version. (Namespace version)
+    deviceHealthAttestationStatus?: NullableOption<string>;
+    // ELAM provides protection for the computers in your network when they start up
+    earlyLaunchAntiMalwareDriverProtection?: NullableOption<string>;
+    // This attribute indicates if DHA is supported for the device
+    healthAttestationSupportedStatus?: NullableOption<string>;
+    // This attribute appears if DHA-Service detects an integrity issue
+    healthStatusMismatchInfo?: NullableOption<string>;
+    // The DateTime when device was evaluated or issued to MDM
+    issuedDateTime?: string;
+    // The Timestamp of the last update.
+    lastUpdateDateTime?: NullableOption<string>;
+    // When operatingSystemKernelDebugging is enabled, the device is used in development and testing
+    operatingSystemKernelDebugging?: NullableOption<string>;
+    // The Operating System Revision List that was loaded during initial boot on the attested device
+    operatingSystemRevListInfo?: NullableOption<string>;
+    // The measurement that is captured in PCR[0]
+    pcr0?: NullableOption<string>;
+    // Informational attribute that identifies the HASH algorithm that was used by TPM
+    pcrHashAlgorithm?: NullableOption<string>;
+    // The number of times a PC device has hibernated or resumed
+    resetCount?: number;
+    // The number of times a PC device has rebooted
+    restartCount?: number;
+    // Safe mode is a troubleshooting option for Windows that starts your computer in a limited state
+    safeMode?: NullableOption<string>;
+    // When Secure Boot is enabled, the core components must have the correct cryptographic signatures
+    secureBoot?: NullableOption<string>;
+    // Fingerprint of the Custom Secure Boot Configuration Policy
+    secureBootConfigurationPolicyFingerPrint?: NullableOption<string>;
+    // When test signing is allowed, the device does not enforce signature validation during boot
+    testSigning?: NullableOption<string>;
+    // The security version number of the Boot Application
+    tpmVersion?: NullableOption<string>;
+    // VSM is a container that protects high value assets from a compromised kernel
+    virtualSecureMode?: NullableOption<string>;
+    // Operating system running with limited services that is used to prepare a computer for Windows
+    windowsPE?: NullableOption<string>;
+}
+export interface HardwareInformation {
+    // The number of charge cycles the device’s current battery has gone through. Valid values 0 to 2147483647
+    batteryChargeCycles?: number;
+    // The device’s current battery’s health percentage. Valid values 0 to 100
+    batteryHealthPercentage?: number;
+    // The serial number of the device’s current battery
+    batterySerialNumber?: NullableOption<string>;
+    // Cellular technology of the device
+    cellularTechnology?: NullableOption<string>;
+    /**
+     * Returns the fully qualified domain name of the device (if any). If the device is not domain-joined, it returns an empty
+     * string.
+     */
+    deviceFullQualifiedDomainName?: NullableOption<string>;
+    /**
+     * Local System Authority (LSA) credential guard status. . Possible values are: running, rebootRequired, notLicensed,
+     * notConfigured, virtualizationBasedSecurityNotRunning.
+     */
+    deviceGuardLocalSystemAuthorityCredentialGuardState?: DeviceGuardLocalSystemAuthorityCredentialGuardState;
+    /**
+     * Virtualization-based security hardware requirement status. Possible values are: meetHardwareRequirements,
+     * secureBootRequired, dmaProtectionRequired, hyperVNotSupportedForGuestVM, hyperVNotAvailable.
+     */
+    deviceGuardVirtualizationBasedSecurityHardwareRequirementState?: DeviceGuardVirtualizationBasedSecurityHardwareRequirementState;
+    /**
+     * Virtualization-based security status. . Possible values are: running, rebootRequired, require64BitArchitecture,
+     * notLicensed, notConfigured, doesNotMeetHardwareRequirements, other.
+     */
+    deviceGuardVirtualizationBasedSecurityState?: DeviceGuardVirtualizationBasedSecurityState;
+    // Free storage space of the device.
+    freeStorageSpace?: number;
+    // IMEI
+    imei?: NullableOption<string>;
+    // IPAddressV4
+    ipAddressV4?: NullableOption<string>;
+    // Encryption status of the device
+    isEncrypted?: boolean;
+    // Shared iPad
+    isSharedDevice?: boolean;
+    // Supervised mode of the device
+    isSupervised?: boolean;
+    // Manufacturer of the device
+    manufacturer?: NullableOption<string>;
+    // MEID
+    meid?: NullableOption<string>;
+    // Model of the device
+    model?: NullableOption<string>;
+    // String that specifies the OS edition.
+    operatingSystemEdition?: NullableOption<string>;
+    // Operating system language of the device
+    operatingSystemLanguage?: NullableOption<string>;
+    /**
+     * Int that specifies the Windows Operating System ProductType. More details here
+     * https://go.microsoft.com/fwlink/?linkid=2126950. Valid values 0 to 2147483647
+     */
+    operatingSystemProductType?: number;
+    // Operating System Build Number on Android device
+    osBuildNumber?: NullableOption<string>;
+    // Phone number of the device
+    phoneNumber?: NullableOption<string>;
+    // Serial number.
+    serialNumber?: NullableOption<string>;
+    // All users on the shared Apple device
+    sharedDeviceCachedUsers?: NullableOption<SharedAppleDeviceUser[]>;
+    // SubnetAddress
+    subnetAddress?: NullableOption<string>;
+    // Subscriber carrier of the device
+    subscriberCarrier?: NullableOption<string>;
+    // Total storage space of the device.
+    totalStorageSpace?: number;
+    // String that specifies the specification version.
+    tpmSpecificationVersion?: NullableOption<string>;
+    // WiFi MAC address of the device
+    wifiMac?: NullableOption<string>;
+}
+export interface LoggedOnUser {
+    // Date time when user logs on
+    lastLogOnDateTime?: string;
+    // User id
+    userId?: NullableOption<string>;
 }
 export interface WindowsEnrollmentStatusScreenSettings {
     // Allow or block user to use device before profile and app installation complete
@@ -33665,6 +33892,42 @@ export interface AndroidDeviceOwnerGlobalProxyDirect extends AndroidDeviceOwnerG
     host?: string;
     // The port
     port?: number;
+}
+// tslint:disable-next-line: no-empty-interface
+export interface AndroidDeviceOwnerKioskModeHomeScreenItem {}
+// tslint:disable-next-line: no-empty-interface
+export interface AndroidDeviceOwnerKioskModeFolderItem extends AndroidDeviceOwnerKioskModeHomeScreenItem {}
+export interface AndroidDeviceOwnerKioskModeApp extends AndroidDeviceOwnerKioskModeFolderItem {
+    // Class name of application
+    className?: NullableOption<string>;
+    // Package name of application
+    package?: string;
+}
+export interface AndroidDeviceOwnerKioskModeAppPositionItem {
+    // Item to be arranged
+    item?: AndroidDeviceOwnerKioskModeHomeScreenItem;
+    // Position of the item on the grid. Valid values 0 to 9999999
+    position?: number;
+}
+export interface AndroidDeviceOwnerKioskModeManagedFolder {
+    // Unique identifier for the folder
+    folderIdentifier?: NullableOption<string>;
+    // Display name for the folder
+    folderName?: string;
+    // Items to be added to managed folder. This collection can contain a maximum of 500 elements.
+    items?: AndroidDeviceOwnerKioskModeFolderItem[];
+}
+export interface AndroidDeviceOwnerKioskModeManagedFolderReference extends AndroidDeviceOwnerKioskModeHomeScreenItem {
+    // Unique identifier for the folder
+    folderIdentifier?: NullableOption<string>;
+    // Name of the folder
+    folderName?: string;
+}
+export interface AndroidDeviceOwnerKioskModeWeblink extends AndroidDeviceOwnerKioskModeFolderItem {
+    // Display name for weblink
+    label?: NullableOption<string>;
+    // Link for weblink
+    link?: NullableOption<string>;
 }
 export interface AppListItem {
     // The application or bundle identifier of the application
@@ -34021,6 +34284,15 @@ export interface DeviceComplianceScriptError {
      * duplicateLocales, unrecognizedLocale, unknown, remediationStringsMissing.
      */
     code?: Code;
+    /**
+     * Error code. Possible values are: none, jsonFileInvalid, jsonFileMissing, jsonFileTooLarge, rulesMissing,
+     * duplicateRules, tooManyRulesSpecified, operatorMissing, operatorNotSupported, datatypeMissing, datatypeNotSupported,
+     * operatorDataTypeCombinationNotSupported, moreInfoUriMissing, moreInfoUriInvalid, moreInfoUriTooLarge,
+     * descriptionMissing, descriptionInvalid, descriptionTooLarge, titleMissing, titleInvalid, titleTooLarge, operandMissing,
+     * operandInvalid, operandTooLarge, settingNameMissing, settingNameInvalid, settingNameTooLarge, englishLocaleMissing,
+     * duplicateLocales, unrecognizedLocale, unknown, remediationStringsMissing.
+     */
+    deviceComplianceScriptRulesValidationError?: DeviceComplianceScriptRulesValidationError;
     // Error message.
     message?: NullableOption<string>;
 }
@@ -34030,6 +34302,17 @@ export interface DeviceComplianceScriptRule {
      * xml, booleanArray, int64Array, doubleArray, stringArray, dateTimeArray, versionArray.
      */
     dataType?: DataType;
+    /**
+     * Data type specified in the rule. Possible values are: none, boolean, int64, double, string, dateTime, version, base64,
+     * xml, booleanArray, int64Array, doubleArray, stringArray, dateTimeArray, versionArray.
+     */
+    deviceComplianceScriptRuleDataType?: DeviceComplianceScriptRuleDataType;
+    /**
+     * Operator specified in the rule. Possible values are: none, and, or, isEquals, notEquals, greaterThan, lessThan,
+     * between, notBetween, greaterEquals, lessEquals, dayTimeBetween, beginsWith, notBeginsWith, endsWith, notEndsWith,
+     * contains, notContains, allOf, oneOf, noneOf, setEquals, orderedSetEquals, subsetOf, excludesAll.
+     */
+    deviceComplianceScriptRulOperator?: DeviceComplianceScriptRulOperator;
     // Operand specified in the rule.
     operand?: NullableOption<string>;
     /**
@@ -34220,20 +34503,25 @@ export interface IosHomeScreenItem {
 }
 // tslint:disable-next-line: interface-name
 export interface IosHomeScreenApp extends IosHomeScreenItem {
-    // BundleID of app
+    // BundleID of the app if isWebClip is false or the URL of a web clip if isWebClip is true.
     bundleID?: string;
+    // When true, the bundle ID will be handled as a URL for a web clip.
+    isWebClip?: boolean;
 }
 // tslint:disable-next-line: interface-name
 export interface IosHomeScreenFolder extends IosHomeScreenItem {
     /**
-     * Pages of Home Screen Layout Icons which must be Application Type. This collection can contain a maximum of 500
+     * Pages of Home Screen Layout Icons which must be applications or web clips. This collection can contain a maximum of 500
      * elements.
      */
     pages?: IosHomeScreenFolderPage[];
 }
 // tslint:disable-next-line: interface-name
 export interface IosHomeScreenFolderPage {
-    // A list of apps to appear on a page within a folder. This collection can contain a maximum of 500 elements.
+    /**
+     * A list of apps and web clips to appear on a page within a folder. This collection can contain a maximum of 500
+     * elements.
+     */
     apps?: IosHomeScreenApp[];
     // Name of the folder page
     displayName?: NullableOption<string>;
@@ -34242,7 +34530,7 @@ export interface IosHomeScreenFolderPage {
 export interface IosHomeScreenPage {
     // Name of the page
     displayName?: NullableOption<string>;
-    // A list of apps and folders to appear on a page. This collection can contain a maximum of 500 elements.
+    // A list of apps, folders, and web clips to appear on a page. This collection can contain a maximum of 500 elements.
     icons?: IosHomeScreenItem[];
 }
 // tslint:disable-next-line: interface-name
@@ -35493,215 +35781,6 @@ export interface WindowsUpdateScheduledInstall extends WindowsUpdateInstallSched
     // Scheduled Install Time during day
     scheduledInstallTime?: string;
 }
-export interface ConfigurationManagerClientEnabledFeatures {
-    // Whether compliance policy is managed by Intune
-    compliancePolicy?: boolean;
-    // Whether device configuration is managed by Intune
-    deviceConfiguration?: boolean;
-    // Whether Endpoint Protection is managed by Intune
-    endpointProtection?: boolean;
-    // Whether inventory is managed by Intune
-    inventory?: boolean;
-    // Whether modern application is managed by Intune
-    modernApps?: boolean;
-    // Whether Office application is managed by Intune
-    officeApps?: boolean;
-    // Whether resource access is managed by Intune
-    resourceAccess?: boolean;
-    // Whether Windows Update for Business is managed by Intune
-    windowsUpdateForBusiness?: boolean;
-}
-export interface ConfigurationManagerClientHealthState {
-    // Error code for failed state.
-    errorCode?: number;
-    // Datetime for last sync with configuration manager management point.
-    lastSyncDateTime?: string;
-    /**
-     * Current configuration manager client state. Possible values are: unknown, installed, healthy, installFailed,
-     * updateFailed, communicationError.
-     */
-    state?: ConfigurationManagerClientState;
-}
-export interface ConfigurationManagerClientInformation {
-    // Configuration Manager Client Id from SCCM
-    clientIdentifier?: NullableOption<string>;
-    // Configuration Manager Client blocked status from SCCM
-    isBlocked?: boolean;
-}
-export interface DeviceActionResult {
-    // Action name
-    actionName?: NullableOption<string>;
-    // State of the action. Possible values are: none, pending, canceled, active, done, failed, notSupported.
-    actionState?: ActionState;
-    // Time the action state was last updated
-    lastUpdatedDateTime?: string;
-    // Time the action was initiated
-    startDateTime?: string;
-}
-export interface DeviceHealthAttestationState {
-    /**
-     * TWhen an Attestation Identity Key (AIK) is present on a device, it indicates that the device has an endorsement key
-     * (EK) certificate.
-     */
-    attestationIdentityKey?: NullableOption<string>;
-    // On or Off of BitLocker Drive Encryption
-    bitLockerStatus?: NullableOption<string>;
-    // The security version number of the Boot Application
-    bootAppSecurityVersion?: NullableOption<string>;
-    // When bootDebugging is enabled, the device is used in development and testing
-    bootDebugging?: NullableOption<string>;
-    // The security version number of the Boot Application
-    bootManagerSecurityVersion?: NullableOption<string>;
-    // The version of the Boot Manager
-    bootManagerVersion?: NullableOption<string>;
-    // The Boot Revision List that was loaded during initial boot on the attested device
-    bootRevisionListInfo?: NullableOption<string>;
-    // When code integrity is enabled, code execution is restricted to integrity verified code
-    codeIntegrity?: NullableOption<string>;
-    // The version of the Boot Manager
-    codeIntegrityCheckVersion?: NullableOption<string>;
-    // The Code Integrity policy that is controlling the security of the boot environment
-    codeIntegrityPolicy?: NullableOption<string>;
-    // The DHA report version. (Namespace version)
-    contentNamespaceUrl?: NullableOption<string>;
-    // The HealthAttestation state schema version
-    contentVersion?: NullableOption<string>;
-    // DEP Policy defines a set of hardware and software technologies that perform additional checks on memory
-    dataExcutionPolicy?: NullableOption<string>;
-    // The DHA report version. (Namespace version)
-    deviceHealthAttestationStatus?: NullableOption<string>;
-    // ELAM provides protection for the computers in your network when they start up
-    earlyLaunchAntiMalwareDriverProtection?: NullableOption<string>;
-    // This attribute indicates if DHA is supported for the device
-    healthAttestationSupportedStatus?: NullableOption<string>;
-    // This attribute appears if DHA-Service detects an integrity issue
-    healthStatusMismatchInfo?: NullableOption<string>;
-    // The DateTime when device was evaluated or issued to MDM
-    issuedDateTime?: string;
-    // The Timestamp of the last update.
-    lastUpdateDateTime?: NullableOption<string>;
-    // When operatingSystemKernelDebugging is enabled, the device is used in development and testing
-    operatingSystemKernelDebugging?: NullableOption<string>;
-    // The Operating System Revision List that was loaded during initial boot on the attested device
-    operatingSystemRevListInfo?: NullableOption<string>;
-    // The measurement that is captured in PCR[0]
-    pcr0?: NullableOption<string>;
-    // Informational attribute that identifies the HASH algorithm that was used by TPM
-    pcrHashAlgorithm?: NullableOption<string>;
-    // The number of times a PC device has hibernated or resumed
-    resetCount?: number;
-    // The number of times a PC device has rebooted
-    restartCount?: number;
-    // Safe mode is a troubleshooting option for Windows that starts your computer in a limited state
-    safeMode?: NullableOption<string>;
-    // When Secure Boot is enabled, the core components must have the correct cryptographic signatures
-    secureBoot?: NullableOption<string>;
-    // Fingerprint of the Custom Secure Boot Configuration Policy
-    secureBootConfigurationPolicyFingerPrint?: NullableOption<string>;
-    // When test signing is allowed, the device does not enforce signature validation during boot
-    testSigning?: NullableOption<string>;
-    // The security version number of the Boot Application
-    tpmVersion?: NullableOption<string>;
-    // VSM is a container that protects high value assets from a compromised kernel
-    virtualSecureMode?: NullableOption<string>;
-    // Operating system running with limited services that is used to prepare a computer for Windows
-    windowsPE?: NullableOption<string>;
-}
-export interface HardwareInformation {
-    // The number of charge cycles the device’s current battery has gone through. Valid values 0 to 2147483647
-    batteryChargeCycles?: number;
-    // The device’s current battery’s health percentage. Valid values 0 to 100
-    batteryHealthPercentage?: number;
-    // The serial number of the device’s current battery
-    batterySerialNumber?: NullableOption<string>;
-    // Cellular technology of the device
-    cellularTechnology?: NullableOption<string>;
-    /**
-     * Returns the fully qualified domain name of the device (if any). If the device is not domain-joined, it returns an empty
-     * string.
-     */
-    deviceFullQualifiedDomainName?: NullableOption<string>;
-    /**
-     * Local System Authority (LSA) credential guard status. . Possible values are: running, rebootRequired, notLicensed,
-     * notConfigured, virtualizationBasedSecurityNotRunning.
-     */
-    deviceGuardLocalSystemAuthorityCredentialGuardState?: DeviceGuardLocalSystemAuthorityCredentialGuardState;
-    /**
-     * Virtualization-based security hardware requirement status. Possible values are: meetHardwareRequirements,
-     * secureBootRequired, dmaProtectionRequired, hyperVNotSupportedForGuestVM, hyperVNotAvailable.
-     */
-    deviceGuardVirtualizationBasedSecurityHardwareRequirementState?: DeviceGuardVirtualizationBasedSecurityHardwareRequirementState;
-    /**
-     * Virtualization-based security status. . Possible values are: running, rebootRequired, require64BitArchitecture,
-     * notLicensed, notConfigured, doesNotMeetHardwareRequirements, other.
-     */
-    deviceGuardVirtualizationBasedSecurityState?: DeviceGuardVirtualizationBasedSecurityState;
-    // Free storage space of the device.
-    freeStorageSpace?: number;
-    // IMEI
-    imei?: NullableOption<string>;
-    // IPAddressV4
-    ipAddressV4?: NullableOption<string>;
-    // Encryption status of the device
-    isEncrypted?: boolean;
-    // Shared iPad
-    isSharedDevice?: boolean;
-    // Supervised mode of the device
-    isSupervised?: boolean;
-    // Manufacturer of the device
-    manufacturer?: NullableOption<string>;
-    // MEID
-    meid?: NullableOption<string>;
-    // Model of the device
-    model?: NullableOption<string>;
-    // String that specifies the OS edition.
-    operatingSystemEdition?: NullableOption<string>;
-    // Operating system language of the device
-    operatingSystemLanguage?: NullableOption<string>;
-    /**
-     * Int that specifies the Windows Operating System ProductType. More details here
-     * https://go.microsoft.com/fwlink/?linkid=2126950. Valid values 0 to 2147483647
-     */
-    operatingSystemProductType?: number;
-    // Operating System Build Number on Android device
-    osBuildNumber?: NullableOption<string>;
-    // Phone number of the device
-    phoneNumber?: NullableOption<string>;
-    // Serial number.
-    serialNumber?: NullableOption<string>;
-    // All users on the shared Apple device
-    sharedDeviceCachedUsers?: NullableOption<SharedAppleDeviceUser[]>;
-    // SubnetAddress
-    subnetAddress?: NullableOption<string>;
-    // Subscriber carrier of the device
-    subscriberCarrier?: NullableOption<string>;
-    // Total storage space of the device.
-    totalStorageSpace?: number;
-    // String that specifies the specification version.
-    tpmSpecificationVersion?: NullableOption<string>;
-    // WiFi MAC address of the device
-    wifiMac?: NullableOption<string>;
-}
-export interface SharedAppleDeviceUser {
-    // Data quota
-    dataQuota?: NullableOption<number>;
-    // Data to sync
-    dataToSync?: boolean;
-    // Data quota
-    dataUsed?: number;
-    // User name
-    userPrincipalName?: NullableOption<string>;
-}
-export interface LoggedOnUser {
-    // Date time when user logs on
-    lastLogOnDateTime?: string;
-    // User id
-    userId?: NullableOption<string>;
-}
-export interface ConfigurationManagerCollectionAssignmentTarget extends DeviceAndAppManagementAssignmentTarget {
-    // The collection Id that is the target of the assignment.
-    collectionId?: NullableOption<string>;
-}
 export interface DeviceManagementConfigurationSettingInstance {
     // Setting Definition Id
     settingDefinitionId?: string;
@@ -35845,6 +35924,17 @@ export interface DeviceManagementConfigurationWindowsSettingApplicability extend
     // List of Windows SKUs that the setting is applicable for
     windowsSkus?: DeviceManagementConfigurationWindowsSkus[];
 }
+export interface CompanyPortalBlockedAction {
+    // Device Action. Possible values are: unknown, remove, reset.
+    action?: CompanyPortalAction;
+    // Device ownership type. Possible values are: unknown, company, personal.
+    ownerType?: OwnerType;
+    /**
+     * Device OS/Platform. Possible values are: android, androidForWork, iOS, macOS, windowsPhone81, windows81AndLater,
+     * windows10AndLater, androidWorkProfile, unknown.
+     */
+    platform?: DevicePlatformType;
+}
 export interface ComplianceManagementPartnerAssignment {
     // Group assignment target.
     target?: NullableOption<DeviceAndAppManagementAssignmentTarget>;
@@ -35882,6 +35972,14 @@ export interface DeviceManagementExchangeDeviceClass {
 export interface DeviceManagementPartnerAssignment {
     // User groups targeting for devices to be enrolled through partner.
     target?: NullableOption<DeviceAndAppManagementAssignmentTarget>;
+}
+export interface RgbColor {
+    // Blue value
+    b?: number;
+    // Green value
+    g?: number;
+    // Red value
+    r?: number;
 }
 export interface VppTokenActionResult {
     // Action name
@@ -36201,7 +36299,9 @@ export interface DeviceOperatingSystemSummary {
     androidFullyManagedCount?: number;
     // Number of work profile Android devices.
     androidWorkProfileCount?: number;
-    // Number of AOSP dedicated Android devices. Valid values 0 to 2147483647
+    // Number of AOSP user-associated Android devices. Valid values 0 to 2147483647
+    aospUserAssociatedCount?: number;
+    // Number of AOSP userless Android devices. Valid values 0 to 2147483647
     aospUserlessCount?: number;
     // Number of ConfigMgr managed devices.
     configMgrDeviceCount?: number;
@@ -36215,6 +36315,16 @@ export interface DeviceOperatingSystemSummary {
     windowsCount?: number;
     // Number of Windows mobile device count.
     windowsMobileCount?: number;
+}
+export interface SharedAppleDeviceUser {
+    // Data quota
+    dataQuota?: NullableOption<number>;
+    // Data to sync
+    dataToSync?: boolean;
+    // Data quota
+    dataUsed?: number;
+    // User name
+    userPrincipalName?: NullableOption<string>;
 }
 // tslint:disable-next-line: no-empty-interface
 export interface UserExperienceAnalyticsInsightValue {}
@@ -36237,6 +36347,14 @@ export interface ManagedDeviceModelsAndManufacturers {
     deviceManufacturers?: NullableOption<string[]>;
     // List of Models for managed devices in the account
     deviceModels?: NullableOption<string[]>;
+}
+export interface OsVersionCount {
+    // Count of devices with malware for the OS version
+    deviceCount?: number;
+    // The Timestamp of the last update for the device count in UTC
+    lastUpdateDateTime?: string;
+    // OS version
+    osVersion?: NullableOption<string>;
 }
 export interface RemoteLockActionResult extends DeviceActionResult {
     // Pin to unlock the client
@@ -36300,29 +36418,74 @@ export interface WindowsDeviceAzureADAccount extends WindowsDeviceAccount {
     // Not yet documented
     userPrincipalName?: NullableOption<string>;
 }
+export interface WindowsMalwareCategoryCount {
+    // Count of active malware detections for this malware category. Valid values -2147483648 to 2147483647
+    activeMalwareDetectionCount?: number;
+    /**
+     * Malware category. Possible values are: invalid, adware, spyware, passwordStealer, trojanDownloader, worm, backdoor,
+     * remoteAccessTrojan, trojan, emailFlooder, keylogger, dialer, monitoringSoftware, browserModifier, cookie,
+     * browserPlugin, aolExploit, nuker, securityDisabler, jokeProgram, hostileActiveXControl, softwareBundler,
+     * stealthNotifier, settingsModifier, toolBar, remoteControlSoftware, trojanFtp, potentialUnwantedSoftware, icqExploit,
+     * trojanTelnet, exploit, filesharingProgram, malwareCreationTool, remote_Control_Software, tool, trojanDenialOfService,
+     * trojanDropper, trojanMassMailer, trojanMonitoringSoftware, trojanProxyServer, virus, known, unknown, spp, behavior,
+     * vulnerability, policy, enterpriseUnwantedSoftware, ransom, hipsRule.
+     */
+    category?: WindowsMalwareCategory;
+    // Count of devices with malware detections for this malware category
+    deviceCount?: number;
+    // Count of distinct active malwares for this malware category. Valid values -2147483648 to 2147483647
+    distinctActiveMalwareCount?: number;
+    // The Timestamp of the last update for the device count in UTC
+    lastUpdateDateTime?: string;
+}
+export interface WindowsMalwareExecutionStateCount {
+    // Count of devices with malware detections for this malware execution state
+    deviceCount?: number;
+    // Malware execution state. Possible values are: unknown, blocked, allowed, running, notRunning.
+    executionState?: WindowsMalwareExecutionState;
+    // The Timestamp of the last update for the device count in UTC
+    lastUpdateDateTime?: string;
+}
+export interface WindowsMalwareNameCount {
+    // Count of devices with malware dectected for this malware
+    deviceCount?: number;
+    // The Timestamp of the last update for the device count in UTC
+    lastUpdateDateTime?: string;
+    // The unique identifier. This is malware identifier
+    malwareIdentifier?: NullableOption<string>;
+    // Malware name
+    name?: NullableOption<string>;
+}
+export interface WindowsMalwareSeverityCount {
+    // Count of distinct malwares for this malware State. Valid values -2147483648 to 2147483647
+    distinctMalwareCount?: number;
+    // The Timestamp of the last update for the WindowsMalwareSeverityCount in UTC
+    lastUpdateDateTime?: string;
+    // Count of threats detections for this malware severity. Valid values -2147483648 to 2147483647
+    malwareDetectionCount?: number;
+    // Malware Threat Severity. Possible values are: unknown, low, moderate, high, severe.
+    severity?: WindowsMalwareSeverity;
+}
+export interface WindowsMalwareStateCount {
+    // Count of devices with malware detections for this malware State
+    deviceCount?: number;
+    // Count of distinct malwares for this malware State. Valid values -2147483648 to 2147483647
+    distinctMalwareCount?: number;
+    // The Timestamp of the last update for the device count in UTC
+    lastUpdateDateTime?: string;
+    // Count of total malware detections for this malware State. Valid values -2147483648 to 2147483647
+    malwareDetectionCount?: number;
+    /**
+     * Malware Threat State. Possible values are: active, actionFailed, manualStepsRequired, fullScanRequired, rebootRequired,
+     * remediatedWithNonCriticalFailures, quarantined, removed, cleaned, allowed, noStatusCleared.
+     */
+    state?: WindowsMalwareThreatState;
+}
 export interface MobileAppTroubleshootingHistoryItem {
     // Time when the history item occurred.
     occurrenceDateTime?: string;
     // Object containing detailed information about the error and its remediation.
     troubleshootingErrorDetails?: NullableOption<DeviceManagementTroubleshootingErrorDetails>;
-}
-export interface DeviceManagementTroubleshootingErrorDetails {
-    // Not yet documented
-    context?: NullableOption<string>;
-    // Not yet documented
-    failure?: NullableOption<string>;
-    // The detailed description of what went wrong.
-    failureDetails?: NullableOption<string>;
-    // The detailed description of how to remediate this issue.
-    remediation?: NullableOption<string>;
-    // Links to helpful documentation about this failure.
-    resources?: NullableOption<DeviceManagementTroubleshootingErrorResource[]>;
-}
-export interface DeviceManagementTroubleshootingErrorResource {
-    // The link to the web resource. Can contain any of the following formatters: {{UPN}}, {{DeviceGUID}}, {{UserGUID}}
-    link?: NullableOption<string>;
-    // Not yet documented
-    text?: NullableOption<string>;
 }
 export interface Windows10XCustomSubjectAlternativeName {
     // Custom SAN Name
@@ -36418,6 +36581,10 @@ export interface IosMobileAppIdentifier extends MobileAppIdentifier {
     // The identifier for an app, as specified in the app store.
     bundleId?: string;
 }
+export interface MacAppIdentifier extends MobileAppIdentifier {
+    // The identifier for an app, as specified in the app store.
+    bundleId?: string;
+}
 export interface ManagedAppDiagnosticStatus {
     // Instruction on how to mitigate a failed validation
     mitigationInstruction?: NullableOption<string>;
@@ -36431,6 +36598,10 @@ export interface ManagedAppPolicyDeploymentSummaryPerApp {
     configurationAppliedUserCount?: number;
     // Deployment of an app.
     mobileAppIdentifier?: NullableOption<MobileAppIdentifier>;
+}
+export interface WindowsAppIdentifier extends MobileAppIdentifier {
+    // The identifier for an app, as specified in the app store.
+    windowsAppId?: string;
 }
 export interface WindowsInformationProtectionApp {
     // If true, app is denied protection or exemption.
@@ -36482,6 +36653,18 @@ export interface WindowsInformationProtectionResourceCollection {
 }
 // tslint:disable-next-line: no-empty-interface
 export interface WindowsInformationProtectionStoreApp extends WindowsInformationProtectionApp {}
+export interface KeyLongValuePair {
+    // Name for this key long value pair
+    name?: string;
+    // Value for this key long value pair
+    value?: number;
+}
+export interface MetricTimeSeriesDataPoint {
+    // Time of the metric time series data point
+    dateTime?: string;
+    // Value of the metric time series data point
+    value?: number;
+}
 export interface ConfigManagerPolicySummary {
     // The number of devices evaluated to be compliant by the policy.
     compliantDeviceCount?: number;
@@ -36495,6 +36678,30 @@ export interface ConfigManagerPolicySummary {
     pendingDeviceCount?: number;
     // The number of devices targeted by the policy.
     targetedDeviceCount?: number;
+}
+export interface UnmanagedDevice {
+    // Device name.
+    deviceName?: NullableOption<string>;
+    // Domain.
+    domain?: NullableOption<string>;
+    // IP address.
+    ipAddress?: NullableOption<string>;
+    // Last logged on user.
+    lastLoggedOnUser?: NullableOption<string>;
+    // Last seen date and time.
+    lastSeenDateTime?: string;
+    // Location.
+    location?: NullableOption<string>;
+    // MAC address.
+    macAddress?: NullableOption<string>;
+    // Manufacturer.
+    manufacturer?: NullableOption<string>;
+    // Model.
+    model?: NullableOption<string>;
+    // Operating system.
+    os?: NullableOption<string>;
+    // Operating system version.
+    osVersion?: NullableOption<string>;
 }
 export interface DeviceAndAppManagementAssignedRoleDetails {
     // Role Assignment IDs for the specifc Role Assignments assigned to a user.
@@ -36521,6 +36728,24 @@ export interface EmbeddedSIMActivationCode {
     matchingIdentifier?: string;
     // The input must match the following regular expression: '^([a-zA-Z0-9]+(-[a-zA-Z0-9]+)*\.)+[a-zA-Z]{2,}$'.
     smdpPlusServerAddress?: string;
+}
+export interface DeviceManagementTroubleshootingErrorDetails {
+    // Not yet documented
+    context?: NullableOption<string>;
+    // Not yet documented
+    failure?: NullableOption<string>;
+    // The detailed description of what went wrong.
+    failureDetails?: NullableOption<string>;
+    // The detailed description of how to remediate this issue.
+    remediation?: NullableOption<string>;
+    // Links to helpful documentation about this failure.
+    resources?: NullableOption<DeviceManagementTroubleshootingErrorResource[]>;
+}
+export interface DeviceManagementTroubleshootingErrorResource {
+    // The link to the web resource. Can contain any of the following formatters: {{UPN}}, {{DeviceGUID}}, {{UserGUID}}
+    link?: NullableOption<string>;
+    // Not yet documented
+    text?: NullableOption<string>;
 }
 export interface ManagedDeviceSummarizedAppState {
     // DeviceId of device represented by this object
@@ -36556,7 +36781,7 @@ export interface MobileAppSupportedDeviceType {
     /**
      * Device type. Possible values are: desktop, windowsRT, winMO6, nokia, windowsPhone, mac, winCE, winEmbedded, iPhone,
      * iPad, iPod, android, iSocConsumer, unix, macMDM, holoLens, surfaceHub, androidForWork, androidEnterprise, windows10x,
-     * androidnGMS, cloudPC, blackberry, palm, unknown.
+     * androidnGMS, cloudPC, linux, blackberry, palm, unknown.
      */
     type?: DeviceType;
 }
@@ -36589,6 +36814,12 @@ export interface MobileAppTroubleshootingAppTargetHistory extends MobileAppTroub
 export interface MobileAppTroubleshootingAppUpdateHistory extends MobileAppTroubleshootingHistoryItem {}
 // tslint:disable-next-line: no-empty-interface
 export interface MobileAppTroubleshootingDeviceCheckinHistory extends MobileAppTroubleshootingHistoryItem {}
+export interface ExpeditedWindowsQualityUpdateSettings {
+    // The number of days after installation that forced reboot will happen.
+    daysUntilForcedReboot?: number;
+    // The release date to identify a quality update.
+    qualityUpdateRelease?: string;
+}
 // tslint:disable-next-line: interface-name
 export interface IosAvailableUpdateVersion {
     // The expiration date of the update.
@@ -36711,10 +36942,12 @@ export interface SearchRequest {
      * Optional.Build this filter based on a prior search that aggregates by the same field. From the response of the prior
      * search, identify the searchBucket that filters results to the specific value of the field, use the string in its
      * aggregationFilterToken property, and build an aggregation filter string in the format
-     * '{field}:/'{aggregationFilterToken}/''. For example, searching and aggregating drive items by file type returns a
-     * searchBucket for the file type docx in the response. You can conveniently use the aggregationFilterToken returned for
-     * this searchBucket in a subsequent search query and filter matches down to drive items of the docx file type. Example 1
-     * and example 2 show the actual requests and responses.
+     * '{field}:/'{aggregationFilterToken}/''. If multiple values for the same field need to be provided, use the strings in
+     * its aggregationFilterToken property and build an aggregation filter string in the format
+     * '{field}:or(/'{aggregationFilterToken1}/',/'{aggregationFilterToken2}/')'. For example, searching and aggregating drive
+     * items by file type returns a searchBucket for the file type docx in the response. You can conveniently use the
+     * aggregationFilterToken returned for this searchBucket in a subsequent search query and filter matches down to drive
+     * items of the docx file type. Example 1 and example 2 show the actual requests and responses.
      */
     aggregationFilters?: NullableOption<string[]>;
     // Specifies aggregations (also known as refiners) to be returned alongside search results. Optional.
@@ -36897,6 +37130,17 @@ export interface PlannerFavoritePlanReference {
 export interface PlannerFavoritePlanReferenceCollection {}
 // tslint:disable-next-line: no-empty-interface
 export interface PlannerOrderHintsByAssignee {}
+export interface PlannerPlanContainer {
+    // The identifier of the resource that contains the plan.
+    containerId?: string;
+    /**
+     * The type of the resource that contains the plan. See the previous table for supported types. Possible values are:
+     * group, unknownFutureValue.
+     */
+    type?: PlannerContainerType;
+    // The full canonical URL of the container.
+    url?: string;
+}
 export interface PlannerPlanContext {
     /**
      * Nullable. An app-defined type of association between the plannerPlan and the app. The app can use this information to
@@ -36914,12 +37158,15 @@ export interface PlannerPlanContext {
      * to display the relationship.
      */
     displayNameSegments?: NullableOption<string[]>;
+    isCreationContext?: NullableOption<boolean>;
     // Read-only. ID of the app that created the plannerPlanContext.
     ownerAppId?: NullableOption<string>;
 }
 // tslint:disable-next-line: no-empty-interface
 export interface PlannerPlanContextCollection {}
 export interface PlannerPlanContextDetails {
+    customLinkText?: NullableOption<string>;
+    displayLinkType?: NullableOption<PlannerPlanContextType>;
     // URL of the user experience represented by the associated plannerPlanContext.
     url?: NullableOption<string>;
 }
@@ -36937,6 +37184,28 @@ export interface PlannerRecentPlanReference {
 }
 // tslint:disable-next-line: no-empty-interface
 export interface PlannerRecentPlanReferenceCollection {}
+export interface PlannerTaskCreation {
+    /**
+     * Information about the publication process that created this task. null value indicates that the task was not created by
+     * a publication process.
+     */
+    teamsPublicationInfo?: NullableOption<PlannerTeamsPublicationInfo>;
+}
+export interface PlannerTeamsPublicationInfo {
+    // The date and time when this task was last modified by the publication process. Read-only.
+    lastModifiedDateTime?: NullableOption<string>;
+    // The identifier of the publication. Read-only.
+    publicationId?: NullableOption<string>;
+    // The identifier of the plannerPlan this task was originally placed in. Read-only.
+    publishedToPlanId?: NullableOption<string>;
+    // The identifier of the team that initiated the publication process. Read-only.
+    publishingTeamId?: NullableOption<string>;
+    /**
+     * The display name of the team that initiated the publication process. This display name is for reference only, and might
+     * not represent the most up-to-date name of the team. Read-only.
+     */
+    publishingTeamName?: NullableOption<string>;
+}
 // tslint:disable-next-line: no-empty-interface
 export interface PlannerUserIds {}
 // tslint:disable-next-line: interface-name
@@ -37035,15 +37304,15 @@ export interface NotebookLinks {
     // Opens the notebook in OneNote on the web.
     oneNoteWebUrl?: NullableOption<ExternalLink>;
 }
-export interface ExternalLink {
-    // The url of the link.
-    href?: NullableOption<string>;
-}
 export interface Diagnostic {
     // The message describing the condition that triggered the error or warning.
     message?: NullableOption<string>;
     // The link to the documentation for this issue.
     url?: NullableOption<string>;
+}
+export interface ExternalLink {
+    // The url of the link.
+    href?: NullableOption<string>;
 }
 export interface OnenoteOperationError {
     // The error code.
@@ -37237,6 +37506,15 @@ export interface ServiceInformation {
     name?: string;
     // Contains the URL for the service being referenced.
     webUrl?: string;
+}
+export interface TranslationLanguageOverride {
+    languageTag?: string;
+    translationBehavior?: NullableOption<TranslationBehavior>;
+}
+export interface TranslationPreferences {
+    languageOverrides?: TranslationLanguageOverride[];
+    translationBehavior?: NullableOption<TranslationBehavior>;
+    untranslatedLanguages?: NullableOption<string[]>;
 }
 export interface YomiPersonName {
     // Composite of first and last name pronunciation guides.
@@ -37484,6 +37762,7 @@ export interface PrinterDefaults {
      * the printer decide how to lay out impressions.
      */
     fitPdfToPage?: NullableOption<boolean>;
+    inputBin?: NullableOption<string>;
     // The default media (such as paper) color to print the document on.
     mediaColor?: NullableOption<string>;
     /**
@@ -37774,15 +38053,11 @@ export interface AlertTrigger {
     value?: NullableOption<string>;
 }
 export interface AverageComparativeScore {
-    // Average score within specified basis.
     averageScore?: NullableOption<number>;
-    // Scope type. The possible values are: AllTenants, TotalSeats, IndustryTypes.
     basis?: NullableOption<string>;
 }
 export interface CertificationControl {
-    // Certification control name
     name?: NullableOption<string>;
-    // URL for the Microsoft Service Trust Portal
     url?: NullableOption<string>;
 }
 export interface CloudAppSecurityState {
@@ -37797,19 +38072,13 @@ export interface CloudAppSecurityState {
     riskScore?: NullableOption<string>;
 }
 export interface ComplianceInformation {
-    // Collection of the certification controls associated with certification
     certificationControls?: NullableOption<CertificationControl[]>;
-    // Compliance certification name (for example, ISO 27018:2014, GDPR, FedRAMP, NIST 800-171)
     certificationName?: NullableOption<string>;
 }
 export interface ControlScore {
-    // Control action category (Identity, Data, Device, Apps, Infrastructure).
     controlCategory?: NullableOption<string>;
-    // Control unique name.
     controlName?: NullableOption<string>;
-    // Description of the control.
     description?: NullableOption<string>;
-    // Tenant achieved score for the control (it varies day by day depending on tenant operations on the control).
     score?: NullableOption<number>;
 }
 export interface DomainRegistrant {
@@ -38069,15 +38338,10 @@ export interface ReputationCategory {
     vendor?: NullableOption<string>;
 }
 export interface SecureScoreControlStateUpdate {
-    // Assigns the control to the user who will take the action.
     assignedTo?: NullableOption<string>;
-    // Provides optional comment about the control.
     comment?: NullableOption<string>;
-    // State of the control, which can be modified via a PATCH command (for example, ignored, thirdParty).
     state?: NullableOption<string>;
-    // ID of the user who updated tenant state.
     updatedBy?: NullableOption<string>;
-    // Time at which the control state was updated.
     updatedDateTime?: NullableOption<string>;
 }
 export interface SecurityActionState {
@@ -38209,10 +38473,15 @@ export interface AudioConferencing {
     tollNumber?: NullableOption<string>;
 }
 export interface BroadcastMeetingSettings {
+    // Defines who can join the live event. Possible values are listed in the following table.
     allowedAudience?: NullableOption<BroadcastMeetingAudience>;
+    // Indicates whether attendee report is enabled for this live event. Default value is false.
     isAttendeeReportEnabled?: NullableOption<boolean>;
+    // Indicates whether Q&amp;A is enabled for this live event. Default value is false.
     isQuestionAndAnswerEnabled?: NullableOption<boolean>;
+    // Indicates whether recording is enabled for this live event. Default value is false.
     isRecordingEnabled?: NullableOption<boolean>;
+    // Indicates whether video on demand is enabled for this live event. Default value is false.
     isVideoOnDemandEnabled?: NullableOption<boolean>;
 }
 export interface CallMediaState {
@@ -38280,15 +38549,6 @@ export interface InvitationParticipantInfo {
 export interface InviteNewBotResponse extends ParticipantJoiningResponse {
     inviteUri?: NullableOption<string>;
 }
-export interface LobbyBypassSettings {
-    // Specifies whether or not to always let dial-in callers bypass the lobby. Optional.
-    isDialInBypassEnabled?: NullableOption<boolean>;
-    /**
-     * Specifies the type of participants that are automatically admitted into a meeting, bypassing the lobby. Possible values
-     * are listed in the following table. Optional.
-     */
-    scope?: NullableOption<LobbyBypassScope>;
-}
 export interface MediaInfo {
     /**
      * Optional, used to uniquely identity the resource. If passed the prompt uri will be cached against this resourceId as
@@ -38353,6 +38613,18 @@ export interface OrganizerMeetingInfo extends MeetingInfo {
 }
 // tslint:disable-next-line: no-empty-interface
 export interface OutgoingCallOptions extends CallOptions {}
+export interface OutOfOfficeSettings {
+    /**
+     * True if either:It is currently in the out of office time window configured on the Outlook or Teams client.There is
+     * currently an event on the user's calendar that's marked as Show as Out of OfficeOtherwise, false.
+     */
+    isOutOfOffice?: NullableOption<boolean>;
+    /**
+     * The out of office message that the user configured on Outlook client (Automatic Replies (Out of Office)) or the Teams
+     * client (Schedule out of office).
+     */
+    message?: NullableOption<string>;
+}
 export interface ParticipantInfo {
     /**
      * The ISO 3166-1 Alpha-2 country code of the participant's best estimated physical location at the start of the call.
@@ -38901,6 +39173,10 @@ export interface ShiftItem extends ScheduleEntity {
     // The shift notes for the shiftItem.
     notes?: NullableOption<string>;
 }
+export interface OpenShiftItem extends ShiftItem {
+    // Count of the number of slots for the given open shift.
+    openSlotCount?: number;
+}
 export interface ShiftActivity {
     // Customer defined code for the shiftActivity. Required.
     code?: NullableOption<string>;
@@ -38921,10 +39197,6 @@ export interface ShiftActivity {
      */
     startDateTime?: NullableOption<string>;
     theme?: ScheduleEntityTheme;
-}
-export interface OpenShiftItem extends ShiftItem {
-    // Count of the number of slots for the given open shift.
-    openSlotCount?: number;
 }
 export interface ShiftAvailability {
     // Specifies the pattern for recurrence
@@ -38975,6 +39247,204 @@ export interface ThreatAssessmentRequestsCount {
     pivotValue?: NullableOption<string>;
 }
 
+export namespace Ediscovery {
+    type CaseAction =
+        | "contentExport"
+        | "applyTags"
+        | "convertToPdf"
+        | "index"
+        | "estimateStatistics"
+        | "addToReviewSet"
+        | "unknownFutureValue";
+    type CaseOperationStatus = "notStarted" | "submissionFailed" | "running" | "succeeded" | "partiallySucceeded" | "failed";
+    type CaseStatus = "unknown" | "active" | "pendingDelete" | "closing" | "closed" | "closedWithError";
+    type ChildSelectability = "One" | "Many";
+    type CustodianStatus = "active" | "released";
+    type DataCollectionScope = "allVersions" | "conversations" | "linkedFiles" | "unknownFutureValue";
+    type DataSourceContainerStatus = "Active" | "Released" | "UnknownFutureValue";
+    type DataSourceScopes =
+        | "none"
+        | "allTenantMailboxes"
+        | "allTenantSites"
+        | "allCaseCustodians"
+        | "allCaseNoncustodialDataSources"
+        | "unknownFutureValue";
+    type ExportFileStructure = "none" | "directory" | "pst" | "unknownFutureValue";
+    type ExportOptions = "originalFiles" | "text" | "pdfReplacement" | "fileInfo" | "tags" | "unknownFutureValue";
+    type LegalHoldStatus = "Pending" | "Error" | "Success" | "UnknownFutureValue";
+    type SourceType = "mailbox" | "site";
+    type TenantSources = "allMailboxes" | "allSites" | "unknownFutureValue";
+    interface Ediscoveryroot extends microsoftgraphbeta.Entity {
+        cases?: NullableOption<Case[]>;
+    }
+    interface CaseOperation extends microsoftgraphbeta.Entity {
+        action?: NullableOption<CaseAction>;
+        completedDateTime?: NullableOption<string>;
+        createdBy?: NullableOption<microsoftgraphbeta.IdentitySet>;
+        createdDateTime?: NullableOption<string>;
+        percentProgress?: NullableOption<number>;
+        resultInfo?: NullableOption<microsoftgraphbeta.ResultInfo>;
+        status?: NullableOption<CaseOperationStatus>;
+    }
+    interface AddToReviewSetOperation extends CaseOperation {
+        reviewSet?: NullableOption<ReviewSet>;
+        sourceCollection?: NullableOption<SourceCollection>;
+    }
+    interface ReviewSet extends microsoftgraphbeta.Entity {
+        createdBy?: NullableOption<microsoftgraphbeta.IdentitySet>;
+        createdDateTime?: NullableOption<string>;
+        displayName?: NullableOption<string>;
+        queries?: NullableOption<ReviewSetQuery[]>;
+    }
+    interface SourceCollection extends microsoftgraphbeta.Entity {
+        contentQuery?: NullableOption<string>;
+        createdBy?: NullableOption<microsoftgraphbeta.IdentitySet>;
+        createdDateTime?: NullableOption<string>;
+        dataSourceScopes?: NullableOption<DataSourceScopes>;
+        description?: NullableOption<string>;
+        displayName?: NullableOption<string>;
+        lastModifiedBy?: NullableOption<microsoftgraphbeta.IdentitySet>;
+        lastModifiedDateTime?: NullableOption<string>;
+        tenantSources?: NullableOption<TenantSources>;
+        additionalSources?: NullableOption<DataSource[]>;
+        addToReviewSetOperation?: NullableOption<AddToReviewSetOperation>;
+        custodianSources?: NullableOption<DataSource[]>;
+        lastEstimateStatisticsOperation?: NullableOption<EstimateStatisticsOperation>;
+        noncustodialSources?: NullableOption<DataSource[]>;
+    }
+    interface Case extends microsoftgraphbeta.Entity {
+        closedBy?: NullableOption<microsoftgraphbeta.IdentitySet>;
+        closedDateTime?: NullableOption<string>;
+        createdDateTime?: NullableOption<string>;
+        description?: NullableOption<string>;
+        displayName?: NullableOption<string>;
+        externalId?: NullableOption<string>;
+        lastModifiedBy?: NullableOption<microsoftgraphbeta.IdentitySet>;
+        lastModifiedDateTime?: NullableOption<string>;
+        status?: NullableOption<CaseStatus>;
+        custodians?: NullableOption<Custodian[]>;
+        legalHolds?: NullableOption<LegalHold[]>;
+        noncustodialDataSources?: NullableOption<NoncustodialDataSource[]>;
+        operations?: NullableOption<CaseOperation[]>;
+        reviewSets?: NullableOption<ReviewSet[]>;
+        settings?: NullableOption<Settings>;
+        sourceCollections?: NullableOption<SourceCollection[]>;
+        tags?: NullableOption<Tag[]>;
+    }
+    interface DataSourceContainer extends microsoftgraphbeta.Entity {
+        createdDateTime?: NullableOption<string>;
+        displayName?: NullableOption<string>;
+        lastModifiedDateTime?: NullableOption<string>;
+        releasedDateTime?: NullableOption<string>;
+        status?: NullableOption<DataSourceContainerStatus>;
+        lastIndexOperation?: NullableOption<CaseIndexOperation>;
+    }
+    interface Custodian extends DataSourceContainer {
+        acknowledgedDateTime?: NullableOption<string>;
+        applyHoldToSources?: NullableOption<boolean>;
+        email?: string;
+        siteSources?: NullableOption<SiteSource[]>;
+        unifiedGroupSources?: NullableOption<UnifiedGroupSource[]>;
+        userSources?: NullableOption<UserSource[]>;
+    }
+    interface LegalHold extends microsoftgraphbeta.Entity {
+        contentQuery?: NullableOption<string>;
+        createdBy?: NullableOption<microsoftgraphbeta.IdentitySet>;
+        createdDateTime?: NullableOption<string>;
+        description?: NullableOption<string>;
+        displayName?: NullableOption<string>;
+        errors?: NullableOption<string[]>;
+        isEnabled?: NullableOption<boolean>;
+        lastModifiedBy?: NullableOption<microsoftgraphbeta.IdentitySet>;
+        lastModifiedDateTime?: NullableOption<string>;
+        status?: NullableOption<LegalHoldStatus>;
+        siteSources?: NullableOption<SiteSource[]>;
+        unifiedGroupSources?: NullableOption<UnifiedGroupSource[]>;
+        userSources?: NullableOption<UserSource[]>;
+    }
+    interface NoncustodialDataSource extends DataSourceContainer {
+        applyHoldToSource?: NullableOption<boolean>;
+        dataSource?: NullableOption<DataSource>;
+    }
+    interface Settings extends microsoftgraphbeta.Entity {
+        ocr?: NullableOption<OcrSettings>;
+        redundancyDetection?: NullableOption<RedundancyDetectionSettings>;
+        topicModeling?: NullableOption<TopicModelingSettings>;
+    }
+    interface Tag extends microsoftgraphbeta.Entity {
+        childSelectability?: NullableOption<ChildSelectability>;
+        createdBy?: NullableOption<microsoftgraphbeta.IdentitySet>;
+        description?: NullableOption<string>;
+        displayName?: NullableOption<string>;
+        lastModifiedDateTime?: NullableOption<string>;
+        childTags?: NullableOption<Tag[]>;
+        parent?: NullableOption<Tag>;
+    }
+    interface CaseExportOperation extends CaseOperation {
+        azureBlobContainer?: NullableOption<string>;
+        azureBlobToken?: NullableOption<string>;
+        description?: NullableOption<string>;
+        exportOptions?: NullableOption<ExportOptions>;
+        exportStructure?: NullableOption<ExportFileStructure>;
+        outputFolderId?: NullableOption<string>;
+        outputName?: NullableOption<string>;
+        reviewSet?: NullableOption<ReviewSet>;
+    }
+// tslint:disable-next-line: no-empty-interface
+    interface CaseIndexOperation extends CaseOperation {}
+    interface DataSource extends microsoftgraphbeta.Entity {
+        createdBy?: NullableOption<microsoftgraphbeta.IdentitySet>;
+        createdDateTime?: NullableOption<string>;
+        displayName?: NullableOption<string>;
+    }
+    interface SiteSource extends DataSource {
+        site?: microsoftgraphbeta.Site;
+    }
+    interface UnifiedGroupSource extends DataSource {
+        includedSources?: NullableOption<SourceType>;
+        group?: microsoftgraphbeta.Group;
+    }
+    interface UserSource extends DataSource {
+        email?: string;
+        includedSources?: NullableOption<SourceType>;
+    }
+    interface EstimateStatisticsOperation extends CaseOperation {
+        indexedItemCount?: NullableOption<number>;
+        indexedItemsSize?: NullableOption<number>;
+        mailboxCount?: NullableOption<number>;
+        siteCount?: NullableOption<number>;
+        unindexedItemCount?: NullableOption<number>;
+        unindexedItemsSize?: NullableOption<number>;
+        sourceCollection?: NullableOption<SourceCollection>;
+    }
+    interface ReviewSetQuery extends microsoftgraphbeta.Entity {
+        createdBy?: NullableOption<microsoftgraphbeta.IdentitySet>;
+        createdDateTime?: NullableOption<string>;
+        displayName?: NullableOption<string>;
+        lastModifiedBy?: NullableOption<microsoftgraphbeta.IdentitySet>;
+        lastModifiedDateTime?: NullableOption<string>;
+        query?: NullableOption<string>;
+    }
+// tslint:disable-next-line: no-empty-interface
+    interface TagOperation extends CaseOperation {}
+    interface OcrSettings {
+        isEnabled?: NullableOption<boolean>;
+        maxImageSize?: NullableOption<number>;
+        timeout?: NullableOption<string>;
+    }
+    interface RedundancyDetectionSettings {
+        isEnabled?: NullableOption<boolean>;
+        maxWords?: NullableOption<number>;
+        minWords?: NullableOption<number>;
+        similarityThreshold?: NullableOption<number>;
+    }
+    interface TopicModelingSettings {
+        dynamicallyAdjustTopicCount?: NullableOption<boolean>;
+        ignoreNumbers?: NullableOption<boolean>;
+        isEnabled?: NullableOption<boolean>;
+        topicCount?: NullableOption<number>;
+    }
+}
 export namespace TermStore {
     type RelationType = "pin" | "reuse";
     type TermGroupScope = "global" | "system" | "siteCollection";
