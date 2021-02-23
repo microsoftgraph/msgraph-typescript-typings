@@ -3762,8 +3762,8 @@ export interface User extends DirectoryObject {
     jobTitle?: NullableOption<string>;
     /**
      * The time when this Azure AD user last changed their password. The Timestamp type represents date and time information
-     * using ISO 8601 format and is always in UTC time. For example, midnight UTC on Jan 1, 2014 would look like this:
-     * '2014-01-01T00:00:00Z' Returned only on $select.
+     * using ISO 8601 format and is always in UTC time. For example, midnight UTC on Jan 1, 2014 is '2014-01-01T00:00:00Z'
+     * Returned only on $select. Read-only.
      */
     lastPasswordChangeDateTime?: NullableOption<string>;
     /**
@@ -3822,8 +3822,7 @@ export interface User extends DirectoryObject {
     /**
      * Indicates the last time at which the object was synced with the on-premises directory; for example:
      * '2013-02-16T03:04:54Z'. The Timestamp type represents date and time information using ISO 8601 format and is always in
-     * UTC time. For example, midnight UTC on Jan 1, 2014 would look like this: '2014-01-01T00:00:00Z'. Returned only on
-     * $select. Read-only.
+     * UTC time. For example, midnight UTC on Jan 1, 2014 is '2014-01-01T00:00:00Z'. Returned only on $select. Read-only.
      */
     onPremisesLastSyncDateTime?: NullableOption<string>;
     // Errors when using Microsoft synchronization product during provisioning. Returned only on $select.
@@ -3943,15 +3942,14 @@ export interface User extends DirectoryObject {
     aboutMe?: NullableOption<string>;
     /**
      * The birthday of the user. The Timestamp type represents date and time information using ISO 8601 format and is always
-     * in UTC time. For example, midnight UTC on Jan 1, 2014 would look like this: '2014-01-01T00:00:00Z' Returned only on
-     * $select.
+     * in UTC time. For example, midnight UTC on Jan 1, 2014 is '2014-01-01T00:00:00Z' Returned only on $select.
      */
     birthday?: string;
     /**
      * The hire date of the user. The Timestamp type represents date and time information using ISO 8601 format and is always
-     * in UTC time. For example, midnight UTC on Jan 1, 2014 would look like this: '2014-01-01T00:00:00Z'. Returned only on
-     * $select. Note: This property is specific to SharePoint Online. We recommend using the native employeeHireDate property
-     * to set and update hire date values using Microsoft Graph APIs.
+     * in UTC time. For example, midnight UTC on Jan 1, 2014 is '2014-01-01T00:00:00Z'. Returned only on $select. Note: This
+     * property is specific to SharePoint Online. We recommend using the native employeeHireDate property to set and update
+     * hire date values using Microsoft Graph APIs.
      */
     hireDate?: string;
     // A list for the user to describe their interests. Returned only on $select.
@@ -3971,6 +3969,7 @@ export interface User extends DirectoryObject {
     analytics?: NullableOption<UserAnalytics>;
     usageRights?: NullableOption<UsageRight[]>;
     informationProtection?: NullableOption<InformationProtection>;
+    // Represents the app roles a user has been granted for an application.
     appRoleAssignments?: NullableOption<AppRoleAssignment[]>;
     // Directory objects that were created by the user. Read-only. Nullable.
     createdObjects?: NullableOption<DirectoryObject[]>;
@@ -4756,6 +4755,7 @@ export interface Group extends DirectoryObject {
      */
     membershipRuleProcessingStatus?: NullableOption<MembershipRuleProcessingStatus>;
     isArchived?: NullableOption<boolean>;
+    // Represents the app roles a group has been granted for an application.
     appRoleAssignments?: NullableOption<AppRoleAssignment[]>;
     // The user (or application) that created the group. Note: This is not set if the user is an administrator. Read-only.
     createdOnBehalfOf?: NullableOption<DirectoryObject>;
@@ -6367,9 +6367,9 @@ export interface ServicePrincipal extends DirectoryObject {
      * token must use the matching private key to decrypt the token before it can be used for the signed-in user.
      */
     tokenEncryptionKeyId?: NullableOption<string>;
-    // Principals (users, groups, and service principals) that are assigned to this service principal. Read-only.
+    // App role assignments for this app or service, granted to users, groups, and other service principals.
     appRoleAssignedTo?: NullableOption<AppRoleAssignment[]>;
-    // Applications that this service principal is assigned to. Read-only. Nullable.
+    // App role assignment for another app or service, granted to this service principal.
     appRoleAssignments?: NullableOption<AppRoleAssignment[]>;
     // The claimsMappingPolicies assigned to this service principal.
     claimsMappingPolicies?: NullableOption<ClaimsMappingPolicy[]>;
@@ -13169,8 +13169,9 @@ export interface AccessReviewScheduleDefinition extends Entity {
     // Name of access review series. Required on create.
     displayName?: NullableOption<string>;
     /**
-     * In the case of an all groups review, this determines the scope of which groups will be reviewed. Each group will become
-     * a unique accessReviewInstance of the access review series. For supported scopes, see accessReviewScope.
+     * In the case of a review of guest users across all Microsoft 365 groups, this determines the scope of which groups will
+     * be reviewed. Each group will become a unique accessReviewInstance of the access review series. For supported scopes,
+     * see accessReviewScope.
      */
     instanceEnumerationScope?: NullableOption<AccessReviewScope>;
     // DateTime when review series was last modified.
@@ -13180,7 +13181,7 @@ export interface AccessReviewScheduleDefinition extends Entity {
      * Required on create.
      */
     reviewers?: NullableOption<AccessReviewReviewerScope[]>;
-    // Defines scope of users reviewed in a group. For supported scopes, see accessReviewScope. Required on create.
+    // Defines scope of users reviewed. For supported scopes, see accessReviewScope. Required on create.
     scope?: NullableOption<AccessReviewScope>;
     // The settings for an access review series, see type definition below.
     settings?: NullableOption<AccessReviewScheduleSettings>;
@@ -21156,7 +21157,7 @@ export interface Windows10GeneralConfiguration extends DeviceConfiguration {
     appManagementMSIAllowUserControlOverInstall?: boolean;
     // This policy setting directs Windows Installer to use elevated permissions when it installs any program on the system.
     appManagementMSIAlwaysInstallWithElevatedPrivileges?: boolean;
-    // List of semi-colon delimited Package Family Names of Windows apps. Listed Windows apps are to be launched after logon.
+    // List of semi-colon delimited Package Family Names of Windows apps. Listed Windows apps are to be launched after logon.​
     appManagementPackageFamilyNamesToLaunchAfterLogOn?: NullableOption<string[]>;
     /**
      * Indicates whether apps from AppX packages signed with a trusted certificate can be side loaded. Possible values are:
@@ -21693,7 +21694,7 @@ export interface Windows10GeneralConfiguration extends DeviceConfiguration {
     privacyBlockInputPersonalization?: boolean;
     // Blocks the shared experiences/discovery of recently used resources in task switcher etc.
     privacyBlockPublishUserActivities?: boolean;
-    // This policy prevents the privacy experience from launching during user logon for new and upgraded users.
+    // This policy prevents the privacy experience from launching during user logon for new and upgraded users.​
     privacyDisableLaunchExperience?: boolean;
     // Indicates whether or not to Block the user from reset protection mode.
     resetProtectionModeBlocked?: boolean;
@@ -22443,7 +22444,7 @@ export interface WindowsDeliveryOptimizationConfiguration extends DeviceConfigur
     cacheServerBackgroundDownloadFallbackToHttpDelayInSeconds?: number;
     /**
      * Specifies number of seconds to delay a fall back from cache servers to an HTTP source for a foreground download. Valid
-     * values 0 to 2592000.
+     * values 0 to 2592000.​
      */
     cacheServerForegroundDownloadFallbackToHttpDelayInSeconds?: number;
     // Specifies cache servers host names.
@@ -23038,7 +23039,7 @@ export interface WindowsWifiEnterpriseEAPConfiguration extends WindowsWifiConfig
     trustedServerCertificateNames?: NullableOption<string[]>;
     /**
      * Specifiy whether to change the virtual LAN used by the device based on the user’s credentials. Cannot be used when
-     * NetworkSingleSignOnType is set to Disabled.
+     * NetworkSingleSignOnType is set to ​Disabled.
      */
     userBasedVirtualLan?: NullableOption<boolean>;
     // Specify identity certificate for client authentication.
@@ -23445,7 +23446,7 @@ export interface DeviceComplianceScriptDeviceState extends Entity {
     expectedStateUpdateDateTime?: NullableOption<string>;
     // The last timestamp of when the device compliance script executed
     lastStateUpdateDateTime?: string;
-    // The last time that Intune Managment Extension synced with Intune
+    // The last time that Intune Management Extension synced with Intune
     lastSyncDateTime?: string;
     // Error from the detection script
     scriptError?: NullableOption<string>;
@@ -23485,7 +23486,7 @@ export interface DeviceHealthScriptDeviceState extends Entity {
     expectedStateUpdateDateTime?: NullableOption<string>;
     // The last timestamp of when the device health script executed
     lastStateUpdateDateTime?: string;
-    // The last time that Intune Managment Extension synced with Intune
+    // The last time that Intune Management Extension synced with Intune
     lastSyncDateTime?: string;
     // Error from the detection script after remediation
     postRemediationDetectionScriptError?: NullableOption<string>;
@@ -28831,9 +28832,9 @@ export interface StatusBase {
 export interface StatusDetails extends StatusBase {
     // Additional details in case of error.
     additionalDetails?: NullableOption<string>;
-    // Categorizes the error code.
+    // Categorizes the error code. Possible values are Failure, NonServiceFailure, Success.
     errorCategory?: NullableOption<string>;
-    // Unique error code if any occurred.
+    // Unique error code if any occurred. Learn more
     errorCode?: NullableOption<string>;
     // Summarizes the status and describes why the status happened.
     reason?: NullableOption<string>;
@@ -38327,6 +38328,7 @@ export interface PrinterDefaults {
      * the printer decide how to lay out impressions.
      */
     fitPdfToPage?: NullableOption<boolean>;
+    // The default input bin that serves as the paper source.
     inputBin?: NullableOption<string>;
     // The default media (such as paper) color to print the document on.
     mediaColor?: NullableOption<string>;
