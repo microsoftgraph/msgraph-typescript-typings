@@ -1354,8 +1354,8 @@ export interface User extends DirectoryObject {
     jobTitle?: NullableOption<string>;
     /**
      * The time when this Azure AD user last changed their password. The Timestamp type represents date and time information
-     * using ISO 8601 format and is always in UTC time. For example, midnight UTC on Jan 1, 2014 would look like this:
-     * '2014-01-01T00:00:00Z' Returned only on $select.
+     * using ISO 8601 format and is always in UTC time. For example, midnight UTC on Jan 1, 2014 is '2014-01-01T00:00:00Z'
+     * Returned only on $select. Read-only.
      */
     lastPasswordChangeDateTime?: NullableOption<string>;
     /**
@@ -1414,8 +1414,7 @@ export interface User extends DirectoryObject {
     /**
      * Indicates the last time at which the object was synced with the on-premises directory; for example:
      * '2013-02-16T03:04:54Z'. The Timestamp type represents date and time information using ISO 8601 format and is always in
-     * UTC time. For example, midnight UTC on Jan 1, 2014 would look like this: '2014-01-01T00:00:00Z'. Returned only on
-     * $select. Read-only.
+     * UTC time. For example, midnight UTC on Jan 1, 2014 is '2014-01-01T00:00:00Z'. Returned only on $select. Read-only.
      */
     onPremisesLastSyncDateTime?: NullableOption<string>;
     // Errors when using Microsoft synchronization product during provisioning. Returned only on $select.
@@ -1523,15 +1522,14 @@ export interface User extends DirectoryObject {
     aboutMe?: NullableOption<string>;
     /**
      * The birthday of the user. The Timestamp type represents date and time information using ISO 8601 format and is always
-     * in UTC time. For example, midnight UTC on Jan 1, 2014 would look like this: '2014-01-01T00:00:00Z' Returned only on
-     * $select.
+     * in UTC time. For example, midnight UTC on Jan 1, 2014 is '2014-01-01T00:00:00Z' Returned only on $select.
      */
     birthday?: string;
     /**
      * The hire date of the user. The Timestamp type represents date and time information using ISO 8601 format and is always
-     * in UTC time. For example, midnight UTC on Jan 1, 2014 would look like this: '2014-01-01T00:00:00Z'. Returned only on
-     * $select. Note: This property is specific to SharePoint Online. We recommend using the native employeeHireDate property
-     * to set and update hire date values using Microsoft Graph APIs.
+     * in UTC time. For example, midnight UTC on Jan 1, 2014 is '2014-01-01T00:00:00Z'. Returned only on $select. Note: This
+     * property is specific to SharePoint Online. We recommend using the native employeeHireDate property to set and update
+     * hire date values using Microsoft Graph APIs.
      */
     hireDate?: string;
     // A list for the user to describe their interests. Returned only on $select.
@@ -1548,6 +1546,7 @@ export interface User extends DirectoryObject {
     schools?: NullableOption<string[]>;
     // A list for the user to enumerate their skills. Returned only on $select.
     skills?: NullableOption<string[]>;
+    // Represents the app roles a user has been granted for an application.
     appRoleAssignments?: NullableOption<AppRoleAssignment[]>;
     // Directory objects that were created by the user. Read-only. Nullable.
     createdObjects?: NullableOption<DirectoryObject[]>;
@@ -2937,9 +2936,9 @@ export interface ServicePrincipal extends DirectoryObject {
      * token must use the matching private key to decrypt the token before it can be used for the signed-in user.
      */
     tokenEncryptionKeyId?: NullableOption<string>;
-    // Principals (users, groups, and service principals) that are assigned to this service principal. Read-only.
+    // App role assignments for this app or service, granted to users, groups, and other service principals.
     appRoleAssignedTo?: NullableOption<AppRoleAssignment[]>;
-    // Applications that this service principal is assigned to. Read-only. Nullable.
+    // App role assignment for another app or service, granted to this service principal.
     appRoleAssignments?: NullableOption<AppRoleAssignment[]>;
     // The claimsMappingPolicies assigned to this service principal.
     claimsMappingPolicies?: NullableOption<ClaimsMappingPolicy[]>;
@@ -3699,6 +3698,7 @@ export interface Group extends DirectoryObject {
      */
     unseenCount?: NullableOption<number>;
     isArchived?: NullableOption<boolean>;
+    // Represents the app roles a group has been granted for an application.
     appRoleAssignments?: NullableOption<AppRoleAssignment[]>;
     // The user (or application) that created the group. Note: This is not set if the user is an administrator. Read-only.
     createdOnBehalfOf?: NullableOption<DirectoryObject>;
