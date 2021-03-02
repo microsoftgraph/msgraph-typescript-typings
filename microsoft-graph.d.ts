@@ -170,6 +170,7 @@ export type UsageAuthMethod =
 export type AnalyticsActivityType = "Email" | "Meeting" | "Focus" | "Chat" | "Call";
 export type AuthenticationMethodState = "enabled" | "disabled";
 export type AuthenticationMethodTargetType = "user" | "group" | "unknownFutureValue";
+export type AuthenticatorAppContextType = "location" | "app" | "unknownFutureValue";
 export type AuthenticatorAppFeatureSettings = "requireNumberMatching";
 export type ExternalEmailOtpState = "default" | "enabled" | "disabled" | "unknownFutureValue";
 export type Fido2RestrictionEnforcementType = "allow" | "block" | "unknownFutureValue";
@@ -203,7 +204,11 @@ export type LocationType =
 export type LocationUniqueIdType = "unknown" | "locationStore" | "directory" | "private" | "bing";
 export type PhysicalAddressType = "unknown" | "home" | "business" | "other";
 export type CloudPcDeviceImageStatus = "pending" | "ready" | "failed";
-export type CloudPcDeviceImageStatusDetails = "internalServerError" | "sourceImageNotFound";
+export type CloudPcDeviceImageStatusDetails =
+    | "internalServerError"
+    | "sourceImageNotFound"
+    | "osVersionNotSupported"
+    | "sourceImageInvalid";
 export type CloudPcOnPremisesConnectionHealthCheckErrorType =
     | "dnsCheckFqdnNotFound"
     | "dnsCheckUnknownError"
@@ -477,6 +482,26 @@ export type TaskStatus = "notStarted" | "inProgress" | "completed" | "waitingOnO
 export type TimeZoneStandard = "windows" | "iana";
 export type WebsiteType = "other" | "home" | "work" | "blog" | "profile";
 export type WeekIndex = "first" | "second" | "third" | "fourth" | "last";
+export type ColumnTypes =
+    | "note"
+    | "text"
+    | "choice"
+    | "multichoice"
+    | "number"
+    | "currency"
+    | "dateTime"
+    | "lookup"
+    | "boolean"
+    | "user"
+    | "url"
+    | "calculated"
+    | "location"
+    | "geolocation"
+    | "term"
+    | "multiterm"
+    | "thumbnail"
+    | "approvalStatus"
+    | "unknownFutureValue";
 export type AgentStatus = "active" | "inactive";
 export type ConnectorGroupRegion = "nam" | "eur" | "aus" | "asia" | "ind" | "unknownFutureValue";
 export type ConnectorGroupType = "applicationProxy";
@@ -594,6 +619,7 @@ export type SynchronizationSecret =
     | "TestReferences";
 export type SynchronizationStatusCode = "NotConfigured" | "NotRun" | "Active" | "Paused" | "Quarantine";
 export type SynchronizationTaskExecutionResult = "Succeeded" | "Failed" | "EntryLevelErrors";
+export type ApprovalFilterByCurrentUserOptions = "target" | "createdBy" | "approver" | "unknownFutureValue";
 export type AgreementAcceptanceState = "accepted" | "declined" | "unknownFutureValue";
 export type ActivityType = "signin" | "user" | "unknownFutureValue";
 export type CloudAppSecuritySessionControlType =
@@ -627,6 +653,7 @@ export type ConditionalAccessGrantControl =
     | "passwordChange"
     | "unknownFutureValue";
 export type ConditionalAccessPolicyState = "enabled" | "disabled" | "enabledForReportingButNotEnforced";
+export type FilterMode = "include" | "exclude";
 export type PersistentBrowserSessionMode = "always" | "never";
 export type RiskDetectionTimingType = "notDefined" | "realtime" | "nearRealtime" | "offline" | "unknownFutureValue";
 export type SigninFrequencyType = "days" | "hours";
@@ -696,7 +723,7 @@ export type ComplianceStatus =
     | "error"
     | "conflict"
     | "notAssigned";
-export type DeviceAndAppManagementAssignmentFilterType = "none" | "include";
+export type DeviceAndAppManagementAssignmentFilterType = "none" | "include" | "exclude";
 export type DeviceAndAppManagementAssignmentSource = "direct" | "policySets";
 export type InstallIntent = "available" | "required" | "uninstall" | "availableWithoutEnrollment";
 export type ManagedAppAvailability = "global" | "lineOfBusiness";
@@ -1899,7 +1926,8 @@ export type Windows10VpnConnectionType =
     | "l2tp"
     | "pptp"
     | "citrix"
-    | "paloAltoGlobalProtect";
+    | "paloAltoGlobalProtect"
+    | "ciscoAnyConnect";
 export type Windows10VpnProfileTarget = "user" | "device" | "autoPilotDevice";
 export type WindowsAppStartLayoutTileSize = "hidden" | "small" | "medium" | "wide" | "large";
 export type WindowsDefenderTamperProtectionOptions = "notConfigured" | "enable" | "disable";
@@ -1911,6 +1939,7 @@ export type WindowsDeliveryOptimizationMode =
     | "httpWithInternetPeering"
     | "simpleDownload"
     | "bypassMode";
+export type WindowsEdgeKioskType = "publicBrowsing" | "fullScreen";
 export type WindowsFirewallRuleInterfaceTypes = "notConfigured" | "remoteAccess" | "wireless" | "lan";
 export type WindowsFirewallRuleNetworkProfileTypes = "notConfigured" | "domain" | "private" | "public";
 export type WindowsFirewallRuleTrafficDirectionType = "notConfigured" | "out" | "in";
@@ -2580,6 +2609,7 @@ export type EndpointSecurityConfigurationType =
     | "accountProtection";
 export type RoleAssignmentScopeType = "resourceScope" | "allDevices" | "allLicensedUsers" | "allDevicesAndLicensedUsers";
 export type RemoteAssistanceOnboardingStatus = "notOnboarded" | "onboarding" | "onboarded";
+export type DeviceManagementExportJobLocalizationType = "localizedValuesAsAdditionalColumn" | "replaceLocalizableValues";
 export type DeviceManagementReportFileFormat = "csv" | "pdf";
 export type DeviceManagementReportStatus = "unknown" | "notStarted" | "inProgress" | "completed" | "failed";
 export type DeviceManagementScheduledReportRecurrence = "none" | "daily" | "weekly" | "monthly";
@@ -2684,7 +2714,6 @@ export type AllowedAudiences =
     | "federatedOrganizations"
     | "everyone"
     | "unknownFutureValue";
-export type AnniversaryType = "birthday" | "wedding" | "unknownFutureValue";
 export type LanguageProficiencyLevel =
     | "elementary"
     | "conversational"
@@ -2693,6 +2722,7 @@ export type LanguageProficiencyLevel =
     | "fullProfessional"
     | "nativeOrBilingual"
     | "unknownFutureValue";
+export type PersonAnnualEventType = "birthday" | "wedding" | "work" | "other" | "unknownFutureValue";
 export type PersonRelationship =
     | "manager"
     | "colleague"
@@ -3762,8 +3792,8 @@ export interface User extends DirectoryObject {
     jobTitle?: NullableOption<string>;
     /**
      * The time when this Azure AD user last changed their password. The Timestamp type represents date and time information
-     * using ISO 8601 format and is always in UTC time. For example, midnight UTC on Jan 1, 2014 would look like this:
-     * '2014-01-01T00:00:00Z' Returned only on $select.
+     * using ISO 8601 format and is always in UTC time. For example, midnight UTC on Jan 1, 2014 is '2014-01-01T00:00:00Z'
+     * Returned only on $select. Read-only.
      */
     lastPasswordChangeDateTime?: NullableOption<string>;
     /**
@@ -3822,8 +3852,7 @@ export interface User extends DirectoryObject {
     /**
      * Indicates the last time at which the object was synced with the on-premises directory; for example:
      * '2013-02-16T03:04:54Z'. The Timestamp type represents date and time information using ISO 8601 format and is always in
-     * UTC time. For example, midnight UTC on Jan 1, 2014 would look like this: '2014-01-01T00:00:00Z'. Returned only on
-     * $select. Read-only.
+     * UTC time. For example, midnight UTC on Jan 1, 2014 is '2014-01-01T00:00:00Z'. Returned only on $select. Read-only.
      */
     onPremisesLastSyncDateTime?: NullableOption<string>;
     // Errors when using Microsoft synchronization product during provisioning. Returned only on $select.
@@ -3943,15 +3972,14 @@ export interface User extends DirectoryObject {
     aboutMe?: NullableOption<string>;
     /**
      * The birthday of the user. The Timestamp type represents date and time information using ISO 8601 format and is always
-     * in UTC time. For example, midnight UTC on Jan 1, 2014 would look like this: '2014-01-01T00:00:00Z' Returned only on
-     * $select.
+     * in UTC time. For example, midnight UTC on Jan 1, 2014 is '2014-01-01T00:00:00Z' Returned only on $select.
      */
     birthday?: string;
     /**
      * The hire date of the user. The Timestamp type represents date and time information using ISO 8601 format and is always
-     * in UTC time. For example, midnight UTC on Jan 1, 2014 would look like this: '2014-01-01T00:00:00Z'. Returned only on
-     * $select. Note: This property is specific to SharePoint Online. We recommend using the native employeeHireDate property
-     * to set and update hire date values using Microsoft Graph APIs.
+     * in UTC time. For example, midnight UTC on Jan 1, 2014 is '2014-01-01T00:00:00Z'. Returned only on $select. Note: This
+     * property is specific to SharePoint Online. We recommend using the native employeeHireDate property to set and update
+     * hire date values using Microsoft Graph APIs.
      */
     hireDate?: string;
     // A list for the user to describe their interests. Returned only on $select.
@@ -3971,6 +3999,7 @@ export interface User extends DirectoryObject {
     analytics?: NullableOption<UserAnalytics>;
     usageRights?: NullableOption<UsageRight[]>;
     informationProtection?: NullableOption<InformationProtection>;
+    // Represents the app roles a user has been granted for an application.
     appRoleAssignments?: NullableOption<AppRoleAssignment[]>;
     // Directory objects that were created by the user. Read-only. Nullable.
     createdObjects?: NullableOption<DirectoryObject[]>;
@@ -4027,10 +4056,6 @@ export interface User extends DirectoryObject {
      * information from across mail, contacts and social networks.
      */
     people?: NullableOption<Person[]>;
-    // The user's profile photo. Read-only.
-    photo?: NullableOption<ProfilePhoto>;
-    // Read-only. Nullable.
-    photos?: NullableOption<ProfilePhoto[]>;
     // The user's OneDrive. Read-only.
     drive?: NullableOption<Drive>;
     // A collection of drives available for this user. Read-only.
@@ -4067,6 +4092,10 @@ export interface User extends DirectoryObject {
     settings?: NullableOption<UserSettings>;
     // Read-only.
     onenote?: NullableOption<Onenote>;
+    // The user's profile photo. Read-only.
+    photo?: NullableOption<ProfilePhoto>;
+    // Read-only. Nullable.
+    photos?: NullableOption<ProfilePhoto[]>;
     // Represents properties that are descriptive of a user in a tenant.
     profile?: NullableOption<Profile>;
     // The user's activities across devices. Read-only. Nullable.
@@ -4756,6 +4785,7 @@ export interface Group extends DirectoryObject {
      */
     membershipRuleProcessingStatus?: NullableOption<MembershipRuleProcessingStatus>;
     isArchived?: NullableOption<boolean>;
+    // Represents the app roles a group has been granted for an application.
     appRoleAssignments?: NullableOption<AppRoleAssignment[]>;
     // The user (or application) that created the group. Note: This is not set if the user is an administrator. Read-only.
     createdOnBehalfOf?: NullableOption<DirectoryObject>;
@@ -4798,10 +4828,6 @@ export interface Group extends DirectoryObject {
     conversations?: NullableOption<Conversation[]>;
     // The group's events.
     events?: NullableOption<Event[]>;
-    // The group's profile photo.
-    photo?: NullableOption<ProfilePhoto>;
-    // The profile photos owned by the group. Read-only. Nullable.
-    photos?: NullableOption<ProfilePhoto[]>;
     // The list of users or groups that are not allowed to create posts or calendar events in this group. Nullable
     rejectedSenders?: NullableOption<DirectoryObject[]>;
     // The group's conversation threads. Nullable.
@@ -4820,6 +4846,10 @@ export interface Group extends DirectoryObject {
     planner?: NullableOption<PlannerGroup>;
     // Read-only.
     onenote?: NullableOption<Onenote>;
+    // The group's profile photo.
+    photo?: NullableOption<ProfilePhoto>;
+    // The profile photos owned by the group. Read-only. Nullable.
+    photos?: NullableOption<ProfilePhoto[]>;
     team?: NullableOption<Team>;
 }
 export interface MailFolder extends Entity {
@@ -5016,12 +5046,6 @@ export interface Person extends Entity {
     // The phonetic Japanese name of the person's company.
     yomiCompany?: NullableOption<string>;
 }
-export interface ProfilePhoto extends Entity {
-    // The height of the photo. Read-only.
-    height?: NullableOption<number>;
-    // The width of the photo. Read-only.
-    width?: NullableOption<number>;
-}
 export interface BaseItem extends Entity {
     // Identity of the user, device, or application which created the item. Read-only.
     createdBy?: NullableOption<IdentitySet>;
@@ -5094,6 +5118,7 @@ export interface Site extends BaseItem {
     drive?: NullableOption<Drive>;
     // The collection of drives (document libraries) under this site.
     drives?: NullableOption<Drive[]>;
+    externalColumns?: NullableOption<ColumnDefinition[]>;
     // Used to address any item contained in this site. This collection cannot be enumerated.
     items?: NullableOption<BaseItem[]>;
     // The collection of lists under this site.
@@ -5117,8 +5142,7 @@ export interface AppConsentRequest extends Entity {
     userConsentRequests?: NullableOption<UserConsentRequest[]>;
 }
 export interface Approval extends Entity {
-    completedSteps?: NullableOption<ApprovalStep[]>;
-    pendingSteps?: NullableOption<ApprovalStep[]>;
+    steps?: NullableOption<ApprovalStep[]>;
 }
 export interface AccessReviewInstance extends Entity {
     // DateTime when review instance is scheduled to end.
@@ -5636,12 +5660,18 @@ export interface Onenote extends Entity {
     // The sections in all OneNote notebooks that are owned by the user or group. Read-only. Nullable.
     sections?: NullableOption<OnenoteSection[]>;
 }
+export interface ProfilePhoto extends Entity {
+    // The height of the photo. Read-only.
+    height?: NullableOption<number>;
+    // The width of the photo. Read-only.
+    width?: NullableOption<number>;
+}
 export interface Profile extends Entity {
     account?: NullableOption<UserAccountInformation[]>;
     // Represents details of addresses associated with the user.
     addresses?: NullableOption<ItemAddress[]>;
     // Represents the details of meaningful dates associated with a person.
-    anniversaries?: NullableOption<PersonAnniversary[]>;
+    anniversaries?: NullableOption<PersonAnnualEvent[]>;
     // Represents the details of awards or honors associated with a person.
     awards?: NullableOption<PersonAward[]>;
     // Represents the details of certifications associated with a person.
@@ -5922,6 +5952,7 @@ export interface Authentication extends Entity {
     passwordlessMicrosoftAuthenticatorMethods?: NullableOption<PasswordlessMicrosoftAuthenticatorAuthenticationMethod[]>;
     passwordMethods?: NullableOption<PasswordAuthenticationMethod[]>;
     phoneMethods?: NullableOption<PhoneAuthenticationMethod[]>;
+    temporaryAccessPassMethods?: NullableOption<TemporaryAccessPassAuthenticationMethod[]>;
     windowsHelloForBusinessMethods?: NullableOption<WindowsHelloForBusinessAuthenticationMethod[]>;
 }
 export interface Chat extends Entity {
@@ -6367,9 +6398,9 @@ export interface ServicePrincipal extends DirectoryObject {
      * token must use the matching private key to decrypt the token before it can be used for the signed-in user.
      */
     tokenEncryptionKeyId?: NullableOption<string>;
-    // Principals (users, groups, and service principals) that are assigned to this service principal. Read-only.
+    // App role assignments for this app or service, granted to users, groups, and other service principals.
     appRoleAssignedTo?: NullableOption<AppRoleAssignment[]>;
-    // Applications that this service principal is assigned to. Read-only. Nullable.
+    // App role assignment for another app or service, granted to this service principal.
     appRoleAssignments?: NullableOption<AppRoleAssignment[]>;
     // The claimsMappingPolicies assigned to this service principal.
     claimsMappingPolicies?: NullableOption<ClaimsMappingPolicy[]>;
@@ -6568,7 +6599,58 @@ export interface OAuth2PermissionGrant extends Entity {
     // Currently, the start time value is ignored, but a value is required when creating an oAuth2PermissionGrant. Required.
     startTime?: NullableOption<string>;
 }
+export interface AuthenticationMethodConfiguration extends Entity {
+    // The state of the policy. Possible values are: enabled, disabled.
+    state?: NullableOption<AuthenticationMethodState>;
+}
+export interface AuthenticationMethodsPolicy extends Entity {
+    description?: NullableOption<string>;
+    displayName?: NullableOption<string>;
+    lastModifiedDateTime?: NullableOption<string>;
+    policyVersion?: NullableOption<string>;
+    reconfirmationInDays?: NullableOption<number>;
+    authenticationMethodConfigurations?: NullableOption<AuthenticationMethodConfiguration[]>;
+}
+export interface AuthenticationMethodTarget extends Entity {
+    // Determines if the user is enforced to register the authentication method.
+    isRegistrationRequired?: boolean;
+    // Possible values are: user, group.
+    targetType?: AuthenticationMethodTargetType;
+}
+export interface EmailAuthenticationMethodConfiguration extends AuthenticationMethodConfiguration {
+    /**
+     * Determines whether email OTP is usable by external users for authentication. Possible values are: default, enabled,
+     * disabled, unknownFutureValue. Tenants in the default state who did not use public preview will automatically have email
+     * OTP enabled beginning in March 2021.
+     */
+    allowExternalIdToUseEmailOtp?: NullableOption<ExternalEmailOtpState>;
+    // A collection of users or groups who are enabled to use the authentication method.
+    includeTargets?: NullableOption<AuthenticationMethodTarget[]>;
+}
+export interface Fido2AuthenticationMethodConfiguration extends AuthenticationMethodConfiguration {
+    // Determines whether attestation must be enforced for FIDO2 security key registration.
+    isAttestationEnforced?: NullableOption<boolean>;
+    // Determines if users can register new FIDO2 security keys.
+    isSelfServiceRegistrationAllowed?: NullableOption<boolean>;
+    /**
+     * Controls whether key restrictions are enforced on FIDO2 security keys, either allowing or disallowing certain key types
+     * as defined by Authenticator Attestation GUID (AAGUID), an identifier that indicates the type (e.g. make and model) of
+     * the authenticator.
+     */
+    keyRestrictions?: NullableOption<Fido2KeyRestrictions>;
+    // A collection of users or groups who are enabled to use the authentication method.
+    includeTargets?: NullableOption<AuthenticationMethodTarget[]>;
+}
+export interface MicrosoftAuthenticatorAuthenticationMethodConfiguration extends AuthenticationMethodConfiguration {
+    // A collection of users or groups who are enabled to use the authentication method.
+    includeTargets?: NullableOption<MicrosoftAuthenticatorAuthenticationMethodTarget[]>;
+}
+export interface MicrosoftAuthenticatorAuthenticationMethodTarget extends AuthenticationMethodTarget {
+    authenticationMode?: MicrosoftAuthenticatorAuthenticationMode;
+    featureSettings?: NullableOption<AuthenticatorAppFeatureSettings>;
+}
 export interface PolicyRoot {
+    authenticationMethodsPolicy?: NullableOption<AuthenticationMethodsPolicy>;
     authenticationFlowsPolicy?: NullableOption<AuthenticationFlowsPolicy>;
     b2cAuthenticationMethodsPolicy?: NullableOption<B2cAuthenticationMethodsPolicy>;
     activityBasedTimeoutPolicies?: NullableOption<ActivityBasedTimeoutPolicy[]>;
@@ -6718,6 +6800,22 @@ export interface UnifiedRoleManagementPolicyAssignment extends Entity {
     scopeId?: string;
     scopeType?: string;
     policy?: NullableOption<UnifiedRoleManagementPolicy>;
+}
+export interface SmsAuthenticationMethodConfiguration extends AuthenticationMethodConfiguration {
+    // A collection of users or groups who are enabled to use the authentication method.
+    includeTargets?: NullableOption<SmsAuthenticationMethodTarget[]>;
+}
+export interface SmsAuthenticationMethodTarget extends AuthenticationMethodTarget {
+    // Determines if the users or groups can use this authentication method to sign in to Azure AD. The value is always true.
+    isUsableForSignIn?: boolean;
+}
+export interface TemporaryAccessPassAuthenticationMethodConfiguration extends AuthenticationMethodConfiguration {
+    defaultLength?: NullableOption<number>;
+    defaultLifetimeInMinutes?: NullableOption<number>;
+    isUsableOnce?: NullableOption<boolean>;
+    maximumLifetimeInMinutes?: NullableOption<number>;
+    minimumLifetimeInMinutes?: NullableOption<number>;
+    includeTargets?: NullableOption<AuthenticationMethodTarget[]>;
 }
 export interface Bitlocker extends Entity {
     // The recovery keys associated with the bitlocker entity.
@@ -7311,6 +7409,8 @@ export interface DeviceManagement extends Entity {
     userExperienceAnalyticsBaselines?: NullableOption<UserExperienceAnalyticsBaseline[]>;
     // User experience analytics categories
     userExperienceAnalyticsCategories?: NullableOption<UserExperienceAnalyticsCategory[]>;
+    // User experience analytics device metric history
+    userExperienceAnalyticsDeviceMetricHistory?: NullableOption<UserExperienceAnalyticsMetricHistory[]>;
     // User experience analytics device performance
     userExperienceAnalyticsDevicePerformance?: NullableOption<UserExperienceAnalyticsDevicePerformance[]>;
     // User experience analytics device Startup History
@@ -7321,12 +7421,16 @@ export interface DeviceManagement extends Entity {
     userExperienceAnalyticsDeviceStartupProcessPerformance?: NullableOption<UserExperienceAnalyticsDeviceStartupProcessPerformance[]>;
     // User experience analytics devices without cloud identity.
     userExperienceAnalyticsDevicesWithoutCloudIdentity?: NullableOption<UserExperienceAnalyticsDeviceWithoutCloudIdentity[]>;
+    // User experience analytics impacting process
+    userExperienceAnalyticsImpactingProcess?: NullableOption<UserExperienceAnalyticsImpactingProcess[]>;
     // User experience analytics metric history
     userExperienceAnalyticsMetricHistory?: NullableOption<UserExperienceAnalyticsMetricHistory[]>;
     // User experience analytics overview
     userExperienceAnalyticsOverview?: NullableOption<UserExperienceAnalyticsOverview>;
     // User experience analytics regression summary
     userExperienceAnalyticsRegressionSummary?: NullableOption<UserExperienceAnalyticsRegressionSummary>;
+    // User experience analytics remote connection
+    userExperienceAnalyticsRemoteConnection?: NullableOption<UserExperienceAnalyticsRemoteConnection[]>;
     // User experience analytics resource performance
     userExperienceAnalyticsResourcePerformance?: NullableOption<UserExperienceAnalyticsResourcePerformance[]>;
     // User experience analytics device Startup Score History
@@ -8843,6 +8947,16 @@ export interface UserExperienceAnalyticsBaseline extends Entity {
     // The user experience analytics resource performance metrics.
     resourcePerformanceMetrics?: NullableOption<UserExperienceAnalyticsCategory>;
 }
+export interface UserExperienceAnalyticsMetricHistory extends Entity {
+    // The user experience analytics device id.
+    deviceId?: NullableOption<string>;
+    // The user experience analytics metric date time.
+    metricDateTime?: string;
+    // The user experience analytics metric type.
+    metricType?: NullableOption<string>;
+    // User experience analytics metric.
+    userExperienceAnalyticsMetric?: NullableOption<UserExperienceAnalyticsMetric>;
+}
 export interface UserExperienceAnalyticsDevicePerformance extends Entity {
     // Average (mean) number of Blue Screens per device in the last 14 days. Valid values 0 to 9999999
     averageBlueScreens?: number;
@@ -8953,13 +9067,19 @@ export interface UserExperienceAnalyticsDeviceWithoutCloudIdentity extends Entit
     // The tenant attach device's name.
     deviceName?: NullableOption<string>;
 }
-export interface UserExperienceAnalyticsMetricHistory extends Entity {
-    // The user experience analytics metric date time.
-    metricDateTime?: string;
-    // The user experience analytics metric type.
-    metricType?: NullableOption<string>;
-    // User experience analytics metric.
-    userExperienceAnalyticsMetric?: NullableOption<UserExperienceAnalyticsMetric>;
+export interface UserExperienceAnalyticsImpactingProcess extends Entity {
+    // The category of impacting process.
+    category?: NullableOption<string>;
+    // The description of process.
+    description?: NullableOption<string>;
+    // The unique identifier of the impacted device.
+    deviceId?: NullableOption<string>;
+    // The impact value of the process. Valid values 0 to 1.79769313486232E+308
+    impactValue?: number;
+    // The process name.
+    processName?: NullableOption<string>;
+    // The publisher of the process.
+    publisher?: NullableOption<string>;
 }
 export interface UserExperienceAnalyticsOverview extends Entity {
     // The user experience analytics insights.
@@ -8972,6 +9092,30 @@ export interface UserExperienceAnalyticsRegressionSummary extends Entity {
     modelRegression?: NullableOption<UserExperienceAnalyticsMetric[]>;
     // The metric values for the user experience analytics operating system regression.
     operatingSystemRegression?: NullableOption<UserExperienceAnalyticsMetric[]>;
+}
+export interface UserExperienceAnalyticsRemoteConnection extends Entity {
+    // The sign in failure percentage of Cloud PC Device. Valid values 0 to 100
+    cloudPcFailurePercentage?: number;
+    // The round tip time of Cloud PC Device. Valid values 0 to 1.79769313486232E+308
+    cloudPcRoundTripTime?: number;
+    // The sign in time of Cloud PC Device. Valid values 0 to 1.79769313486232E+308
+    cloudPcSignInTime?: number;
+    // The core boot time of Cloud PC Device. Valid values 0 to 1.79769313486232E+308
+    coreBootTime?: number;
+    // The core sign in time of Cloud PC Device. Valid values 0 to 1.79769313486232E+308
+    coreSignInTime?: number;
+    // The count of remote connection. Valid values 0 to 2147483647
+    deviceCount?: number;
+    // The id of the device.
+    deviceId?: NullableOption<string>;
+    // The name of the device.
+    deviceName?: NullableOption<string>;
+    // The user experience analytics device model.
+    model?: NullableOption<string>;
+    // The remote sign in time of Cloud PC Device. Valid values 0 to 1.79769313486232E+308
+    remoteSignInTime?: number;
+    // The user experience analytics virtual network.
+    virtualNetwork?: NullableOption<string>;
 }
 export interface UserExperienceAnalyticsResourcePerformance extends Entity {
     // CPU spike time in percentage. Valid values 0 to 100
@@ -10008,6 +10152,7 @@ export interface ColumnDefinition extends Entity {
     choice?: NullableOption<ChoiceColumn>;
     // For site columns, the name of the group this column belongs to. Helps organize related columns.
     columnGroup?: NullableOption<string>;
+    contentApprovalStatus?: NullableOption<ContentApprovalStatusColumn>;
     // This column stores currency values.
     currency?: NullableOption<CurrencyColumn>;
     // This column stores DateTime values.
@@ -10024,8 +10169,12 @@ export interface ColumnDefinition extends Entity {
     geolocation?: NullableOption<GeolocationColumn>;
     // Specifies whether the column is displayed in the user interface.
     hidden?: NullableOption<boolean>;
+    hyperlinkOrPicture?: NullableOption<HyperlinkOrPictureColumn>;
     // Specifies whether the column values can used for sorting and searching.
     indexed?: NullableOption<boolean>;
+    isDeletable?: NullableOption<boolean>;
+    isReorderable?: NullableOption<boolean>;
+    isSealed?: NullableOption<boolean>;
     // This column's data is looked up from another source in the site.
     lookup?: NullableOption<LookupColumn>;
     /**
@@ -10037,16 +10186,25 @@ export interface ColumnDefinition extends Entity {
     number?: NullableOption<NumberColumn>;
     // This column stores Person or Group values.
     personOrGroup?: NullableOption<PersonOrGroupColumn>;
+    propagateChanges?: NullableOption<boolean>;
     // Specifies whether the column values can be modified.
     readOnly?: NullableOption<boolean>;
     // Specifies whether the column value is not optional.
     required?: NullableOption<boolean>;
+    term?: NullableOption<TermColumn>;
     // This column stores text values.
     text?: NullableOption<TextColumn>;
+    thumbnail?: NullableOption<ThumbnailColumn>;
+    type?: NullableOption<ColumnTypes>;
+    validation?: NullableOption<ColumnValidation>;
+    sourceColumn?: NullableOption<ColumnDefinition>;
 }
 export interface ContentType extends Entity {
+    associatedHubsUrls?: NullableOption<string[]>;
     // The descriptive text for the item.
     description?: NullableOption<string>;
+    documentSet?: NullableOption<DocumentSet>;
+    documentTemplate?: NullableOption<DocumentSetContent>;
     // The name of the group this content type belongs to. Helps organize related content types.
     group?: NullableOption<string>;
     // Indicates whether the content type is hidden in the list's 'New' menu.
@@ -10056,12 +10214,14 @@ export interface ContentType extends Entity {
      * type is defined.
      */
     inheritedFrom?: NullableOption<ItemReference>;
+    isBuiltIn?: NullableOption<boolean>;
     // The name of the content type.
     name?: NullableOption<string>;
     // Specifies the order in which the content type appears in the selection UI.
     order?: NullableOption<ContentTypeOrder>;
     // The unique identifier of the content type.
     parentId?: NullableOption<string>;
+    propagateChanges?: NullableOption<boolean>;
     // If true, the content type cannot be modified unless this value is first set to false.
     readOnly?: NullableOption<boolean>;
     /**
@@ -10069,8 +10229,12 @@ export interface ContentType extends Entity {
      * administrators can seal or unseal content types.
      */
     sealed?: NullableOption<boolean>;
+    base?: NullableOption<ContentType>;
+    baseTypes?: NullableOption<ContentType[]>;
     // The collection of columns that are required by this content type
     columnLinks?: NullableOption<ColumnLink[]>;
+    columnPositions?: NullableOption<ColumnDefinition[]>;
+    columns?: NullableOption<ColumnDefinition[]>;
 }
 export interface List extends BaseItem {
     // The displayable title of the list.
@@ -11288,6 +11452,17 @@ export interface EducationSubmission extends Entity {
     // Read-only. Nullable.
     submittedResources?: NullableOption<EducationSubmissionResource[]>;
 }
+export interface EducationAssignmentDefaults extends Entity {
+    /**
+     * Class-level default behavior for handling students who are added after the assignment is published. Possible values
+     * are: none, assignIfOpen.
+     */
+    addedStudentAction?: NullableOption<EducationAddedStudentAction>;
+    // Class-level default value for due time field. Default value is 23:59:00.
+    dueTime?: NullableOption<string>;
+    // Default Teams channel to which notifications will be sent. Default value is null.
+    notificationChannelUrl?: NullableOption<string>;
+}
 export interface EducationAssignmentSettings extends Entity {
     /**
      * Indicates whether turn-in celebration animation will be shown. A value of true indicates that the animation will not be
@@ -11324,6 +11499,7 @@ export interface EducationClass extends Entity {
     // Term for the class.
     term?: NullableOption<EducationTerm>;
     assignmentCategories?: NullableOption<EducationCategory[]>;
+    assignmentDefaults?: NullableOption<EducationAssignmentDefaults>;
     // All assignments associated with this class. Nullable.
     assignments?: NullableOption<EducationAssignment[]>;
     assignmentSettings?: NullableOption<EducationAssignmentSettings>;
@@ -13169,8 +13345,9 @@ export interface AccessReviewScheduleDefinition extends Entity {
     // Name of access review series. Required on create.
     displayName?: NullableOption<string>;
     /**
-     * In the case of an all groups review, this determines the scope of which groups will be reviewed. Each group will become
-     * a unique accessReviewInstance of the access review series. For supported scopes, see accessReviewScope.
+     * In the case of a review of guest users across all Microsoft 365 groups, this determines the scope of which groups will
+     * be reviewed. Each group will become a unique accessReviewInstance of the access review series. For supported scopes,
+     * see accessReviewScope.
      */
     instanceEnumerationScope?: NullableOption<AccessReviewScope>;
     // DateTime when review series was last modified.
@@ -13180,7 +13357,7 @@ export interface AccessReviewScheduleDefinition extends Entity {
      * Required on create.
      */
     reviewers?: NullableOption<AccessReviewReviewerScope[]>;
-    // Defines scope of users reviewed in a group. For supported scopes, see accessReviewScope. Required on create.
+    // Defines scope of users reviewed. For supported scopes, see accessReviewScope. Required on create.
     scope?: NullableOption<AccessReviewScope>;
     // The settings for an access review series, see type definition below.
     settings?: NullableOption<AccessReviewScheduleSettings>;
@@ -13238,18 +13415,8 @@ export interface BusinessFlowTemplate extends Entity {
     // The name of the business flow template
     displayName?: NullableOption<string>;
 }
-// tslint:disable-next-line: interface-name
-export interface IdentityGovernance {
-    accessReviews?: NullableOption<AccessReviewSet>;
-    appConsent?: NullableOption<AppConsentApprovalRoute>;
-    termsOfUse?: NullableOption<TermsOfUseContainer>;
-    entitlementManagement?: NullableOption<EntitlementManagement>;
-}
-export interface TermsOfUseContainer extends Entity {
-    agreementAcceptances?: NullableOption<AgreementAcceptance[]>;
-    agreements?: NullableOption<Agreement[]>;
-}
 export interface EntitlementManagement extends Entity {
+    accessPackageAssignmentApprovals?: NullableOption<Approval[]>;
     accessPackageAssignmentPolicies?: NullableOption<AccessPackageAssignmentPolicy[]>;
     accessPackageAssignmentRequests?: NullableOption<AccessPackageAssignmentRequest[]>;
     accessPackageAssignmentResourceRoles?: NullableOption<AccessPackageAssignmentResourceRole[]>;
@@ -13262,6 +13429,384 @@ export interface EntitlementManagement extends Entity {
     accessPackages?: NullableOption<AccessPackage[]>;
     connectedOrganizations?: NullableOption<ConnectedOrganization[]>;
     settings?: NullableOption<EntitlementManagementSettings>;
+}
+export interface AccessPackageAssignmentPolicy extends Entity {
+    // ID of the access package.
+    accessPackageId?: NullableOption<string>;
+    /**
+     * Who must review, and how often, the assignments to the access package from this policy. This property is null if
+     * reviews are not required.
+     */
+    accessReviewSettings?: NullableOption<AssignmentReviewSettings>;
+    // Indicates whether a user can extend the access package assignment duration after approval.
+    canExtend?: NullableOption<boolean>;
+    // Read-only.
+    createdBy?: NullableOption<string>;
+    /**
+     * The Timestamp type represents date and time information using ISO 8601 format and is always in UTC time. For example,
+     * midnight UTC on Jan 1, 2014 would look like this: '2014-01-01T00:00:00Z'
+     */
+    createdDateTime?: NullableOption<string>;
+    // The description of the policy.
+    description?: NullableOption<string>;
+    // The display name of the policy.
+    displayName?: NullableOption<string>;
+    // The number of days in which assignments from this policy last until they are expired.
+    durationInDays?: NullableOption<number>;
+    /**
+     * The expiration date for assignments created in this policy. The Timestamp type represents date and time information
+     * using ISO 8601 format and is always in UTC time. For example, midnight UTC on Jan 1, 2014 would look like this:
+     * '2014-01-01T00:00:00Z'
+     */
+    expirationDateTime?: NullableOption<string>;
+    // Read-only.
+    modifiedBy?: NullableOption<string>;
+    /**
+     * The Timestamp type represents date and time information using ISO 8601 format and is always in UTC time. For example,
+     * midnight UTC on Jan 1, 2014 would look like this: '2014-01-01T00:00:00Z'
+     */
+    modifiedDateTime?: NullableOption<string>;
+    // Questions that are posed to the requestor.
+    questions?: NullableOption<AccessPackageQuestion[]>;
+    // Who must approve requests for access package in this policy.
+    requestApprovalSettings?: NullableOption<ApprovalSettings>;
+    // Who can request this access package from this policy.
+    requestorSettings?: NullableOption<RequestorSettings>;
+    // The access package with this policy. Read-only. Nullable.
+    accessPackage?: NullableOption<AccessPackage>;
+    accessPackageCatalog?: NullableOption<AccessPackageCatalog>;
+}
+export interface AccessPackageAssignmentRequest extends Entity {
+    // Answers provided by the requestor to accessPackageQuestions asked of them at the time of request.
+    answers?: NullableOption<AccessPackageAnswer[]>;
+    /**
+     * The date of the end of processing, either successful or failure, of a request. The Timestamp type represents date and
+     * time information using ISO 8601 format and is always in UTC time. For example, midnight UTC on Jan 1, 2014 would look
+     * like this: '2014-01-01T00:00:00Z'. Read-only.
+     */
+    completedDate?: NullableOption<string>;
+    /**
+     * The Timestamp type represents date and time information using ISO 8601 format and is always in UTC time. For example,
+     * midnight UTC on Jan 1, 2014 would look like this: '2014-01-01T00:00:00Z'. Read-only.
+     */
+    createdDateTime?: NullableOption<string>;
+    expirationDateTime?: NullableOption<string>;
+    // True if the request is not to be processed for assignment.
+    isValidationOnly?: NullableOption<boolean>;
+    // The requestor's supplied justification.
+    justification?: NullableOption<string>;
+    // One of PendingApproval, Canceled, Denied, Delivering, Delivered, PartiallyDelivered, Submitted or Scheduled. Read-only.
+    requestState?: NullableOption<string>;
+    // More information on the request processing status. Read-only.
+    requestStatus?: NullableOption<string>;
+    /**
+     * One of UserAdd, UserRemove, AdminAdd, AdminRemove or SystemRemove. A request from the user themselves would have
+     * requestType of UserAdd or UserRemove. Read-only.
+     */
+    requestType?: NullableOption<string>;
+    // The range of dates that access is to be assigned to the requestor. Read-only.
+    schedule?: NullableOption<RequestSchedule>;
+    accessPackage?: NullableOption<AccessPackage>;
+    accessPackageAssignment?: NullableOption<AccessPackageAssignment>;
+    // The subject who requested or, if a direct assignment, was assigned. Read-only. Nullable.
+    requestor?: NullableOption<AccessPackageSubject>;
+}
+export interface AccessPackageAssignmentResourceRole extends Entity {
+    /**
+     * A unique identifier relative to the origin system, corresponding to the originId property of the
+     * accessPackageResourceRole.
+     */
+    originId?: NullableOption<string>;
+    /**
+     * The system where the role assignment is to be created or has been created for an access package assignment, such as
+     * SharePointOnline, AadGroup or AadApplication, corresponding to the originSystem property of the
+     * accessPackageResourceRole.
+     */
+    originSystem?: NullableOption<string>;
+    /**
+     * The value is PendingFulfillment when the access package assignment has not yet been delivered to the origin system, and
+     * Fulfilled when the access package assignment has been delivered to the origin system.
+     */
+    status?: NullableOption<string>;
+    // The access package assignments resulting in this role assignment. Read-only. Nullable.
+    accessPackageAssignments?: NullableOption<AccessPackageAssignment[]>;
+    // Read-only. Nullable.
+    accessPackageResourceRole?: NullableOption<AccessPackageResourceRole>;
+    // Read-only. Nullable.
+    accessPackageResourceScope?: NullableOption<AccessPackageResourceScope>;
+    // Read-only. Nullable.
+    accessPackageSubject?: NullableOption<AccessPackageSubject>;
+}
+export interface AccessPackageAssignment extends Entity {
+    // The identifier of the access package. Read-only.
+    accessPackageId?: NullableOption<string>;
+    // The identifier of the access package assignment policy. Read-only.
+    assignmentPolicyId?: NullableOption<string>;
+    // The state of the access package assignment. Possible values are Delivering, Delivered, or Expired. Read-only.
+    assignmentState?: NullableOption<string>;
+    /**
+     * More information about the assignment lifecycle. Possible values include Delivering, Delivered,
+     * NearExpiry1DayNotificationTriggered, or ExpiredNotificationTriggered. Read-only.
+     */
+    assignmentStatus?: NullableOption<string>;
+    // The identifier of the catalog containing the access package. Read-only.
+    catalogId?: NullableOption<string>;
+    /**
+     * The Timestamp type represents date and time information using ISO 8601 format and is always in UTC time. For example,
+     * midnight UTC on Jan 1, 2014 would look like this: '2014-01-01T00:00:00Z'
+     */
+    expiredDateTime?: NullableOption<string>;
+    // Indicates whether the access package assignment is extended. Read-only.
+    isExtended?: NullableOption<boolean>;
+    // When the access assignment is to be in place. Read-only.
+    schedule?: NullableOption<RequestSchedule>;
+    // The ID of the subject with the assignment. Read-only.
+    targetId?: NullableOption<string>;
+    // Read-only. Nullable.
+    accessPackage?: NullableOption<AccessPackage>;
+    // Read-only. Nullable.
+    accessPackageAssignmentPolicy?: NullableOption<AccessPackageAssignmentPolicy>;
+    accessPackageAssignmentRequests?: NullableOption<AccessPackageAssignmentRequest[]>;
+    // The resource roles delivered to the target user for this assignment. Read-only. Nullable.
+    accessPackageAssignmentResourceRoles?: NullableOption<AccessPackageAssignmentResourceRole[]>;
+    // The subject of the access package assignment. Read-only. Nullable.
+    target?: NullableOption<AccessPackageSubject>;
+}
+export interface AccessPackageCatalog extends Entity {
+    // Has the value Published if the access packages are available for management.
+    catalogStatus?: NullableOption<string>;
+    // One of UserManaged or ServiceDefault.
+    catalogType?: NullableOption<string>;
+    // UPN of the user who created this resource. Read-only.
+    createdBy?: NullableOption<string>;
+    /**
+     * The Timestamp type represents date and time information using ISO 8601 format and is always in UTC time. For example,
+     * midnight UTC on Jan 1, 2014 would look like this: '2014-01-01T00:00:00Z'. Read-only.
+     */
+    createdDateTime?: NullableOption<string>;
+    // The description of the access package catalog.
+    description?: NullableOption<string>;
+    // The display name of the access package catalog.
+    displayName?: NullableOption<string>;
+    // Whether the access packages in this catalog can be requested by users outside of the tenant.
+    isExternallyVisible?: NullableOption<boolean>;
+    // The UPN of the user who last modified this resource. Read-only.
+    modifiedBy?: NullableOption<string>;
+    /**
+     * The Timestamp type represents date and time information using ISO 8601 format and is always in UTC time. For example,
+     * midnight UTC on Jan 1, 2014 would look like this: '2014-01-01T00:00:00Z'. Read-only.
+     */
+    modifiedDateTime?: NullableOption<string>;
+    accessPackageResourceRoles?: NullableOption<AccessPackageResourceRole[]>;
+    // Read-only. Nullable.
+    accessPackageResources?: NullableOption<AccessPackageResource[]>;
+    accessPackageResourceScopes?: NullableOption<AccessPackageResourceScope[]>;
+    // The access packages in this catalog. Read-only. Nullable.
+    accessPackages?: NullableOption<AccessPackage[]>;
+}
+export interface AccessPackageResourceEnvironment extends Entity {
+    // Connection information of an environment used to connect to a resource.
+    connectionInfo?: NullableOption<ConnectionInfo>;
+    // The display name of the user that created this object.
+    createdBy?: NullableOption<string>;
+    /**
+     * The date and time that this object was created. The DateTimeOffset type represents date and time information using ISO
+     * 8601 format and is always in UTC time. For example, midnight UTC on Jan 1, 2014 is '2014-01-01T00:00:00Z'.
+     */
+    createdDateTime?: NullableOption<string>;
+    // The description of this accessPackageResourceEnvironment object.
+    description?: NullableOption<string>;
+    // The display name of this object.
+    displayName?: NullableOption<string>;
+    /**
+     * Determines whether this is default environment or not. It is set to true for all static origin systems, such as Azure
+     * AD groups and Azure AD Applications.
+     */
+    isDefaultEnvironment?: NullableOption<boolean>;
+    // The display name of the entity that last modified this object.
+    modifiedBy?: NullableOption<string>;
+    /**
+     * The date and time that this object was last modified. The DateTimeOffset type represents date and time information
+     * using ISO 8601 format and is always in UTC time. For example, midnight UTC on Jan 1, 2014 is '2014-01-01T00:00:00Z'.
+     */
+    modifiedDateTime?: NullableOption<string>;
+    // The unique identifier of this environment in the origin system.
+    originId?: string;
+    // The type of the resource in the origin system such as SharePointOnline. Supports $filter.
+    originSystem?: string;
+    // Read-only. Required.
+    accessPackageResources?: NullableOption<AccessPackageResource[]>;
+}
+export interface AccessPackageResourceRequest extends Entity {
+    // The unique ID of the access package catalog.
+    catalogId?: NullableOption<string>;
+    executeImmediately?: NullableOption<boolean>;
+    /**
+     * The Timestamp type represents date and time information using ISO 8601 format and is always in UTC time. For example,
+     * midnight UTC on Jan 1, 2014 would look like this: '2014-01-01T00:00:00Z'
+     */
+    expirationDateTime?: NullableOption<string>;
+    // If set, does not add the resource.
+    isValidationOnly?: NullableOption<boolean>;
+    // The requestor's justification for adding or removing the resource.
+    justification?: NullableOption<string>;
+    /**
+     * The outcome of whether the service was able to add the resource to the catalog. The value is Delivered if the resource
+     * was added or removed. Read-Only.
+     */
+    requestState?: NullableOption<string>;
+    // Read-only.
+    requestStatus?: NullableOption<string>;
+    /**
+     * Use AdminAdd to add a resource, if the caller is an administrator or resource owner, or AdminRemove to remove a
+     * resource.
+     */
+    requestType?: NullableOption<string>;
+    // Nullable.
+    accessPackageResource?: NullableOption<AccessPackageResource>;
+    // Read-only. Nullable.
+    requestor?: NullableOption<AccessPackageSubject>;
+}
+export interface AccessPackageResourceRoleScope extends Entity {
+    // Read-only.
+    createdBy?: NullableOption<string>;
+    /**
+     * The Timestamp type represents date and time information using ISO 8601 format and is always in UTC time. For example,
+     * midnight UTC on Jan 1, 2014 would look like this: '2014-01-01T00:00:00Z'
+     */
+    createdDateTime?: NullableOption<string>;
+    // Read-only.
+    modifiedBy?: NullableOption<string>;
+    /**
+     * The Timestamp type represents date and time information using ISO 8601 format and is always in UTC time. For example,
+     * midnight UTC on Jan 1, 2014 would look like this: '2014-01-01T00:00:00Z'
+     */
+    modifiedDateTime?: NullableOption<string>;
+    // Read-only. Nullable.
+    accessPackageResourceRole?: NullableOption<AccessPackageResourceRole>;
+    // Read-only. Nullable.
+    accessPackageResourceScope?: NullableOption<AccessPackageResourceScope>;
+}
+export interface AccessPackageResource extends Entity {
+    // Read-only.
+    addedBy?: NullableOption<string>;
+    /**
+     * The Timestamp type represents date and time information using ISO 8601 format and is always in UTC time. For example,
+     * midnight UTC on Jan 1, 2014 would look like this: '2014-01-01T00:00:00Z'
+     */
+    addedOn?: NullableOption<string>;
+    attributes?: NullableOption<AccessPackageResourceAttribute[]>;
+    // A description for the resource.
+    description?: NullableOption<string>;
+    // The display name of the resource, such as the application name, group name or site name.
+    displayName?: NullableOption<string>;
+    // True if the resource is not yet available for assignment.
+    isPendingOnboarding?: NullableOption<boolean>;
+    /**
+     * The unique identifier of the resource in the origin system. In the case of an Azure AD group, this is the identifier of
+     * the group.
+     */
+    originId?: NullableOption<string>;
+    // The type of the resource in the origin system, such as SharePointOnline, AadApplication or AadGroup.
+    originSystem?: NullableOption<string>;
+    /**
+     * The type of the resource, such as Application if it is an Azure AD connected application, or SharePoint Online Site for
+     * a SharePoint Online site.
+     */
+    resourceType?: NullableOption<string>;
+    // A unique resource locator for the resource, such as the URL for signing a user into an application.
+    url?: NullableOption<string>;
+    /**
+     * Contains the environment information for the resource. This can be set using either the @odata.bind annotation or the
+     * environment's originId.
+     */
+    accessPackageResourceEnvironment?: NullableOption<AccessPackageResourceEnvironment>;
+    // Read-only. Nullable.
+    accessPackageResourceRoles?: NullableOption<AccessPackageResourceRole[]>;
+    // Read-only. Nullable.
+    accessPackageResourceScopes?: NullableOption<AccessPackageResourceScope[]>;
+}
+export interface AccessPackage extends Entity {
+    // ID of the access package catalog referencing this access package. Read-only.
+    catalogId?: NullableOption<string>;
+    // UPN of the user or identity of the subject who created this resource. Read-only.
+    createdBy?: NullableOption<string>;
+    /**
+     * The Timestamp type represents date and time information using ISO 8601 format and is always in UTC time. For example,
+     * midnight UTC on Jan 1, 2014 would look like this: '2014-01-01T00:00:00Z'. Read-only.
+     */
+    createdDateTime?: NullableOption<string>;
+    // The description of the access package.
+    description?: NullableOption<string>;
+    // The display name of the access package.
+    displayName?: NullableOption<string>;
+    // Whether the access package is hidden from the requestor.
+    isHidden?: NullableOption<boolean>;
+    // Indicates whether role scopes are visible.
+    isRoleScopesVisible?: NullableOption<boolean>;
+    // The UPN of the user who last modified this resource. Read-only.
+    modifiedBy?: NullableOption<string>;
+    /**
+     * The Timestamp type represents date and time information using ISO 8601 format and is always in UTC time. For example,
+     * midnight UTC on Jan 1, 2014 would look like this: '2014-01-01T00:00:00Z'. Read-only.
+     */
+    modifiedDateTime?: NullableOption<string>;
+    // Read-only. Nullable.
+    accessPackageAssignmentPolicies?: NullableOption<AccessPackageAssignmentPolicy[]>;
+    // Read-only. Nullable.
+    accessPackageCatalog?: NullableOption<AccessPackageCatalog>;
+    // Nullable.
+    accessPackageResourceRoleScopes?: NullableOption<AccessPackageResourceRoleScope[]>;
+}
+export interface ConnectedOrganization extends Entity {
+    // UPN of the user who created this resource. Read-only.
+    createdBy?: NullableOption<string>;
+    /**
+     * The Timestamp type represents date and time information using ISO 8601 format and is always in UTC time. For example,
+     * midnight UTC on Jan 1, 2014 would look like this: '2014-01-01T00:00:00Z'. Read-only.
+     */
+    createdDateTime?: NullableOption<string>;
+    // The description of the connected organization.
+    description?: NullableOption<string>;
+    // The display name of the connected organization.
+    displayName?: NullableOption<string>;
+    identitySources?: NullableOption<IdentitySource[]>;
+    // UPN of the user who last modified this resource. Read-only.
+    modifiedBy?: NullableOption<string>;
+    /**
+     * The Timestamp type represents date and time information using ISO 8601 format and is always in UTC time. For example,
+     * midnight UTC on Jan 1, 2014 would look like this: '2014-01-01T00:00:00Z'. Read-only.
+     */
+    modifiedDateTime?: NullableOption<string>;
+    /**
+     * The state of a connected organization defines whether assignment policies with requestor scope type
+     * AllConfiguredConnectedOrganizationSubjects are applicable or not. Possible values are: configured, proposed.
+     */
+    state?: NullableOption<ConnectedOrganizationState>;
+    // Nullable.
+    externalSponsors?: NullableOption<DirectoryObject[]>;
+    // Nullable.
+    internalSponsors?: NullableOption<DirectoryObject[]>;
+}
+export interface EntitlementManagementSettings extends Entity {
+    /**
+     * If externalUserLifecycleAction is BlockSignInAndDelete, the number of days after an external user is blocked from sign
+     * in before their account is deleted.
+     */
+    daysUntilExternalUserDeletedAfterBlocked?: NullableOption<number>;
+    // One of None, BlockSignIn, or BlockSignInAndDelete.
+    externalUserLifecycleAction?: NullableOption<string>;
+}
+// tslint:disable-next-line: interface-name
+export interface IdentityGovernance {
+    accessReviews?: NullableOption<AccessReviewSet>;
+    appConsent?: NullableOption<AppConsentApprovalRoute>;
+    termsOfUse?: NullableOption<TermsOfUseContainer>;
+    entitlementManagement?: NullableOption<EntitlementManagement>;
+}
+export interface TermsOfUseContainer extends Entity {
+    agreementAcceptances?: NullableOption<AgreementAcceptance[]>;
+    agreements?: NullableOption<Agreement[]>;
 }
 export interface Program extends Entity {
     // The description of the program.
@@ -13486,232 +14031,6 @@ export interface RiskyUserHistoryItem extends RiskyUser {
     // The id of the user.
     userId?: NullableOption<string>;
 }
-export interface AccessPackage extends Entity {
-    // ID of the access package catalog referencing this access package. Read-only.
-    catalogId?: NullableOption<string>;
-    // UPN of the user or identity of the subject who created this resource. Read-only.
-    createdBy?: NullableOption<string>;
-    /**
-     * The Timestamp type represents date and time information using ISO 8601 format and is always in UTC time. For example,
-     * midnight UTC on Jan 1, 2014 would look like this: '2014-01-01T00:00:00Z'. Read-only.
-     */
-    createdDateTime?: NullableOption<string>;
-    // The description of the access package.
-    description?: NullableOption<string>;
-    // The display name of the access package.
-    displayName?: NullableOption<string>;
-    // Whether the access package is hidden from the requestor.
-    isHidden?: NullableOption<boolean>;
-    // Indicates whether role scopes are visible.
-    isRoleScopesVisible?: NullableOption<boolean>;
-    // The UPN of the user who last modified this resource. Read-only.
-    modifiedBy?: NullableOption<string>;
-    /**
-     * The Timestamp type represents date and time information using ISO 8601 format and is always in UTC time. For example,
-     * midnight UTC on Jan 1, 2014 would look like this: '2014-01-01T00:00:00Z'. Read-only.
-     */
-    modifiedDateTime?: NullableOption<string>;
-    // Read-only. Nullable.
-    accessPackageAssignmentPolicies?: NullableOption<AccessPackageAssignmentPolicy[]>;
-    // Read-only. Nullable.
-    accessPackageCatalog?: NullableOption<AccessPackageCatalog>;
-    // Nullable.
-    accessPackageResourceRoleScopes?: NullableOption<AccessPackageResourceRoleScope[]>;
-}
-export interface AccessPackageAssignmentPolicy extends Entity {
-    // ID of the access package.
-    accessPackageId?: NullableOption<string>;
-    /**
-     * Who must review, and how often, the assignments to the access package from this policy. This property is null if
-     * reviews are not required.
-     */
-    accessReviewSettings?: NullableOption<AssignmentReviewSettings>;
-    // Indicates whether a user can extend the access package assignment duration after approval.
-    canExtend?: NullableOption<boolean>;
-    // Read-only.
-    createdBy?: NullableOption<string>;
-    /**
-     * The Timestamp type represents date and time information using ISO 8601 format and is always in UTC time. For example,
-     * midnight UTC on Jan 1, 2014 would look like this: '2014-01-01T00:00:00Z'
-     */
-    createdDateTime?: NullableOption<string>;
-    // The description of the policy.
-    description?: NullableOption<string>;
-    // The display name of the policy.
-    displayName?: NullableOption<string>;
-    // The number of days in which assignments from this policy last until they are expired.
-    durationInDays?: NullableOption<number>;
-    /**
-     * The expiration date for assignments created in this policy. The Timestamp type represents date and time information
-     * using ISO 8601 format and is always in UTC time. For example, midnight UTC on Jan 1, 2014 would look like this:
-     * '2014-01-01T00:00:00Z'
-     */
-    expirationDateTime?: NullableOption<string>;
-    // Read-only.
-    modifiedBy?: NullableOption<string>;
-    /**
-     * The Timestamp type represents date and time information using ISO 8601 format and is always in UTC time. For example,
-     * midnight UTC on Jan 1, 2014 would look like this: '2014-01-01T00:00:00Z'
-     */
-    modifiedDateTime?: NullableOption<string>;
-    // Questions that are posed to the requestor.
-    questions?: NullableOption<AccessPackageQuestion[]>;
-    // Who must approve requests for access package in this policy.
-    requestApprovalSettings?: NullableOption<ApprovalSettings>;
-    // Who can request this access package from this policy.
-    requestorSettings?: NullableOption<RequestorSettings>;
-    // The access package with this policy. Read-only. Nullable.
-    accessPackage?: NullableOption<AccessPackage>;
-    accessPackageCatalog?: NullableOption<AccessPackageCatalog>;
-}
-export interface AccessPackageCatalog extends Entity {
-    // Has the value Published if the access packages are available for management.
-    catalogStatus?: NullableOption<string>;
-    // One of UserManaged or ServiceDefault.
-    catalogType?: NullableOption<string>;
-    // UPN of the user who created this resource. Read-only.
-    createdBy?: NullableOption<string>;
-    /**
-     * The Timestamp type represents date and time information using ISO 8601 format and is always in UTC time. For example,
-     * midnight UTC on Jan 1, 2014 would look like this: '2014-01-01T00:00:00Z'. Read-only.
-     */
-    createdDateTime?: NullableOption<string>;
-    // The description of the access package catalog.
-    description?: NullableOption<string>;
-    // The display name of the access package catalog.
-    displayName?: NullableOption<string>;
-    // Whether the access packages in this catalog can be requested by users outside of the tenant.
-    isExternallyVisible?: NullableOption<boolean>;
-    // The UPN of the user who last modified this resource. Read-only.
-    modifiedBy?: NullableOption<string>;
-    /**
-     * The Timestamp type represents date and time information using ISO 8601 format and is always in UTC time. For example,
-     * midnight UTC on Jan 1, 2014 would look like this: '2014-01-01T00:00:00Z'. Read-only.
-     */
-    modifiedDateTime?: NullableOption<string>;
-    accessPackageResourceRoles?: NullableOption<AccessPackageResourceRole[]>;
-    // Read-only. Nullable.
-    accessPackageResources?: NullableOption<AccessPackageResource[]>;
-    accessPackageResourceScopes?: NullableOption<AccessPackageResourceScope[]>;
-    // The access packages in this catalog. Read-only. Nullable.
-    accessPackages?: NullableOption<AccessPackage[]>;
-}
-export interface AccessPackageResourceRoleScope extends Entity {
-    // Read-only.
-    createdBy?: NullableOption<string>;
-    /**
-     * The Timestamp type represents date and time information using ISO 8601 format and is always in UTC time. For example,
-     * midnight UTC on Jan 1, 2014 would look like this: '2014-01-01T00:00:00Z'
-     */
-    createdDateTime?: NullableOption<string>;
-    // Read-only.
-    modifiedBy?: NullableOption<string>;
-    /**
-     * The Timestamp type represents date and time information using ISO 8601 format and is always in UTC time. For example,
-     * midnight UTC on Jan 1, 2014 would look like this: '2014-01-01T00:00:00Z'
-     */
-    modifiedDateTime?: NullableOption<string>;
-    // Read-only. Nullable.
-    accessPackageResourceRole?: NullableOption<AccessPackageResourceRole>;
-    // Read-only. Nullable.
-    accessPackageResourceScope?: NullableOption<AccessPackageResourceScope>;
-}
-export interface AccessPackageAssignment extends Entity {
-    // The identifier of the access package. Read-only.
-    accessPackageId?: NullableOption<string>;
-    // The identifier of the access package assignment policy. Read-only.
-    assignmentPolicyId?: NullableOption<string>;
-    // The state of the access package assignment. Possible values are Delivering, Delivered, or Expired. Read-only.
-    assignmentState?: NullableOption<string>;
-    /**
-     * More information about the assignment lifecycle. Possible values include Delivering, Delivered,
-     * NearExpiry1DayNotificationTriggered, or ExpiredNotificationTriggered. Read-only.
-     */
-    assignmentStatus?: NullableOption<string>;
-    // The identifier of the catalog containing the access package. Read-only.
-    catalogId?: NullableOption<string>;
-    /**
-     * The Timestamp type represents date and time information using ISO 8601 format and is always in UTC time. For example,
-     * midnight UTC on Jan 1, 2014 would look like this: '2014-01-01T00:00:00Z'
-     */
-    expiredDateTime?: NullableOption<string>;
-    // Indicates whether the access package assignment is extended. Read-only.
-    isExtended?: NullableOption<boolean>;
-    // When the access assignment is to be in place. Read-only.
-    schedule?: NullableOption<RequestSchedule>;
-    // The ID of the subject with the assignment. Read-only.
-    targetId?: NullableOption<string>;
-    // Read-only. Nullable.
-    accessPackage?: NullableOption<AccessPackage>;
-    // Read-only. Nullable.
-    accessPackageAssignmentPolicy?: NullableOption<AccessPackageAssignmentPolicy>;
-    accessPackageAssignmentRequests?: NullableOption<AccessPackageAssignmentRequest[]>;
-    // The resource roles delivered to the target user for this assignment. Read-only. Nullable.
-    accessPackageAssignmentResourceRoles?: NullableOption<AccessPackageAssignmentResourceRole[]>;
-    // The subject of the access package assignment. Read-only. Nullable.
-    target?: NullableOption<AccessPackageSubject>;
-}
-export interface AccessPackageAssignmentRequest extends Entity {
-    // Answers provided by the requestor to accessPackageQuestions asked of them at the time of request.
-    answers?: NullableOption<AccessPackageAnswer[]>;
-    /**
-     * The date of the end of processing, either successful or failure, of a request. The Timestamp type represents date and
-     * time information using ISO 8601 format and is always in UTC time. For example, midnight UTC on Jan 1, 2014 would look
-     * like this: '2014-01-01T00:00:00Z'. Read-only.
-     */
-    completedDate?: NullableOption<string>;
-    /**
-     * The Timestamp type represents date and time information using ISO 8601 format and is always in UTC time. For example,
-     * midnight UTC on Jan 1, 2014 would look like this: '2014-01-01T00:00:00Z'. Read-only.
-     */
-    createdDateTime?: NullableOption<string>;
-    expirationDateTime?: NullableOption<string>;
-    // True if the request is not to be processed for assignment.
-    isValidationOnly?: NullableOption<boolean>;
-    // The requestor's supplied justification.
-    justification?: NullableOption<string>;
-    // One of PendingApproval, Canceled, Denied, Delivering, Delivered, PartiallyDelivered, Submitted or Scheduled. Read-only.
-    requestState?: NullableOption<string>;
-    // More information on the request processing status. Read-only.
-    requestStatus?: NullableOption<string>;
-    /**
-     * One of UserAdd, UserRemove, AdminAdd, AdminRemove or SystemRemove. A request from the user themselves would have
-     * requestType of UserAdd or UserRemove. Read-only.
-     */
-    requestType?: NullableOption<string>;
-    // The range of dates that access is to be assigned to the requestor. Read-only.
-    schedule?: NullableOption<RequestSchedule>;
-    accessPackage?: NullableOption<AccessPackage>;
-    accessPackageAssignment?: NullableOption<AccessPackageAssignment>;
-    // The subject who requested or, if a direct assignment, was assigned. Read-only. Nullable.
-    requestor?: NullableOption<AccessPackageSubject>;
-}
-export interface AccessPackageAssignmentResourceRole extends Entity {
-    /**
-     * A unique identifier relative to the origin system, corresponding to the originId property of the
-     * accessPackageResourceRole.
-     */
-    originId?: NullableOption<string>;
-    /**
-     * The system where the role assignment is to be created or has been created for an access package assignment, such as
-     * SharePointOnline, AadGroup or AadApplication, corresponding to the originSystem property of the
-     * accessPackageResourceRole.
-     */
-    originSystem?: NullableOption<string>;
-    /**
-     * The value is PendingFulfillment when the access package assignment has not yet been delivered to the origin system, and
-     * Fulfilled when the access package assignment has been delivered to the origin system.
-     */
-    status?: NullableOption<string>;
-    // The access package assignments resulting in this role assignment. Read-only. Nullable.
-    accessPackageAssignments?: NullableOption<AccessPackageAssignment[]>;
-    // Read-only. Nullable.
-    accessPackageResourceRole?: NullableOption<AccessPackageResourceRole>;
-    // Read-only. Nullable.
-    accessPackageResourceScope?: NullableOption<AccessPackageResourceScope>;
-    // Read-only. Nullable.
-    accessPackageSubject?: NullableOption<AccessPackageSubject>;
-}
 export interface AccessPackageSubject extends Entity {
     altSecId?: NullableOption<string>;
     connectedOrganizationId?: NullableOption<string>;
@@ -13757,147 +14076,6 @@ export interface AccessPackageResourceScope extends Entity {
     url?: NullableOption<string>;
     // Read-only. Nullable.
     accessPackageResource?: NullableOption<AccessPackageResource>;
-}
-export interface AccessPackageResource extends Entity {
-    // Read-only.
-    addedBy?: NullableOption<string>;
-    /**
-     * The Timestamp type represents date and time information using ISO 8601 format and is always in UTC time. For example,
-     * midnight UTC on Jan 1, 2014 would look like this: '2014-01-01T00:00:00Z'
-     */
-    addedOn?: NullableOption<string>;
-    attributes?: NullableOption<AccessPackageResourceAttribute[]>;
-    // A description for the resource.
-    description?: NullableOption<string>;
-    // The display name of the resource, such as the application name, group name or site name.
-    displayName?: NullableOption<string>;
-    // True if the resource is not yet available for assignment.
-    isPendingOnboarding?: NullableOption<boolean>;
-    /**
-     * The unique identifier of the resource in the origin system. In the case of an Azure AD group, this is the identifier of
-     * the group.
-     */
-    originId?: NullableOption<string>;
-    // The type of the resource in the origin system, such as SharePointOnline, AadApplication or AadGroup.
-    originSystem?: NullableOption<string>;
-    /**
-     * The type of the resource, such as Application if it is an Azure AD connected application, or SharePoint Online Site for
-     * a SharePoint Online site.
-     */
-    resourceType?: NullableOption<string>;
-    // A unique resource locator for the resource, such as the URL for signing a user into an application.
-    url?: NullableOption<string>;
-    /**
-     * Contains the environment information for the resource. This can be set using either the @odata.bind annotation or the
-     * environment's originId.
-     */
-    accessPackageResourceEnvironment?: NullableOption<AccessPackageResourceEnvironment>;
-    // Read-only. Nullable.
-    accessPackageResourceRoles?: NullableOption<AccessPackageResourceRole[]>;
-    // Read-only. Nullable.
-    accessPackageResourceScopes?: NullableOption<AccessPackageResourceScope[]>;
-}
-export interface AccessPackageResourceEnvironment extends Entity {
-    // Connection information of an environment used to connect to a resource.
-    connectionInfo?: NullableOption<ConnectionInfo>;
-    // The display name of the user that created this object.
-    createdBy?: NullableOption<string>;
-    /**
-     * The date and time that this object was created. The DateTimeOffset type represents date and time information using ISO
-     * 8601 format and is always in UTC time. For example, midnight UTC on Jan 1, 2014 is '2014-01-01T00:00:00Z'.
-     */
-    createdDateTime?: NullableOption<string>;
-    // The description of this accessPackageResourceEnvironment object.
-    description?: NullableOption<string>;
-    // The display name of this object.
-    displayName?: NullableOption<string>;
-    /**
-     * Determines whether this is default environment or not. It is set to true for all static origin systems, such as Azure
-     * AD groups and Azure AD Applications.
-     */
-    isDefaultEnvironment?: NullableOption<boolean>;
-    // The display name of the entity that last modified this object.
-    modifiedBy?: NullableOption<string>;
-    /**
-     * The date and time that this object was last modified. The DateTimeOffset type represents date and time information
-     * using ISO 8601 format and is always in UTC time. For example, midnight UTC on Jan 1, 2014 is '2014-01-01T00:00:00Z'.
-     */
-    modifiedDateTime?: NullableOption<string>;
-    // The unique identifier of this environment in the origin system.
-    originId?: string;
-    // The type of the resource in the origin system such as SharePointOnline. Supports $filter.
-    originSystem?: string;
-    // Read-only. Required.
-    accessPackageResources?: NullableOption<AccessPackageResource[]>;
-}
-export interface AccessPackageResourceRequest extends Entity {
-    // The unique ID of the access package catalog.
-    catalogId?: NullableOption<string>;
-    executeImmediately?: NullableOption<boolean>;
-    /**
-     * The Timestamp type represents date and time information using ISO 8601 format and is always in UTC time. For example,
-     * midnight UTC on Jan 1, 2014 would look like this: '2014-01-01T00:00:00Z'
-     */
-    expirationDateTime?: NullableOption<string>;
-    // If set, does not add the resource.
-    isValidationOnly?: NullableOption<boolean>;
-    // The requestor's justification for adding or removing the resource.
-    justification?: NullableOption<string>;
-    /**
-     * The outcome of whether the service was able to add the resource to the catalog. The value is Delivered if the resource
-     * was added or removed. Read-Only.
-     */
-    requestState?: NullableOption<string>;
-    // Read-only.
-    requestStatus?: NullableOption<string>;
-    /**
-     * Use AdminAdd to add a resource, if the caller is an administrator or resource owner, or AdminRemove to remove a
-     * resource.
-     */
-    requestType?: NullableOption<string>;
-    // Nullable.
-    accessPackageResource?: NullableOption<AccessPackageResource>;
-    // Read-only. Nullable.
-    requestor?: NullableOption<AccessPackageSubject>;
-}
-export interface ConnectedOrganization extends Entity {
-    // UPN of the user who created this resource. Read-only.
-    createdBy?: NullableOption<string>;
-    /**
-     * The Timestamp type represents date and time information using ISO 8601 format and is always in UTC time. For example,
-     * midnight UTC on Jan 1, 2014 would look like this: '2014-01-01T00:00:00Z'. Read-only.
-     */
-    createdDateTime?: NullableOption<string>;
-    // The description of the connected organization.
-    description?: NullableOption<string>;
-    // The display name of the connected organization.
-    displayName?: NullableOption<string>;
-    identitySources?: NullableOption<IdentitySource[]>;
-    // UPN of the user who last modified this resource. Read-only.
-    modifiedBy?: NullableOption<string>;
-    /**
-     * The Timestamp type represents date and time information using ISO 8601 format and is always in UTC time. For example,
-     * midnight UTC on Jan 1, 2014 would look like this: '2014-01-01T00:00:00Z'. Read-only.
-     */
-    modifiedDateTime?: NullableOption<string>;
-    /**
-     * The state of a connected organization defines whether assignment policies with requestor scope type
-     * AllConfiguredConnectedOrganizationSubjects are applicable or not. Possible values are: configured, proposed.
-     */
-    state?: NullableOption<ConnectedOrganizationState>;
-    // Nullable.
-    externalSponsors?: NullableOption<DirectoryObject[]>;
-    // Nullable.
-    internalSponsors?: NullableOption<DirectoryObject[]>;
-}
-export interface EntitlementManagementSettings extends Entity {
-    /**
-     * If externalUserLifecycleAction is BlockSignInAndDelete, the number of days after an external user is blocked from sign
-     * in before their account is deleted.
-     */
-    daysUntilExternalUserDeletedAfterBlocked?: NullableOption<number>;
-    // One of None, BlockSignIn, or BlockSignInAndDelete.
-    externalUserLifecycleAction?: NullableOption<string>;
 }
 // tslint:disable-next-line: interface-name
 export interface InformationProtectionLabel extends Entity {
@@ -15076,6 +15254,8 @@ export interface DeviceManagementExportJob extends Entity {
     filter?: NullableOption<string>;
     // Format of the exported report. Possible values are: csv, pdf.
     format?: DeviceManagementReportFileFormat;
+    // Configures how the requested export job is localized
+    localizationType?: DeviceManagementExportJobLocalizationType;
     // Name of the report
     reportName?: string;
     // Time that the exported report was requested
@@ -18252,6 +18432,44 @@ export interface AndroidWorkProfileVpnConfiguration extends DeviceConfiguration 
     // Identity certificate for client authentication when authentication method is certificate.
     identityCertificate?: NullableOption<AndroidWorkProfileCertificateProfileBase>;
 }
+export interface AospDeviceOwnerDeviceConfiguration extends DeviceConfiguration {
+    // Indicates whether or not the user is allowed to enable to unknown sources setting.
+    appsAllowInstallFromUnknownSources?: NullableOption<boolean>;
+    // Indicates whether or not to block backup service.
+    backupBlocked?: NullableOption<boolean>;
+    // Indicates whether or not to block a user from configuring bluetooth.
+    bluetoothBlockConfiguration?: NullableOption<boolean>;
+    // Indicates whether or not to block a user from sharing contacts via bluetooth.
+    bluetoothBlockContactSharing?: NullableOption<boolean>;
+    // Indicates whether or not to disable the use of bluetooth. When set to true, bluetooth cannot be enabled on the device.
+    bluetoothBlocked?: NullableOption<boolean>;
+    // Indicates whether or not to disable the use of the camera.
+    cameraBlocked?: NullableOption<boolean>;
+    // Indicates whether or not to block Wi-Fi tethering.
+    cellularBlockWiFiTethering?: NullableOption<boolean>;
+    // Indicates whether or not the factory reset option in settings is disabled.
+    factoryResetBlocked?: NullableOption<boolean>;
+    // Indicates the minimum length of the password required on the device. Valid values 4 to 16
+    passwordMinimumLength?: NullableOption<number>;
+    // Minutes of inactivity before the screen times out.
+    passwordMinutesOfInactivityBeforeScreenTimeout?: NullableOption<number>;
+    // Indicates the minimum password quality required on the device.
+    passwordRequiredType?: NullableOption<AndroidDeviceOwnerRequiredPasswordType>;
+    // Indicates the number of times a user can enter an incorrect password before the device is wiped. Valid values 4 to 11
+    passwordSignInFailureCountBeforeFactoryReset?: NullableOption<number>;
+    // Indicates whether or not to disable the capability to take screenshots.
+    screenCaptureBlocked?: NullableOption<boolean>;
+    // Indicates whether or not to block the user from enabling debugging features on the device.
+    securityAllowDebuggingFeatures?: NullableOption<boolean>;
+    // Indicates whether or not to block USB storage.
+    storageAllowUsb?: NullableOption<boolean>;
+    // Indicates whether or not to block external media.
+    storageBlockExternalMedia?: NullableOption<boolean>;
+    // Indicates whether or not to block USB file transfer.
+    storageBlockUsbFileTransfer?: NullableOption<boolean>;
+    // Indicates whether or not to block the user from editing the wifi connection settings.
+    wifiBlockEditConfigurations?: NullableOption<boolean>;
+}
 export interface AppleDeviceFeaturesConfigurationBase extends DeviceConfiguration {
     // An array of AirPrint printers that should always be shown. This collection can contain a maximum of 500 elements.
     airPrintDestinations?: NullableOption<AirPrintDestination[]>;
@@ -21156,7 +21374,7 @@ export interface Windows10GeneralConfiguration extends DeviceConfiguration {
     appManagementMSIAllowUserControlOverInstall?: boolean;
     // This policy setting directs Windows Installer to use elevated permissions when it installs any program on the system.
     appManagementMSIAlwaysInstallWithElevatedPrivileges?: boolean;
-    // List of semi-colon delimited Package Family Names of Windows apps. Listed Windows apps are to be launched after logon.
+    // List of semi-colon delimited Package Family Names of Windows apps. Listed Windows apps are to be launched after logon.​
     appManagementPackageFamilyNamesToLaunchAfterLogOn?: NullableOption<string[]>;
     /**
      * Indicates whether apps from AppX packages signed with a trusted certificate can be side loaded. Possible values are:
@@ -21693,7 +21911,7 @@ export interface Windows10GeneralConfiguration extends DeviceConfiguration {
     privacyBlockInputPersonalization?: boolean;
     // Blocks the shared experiences/discovery of recently used resources in task switcher etc.
     privacyBlockPublishUserActivities?: boolean;
-    // This policy prevents the privacy experience from launching during user logon for new and upgraded users.
+    // This policy prevents the privacy experience from launching during user logon for new and upgraded users.​
     privacyDisableLaunchExperience?: boolean;
     // Indicates whether or not to Block the user from reset protection mode.
     resetProtectionModeBlocked?: boolean;
@@ -22443,7 +22661,7 @@ export interface WindowsDeliveryOptimizationConfiguration extends DeviceConfigur
     cacheServerBackgroundDownloadFallbackToHttpDelayInSeconds?: number;
     /**
      * Specifies number of seconds to delay a fall back from cache servers to an HTTP source for a foreground download. Valid
-     * values 0 to 2592000.
+     * values 0 to 2592000.​
      */
     cacheServerForegroundDownloadFallbackToHttpDelayInSeconds?: number;
     // Specifies cache servers host names.
@@ -23038,7 +23256,7 @@ export interface WindowsWifiEnterpriseEAPConfiguration extends WindowsWifiConfig
     trustedServerCertificateNames?: NullableOption<string[]>;
     /**
      * Specifiy whether to change the virtual LAN used by the device based on the user’s credentials. Cannot be used when
-     * NetworkSingleSignOnType is set to Disabled.
+     * NetworkSingleSignOnType is set to ​Disabled.
      */
     userBasedVirtualLan?: NullableOption<boolean>;
     // Specify identity certificate for client authentication.
@@ -23445,7 +23663,7 @@ export interface DeviceComplianceScriptDeviceState extends Entity {
     expectedStateUpdateDateTime?: NullableOption<string>;
     // The last timestamp of when the device compliance script executed
     lastStateUpdateDateTime?: string;
-    // The last time that Intune Managment Extension synced with Intune
+    // The last time that Intune Management Extension synced with Intune
     lastSyncDateTime?: string;
     // Error from the detection script
     scriptError?: NullableOption<string>;
@@ -23485,7 +23703,7 @@ export interface DeviceHealthScriptDeviceState extends Entity {
     expectedStateUpdateDateTime?: NullableOption<string>;
     // The last timestamp of when the device health script executed
     lastStateUpdateDateTime?: string;
-    // The last time that Intune Managment Extension synced with Intune
+    // The last time that Intune Management Extension synced with Intune
     lastSyncDateTime?: string;
     // Error from the detection script after remediation
     postRemediationDetectionScriptError?: NullableOption<string>;
@@ -26380,6 +26598,7 @@ export interface ItemFacet extends Entity {
     createdDateTime?: string;
     // Contains inference detail if the entity is inferred by the creating or modifying application.
     inference?: NullableOption<InferenceData>;
+    isSearchable?: NullableOption<boolean>;
     // Provides the identifier of the user and/or application that last modified the entity.
     lastModifiedBy?: IdentitySet;
     // Provides the dateTimeOffset for when the entity was created.
@@ -26486,7 +26705,8 @@ export interface LanguageProficiency extends ItemFacet {
      */
     spoken?: NullableOption<LanguageProficiencyLevel>;
     // Contains the four-character BCP47 name for the language (en-US, no-NB, en-AU).
-    tag?: string;
+    tag?: NullableOption<string>;
+    thumbnailUrl?: NullableOption<string>;
     /**
      * Represents the users written proficiency for the language represented by the object. Possible values are: elementary,
      * conversational, limitedWorking, professionalWorking, fullProfessional, nativeOrBilingual, unknownFutureValue.
@@ -26510,17 +26730,17 @@ export interface ProfileCardProperty extends Entity {
      */
     directoryPropertyName?: NullableOption<string>;
 }
-export interface PersonAnniversary extends ItemFacet {
-    // Contains the date associated with the anniversary type.
-    date?: NullableOption<string>;
-    // The type of anniversary the date represents. Possible values are: birthday, wedding, unknownFutureValue.
-    type?: NullableOption<AnniversaryType>;
-}
 export interface PersonAnnotation extends ItemFacet {
     // Contains the detail of the note itself.
     detail?: NullableOption<ItemBody>;
     // Contains a friendly name for the note.
     displayName?: NullableOption<string>;
+    thumbnailUrl?: NullableOption<string>;
+}
+export interface PersonAnnualEvent extends ItemFacet {
+    date?: NullableOption<string>;
+    displayName?: NullableOption<string>;
+    type?: NullableOption<PersonAnnualEventType>;
 }
 export interface PersonAward extends ItemFacet {
     // Descpription of the award or honor.
@@ -26572,20 +26792,21 @@ export interface PersonInterest extends ItemFacet {
     description?: NullableOption<string>;
     // Contains a friendly name for the interest.
     displayName?: string;
+    thumbnailUrl?: NullableOption<string>;
     // Contains a link to a web page or resource about the interest.
     webUrl?: NullableOption<string>;
 }
 export interface PersonName extends ItemFacet {
     // Provides an ordered rendering of firstName and lastName depending on the locale of the user or their device.
-    displayName?: string;
+    displayName?: NullableOption<string>;
     // First name of the user.
-    first?: string;
+    first?: NullableOption<string>;
     // Initials of the user.
     initials?: NullableOption<string>;
     // Contains the name for the language (en-US, no-NB, en-AU) following IETF BCP47 format.
     languageTag?: NullableOption<string>;
     // Last name of the user.
-    last?: string;
+    last?: NullableOption<string>;
     // Maiden name of the user.
     maiden?: NullableOption<string>;
     // Middle name of the user.
@@ -26593,7 +26814,7 @@ export interface PersonName extends ItemFacet {
     // Nickname of the user.
     nickname?: NullableOption<string>;
     // Guidance on how to pronounce the users name.
-    pronunciation?: NullableOption<YomiPersonName>;
+    pronunciation?: NullableOption<PersonNamePronounciation>;
     // Designators used after the users name (eg: PhD.)
     suffix?: NullableOption<string>;
     // Honorifics used to prefix a users name (eg: Dr, Sir, Madam, Mrs.)
@@ -26609,6 +26830,7 @@ export interface PersonResponsibility extends ItemFacet {
     description?: NullableOption<string>;
     // Contains a friendly name for the responsibility.
     displayName?: string;
+    thumbnailUrl?: NullableOption<string>;
     // Contains a link to a web page or resource about the responsibility.
     webUrl?: NullableOption<string>;
 }
@@ -26619,6 +26841,7 @@ export interface PersonWebsite extends ItemFacet {
     description?: NullableOption<string>;
     // Contains a friendly name for the website.
     displayName?: string;
+    thumbnailUrl?: NullableOption<string>;
     // Contains a link to the website itself.
     webUrl?: string;
 }
@@ -26665,6 +26888,7 @@ export interface ProjectParticipation extends ItemFacet {
     displayName?: string;
     // The Person or people who sponsored the project.
     sponsors?: NullableOption<RelatedPerson[]>;
+    thumbnailUrl?: NullableOption<string>;
 }
 export interface SkillProficiency extends ItemFacet {
     // Contains categories a user has associated with the skill (for example, personal, professional, hobby).
@@ -26681,6 +26905,7 @@ export interface SkillProficiency extends ItemFacet {
      * advancedProfessional, expert, unknownFutureValue.
      */
     proficiency?: NullableOption<SkillProficiencyLevel>;
+    thumbnailUrl?: NullableOption<string>;
     // Contains a link to an information source about the skill.
     webUrl?: NullableOption<string>;
 }
@@ -26691,6 +26916,7 @@ export interface WebAccount extends ItemFacet {
     service?: ServiceInformation;
     // Contains a status message from the cloud service if provided or synchronized.
     statusMessage?: NullableOption<string>;
+    thumbnailUrl?: NullableOption<string>;
     // The user name displayed for the webaccount.
     userId?: string;
     // Contains a link to the user's profile on the cloud service if one exists.
@@ -27173,6 +27399,7 @@ export interface Printer extends PrinterBase {
     hasPhysicalDevice?: boolean;
     // True if the printer is shared; false otherwise. Read-only.
     isShared?: boolean;
+    lastSeenDateTime?: NullableOption<string>;
     // The DateTimeOffset when the printer was registered. Read-only.
     registeredDateTime?: string;
     // The connectors that are associated with the printer.
@@ -27977,6 +28204,34 @@ export interface PhoneAuthenticationMethod extends AuthenticationMethod {
      * notEnabled, phoneNumberNotUnique, ready, or notConfigured.
      */
     smsSignInState?: NullableOption<AuthenticationMethodSignInState>;
+}
+export interface TemporaryAccessPassAuthenticationMethod extends AuthenticationMethod {
+    // The date and time when the temporaryAccessPass was created.
+    createdDateTime?: NullableOption<string>;
+    // The state of the authentication method that indicates whether it's currently usable by the user.
+    isUsable?: NullableOption<boolean>;
+    /**
+     * Determines whether the pass is limited to a one time use. If true, the pass can be used once; if false, the pass can be
+     * used multiple times within the temporaryAccessPass lifetime.
+     */
+    isUsableOnce?: NullableOption<boolean>;
+    /**
+     * The lifetime of the temporaryAccessPass in minutes starting at startDateTime. Minimum 10, Maximum 43200 (equivalent to
+     * 30 days).
+     */
+    lifetimeInMinutes?: NullableOption<number>;
+    /**
+     * Details about usability state (isUsable). Reasons can include: enabledByPolicy, disabledByPolicy, expired, notYetValid,
+     * oneTimeUsed.
+     */
+    methodUsabilityReason?: NullableOption<string>;
+    // The date and time when the temporaryAccessPass becomes available to use.
+    startDateTime?: NullableOption<string>;
+    /**
+     * The temporaryAccessPass used to authenticate. Returned only on creation of a new temporaryAccessPass; returned as NULL
+     * with GET.
+     */
+    temporaryAccessPass?: NullableOption<string>;
 }
 export interface WindowsHelloForBusinessAuthenticationMethod extends AuthenticationMethod {
     // The date and time that this Windows Hello for Business key was registered.
@@ -28831,9 +29086,9 @@ export interface StatusBase {
 export interface StatusDetails extends StatusBase {
     // Additional details in case of error.
     additionalDetails?: NullableOption<string>;
-    // Categorizes the error code.
+    // Categorizes the error code. Possible values are Failure, NonServiceFailure, Success.
     errorCategory?: NullableOption<string>;
-    // Unique error code if any occurred.
+    // Unique error code if any occurred. Learn more
     errorCode?: NullableOption<string>;
     // Summarizes the status and describes why the status happened.
     reason?: NullableOption<string>;
@@ -31772,6 +32027,20 @@ export interface ChoiceColumn {
     // How the choices are to be presented in the UX. Must be one of checkBoxes, dropDownMenu, or radioButtons
     displayAs?: NullableOption<string>;
 }
+export interface ColumnValidation {
+    defaultLanguage?: NullableOption<string>;
+    descriptions?: NullableOption<DisplayNameLocalization[]>;
+    formula?: NullableOption<string>;
+}
+export interface DisplayNameLocalization {
+    /**
+     * If present, the value of this field contains the displayName string that has been set for the language present in the
+     * languageTag field.
+     */
+    displayName?: NullableOption<string>;
+    // Provides the language culture-code and friendly name of the language that the displayName field has been provided in.
+    languageTag?: NullableOption<string>;
+}
 export interface CommentAction {
     // If true, this activity was a reply to an existing comment thread.
     isReply?: NullableOption<boolean>;
@@ -31780,6 +32049,8 @@ export interface CommentAction {
     // The identities of the users participating in this comment thread.
     participants?: NullableOption<IdentitySet[]>;
 }
+// tslint:disable-next-line: no-empty-interface
+export interface ContentApprovalStatusColumn {}
 export interface ContentTypeInfo {
     // The id of the content type.
     id?: NullableOption<string>;
@@ -31818,6 +32089,20 @@ export interface DeleteAction {
     name?: NullableOption<string>;
     // File or Folder, depending on the type of the deleted item.
     objectType?: NullableOption<string>;
+}
+export interface DocumentSet {
+    allowedContentTypes?: NullableOption<ContentTypeInfo[]>;
+    defaultContents?: NullableOption<DocumentSetContent[]>;
+    propagateWelcomePageChanges?: NullableOption<boolean>;
+    shouldPrefixNameToFile?: NullableOption<boolean>;
+    welcomePageUrl?: NullableOption<string>;
+    sharedColumns?: NullableOption<ColumnDefinition[]>;
+    welcomePageColumns?: NullableOption<ColumnDefinition[]>;
+}
+export interface DocumentSetContent {
+    contentType?: NullableOption<ContentTypeInfo>;
+    fileName?: NullableOption<string>;
+    folderName?: NullableOption<string>;
 }
 export interface DriveItemUploadableProperties {
     // Provides a user-visible description of the item. Read-write. Only on OneDrive Personal.
@@ -31864,6 +32149,9 @@ export interface FolderView {
 }
 // tslint:disable-next-line: no-empty-interface
 export interface GeolocationColumn {}
+export interface HyperlinkOrPictureColumn {
+    isPicture?: NullableOption<boolean>;
+}
 // tslint:disable-next-line: interface-name
 export interface IncompleteData {
     // The service does not have source data before the specified time.
@@ -32043,6 +32331,10 @@ export interface SharingLink {
 }
 // tslint:disable-next-line: no-empty-interface
 export interface SitePageData {}
+export interface TermColumn {
+    allowMultipleValues?: NullableOption<boolean>;
+    showFullyQualifiedName?: NullableOption<boolean>;
+}
 export interface TextColumn {
     // Whether to allow multiple lines of text.
     allowMultipleLines?: NullableOption<boolean>;
@@ -32070,6 +32362,8 @@ export interface Thumbnail {
     // The width of the thumbnail, in pixels.
     width?: NullableOption<number>;
 }
+// tslint:disable-next-line: no-empty-interface
+export interface ThumbnailColumn {}
 export interface WebPart {
     // The required properties for the webPart (varies by webPart)
     data?: NullableOption<SitePageData>;
@@ -36259,6 +36553,22 @@ export interface WindowsKioskUWPApp extends WindowsKioskAppBase {
     // This references an contained App from an Intune App
     containedAppId?: NullableOption<string>;
 }
+export interface WindowsKioskSingleWin32App extends WindowsKioskAppConfiguration {
+    // This is the win32 app that will be available to launch use while in Kiosk Mode
+    win32App?: WindowsKioskWin32App;
+}
+export interface WindowsKioskWin32App extends WindowsKioskAppBase {
+    // This is the classicapppath to be used by v4 Win32 app while in Kiosk Mode
+    classicAppPath?: string;
+    // Edge kiosk (url) for Edge kiosk mode
+    edgeKiosk?: NullableOption<string>;
+    // Edge kiosk idle timeout in minutes for Edge kiosk mode. Valid values 0 to 1440
+    edgeKioskIdleTimeoutMinutes?: NullableOption<number>;
+    // Edge kiosk type for Edge kiosk mode
+    edgeKioskType?: WindowsEdgeKioskType;
+    // Edge first run flag for Edge kiosk mode
+    edgeNoFirstRun?: boolean;
+}
 // tslint:disable-next-line: no-empty-interface
 export interface WindowsKioskVisitor extends WindowsKioskUser {}
 export interface WindowsNetworkIsolationPolicy {
@@ -36847,6 +37157,8 @@ export interface DeviceOperatingSystemSummary {
     configMgrDeviceCount?: number;
     // Number of iOS device count.
     iosCount?: number;
+    // Number of Linux OS devices. Valid values 0 to 2147483647
+    linuxCount?: number;
     // Number of Mac OS X device count.
     macOSCount?: number;
     // Number of unknown device count.
@@ -37613,8 +37925,40 @@ export interface PlannerAssignments {}
 export interface PlannerCategoryDescriptions {
     // The label associated with Category 1
     category1?: NullableOption<string>;
+    // The label associated with Category 10
+    category10?: NullableOption<string>;
+    // The label associated with Category 11
+    category11?: NullableOption<string>;
+    // The label associated with Category 12
+    category12?: NullableOption<string>;
+    // The label associated with Category 13
+    category13?: NullableOption<string>;
+    // The label associated with Category 14
+    category14?: NullableOption<string>;
+    // The label associated with Category 15
+    category15?: NullableOption<string>;
+    // The label associated with Category 16
+    category16?: NullableOption<string>;
+    // The label associated with Category 17
+    category17?: NullableOption<string>;
+    // The label associated with Category 18
+    category18?: NullableOption<string>;
+    // The label associated with Category 19
+    category19?: NullableOption<string>;
     // The label associated with Category 2
     category2?: NullableOption<string>;
+    // The label associated with Category 20
+    category20?: NullableOption<string>;
+    // The label associated with Category 21
+    category21?: NullableOption<string>;
+    // The label associated with Category 22
+    category22?: NullableOption<string>;
+    // The label associated with Category 23
+    category23?: NullableOption<string>;
+    // The label associated with Category 24
+    category24?: NullableOption<string>;
+    // The label associated with Category 25
+    category25?: NullableOption<string>;
     // The label associated with Category 3
     category3?: NullableOption<string>;
     // The label associated with Category 4
@@ -37623,6 +37967,12 @@ export interface PlannerCategoryDescriptions {
     category5?: NullableOption<string>;
     // The label associated with Category 6
     category6?: NullableOption<string>;
+    // The label associated with Category 7
+    category7?: NullableOption<string>;
+    // The label associated with Category 8
+    category8?: NullableOption<string>;
+    // The label associated with Category 9
+    category9?: NullableOption<string>;
 }
 export interface PlannerChecklistItem {
     // Value is true if the item is checked and false otherwise.
@@ -37948,15 +38298,6 @@ export interface CompanyDetail {
     // Link to the company home page.
     webUrl?: NullableOption<string>;
 }
-export interface DisplayNameLocalization {
-    /**
-     * If present, the value of this field contains the displayName string that has been set for the language present in the
-     * languageTag field.
-     */
-    displayName?: NullableOption<string>;
-    // Provides the language culture-code and friendly name of the language that the displayName field has been provided in.
-    languageTag?: NullableOption<string>;
-}
 export interface EducationalActivityDetail {
     // Shortened name of the degree or program (example: PhD, MBA)
     abbreviation?: NullableOption<string>;
@@ -37998,15 +38339,22 @@ export interface InstitutionData {
 export interface PersonDataSources {
     type?: NullableOption<string[]>;
 }
+export interface PersonNamePronounciation {
+    displayName?: NullableOption<string>;
+    first?: NullableOption<string>;
+    last?: NullableOption<string>;
+    maiden?: NullableOption<string>;
+    middle?: NullableOption<string>;
+}
 export interface PositionDetail {
     // Detail about the company or employer.
-    company?: CompanyDetail;
+    company?: NullableOption<CompanyDetail>;
     // Description of the position in question.
     description?: NullableOption<string>;
     // When the position ended.
     endMonthYear?: NullableOption<string>;
     // The title held when in that position.
-    jobTitle?: string;
+    jobTitle?: NullableOption<string>;
     // The role the position entailed.
     role?: NullableOption<string>;
     // The start month and year of the position.
@@ -38068,18 +38416,6 @@ export interface TranslationPreferences {
     languageOverrides?: TranslationLanguageOverride[];
     translationBehavior?: NullableOption<TranslationBehavior>;
     untranslatedLanguages?: NullableOption<string[]>;
-}
-export interface YomiPersonName {
-    // Composite of first and last name pronunciation guides.
-    displayName?: NullableOption<string>;
-    // Pronunciation guide for the first name of the user.
-    first?: NullableOption<string>;
-    // Pronunciation guide for the last name of the user.
-    last?: NullableOption<string>;
-    // Pronunciation guide for the maiden name of the user.
-    maiden?: NullableOption<string>;
-    // Pronunciation guide for the middle name of the user.
-    middle?: NullableOption<string>;
 }
 export interface GovernancePermission {
     // The access level. Valid values: None, UserRead, AdminRead, and AdminReadWrite.
@@ -38327,6 +38663,7 @@ export interface PrinterDefaults {
      * the printer decide how to lay out impressions.
      */
     fitPdfToPage?: NullableOption<boolean>;
+    // The default input bin that serves as the paper source.
     inputBin?: NullableOption<string>;
     // The default media (such as paper) color to print the document on.
     mediaColor?: NullableOption<string>;
