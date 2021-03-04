@@ -3,6 +3,8 @@
 # Microsoft Graph TypeScript Types
 The Microsoft Graph TypeScript definitions enable editors to provide intellisense on Microsoft Graph objects including users, messages, and groups.
 
+> **_NOTE:_**  The **Microsoft Graph TypeScript Types Beta** [npm package](https://www.npmjs.com/package/@microsoft/microsoft-graph-types-beta) and [GitHub repo](https://github.com/microsoftgraph/msgraph-beta-typescript-typings) is now available. Imports from the `microsoftgraph/msgraph-typescript-typings#beta` branch will no longer be supported.
+ 
 ## Installation
 
 We recommend including the .d.ts file by downloading this package through [npm](https://www.npmjs.com/).
@@ -17,7 +19,7 @@ npm install @microsoft/microsoft-graph-types --save-dev
 ![GIF showing intellisense and autocompletion for Microsoft Graph entities in Visual Studio Code ](https://github.com/microsoftgraph/msgraph-typescript-typings/raw/master/typings-demo.gif)
 
 ## Examples
-The following examples assume that you have a valid access token. The following example uses [isomorphic-fetch](https://www.npmjs.com/package/isomorphic-fetch) and  [Microsoft Graph JavaScript client library](https://github.com/microsoftgraph/msgraph-sdk-javascript) -
+The following examples assume that you have a valid access token. The following example uses [isomorphic-fetch](https://www.npmjs.com/package/isomorphic-fetch) and [Microsoft Graph JavaScript client library](https://github.com/microsoftgraph/msgraph-sdk-javascript) -
 
 ```typescript
 import { User } from "@microsoft/microsoft-graph-types-beta";
