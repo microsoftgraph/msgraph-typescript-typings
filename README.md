@@ -14,49 +14,35 @@ npm install @microsoft/microsoft-graph-types --save-dev
 
 ```
 
-
 ![GIF showing intellisense and autocompletion for Microsoft Graph entities in Visual Studio Code ](https://github.com/microsoftgraph/msgraph-typescript-typings/raw/master/typings-demo.gif)
+
 ## Examples
-The following examples assume that you have a valid access token. We used [isomorphic-fetch](https://www.npmjs.com/package/isomorphic-fetch) to perform requests, but you can use [our JavaScript client library](https://github.com/microsoftgraph/msgraph-sdk-javascript) or other libraries as well.
-```typescript
-import * as MicrosoftGraph from "@microsoft/microsoft-graph-types"
+The following examples assume that you have a valid access token. The following example uses [isomorphic-fetch](https://www.npmjs.com/package/isomorphic-fetch) and  [Microsoft Graph JavaScript client library](https://github.com/microsoftgraph/msgraph-sdk-javascript) -
 
-import * from 'isomorphic-fetch';
-const accessToken:string = "";
-```
-### List my recent messages
 ```typescript
-let url = "https://graph.microsoft.com/v1.0/me/messages";
-let request = new Request(url, {
-    method: "GET",
-    headers: new Headers({
-        "Authorization": "Bearer " + accessToken
-    })
+import { User } from "@microsoft/microsoft-graph-types-beta";
+
+import { Client } from "@microsoft/microsoft-graph-client";
+
+import 'isomorphic-fetch';
+
+const client = Client.initWithMiddleware({
+	defaultVersion: 'beta',
+    ...
 });
 
-fetch(request)
-.then((response) => {
-    response.json().then((res) => {
-        let messages:[MicrosoftGraph.Message] = res.value;
-        for (let msg of messages) { //iterate through the recent messages
-            console.log(msg.subject);
-            console.log(msg.toRecipients[0].emailAddress.address);
-        }
-    });
-
-})
-.catch((error) => {
-    console.error(error);
-});
+const response = await client.api("/me").get();
+const user = response as User;
 ```
-### Send an email as the logged in user
+
+### Example of creating an object
 ```typescript
 // Create the message object
 
 // Note that all the properties must follow the interface definitions.
-// For example, this will not compile if you try to type "xml" instead of "html" for contentType. 
+// For example, this will not compile if you try to type "xml" instead of "html" for contentType.
 
-let mail:MicrosoftGraph.Message = {
+let mail:MicrosoftGraphBeta.Message = {
     subject: "Microsoft Graph TypeScript Sample",
     toRecipients: [{
         emailAddress: {
@@ -68,55 +54,32 @@ let mail:MicrosoftGraph.Message = {
         contentType: "html"
     }
 }
-// send the email by sending a POST request to the Microsoft Graph
-let url = "https://graph.microsoft.com/v1.0/users/me/sendMail";
-let request = new Request(
-            url, {
-                method: "POST",
-                body: JSON.stringify({
-                    message: mail
-                }),
-                headers: new Headers({
-                    "Authorization": "Bearer " + accessToken,
-                    'Content-Type': 'application/json'
-                })
-            }
-        );
-        
-fetch(request)
-.then((response) => {
-    if(response.ok === true) {
-        console.log("Mail sent successfully..!!");
-    }
-})
-.catch((err) => {
-    console.error(err);
-});
-
 ```
-## Microsoft Graph beta support
-If you want to test the Microsoft Graph beta endpoints, you can use those types simultaneously with the v1.0 types.
 
-Update your package.json file with the following:
-
-```javascript
+## Example of using v1 types and beta types together
+```json
   "devDependencies": {
     // import published v1.0 types with a version from NPM
     "@microsoft/microsoft-graph-types": "^0.4.0",
-
-    // import beta types from the beta branch on the GitHub repo
-    "@microsoft/microsoft-graph-types-beta": "microsoftgraph/msgraph-typescript-typings#beta"
+    // import beta types with a version from NPM
+    "@microsoft/microsoft-graph-types-beta": "^0.1.0-preview"
   }
 }
 ```
 
-Import the beta types from `@microsoft/microsoft-graph-types-beta`
 ```typescript
-// import individual entities
-import {User as BetaUser} from "@microsoft/microsoft-graph-types-beta"
+import * as MicrosoftGraph from "@microsoft/microsoft-graph-types"
 
-// or import everything under MicrosoftGraphBeta
 import * as MicrosoftGraphBeta from "@microsoft/microsoft-graph-types-beta"
+
+const v1User: MicrosoftGraph.User = {
+	givenName: "V1 User"
+}
+
+const betaUser: MicrosoftGraphBeta.User = {
+	givenName: "Beta User"
+}
+
 ```
 
 ## Supported editors
