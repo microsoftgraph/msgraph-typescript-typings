@@ -3037,6 +3037,12 @@ export interface Application extends DirectoryObject {
      */
     createdDateTime?: NullableOption<string>;
     description?: NullableOption<string>;
+    /**
+     * Specifies whether Microsoft has disabled the registered application. Possible values are: null (default value),
+     * NotDisabled, and DisabledDueToViolationOfServicesAgreement (reasons may include suspicious, abusive, or malicious
+     * activity, or a violation of the Microsoft Services Agreement).
+     */
+    disabledByMicrosoftStatus?: NullableOption<string>;
     // The display name for the application.
     displayName?: NullableOption<string>;
     /**
@@ -3168,6 +3174,12 @@ export interface ServicePrincipal extends DirectoryObject {
      * MyApps will display the application description in this field. The maximum allowed size is 1024 characters.
      */
     description?: NullableOption<string>;
+    /**
+     * Specifies whether Microsoft has disabled the registered application. Possible values are: null (default value),
+     * NotDisabled, and DisabledDueToViolationOfServicesAgreement (reasons may include suspicious, abusive, or malicious
+     * activity, or a violation of the Microsoft Services Agreement).
+     */
+    disabledByMicrosoftStatus?: NullableOption<string>;
     // The display name for the service principal.
     displayName?: NullableOption<string>;
     // Home page or landing page of the application.
@@ -11271,7 +11283,7 @@ export interface ChatMessage extends Entity {
     summary?: NullableOption<string>;
     // Read-only. Link to the message in Microsoft Teams.
     webUrl?: NullableOption<string>;
-    // Content in a message hosted by Microsoft Teams e.g., images, code snippets etc.
+    // Content in a message hosted by Microsoft Teams - for example, images or code snippets.
     hostedContents?: NullableOption<ChatMessageHostedContent[]>;
     // Replies for a specified message.
     replies?: NullableOption<ChatMessage[]>;
@@ -11397,8 +11409,8 @@ export interface WorkforceIntegration extends ChangeTrackedEntity {
     /**
      * This property will replace supports in v1.0. We recommend that you use this property instead of supports. The supports
      * property will still be supported in beta for the time being. Possible values are none, shift, swapRequest, openshift,
-     * openShiftRequest, userShiftPreferences. If selecting more than one value, all values must start with the first letter
-     * in uppercase.
+     * openShiftRequest, userShiftPreferences, offerShiftRequest, timeCard, timeOffReason, timeOff, timeOffRequest and
+     * unknownFutureValue. If selecting more than one value, all values must start with the first letter in uppercase.
      */
     supportedEntities?: NullableOption<WorkforceIntegrationSupportedEntities>;
     // Workforce Integration URL for callbacks from the Shifts service.
