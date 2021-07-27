@@ -1632,9 +1632,8 @@ export interface User extends DirectoryObject {
     licenseAssignmentStates?: NullableOption<LicenseAssignmentState[]>;
     /**
      * The SMTP address for the user, for example, admin@contoso.com. Changes to this property will also update the user's
-     * proxyAddresses collection to include the value as an SMTP address. While this property can contain accent characters,
-     * using them can cause access issues with other Microsoft applications for the user. Supports $filter (eq, ne, NOT, ge,
-     * le, in, startsWith, endsWith).
+     * proxyAddresses collection to include the value as an SMTP address. This property cannot contain accent characters.
+     * Supports $filter (eq, ne, NOT, ge, le, in, startsWith, endsWith).
      */
     mail?: NullableOption<string>;
     /**
@@ -1711,9 +1710,8 @@ export interface User extends DirectoryObject {
      */
     onPremisesUserPrincipalName?: NullableOption<string>;
     /**
-     * A list of additional email addresses for the user; for example: ['bob@contoso.com', 'Robert@fabrikam.com'].NOTE: While
-     * this property can contain accent characters, they can cause access issues to first-party applications for the
-     * user.Supports $filter (eq, NOT, ge, le, in, startsWith).
+     * A list of additional email addresses for the user; for example: ['bob@contoso.com', 'Robert@fabrikam.com'].NOTE: This
+     * property cannot contain accent characters.Supports $filter (eq, NOT, ge, le, in, startsWith).
      */
     otherMails?: string[];
     /**
@@ -1789,8 +1787,8 @@ export interface User extends DirectoryObject {
      * standard RFC 822. By convention, this should map to the user's email name. The general format is alias@domain, where
      * domain must be present in the tenant's collection of verified domains. This property is required when a user is
      * created. The verified domains for the tenant can be accessed from the verifiedDomains property of organization.NOTE:
-     * While this property can contain accent characters, they can cause access issues to first-party applications for the
-     * user. Supports $filter (eq, ne, NOT, ge, le, in, startsWith, endsWith) and $orderBy.
+     * This property cannot contain accent characters. Supports $filter (eq, ne, NOT, ge, le, in, startsWith, endsWith) and
+     * $orderBy.
      */
     userPrincipalName?: NullableOption<string>;
     /**
@@ -3560,18 +3558,37 @@ export interface MicrosoftAuthenticatorAuthenticationMethodTarget extends Authen
     featureSettings?: NullableOption<AuthenticatorAppFeatureSettings>;
 }
 export interface PolicyRoot extends Entity {
+    /**
+     * The authentication methods and the users that are allowed to use them to sign in and perform multi-factor
+     * authentication (MFA) in Azure Active Directory (Azure AD).
+     */
     authenticationMethodsPolicy?: NullableOption<AuthenticationMethodsPolicy>;
+    // The policy configuration of the self-service sign-up experience of external users.
     authenticationFlowsPolicy?: NullableOption<AuthenticationFlowsPolicy>;
+    // The policy that controls the idle time out for web sessions for applications.
     activityBasedTimeoutPolicies?: NullableOption<ActivityBasedTimeoutPolicy[]>;
+    // The policy that controls Azure AD authorization settings.
     authorizationPolicy?: NullableOption<AuthorizationPolicy>;
+    /**
+     * The claim-mapping policies for WS-Fed, SAML, OAuth 2.0, and OpenID Connect protocols, for tokens issued to a specific
+     * application.
+     */
     claimsMappingPolicies?: NullableOption<ClaimsMappingPolicy[]>;
+    // The policy to control Azure AD authentication behavior for federated users.
     homeRealmDiscoveryPolicies?: NullableOption<HomeRealmDiscoveryPolicy[]>;
+    // The policy that specifies the conditions under which consent can be granted.
     permissionGrantPolicies?: NullableOption<PermissionGrantPolicy[]>;
+    // The policy that specifies the characteristics of SAML tokens issued by Azure AD.
     tokenIssuancePolicies?: NullableOption<TokenIssuancePolicy[]>;
+    // The policy that controls the lifetime of a JWT access token, an ID token, or a SAML 1.1/2.0 token issued by Azure AD.
     tokenLifetimePolicies?: NullableOption<TokenLifetimePolicy[]>;
+    // The feature rollout policy associated with a directory object.
     featureRolloutPolicies?: NullableOption<FeatureRolloutPolicy[]>;
+    // The policy by which consent requests are created and managed for the entire tenant.
     adminConsentRequestPolicy?: NullableOption<AdminConsentRequestPolicy>;
+    // The custom rules that define an access scenario.
     conditionalAccessPolicies?: NullableOption<ConditionalAccessPolicy[]>;
+    // The policy that represents the security defaults that protect against common attacks.
     identitySecurityDefaultsEnforcementPolicy?: NullableOption<IdentitySecurityDefaultsEnforcementPolicy>;
 }
 export interface AuthenticationFlowsPolicy extends Entity {
@@ -3828,7 +3845,7 @@ export interface SocialIdentityProvider extends IdentityProviderBase {
     clientId?: NullableOption<string>;
     /**
      * The client secret for the application that is obtained when the application is registered with the identity provider.
-     * This is write-only. A read operation returns '****'. Required.
+     * This is write-only. A read operation returns ****. Required.
      */
     clientSecret?: NullableOption<string>;
     /**
@@ -12780,7 +12797,6 @@ export interface AlternativeSecurityId {
 export interface PreAuthorizedApplication {
     // The unique identifier for the application.
     appId?: NullableOption<string>;
-    // The unique identifier for the oauth2PermissionScopes the application requires.
     delegatedPermissionIds?: string[];
 }
 export interface AssignedLabel {
