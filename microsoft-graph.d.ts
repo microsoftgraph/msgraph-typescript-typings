@@ -4156,7 +4156,7 @@ export interface ServicePrincipal extends DirectoryObject {
     /**
      * Identifies if the service principal represents an application or a managed identity. This is set by Azure AD
      * internally. For a service principal that represents an application this is set as Application. For a service principal
-     * that represent a managed identity this is set as ManagedIdentity.
+     * that represent a managed identity this is set as ManagedIdentity. The SocialIdp type is for internal use.
      */
     servicePrincipalType?: NullableOption<string>;
     /**
@@ -7556,11 +7556,21 @@ export interface AppConsentRequest extends Entity {
     userConsentRequests?: NullableOption<UserConsentRequest[]>;
 }
 export interface Request extends Entity {
+    // The identifier of the approval of the request.
     approvalId?: NullableOption<string>;
+    // The request completion date time.
     completedDateTime?: NullableOption<string>;
+    // The user who created this request.
     createdBy?: NullableOption<IdentitySet>;
+    // The request creation date time.
     createdDateTime?: NullableOption<string>;
+    // Free text field to define any custom data for the request. Not used.
     customData?: NullableOption<string>;
+    /**
+     * The status of the request. Not nullable. The possible values are: Canceled, Denied, Failed, Granted,
+     * PendingAdminDecision, PendingApproval, PendingProvisioning, PendingScheduleCreation, Provisioned, Revoked, and
+     * ScheduleCreated. Not nullable.
+     */
     status?: string;
 }
 export interface UserConsentRequest extends Request {
@@ -7675,7 +7685,7 @@ export interface CountryNamedLocation extends NamedLocation {
     countriesAndRegions?: string[];
     /**
      * Determines what method is used to decide which country the user is located in. Possible values are clientIpAddress and
-     * authenticatorAppGps.
+     * authenticatorAppGps. Note: authenticatorAppGps is not yet supported in the Microsoft Cloud for US Government.
      */
     countryLookupMethod?: NullableOption<CountryLookupMethodType>;
     // True if IP addresses that don't map to a country or region should be included in the named location.
@@ -18534,21 +18544,21 @@ export namespace TermStore {
         toTerm?: NullableOption<Term>;
     }
     interface Term extends microsoftgraph.Entity {
-        // Date and time of term creation. Read-only
+        // Date and time of term creation. Read-only.
         createdDateTime?: NullableOption<string>;
-        // Description about term that is dependent on the languageTag
+        // Description about term that is dependent on the languageTag.
         descriptions?: NullableOption<LocalizedDescription[]>;
-        // Label metadata for a term
+        // Label metadata for a term.
         labels?: NullableOption<LocalizedLabel[]>;
-        // Last date and time of term modification. Read-only
+        // Last date and time of term modification. Read-only.
         lastModifiedDateTime?: NullableOption<string>;
-        // Collection of properties on the term
+        // Collection of properties on the term.
         properties?: NullableOption<microsoftgraph.KeyValue[]>;
-        // Children of current term
+        // Children of current term.
         children?: NullableOption<Term[]>;
-        // To indicate which terms are related to the current term as either pinned or reused
+        // To indicate which terms are related to the current term as either pinned or reused.
         relations?: NullableOption<Relation[]>;
-        // The [set] in which the term is created
+        // The [set] in which the term is created.
         set?: NullableOption<Set>;
     }
     interface LocalizedDescription {
@@ -19196,9 +19206,9 @@ export namespace ExternalConnectors {
     interface Properties {}
     interface Property {
         /**
-         * A set of aliases or a friendly names for the property. Maximum 32 characters. Each string must not contain control
-         * characters, whitespace, or any of the following: :, ;, ,, (, ), [, ], {, }, %, $, +, !, *, =, &amp;, ?, @, #, /, ~, ',
-         * ', &amp;lt;, &amp;gt;, `
+         * A set of aliases or a friendly names for the property. Maximum 32 characters. Only alphanumeric characters allowed. For
+         * example, each string may not contain control characters, whitespace, or any of the following: :, ;, ,, (, ), [, ], {,
+         * }, %, $, +, !, *, =, &amp;, ?, @, #, /, ~, ', ', &amp;lt;, &amp;gt;, `, ^. Optional.
          */
         aliases?: NullableOption<string[]>;
         /**
@@ -19232,8 +19242,9 @@ export namespace ExternalConnectors {
          */
         labels?: NullableOption<Label[]>;
         /**
-         * The name of the property. Maximum 32 characters. Must not contain control characters, whitespace, or any of the
-         * following: :, ;, ,, (, ), [, ], {, }, %, $, +, !, *, =, &amp;, ?, @, #, /, ~, ', ', &amp;lt;, &amp;gt;, `
+         * The name of the property. Maximum 32 characters. Only alphanumeric characters allowed. For example, each string may not
+         * contain control characters, whitespace, or any of the following: :, ;, ,, (, ), [, ], {, }, %, $, +, !, *, =, &amp;, ?,
+         * @, #, /, ~, ', ', &amp;lt;, &amp;gt;, `, ^. Required.
          */
         name?: string;
         /**
