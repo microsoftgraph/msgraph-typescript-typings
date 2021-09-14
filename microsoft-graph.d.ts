@@ -4289,9 +4289,9 @@ export interface ExtensionProperty extends DirectoryObject {
     targetObjects?: string[];
 }
 export interface PolicyBase extends DirectoryObject {
-    // Description for this policy.
+    // Description for this policy. Required.
     description?: NullableOption<string>;
-    // Display name for this policy.
+    // Display name for this policy. Required.
     displayName?: NullableOption<string>;
 }
 export interface StsPolicy extends PolicyBase {
@@ -6383,6 +6383,7 @@ export interface DriveItem extends BaseItem {
     image?: NullableOption<Image>;
     // Location metadata, if the item has location data. Read-only.
     location?: NullableOption<GeoCoordinates>;
+    // Malware metadata, if the item was detected to contain malware. Read-only.
     malware?: NullableOption<Malware>;
     /**
      * If present, indicates that this item is a package instead of a folder or file. Packages are treated like files in some
@@ -7620,7 +7621,8 @@ export interface AccessReviewScheduleDefinition extends Entity {
     descriptionForAdmins?: NullableOption<string>;
     /**
      * Description provided by review creators to provide more context of the review to reviewers. Reviewers will see this
-     * description in the email sent to them requesting their review. Supports $select.
+     * description in the email sent to them requesting their review. Email notifications support up to 256 characters.
+     * Supports $select.
      */
     descriptionForReviewers?: NullableOption<string>;
     // Name of the access review series. Supports $select and $orderBy. Required on create.
@@ -13470,8 +13472,11 @@ export interface ObjectIdentity {
      */
     issuerAssignedId?: NullableOption<string>;
     /**
-     * Specifies the user sign-in types in your directory, such as emailAddress, userName or federated. Here, federated
-     * represents a unique identifier for a user from an issuer, that can be in any format chosen by the issuer. Additional
+     * Specifies the user sign-in types in your directory, such as emailAddress, userName, federated, or userPrincipalName.
+     * federated represents a unique identifier for a user from an issuer, that can be in any format chosen by the issuer.
+     * Setting or updating a userPrincipalName identity will update the value of the userPrincipalName property on the user
+     * object. The validations performed on the userPrincipalName property on the user object, for example, verified domains
+     * and acceptable characters, will be performed when setting or updating a userPrincipalName identity. Additional
      * validation is enforced on issuerAssignedId when the sign-in type is set to emailAddress or userName. This property can
      * also be set to any custom string.
      */
@@ -14569,6 +14574,7 @@ export interface Image {
     width?: NullableOption<number>;
 }
 export interface Malware {
+    // Contains the virus details for the malware facet.
     description?: NullableOption<string>;
 }
 export interface Package {
@@ -17073,7 +17079,7 @@ export interface ServiceUpdateMessageViewpoint {
 export interface AggregationOption {
     // Specifies the criteria to compute an aggregation. Optional.
     bucketDefinition?: BucketAggregationDefinition;
-    // Specifies the field in the schema of the specified entity type that aggregation should be computed on. Required.
+    // Computes aggregation on the field while the field exists in current entity type. Required.
     field?: string;
     /**
      * The number of searchBucket resources to be returned. This is not required when the range is provided manually in the
