@@ -81,7 +81,6 @@ export type RiskState =
     | "unknownFutureValue";
 export type AuthenticationMethodState = "enabled" | "disabled";
 export type AuthenticationMethodTargetType = "user" | "group" | "unknownFutureValue";
-export type AuthenticatorAppFeatureSettings = "requireNumberMatching";
 export type ExternalEmailOtpState = "default" | "enabled" | "disabled" | "unknownFutureValue";
 export type Fido2RestrictionEnforcementType = "allow" | "block" | "unknownFutureValue";
 export type MicrosoftAuthenticatorAuthenticationMode = "deviceBasedPush" | "push" | "any";
@@ -940,6 +939,7 @@ export type EntityType =
     | "listItem"
     | "drive"
     | "unknownFutureValue";
+export type SearchAlterationType = "suggestion" | "modification";
 export type PlannerPreviewType = "automatic" | "noPreview" | "checklist" | "description" | "reference";
 export type OnenotePatchActionType = "Replace" | "Append" | "Delete" | "Insert" | "Prepend";
 export type OnenotePatchInsertPosition = "After" | "Before";
@@ -2749,10 +2749,6 @@ export interface User extends DirectoryObject {
     outlook?: NullableOption<OutlookUser>;
     // People that are relevant to the user. Read-only. Nullable.
     people?: NullableOption<Person[]>;
-    // The user's profile photo. Read-only.
-    photo?: NullableOption<ProfilePhoto>;
-    // Read-only. Nullable.
-    photos?: NullableOption<ProfilePhoto[]>;
     // The user's OneDrive. Read-only.
     drive?: NullableOption<Drive>;
     // A collection of drives available for this user. Read-only.
@@ -2776,6 +2772,10 @@ export interface User extends DirectoryObject {
     settings?: NullableOption<UserSettings>;
     // Read-only.
     onenote?: NullableOption<Onenote>;
+    // The user's profile photo. Read-only.
+    photo?: NullableOption<ProfilePhoto>;
+    // Read-only. Nullable.
+    photos?: NullableOption<ProfilePhoto[]>;
     // The user's activities across devices. Read-only. Nullable.
     activities?: NullableOption<UserActivity[]>;
     onlineMeetings?: NullableOption<OnlineMeeting[]>;
@@ -2997,108 +2997,48 @@ export interface Event extends OutlookItem {
      * Read-only.
      */
     iCalUId?: NullableOption<string>;
-    // The importance of the event. The possible values are: low, normal, high.
     importance?: NullableOption<Importance>;
-    // Set to true if the event lasts all day.
     isAllDay?: NullableOption<boolean>;
-    // Set to true if the event has been canceled.
     isCancelled?: NullableOption<boolean>;
-    /**
-     * Set to true if the user has updated the meeting in Outlook but has not sent the updates to attendees. Set to false if
-     * all changes have been sent, or if the event is an appointment without any attendees.
-     */
     isDraft?: NullableOption<boolean>;
-    // True if this event has online meeting information, false otherwise. Default is false. Optional.
     isOnlineMeeting?: NullableOption<boolean>;
-    /**
-     * Set to true if the calendar owner (specified by the owner property of the calendar) is the organizer of the event
-     * (specified by the organizer property of the event). This also applies if a delegate organized the event on behalf of
-     * the owner.
-     */
     isOrganizer?: NullableOption<boolean>;
-    // Set to true if an alert is set to remind the user of the event.
     isReminderOn?: NullableOption<boolean>;
-    // The location of the event.
     location?: NullableOption<Location>;
-    /**
-     * The locations where the event is held or attended from. The location and locations properties always correspond with
-     * each other. If you update the location property, any prior locations in the locations collection would be removed and
-     * replaced by the new location value.
-     */
     locations?: NullableOption<Location[]>;
-    // Details for an attendee to join the meeting online. Read-only.
     onlineMeeting?: NullableOption<OnlineMeetingInfo>;
-    /**
-     * Represents the online meeting service provider. The possible values are teamsForBusiness, skypeForBusiness, and
-     * skypeForConsumer. Optional.
-     */
     onlineMeetingProvider?: NullableOption<OnlineMeetingProviderType>;
-    /**
-     * A URL for an online meeting. The property is set only when an organizer specifies an event as an online meeting such as
-     * a Skype meeting. Read-only.
-     */
     onlineMeetingUrl?: NullableOption<string>;
-    // The organizer of the event.
     organizer?: NullableOption<Recipient>;
-    /**
-     * The end time zone that was set when the event was created. A value of tzone://Microsoft/Custom indicates that a legacy
-     * custom time zone was set in desktop Outlook.
-     */
     originalEndTimeZone?: NullableOption<string>;
-    /**
-     * The Timestamp type represents date and time information using ISO 8601 format and is always in UTC time. For example,
-     * midnight UTC on Jan 1, 2014 is 2014-01-01T00:00:00Z
-     */
     originalStart?: NullableOption<string>;
-    /**
-     * The start time zone that was set when the event was created. A value of tzone://Microsoft/Custom indicates that a
-     * legacy custom time zone was set in desktop Outlook.
-     */
     originalStartTimeZone?: NullableOption<string>;
-    // The recurrence pattern for the event.
     recurrence?: NullableOption<PatternedRecurrence>;
-    // The number of minutes before the event start time that the reminder alert occurs.
     reminderMinutesBeforeStart?: NullableOption<number>;
-    // Default is true, which represents the organizer would like an invitee to send a response to the event.
     responseRequested?: NullableOption<boolean>;
-    // Indicates the type of response sent in response to an event message.
     responseStatus?: NullableOption<ResponseStatus>;
-    // The possible values are: normal, personal, private, confidential.
     sensitivity?: NullableOption<Sensitivity>;
-    // The ID for the recurring series master item, if this event is part of a recurring series.
     seriesMasterId?: NullableOption<string>;
-    // The status to show. The possible values are: free, tentative, busy, oof, workingElsewhere, unknown.
     showAs?: NullableOption<FreeBusyStatus>;
-    // The date, time, and time zone that the event starts. By default, the start time is in UTC.
     start?: NullableOption<DateTimeTimeZone>;
-    // The text of the event's subject line.
     subject?: NullableOption<string>;
-    /**
-     * A custom identifier specified by a client app for the server to avoid redundant POST operations in case of client
-     * retries to create the same event. This is useful when low network connectivity causes the client to time out before
-     * receiving a response from the server for the client's prior create-event request. After you set transactionId when
-     * creating an event, you cannot change transactionId in a subsequent update. This property is only returned in a response
-     * payload if an app has set it. Optional.
-     */
     transactionId?: NullableOption<string>;
-    // The event type. The possible values are: singleInstance, occurrence, exception, seriesMaster. Read-only.
     type?: NullableOption<EventType>;
-    /**
-     * The URL to open the event in Outlook on the web.Outlook on the web opens the event in the browser if you are signed in
-     * to your mailbox. Otherwise, Outlook on the web prompts you to sign in.This URL cannot be accessed from within an
-     * iFrame.
-     */
     webLink?: NullableOption<string>;
     /**
-     * The collection of fileAttachment and itemAttachment attachments for the event. Navigation property. Read-only.
-     * Nullable.
+     * The collection of FileAttachment, ItemAttachment, and referenceAttachment attachments for the event. Navigation
+     * property. Read-only. Nullable.
      */
     attachments?: NullableOption<Attachment[]>;
     // The calendar that contains the event. Navigation property. Read-only.
     calendar?: NullableOption<Calendar>;
-    // The collection of open extensions defined for the event. Read-only. Nullable.
+    // The collection of open extensions defined for the event. Nullable.
     extensions?: NullableOption<Extension[]>;
-    // The instances of the event. Navigation property. Read-only. Nullable.
+    /**
+     * The occurrences of a recurring series, if the event is a series master. This property includes occurrences that are
+     * part of the recurrence pattern, and exceptions that have been modified, but does not include occurrences that have been
+     * cancelled from the series. Navigation property. Read-only. Nullable.
+     */
     instances?: NullableOption<Event[]>;
     // The collection of multi-value extended properties defined for the event. Read-only. Nullable.
     multiValueExtendedProperties?: NullableOption<MultiValueLegacyExtendedProperty[]>;
@@ -3157,41 +3097,23 @@ export interface Contact extends OutlookItem {
     homeAddress?: NullableOption<PhysicalAddress>;
     // The contact's home phone numbers.
     homePhones?: NullableOption<string[]>;
-    // The contact's instant messaging (IM) addresses.
     imAddresses?: NullableOption<string[]>;
-    // The contact's initials.
     initials?: NullableOption<string>;
-    // The contact’s job title.
     jobTitle?: NullableOption<string>;
-    // The name of the contact's manager.
     manager?: NullableOption<string>;
-    // The contact's middle name.
     middleName?: NullableOption<string>;
-    // The contact's mobile phone number.
     mobilePhone?: NullableOption<string>;
-    // The contact's nickname.
     nickName?: NullableOption<string>;
-    // The location of the contact's office.
     officeLocation?: NullableOption<string>;
-    // Other addresses for the contact.
     otherAddress?: NullableOption<PhysicalAddress>;
-    // The ID of the contact's parent folder.
     parentFolderId?: NullableOption<string>;
-    // The user's notes about the contact.
     personalNotes?: NullableOption<string>;
-    // The contact's profession.
     profession?: NullableOption<string>;
-    // The name of the contact's spouse/partner.
     spouseName?: NullableOption<string>;
-    // The contact's surname.
     surname?: NullableOption<string>;
-    // The contact's title.
     title?: NullableOption<string>;
-    // The phonetic Japanese company name of the contact.
     yomiCompanyName?: NullableOption<string>;
-    // The phonetic Japanese given name (first name) of the contact.
     yomiGivenName?: NullableOption<string>;
-    // The phonetic Japanese surname (last name) of the contact.
     yomiSurname?: NullableOption<string>;
     // The collection of open extensions defined for the contact. Read-only. Nullable.
     extensions?: NullableOption<Extension[]>;
@@ -3264,66 +3186,22 @@ export interface Message extends OutlookItem {
      * property to look for a src attribute, such as &amp;lt;IMG src='cid:image001.jpg@01D26CD8.6C05F070'&amp;gt;.
      */
     hasAttachments?: NullableOption<boolean>;
-    // The importance of the message. The possible values are: low, normal, and high.
     importance?: NullableOption<Importance>;
-    /**
-     * The classification of the message for the user, based on inferred relevance or importance, or on an explicit override.
-     * The possible values are: focused or other.
-     */
     inferenceClassification?: NullableOption<InferenceClassificationType>;
-    /**
-     * A collection of message headers defined by RFC5322. The set includes message headers indicating the network path taken
-     * by a message from the sender to the recipient. It can also contain custom message headers that hold app data for the
-     * message. Returned only on applying a $select query option. Read-only.
-     */
     internetMessageHeaders?: NullableOption<InternetMessageHeader[]>;
-    // The message ID in the format specified by RFC2822.
     internetMessageId?: NullableOption<string>;
-    // Indicates whether a read receipt is requested for the message.
     isDeliveryReceiptRequested?: NullableOption<boolean>;
-    // Indicates whether the message is a draft. A message is a draft if it hasn't been sent yet.
     isDraft?: NullableOption<boolean>;
-    // Indicates whether the message has been read.
     isRead?: NullableOption<boolean>;
-    // Indicates whether a read receipt is requested for the message.
     isReadReceiptRequested?: NullableOption<boolean>;
-    // The unique identifier for the message's parent mailFolder.
     parentFolderId?: NullableOption<string>;
-    /**
-     * The date and time the message was received. The date and time information uses ISO 8601 format and is always in UTC
-     * time. For example, midnight UTC on Jan 1, 2014 is 2014-01-01T00:00:00Z.
-     */
     receivedDateTime?: NullableOption<string>;
-    // The email addresses to use when replying.
     replyTo?: NullableOption<Recipient[]>;
-    /**
-     * The account that is actually used to generate the message. In most cases, this value is the same as the from property.
-     * You can set this property to a different value when sending a message from a shared mailbox, for a shared calendar, or
-     * as a delegate. In any case, the value must correspond to the actual mailbox used. Find out more about setting the from
-     * and sender properties of a message.
-     */
     sender?: NullableOption<Recipient>;
-    /**
-     * The date and time the message was sent. The date and time information uses ISO 8601 format and is always in UTC time.
-     * For example, midnight UTC on Jan 1, 2014 is 2014-01-01T00:00:00Z.
-     */
     sentDateTime?: NullableOption<string>;
-    // The subject of the message.
     subject?: NullableOption<string>;
-    // The To: recipients for the message.
     toRecipients?: NullableOption<Recipient[]>;
-    /**
-     * The part of the body of the message that is unique to the current message. uniqueBody is not returned by default but
-     * can be retrieved for a given message by use of the ?$select=uniqueBody query. It can be in HTML or text format.
-     */
     uniqueBody?: NullableOption<ItemBody>;
-    /**
-     * The URL to open the message in Outlook on the web.You can append an ispopout argument to the end of the URL to change
-     * how the message is displayed. If ispopout is not present or if it is set to 1, then the message is shown in a popout
-     * window. If ispopout is set to 0, then the browser will show the message in the Outlook on the web review pane.The
-     * message will open in the browser if you are logged in to your mailbox via Outlook on the web. You will be prompted to
-     * login if you are not already logged in with the browser.This URL cannot be accessed from within an iFrame.
-     */
     webLink?: NullableOption<string>;
     // The fileAttachment and itemAttachment attachments for the message.
     attachments?: NullableOption<Attachment[]>;
@@ -3381,12 +3259,6 @@ export interface Person extends Entity {
     websites?: NullableOption<Website[]>;
     // The phonetic Japanese name of the person's company.
     yomiCompany?: NullableOption<string>;
-}
-export interface ProfilePhoto extends Entity {
-    // The height of the photo. Read-only.
-    height?: NullableOption<number>;
-    // The width of the photo. Read-only.
-    width?: NullableOption<number>;
 }
 export interface BaseItem extends Entity {
     // Identity of the user, device, or application which created the item. Read-only.
@@ -3749,6 +3621,12 @@ export interface Onenote extends Entity {
     // The sections in all OneNote notebooks that are owned by the user or group. Read-only. Nullable.
     sections?: NullableOption<OnenoteSection[]>;
 }
+export interface ProfilePhoto extends Entity {
+    // The height of the photo. Read-only.
+    height?: NullableOption<number>;
+    // The width of the photo. Read-only.
+    width?: NullableOption<number>;
+}
 export interface UserActivity extends Entity {
     /**
      * Required. URL used to launch the activity in the best native experience represented by the appId. Might launch a
@@ -3809,6 +3687,8 @@ export interface OnlineMeeting extends Entity {
     allowMeetingChat?: NullableOption<MeetingChatMode>;
     // Indicates whether Teams reactions are enabled for the meeting.
     allowTeamworkReactions?: NullableOption<boolean>;
+    // The content stream of the attendee report of a live event. Read-only.
+    attendeeReport?: NullableOption<any>;
     // The phone access (dial-in) information for an online meeting. Read-only.
     audioConferencing?: NullableOption<AudioConferencing>;
     // Settings related to a live event.
@@ -3836,6 +3716,8 @@ export interface OnlineMeeting extends Entity {
     lobbyBypassSettings?: NullableOption<LobbyBypassSettings>;
     // The participants associated with the online meeting. This includes the organizer and the attendees.
     participants?: NullableOption<MeetingParticipants>;
+    // Indicates whether to record the meeting automatically.
+    recordAutomatically?: NullableOption<boolean>;
     // The meeting start time in UTC.
     startDateTime?: NullableOption<string>;
     // The subject of the online meeting.
@@ -4431,12 +4313,6 @@ export interface MicrosoftAuthenticatorAuthenticationMethodTarget extends Authen
      * (passwordless only), push.
      */
     authenticationMode?: MicrosoftAuthenticatorAuthenticationMode;
-    /**
-     * Determines what additional settings should be applied to Microsoft Authenticator. Possible values are: null,
-     * requireNumberMatching (Requires number matching for MFA notifications. Value is ignored for phone sign-in
-     * notifications).
-     */
-    featureSettings?: NullableOption<AuthenticatorAppFeatureSettings>;
 }
 export interface PolicyRoot extends Entity {
     /**
@@ -4755,11 +4631,16 @@ export interface Group extends DirectoryObject {
      * (default). Returned by default. Read-only. Supports $filter (eq, ne, NOT, in).
      */
     onPremisesSyncEnabled?: NullableOption<boolean>;
-    // The preferred data location for the group. For more information, see OneDrive Online Multi-Geo. Returned by default.
+    /**
+     * The preferred data location for the Microsoft 365 group. By default, the group inherits the group creator's preferred
+     * data location. To set this property, the calling user must be assigned one of the following Azure AD roles: Global
+     * Administrator User Account Administrator Directory Writer Exchange Administrator SharePoint Administrator For more
+     * information about this property, see OneDrive Online Multi-Geo. Nullable. Returned by default.
+     */
     preferredDataLocation?: NullableOption<string>;
     /**
-     * The preferred language for a Microsoft 365 group. Should follow ISO 639-1 Code; for example 'en-US'. Returned by
-     * default. Supports $filter (eq, ne, NOT, ge, le, in, startsWith).
+     * The preferred language for a Microsoft 365 group. Should follow ISO 639-1 Code; for example en-US. Returned by default.
+     * Supports $filter (eq, ne, NOT, ge, le, in, startsWith).
      */
     preferredLanguage?: NullableOption<string>;
     /**
@@ -4789,7 +4670,8 @@ export interface Group extends DirectoryObject {
      * Hiddenmembership. Hiddenmembership can be set only for Microsoft 365 groups, when the groups are created. It can't be
      * updated later. Other values of visibility can be updated after group creation. If visibility value is not specified
      * during group creation on Microsoft Graph, a security group is created as Private by default and Microsoft 365 group is
-     * Public. See group visibility options to learn more. Returned by default. Nullable.
+     * Public. Groups assignable to roles are always Private. See group visibility options to learn more. Returned by default.
+     * Nullable.
      */
     visibility?: NullableOption<string>;
     /**
@@ -5135,6 +5017,8 @@ export interface Permission extends Entity {
     grantedTo?: NullableOption<IdentitySet>;
     // For link type permissions, the details of the users to whom permission was granted. Read-only.
     grantedToIdentities?: NullableOption<IdentitySet[]>;
+    grantedToIdentitiesV2?: NullableOption<SharePointIdentitySet[]>;
+    grantedToV2?: NullableOption<SharePointIdentitySet>;
     /**
      * This indicates whether password is set for this permission, it's only showing in response. Optional and Read-only and
      * for OneDrive Personal only.
@@ -5389,7 +5273,10 @@ export interface Contract extends DirectoryObject {
     displayName?: NullableOption<string>;
 }
 export interface Device extends DirectoryObject {
-    // true if the account is enabled; otherwise, false. Required. Default is true. Supports $filter (eq, ne, NOT, in).
+    /**
+     * true if the account is enabled; otherwise, false. Required. Default is true. Supports $filter (eq, ne, NOT, in). Only
+     * callers in Global Administrator and Cloud Device Administrator roles can set this property.
+     */
     accountEnabled?: NullableOption<boolean>;
     // For internal use only. Not nullable. Supports $filter (eq, NOT, ge, le).
     alternativeSecurityIds?: AlternativeSecurityId[];
@@ -5712,19 +5599,19 @@ export interface Organization extends DirectoryObject {
 }
 export interface OrganizationalBrandingProperties extends Entity {
     /**
-     * Color that will appear in place of the background image in low-bandwidth connections. The primary color of your banner
-     * logo or your organization color is recommended to be used here. Specify this in hexadecimal (for example, white is
-     * #FFFFFF).
+     * Color that will appear in place of the background image in low-bandwidth connections. We recommend that you use the
+     * primary color of your banner logo or your organization color. Specify this in hexadecimal format, for example, white is
+     * #FFFFFF.
      */
     backgroundColor?: NullableOption<string>;
     /**
-     * Image that appears as the background of the sign in page. .png or .jpg not larger than 1920x1080 and smaller than
-     * 300kb. A smaller image will reduce bandwidth requirements and make page loads more performant.
+     * Image that appears as the background of the sign-in page. The allowed types are PNG or JPEG not smaller than 300 KB and
+     * not larger than 1920 × 1080 pixels. A smaller image will reduce bandwidth requirements and make the page load faster.
      */
     backgroundImage?: NullableOption<any>;
     /**
-     * A banner version of your company logo which appears appears on the sign-in page. .png or .jpg no larger than 36x245px.
-     * We recommend using a transparent image with no padding around the logo.
+     * A banner version of your company logo that appears on the sign-in page. The allowed types are PNG or JPEG no larger
+     * than 36 × 245 pixels. We recommend using a transparent image with no padding around the logo.
      */
     bannerLogo?: NullableOption<any>;
     /**
@@ -5733,18 +5620,19 @@ export interface OrganizationalBrandingProperties extends Entity {
      */
     signInPageText?: NullableOption<string>;
     /**
-     * Square version of your company logo. This appears in Windows 10 out-of-box (OOBE) experiences and when Windows
-     * Autopilot is enabled for deployment. .png or .jpg no larger than 240x240px and no more than 10kb in size. We recommend
-     * using a transparent image with no padding around the logo.
+     * A square version of your company logo that appears in Windows 10 out-of-box experiences (OOBE) and when Windows
+     * Autopilot is enabled for deployment. Allowed types are PNG or JPEG no larger than 240 x 240 pixels and no more than 10
+     * KB in size. We recommend using a transparent image with no padding around the logo.
      */
     squareLogo?: NullableOption<any>;
     /**
-     * String that shows as the hint in the username textbox on the sign in screen. This text must be Unicode, without links
+     * String that shows as the hint in the username textbox on the sign-in screen. This text must be a Unicode, without links
      * or code, and can't exceed 64 characters.
      */
     usernameHintText?: NullableOption<string>;
 }
 export interface OrganizationalBranding extends OrganizationalBrandingProperties {
+    // Add different branding based on a locale.
     localizations?: NullableOption<OrganizationalBrandingLocalization[]>;
 }
 // tslint:disable-next-line: no-empty-interface
@@ -7273,14 +7161,9 @@ export interface EventMessage extends Message {
     // The end time of the requested meeting.
     endDateTime?: NullableOption<DateTimeTimeZone>;
     isAllDay?: NullableOption<boolean>;
-    // True if this meeting request is accessible to a delegate, false otherwise. Default is false.
     isDelegated?: NullableOption<boolean>;
     isOutOfDate?: NullableOption<boolean>;
     location?: NullableOption<Location>;
-    /**
-     * The type of event message: none, meetingRequest, meetingCancelled, meetingAccepted, meetingTenativelyAccepted,
-     * meetingDeclined.
-     */
     meetingMessageType?: NullableOption<MeetingMessageType>;
     recurrence?: NullableOption<PatternedRecurrence>;
     startDateTime?: NullableOption<DateTimeTimeZone>;
@@ -12692,6 +12575,10 @@ export interface RecordOperation extends CommsOperation {
     recordingLocation?: NullableOption<string>;
 }
 // tslint:disable-next-line: no-empty-interface
+export interface StartHoldMusicOperation extends CommsOperation {}
+// tslint:disable-next-line: no-empty-interface
+export interface StopHoldMusicOperation extends CommsOperation {}
+// tslint:disable-next-line: no-empty-interface
 export interface SubscribeToToneOperation extends CommsOperation {}
 // tslint:disable-next-line: no-empty-interface
 export interface UnmuteParticipantOperation extends CommsOperation {}
@@ -14273,6 +14160,9 @@ export interface EducationExcelResource extends EducationResource {
     // Pointer to the Excel file object.
     fileUrl?: NullableOption<string>;
 }
+export interface EducationExternalResource extends EducationResource {
+    webUrl?: NullableOption<string>;
+}
 export interface EducationFeedback {
     // User who created the feedback.
     feedbackBy?: NullableOption<IdentitySet>;
@@ -14295,6 +14185,9 @@ export interface EducationFileResource extends EducationResource {
 export interface EducationLinkResource extends EducationResource {
     // URL to the resource.
     link?: NullableOption<string>;
+}
+export interface EducationMediaResource extends EducationResource {
+    fileUrl?: NullableOption<string>;
 }
 export interface EducationPowerPointResource extends EducationResource {
     // Location of the file on disk.
@@ -15650,6 +15543,14 @@ export interface StoragePlanInformation {
     // Indicates whether there are higher storage quota plans available. Read-only.
     upgradeAvailable?: NullableOption<boolean>;
 }
+export interface SharePointIdentity extends Identity {
+    loginName?: NullableOption<string>;
+}
+export interface SharePointIdentitySet extends IdentitySet {
+    group?: NullableOption<Identity>;
+    siteGroup?: NullableOption<SharePointIdentity>;
+    siteUser?: NullableOption<SharePointIdentity>;
+}
 export interface SharingInvitation {
     // The email address provided for the recipient of the sharing invitation. Read-only.
     email?: NullableOption<string>;
@@ -15894,8 +15795,8 @@ export interface ConditionalAccessConditionSet {
 }
 export interface ConditionalAccessDevices {
     /**
-     * Filter defining the dynamic-device-syntax rule to include/exclude devices. A filter can use device properties (such as
-     * extension attributes) to include/exclude them. Cannot be set if includeDevices or excludeDevices is set.
+     * Filter that defines the dynamic-device-syntax rule to include/exclude devices. A filter can use device properties (such
+     * as extension attributes) to include/exclude them. Cannot be set if includeDevices or excludeDevices is set.
      */
     deviceFilter?: NullableOption<ConditionalAccessFilter>;
 }
@@ -15929,8 +15830,8 @@ export interface ConditionalAccessFilter {
     // Mode to use for the filter. Possible values are include or exclude.
     mode?: FilterMode;
     /**
-     * Rule syntax is similar to that used for membership rules for groups in Azure AD. For details, see rules with multiple
-     * expressions
+     * Rule syntax is similar to that used for membership rules for groups in Azure Active Directory. For details, see rules
+     * with multiple expressions
      */
     rule?: string;
 }
@@ -17132,6 +17033,33 @@ export interface BucketAggregationDefinition {
      */
     sortBy?: BucketAggregationSortProperty;
 }
+export interface AlterationResponse {
+    // Defines the original user query string.
+    originalQueryString?: NullableOption<string>;
+    // Defines the details of alteration information for the spelling correction.
+    queryAlteration?: NullableOption<SearchAlteration>;
+    // Defines the type of the spelling correction. Possible values are suggestion, modification.
+    queryAlterationType?: NullableOption<SearchAlterationType>;
+}
+export interface SearchAlteration {
+    /**
+     * Defines the altered highlighted query string with spelling correction. The annotation around the corrected segment is
+     * (/ue000, /ue001)
+     */
+    alteredHighlightedQueryString?: NullableOption<string>;
+    // Defines the altered query string with spelling correction.
+    alteredQueryString?: NullableOption<string>;
+    // Represents changed segments with respect to original query.
+    alteredQueryTokens?: NullableOption<AlteredQueryToken[]>;
+}
+export interface AlteredQueryToken {
+    // Defines the length of a changed segment.
+    length?: NullableOption<number>;
+    // Defines the offset of a changed segment.
+    offset?: NullableOption<number>;
+    // Represents the corrected segment string.
+    suggestion?: NullableOption<string>;
+}
 export interface BucketAggregationRange {
     /**
      * Defines the lower bound from which to compute the aggregation. This can be a numeric value or a string representation
@@ -17143,6 +17071,24 @@ export interface BucketAggregationRange {
      * of a date using the YYYY-MM-DDTHH:mm:ss.sssZ format. Required.
      */
     to?: string;
+}
+export interface ResultTemplate {
+    // JSON schema of the result template.
+    body?: NullableOption<any>;
+    // Name of the result template.
+    displayName?: NullableOption<string>;
+}
+// tslint:disable-next-line: no-empty-interface
+export interface Dictionary {}
+// tslint:disable-next-line: no-empty-interface
+export interface ResultTemplateDictionary extends Dictionary {}
+export interface ResultTemplateOption {
+    /**
+     * Indicates whether search display layouts are enabled. If enabled, the user will get the result template to render the
+     * search results content in the resultTemplates property of the response. The result template is based on Adaptive Cards.
+     * This property is optional.
+     */
+    enableResultTemplate?: NullableOption<boolean>;
 }
 export interface SearchAggregation {
     // Defines the actual buckets of the computed aggregation.
@@ -17165,6 +17111,20 @@ export interface SearchBucket {
     // The discrete value of the field that an aggregation was computed on.
     key?: NullableOption<string>;
 }
+export interface SearchAlterationOptions {
+    /**
+     * Indicates whether spelling modifications are enabled. If enabled, user will get the search results for corrected query
+     * when there are no results for the original query with typos and get the spelling modification information in
+     * queryAlterationResponse property of the response. Optional.
+     */
+    enableModification?: NullableOption<boolean>;
+    /**
+     * Indicates whether spelling suggestions are enabled. If enabled, user will get the search results for original search
+     * query and suggesting spelling correction in queryAlterationResponse property of the response for typos in query.
+     * Optional.
+     */
+    enableSuggestion?: NullableOption<boolean>;
+}
 export interface SearchHit {
     // The name of the content source which the externalItem is part of .
     contentSource?: NullableOption<string>;
@@ -17172,6 +17132,11 @@ export interface SearchHit {
     hitId?: NullableOption<string>;
     // The rank or the order of the result.
     rank?: NullableOption<number>;
+    /**
+     * ID of the result template for rendering the search result. This ID must map to a display layout in the resultTemplates
+     * dictionary, included in the searchresponse as well.
+     */
+    resultTemplateId?: NullableOption<string>;
     // A summary of the result, if a summary is available.
     summary?: NullableOption<string>;
     resource?: NullableOption<Entity>;
@@ -17241,6 +17206,8 @@ export interface SearchRequest {
     from?: number;
     // Contains the query terms. Required.
     query?: SearchQuery;
+    // Provides the search result templates options for rendering connectors search results.
+    resultTemplateOptions?: NullableOption<ResultTemplateOption>;
     // The size of the page to be retrieved. Optional.
     size?: number;
     /**
@@ -17256,8 +17223,19 @@ export interface SortProperty {
     name?: string;
 }
 export interface SearchResponse {
+    // Provides details of query alteration response for spelling correction.
+    queryAlterationResponse?: NullableOption<AlterationResponse>;
+    // Represents results from a search query, and the terms used for the query.
+    value?: SearchResultSet[];
+}
+export interface SearchResultSet {
     // A collection of search results.
     hitsContainers?: NullableOption<SearchHitsContainer[]>;
+    /**
+     * A dictionary of resultTemplateIds and associated values, which include the name and JSON schema of the result
+     * templates.
+     */
+    resultTemplates?: NullableOption<ResultTemplateDictionary>;
     // Contains the search terms sent in the initial search query.
     searchTerms?: NullableOption<string[]>;
 }
@@ -18347,6 +18325,7 @@ export interface ParticipantInfo {
     identity?: IdentitySet;
     // The language culture string. Read-only.
     languageId?: NullableOption<string>;
+    participantId?: NullableOption<string>;
     /**
      * The home region of the participant. This can be a country, a continent, or a larger geographic region. This does not
      * change based on the participant's current physical location. Read-only.
@@ -18546,6 +18525,14 @@ export interface ChangeNotificationCollection {
     validationTokens?: NullableOption<string[]>;
     // The set of notifications being sent to the notification URL. Required.
     value?: ChangeNotification[];
+}
+export interface ActionResultPart {
+    // The error that occurred, if any, during the course of the bulk operation.
+    error?: NullableOption<PublicError>;
+}
+export interface AadUserConversationMemberResult extends ActionResultPart {
+    // The user object ID of the Azure AD user that was being added as part of the bulk operation.
+    userId?: NullableOption<string>;
 }
 // tslint:disable-next-line: no-empty-interface
 export interface TeamworkNotificationRecipient {}
