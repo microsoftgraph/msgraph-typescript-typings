@@ -153,6 +153,15 @@ export type PhoneType =
 export type EducationAddedStudentAction = "none" | "assignIfOpen" | "unknownFutureValue";
 export type EducationAssignmentStatus = "draft" | "published" | "assigned" | "unknownFutureValue";
 export type EducationSubmissionStatus = "working" | "submitted" | "released" | "returned" | "unknownFutureValue";
+export type ContactRelationship =
+    | "parent"
+    | "relative"
+    | "aide"
+    | "doctor"
+    | "guardian"
+    | "child"
+    | "other"
+    | "unknownFutureValue";
 export type EducationExternalSource = "sis" | "manual" | "unknownFutureValue";
 export type EducationGender = "female" | "male" | "other" | "unknownFutureValue";
 export type EducationUserRole = "student" | "teacher" | "none" | "unknownFutureValue";
@@ -2446,13 +2455,13 @@ export interface User extends DirectoryObject {
     businessPhones?: string[];
     /**
      * The city in which the user is located. Maximum length is 128 characters. Returned only on $select. Supports $filter
-     * (eq, ne, NOT, ge, le, in, startsWith).
+     * (eq, ne, NOT, ge, le, in, startsWith, and eq on null values).
      */
     city?: NullableOption<string>;
     /**
      * The company name which the user is associated. This property can be useful for describing the company that an external
      * user comes from. The maximum length of the company name is 64 characters.Returned only on $select. Supports $filter
-     * (eq, ne, NOT, ge, le, in, startsWith).
+     * (eq, ne, NOT, ge, le, in, startsWith, and eq on null values).
      */
     companyName?: NullableOption<string>;
     /**
@@ -2463,32 +2472,29 @@ export interface User extends DirectoryObject {
     consentProvidedForMinor?: NullableOption<string>;
     /**
      * The country/region in which the user is located; for example, US or UK. Maximum length is 128 characters. Returned only
-     * on $select. Supports $filter (eq, ne, NOT, ge, le, in, startsWith).
+     * on $select. Supports $filter (eq, ne, NOT, ge, le, in, startsWith, and eq on null values).
      */
     country?: NullableOption<string>;
-    /**
-     * The created date of the user object. Read-only. Returned only on $select. Supports $filter (eq, ne, NOT , ge, le, and
-     * in operators).
-     */
+    // The created date of the user object. Read-only. Returned only on $select. Supports $filter (eq, ne, NOT , ge, le, in).
     createdDateTime?: NullableOption<string>;
     /**
      * Indicates whether the user account was created through one of the following methods: As a regular school or work
      * account (null). As an external account (Invitation). As a local account for an Azure Active Directory B2C tenant
      * (LocalAccount). Through self-service sign-up by an internal user using email verification (EmailVerified). Through
      * self-service sign-up by an external user signing up through a link that is part of a user flow (SelfServiceSignUp).
-     * Read-only.Returned only on $select. Supports $filter (eq, ne, NOT, and in).
+     * Read-only.Returned only on $select. Supports $filter (eq, ne, NOT, in).
      */
     creationType?: NullableOption<string>;
     /**
      * The name for the department in which the user works. Maximum length is 64 characters. Returned only on $select.
-     * Supports $filter (eq, ne, NOT , ge, le, and in operators).
+     * Supports $filter (eq, ne, NOT , ge, le, in, and eq on null values).
      */
     department?: NullableOption<string>;
     /**
      * The name displayed in the address book for the user. This is usually the combination of the user's first name, middle
      * initial and last name. This property is required when a user is created and it cannot be cleared during updates.
-     * Maximum length is 256 characters. Returned by default. Supports $filter (eq, ne, NOT , ge, le, in, startsWith),
-     * $orderBy, and $search.
+     * Maximum length is 256 characters. Returned by default. Supports $filter (eq, ne, NOT , ge, le, in, startsWith, and eq
+     * on null values), $orderBy, and $search.
      */
     displayName?: NullableOption<string>;
     /**
@@ -2498,7 +2504,7 @@ export interface User extends DirectoryObject {
     employeeHireDate?: NullableOption<string>;
     /**
      * The employee identifier assigned to the user by the organization. Returned only on $select. Supports $filter (eq, ne,
-     * NOT , ge, le, in, startsWith).
+     * NOT , ge, le, in, startsWith, and eq on null values).
      */
     employeeId?: NullableOption<string>;
     /**
@@ -2522,18 +2528,21 @@ export interface User extends DirectoryObject {
      * (eq, ne, NOT , in).
      */
     externalUserStateChangeDateTime?: NullableOption<string>;
-    // The fax number of the user. Returned only on $select. Supports $filter (eq, ne, NOT , ge, le, in, startsWith).
+    /**
+     * The fax number of the user. Returned only on $select. Supports $filter (eq, ne, NOT , ge, le, in, startsWith, and eq on
+     * null values).
+     */
     faxNumber?: NullableOption<string>;
     /**
      * The given name (first name) of the user. Maximum length is 64 characters. Returned by default. Supports $filter (eq,
-     * ne, NOT , ge, le, in, startsWith).
+     * ne, NOT , ge, le, in, startsWith, and eq on null values).
      */
     givenName?: NullableOption<string>;
     /**
      * Represents the identities that can be used to sign in to this user account. An identity can be provided by Microsoft
      * (also known as a local account), by organizations, or by social identity providers such as Facebook, Google, and
      * Microsoft, and tied to a user account. May contain multiple items with the same signInType value. Returned only on
-     * $select. Supports $filter (eq) only where the signInType is not userPrincipalName.
+     * $select. Supports $filter (eq) including on null values, only where the signInType is not userPrincipalName.
      */
     identities?: NullableOption<ObjectIdentity[]>;
     /**
@@ -2545,7 +2554,7 @@ export interface User extends DirectoryObject {
     isResourceAccount?: NullableOption<boolean>;
     /**
      * The user's job title. Maximum length is 128 characters. Returned by default. Supports $filter (eq, ne, NOT , ge, le,
-     * in, startsWith).
+     * in, startsWith, and eq on null values).
      */
     jobTitle?: NullableOption<string>;
     /**
@@ -2567,22 +2576,23 @@ export interface User extends DirectoryObject {
      * The SMTP address for the user, for example, jeff@contoso.onmicrosoft.com.Changes to this property will also update the
      * user's proxyAddresses collection to include the value as an SMTP address. For Azure AD B2C accounts, this property can
      * be updated up to only ten times with unique SMTP addresses. This property cannot contain accent characters.Returned by
-     * default. Supports $filter (eq, ne, NOT, ge, le, in, startsWith, endsWith).
+     * default. Supports $filter (eq, ne, NOT, ge, le, in, startsWith, endsWith, and eq on null values).
      */
     mail?: NullableOption<string>;
     /**
      * The mail alias for the user. This property must be specified when a user is created. Maximum length is 64 characters.
-     * Returned only on $select. Supports $filter (eq, ne, NOT, ge, le, in, startsWith).
+     * Returned only on $select. Supports $filter (eq, ne, NOT, ge, le, in, startsWith, and eq on null values).
      */
     mailNickname?: NullableOption<string>;
     /**
      * The primary cellular telephone number for the user. Read-only for users synced from on-premises directory. Maximum
-     * length is 64 characters. Returned by default. Supports $filter (eq, ne, NOT, ge, le, in, startsWith).
+     * length is 64 characters. Returned by default. Supports $filter (eq, ne, NOT, ge, le, in, startsWith, and eq on null
+     * values).
      */
     mobilePhone?: NullableOption<string>;
     /**
      * The office location in the user's place of business. Returned by default. Supports $filter (eq, ne, NOT, ge, le, in,
-     * startsWith).
+     * startsWith, and eq on null values).
      */
     officeLocation?: NullableOption<string>;
     /**
@@ -2602,7 +2612,7 @@ export interface User extends DirectoryObject {
      * nor filterable. For an onPremisesSyncEnabled user, the source of authority for this set of properties is the
      * on-premises and is read-only. For a cloud-only user (where onPremisesSyncEnabled is false), these properties may be set
      * during creation or update. These extension attributes are also known as Exchange custom attributes 1-15. Returned only
-     * on $select. Supports $filter (eq, NOT, ge, le, in).
+     * on $select. Supports $filter (eq, NOT, ge, le, in, and eq on null values).
      */
     onPremisesExtensionAttributes?: NullableOption<OnPremisesExtensionAttributes>;
     /**
@@ -2632,13 +2642,13 @@ export interface User extends DirectoryObject {
     onPremisesSamAccountName?: NullableOption<string>;
     /**
      * Contains the on-premises security identifier (SID) for the user that was synchronized from on-premises to the cloud.
-     * Read-only. Returned only on $select.
+     * Read-only. Returned only on $select. Supports $filter (eq) on null values only.
      */
     onPremisesSecurityIdentifier?: NullableOption<string>;
     /**
      * true if this object is synced from an on-premises directory; false if this object was originally synced from an
      * on-premises directory but is no longer synced; null if this object has never been synced from an on-premises directory
-     * (default). Read-only. Returned only on $select. Supports $filter (eq, ne, NOT, in).
+     * (default). Read-only. Returned only on $select. Supports $filter (eq, ne, NOT, in, and eq on null values).
      */
     onPremisesSyncEnabled?: NullableOption<boolean>;
     /**
@@ -2658,7 +2668,7 @@ export interface User extends DirectoryObject {
      * DisableStrongPassword, which allows weaker passwords than the default policy to be specified. DisablePasswordExpiration
      * can also be specified. The two may be specified together; for example: DisablePasswordExpiration,
      * DisableStrongPassword. Returned only on $select. For more information on the default password policies, see Azure AD
-     * pasword policies. Supports $filter (ne, NOT).
+     * pasword policies. Supports $filter (ne, NOT, and eq on null values).
      */
     passwordPolicies?: NullableOption<string>;
     /**
@@ -2666,18 +2676,19 @@ export interface User extends DirectoryObject {
      * user is created. The password in the profile must satisfy minimum requirements as specified by the passwordPolicies
      * property. By default, a strong password is required. NOTE: For Azure B2C tenants, the forceChangePasswordNextSignIn
      * property should be set to false and instead use custom policies and user flows to force password reset at first logon.
-     * See Force password reset at first logon.Returned only on $select. Supports $filter (eq, ne, NOT, in).
+     * See Force password reset at first logon.Returned only on $select. Supports $filter (eq, ne, NOT, in, and eq on null
+     * values).
      */
     passwordProfile?: NullableOption<PasswordProfile>;
     /**
      * The postal code for the user's postal address. The postal code is specific to the user's country/region. In the United
      * States of America, this attribute contains the ZIP code. Maximum length is 40 characters. Returned only on $select.
-     * Supports $filter (eq, ne, NOT, ge, le, in, startsWith).
+     * Supports $filter (eq, ne, NOT, ge, le, in, startsWith, and eq on null values).
      */
     postalCode?: NullableOption<string>;
     /**
      * The preferred language for the user. Should follow ISO 639-1 Code; for example en-US. Returned by default. Supports
-     * $filter (eq, ne, NOT, ge, le, in, startsWith)
+     * $filter (eq, ne, NOT, ge, le, in, startsWith, and eq on null values)
      */
     preferredLanguage?: NullableOption<string>;
     /**
@@ -2706,23 +2717,23 @@ export interface User extends DirectoryObject {
     signInSessionsValidFromDateTime?: NullableOption<string>;
     /**
      * The state or province in the user's address. Maximum length is 128 characters. Returned only on $select. Supports
-     * $filter (eq, ne, NOT, ge, le, in, startsWith).
+     * $filter (eq, ne, NOT, ge, le, in, startsWith, and eq on null values).
      */
     state?: NullableOption<string>;
     /**
      * The street address of the user's place of business. Maximum length is 1024 characters. Returned only on $select.
-     * Supports $filter (eq, ne, NOT, ge, le, in, startsWith).
+     * Supports $filter (eq, ne, NOT, ge, le, in, startsWith, and eq on null values).
      */
     streetAddress?: NullableOption<string>;
     /**
      * The user's surname (family name or last name). Maximum length is 64 characters. Returned by default. Supports $filter
-     * (eq, ne, NOT, ge, le, in, startsWith).
+     * (eq, ne, NOT, ge, le, in, startsWith, and eq on null values).
      */
     surname?: NullableOption<string>;
     /**
      * A two letter country code (ISO standard 3166). Required for users that will be assigned licenses due to legal
      * requirement to check for availability of services in countries. Examples include: US, JP, and GB. Not nullable.
-     * Returned only on $select. Supports $filter (eq, ne, NOT, ge, le, in, startsWith).
+     * Returned only on $select. Supports $filter (eq, ne, NOT, ge, le, in, startsWith, and eq on null values).
      */
     usageLocation?: NullableOption<string>;
     /**
@@ -2736,8 +2747,8 @@ export interface User extends DirectoryObject {
     userPrincipalName?: NullableOption<string>;
     /**
      * A string value that can be used to classify user types in your directory, such as Member and Guest. Returned only on
-     * $select. Supports $filter (eq, ne, NOT, in). NOTE: For more information about the permissions for member and guest
-     * users, see What are the default user permissions in Azure Active Directory?
+     * $select. Supports $filter (eq, ne, NOT, in, and eq on null values). NOTE: For more information about the permissions
+     * for member and guest users, see What are the default user permissions in Azure Active Directory?
      */
     userType?: NullableOption<string>;
     /**
@@ -3924,7 +3935,7 @@ export interface Application extends DirectoryObject {
     /**
      * The date and time the application was registered. The DateTimeOffset type represents date and time information using
      * ISO 8601 format and is always in UTC time. For example, midnight UTC on Jan 1, 2014 is 2014-01-01T00:00:00Z. Read-only.
-     * Supports $filter (eq, ne, NOT, ge, le, in) and $orderBy.
+     * Supports $filter (eq, ne, NOT, ge, le, in, and eq on null values) and $orderBy.
      */
     createdDateTime?: NullableOption<string>;
     // An optional description of the application. Supports $filter (eq, ne, NOT, ge, le, startsWith) and $search.
@@ -3935,7 +3946,10 @@ export interface Application extends DirectoryObject {
      * activity, or a violation of the Microsoft Services Agreement). Supports $filter (eq, ne, NOT).
      */
     disabledByMicrosoftStatus?: NullableOption<string>;
-    // The display name for the application. Supports $filter (eq, ne, NOT, ge, le, in, startsWith), $search, and $orderBy.
+    /**
+     * The display name for the application. Supports $filter (eq, ne, NOT, ge, le, in, startsWith, and eq on null values),
+     * $search, and $orderBy.
+     */
     displayName?: NullableOption<string>;
     /**
      * Configures the groups claim issued in a user or OAuth 2.0 access token that the application expects. To set this
@@ -3956,7 +3970,7 @@ export interface Application extends DirectoryObject {
      * Basic profile information of the application such as app's marketing, support, terms of service and privacy statement
      * URLs. The terms of service and privacy statement are surfaced to users through the user consent experience. For more
      * info, see How to: Add Terms of service and privacy statement for registered Azure AD apps. Supports $filter (eq, ne,
-     * NOT, ge, le).
+     * NOT, ge, le, and eq on null values).
      */
     info?: NullableOption<InformationalUrl>;
     // Specifies whether this application supports device authentication without a user. The default is false.
@@ -4092,8 +4106,8 @@ export interface ServicePrincipal extends DirectoryObject {
      */
     disabledByMicrosoftStatus?: NullableOption<string>;
     /**
-     * The display name for the service principal. Supports $filter (eq, ne, NOT, ge, le, in, startsWith), $search, and
-     * $orderBy.
+     * The display name for the service principal. Supports $filter (eq, ne, NOT, ge, le, in, startsWith, and eq on null
+     * values), $search, and $orderBy.
      */
     displayName?: NullableOption<string>;
     // Home page or landing page of the application.
@@ -4102,7 +4116,7 @@ export interface ServicePrincipal extends DirectoryObject {
      * Basic profile information of the acquired application such as app's marketing, support, terms of service and privacy
      * statement URLs. The terms of service and privacy statement are surfaced to users through the user consent experience.
      * For more info, see How to: Add Terms of service and privacy statement for registered Azure AD apps. Supports $filter
-     * (eq, ne, NOT, ge, le).
+     * (eq, ne, NOT, ge, le, and eq on null values).
      */
     info?: NullableOption<InformationalUrl>;
     /**
@@ -4718,7 +4732,8 @@ export interface Group extends DirectoryObject {
     description?: NullableOption<string>;
     /**
      * The display name for the group. This property is required when a group is created and cannot be cleared during updates.
-     * Returned by default. Supports $filter (eq, ne, NOT, ge, le, in, startsWith), $search, and $orderBy.
+     * Returned by default. Supports $filter (eq, ne, NOT, ge, le, in, startsWith, and eq on null values), $search, and
+     * $orderBy.
      */
     displayName?: NullableOption<string>;
     /**
@@ -4757,7 +4772,7 @@ export interface Group extends DirectoryObject {
     licenseProcessingState?: NullableOption<LicenseProcessingState>;
     /**
      * The SMTP address for the group, for example, 'serviceadmins@contoso.onmicrosoft.com'. Returned by default. Read-only.
-     * Supports $filter (eq, ne, NOT, ge, le, in, startsWith).
+     * Supports $filter (eq, ne, NOT, ge, le, in, startsWith, and eq on null values).
      */
     mail?: NullableOption<string>;
     // Specifies whether the group is mail-enabled. Required. Returned by default. Supports $filter (eq, ne, NOT).
@@ -4765,7 +4780,7 @@ export interface Group extends DirectoryObject {
     /**
      * The mail alias for the group, unique in the organization. Maximum length is 64 characters. This property can contain
      * only characters in the ASCII character set 0 - 127 except the following: @ () / [] ' ; : . &amp;lt;&amp;gt; , SPACE.
-     * Required. Returned by default. Supports $filter (eq, ne, NOT, ge, le, in, startsWith).
+     * Required. Returned by default. Supports $filter (eq, ne, NOT, ge, le, in, startsWith, and eq on null values).
      */
     mailNickname?: NullableOption<string>;
     /**
@@ -4816,7 +4831,7 @@ export interface Group extends DirectoryObject {
     /**
      * true if this group is synced from an on-premises directory; false if this group was originally synced from an
      * on-premises directory but is no longer synced; null if this object has never been synced from an on-premises directory
-     * (default). Returned by default. Read-only. Supports $filter (eq, ne, NOT, in).
+     * (default). Returned by default. Read-only. Supports $filter (eq, ne, NOT, in, and eq on null values).
      */
     onPremisesSyncEnabled?: NullableOption<boolean>;
     /**
@@ -4828,7 +4843,7 @@ export interface Group extends DirectoryObject {
     preferredDataLocation?: NullableOption<string>;
     /**
      * The preferred language for a Microsoft 365 group. Should follow ISO 639-1 Code; for example en-US. Returned by default.
-     * Supports $filter (eq, ne, NOT, ge, le, in, startsWith).
+     * Supports $filter (eq, ne, NOT, ge, le, in, startsWith, and eq on null values).
      */
     preferredLanguage?: NullableOption<string>;
     /**
@@ -5035,9 +5050,8 @@ export interface Schedule extends Entity {
     // The instances of times off in the schedule.
     timesOff?: NullableOption<TimeOff[]>;
 }
-export interface Compliance {
-    ediscovery?: NullableOption<Ediscovery.Ediscoveryroot>;
-}
+// tslint:disable-next-line: no-empty-interface
+export interface Compliance {}
 export interface ResourceSpecificPermissionGrant extends DirectoryObject {
     // ID of the service principal of the Azure AD app that has been granted access. Read-only.
     clientAppId?: NullableOption<string>;
@@ -5317,7 +5331,7 @@ export interface IdentityProviderBase extends Entity {
     displayName?: NullableOption<string>;
 }
 export interface AppleManagedIdentityProvider extends IdentityProviderBase {
-    // The certificate data which is a long string of text from the certificate, can be null.
+    // The certificate data, which is a long string of text from the certificate. Can be null.
     certificateData?: NullableOption<string>;
     // The Apple developer identifier. Required.
     developerId?: NullableOption<string>;
@@ -5546,7 +5560,8 @@ export interface Device extends DirectoryObject {
     alternativeSecurityIds?: AlternativeSecurityId[];
     /**
      * The timestamp type represents date and time information using ISO 8601 format and is always in UTC time. For example,
-     * midnight UTC on Jan 1, 2014 is 2014-01-01T00:00:00Z. Read-only. Supports $filter (eq, ne, NOT, ge, le) and $orderBy.
+     * midnight UTC on Jan 1, 2014 is 2014-01-01T00:00:00Z. Read-only. Supports $filter (eq, ne, NOT, ge, le, and eq on null
+     * values) and $orderBy.
      */
     approximateLastSignInDateTime?: NullableOption<string>;
     /**
@@ -5565,8 +5580,8 @@ export interface Device extends DirectoryObject {
     // For internal use only.
     deviceVersion?: NullableOption<number>;
     /**
-     * The display name for the device. Required. Supports $filter (eq, ne, NOT, ge, le, in, startsWith), $search, and
-     * $orderBy.
+     * The display name for the device. Required. Supports $filter (eq, ne, NOT, ge, le, in, startsWith, and eq on null
+     * values), $search, and $orderBy.
      */
     displayName?: NullableOption<string>;
     /**
@@ -5591,12 +5606,18 @@ export interface Device extends DirectoryObject {
     /**
      * true if this object is synced from an on-premises directory; false if this object was originally synced from an
      * on-premises directory but is no longer synced; null if this object has never been synced from an on-premises directory
-     * (default). Read-only. Supports $filter (eq, ne, NOT, in).
+     * (default). Read-only. Supports $filter (eq, ne, NOT, in, and eq on null values).
      */
     onPremisesSyncEnabled?: NullableOption<boolean>;
-    // The type of operating system on the device. Required. Supports $filter (eq, ne, NOT, ge, le, startsWith).
+    /**
+     * The type of operating system on the device. Required. Supports $filter (eq, ne, NOT, ge, le, startsWith, and eq on null
+     * values).
+     */
     operatingSystem?: NullableOption<string>;
-    // The version of the operating system on the device. Required. Supports $filter (eq, ne, NOT, ge, le, startsWith).
+    /**
+     * The version of the operating system on the device. Required. Supports $filter (eq, ne, NOT, ge, le, startsWith, and eq
+     * on null values).
+     */
     operatingSystemVersion?: NullableOption<string>;
     // For internal use only. Not nullable. Supports $filter (eq, NOT, ge, le, startsWith).
     physicalIds?: string[];
@@ -5874,10 +5895,25 @@ export interface OrganizationalBrandingProperties extends Entity {
      */
     backgroundImage?: NullableOption<any>;
     /**
+     * A relative URL for the backgroundImage property that is combined with a CDN base URL from the cdnList to provide the
+     * version served by a CDN. Read-only.
+     */
+    backgroundImageRelativeUrl?: NullableOption<string>;
+    /**
      * A banner version of your company logo that appears on the sign-in page. The allowed types are PNG or JPEG no larger
      * than 36 × 245 pixels. We recommend using a transparent image with no padding around the logo.
      */
     bannerLogo?: NullableOption<any>;
+    /**
+     * A relative url for the bannerLogo property that is combined with a CDN base URL from the cdnList to provide the
+     * read-only version served by a CDN. Read-only.
+     */
+    bannerLogoRelativeUrl?: NullableOption<string>;
+    /**
+     * A list of base URLs for all available CDN providers that are serving the assets of the current resource. Several CDN
+     * providers are used at the same time for high availability of read requests. Read-only.
+     */
+    cdnList?: NullableOption<string[]>;
     /**
      * Text that appears at the bottom of the sign-in box. You can use this to communicate additional information, such as the
      * phone number to your help desk or a legal statement. This text must be Unicode and not exceed 1024 characters.
@@ -5889,6 +5925,11 @@ export interface OrganizationalBrandingProperties extends Entity {
      * KB in size. We recommend using a transparent image with no padding around the logo.
      */
     squareLogo?: NullableOption<any>;
+    /**
+     * A relative url for the squareLogo property that is combined with a CDN base URL from the cdnList to provide the version
+     * served by a CDN. Read-only.
+     */
+    squareLogoRelativeUrl?: NullableOption<string>;
     /**
      * String that shows as the hint in the username textbox on the sign-in screen. This text must be a Unicode, without links
      * or code, and can't exceed 64 characters.
@@ -5904,27 +5945,39 @@ export interface OrganizationalBrandingLocalization extends OrganizationalBrandi
 export interface OrgContact extends DirectoryObject {
     // Postal addresses for this organizational contact. For now a contact can only have one physical address.
     addresses?: NullableOption<PhysicalOfficeAddress[]>;
-    // Name of the company that this organizational contact belong to. Supports $filter (eq, ne, NOT, ge, le, in, startsWith).
+    /**
+     * Name of the company that this organizational contact belong to. Supports $filter (eq, ne, NOT, ge, le, in, startsWith,
+     * and eq on null values).
+     */
     companyName?: NullableOption<string>;
-    // The name for the department in which the contact works. Supports $filter (eq, ne, NOT, ge, le, in, startsWith).
+    /**
+     * The name for the department in which the contact works. Supports $filter (eq, ne, NOT, ge, le, in, startsWith, and eq
+     * on null values).
+     */
     department?: NullableOption<string>;
     /**
-     * Display name for this organizational contact. Supports $filter (eq, ne, NOT, ge, le, in, startsWith), $search, and
-     * $orderBy.
+     * Display name for this organizational contact. Supports $filter (eq, ne, NOT, ge, le, in, startsWith, and eq on null
+     * values), $search, and $orderBy.
      */
     displayName?: NullableOption<string>;
-    // First name for this organizational contact. Supports $filter (eq, ne, NOT, ge, le, in, startsWith).
+    /**
+     * First name for this organizational contact. Supports $filter (eq, ne, NOT, ge, le, in, startsWith, and eq on null
+     * values).
+     */
     givenName?: NullableOption<string>;
-    // Job title for this organizational contact. Supports $filter (eq, ne, NOT, ge, le, in, startsWith).
+    /**
+     * Job title for this organizational contact. Supports $filter (eq, ne, NOT, ge, le, in, startsWith, and eq on null
+     * values).
+     */
     jobTitle?: NullableOption<string>;
     /**
      * The SMTP address for the contact, for example, 'jeff@contoso.onmicrosoft.com'. Supports $filter (eq, ne, NOT, ge, le,
-     * in, startsWith).
+     * in, startsWith, and eq on null values).
      */
     mail?: NullableOption<string>;
     /**
      * Email alias (portion of email address pre-pending the @ symbol) for this organizational contact. Supports $filter (eq,
-     * ne, NOT, ge, le, in, startsWith).
+     * ne, NOT, ge, le, in, startsWith, and eq on null values).
      */
     mailNickname?: NullableOption<string>;
     /**
@@ -5938,7 +5991,7 @@ export interface OrgContact extends DirectoryObject {
     /**
      * true if this object is synced from an on-premises directory; false if this object was originally synced from an
      * on-premises directory but is no longer synced and now mastered in Exchange; null if this object has never been synced
-     * from an on-premises directory (default).
+     * from an on-premises directory (default). Supports $filter (eq, ne, NOT, in, and eq on null values).
      */
     onPremisesSyncEnabled?: NullableOption<boolean>;
     /**
@@ -5951,7 +6004,10 @@ export interface OrgContact extends DirectoryObject {
      * expressions on multi-valued properties. Supports $filter (eq, NOT, ge, le, startsWith).
      */
     proxyAddresses?: string[];
-    // Last name for this organizational contact. Supports $filter (eq, ne, NOT, ge, le, in, startsWith)
+    /**
+     * Last name for this organizational contact. Supports $filter (eq, ne, NOT, ge, le, in, startsWith, and eq on null
+     * values)
+     */
     surname?: NullableOption<string>;
     /**
      * The contact's direct reports. (The users and contacts that have their manager property set to this contact.) Read-only.
@@ -6333,6 +6389,11 @@ export interface EducationClass extends Entity {
     teachers?: NullableOption<EducationUser[]>;
 }
 export interface EducationUser extends Entity {
+    /**
+     * Related records related to the user. Possible relationships are parent, relative, aide, doctor, guardian, child, other,
+     * unknownFutureValue
+     */
+    relatedContacts?: NullableOption<RelatedContact[]>;
     // True if the account is enabled; otherwise, false. This property is required when a user is created. Supports $filter.
     accountEnabled?: NullableOption<boolean>;
     // The licenses that are assigned to the user. Not nullable.
@@ -14081,25 +14142,25 @@ export interface AuthenticationMethodsRegistrationCampaign {
     // Users and groups of users that are prompted to set up the authentication method.
     includeTargets?: AuthenticationMethodsRegistrationCampaignIncludeTarget[];
     /**
-     * Specifies the number of days that the user sees a prompt again if they select 'Not now' and snoozes the prompt. Minimum
-     * 0 days. Maximum: 14 days. If the value is '0' – The user is prompted during every MFA attempt.
+     * Specifies the number of days that the user sees a prompt again if they select 'Not now' and snoozes the prompt.
+     * Minimum: 0 days. Maximum: 14 days. If the value is '0', the user is prompted during every MFA attempt.
      */
     snoozeDurationInDays?: number;
     /**
      * Enable or disable the feature. Possible values are: default, enabled, disabled, unknownFutureValue. The default value
-     * is used when the configuration hasn't been explicitly set and uses the default behavior of Azure AD for the setting.
-     * The default value is disabled.
+     * is used when the configuration hasn't been explicitly set and uses the default behavior of Azure Active Directory for
+     * the setting. The default value is disabled.
      */
     state?: AdvancedConfigState;
 }
 export interface ExcludeTarget {
-    // The object identifier of an Azure AD user or group.
+    // The object identifier of an Azure Active Directory user or group.
     id?: string;
     // The type of the authentication method target. Possible values are: user, group, unknownFutureValue.
     targetType?: AuthenticationMethodTargetType;
 }
 export interface AuthenticationMethodsRegistrationCampaignIncludeTarget {
-    // The object identifier of an Azure AD user or group.
+    // The object identifier of an Azure Active Directory user or group.
     id?: string;
     // The authentication method that the user is prompted to register. The value must be microsoftAuthenticator.
     targetedAuthenticationMethod?: NullableOption<string>;
@@ -14115,7 +14176,7 @@ export interface Fido2KeyRestrictions {
     isEnforced?: NullableOption<boolean>;
 }
 export interface RegistrationEnforcement {
-    // Run campaigns to remind users to setup targeted authentication methods.
+    // Run campaigns to remind users to set up targeted authentication methods.
     authenticationMethodsRegistrationCampaign?: NullableOption<AuthenticationMethodsRegistrationCampaign>;
 }
 export interface DataSubject {
@@ -14748,6 +14809,21 @@ export interface EducationTerm {
     externalId?: NullableOption<string>;
     // Start of the term.
     startDate?: NullableOption<string>;
+}
+export interface RelatedContact {
+    // Indicates whether the user has been consented to access student data.
+    accessConsent?: NullableOption<boolean>;
+    // Name of the contact. Required.
+    displayName?: string;
+    // Primary email address of the contact.
+    emailAddress?: string;
+    // Mobile phone number of the contact.
+    mobilePhone?: NullableOption<string>;
+    /**
+     * Relationship to the user. Possible values are parent, relative, aide, doctor, guardian, child, other,
+     * unknownFutureValue.
+     */
+    relationship?: ContactRelationship;
 }
 export interface PhysicalAddress {
     // The city.
@@ -19497,373 +19573,6 @@ export interface WorkforceIntegrationEncryption {
     secret?: NullableOption<string>;
 }
 
-export namespace Ediscovery {
-    type AdditionalDataOptions = "allVersions" | "linkedFiles" | "unknownFutureValue";
-    type CaseAction =
-        | "contentExport"
-        | "applyTags"
-        | "convertToPdf"
-        | "index"
-        | "estimateStatistics"
-        | "addToReviewSet"
-        | "unknownFutureValue";
-    type CaseOperationStatus = "notStarted" | "submissionFailed" | "running" | "succeeded" | "partiallySucceeded" | "failed";
-    type CaseStatus = "unknown" | "active" | "pendingDelete" | "closing" | "closed" | "closedWithError";
-    type ChildSelectability = "One" | "Many";
-    type DataSourceContainerStatus = "Active" | "Released" | "UnknownFutureValue";
-    type DataSourceScopes =
-        | "none"
-        | "allTenantMailboxes"
-        | "allTenantSites"
-        | "allCaseCustodians"
-        | "allCaseNoncustodialDataSources"
-        | "unknownFutureValue";
-    type ExportFileStructure = "none" | "directory" | "pst" | "unknownFutureValue";
-    type ExportOptions = "originalFiles" | "text" | "pdfReplacement" | "fileInfo" | "tags" | "unknownFutureValue";
-    type LegalHoldStatus = "Pending" | "Error" | "Success" | "UnknownFutureValue";
-    type SourceType = "mailbox" | "site";
-    interface Ediscoveryroot extends microsoftgraph.Entity {
-        cases?: NullableOption<Case[]>;
-    }
-    interface CaseOperation extends microsoftgraph.Entity {
-        /**
-         * The type of action the operation represents. Possible values are:
-         * addToReviewSet,applyTags,contentExport,convertToPdf,estimateStatistics
-         */
-        action?: NullableOption<CaseAction>;
-        // The date and time the operation was completed.
-        completedDateTime?: NullableOption<string>;
-        // The user that created the operation.
-        createdBy?: NullableOption<microsoftgraph.IdentitySet>;
-        // The date and time the operation was created.
-        createdDateTime?: NullableOption<string>;
-        // The progress of the operation.
-        percentProgress?: NullableOption<number>;
-        // Contains success and failure-specific result information.
-        resultInfo?: NullableOption<microsoftgraph.ResultInfo>;
-        /**
-         * The status of the case operation. Possible values are: notStarted, submissionFailed, running, succeeded,
-         * partiallySucceeded, failed.
-         */
-        status?: NullableOption<CaseOperationStatus>;
-    }
-    interface AddToReviewSetOperation extends CaseOperation {
-        // The review set to which items matching the source collection query are added to.
-        reviewSet?: NullableOption<ReviewSet>;
-        // The sourceCollection that items are being added from.
-        sourceCollection?: NullableOption<SourceCollection>;
-    }
-    interface ReviewSet extends microsoftgraph.Entity {
-        // The user who created the review set. Read-only.
-        createdBy?: NullableOption<microsoftgraph.IdentitySet>;
-        /**
-         * The datetime when the review set was created. The Timestamp type represents date and time information using ISO 8601
-         * format and is always in UTC time. For example, midnight UTC on Jan 1, 2014 is 2014-01-01T00:00:00Z. Read-only.
-         */
-        createdDateTime?: NullableOption<string>;
-        // The review set name. The name is unique with a maximum limit of 64 characters.
-        displayName?: NullableOption<string>;
-        // Read-only. Nullable.
-        queries?: NullableOption<ReviewSetQuery[]>;
-    }
-    interface SourceCollection extends microsoftgraph.Entity {
-        /**
-         * The query string in KQL (Keyword Query Language) query. For details, see Keyword queries and search conditions for
-         * Content Search and eDiscovery. You can refine searches by using fields paired with values; for example,
-         * subject:'Quarterly Financials' AND Date&amp;gt;=06/01/2016 AND Date&amp;lt;=07/01/2016.
-         */
-        contentQuery?: NullableOption<string>;
-        // The user who created the sourceCollection.
-        createdBy?: NullableOption<microsoftgraph.IdentitySet>;
-        // The date and time the sourceCollection was created.
-        createdDateTime?: NullableOption<string>;
-        /**
-         * When specified, the collection will span across a service for an entire workload. Possible values are: none,
-         * allTenantMailboxes, allTenantSites, allCaseCustodians, allCaseNoncustodialDataSources.
-         */
-        dataSourceScopes?: NullableOption<DataSourceScopes>;
-        // The description of the sourceCollection.
-        description?: NullableOption<string>;
-        // The display name of the sourceCollection.
-        displayName?: NullableOption<string>;
-        // The last user who modified the sourceCollection.
-        lastModifiedBy?: NullableOption<microsoftgraph.IdentitySet>;
-        // The last date and time the sourceCollection was modified.
-        lastModifiedDateTime?: NullableOption<string>;
-        // Adds an additional source to the sourceCollection.
-        additionalSources?: NullableOption<DataSource[]>;
-        // Adds the results of the sourceCollection to the specified reviewSet.
-        addToReviewSetOperation?: NullableOption<AddToReviewSetOperation>;
-        // Custodian sources that are included in the sourceCollection.
-        custodianSources?: NullableOption<DataSource[]>;
-        // The last estimate operation associated with the sourceCollection.
-        lastEstimateStatisticsOperation?: NullableOption<EstimateStatisticsOperation>;
-        // noncustodialDataSource sources that are included in the sourceCollection
-        noncustodialSources?: NullableOption<NoncustodialDataSource[]>;
-    }
-    interface Case extends microsoftgraph.Entity {
-        // The user who closed the case.
-        closedBy?: NullableOption<microsoftgraph.IdentitySet>;
-        /**
-         * The date and time when the case was closed. The Timestamp type represents date and time information using ISO 8601
-         * format and is always in UTC time. For example, midnight UTC on Jan 1, 2014 is 2014-01-01T00:00:00Z
-         */
-        closedDateTime?: NullableOption<string>;
-        /**
-         * The date and time when the entity was created. The Timestamp type represents date and time information using ISO 8601
-         * format and is always in UTC time. For example, midnight UTC on Jan 1, 2014 is 2014-01-01T00:00:00Z
-         */
-        createdDateTime?: NullableOption<string>;
-        // The case description.
-        description?: NullableOption<string>;
-        // The case name.
-        displayName?: NullableOption<string>;
-        // The external case number for customer reference.
-        externalId?: NullableOption<string>;
-        // The last user who modified the entity.
-        lastModifiedBy?: NullableOption<microsoftgraph.IdentitySet>;
-        /**
-         * The latest date and time when the case was modified. The Timestamp type represents date and time information using ISO
-         * 8601 format and is always in UTC time. For example, midnight UTC on Jan 1, 2014 is 2014-01-01T00:00:00Z
-         */
-        lastModifiedDateTime?: NullableOption<string>;
-        /**
-         * The case status. Possible values are unknown, active, pendingDelete, closing, closed, and closedWithError. For details,
-         * see the following table.
-         */
-        status?: NullableOption<CaseStatus>;
-        // Returns a list of case custodian objects for this case. Nullable.
-        custodians?: NullableOption<Custodian[]>;
-        // Returns a list of case legalHold objects for this case. Nullable.
-        legalHolds?: NullableOption<LegalHold[]>;
-        // Returns a list of case noncustodialDataSource objects for this case. Nullable.
-        noncustodialDataSources?: NullableOption<NoncustodialDataSource[]>;
-        // Returns a list of case operation objects for this case. Nullable.
-        operations?: NullableOption<CaseOperation[]>;
-        // Returns a list of reviewSet objects in the case. Read-only. Nullable.
-        reviewSets?: NullableOption<ReviewSet[]>;
-        settings?: NullableOption<CaseSettings>;
-        // Returns a list of sourceCollection objects associated with this case.
-        sourceCollections?: NullableOption<SourceCollection[]>;
-        // Returns a list of tag objects associated to this case.
-        tags?: NullableOption<Tag[]>;
-    }
-    interface DataSourceContainer extends microsoftgraph.Entity {
-        // Created date and time of the dataSourceContainer entity.
-        createdDateTime?: NullableOption<string>;
-        // Display name of the dataSourceContainer entity.
-        displayName?: NullableOption<string>;
-        // Last modified date and time of the dataSourceContainer.
-        lastModifiedDateTime?: NullableOption<string>;
-        // Date and time that the dataSourceContainer was released from the case.
-        releasedDateTime?: NullableOption<string>;
-        // Latest status of the dataSourceContainer. Possible values are: Active, Released.
-        status?: NullableOption<DataSourceContainerStatus>;
-        lastIndexOperation?: NullableOption<CaseIndexOperation>;
-    }
-    interface Custodian extends DataSourceContainer {
-        // Date and time the custodian acknowledged a hold notification.
-        acknowledgedDateTime?: NullableOption<string>;
-        // Identifies whether a custodian's sources were placed on hold during creation.
-        applyHoldToSources?: NullableOption<boolean>;
-        // Email address of the custodian.
-        email?: string;
-        // Data source entity for SharePoint sites associated with the custodian.
-        siteSources?: NullableOption<SiteSource[]>;
-        // Data source entity for groups associated with the custodian.
-        unifiedGroupSources?: NullableOption<UnifiedGroupSource[]>;
-        // Data source entity for a the custodian. This is the container for a custodian's mailbox and OneDrive for Business site.
-        userSources?: NullableOption<UserSource[]>;
-    }
-    interface LegalHold extends microsoftgraph.Entity {
-        /**
-         * KQL query that specifies content to be held in the specified locations. To learn more, see Keyword queries and search
-         * conditions for Content Search and eDiscovery. To hold all content in the specified locations, leave contentQuery blank.
-         */
-        contentQuery?: NullableOption<string>;
-        // The user who created the legal hold.
-        createdBy?: NullableOption<microsoftgraph.IdentitySet>;
-        // The date and time the legal hold was created.
-        createdDateTime?: NullableOption<string>;
-        // The legal hold description.
-        description?: NullableOption<string>;
-        // The display name of the legal hold.
-        displayName?: NullableOption<string>;
-        // Lists any errors that happened while placing the hold.
-        errors?: NullableOption<string[]>;
-        // Indicates whether the hold is enabled and actively holding content.
-        isEnabled?: NullableOption<boolean>;
-        // the user who last modified the legal hold.
-        lastModifiedBy?: NullableOption<microsoftgraph.IdentitySet>;
-        // The date and time the legal hold was last modified.
-        lastModifiedDateTime?: NullableOption<string>;
-        // The status of the legal hold. Possible values are: Pending, Error, Success, UnknownFutureValue.
-        status?: NullableOption<LegalHoldStatus>;
-        // Data source entity for SharePoint sites associated with the legal hold.
-        siteSources?: NullableOption<SiteSource[]>;
-        // Data source entity for a the legal hold. This is the container for a mailbox and OneDrive for Business site.
-        userSources?: NullableOption<UserSource[]>;
-    }
-    interface NoncustodialDataSource extends DataSourceContainer {
-        // Indicates if hold is applied to non-custodial data source (such as mailbox or site).
-        applyHoldToSource?: NullableOption<boolean>;
-        // User source or SharePoint site data source as non-custodial data source.
-        dataSource?: NullableOption<DataSource>;
-    }
-    interface CaseSettings extends microsoftgraph.Entity {
-        // The OCR (Optical Character Recognition) settings for the case.
-        ocr?: NullableOption<OcrSettings>;
-        // The redundancy (near duplicate and email threading) detection settings for the case.
-        redundancyDetection?: NullableOption<RedundancyDetectionSettings>;
-        // The Topic Modeling (Themes) settings for the case.
-        topicModeling?: NullableOption<TopicModelingSettings>;
-    }
-    interface Tag extends microsoftgraph.Entity {
-        /**
-         * Indicates whether a single or multiple child tags can be associated with a document. Possible values are: One, Many.
-         * This value controls whether the UX presents the tags as checkboxes or a radio button group.
-         */
-        childSelectability?: NullableOption<ChildSelectability>;
-        // The user who created the tag.
-        createdBy?: NullableOption<microsoftgraph.IdentitySet>;
-        // The description for the tag.
-        description?: NullableOption<string>;
-        // Display name of the tag.
-        displayName?: NullableOption<string>;
-        // The date and time the tag was last modified.
-        lastModifiedDateTime?: NullableOption<string>;
-        // Returns the tags that are a child of a tag.
-        childTags?: NullableOption<Tag[]>;
-        // Returns the parent tag of the specified tag.
-        parent?: NullableOption<Tag>;
-    }
-    interface CaseExportOperation extends CaseOperation {
-        /**
-         * The name of the Azure storage location where the export will be stored. This only applies to exports stored in your own
-         * Azure storage location.
-         */
-        azureBlobContainer?: NullableOption<string>;
-        // The SAS token for the Azure storage location. This only applies to exports stored in your own Azure storage location.
-        azureBlobToken?: NullableOption<string>;
-        // The description provided for the export.
-        description?: NullableOption<string>;
-        /**
-         * The options provided for the export. For more details, see reviewSet: export. Possible values are: originalFiles, text,
-         * pdfReplacement, fileInfo, tags.
-         */
-        exportOptions?: NullableOption<ExportOptions>;
-        /**
-         * The options provided that specify the structure of the export. For more details, see reviewSet: export. Possible values
-         * are: none, directory, pst.
-         */
-        exportStructure?: NullableOption<ExportFileStructure>;
-        outputFolderId?: NullableOption<string>;
-        // The name provided for the export.
-        outputName?: NullableOption<string>;
-        // The review set the content is being exported from.
-        reviewSet?: NullableOption<ReviewSet>;
-    }
-// tslint:disable-next-line: no-empty-interface
-    interface CaseIndexOperation extends CaseOperation {}
-    interface DataSource extends microsoftgraph.Entity {
-        // The user who created the dataSource.
-        createdBy?: NullableOption<microsoftgraph.IdentitySet>;
-        // The date and time the dataSource was created.
-        createdDateTime?: NullableOption<string>;
-        // The display name of the dataSource. This will be the name of the SharePoint site.
-        displayName?: NullableOption<string>;
-    }
-    interface SiteSource extends DataSource {
-        // The SharePoint site associated with the siteSource.
-        site?: microsoftgraph.Site;
-    }
-    interface UnifiedGroupSource extends DataSource {
-        // Specifies which sources are included in this group. Possible values are: mailbox, site.
-        includedSources?: NullableOption<SourceType>;
-        // The group associated with the unifiedGroupSource.
-        group?: microsoftgraph.Group;
-    }
-    interface UserSource extends DataSource {
-        // Email address of the user's mailbox.
-        email?: string;
-        // Specifies which sources are included in this group. Possible values are: mailbox, site.
-        includedSources?: NullableOption<SourceType>;
-    }
-    interface EstimateStatisticsOperation extends CaseOperation {
-        // The estimated count of items for the sourceCollection that matched the content query.
-        indexedItemCount?: NullableOption<number>;
-        // The estimated size of items for the sourceCollection that matched the content query.
-        indexedItemsSize?: NullableOption<number>;
-        // The number of mailboxes that had search hits.
-        mailboxCount?: NullableOption<number>;
-        // The number of mailboxes that had search hits.
-        siteCount?: NullableOption<number>;
-        // The estimated count of unindexed items for the collection.
-        unindexedItemCount?: NullableOption<number>;
-        // The estimated size of unindexed items for the collection.
-        unindexedItemsSize?: NullableOption<number>;
-        // eDiscovery collection, commonly known as a search.
-        sourceCollection?: NullableOption<SourceCollection>;
-    }
-    interface ReviewSetQuery extends microsoftgraph.Entity {
-        // The user who created the query.
-        createdBy?: NullableOption<microsoftgraph.IdentitySet>;
-        /**
-         * The time and date when the query was created. The Timestamp type represents date and time information using ISO 8601
-         * format and is always in UTC time. For example, midnight UTC on Jan 1, 2014 is 2014-01-01T00:00:00Z
-         */
-        createdDateTime?: NullableOption<string>;
-        // The name of the query.
-        displayName?: NullableOption<string>;
-        // The user who last modified the query.
-        lastModifiedBy?: NullableOption<microsoftgraph.IdentitySet>;
-        /**
-         * The date and time the query was last modified. The Timestamp type represents date and time information using ISO 8601
-         * format and is always in UTC time. For example, midnight UTC on Jan 1, 2014 is 2014-01-01T00:00:00Z
-         */
-        lastModifiedDateTime?: NullableOption<string>;
-        /**
-         * The query string in KQL (Keyword Query Language) query. For details, see Document metadata fields in Advanced
-         * eDiscovery. This field maps directly to the keywords condition. You can refine searches by using fields listed in the
-         * searchable field name paired with values; for example, subject:'Quarterly Financials' AND Date&amp;gt;=06/01/2016 AND
-         * Date&amp;lt;=07/01/2016.
-         */
-        query?: NullableOption<string>;
-    }
-// tslint:disable-next-line: no-empty-interface
-    interface TagOperation extends CaseOperation {}
-    interface OcrSettings {
-        // Indicates whether or not OCR is enabled for the case.
-        isEnabled?: NullableOption<boolean>;
-        // Maximum image size that will be processed in KB).
-        maxImageSize?: NullableOption<number>;
-        /**
-         * The timeout duration for the OCR engine. A longer timeout may increase success of OCR, but may add to the total
-         * processing time.
-         */
-        timeout?: NullableOption<string>;
-    }
-    interface RedundancyDetectionSettings {
-        // Indicates whether email threading and near duplicate detection are enabled.
-        isEnabled?: NullableOption<boolean>;
-        // See Minimum/maximum number of words to learn more.
-        maxWords?: NullableOption<number>;
-        // See Minimum/maximum number of words to learn more.
-        minWords?: NullableOption<number>;
-        // See Document and email similarity threshold to learn more.
-        similarityThreshold?: NullableOption<number>;
-    }
-    interface TopicModelingSettings {
-        // To learn more, see Adjust maximum number of themes dynamically.
-        dynamicallyAdjustTopicCount?: NullableOption<boolean>;
-        // To learn more, see Include numbers in themes.
-        ignoreNumbers?: NullableOption<boolean>;
-        // Indicates whether themes is enabled for the case.
-        isEnabled?: NullableOption<boolean>;
-        // To learn more, see Maximum number of themes.
-        topicCount?: NullableOption<number>;
-    }
-}
 export namespace TermStore {
     type RelationType = "pin" | "reuse" | "unknownFutureValue";
     type TermGroupScope = "global" | "system" | "siteCollection" | "unknownFutureValue";
