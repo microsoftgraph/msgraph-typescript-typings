@@ -86,6 +86,44 @@ export type ExternalEmailOtpState = "default" | "enabled" | "disabled" | "unknow
 export type Fido2RestrictionEnforcementType = "allow" | "block" | "unknownFutureValue";
 export type MicrosoftAuthenticatorAuthenticationMode = "deviceBasedPush" | "push" | "any";
 export type VolumeType = "operatingSystemVolume" | "fixedDataVolume" | "removableDataVolume" | "unknownFutureValue";
+export type AnswerInputType = "text" | "radioButton" | "unknownFutureValue";
+export type BookingPriceType =
+    | "undefined"
+    | "fixedPrice"
+    | "startingAt"
+    | "hourly"
+    | "free"
+    | "priceVaries"
+    | "callUs"
+    | "notSet"
+    | "unknownFutureValue";
+export type BookingReminderRecipients = "allAttendees" | "staff" | "customer" | "unknownFutureValue";
+export type BookingStaffRole = "guest" | "administrator" | "viewer" | "externalGuest" | "unknownFutureValue";
+export type DayOfWeek = "sunday" | "monday" | "tuesday" | "wednesday" | "thursday" | "friday" | "saturday";
+export type LocationType =
+    | "default"
+    | "conferenceRoom"
+    | "homeAddress"
+    | "businessAddress"
+    | "geoCoordinates"
+    | "streetAddress"
+    | "hotel"
+    | "restaurant"
+    | "localBusiness"
+    | "postalAddress";
+export type LocationUniqueIdType = "unknown" | "locationStore" | "directory" | "private" | "bing";
+export type PhoneType =
+    | "home"
+    | "business"
+    | "mobile"
+    | "other"
+    | "assistant"
+    | "homeFax"
+    | "businessFax"
+    | "otherFax"
+    | "pager"
+    | "radio";
+export type PhysicalAddressType = "unknown" | "home" | "business" | "other";
 export type BodyType = "text" | "html";
 export type DataSubjectType =
     | "customer"
@@ -139,20 +177,21 @@ export type AllowInvitesFrom =
     | "unknownFutureValue";
 export type PermissionClassificationType = "low" | "medium" | "high" | "unknownFutureValue";
 export type PermissionType = "application" | "delegated" | "delegatedUserConsentable";
-export type PhoneType =
-    | "home"
-    | "business"
-    | "mobile"
-    | "other"
-    | "assistant"
-    | "homeFax"
-    | "businessFax"
-    | "otherFax"
-    | "pager"
-    | "radio";
 export type EducationAddedStudentAction = "none" | "assignIfOpen" | "unknownFutureValue";
+export type EducationAddToCalendarOptions =
+    | "none"
+    | "studentsAndPublisher"
+    | "studentsAndTeamOwners"
+    | "unknownFutureValue"
+    | "studentsOnly";
 export type EducationAssignmentStatus = "draft" | "published" | "assigned" | "unknownFutureValue";
-export type EducationSubmissionStatus = "working" | "submitted" | "released" | "returned" | "unknownFutureValue";
+export type EducationSubmissionStatus =
+    | "working"
+    | "submitted"
+    | "released"
+    | "returned"
+    | "unknownFutureValue"
+    | "reassigned";
 export type ContactRelationship =
     | "parent"
     | "relative"
@@ -169,19 +208,6 @@ export type WorkbookOperationStatus = "notStarted" | "running" | "succeeded" | "
 export type ActivityDomain = "unknown" | "work" | "personal" | "unrestricted";
 export type AttendeeType = "required" | "optional" | "resource";
 export type FreeBusyStatus = "unknown" | "free" | "tentative" | "busy" | "oof" | "workingElsewhere";
-export type LocationType =
-    | "default"
-    | "conferenceRoom"
-    | "homeAddress"
-    | "businessAddress"
-    | "geoCoordinates"
-    | "streetAddress"
-    | "hotel"
-    | "restaurant"
-    | "localBusiness"
-    | "postalAddress";
-export type LocationUniqueIdType = "unknown" | "locationStore" | "directory" | "private" | "bing";
-export type PhysicalAddressType = "unknown" | "home" | "business" | "other";
 export type BookingType = "unknown" | "standard" | "reserved";
 export type AttachmentType = "file" | "item" | "reference";
 export type AutomaticRepliesStatus = "disabled" | "alwaysEnabled" | "scheduled";
@@ -236,7 +262,6 @@ export type CategoryColor =
     | "preset22"
     | "preset23"
     | "preset24";
-export type DayOfWeek = "sunday" | "monday" | "tuesday" | "wednesday" | "thursday" | "friday" | "saturday";
 export type DelegateMeetingMessageDeliveryOptions =
     | "sendToDelegateAndInformationToPrincipal"
     | "sendToDelegateAndPrincipal"
@@ -2298,8 +2323,9 @@ export interface SignIn extends Entity {
     // A list of conditional access policies that are triggered by the corresponding sign-in activity.
     appliedConditionalAccessPolicies?: NullableOption<AppliedConditionalAccessPolicy[]>;
     /**
-     * Identifies the legacy client used for sign-in activity. Includes Browser, Exchange Active Sync, modern clients, IMAP,
-     * MAPI, SMTP, and POP. Supports $filter (eq operator only).
+     * Identifies the client used for the sign-in activity. Modern authentication clients include Browser and modern clients.
+     * Legacy authentication clients include Exchange Active Sync, IMAP, MAPI, SMTP, POP, and other clients. Supports $filter
+     * (eq operator only).
      */
     clientAppUsed?: NullableOption<string>;
     /**
@@ -2609,11 +2635,12 @@ export interface User extends DirectoryObject {
      */
     onPremisesDomainName?: NullableOption<string>;
     /**
-     * Contains extensionAttributes 1-15 for the user. Note that the individual extension attributes are neither selectable
-     * nor filterable. For an onPremisesSyncEnabled user, the source of authority for this set of properties is the
-     * on-premises and is read-only. For a cloud-only user (where onPremisesSyncEnabled is false), these properties may be set
-     * during creation or update. These extension attributes are also known as Exchange custom attributes 1-15. Returned only
-     * on $select. Supports $filter (eq, not, ge, le, in, and eq on null values).
+     * Contains extensionAttributes1-15 for the user. The individual extension attributes are neither selectable nor
+     * filterable. For an onPremisesSyncEnabled user, the source of authority for this set of properties is the on-premises
+     * and is read-only. For a cloud-only user (where onPremisesSyncEnabled is false), these properties can be set during
+     * creation or update of a user object. For a cloud-only user previously synced from on-premises Active Directory, these
+     * properties are read-only in Microsoft Graph but can be fully managed through the Exchange Admin Center or the Exchange
+     * Online V2 module in PowerShell. These extension attributes are also known as Exchange custom attributes 1-15.
      */
     onPremisesExtensionAttributes?: NullableOption<OnPremisesExtensionAttributes>;
     /**
@@ -3814,6 +3841,8 @@ export interface OnlineMeeting extends Entity {
     subject?: NullableOption<string>;
     // The video teleconferencing ID. Read-only.
     videoTeleconferenceId?: NullableOption<string>;
+    // The attendance reports of an online meeting. Read-only.
+    attendanceReports?: NullableOption<MeetingAttendanceReport[]>;
 }
 export interface Presence extends Entity {
     /**
@@ -3843,6 +3872,8 @@ export interface Chat extends Entity {
     lastUpdatedDateTime?: NullableOption<string>;
     // (Optional) Subject or topic for the chat. Only available for group chats.
     topic?: NullableOption<string>;
+    // The URL for the chat in Microsoft Teams. The URL should be treated as an opaque blob, and not parsed. Read-only.
+    webUrl?: NullableOption<string>;
     // A collection of all the apps in the chat. Nullable.
     installedApps?: NullableOption<TeamsAppInstallation[]>;
     // A collection of all the members in the chat. Nullable.
@@ -4607,6 +4638,236 @@ export interface ThreatAssessmentRequest extends Entity {
      */
     results?: NullableOption<ThreatAssessmentResult[]>;
 }
+export interface BookingAppointment extends Entity {
+    // Additional information that is sent to the customer when an appointment is confirmed.
+    additionalInformation?: NullableOption<string>;
+    /**
+     * It lists down the customer properties for an appointment. An appointment will contain a list of customer information
+     * and each unit will indicate the properties of a customer who is part of that appointment. Optional.
+     */
+    customers?: BookingCustomerInformationBase[];
+    // The time zone of the customer. For a list of possible values, see dateTimeTimeZone.
+    customerTimeZone?: NullableOption<string>;
+    // The length of the appointment, denoted in ISO8601 format.
+    duration?: string;
+    // The date, time, and time zone that the appointment ends.
+    endDateTime?: DateTimeTimeZone;
+    // The current number of customers in the appointment
+    filledAttendeesCount?: number;
+    // If true, indicates that the appointment will be held online. Default value is false.
+    isLocationOnline?: boolean;
+    // The URL of the online meeting for the appointment.
+    joinWebUrl?: NullableOption<string>;
+    // The maximum number of customers allowed in an appointment.
+    maximumAttendeesCount?: number;
+    /**
+     * If true indicates that the bookingCustomer for this appointment does not wish to receive a confirmation for this
+     * appointment.
+     */
+    optOutOfCustomerEmail?: boolean;
+    /**
+     * The amount of time to reserve after the appointment ends, for cleaning up, as an example. The value is expressed in
+     * ISO8601 format.
+     */
+    postBuffer?: string;
+    /**
+     * The amount of time to reserve before the appointment begins, for preparation, as an example. The value is expressed in
+     * ISO8601 format.
+     */
+    preBuffer?: string;
+    // The regular price for an appointment for the specified bookingService.
+    price?: number;
+    /**
+     * A setting to provide flexibility for the pricing structure of services. Possible values are: undefined, fixedPrice,
+     * startingAt, hourly, free, priceVaries, callUs, notSet, unknownFutureValue.
+     */
+    priceType?: BookingPriceType;
+    // The value of this property is only available when reading an individual booking appointment by id.
+    reminders?: NullableOption<BookingReminder[]>;
+    /**
+     * An additional tracking ID for the appointment, if the appointment has been created directly by the customer on the
+     * scheduling page, as opposed to by a staff member on the behalf of the customer. Only supported for appointment if
+     * maxAttendeeCount is 1.
+     */
+    selfServiceAppointmentId?: NullableOption<string>;
+    // The ID of the bookingService associated with this appointment.
+    serviceId?: NullableOption<string>;
+    // The location where the service is delivered.
+    serviceLocation?: NullableOption<Location>;
+    /**
+     * This property is optional when creating a new appointment. If not specified, it is computed from the service associated
+     * with the appointment by the service id.
+     */
+    serviceName?: string;
+    // The value of this property is only available when reading an individual booking appointment by id.
+    serviceNotes?: NullableOption<string>;
+    // If true, indicates SMS notifications will be sent to the customers for the appointment. Default value is false.
+    smsNotificationsEnabled?: boolean;
+    // The ID of each bookingStaffMember who is scheduled in this appointment.
+    staffMemberIds?: NullableOption<string[]>;
+    // The date, time, and time zone that the appointment begins.
+    startDateTime?: DateTimeTimeZone;
+}
+export interface BookingBusiness extends Entity {
+    /**
+     * The street address of the business. The address property, together with phone and webSiteUrl, appear in the footer of a
+     * business scheduling page. The attribute type of physicalAddress is not supported in v1.0. Internally we map the
+     * addresses to the type others.
+     */
+    address?: NullableOption<PhysicalAddress>;
+    // The hours of operation for the business.
+    businessHours?: NullableOption<BookingWorkHours[]>;
+    // The type of business.
+    businessType?: NullableOption<string>;
+    // The code for the currency that the business operates in on Microsoft Bookings.
+    defaultCurrencyIso?: NullableOption<string>;
+    // The display name is suitable for human-readable interfaces.
+    displayName?: string;
+    // The email address for the business.
+    email?: NullableOption<string>;
+    /**
+     * The scheduling page has been made available to external customers. Use the publish and unpublish actions to set this
+     * property. Read-only.
+     */
+    isPublished?: NullableOption<boolean>;
+    /**
+     * The telephone number for the business. The phone property, together with address and webSiteUrl, appear in the footer
+     * of a business scheduling page.
+     */
+    phone?: NullableOption<string>;
+    // The URL for the scheduling page, which is set after you publish or unpublish the page. Read-only.
+    publicUrl?: NullableOption<string>;
+    // Specifies how bookings can be created for this business.
+    schedulingPolicy?: NullableOption<BookingSchedulingPolicy>;
+    // Example: https://www.contoso.com
+    webSiteUrl?: NullableOption<string>;
+    // All the appointments of this business. Read-only. Nullable.
+    appointments?: NullableOption<BookingAppointment[]>;
+    // The set of appointments of this business in a specified date range. Read-only. Nullable.
+    calendarView?: NullableOption<BookingAppointment[]>;
+    // All the customers of this business. Read-only. Nullable.
+    customers?: NullableOption<BookingCustomerBase[]>;
+    // All the custom questions of this business. Read-only. Nullable.
+    customQuestions?: NullableOption<BookingCustomQuestion[]>;
+    // All the services offered by this business. Read-only. Nullable.
+    services?: NullableOption<BookingService[]>;
+    // All the staff members that provide services in this business. Read-only. Nullable.
+    staffMembers?: NullableOption<BookingStaffMemberBase[]>;
+}
+// tslint:disable-next-line: no-empty-interface
+export interface BookingCustomerBase extends Entity {}
+export interface BookingCustomQuestion extends Entity {
+    // The expected answer type. The possible values are: text, radioButton, unknownFutureValue.
+    answerInputType?: NullableOption<AnswerInputType>;
+    // List of possible answer values.
+    answerOptions?: NullableOption<string[]>;
+    // The display name is suitable for human-readable interfaces.
+    displayName?: string;
+}
+export interface BookingService extends Entity {
+    // Additional information that is sent to the customer when an appointment is confirmed.
+    additionalInformation?: NullableOption<string>;
+    // Contains the set of custom questions associated with a particular service.
+    customQuestions?: NullableOption<BookingQuestionAssignment[]>;
+    /**
+     * The default length of the service, represented in numbers of days, hours, minutes, and seconds. For example,
+     * P11D23H59M59.999999999999S.
+     */
+    defaultDuration?: string;
+    // The default physical location for the service.
+    defaultLocation?: NullableOption<Location>;
+    // The default monetary price for the service.
+    defaultPrice?: number;
+    /**
+     * The default way the service is charged. Possible values are: undefined, fixedPrice, startingAt, hourly, free,
+     * priceVaries, callUs, notSet, unknownFutureValue.
+     */
+    defaultPriceType?: BookingPriceType;
+    // The value of this property is only available when reading an individual booking service by id.
+    defaultReminders?: NullableOption<BookingReminder[]>;
+    // A text description for the service.
+    description?: NullableOption<string>;
+    // The display name is suitable for human-readable interfaces.
+    displayName?: string;
+    // True means this service is not available to customers for booking.
+    isHiddenFromCustomers?: boolean;
+    // True indicates that the appointments for the service will be held online. Default value is false.
+    isLocationOnline?: boolean;
+    // The maximum number of customers allowed in a service.
+    maximumAttendeesCount?: number;
+    // Additional information about this service.
+    notes?: NullableOption<string>;
+    // The time to buffer after an appointment for this service ends, and before the next customer appointment can be booked.
+    postBuffer?: string;
+    // The time to buffer before an appointment for this service can start.
+    preBuffer?: string;
+    // The set of policies that determine how appointments for this type of service should be created and managed.
+    schedulingPolicy?: NullableOption<BookingSchedulingPolicy>;
+    /**
+     * True indicates SMS notifications can be sent to the customers for the appointment of the service. Default value is
+     * false.
+     */
+    smsNotificationsEnabled?: boolean;
+    // Represents those staff members who provide this service.
+    staffMemberIds?: NullableOption<string[]>;
+    // The URL a customer uses to access the service.
+    webUrl?: NullableOption<string>;
+}
+// tslint:disable-next-line: no-empty-interface
+export interface BookingStaffMemberBase extends Entity {}
+export interface BookingCurrency extends Entity {
+    // The currency symbol. For example, the currency symbol for the US dollar and for the Australian dollar is $.
+    symbol?: string;
+}
+export interface BookingCustomer extends BookingCustomerBase {
+    /**
+     * Addresses associated with the customer. The attribute type of physicalAddress is not supported in v1.0. Internally we
+     * map the addresses to the type others.
+     */
+    addresses?: NullableOption<PhysicalAddress[]>;
+    // The display name is suitable for human-readable interfaces.
+    displayName?: string;
+    // The SMTP address of the customer.
+    emailAddress?: NullableOption<string>;
+    // Phone numbers associated with the customer, including home, business and mobile numbers.
+    phones?: NullableOption<Phone[]>;
+}
+export interface BookingStaffMember extends BookingStaffMemberBase {
+    /**
+     * True means that if the staff member is a Microsoft 365 user, the Bookings API would verify the staff member's
+     * availability in their personal calendar in Microsoft 365, before making a booking.
+     */
+    availabilityIsAffectedByPersonalCalendar?: boolean;
+    // The display name is suitable for human-readable interfaces.
+    displayName?: string;
+    /**
+     * The email address of the staff member. This can be in the same Microsoft 365 tenant as the business, or in a different
+     * email domain. This email address can be used if the sendConfirmationsToOwner property is set to true in the scheduling
+     * policy of the business. Required.
+     */
+    emailAddress?: NullableOption<string>;
+    /**
+     * The role of the staff member in the business. Possible values are: guest, administrator, viewer, externalGuest and
+     * unknownFutureValue. Required.
+     */
+    role?: BookingStaffRole;
+    // The time zone of the staff member. For a list of possible values, see dateTimeTimeZone.
+    timeZone?: NullableOption<string>;
+    /**
+     * True means the staff member's availability is as specified in the businessHours property of the business. False means
+     * the availability is determined by the staff member's workingHours property setting.
+     */
+    useBusinessHours?: boolean;
+    /**
+     * The range of hours each day of the week that the staff member is available for booking. By default, they are
+     * initialized to be the same as the businessHours property of the business.
+     */
+    workingHours?: NullableOption<BookingWorkHours[]>;
+}
+export interface SolutionsRoot {
+    bookingBusinesses?: NullableOption<BookingBusiness[]>;
+    bookingCurrencies?: NullableOption<BookingCurrency[]>;
+}
 export interface AuthoredNote extends Entity {
     // Identity information about the note's author.
     author?: NullableOption<Identity>;
@@ -4785,9 +5046,10 @@ export interface Group extends DirectoryObject {
     // Specifies whether the group is mail-enabled. Required. Returned by default. Supports $filter (eq, ne, not).
     mailEnabled?: NullableOption<boolean>;
     /**
-     * The mail alias for the group, unique in the organization. Maximum length is 64 characters. This property can contain
-     * only characters in the ASCII character set 0 - 127 except the following: @ () / [] ' ; : . &amp;lt;&amp;gt; , SPACE.
-     * Required. Returned by default. Supports $filter (eq, ne, not, ge, le, in, startsWith, and eq on null values).
+     * The mail alias for the group, unique for Microsoft 365 groups in the organization. Maximum length is 64 characters.
+     * This property can contain only characters in the ASCII character set 0 - 127 except the following: @ () / [] ' ; : .
+     * &amp;lt;&amp;gt; , SPACE. Required. Returned by default. Supports $filter (eq, ne, not, ge, le, in, startsWith, and eq
+     * on null values).
      */
     mailNickname?: NullableOption<string>;
     /**
@@ -6186,6 +6448,13 @@ export interface EducationAssignment extends Entity {
      */
     addedStudentAction?: NullableOption<EducationAddedStudentAction>;
     /**
+     * Optional field to control the assignment behavior for adding assignments to students' and teachers' calendars when the
+     * assignment is published. The possible values are: none, studentsAndPublisher, studentsAndTeamOwners,
+     * unknownFutureValue, and studentsOnly. Note that you must use the Prefer: include-unknown-enum-members request header to
+     * get the following value(s) in this evolvable enum: studentsOnly. The default value is none.
+     */
+    addToCalendarAction?: NullableOption<EducationAddToCalendarOptions>;
+    /**
      * Identifies whether students can submit after the due date. If this property isn't specified during create, it defaults
      * to true.
      */
@@ -6305,6 +6574,13 @@ export interface EducationRubric extends Entity {
     qualities?: NullableOption<RubricQuality[]>;
 }
 export interface EducationSubmission extends Entity {
+    // User who moved the status of this submission to reassigned.
+    reassignedBy?: NullableOption<IdentitySet>;
+    /**
+     * Moment in time when the submission was reassigned. The Timestamp type represents date and time information using ISO
+     * 8601 format and is always in UTC time. For example, midnight UTC on Jan 1, 2014 is 2014-01-01T00:00:00Z
+     */
+    reassignedDateTime?: NullableOption<string>;
     // Who this submission is assigned to.
     recipient?: NullableOption<EducationSubmissionRecipient>;
     // Folder where all file resources for this submission need to be stored.
@@ -6316,7 +6592,10 @@ export interface EducationSubmission extends Entity {
      * format and is always in UTC time. For example, midnight UTC on Jan 1, 2014 is 2014-01-01T00:00:00Z
      */
     returnedDateTime?: NullableOption<string>;
-    // Read-Only. Possible values are: working, submitted, released, returned.
+    /**
+     * Read-only. Possible values are: working, submitted, released, returned, and reassigned. Note that you must use the
+     * Prefer: include-unknown-enum-members request header to get the following value(s) in this evolvable enum: reassigned.
+     */
     status?: NullableOption<EducationSubmissionStatus>;
     // User who moved the resource into the submitted state.
     submittedBy?: NullableOption<IdentitySet>;
@@ -6347,6 +6626,13 @@ export interface EducationAssignmentDefaults extends Entity {
      * are: none, assignIfOpen.
      */
     addedStudentAction?: NullableOption<EducationAddedStudentAction>;
+    /**
+     * Optional field to control adding assignments to students' and teachers' calendars when the assignment is published. The
+     * possible values are: none, studentsAndPublisher, studentsAndTeamOwners, unknownFutureValue, and studentsOnly. Note that
+     * you must use the Prefer: include-unknown-enum-members request header to get the following value(s) in this evolvable
+     * enum: studentsOnly. The default value is none.
+     */
+    addToCalendarAction?: NullableOption<EducationAddToCalendarOptions>;
     // Class-level default value for due time field. Default value is 23:59:00.
     dueTime?: NullableOption<string>;
     // Default Teams channel to which notifications will be sent. Default value is null.
@@ -6499,6 +6785,8 @@ export interface EducationUser extends Entity {
      * $filter.
      */
     userType?: NullableOption<string>;
+    // Assignments belonging to the user.
+    assignments?: NullableOption<EducationAssignment[]>;
     rubrics?: NullableOption<EducationRubric[]>;
     // Classes to which the user belongs. Nullable.
     classes?: NullableOption<EducationClass[]>;
@@ -13062,6 +13350,18 @@ export interface Security extends Entity {
     secureScoreControlProfiles?: NullableOption<SecureScoreControlProfile[]>;
     secureScores?: NullableOption<SecureScore[]>;
 }
+export interface AttendanceRecord extends Entity {
+    // List of time periods between joining and leaving a meeting.
+    attendanceIntervals?: NullableOption<AttendanceInterval[]>;
+    // Email address of the user associated with this atttendance record.
+    emailAddress?: NullableOption<string>;
+    // Identity of the user associated with this atttendance record.
+    identity?: NullableOption<Identity>;
+    // Role of the attendee. Possible values are: None, Attendee, Presenter, and Organizer.
+    role?: NullableOption<string>;
+    // Total duration of the attendances in seconds.
+    totalAttendanceInSeconds?: NullableOption<number>;
+}
 export interface AudioRoutingGroup extends Entity {
     // List of receiving participant ids.
     receivers?: NullableOption<string[]>;
@@ -13098,6 +13398,16 @@ export interface CancelMediaProcessingOperation extends CommsOperation {}
 export interface InviteParticipantsOperation extends CommsOperation {
     // The participants to invite.
     participants?: InvitationParticipantInfo[];
+}
+export interface MeetingAttendanceReport extends Entity {
+    // UTC time when the meeting ended. Read-only.
+    meetingEndDateTime?: NullableOption<string>;
+    // UTC time when the meeting started. Read-only.
+    meetingStartDateTime?: NullableOption<string>;
+    // Total number of participants. Read-only.
+    totalParticipantCount?: NullableOption<number>;
+    // List of attendance records of an attendance report. Read-only.
+    attendanceRecords?: NullableOption<AttendanceRecord[]>;
 }
 // tslint:disable-next-line: no-empty-interface
 export interface MuteParticipantOperation extends CommsOperation {}
@@ -13829,6 +14139,8 @@ export interface LicenseAssignmentState {
      * here.
      */
     error?: NullableOption<string>;
+    // The timestamp when the state of the license assignment was last updated.
+    lastUpdatedDateTime?: NullableOption<string>;
     // The unique identifier for the SKU. Read-Only.
     skuId?: NullableOption<string>;
     // Indicate the current state of this assignment. Read-Only. Possible values: Active, ActiveWithError, Disabled and Error.
@@ -14169,10 +14481,11 @@ export interface PermissionScope {
     isEnabled?: boolean;
     origin?: NullableOption<string>;
     /**
-     * Specifies whether this delegated permission should be considered safe for non-admin users to consent to on behalf of
-     * themselves, or whether an administrator should be required for consent to the permissions. This will be the default
-     * behavior, but each customer can choose to customize the behavior in their organization (by allowing, restricting or
-     * limiting user consent to this delegated permission.)
+     * The possible values are: User and Admin. Specifies whether this delegated permission should be considered safe for
+     * non-admin users to consent to on behalf of themselves, or whether an administrator consent should always be required.
+     * While Microsoft Graph defines the default consent requirement for each permission, the tenant administrator may
+     * override the behavior in their organization (by allowing, restricting, or limiting user consent to this delegated
+     * permission). For more information, see Configure how users consent to applications.
      */
     type?: NullableOption<string>;
     /**
@@ -14238,6 +14551,170 @@ export interface Fido2KeyRestrictions {
 export interface RegistrationEnforcement {
     // Run campaigns to remind users to set up targeted authentication methods.
     authenticationMethodsRegistrationCampaign?: NullableOption<AuthenticationMethodsRegistrationCampaign>;
+}
+// tslint:disable-next-line: no-empty-interface
+export interface BookingCustomerInformationBase {}
+export interface BookingCustomerInformation extends BookingCustomerInformationBase {
+    /**
+     * The ID of the bookingCustomer for this appointment. If no ID is specified when an appointment is created, then a new
+     * bookingCustomer object is created. Once set, you should consider the customerId immutable.
+     */
+    customerId?: NullableOption<string>;
+    // It consists of the list of custom questions and answers given by the customer as part of the appointment
+    customQuestionAnswers?: NullableOption<BookingQuestionAnswer[]>;
+    // The SMTP address of the bookingCustomer who is booking the appointment
+    emailAddress?: NullableOption<string>;
+    // Represents location information for the bookingCustomer who is booking the appointment.
+    location?: NullableOption<Location>;
+    // The customer's name.
+    name?: NullableOption<string>;
+    /**
+     * Notes from the customer associated with this appointment. You can get the value only when reading this
+     * bookingAppointment by its ID. You can set this property only when initially creating an appointment with a new
+     * customer. After that point, the value is computed from the customer represented by the customerId.
+     */
+    notes?: NullableOption<string>;
+    // The customer's phone number.
+    phone?: NullableOption<string>;
+    // The time zone of the customer. For a list of possible values, see dateTimeTimeZone.
+    timeZone?: NullableOption<string>;
+}
+export interface BookingQuestionAnswer {
+    // The answer given by the user in case the answerInputType is text.
+    answer?: NullableOption<string>;
+    // The expected answer type. The possible values are: text, radioButton, unknownFutureValue.
+    answerInputType?: NullableOption<AnswerInputType>;
+    // In case the answerInputType is radioButton, this will consists of a list of possible answer values.
+    answerOptions?: NullableOption<string[]>;
+    // Indicates whether it is mandatory to answer the custom question.
+    isRequired?: NullableOption<boolean>;
+    // The question.
+    question?: NullableOption<string>;
+    // The ID of the custom question.
+    questionId?: NullableOption<string>;
+    // The answers selected by the user.
+    selectedOptions?: NullableOption<string[]>;
+}
+export interface Location {
+    // The street address of the location.
+    address?: NullableOption<PhysicalAddress>;
+    // The geographic coordinates and elevation of the location.
+    coordinates?: NullableOption<OutlookGeoCoordinates>;
+    // The name associated with the location.
+    displayName?: NullableOption<string>;
+    // Optional email address of the location.
+    locationEmailAddress?: NullableOption<string>;
+    /**
+     * The type of location. The possible values are: default, conferenceRoom, homeAddress, businessAddress,geoCoordinates,
+     * streetAddress, hotel, restaurant, localBusiness, postalAddress. Read-only.
+     */
+    locationType?: NullableOption<LocationType>;
+    // Optional URI representing the location.
+    locationUri?: NullableOption<string>;
+    // For internal use only.
+    uniqueId?: NullableOption<string>;
+    // For internal use only.
+    uniqueIdType?: NullableOption<LocationUniqueIdType>;
+}
+export interface BookingQuestionAssignment {
+    // The ID of the custom question.
+    isRequired?: boolean;
+    // Indicates whether it is mandatory to answer the custom question.
+    questionId?: string;
+}
+export interface BookingReminder {
+    // The message in the reminder.
+    message?: string;
+    /**
+     * The amount of time before the start of an appointment that the reminder should be sent. It's denoted in ISO 8601
+     * format.
+     */
+    offset?: string;
+    // The persons who should receive the reminder. Possible values are: allAttendees, staff, customer, unknownFutureValue.
+    recipients?: BookingReminderRecipients;
+}
+export interface BookingSchedulingPolicy {
+    // True if to allow customers to choose a specific person for the booking.
+    allowStaffSelection?: boolean;
+    // Maximum number of days in advance that a booking can be made. It follows the ISO 8601 format.
+    maximumAdvance?: string;
+    // The minimum amount of time before which bookings and cancellations must be made. It follows the ISO 8601 format.
+    minimumLeadTime?: string;
+    /**
+     * True to notify the business via email when a booking is created or changed. Use the email address specified in the
+     * email property of the bookingBusiness entity for the business.
+     */
+    sendConfirmationsToOwner?: boolean;
+    // Duration of each time slot, denoted in ISO 8601 format.
+    timeSlotInterval?: string;
+}
+export interface BookingWorkHours {
+    /**
+     * The day of the week represented by this instance. Possible values are: sunday, monday, tuesday, wednesday, thursday,
+     * friday, saturday.
+     */
+    day?: DayOfWeek;
+    // A list of start/end times during a day.
+    timeSlots?: NullableOption<BookingWorkTimeSlot[]>;
+}
+export interface BookingWorkTimeSlot {
+    // The time of the day when work stops. For example, 17:00:00.0000000.
+    endTime?: string;
+    // The time of the day when work starts. For example, 08:00:00.0000000.
+    startTime?: string;
+}
+export interface DateTimeTimeZone {
+    /**
+     * A single point of time in a combined date and time representation ({date}T{time}; for example,
+     * 2017-08-29T04:00:00.0000000).
+     */
+    dateTime?: string;
+    // Represents a time zone, for example, 'Pacific Standard Time'. See below for more possible values.
+    timeZone?: NullableOption<string>;
+}
+export interface PhysicalAddress {
+    // The city.
+    city?: NullableOption<string>;
+    // The country or region. It's a free-format string value, for example, 'United States'.
+    countryOrRegion?: NullableOption<string>;
+    // The postal code.
+    postalCode?: NullableOption<string>;
+    // The state.
+    state?: NullableOption<string>;
+    // The street.
+    street?: NullableOption<string>;
+}
+export interface OutlookGeoCoordinates {
+    /**
+     * The accuracy of the latitude and longitude. As an example, the accuracy can be measured in meters, such as the latitude
+     * and longitude are accurate to within 50 meters.
+     */
+    accuracy?: NullableOption<number>;
+    // The altitude of the location.
+    altitude?: NullableOption<number>;
+    // The accuracy of the altitude.
+    altitudeAccuracy?: NullableOption<number>;
+    // The latitude of the location.
+    latitude?: NullableOption<number>;
+    // The longitude of the location.
+    longitude?: NullableOption<number>;
+}
+export interface Phone {
+    language?: NullableOption<string>;
+    // The phone number.
+    number?: NullableOption<string>;
+    region?: NullableOption<string>;
+    /**
+     * The type of phone number. The possible values are: home, business, mobile, other, assistant, homeFax, businessFax,
+     * otherFax, pager, radio.
+     */
+    type?: NullableOption<PhoneType>;
+}
+export interface TimeSlot {
+    // The date, time, and time zone that a period ends.
+    end?: DateTimeTimeZone;
+    // The date, time, and time zone that a period begins.
+    start?: DateTimeTimeZone;
 }
 export interface DataSubject {
     // Email of the data subject.
@@ -14615,17 +15092,6 @@ export interface OptionalClaim {
      */
     source?: NullableOption<string>;
 }
-export interface Phone {
-    language?: NullableOption<string>;
-    // The phone number.
-    number?: NullableOption<string>;
-    region?: NullableOption<string>;
-    /**
-     * The type of phone number. The possible values are: home, business, mobile, other, assistant, homeFax, businessFax,
-     * otherFax, pager, radio.
-     */
-    type?: NullableOption<PhoneType>;
-}
 export interface PhysicalOfficeAddress {
     // The city.
     city?: NullableOption<string>;
@@ -14884,18 +15350,6 @@ export interface RelatedContact {
      * unknownFutureValue.
      */
     relationship?: ContactRelationship;
-}
-export interface PhysicalAddress {
-    // The city.
-    city?: NullableOption<string>;
-    // The country or region. It's a free-format string value, for example, 'United States'.
-    countryOrRegion?: NullableOption<string>;
-    // The postal code.
-    postalCode?: NullableOption<string>;
-    // The state.
-    state?: NullableOption<string>;
-    // The street.
-    street?: NullableOption<string>;
 }
 export interface EducationOnPremisesInfo {
     // Unique identifier for the user object in Active Directory.
@@ -15257,51 +15711,6 @@ export interface AttendeeBase extends Recipient {
      */
     type?: NullableOption<AttendeeType>;
 }
-export interface DateTimeTimeZone {
-    /**
-     * A single point of time in a combined date and time representation ({date}T{time}; for example,
-     * 2017-08-29T04:00:00.0000000).
-     */
-    dateTime?: string;
-    // Represents a time zone, for example, 'Pacific Standard Time'. See below for more possible values.
-    timeZone?: NullableOption<string>;
-}
-export interface Location {
-    // The street address of the location.
-    address?: NullableOption<PhysicalAddress>;
-    // The geographic coordinates and elevation of the location.
-    coordinates?: NullableOption<OutlookGeoCoordinates>;
-    // The name associated with the location.
-    displayName?: NullableOption<string>;
-    // Optional email address of the location.
-    locationEmailAddress?: NullableOption<string>;
-    /**
-     * The type of location. The possible values are: default, conferenceRoom, homeAddress, businessAddress,geoCoordinates,
-     * streetAddress, hotel, restaurant, localBusiness, postalAddress. Read-only.
-     */
-    locationType?: NullableOption<LocationType>;
-    // Optional URI representing the location.
-    locationUri?: NullableOption<string>;
-    // For internal use only.
-    uniqueId?: NullableOption<string>;
-    // For internal use only.
-    uniqueIdType?: NullableOption<LocationUniqueIdType>;
-}
-export interface OutlookGeoCoordinates {
-    /**
-     * The accuracy of the latitude and longitude. As an example, the accuracy can be measured in meters, such as the latitude
-     * and longitude are accurate to within 50 meters.
-     */
-    accuracy?: NullableOption<number>;
-    // The altitude of the location.
-    altitude?: NullableOption<number>;
-    // The accuracy of the altitude.
-    altitudeAccuracy?: NullableOption<number>;
-    // The latitude of the location.
-    latitude?: NullableOption<number>;
-    // The longitude of the location.
-    longitude?: NullableOption<number>;
-}
 export interface LocationConstraint {
     /**
      * The client requests the service to include in the response a meeting location for the meeting. If this is true and all
@@ -15343,12 +15752,6 @@ export interface MeetingTimeSuggestion {
     organizerAvailability?: NullableOption<FreeBusyStatus>;
     // Reason for suggesting the meeting time.
     suggestionReason?: NullableOption<string>;
-}
-export interface TimeSlot {
-    // The date, time, and time zone that a period ends.
-    end?: DateTimeTimeZone;
-    // The date, time, and time zone that a period begins.
-    start?: DateTimeTimeZone;
 }
 export interface MeetingTimeSuggestionsResult {
     /**
@@ -15750,7 +16153,10 @@ export interface OnlineMeetingInfo {
     tollNumber?: NullableOption<string>;
 }
 export interface PatternedRecurrence {
-    // The frequency of an event. Do not specify for a one-time access review.
+    /**
+     * The frequency of an event. For access reviews: Do not specify this property for a one-time access review. Only
+     * interval, dayOfMonth, and type (weekly, absoluteMonthly) properties of recurrencePattern are supported.
+     */
     pattern?: NullableOption<RecurrencePattern>;
     // The duration of an event.
     range?: NullableOption<RecurrenceRange>;
@@ -15783,7 +16189,10 @@ export interface RecurrencePattern {
     interval?: number;
     // The month in which the event occurs. This is a number from 1 to 12.
     month?: number;
-    // The recurrence pattern type: daily, weekly, absoluteMonthly, relativeMonthly, absoluteYearly, relativeYearly. Required.
+    /**
+     * The recurrence pattern type: daily, weekly, absoluteMonthly, relativeMonthly, absoluteYearly, relativeYearly. Required.
+     * For more information, see values of type property.
+     */
     type?: NullableOption<RecurrencePatternType>;
 }
 export interface RecurrenceRange {
@@ -16328,8 +16737,9 @@ export interface AccessReviewScheduleSettings {
     // Indicates whether decision recommendations are enabled or disabled.
     recommendationsEnabled?: boolean;
     /**
-     * Detailed settings for recurrence using the standard Outlook recurrence object. Only weekly and absoluteMonthly on
-     * recurrencePattern are supported. Use the property startDate on recurrenceRange to determine the day the review starts.
+     * Detailed settings for recurrence using the standard Outlook recurrence object. Note: Only dayOfMonth, interval, and
+     * type (weekly, absoluteMonthly) properties are supported. Use the property startDate on recurrenceRange to determine the
+     * day the review starts.
      */
     recurrence?: NullableOption<PatternedRecurrence>;
     // Indicates whether reminders are enabled or disabled. Default value is false.
@@ -18817,6 +19227,14 @@ export interface AppHostedMediaConfig extends MediaConfig {
     // The media configuration blob generated by smart media agent.
     blob?: NullableOption<string>;
 }
+export interface AttendanceInterval {
+    // Duration of the meeting interval in seconds; that is, the difference between joinDateTime and leaveDateTime.
+    durationInSeconds?: NullableOption<number>;
+    // The time the attendee joined in UTC.
+    joinDateTime?: NullableOption<string>;
+    // The time the attendee left in UTC.
+    leaveDateTime?: NullableOption<string>;
+}
 export interface AudioConferencing {
     // The conference id of the online meeting.
     conferenceId?: NullableOption<string>;
@@ -18845,8 +19263,9 @@ export interface CallMediaState {
     // The audio media state. Possible values are: active, inactive, unknownFutureValue.
     audio?: NullableOption<MediaState>;
 }
-// tslint:disable-next-line: no-empty-interface
-export interface CallOptions {}
+export interface CallOptions {
+    hideBotAfterEscalation?: NullableOption<boolean>;
+}
 export interface CallRoute {
     // The identity that was resolved to in the call.
     final?: IdentitySet;
@@ -18892,8 +19311,11 @@ export interface IncomingContext {
 }
 // tslint:disable-next-line: interface-name
 export interface InvitationParticipantInfo {
+    hidden?: NullableOption<boolean>;
     // The identitySet associated with this invitation.
     identity?: IdentitySet;
+    participantId?: NullableOption<string>;
+    removeFromDefaultAudioRoutingGroup?: NullableOption<boolean>;
     /**
      * Optional. The call which the target identity is currently a part of. This call will be dropped once the participant is
      * added.
@@ -19771,7 +20193,13 @@ export namespace CallRecords {
     type MediaStreamDirection = "callerToCallee" | "calleeToCaller";
     type Modality = "audio" | "video" | "videoBasedScreenSharing" | "data" | "screenSharing" | "unknownFutureValue";
     type NetworkConnectionType = "unknown" | "wired" | "wifi" | "mobile" | "tunnel" | "unknownFutureValue";
-    type ProductFamily = "unknown" | "teams" | "skypeForBusiness" | "lync" | "unknownFutureValue";
+    type ProductFamily =
+        | "unknown"
+        | "teams"
+        | "skypeForBusiness"
+        | "lync"
+        | "unknownFutureValue"
+        | "azureCommunicationServices";
     type PstnCallDurationSource = "microsoft" | "operator";
     type ServiceRole =
         | "unknown"
@@ -19906,7 +20334,9 @@ export namespace CallRecords {
         platform?: ClientPlatform;
         /**
          * Identifies the family of application software used by this endpoint. Possible values are: unknown, teams,
-         * skypeForBusiness, lync, unknownFutureValue.
+         * skypeForBusiness, lync, unknownFutureValue, azureCommunicationServices. Note that you must use the Prefer:
+         * include-unknown-enum-members request header to get the following value(s) in this evolvable enum:
+         * azureCommunicationServices.
          */
         productFamily?: ProductFamily;
     }
