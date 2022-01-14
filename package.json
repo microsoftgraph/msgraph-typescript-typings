@@ -1,7 +1,7 @@
 {
   "name": "@microsoft/microsoft-graph-types",
   "description": "Types for Microsoft Graph objects",
-  "version": "2.12.0",
+  "version": "2.11.0",
   "license": "MIT",
   "types": "microsoft-graph.d.ts",
   "scripts": {
