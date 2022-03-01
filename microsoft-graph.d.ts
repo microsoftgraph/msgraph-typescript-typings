@@ -3912,6 +3912,7 @@ export interface Chat extends Entity {
     members?: NullableOption<ConversationMember[]>;
     // A collection of all the messages in the chat. Nullable.
     messages?: NullableOption<ChatMessage[]>;
+    // A collection of all the tabs in the chat. Nullable.
     tabs?: NullableOption<TeamsTab[]>;
 }
 export interface Team extends Entity {
@@ -8667,14 +8668,21 @@ export interface IdentityProtectionRoot {
     riskyUsers?: NullableOption<RiskyUser[]>;
 }
 export interface RiskDetection extends Entity {
-    // Indicates the activity type the detected risk is linked to. . Possible values are: signin, user, unknownFutureValue.
+    // Indicates the activity type the detected risk is linked to. Possible values are: signin, user, unknownFutureValue.
     activity?: NullableOption<ActivityType>;
     /**
      * Date and time that the risky activity occurred. The DateTimeOffset type represents date and time information using ISO
      * 8601 format and is always in UTC time. For example, midnight UTC on Jan 1, 2014 is look like this: 2014-01-01T00:00:00Z
      */
     activityDateTime?: NullableOption<string>;
-    // Additional information associated with the risk detection in JSON format.
+    /**
+     * Additional information associated with the risk detection in JSON format. For example,
+     * '[{/'Key/':/'userAgent/',/'Value/':/'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko)
+     * Chrome/68.0.3440.106 Safari/537.36/'}]'. Possible keys in the additionalInfo JSON string are: userAgent, alertUrl,
+     * relatedEventTimeInUtc, relatedUserAgent, deviceInformation, relatedLocation, requestId, correlationId,
+     * lastActivityTimeInUtc, malwareName, clientLocation, clientIp, riskReasons. For more information about riskReasons and
+     * possible values, see riskReasons values.
+     */
     additionalInfo?: NullableOption<string>;
     /**
      * Correlation ID of the sign-in associated with the risk detection. This property is null if the risk detection is not
@@ -8683,7 +8691,7 @@ export interface RiskDetection extends Entity {
     correlationId?: NullableOption<string>;
     /**
      * Date and time that the risk was detected. The DateTimeOffset type represents date and time information using ISO 8601
-     * format and is always in UTC time. For example, midnight UTC on Jan 1, 2014 is look like this: 2014-01-01T00:00:00Z
+     * format and is always in UTC time. For example, midnight UTC on Jan 1, 2014 looks like this: 2014-01-01T00:00:00Z
      */
     detectedDateTime?: NullableOption<string>;
     /**
@@ -8716,10 +8724,10 @@ export interface RiskDetection extends Entity {
     /**
      * The type of risk event detected. The possible values are unlikelyTravel, anonymizedIPAddress, maliciousIPAddress,
      * unfamiliarFeatures, malwareInfectedIPAddress, suspiciousIPAddress, leakedCredentials, investigationsThreatIntelligence,
-     * generic,adminConfirmedUserCompromised, mcasImpossibleTravel, mcasSuspiciousInboxManipulationRules,
-     * investigationsThreatIntelligenceSigninLinked, maliciousIPAddressValidCredentialsBlockedIP, and unknownFutureValue. If
-     * the risk detection is a premium detection, will show generic. For more information about each value, see riskEventType
-     * values.
+     * generic,adminConfirmedUserCompromised, passwordSpray, impossibleTravel, newCountry, anomalousToken,
+     * tokenIssuerAnomaly,suspiciousBrowser, riskyIPAddress, mcasSuspiciousInboxManipulationRules, suspiciousInboxForwarding,
+     * and unknownFutureValue. If the risk detection is a premium detection, will show generic. For more information about
+     * each value, see riskEventType values.
      */
     riskEventType?: NullableOption<string>;
     // Level of the detected risk. Possible values are: low, medium, high, hidden, none, unknownFutureValue.
@@ -13034,7 +13042,7 @@ export interface PlannerProgressTaskBoardTaskFormat extends Entity {
 export interface PlannerTaskDetails extends Entity {
     // The collection of checklist items on the task.
     checklist?: NullableOption<PlannerChecklistItems>;
-    // Description of the task
+    // Description of the task.
     description?: NullableOption<string>;
     /**
      * This sets the type of preview that shows up on the task. The possible values are: automatic, noPreview, checklist,
@@ -13774,7 +13782,12 @@ export interface WindowsHelloForBusinessAuthenticationMethod extends Authenticat
     displayName?: NullableOption<string>;
     // Key strength of this Windows Hello for Business key. Possible values are: normal, weak, unknown.
     keyStrength?: NullableOption<AuthenticationMethodKeyStrength>;
-    // The registered device on which this Windows Hello for Business key resides.
+    /**
+     * The registered device on which this Windows Hello for Business key resides. Supports $expand. When you get a user's
+     * Windows Hello for Business registration information, this property is returned only on a single GET and when you
+     * specify ?$expand. For example, GET
+     * /users/admin@contoso.com/authentication/windowsHelloForBusinessMethods/_jpuR-TGZtk6aQCLF3BQjA2?$expand=device.
+     */
     device?: NullableOption<Device>;
 }
 export interface AadUserConversationMember extends ConversationMember {
