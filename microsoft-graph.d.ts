@@ -459,6 +459,22 @@ export type AccessPackageRequestType =
     | "onBehalfAdd"
     | "unknownFutureValue";
 export type AccessPackageSubjectType = "notSpecified" | "user" | "servicePrincipal" | "unknownFutureValue";
+export type AccessReviewExpirationBehavior =
+    | "keepAccess"
+    | "removeAccess"
+    | "acceptAccessRecommendation"
+    | "unknownFutureValue";
+export type AllowedTargetScope =
+    | "notSpecified"
+    | "specificDirectoryUsers"
+    | "specificConnectedOrganizationUsers"
+    | "specificDirectoryServicePrincipals"
+    | "allMemberUsers"
+    | "allDirectoryUsers"
+    | "allDirectoryServicePrincipals"
+    | "allConfiguredConnectedOrganizationUsers"
+    | "allExternalUsers"
+    | "unknownFutureValue";
 export type ExpirationPatternType = "notSpecified" | "noExpiration" | "afterDateTime" | "afterDuration";
 export type ConnectedOrganizationState = "configured" | "proposed" | "unknownFutureValue";
 export type ComplianceStatus =
@@ -3518,7 +3534,7 @@ export interface AgreementAcceptance extends Entity {
      * midnight UTC on Jan 1, 2014 is 2014-01-01T00:00:00Z.
      */
     recordedDateTime?: NullableOption<string>;
-    // The state of the agreement acceptance. Possible values are: accepted, declined.
+    // The state of the agreement acceptance. Possible values are: accepted, declined. Supports $filter (eq).
     state?: NullableOption<AgreementAcceptanceState>;
     // Display name of the user when the acceptance was recorded.
     userDisplayName?: NullableOption<string>;
@@ -6473,7 +6489,7 @@ export interface UnifiedRoleDefinition extends Entity {
 export interface RoleManagement {
     // Read-only. Nullable.
     directory?: NullableOption<RbacApplication>;
-    // Container for all entitlement management resources in Azure AD identity governance.
+    // Container for roles and assignments for entitlement management resources.
     entitlementManagement?: NullableOption<RbacApplication>;
 }
 export interface SubscribedSku extends Entity {
@@ -8402,9 +8418,11 @@ export interface ApprovalStage extends Entity {
     status?: NullableOption<string>;
 }
 export interface EntitlementManagement extends Entity {
+    // Approval stages for assignment requests.
     accessPackageAssignmentApprovals?: NullableOption<Approval[]>;
     // Represents access package objects.
     accessPackages?: NullableOption<AccessPackage[]>;
+    assignmentPolicies?: NullableOption<AccessPackageAssignmentPolicy[]>;
     // Represents access package assignment requests created by or on behalf of a user.
     assignmentRequests?: NullableOption<AccessPackageAssignmentRequest[]>;
     // Represents the grant of an access package to a subject (user or group).
@@ -8433,7 +8451,35 @@ export interface AccessPackage extends Entity {
      * midnight UTC on Jan 1, 2014 is 2014-01-01T00:00:00Z. Read-only.
      */
     modifiedDateTime?: NullableOption<string>;
+    assignmentPolicies?: NullableOption<AccessPackageAssignmentPolicy[]>;
     // Read-only. Nullable.
+    catalog?: NullableOption<AccessPackageCatalog>;
+}
+export interface AccessPackageAssignmentPolicy extends Entity {
+    allowedTargetScope?: NullableOption<AllowedTargetScope>;
+    /**
+     * The Timestamp type represents date and time information using ISO 8601 format and is always in UTC time. For example,
+     * midnight UTC on Jan 1, 2014 is 2014-01-01T00:00:00Z
+     */
+    createdDateTime?: NullableOption<string>;
+    // The description of the policy.
+    description?: NullableOption<string>;
+    // The display name of the policy. Supports $filter (eq).
+    displayName?: NullableOption<string>;
+    expiration?: NullableOption<ExpirationPattern>;
+    /**
+     * The Timestamp type represents date and time information using ISO 8601 format and is always in UTC time. For example,
+     * midnight UTC on Jan 1, 2014 is 2014-01-01T00:00:00Z
+     */
+    modifiedDateTime?: NullableOption<string>;
+    // Who must approve requests for access package in this policy.
+    requestApprovalSettings?: NullableOption<AccessPackageAssignmentApprovalSettings>;
+    // Who can request this access package from this policy.
+    requestorSettings?: NullableOption<AccessPackageAssignmentRequestorSettings>;
+    reviewSettings?: NullableOption<AccessPackageAssignmentReviewSettings>;
+    specificAllowedTargets?: NullableOption<SubjectSet[]>;
+    // The access package with this policy. Read-only. Nullable. Supports $expand.
+    accessPackage?: NullableOption<AccessPackage>;
     catalog?: NullableOption<AccessPackageCatalog>;
 }
 export interface AccessPackageAssignmentRequest extends Entity {
@@ -8498,6 +8544,7 @@ export interface AccessPackageAssignment extends Entity {
     status?: NullableOption<string>;
     // Read-only. Nullable. Supports $filter (eq) on the id property and $expand query parameters.
     accessPackage?: NullableOption<AccessPackage>;
+    assignmentPolicy?: NullableOption<AccessPackageAssignmentPolicy>;
     // The subject of the access package assignment. Read-only. Nullable. Supports $expand. Supports $filter (eq) on objectId.
     target?: NullableOption<AccessPackageSubject>;
 }
@@ -8593,28 +8640,31 @@ export interface TermsOfUseContainer extends Entity {
 export interface Agreement extends Entity {
     /**
      * Display name of the agreement. The display name is used for internal tracking of the agreement but is not shown to end
-     * users who view the agreement.
+     * users who view the agreement. Supports $filter (eq).
      */
     displayName?: NullableOption<string>;
     /**
      * Indicates whether end users are required to accept this agreement on every device that they access it from. The end
-     * user is required to register their device in Azure AD, if they haven't already done so.
+     * user is required to register their device in Azure AD, if they haven't already done so. Supports $filter (eq).
      */
     isPerDeviceAcceptanceRequired?: NullableOption<boolean>;
-    // Indicates whether the user has to expand the agreement before accepting.
+    // Indicates whether the user has to expand the agreement before accepting. Supports $filter (eq).
     isViewingBeforeAcceptanceRequired?: NullableOption<boolean>;
-    // Expiration schedule and frequency of agreement for all users.
+    // Expiration schedule and frequency of agreement for all users. Supports $filter (eq).
     termsExpiration?: NullableOption<TermsExpiration>;
     /**
      * The duration after which the user must re-accept the terms of use. The value is represented in ISO 8601 format for
-     * durations.
+     * durations. Supports $filter (eq).
      */
     userReacceptRequiredFrequency?: NullableOption<string>;
     // Read-only. Information about acceptances of this agreement.
     acceptances?: NullableOption<AgreementAcceptance[]>;
     // Default PDF linked to this agreement.
     file?: NullableOption<AgreementFile>;
-    // PDFs linked to this agreement. This property is in the process of being deprecated. Use the file property instead.
+    /**
+     * PDFs linked to this agreement. This property is in the process of being deprecated. Use the file property instead.
+     * Supports $expand.
+     */
     files?: NullableOption<AgreementFileLocalization[]>;
 }
 export interface AgreementFileProperties extends Entity {
@@ -17176,6 +17226,7 @@ export interface ServicePrincipalIdentity extends Identity {
     appId?: NullableOption<string>;
 }
 export interface AgreementFileData {
+    // Data that represents the terms of use PDF document. Read-only.
     data?: NullableOption<number>;
 }
 export interface TermsExpiration {
@@ -17352,6 +17403,33 @@ export interface RiskUserActivity {
     // The type of risk event detected.
     riskEventTypes?: NullableOption<string[]>;
 }
+export interface AccessPackageApprovalStage {
+    durationBeforeAutomaticDenial?: NullableOption<string>;
+    durationBeforeEscalation?: NullableOption<string>;
+    escalationApprovers?: NullableOption<SubjectSet[]>;
+    fallbackEscalationApprovers?: NullableOption<SubjectSet[]>;
+    fallbackPrimaryApprovers?: NullableOption<SubjectSet[]>;
+    isApproverJustificationRequired?: NullableOption<boolean>;
+    isEscalationEnabled?: NullableOption<boolean>;
+    primaryApprovers?: NullableOption<SubjectSet[]>;
+}
+// tslint:disable-next-line: no-empty-interface
+export interface SubjectSet {}
+export interface AccessPackageAssignmentApprovalSettings {
+    isApprovalRequiredForAdd?: NullableOption<boolean>;
+    isApprovalRequiredForUpdate?: NullableOption<boolean>;
+    stages?: NullableOption<AccessPackageApprovalStage[]>;
+}
+export interface AccessPackageAssignmentRequestorSettings {
+    allowCustomAssignmentSchedule?: NullableOption<boolean>;
+    enableOnBehalfRequestorsToAddAccess?: NullableOption<boolean>;
+    enableOnBehalfRequestorsToRemoveAccess?: NullableOption<boolean>;
+    enableOnBehalfRequestorsToUpdateAccess?: NullableOption<boolean>;
+    enableTargetsToSelfAddAccess?: NullableOption<boolean>;
+    enableTargetsToSelfRemoveAccess?: NullableOption<boolean>;
+    enableTargetsToSelfUpdateAccess?: NullableOption<boolean>;
+    onBehalfRequestors?: NullableOption<SubjectSet[]>;
+}
 export interface AccessPackageAssignmentRequestRequirements {
     // Indicates whether the requestor is allowed to set a custom schedule.
     allowCustomAssignmentSchedule?: NullableOption<boolean>;
@@ -17382,8 +17460,16 @@ export interface EntitlementManagementSchedule {
      */
     startDateTime?: NullableOption<string>;
 }
-// tslint:disable-next-line: no-empty-interface
-export interface SubjectSet {}
+export interface AccessPackageAssignmentReviewSettings {
+    expirationBehavior?: NullableOption<AccessReviewExpirationBehavior>;
+    fallbackReviewers?: NullableOption<SubjectSet[]>;
+    isEnabled?: NullableOption<boolean>;
+    isRecommendationEnabled?: NullableOption<boolean>;
+    isReviewerJustificationRequired?: NullableOption<boolean>;
+    isSelfReview?: NullableOption<boolean>;
+    primaryReviewers?: NullableOption<SubjectSet[]>;
+    schedule?: NullableOption<EntitlementManagementSchedule>;
+}
 export interface ConnectedOrganizationMembers extends SubjectSet {
     // The ID of the connected organization in entitlement management.
     connectedOrganizationId?: NullableOption<string>;
@@ -17441,6 +17527,11 @@ export interface SingleUser extends SubjectSet {
     description?: NullableOption<string>;
     // The ID of the user in Azure AD.
     userId?: NullableOption<string>;
+}
+// tslint:disable-next-line: no-empty-interface
+export interface TargetApplicationOwners extends SubjectSet {}
+export interface TargetManager extends SubjectSet {
+    managerLevel?: NullableOption<number>;
 }
 // tslint:disable-next-line: interface-name no-empty-interface
 export interface IdentitySource {}
