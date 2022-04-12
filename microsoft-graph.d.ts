@@ -1089,6 +1089,41 @@ export type OnenotePatchInsertPosition = "After" | "Before";
 export type OnenoteSourceService = "Unknown" | "OneDrive" | "OneDriveForBusiness" | "OnPremOneDriveForBusiness";
 export type OnenoteUserRole = "None" | "Owner" | "Contributor" | "Reader";
 export type OperationStatus = "NotStarted" | "Running" | "Completed" | "Failed";
+export type RoleAssignmentScheduleFilterByCurrentUserOptions = "principal" | "unknownFutureValue";
+export type RoleAssignmentScheduleInstanceFilterByCurrentUserOptions = "principal" | "unknownFutureValue";
+export type RoleAssignmentScheduleRequestFilterByCurrentUserOptions =
+    | "principal"
+    | "createdBy"
+    | "approver"
+    | "unknownFutureValue";
+export type RoleEligibilityScheduleFilterByCurrentUserOptions = "principal" | "unknownFutureValue";
+export type RoleEligibilityScheduleInstanceFilterByCurrentUserOptions = "principal" | "unknownFutureValue";
+export type RoleEligibilityScheduleRequestFilterByCurrentUserOptions =
+    | "principal"
+    | "createdBy"
+    | "approver"
+    | "unknownFutureValue";
+export type UnifiedRoleManagementPolicyRuleTargetOperations =
+    | "all"
+    | "activate"
+    | "deactivate"
+    | "assign"
+    | "update"
+    | "remove"
+    | "extend"
+    | "renew"
+    | "unknownFutureValue";
+export type UnifiedRoleScheduleRequestActions =
+    | "adminAssign"
+    | "adminUpdate"
+    | "adminRemove"
+    | "selfActivate"
+    | "selfDeactivate"
+    | "adminExtend"
+    | "adminRenew"
+    | "selfExtend"
+    | "selfRenew"
+    | "unknownFutureValue";
 export type PrintColorMode = "blackAndWhite" | "grayscale" | "color" | "auto" | "unknownFutureValue";
 export type PrintDuplexMode = "flipOnLongEdge" | "flipOnShortEdge" | "oneSided" | "unknownFutureValue";
 export type PrinterFeedOrientation = "longEdgeFirst" | "shortEdgeFirst" | "unknownFutureValue";
@@ -2709,7 +2744,7 @@ export interface User extends DirectoryObject {
     onPremisesSamAccountName?: NullableOption<string>;
     /**
      * Contains the on-premises security identifier (SID) for the user that was synchronized from on-premises to the cloud.
-     * Read-only. Returned only on $select. Supports $filter (eq) on null values only.
+     * Read-only. Returned only on $select. Supports $filter (eq including on null values).
      */
     onPremisesSecurityIdentifier?: NullableOption<string>;
     /**
@@ -2753,6 +2788,8 @@ export interface User extends DirectoryObject {
      * Supports $filter (eq, ne, not, ge, le, in, startsWith, and eq on null values).
      */
     postalCode?: NullableOption<string>;
+    // The preferred data location for the user. For more information, see OneDrive Online Multi-Geo.
+    preferredDataLocation?: NullableOption<string>;
     /**
      * The preferred language for the user. Should follow ISO 639-1 Code; for example en-US. Returned by default. Supports
      * $filter (eq, ne, not, ge, le, in, startsWith, and eq on null values)
@@ -4552,6 +4589,10 @@ export interface PolicyRoot extends Entity {
     conditionalAccessPolicies?: NullableOption<ConditionalAccessPolicy[]>;
     // The policy that represents the security defaults that protect against common attacks.
     identitySecurityDefaultsEnforcementPolicy?: NullableOption<IdentitySecurityDefaultsEnforcementPolicy>;
+    // Represents the role management policies.
+    roleManagementPolicies?: NullableOption<UnifiedRoleManagementPolicy[]>;
+    // Represents the role management policy assignments.
+    roleManagementPolicyAssignments?: NullableOption<UnifiedRoleManagementPolicyAssignment[]>;
 }
 export interface AuthenticationFlowsPolicy extends Entity {
     // Inherited property. A description of the policy. Optional. Read-only.
@@ -4658,6 +4699,45 @@ export interface ConditionalAccessPolicy extends Entity {
 export interface IdentitySecurityDefaultsEnforcementPolicy extends PolicyBase {
     // If set to true, Azure Active Directory security defaults is enabled for the tenant.
     isEnabled?: boolean;
+}
+export interface UnifiedRoleManagementPolicy extends Entity {
+    // Description for the policy.
+    description?: string;
+    // Display name for the policy.
+    displayName?: string;
+    /**
+     * This can only be set to true for a single tenant wide policy which will apply to all scopes and roles. Set the scopeId
+     * to '/' and scopeType to Directory.
+     */
+    isOrganizationDefault?: NullableOption<boolean>;
+    // The identity who last modified the role setting.
+    lastModifiedBy?: NullableOption<Identity>;
+    // The time when the role setting was last modified.
+    lastModifiedDateTime?: NullableOption<string>;
+    // The id of the scope where the policy is created. Can be / for the tenant or a group ID. Required.
+    scopeId?: string;
+    // The type of the scope where the policy is created. One of Directory, DirectoryRole. Required.
+    scopeType?: string;
+    /**
+     * Not implemented. The list of effective rules like approval rules and expiration rules evaluated based on inherited
+     * referenced rules. For example, if there is a tenant-wide policy to enforce enabling an approval rule, the effective
+     * rule will be to enable approval even if the policy has a rule to disable approval.
+     */
+    effectiveRules?: NullableOption<UnifiedRoleManagementPolicyRule[]>;
+    // The collection of rules like approval rules and expiration rules.
+    rules?: NullableOption<UnifiedRoleManagementPolicyRule[]>;
+}
+export interface UnifiedRoleManagementPolicyAssignment extends Entity {
+    // The id of the policy.
+    policyId?: string;
+    // The id of the role definition where the policy applies. If not specified, the policy applies to all roles.
+    roleDefinitionId?: NullableOption<string>;
+    // The id of the scope where the policy is assigned. E.g. '/', groupId, etc.
+    scopeId?: string;
+    // The type of the scope where the policy is assigned. One of Directory, DirectoryRole, Group.
+    scopeType?: string;
+    // The policy for the assignment.
+    policy?: NullableOption<UnifiedRoleManagementPolicy>;
 }
 export interface Bitlocker extends Entity {
     // The recovery keys associated with the bitlocker entity.
@@ -5169,7 +5249,7 @@ export interface Group extends DirectoryObject {
     onPremisesSamAccountName?: NullableOption<string>;
     /**
      * Contains the on-premises security identifier (SID) for the group that was synchronized from on-premises to the cloud.
-     * Returned by default. Supports $filter on null values. Read-only.
+     * Returned by default. Supports $filter (eq including on null values). Read-only.
      */
     onPremisesSecurityIdentifier?: NullableOption<string>;
     /**
@@ -5253,6 +5333,7 @@ export interface Group extends DirectoryObject {
      * $select. Supported only on the Get group API (GET /groups/{ID}).
      */
     unseenCount?: NullableOption<number>;
+    // When a group is associated with a team this property deternunes whether the team is in read-only mode.
     isArchived?: NullableOption<boolean>;
     // Represents the app roles a group has been granted for an application. Supports $expand.
     appRoleAssignments?: NullableOption<AppRoleAssignment[]>;
@@ -5264,8 +5345,8 @@ export interface Group extends DirectoryObject {
      */
     memberOf?: NullableOption<DirectoryObject[]>;
     /**
-     * UMembers of this group, who can be users, devices, other groups, or service principals. Supports the List members, Add
-     * member, and Remove member operations. Nullable. Supports $expand including nested $select. For example,
+     * The members of this group, who can be users, devices, other groups, or service principals. Supports the List members,
+     * Add member, and Remove member operations. Nullable. Supports $expand including nested $select. For example,
      * /groups?$filter=startsWith(displayName,'Role')&amp;$select=id,displayName&amp;$expand=members($select=id,userPrincipalName,displayName).
      */
     members?: NullableOption<DirectoryObject[]>;
@@ -6426,6 +6507,12 @@ export interface RbacApplication extends Entity {
     roleAssignments?: NullableOption<UnifiedRoleAssignment[]>;
     // Resource representing the roles allowed by RBAC providers and the permissions assigned to the roles.
     roleDefinitions?: NullableOption<UnifiedRoleDefinition[]>;
+    roleAssignmentScheduleInstances?: NullableOption<UnifiedRoleAssignmentScheduleInstance[]>;
+    roleAssignmentScheduleRequests?: NullableOption<UnifiedRoleAssignmentScheduleRequest[]>;
+    roleAssignmentSchedules?: NullableOption<UnifiedRoleAssignmentSchedule[]>;
+    roleEligibilityScheduleInstances?: NullableOption<UnifiedRoleEligibilityScheduleInstance[]>;
+    roleEligibilityScheduleRequests?: NullableOption<UnifiedRoleEligibilityScheduleRequest[]>;
+    roleEligibilitySchedules?: NullableOption<UnifiedRoleEligibilitySchedule[]>;
 }
 export interface UnifiedRoleAssignment extends Entity {
     /**
@@ -6493,6 +6580,300 @@ export interface UnifiedRoleDefinition extends Entity {
      * (isBuiltIn is true) support this attribute. Supports $expand.
      */
     inheritsPermissionsFrom?: NullableOption<UnifiedRoleDefinition[]>;
+}
+export interface UnifiedRoleScheduleInstanceBase extends Entity {
+    /**
+     * Identifier of the app-specific scope when the assignment scope is app-specific. The scope of an assignment determines
+     * the set of resources for which the principal has been granted access. App scopes are scopes that are defined and
+     * understood by this application only. Use / for tenant-wide app scopes. Use directoryScopeId to limit the scope to
+     * particular directory objects, for example, administrative units.
+     */
+    appScopeId?: NullableOption<string>;
+    /**
+     * Identifier of the directory object representing the scope of the assignment. The scope of an assignment determines the
+     * set of resources for which the principal has been granted access. Directory scopes are shared scopes stored in the
+     * directory that are understood by multiple applications. Use / for tenant-wide scope. Use appScopeId to limit the scope
+     * to an application only.
+     */
+    directoryScopeId?: NullableOption<string>;
+    // Identifier of the principal to which the assignment is being granted to. Can be a group or a user.
+    principalId?: NullableOption<string>;
+    // Identifier of the unifiedRoleDefinition the assignment is for. Read only. Supports $filter (eq).
+    roleDefinitionId?: NullableOption<string>;
+    /**
+     * Read-only property with details of the app specific scope when the assignment scope is app specific. Containment
+     * entity.
+     */
+    appScope?: NullableOption<AppScope>;
+    /**
+     * The directory object that is the scope of the assignment. Enables the retrieval of the directory object using $expand
+     * at the same time as getting the role assignment. Read-only.
+     */
+    directoryScope?: NullableOption<DirectoryObject>;
+    /**
+     * The principal that is getting a role assignment through the request. Enables the retrieval of the principal using
+     * $expand at the same time as getting the role assignment. Read-only.
+     */
+    principal?: NullableOption<DirectoryObject>;
+    /**
+     * The roleDefinition for the assignment. Enables the retrieval of the role definition using $expand at the same time as
+     * getting the role assignment. The roleDefinition.Id is automatically expanded.
+     */
+    roleDefinition?: NullableOption<UnifiedRoleDefinition>;
+}
+export interface UnifiedRoleAssignmentScheduleInstance extends UnifiedRoleScheduleInstanceBase {
+    // Type of the assignment. It can either be Assigned or Activated.
+    assignmentType?: NullableOption<string>;
+    // Time that the roleAssignmentInstance will expire
+    endDateTime?: NullableOption<string>;
+    // Membership type of the assignment. It can either be Inherited, Direct, or Group.
+    memberType?: NullableOption<string>;
+    // ID of the roleAssignment in the directory
+    roleAssignmentOriginId?: NullableOption<string>;
+    // ID of the parent roleAssignmentSchedule for this instance
+    roleAssignmentScheduleId?: NullableOption<string>;
+    // Time that the roleAssignmentInstance will start
+    startDateTime?: NullableOption<string>;
+    /**
+     * If the roleAssignmentScheduleInstance is activated by a roleEligibilityScheduleRequest, this is the link to the related
+     * schedule instance.
+     */
+    activatedUsing?: NullableOption<UnifiedRoleEligibilityScheduleInstance>;
+}
+export interface Request extends Entity {
+    // The identifier of the approval of the request.
+    approvalId?: NullableOption<string>;
+    // The request completion date time.
+    completedDateTime?: NullableOption<string>;
+    // The user who created this request.
+    createdBy?: NullableOption<IdentitySet>;
+    // The request creation date time.
+    createdDateTime?: NullableOption<string>;
+    // Free text field to define any custom data for the request. Not used.
+    customData?: NullableOption<string>;
+    /**
+     * The status of the request. Not nullable. The possible values are: Canceled, Denied, Failed, Granted,
+     * PendingAdminDecision, PendingApproval, PendingProvisioning, PendingScheduleCreation, Provisioned, Revoked, and
+     * ScheduleCreated. Not nullable.
+     */
+    status?: string;
+}
+export interface UnifiedRoleAssignmentScheduleRequest extends Request {
+    /**
+     * Represents the type of the operation on the role assignment. The possible values are: AdminAssign: For administrators
+     * to assign roles to users or groups.AdminRemove: For administrators to remove users or groups from roles. AdminUpdate:
+     * For administrators to change existing role assignments.AdminExtend: For administrators to extend expiring
+     * assignments.AdminRenew: For administrators to renew expired assignments.SelfActivate: For users to activate their
+     * assignments.SelfDeactivate: For users to deactivate their active assignments.SelfExtend: For users to request to extend
+     * their expiring assignments.SelfRenew: For users to request to renew their expired assignments.
+     */
+    action?: NullableOption<UnifiedRoleScheduleRequestActions>;
+    /**
+     * Identifier of the app-specific scope when the assignment scope is app-specific. The scope of an assignment determines
+     * the set of resources for which the principal has been granted access. App scopes are scopes that are defined and
+     * understood by this application only. Use / for tenant-wide app scopes. Use directoryScopeId to limit the scope to
+     * particular directory objects, for example, administrative units.
+     */
+    appScopeId?: NullableOption<string>;
+    /**
+     * Identifier of the directory object representing the scope of the assignment. The scope of an assignment determines the
+     * set of resources for which the principal has been granted access. Directory scopes are shared scopes stored in the
+     * directory that are understood by multiple applications. Use / for tenant-wide scope. Use appScopeId to limit the scope
+     * to an application only.
+     */
+    directoryScopeId?: NullableOption<string>;
+    /**
+     * A boolean that determines whether the call is a validation or an actual call. Only set this property if you want to
+     * check whether an activation is subject to additional rules like MFA before actually submitting the request.
+     */
+    isValidationOnly?: NullableOption<boolean>;
+    // A message provided by users and administrators when create the request about why it is needed.
+    justification?: NullableOption<string>;
+    // Identifier of the principal to which the assignment is being granted to.
+    principalId?: NullableOption<string>;
+    // Identifier of the unifiedRoleDefinition the assignment is for. Read only.
+    roleDefinitionId?: NullableOption<string>;
+    // The schedule object of the role assignment request.
+    scheduleInfo?: NullableOption<RequestSchedule>;
+    // Identifier of the schedule object attached to the assignment.
+    targetScheduleId?: NullableOption<string>;
+    /**
+     * The ticketInfo object attached to the role assignment request which includes details of the ticket number and ticket
+     * system.
+     */
+    ticketInfo?: NullableOption<TicketInfo>;
+    /**
+     * If the request is from an eligible administrator to activate a role, this parameter will show the related eligible
+     * assignment for that activation.
+     */
+    activatedUsing?: NullableOption<UnifiedRoleEligibilitySchedule>;
+    /**
+     * Read-only property with details of the app specific scope when the assignment scope is app specific. Containment
+     * entity.
+     */
+    appScope?: NullableOption<AppScope>;
+    /**
+     * Property referencing the directory object that is the scope of the assignment. Provided so that callers can get the
+     * directory object using $expand at the same time as getting the role assignment. Read-only.
+     */
+    directoryScope?: NullableOption<DirectoryObject>;
+    /**
+     * Property referencing the principal that is getting a role assignment through the request. Provided so that callers can
+     * get the principal using $expand at the same time as getting the role assignment. Read-only.
+     */
+    principal?: NullableOption<DirectoryObject>;
+    /**
+     * Property indicating the roleDefinition the assignment is for. Provided so that callers can get the role definition
+     * using $expand at the same time as getting the role assignment. roleDefinition.Id will be auto expanded.
+     */
+    roleDefinition?: NullableOption<UnifiedRoleDefinition>;
+    // Property indicating the schedule for an eligible role assignment.
+    targetSchedule?: NullableOption<UnifiedRoleAssignmentSchedule>;
+}
+export interface UnifiedRoleScheduleBase extends Entity {
+    /**
+     * Identifier of the app-specific scope when the assignment scope is app-specific. The scope of an assignment determines
+     * the set of resources for which the principal has been granted access. App scopes are scopes that are defined and
+     * understood by this application only. Use / for tenant-wide app scopes. Use directoryScopeId to limit the scope to
+     * particular directory objects, for example, administrative units or all users.
+     */
+    appScopeId?: NullableOption<string>;
+    // Time that the schedule was created.
+    createdDateTime?: NullableOption<string>;
+    // Identifier of the roleAssignmentScheduleRequest that created this schedule.
+    createdUsing?: NullableOption<string>;
+    /**
+     * Identifier of the directory object representing the scope of the assignment. The scope of an assignment determines the
+     * set of resources for which the principal has been granted access. Directory scopes are shared scopes stored in the
+     * directory that are understood by multiple applications. Use / for tenant-wide scope. Use appScopeId to limit the scope
+     * to an application only.
+     */
+    directoryScopeId?: NullableOption<string>;
+    // Last time the schedule was updated.
+    modifiedDateTime?: NullableOption<string>;
+    // Identifier of the principal to which the assignment is being granted to. Supports $filter (eq).
+    principalId?: NullableOption<string>;
+    // Identifier of the unifiedRoleDefinition the assignment is for. Read only. Supports $filter (eq).
+    roleDefinitionId?: NullableOption<string>;
+    /**
+     * Status for the roleAssignmentSchedule. It can include state related messages like Provisioned, Revoked, Pending
+     * Provisioning, and Pending Approval. Supports $filter (eq).
+     */
+    status?: NullableOption<string>;
+    /**
+     * Read-only property with details of the app specific scope when the assignment scope is app specific. Containment
+     * entity.
+     */
+    appScope?: NullableOption<AppScope>;
+    /**
+     * Property referencing the directory object that is the scope of the assignment. Provided so that callers can get the
+     * directory object using $expand at the same time as getting the role assignment. Read-only.
+     */
+    directoryScope?: NullableOption<DirectoryObject>;
+    /**
+     * Property referencing the principal that is getting a role assignment through the request. Provided so that callers can
+     * get the principal using $expand at the same time as getting the role assignment. Read-only.
+     */
+    principal?: NullableOption<DirectoryObject>;
+    /**
+     * Property indicating the roleDefinition the assignment is for. Provided so that callers can get the role definition
+     * using $expand at the same time as getting the role assignment. roleDefinition.Id will be auto expanded.
+     */
+    roleDefinition?: NullableOption<UnifiedRoleDefinition>;
+}
+export interface UnifiedRoleAssignmentSchedule extends UnifiedRoleScheduleBase {
+    // Type of the assignment. It can either be Assigned or Activated.
+    assignmentType?: NullableOption<string>;
+    // Membership type of the assignment. It can either be Inherited, Direct, or Group.
+    memberType?: NullableOption<string>;
+    // The schedule object of the role assignment request.
+    scheduleInfo?: NullableOption<RequestSchedule>;
+    // If the roleAssignmentSchedule is activated by a roleEligibilitySchedule, this is the link to that schedule.
+    activatedUsing?: NullableOption<UnifiedRoleEligibilitySchedule>;
+}
+export interface UnifiedRoleEligibilityScheduleInstance extends UnifiedRoleScheduleInstanceBase {
+    // Time that the roleEligibilityScheduleInstance will expire.
+    endDateTime?: NullableOption<string>;
+    // Membership type of the assignment. It can either be Inherited, Direct, or Group.
+    memberType?: NullableOption<string>;
+    // Identifier of the parent roleEligibilitySchedule for this instance.
+    roleEligibilityScheduleId?: NullableOption<string>;
+    // Time that the roleEligibilityScheduleInstance will start.
+    startDateTime?: NullableOption<string>;
+}
+export interface UnifiedRoleEligibilityScheduleRequest extends Request {
+    /**
+     * Represents the type of the operation on the role eligibility assignment. The possible values are: AdminAssign: For
+     * administrators to assign role eligibility to users or groups to roles.AdminExtend: For administrators to extend
+     * expiring assignments.AdminUpdate: For administrators to change existing role assignments.AdminRenew: For administrators
+     * to renew expired assignments.AdminRemove: For administrators to remove users or groups from eligible roles.UserAdd: For
+     * users to activate their eligible assignments.UserExtend: For users to request to extend their expiring eligible
+     * assignments.UserRemove: For users to deactivate their active eligible assignments.UserRenew: For users to request to
+     * renew their expired eligible assignments.
+     */
+    action?: NullableOption<UnifiedRoleScheduleRequestActions>;
+    /**
+     * Identifier of the app-specific scope when the assignment scope is app-specific. The scope of an assignment determines
+     * the set of resources for which the principal has been granted access. App scopes are scopes that are defined and
+     * understood by this application only. Use / for tenant-wide app scopes. Use directoryScopeId to limit the scope to
+     * particular directory objects, for example, administrative units.
+     */
+    appScopeId?: NullableOption<string>;
+    /**
+     * Identifier of the directory object representing the scope of the assignment. The scope of an assignment determines the
+     * set of resources for which the principal has been granted access. Directory scopes are shared scopes stored in the
+     * directory that are understood by multiple applications. Use / for tenant-wide scope. Use appScopeId to limit the scope
+     * to an application only.
+     */
+    directoryScopeId?: NullableOption<string>;
+    /**
+     * A boolean that determines whether the call is a validation or an actual call. Only set this property if you want to
+     * check whether an activation is subject to additional rules like MFA before actually submitting the request.
+     */
+    isValidationOnly?: NullableOption<boolean>;
+    // A message provided by users and administrators when create the request about why it is needed.
+    justification?: NullableOption<string>;
+    /**
+     * Identifier of the principal to which the assignment is being granted to. For example, a user or a group. For groups,
+     * they must be assignable to roles, that is, the isAssignableToRole of the group property set to true.
+     */
+    principalId?: NullableOption<string>;
+    // Identifier of the unifiedRoleDefinition the assignment is for. Read only.
+    roleDefinitionId?: NullableOption<string>;
+    // The schedule object of the role assignment request.
+    scheduleInfo?: NullableOption<RequestSchedule>;
+    // The time period for which the eligibility assignment is valid.
+    targetScheduleId?: NullableOption<string>;
+    // The details of the ticket number and ticket system that is attached to the role assignment request.
+    ticketInfo?: NullableOption<TicketInfo>;
+    /**
+     * Read-only property with details of the app-specific scope when the assignment scope is app-specific. Containment
+     * entity.
+     */
+    appScope?: NullableOption<AppScope>;
+    /**
+     * Property referencing the directory object that is the scope of the assignment. Provided so that callers can get the
+     * directory object using $expand at the same time as getting the role assignment. Read-only.
+     */
+    directoryScope?: NullableOption<DirectoryObject>;
+    /**
+     * Property referencing the principal that is getting a role assignment through the request. Provided so that callers can
+     * get the principal using $expand at the same time as getting the role assignment. Read-only.
+     */
+    principal?: NullableOption<DirectoryObject>;
+    /**
+     * Property indicating the roleDefinition the assignment is for. Provided so that callers can get the role definition
+     * using $expand at the same time as getting the role assignment. roleDefinition.Id will be auto expanded.
+     */
+    roleDefinition?: NullableOption<UnifiedRoleDefinition>;
+    // Property indicating the schedule for an eligible role assignment.
+    targetSchedule?: NullableOption<UnifiedRoleEligibilitySchedule>;
+}
+export interface UnifiedRoleEligibilitySchedule extends UnifiedRoleScheduleBase {
+    // Membership type of the eligible assignment. It can either be Inherited, Direct, or Group.
+    memberType?: NullableOption<string>;
+    // The schedule object of the eligible role assignment request.
+    scheduleInfo?: NullableOption<RequestSchedule>;
 }
 export interface RoleManagement {
     // Read-only. Nullable.
@@ -6751,10 +7132,13 @@ export interface EducationClass extends Entity {
     mailNickname?: string;
     // Term for this class.
     term?: NullableOption<EducationTerm>;
+    // All categories associated with this class. Nullable.
     assignmentCategories?: NullableOption<EducationCategory[]>;
+    // Specifies class-level defaults respected by new assignments created in the class.
     assignmentDefaults?: NullableOption<EducationAssignmentDefaults>;
     // All assignments associated with this class. Nullable.
     assignments?: NullableOption<EducationAssignment[]>;
+    // Specifies class-level assignments settings.
     assignmentSettings?: NullableOption<EducationAssignmentSettings>;
     // The underlying Microsoft 365 group object.
     group?: NullableOption<Group>;
@@ -6766,10 +7150,7 @@ export interface EducationClass extends Entity {
     teachers?: NullableOption<EducationUser[]>;
 }
 export interface EducationUser extends Entity {
-    /**
-     * Related records related to the user. Possible relationships are parent, relative, aide, doctor, guardian, child, other,
-     * unknownFutureValue
-     */
+    // Related records associated with the user. Read-only.
     relatedContacts?: NullableOption<RelatedContact[]>;
     // True if the account is enabled; otherwise, false. This property is required when a user is created. Supports $filter.
     accountEnabled?: NullableOption<boolean>;
@@ -6782,7 +7163,7 @@ export interface EducationUser extends Entity {
      * property.
      */
     businessPhones?: string[];
-    // Entity who created the user.
+    // The entity who created the user.
     createdBy?: NullableOption<IdentitySet>;
     // The name for the department in which the user works. Supports $filter.
     department?: NullableOption<string>;
@@ -6794,22 +7175,22 @@ export interface EducationUser extends Entity {
     displayName?: NullableOption<string>;
     // Where this user was created from. Possible values are: sis, manual.
     externalSource?: NullableOption<EducationExternalSource>;
-    // The name of the external source this resources was generated from.
+    // The name of the external source this resource was generated from.
     externalSourceDetail?: NullableOption<string>;
     // The given name (first name) of the user. Supports $filter.
     givenName?: NullableOption<string>;
-    // The SMTP address for the user; for example, jeff@contoso.onmicrosoft.com. Read-Only. Supports $filter.
+    // The SMTP address for the user, for example, jeff@contoso.onmicrosoft.com. Read-Only. Supports $filter.
     mail?: NullableOption<string>;
-    // Mail address of user.
+    // The mail address of the user.
     mailingAddress?: NullableOption<PhysicalAddress>;
     // The mail alias for the user. This property must be specified when a user is created. Supports $filter.
     mailNickname?: NullableOption<string>;
-    // The middle name of user.
+    // The middle name of the user.
     middleName?: NullableOption<string>;
     // The primary cellular telephone number for the user.
     mobilePhone?: NullableOption<string>;
     officeLocation?: NullableOption<string>;
-    // Additional information used to associate the Azure AD user with its Active Directory counterpart.
+    // Additional information used to associate the Azure Active Directory user with its Active Directory counterpart.
     onPremisesInfo?: NullableOption<EducationOnPremisesInfo>;
     /**
      * Specifies password policies for the user. This value is an enumeration with one possible value being
@@ -6824,7 +7205,7 @@ export interface EducationUser extends Entity {
      * property. By default, a strong password is required.
      */
     passwordProfile?: NullableOption<PasswordProfile>;
-    // The preferred language for the user. Should follow ISO 639-1 Code; for example, 'en-US'.
+    // The preferred language for the user that should follow the ISO 639-1 code, for example, en-US.
     preferredLanguage?: NullableOption<string>;
     /**
      * Default role for a user. The user's role might be different in an individual class. Possible values are: student,
@@ -6834,10 +7215,10 @@ export interface EducationUser extends Entity {
     // The plans that are provisioned for the user. Read-only. Not nullable.
     provisionedPlans?: ProvisionedPlan[];
     refreshTokensValidFromDateTime?: NullableOption<string>;
-    // Address where user lives.
+    // The address where the user lives.
     residenceAddress?: NullableOption<PhysicalAddress>;
     /**
-     * true if the Outlook global address list should contain this user, otherwise false. If not set, this will be treated as
+     * True if the Outlook Global Address List should contain this user; otherwise, false. If not set, this will be treated as
      * true. For users invited through the invitation manager, this property will be set to false.
      */
     showInAddressList?: NullableOption<boolean>;
@@ -6849,25 +7230,23 @@ export interface EducationUser extends Entity {
     teacher?: NullableOption<EducationTeacher>;
     /**
      * A two-letter country code (ISO standard 3166). Required for users who will be assigned licenses due to a legal
-     * requirement to check for availability of services in countries or regions. Examples include: 'US', 'JP', and 'GB'. Not
+     * requirement to check for availability of services in countries or regions. Examples include: US, JP, and GB. Not
      * nullable. Supports $filter.
      */
     usageLocation?: NullableOption<string>;
     /**
-     * The user principal name (UPN) of the user. The UPN is an Internet-style login name for the user based on the Internet
+     * The user principal name (UPN) of the user. The UPN is an internet-style login name for the user based on the internet
      * standard RFC 822. By convention, this should map to the user's email name. The general format is alias@domain, where
      * domain must be present in the tenant's collection of verified domains. This property is required when a user is
-     * created. The verified domains for the tenant can be accessed from the verifiedDomains property of organization.
+     * created. The verified domains for the tenant can be accessed from the verifiedDomains property of the organization.
      * Supports $filter and $orderby.
      */
     userPrincipalName?: NullableOption<string>;
-    /**
-     * A string value that can be used to classify user types in your directory, such as 'Member' and 'Guest'. Supports
-     * $filter.
-     */
+    // A string value that can be used to classify user types in your directory, such as Member and Guest. Supports $filter.
     userType?: NullableOption<string>;
     // Assignments belonging to the user.
     assignments?: NullableOption<EducationAssignment[]>;
+    // When set, the grading rubric attached to the assignment.
     rubrics?: NullableOption<EducationRubric[]>;
     // Classes to which the user belongs. Nullable.
     classes?: NullableOption<EducationClass[]>;
@@ -6875,7 +7254,7 @@ export interface EducationUser extends Entity {
     schools?: NullableOption<EducationSchool[]>;
     // Classes for which the user is a teacher.
     taughtClasses?: NullableOption<EducationClass[]>;
-    // The directory user corresponding to this user.
+    // The directory user that corresponds to this user.
     user?: NullableOption<User>;
 }
 export interface EducationOrganization extends Entity {
@@ -8379,24 +8758,6 @@ export interface AppConsentRequest extends Entity {
     // A list of pending user consent requests.
     userConsentRequests?: NullableOption<UserConsentRequest[]>;
 }
-export interface Request extends Entity {
-    // The identifier of the approval of the request.
-    approvalId?: NullableOption<string>;
-    // The request completion date time.
-    completedDateTime?: NullableOption<string>;
-    // The user who created this request.
-    createdBy?: NullableOption<IdentitySet>;
-    // The request creation date time.
-    createdDateTime?: NullableOption<string>;
-    // Free text field to define any custom data for the request. Not used.
-    customData?: NullableOption<string>;
-    /**
-     * The status of the request. Not nullable. The possible values are: Canceled, Denied, Failed, Granted,
-     * PendingAdminDecision, PendingApproval, PendingProvisioning, PendingScheduleCreation, Provisioned, Revoked, and
-     * ScheduleCreated. Not nullable.
-     */
-    status?: string;
-}
 export interface UserConsentRequest extends Request {
     // The user's justification for requiring access to the app. Supports $filter (eq only) and $orderby.
     reason?: NullableOption<string>;
@@ -8431,12 +8792,13 @@ export interface EntitlementManagement extends Entity {
     accessPackageAssignmentApprovals?: NullableOption<Approval[]>;
     // Represents access package objects.
     accessPackages?: NullableOption<AccessPackage[]>;
+    // Access package assignment policies.
     assignmentPolicies?: NullableOption<AccessPackageAssignmentPolicy[]>;
     // Represents access package assignment requests created by or on behalf of a user.
     assignmentRequests?: NullableOption<AccessPackageAssignmentRequest[]>;
     // Represents the grant of an access package to a subject (user or group).
     assignments?: NullableOption<AccessPackageAssignment[]>;
-    // Represents a group of access packages.
+    // Represents a collection of access packages.
     catalogs?: NullableOption<AccessPackageCatalog[]>;
     // Represents references to a directory or domain of another organization whose users can request access.
     connectedOrganizations?: NullableOption<ConnectedOrganization[]>;
@@ -8460,35 +8822,52 @@ export interface AccessPackage extends Entity {
      * midnight UTC on Jan 1, 2014 is 2014-01-01T00:00:00Z. Read-only.
      */
     modifiedDateTime?: NullableOption<string>;
+    // Read-only. Nullable.
     assignmentPolicies?: NullableOption<AccessPackageAssignmentPolicy[]>;
     // Read-only. Nullable.
     catalog?: NullableOption<AccessPackageCatalog>;
 }
 export interface AccessPackageAssignmentPolicy extends Entity {
+    /**
+     * Principals that can be assigned the access package through this policy. The possible values are: notSpecified,
+     * specificDirectoryUsers, specificConnectedOrganizationUsers, specificDirectoryServicePrincipals, allMemberUsers,
+     * allDirectoryUsers, allDirectoryServicePrincipals, allConfiguredConnectedOrganizationUsers, allExternalUsers,
+     * unknownFutureValue.
+     */
     allowedTargetScope?: NullableOption<AllowedTargetScope>;
     /**
      * The Timestamp type represents date and time information using ISO 8601 format and is always in UTC time. For example,
-     * midnight UTC on Jan 1, 2014 is 2014-01-01T00:00:00Z
+     * midnight UTC on Jan 1, 2014 is 2014-01-01T00:00:00Z.
      */
     createdDateTime?: NullableOption<string>;
     // The description of the policy.
     description?: NullableOption<string>;
-    // The display name of the policy. Supports $filter (eq).
+    // The display name of the policy.
     displayName?: NullableOption<string>;
+    // The expiration date for assignments created in this policy.
     expiration?: NullableOption<ExpirationPattern>;
     /**
      * The Timestamp type represents date and time information using ISO 8601 format and is always in UTC time. For example,
-     * midnight UTC on Jan 1, 2014 is 2014-01-01T00:00:00Z
+     * midnight UTC on Jan 1, 2014 is 2014-01-01T00:00:00Z.
      */
     modifiedDateTime?: NullableOption<string>;
-    // Who must approve requests for access package in this policy.
+    /**
+     * Specifies the settings for approval of requests for an access package assignment through this policy. For example, if
+     * approval is required for new requests.
+     */
     requestApprovalSettings?: NullableOption<AccessPackageAssignmentApprovalSettings>;
-    // Who can request this access package from this policy.
+    /**
+     * Provides additional settings to select who can create a request for an access package assignment through this policy,
+     * and what they can include in their request.
+     */
     requestorSettings?: NullableOption<AccessPackageAssignmentRequestorSettings>;
+    // Settings for access reviews of assignments through this policy.
     reviewSettings?: NullableOption<AccessPackageAssignmentReviewSettings>;
+    // The principals that can be assigned access from an access package through this policy.
     specificAllowedTargets?: NullableOption<SubjectSet[]>;
-    // The access package with this policy. Read-only. Nullable. Supports $expand.
+    // Access package containing this policy. Read-only.
     accessPackage?: NullableOption<AccessPackage>;
+    // Catalog of the access package containing this policy. Read-only.
     catalog?: NullableOption<AccessPackageCatalog>;
 }
 export interface AccessPackageAssignmentRequest extends Entity {
@@ -8553,6 +8932,7 @@ export interface AccessPackageAssignment extends Entity {
     status?: NullableOption<string>;
     // Read-only. Nullable. Supports $filter (eq) on the id property and $expand query parameters.
     accessPackage?: NullableOption<AccessPackage>;
+    // Read-only. Supports $filter (eq) on the id property and $expand query parameters.
     assignmentPolicy?: NullableOption<AccessPackageAssignmentPolicy>;
     // The subject of the access package assignment. Read-only. Nullable. Supports $expand. Supports $filter (eq) on objectId.
     target?: NullableOption<AccessPackageSubject>;
@@ -13337,6 +13717,42 @@ export interface OnenoteResource extends OnenoteEntityBaseModel {
     // The URL for downloading the content
     contentUrl?: NullableOption<string>;
 }
+export interface UnifiedRoleManagementPolicyRule extends Entity {
+    // The target for the policy rule.
+    target?: NullableOption<UnifiedRoleManagementPolicyRuleTarget>;
+}
+export interface UnifiedRoleManagementPolicyApprovalRule extends UnifiedRoleManagementPolicyRule {
+    // The approval setting for the rule.
+    setting?: NullableOption<ApprovalSettings>;
+}
+export interface UnifiedRoleManagementPolicyAuthenticationContextRule extends UnifiedRoleManagementPolicyRule {
+    // Value of the authentication context claim.
+    claimValue?: NullableOption<string>;
+    // Indicates if the setting is enabled.
+    isEnabled?: NullableOption<boolean>;
+}
+export interface UnifiedRoleManagementPolicyEnablementRule extends UnifiedRoleManagementPolicyRule {
+    // The rules which are enabled. Allowed values are MultifactorAuthentication, Justification, Ticketing.
+    enabledRules?: NullableOption<string[]>;
+}
+export interface UnifiedRoleManagementPolicyExpirationRule extends UnifiedRoleManagementPolicyRule {
+    // Indicates if expiration is required for eligibility or assignment.
+    isExpirationRequired?: NullableOption<boolean>;
+    // The maximum duration allowed for eligiblity or assignment which is not permanent.
+    maximumDuration?: NullableOption<string>;
+}
+export interface UnifiedRoleManagementPolicyNotificationRule extends UnifiedRoleManagementPolicyRule {
+    // Whether default recipient is receiving the email or not.
+    isDefaultRecipientsEnabled?: NullableOption<boolean>;
+    // The level of notification. One of None, Critical, All.
+    notificationLevel?: NullableOption<string>;
+    // The list of notification recepients like email.
+    notificationRecipients?: NullableOption<string[]>;
+    // The type of notification. One of Email.
+    notificationType?: NullableOption<string>;
+    // The type of recipient. One of Requestor, Approver, Admin.
+    recipientType?: NullableOption<string>;
+}
 export interface Print {
     // Tenant-wide settings for the Universal Print service.
     settings?: NullableOption<PrintSettings>;
@@ -15794,12 +16210,12 @@ export interface RelatedContact {
     accessConsent?: NullableOption<boolean>;
     // Name of the contact. Required.
     displayName?: string;
-    // Primary email address of the contact.
+    // Primary email address of the contact. Required.
     emailAddress?: string;
     // Mobile phone number of the contact.
     mobilePhone?: NullableOption<string>;
     /**
-     * Relationship to the user. Possible values are parent, relative, aide, doctor, guardian, child, other,
+     * Relationship to the user. Possible values are: parent, relative, aide, doctor, guardian, child, other,
      * unknownFutureValue.
      */
     relationship?: ContactRelationship;
@@ -17439,30 +17855,58 @@ export interface RiskUserActivity {
     riskEventTypes?: NullableOption<string[]>;
 }
 export interface AccessPackageApprovalStage {
+    // The number of days that a request can be pending a response before it is automatically denied.
     durationBeforeAutomaticDenial?: NullableOption<string>;
+    // If escalation is required, the time a request can be pending a response from a primary approver.
     durationBeforeEscalation?: NullableOption<string>;
+    /**
+     * If escalation is enabled and the primary approvers do not respond before the escalation time, the escalationApprovers
+     * are the users who will be asked to approve requests.
+     */
     escalationApprovers?: NullableOption<SubjectSet[]>;
+    // The subjects, typically users, who are the fallback escalation approvers.
     fallbackEscalationApprovers?: NullableOption<SubjectSet[]>;
+    // The subjects, typically users, who are the fallback primary approvers.
     fallbackPrimaryApprovers?: NullableOption<SubjectSet[]>;
+    // Indicates whether the approver is required to provide a justification for approving a request.
     isApproverJustificationRequired?: NullableOption<boolean>;
+    // If true, then one or more escalationApprovers are configured in this approval stage.
     isEscalationEnabled?: NullableOption<boolean>;
+    /**
+     * The subjects, typically users, who will be asked to approve requests. A collection of singleUser, groupMembers,
+     * requestorManager, internalSponsors or externalSponsors.
+     */
     primaryApprovers?: NullableOption<SubjectSet[]>;
 }
 // tslint:disable-next-line: no-empty-interface
 export interface SubjectSet {}
 export interface AccessPackageAssignmentApprovalSettings {
+    // If false, then approval is not required for new requests in this policy.
     isApprovalRequiredForAdd?: NullableOption<boolean>;
+    // If false, then approval is not required for updates to requests in this policy.
     isApprovalRequiredForUpdate?: NullableOption<boolean>;
+    /**
+     * If approval is required, the one, two or three elements of this collection define each of the stages of approval. An
+     * empty array is present if no approval is required.
+     */
     stages?: NullableOption<AccessPackageApprovalStage[]>;
 }
 export interface AccessPackageAssignmentRequestorSettings {
+    // If false, the requestor is not permitted to include a schedule in their request.
     allowCustomAssignmentSchedule?: NullableOption<boolean>;
+    // If true, allows on-behalf-of requestors to create a request to add access for another principal.
     enableOnBehalfRequestorsToAddAccess?: NullableOption<boolean>;
+    // If true, allows on-behalf-of requestors to create a request to remove access for another principal.
     enableOnBehalfRequestorsToRemoveAccess?: NullableOption<boolean>;
+    // If true, allows on-behalf-of requestors to create a request to update access for another principal.
     enableOnBehalfRequestorsToUpdateAccess?: NullableOption<boolean>;
+    // If true, allows requestors to create a request to add access for themselves.
     enableTargetsToSelfAddAccess?: NullableOption<boolean>;
+    // If true, allows requestors to create a request to remove their access.
     enableTargetsToSelfRemoveAccess?: NullableOption<boolean>;
+    // If true, allows requestors to create a request to update their access.
     enableTargetsToSelfUpdateAccess?: NullableOption<boolean>;
+    // The principals who can request on-behalf-of others.
     onBehalfRequestors?: NullableOption<SubjectSet[]>;
 }
 export interface AccessPackageAssignmentRequestRequirements {
@@ -17496,13 +17940,24 @@ export interface EntitlementManagementSchedule {
     startDateTime?: NullableOption<string>;
 }
 export interface AccessPackageAssignmentReviewSettings {
+    /**
+     * The default decision to apply if the access is not reviewed. The possible values are: keepAccess, removeAccess,
+     * acceptAccessRecommendation, unknownFutureValue.
+     */
     expirationBehavior?: NullableOption<AccessReviewExpirationBehavior>;
+    // This collection specifies the users who will be the fallback reviewers when the primary reviewers don't respond.
     fallbackReviewers?: NullableOption<SubjectSet[]>;
+    // If true, access reviews are required for assignments through this policy.
     isEnabled?: NullableOption<boolean>;
+    // Specifies whether to display recommendations to the reviewer. The default value is true.
     isRecommendationEnabled?: NullableOption<boolean>;
+    // Specifies whether the reviewer must provide justification for the approval. The default value is true.
     isReviewerJustificationRequired?: NullableOption<boolean>;
+    // Specifies whether the principals can review their own assignments.
     isSelfReview?: NullableOption<boolean>;
+    // This collection specifies the users or group of users who will review the access package assignments.
     primaryReviewers?: NullableOption<SubjectSet[]>;
+    // When the first review should start and how often it should recur.
     schedule?: NullableOption<EntitlementManagementSchedule>;
 }
 export interface ConnectedOrganizationMembers extends SubjectSet {
@@ -17566,6 +18021,7 @@ export interface SingleUser extends SubjectSet {
 // tslint:disable-next-line: no-empty-interface
 export interface TargetApplicationOwners extends SubjectSet {}
 export interface TargetManager extends SubjectSet {
+    // Manager level, between 1 and 4. The direct manager is 1.
     managerLevel?: NullableOption<number>;
 }
 // tslint:disable-next-line: interface-name no-empty-interface
@@ -18905,8 +19361,8 @@ export interface SearchRequest {
     // Contains the query terms. Required.
     query?: SearchQuery;
     /**
-     * Query alteration options formatted in a JSON blob that contains two optional flags related to spelling correction.
-     * Optional.
+     * Provides query alteration options formatted as a JSON blob that contains two optional flags related to spelling
+     * correction. Optional.
      */
     queryAlterationOptions?: NullableOption<SearchAlterationOptions>;
     // Provides the search result templates options for rendering connectors search results.
@@ -19173,6 +19629,62 @@ export interface SectionLinks {
     oneNoteClientUrl?: NullableOption<ExternalLink>;
     // Opens the section in OneNote on the web.
     oneNoteWebUrl?: NullableOption<ExternalLink>;
+}
+export interface ApprovalSettings {
+    // One of NoApproval, SingleStage or Serial. The NoApproval is used when isApprovalRequired is false.
+    approvalMode?: NullableOption<string>;
+    /**
+     * If approval is required, the one or two elements of this collection define each of the stages of approval. An empty
+     * array if no approval is required.
+     */
+    approvalStages?: NullableOption<UnifiedApprovalStage[]>;
+    // If false, then approval is not required for requests in this policy.
+    isApprovalRequired?: NullableOption<boolean>;
+    // If false, then approval is not required for a user who already has an assignment to extend their assignment.
+    isApprovalRequiredForExtension?: NullableOption<boolean>;
+    // Indicates whether the requestor is required to supply a justification in their request.
+    isRequestorJustificationRequired?: NullableOption<boolean>;
+}
+export interface UnifiedApprovalStage {
+    approvalStageTimeOutInDays?: NullableOption<number>;
+    escalationApprovers?: NullableOption<SubjectSet[]>;
+    escalationTimeInMinutes?: NullableOption<number>;
+    isApproverJustificationRequired?: NullableOption<boolean>;
+    isEscalationEnabled?: NullableOption<boolean>;
+    primaryApprovers?: NullableOption<SubjectSet[]>;
+}
+export interface RequestSchedule {
+    // When the access should expire.
+    expiration?: NullableOption<ExpirationPattern>;
+    // For recurring access. Not used at present.
+    recurrence?: NullableOption<PatternedRecurrence>;
+    /**
+     * The Timestamp type represents date and time information using ISO 8601 format and is always in UTC time. For example,
+     * midnight UTC on Jan 1, 2014 is 2014-01-01T00:00:00Z.
+     */
+    startDateTime?: NullableOption<string>;
+}
+export interface TicketInfo {
+    // Ticket number meta data
+    ticketNumber?: NullableOption<string>;
+    // Ticket system meta data
+    ticketSystem?: NullableOption<string>;
+}
+export interface UnifiedRoleManagementPolicyRuleTarget {
+    // The caller for the policy rule target. Allowed values are: None, Admin, EndUser.
+    caller?: NullableOption<string>;
+    // The list of settings which are enforced and cannot be overridden by child scopes. Use All for all settings.
+    enforcedSettings?: NullableOption<string[]>;
+    // The list of settings which can be inherited by child scopes. Use All for all settings.
+    inheritableSettings?: NullableOption<string[]>;
+    // The level for the policy rule target. Allowed values are: Eligibility, Assignment.
+    level?: NullableOption<string>;
+    /**
+     * The operations for policy rule target. Allowed values are: All, Activate, Deactivate, Assign, Update, Remove, Extend,
+     * Renew.
+     */
+    operations?: NullableOption<UnifiedRoleManagementPolicyRuleTargetOperations[]>;
+    targetObjects?: NullableOption<DirectoryObject[]>;
 }
 export interface ArchivedPrintJob {
     // True if the job was acquired by a printer; false otherwise. Read-only.
