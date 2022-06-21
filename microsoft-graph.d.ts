@@ -2177,7 +2177,7 @@ export type AttestationLevel = "attested" | "notAttested" | "unknownFutureValue"
 export type AuthenticationMethodKeyStrength = "normal" | "weak" | "unknown";
 export type LifecycleEventType = "missed" | "subscriptionRemoved" | "reauthorizationRequired";
 export type CallRecordingStatus = "success" | "failure" | "initial" | "chunkFinished" | "unknownFutureValue";
-export type ChannelMembershipType = "standard" | "private" | "unknownFutureValue";
+export type ChannelMembershipType = "standard" | "private" | "unknownFutureValue" | "shared";
 export type ChatMessageImportance = "normal" | "high" | "urgent" | "unknownFutureValue";
 export type ChatMessagePolicyViolationDlpActionTypes = "none" | "notifySender" | "blockAccess" | "blockAccessExternal";
 export type ChatMessagePolicyViolationUserActionTypes = "none" | "override" | "reportFalsePositive";
@@ -3053,12 +3053,12 @@ export interface OAuth2PermissionGrant extends Entity {
     consentType?: NullableOption<string>;
     /**
      * The id of the user on behalf of whom the client is authorized to access the resource, when consentType is Principal. If
-     * consentType is AllPrincipals this value is null. Required when consentType is Principal.
+     * consentType is AllPrincipals this value is null. Required when consentType is Principal. Supports $filter (eq only).
      */
     principalId?: NullableOption<string>;
     /**
      * The id of the resource service principal to which access is authorized. This identifies the API which the client is
-     * authorized to attempt to call on behalf of a signed-in user.
+     * authorized to attempt to call on behalf of a signed-in user. Supports $filter (eq only).
      */
     resourceId?: string;
     /**
@@ -4012,6 +4012,8 @@ export interface Team extends Entity {
      * unique behaviors and experiences targeted to its use case.
      */
     specialization?: NullableOption<TeamSpecialization>;
+    // The ID of the Azure Active Directory tenant.
+    tenantId?: NullableOption<string>;
     // The visibility of the group and team. Defaults to Public.
     visibility?: NullableOption<TeamVisibilityType>;
     /**
@@ -4020,9 +4022,13 @@ export interface Team extends Entity {
      * parsed.
      */
     webUrl?: NullableOption<string>;
+    // List of channels either hosted in or shared with the team (incoming channels).
+    allChannels?: NullableOption<Channel[]>;
     // The collection of channels and messages associated with the team.
     channels?: NullableOption<Channel[]>;
     group?: NullableOption<Group>;
+    // List of channels shared with the team.
+    incomingChannels?: NullableOption<Channel[]>;
     // The apps installed in this team.
     installedApps?: NullableOption<TeamsAppInstallation[]>;
     // Members and owners of the team.
@@ -4037,6 +4043,8 @@ export interface Team extends Entity {
     schedule?: NullableOption<Schedule>;
 }
 export interface UserTeamwork extends Entity {
+    // The list of associatedTeamInfo objects that a user is associated with.
+    associatedTeams?: NullableOption<AssociatedTeamInfo[]>;
     // The apps installed in the personal scope of this user.
     installedApps?: NullableOption<UserScopeTeamsAppInstallation[]>;
 }
@@ -4738,25 +4746,25 @@ export interface UnifiedRoleManagementPolicyAssignment extends Entity {
     policy?: NullableOption<UnifiedRoleManagementPolicy>;
 }
 export interface TemporaryAccessPassAuthenticationMethodConfiguration extends AuthenticationMethodConfiguration {
-    // Default length, in characters, of a temporaryAccessPass, between 8 and 48 characters.
+    // Default length in characters of a Temporary Access Pass object. Must be between 8 and 48 characters.
     defaultLength?: NullableOption<number>;
     /**
-     * Default lifetime, in minutes, for a temporaryAccessPass. Value can be between the minimumLifetimeInMinutes and
-     * maximumLifetimeInMinutes.
+     * Default lifetime in minutes for a Temporary Access Pass. Value can be any integer between the minimumLifetimeInMinutes
+     * and maximumLifetimeInMinutes.
      */
     defaultLifetimeInMinutes?: NullableOption<number>;
     /**
      * If true, all the passes in the tenant will be restricted to one-time use. If false, passes in the tenant can be created
-     * to be either one-time use or multiple time use.
+     * to be either one-time use or reusable.
      */
     isUsableOnce?: NullableOption<boolean>;
     /**
-     * Maximum lifetime in minutes for any temporaryAccessPass created in the tenant. Value can be between 10 and 43200
+     * Maximum lifetime in minutes for any Temporary Access Pass created in the tenant. Value can be between 10 and 43200
      * minutes (equivalent to 30 days).
      */
     maximumLifetimeInMinutes?: NullableOption<number>;
     /**
-     * Minimum lifetime in minutes for any temporaryAccessPass created in the tenant. Value can be between 10 and 43200
+     * Minimum lifetime in minutes for any Temporary Access Pass created in the tenant. Value can be between 10 and 43200
      * minutes (equivalent to 30 days).
      */
     minimumLifetimeInMinutes?: NullableOption<number>;
@@ -5021,8 +5029,9 @@ export interface BookingStaffMember extends BookingStaffMemberBase {
      */
     emailAddress?: NullableOption<string>;
     /**
-     * The role of the staff member in the business. Possible values are: guest, administrator, viewer, externalGuest and
-     * unknownFutureValue. Required.
+     * The role of the staff member in the business. Possible values are: guest, administrator, viewer, externalGuest,
+     * unknownFutureValue, scheduler and member. Note that you must use the Prefer: include-unknown-enum-members request
+     * header to get the following value(s) in this evolvable enum: scheduler, member. Required.
      */
     role?: BookingStaffRole;
     // The time zone of the staff member. For a list of possible values, see dateTimeTimeZone.
@@ -5131,6 +5140,8 @@ export interface Channel extends Entity {
      * include-unknown-enum-members request header to get the following value in this evolvable enum: shared.
      */
     membershipType?: NullableOption<ChannelMembershipType>;
+    // The ID of the Azure Active Directory tenant.
+    tenantId?: NullableOption<string>;
     /**
      * A hyperlink that will go to the channel in Microsoft Teams. This is the URL that you get when you right-click a channel
      * in Microsoft Teams and select Get link to channel. This URL should be treated as an opaque blob, and not parsed.
@@ -5143,6 +5154,8 @@ export interface Channel extends Entity {
     members?: NullableOption<ConversationMember[]>;
     // A collection of all the messages in the channel. A navigation property. Nullable.
     messages?: NullableOption<ChatMessage[]>;
+    // A collection of teams with which a channel is shared.
+    sharedWithTeams?: NullableOption<SharedWithChannelTeamInfo[]>;
     // A collection of all the tabs in the channel. A navigation property.
     tabs?: NullableOption<TeamsTab[]>;
 }
@@ -5432,7 +5445,12 @@ export interface TeamsAppInstallation extends Entity {
 export interface ConversationMember extends Entity {
     // The display name of the user.
     displayName?: NullableOption<string>;
-    // The roles for that user.
+    /**
+     * The roles for that user. This property only contains additional qualifiers when relevant - for example, if the member
+     * has owner privileges, the roles property contains owner as one of the values. Similarly, if the member is a guest, the
+     * roles property contains guest as one of the values. A basic member should not have any values specified in the roles
+     * property.
+     */
     roles?: NullableOption<string[]>;
     /**
      * The timestamp denoting how far back a conversation's history is shared with the conversation member. This property is
@@ -14440,30 +14458,30 @@ export interface MicrosoftAuthenticatorAuthenticationMethod extends Authenticati
     device?: NullableOption<Device>;
 }
 export interface TemporaryAccessPassAuthenticationMethod extends AuthenticationMethod {
-    // The date and time when the temporaryAccessPass was created.
+    // The date and time when the Temporary Access Pass was created.
     createdDateTime?: NullableOption<string>;
     // The state of the authentication method that indicates whether it's currently usable by the user.
     isUsable?: NullableOption<boolean>;
     /**
-     * Determines whether the pass is limited to a one time use. If true, the pass can be used once; if false, the pass can be
-     * used multiple times within the temporaryAccessPass lifetime.
+     * Determines whether the pass is limited to a one-time use. If true, the pass can be used once; if false, the pass can be
+     * used multiple times within the Temporary Access Pass lifetime.
      */
     isUsableOnce?: NullableOption<boolean>;
     /**
-     * The lifetime of the temporaryAccessPass in minutes starting at startDateTime. Minimum 10, Maximum 43200 (equivalent to
-     * 30 days).
+     * The lifetime of the Temporary Access Pass in minutes starting at startDateTime. Must be between 10 and 43200 inclusive
+     * (equivalent to 30 days).
      */
     lifetimeInMinutes?: NullableOption<number>;
     /**
-     * Details about usability state (isUsable). Reasons can include: enabledByPolicy, disabledByPolicy, expired, notYetValid,
-     * oneTimeUsed.
+     * Details about the usability state (isUsable). Reasons can include: EnabledByPolicy, DisabledByPolicy, Expired,
+     * NotYetValid, OneTimeUsed.
      */
     methodUsabilityReason?: NullableOption<string>;
-    // The date and time when the temporaryAccessPass becomes available to use.
+    // The date and time when the Temporary Access Pass becomes available to use and when isUsable is true is enforced.
     startDateTime?: NullableOption<string>;
     /**
-     * The temporaryAccessPass used to authenticate. Returned only on creation of a new temporaryAccessPass; returned as NULL
-     * with GET.
+     * The Temporary Access Pass used to authenticate. Returned only on creation of a new
+     * temporaryAccessPassAuthenticationMethod object; Hidden in subsequent read operations and returned as null with GET.
      */
     temporaryAccessPass?: NullableOption<string>;
 }
@@ -14504,6 +14522,15 @@ export interface TeamsApp extends Entity {
     // The details for each version of the app.
     appDefinitions?: NullableOption<TeamsAppDefinition[]>;
 }
+export interface TeamInfo extends Entity {
+    // The name of the team.
+    displayName?: NullableOption<string>;
+    // The ID of the Azure Active Directory tenant.
+    tenantId?: NullableOption<string>;
+    team?: NullableOption<Team>;
+}
+// tslint:disable-next-line: no-empty-interface
+export interface AssociatedTeamInfo extends TeamInfo {}
 export interface ChatMessage extends Entity {
     // References to attached objects like files, tabs, meetings etc.
     attachments?: NullableOption<ChatMessageAttachment[]>;
@@ -14573,6 +14600,12 @@ export interface ChatMessage extends Entity {
     hostedContents?: NullableOption<ChatMessageHostedContent[]>;
     // Replies for a specified message. Supports $expand for channel messages.
     replies?: NullableOption<ChatMessage[]>;
+}
+export interface SharedWithChannelTeamInfo extends TeamInfo {
+    // Indicates whether the team is the host of the channel.
+    isHostTeam?: NullableOption<boolean>;
+    // A collection of team members who have access to the shared channel.
+    allowedMembers?: NullableOption<ConversationMember[]>;
 }
 export interface TeamsTab extends Entity {
     // Container for custom settings applied to a tab. The tab is considered configured only once this property is set.
@@ -16044,7 +16077,7 @@ export interface AlternativeSecurityId {
     type?: NullableOption<number>;
 }
 export interface PreAuthorizedApplication {
-    // The unique identifier for the application.
+    // The unique identifier for the client application.
     appId?: NullableOption<string>;
     // The unique identifier for the oauth2PermissionScopes the application requires.
     delegatedPermissionIds?: string[];
