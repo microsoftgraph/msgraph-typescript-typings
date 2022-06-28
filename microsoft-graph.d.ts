@@ -2205,7 +2205,9 @@ export type TeamsAsyncOperationType =
     | "archiveTeam"
     | "unarchiveTeam"
     | "createTeam"
-    | "unknownFutureValue";
+    | "unknownFutureValue"
+    | "teamifyGroup"
+    | "createChannel";
 export type TeamSpecialization =
     | "none"
     | "educationStandard"
@@ -2687,9 +2689,9 @@ export interface User extends DirectoryObject {
     licenseAssignmentStates?: NullableOption<LicenseAssignmentState[]>;
     /**
      * The SMTP address for the user, for example, admin@contoso.com. Changes to this property will also update the user's
-     * proxyAddresses collection to include the value as an SMTP address. For Azure AD B2C accounts, this property can be
-     * updated up to only ten times with unique SMTP addresses. This property cannot contain accent characters. Supports
-     * $filter (eq, ne, not, ge, le, in, startsWith, endsWith, and eq on null values).
+     * proxyAddresses collection to include the value as an SMTP address. This property cannot contain accent characters.
+     * NOTE: We do not recommend updating this property for Azure AD B2C user profiles. Use the otherMails property instead.
+     * Supports $filter (eq, ne, not, ge, le, in, startsWith, endsWith, and eq on null values).
      */
     mail?: NullableOption<string>;
     /**
@@ -5412,10 +5414,6 @@ export interface Group extends DirectoryObject {
     conversations?: NullableOption<Conversation[]>;
     // The group's events.
     events?: NullableOption<Event[]>;
-    // The group's profile photo.
-    photo?: NullableOption<ProfilePhoto>;
-    // The profile photos owned by the group. Read-only. Nullable.
-    photos?: NullableOption<ProfilePhoto[]>;
     // The list of users or groups that are not allowed to create posts or calendar events in this group. Nullable
     rejectedSenders?: NullableOption<DirectoryObject[]>;
     // The group's conversation threads. Nullable.
@@ -5433,6 +5431,10 @@ export interface Group extends DirectoryObject {
     // Selective Planner services available to the group. Read-only. Nullable.
     planner?: NullableOption<PlannerGroup>;
     onenote?: NullableOption<Onenote>;
+    // The group's profile photo.
+    photo?: NullableOption<ProfilePhoto>;
+    // The profile photos owned by the group. Read-only. Nullable.
+    photos?: NullableOption<ProfilePhoto[]>;
     // The team associated with this group.
     team?: NullableOption<Team>;
 }
@@ -6175,8 +6177,8 @@ export interface AdministrativeUnit extends DirectoryObject {
      */
     displayName?: NullableOption<string>;
     /**
-     * Controls whether the administrative unit and its members are hidden or public. Can be set to HiddenMembership. If not
-     * set (value is null), the default behavior is public. When set to HiddenMembership, only members of the administrative
+     * Controls whether the administrative unit and its members are hidden or public. Can be set to HiddenMembership or
+     * Public. If not set, the default behavior is Public. When set to HiddenMembership, only members of the administrative
      * unit can list other members of the administrative unit.
      */
     visibility?: NullableOption<string>;
@@ -14948,9 +14950,13 @@ export interface AuditActivityInitiator {
 }
 // tslint:disable-next-line: interface-name
 export interface Identity {
-    // The display name of the identity. This property is read-only.
+    /**
+     * The identity's display name. Note that this may not always be available or up to date. For example, if a user changes
+     * their display name, the API may show the new value in a future response, but the items associated with the user won't
+     * show up as having changed when using delta.
+     */
     displayName?: NullableOption<string>;
-    // The identifier of the identity. This property is read-only.
+    // Unique identifier for the identity.
     id?: NullableOption<string>;
 }
 export interface UserIdentity extends Identity {
@@ -22100,7 +22106,7 @@ export namespace CallRecords {
         sentQualityEventRatio?: NullableOption<number>;
         // Subnet used for media stream by the media endpoint.
         subnet?: NullableOption<string>;
-        // List of network trace route hops collected for this media stream.
+        // List of network trace route hops collected for this media stream.*
         traceRouteHops?: TraceRouteHop[];
         /**
          * WiFi band used by the media endpoint. Possible values are: unknown, frequency24GHz, frequency50GHz, frequency60GHz,
@@ -22233,7 +22239,7 @@ export namespace CallRecords {
         wasMediaBypassed?: NullableOption<boolean>;
     }
     interface TraceRouteHop {
-        // The network path count of this hop that was used to compute the RTT.
+        // The network path count of this hop that was used to compute the round-trip time.
         hopCount?: NullableOption<number>;
         // IP address used for this hop in the network trace.
         ipAddress?: NullableOption<string>;
