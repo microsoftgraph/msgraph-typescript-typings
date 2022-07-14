@@ -8611,7 +8611,7 @@ export interface EventMessageResponse extends EventMessage {
 }
 export interface FileAttachment extends Attachment {
     // The base64-encoded contents of the file.
-    contentBytes?: NullableOption<number>;
+    contentBytes?: NullableOption<string>;
     // The ID of the attachment in the Exchange store.
     contentId?: NullableOption<string>;
     // Do not use this property as it is not supported.
