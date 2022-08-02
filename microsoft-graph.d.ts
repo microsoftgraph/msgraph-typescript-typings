@@ -98,6 +98,7 @@ export type BookingPriceType =
     | "notSet"
     | "unknownFutureValue";
 export type BookingReminderRecipients = "allAttendees" | "staff" | "customer" | "unknownFutureValue";
+export type BookingsAvailabilityStatus = "available" | "busy" | "slotsAvailable" | "outOfOffice" | "unknownFutureValue";
 export type BookingStaffRole = "guest" | "administrator" | "viewer" | "externalGuest" | "unknownFutureValue";
 export type DayOfWeek = "sunday" | "monday" | "tuesday" | "wednesday" | "thursday" | "friday" | "saturday";
 export type LocationType =
@@ -421,6 +422,11 @@ export type CountryLookupMethodType = "clientIpAddress" | "authenticatorAppGps" 
 export type FilterMode = "include" | "exclude";
 export type PersistentBrowserSessionMode = "always" | "never";
 export type RiskDetectionTimingType = "notDefined" | "realtime" | "nearRealtime" | "offline" | "unknownFutureValue";
+export type SignInFrequencyAuthenticationType =
+    | "primaryAndSecondaryAuthentication"
+    | "secondaryAuthentication"
+    | "unknownFutureValue";
+export type SignInFrequencyInterval = "timeBased" | "everyTime" | "unknownFutureValue";
 export type SigninFrequencyType = "days" | "hours";
 export type TokenIssuerType =
     | "AzureAD"
@@ -987,6 +993,7 @@ export type DeviceRegistrationState =
     | "certificateReset"
     | "notRegisteredPendingEnrollment"
     | "unknown";
+export type DiskType = "unknown" | "hdd" | "ssd" | "unknownFutureValue";
 export type ManagedDeviceOwnerType = "unknown" | "company" | "personal";
 export type ManagedDevicePartnerReportedHealthState =
     | "unknown"
@@ -1013,6 +1020,12 @@ export type ManagementAgentType =
     | "googleCloudDevicePolicyController"
     | "microsoft365ManagedMdm"
     | "msSense";
+export type UserExperienceAnalyticsHealthState =
+    | "unknown"
+    | "insufficientData"
+    | "needsAttention"
+    | "meetingGoals"
+    | "unknownFutureValue";
 export type EnrollmentState = "unknown" | "enrolled" | "pendingReset" | "failed" | "notContacted";
 export type ImportedWindowsAutopilotDeviceIdentityImportStatus =
     | "unknown"
@@ -1043,7 +1056,8 @@ export type NotificationTemplateBrandingOptions =
     | "none"
     | "includeCompanyLogo"
     | "includeCompanyName"
-    | "includeContactInformation";
+    | "includeContactInformation"
+    | "includeDeviceDetails";
 export type RemoteAssistanceOnboardingStatus = "notOnboarded" | "onboarding" | "onboarded";
 export type DeviceManagementExportJobLocalizationType = "localizedValuesAsAdditionalColumn" | "replaceLocalizableValues";
 export type DeviceManagementReportFileFormat = "csv" | "pdf";
@@ -2177,6 +2191,15 @@ export type Tone =
     | "flash";
 export type AttestationLevel = "attested" | "notAttested" | "unknownFutureValue";
 export type AuthenticationMethodKeyStrength = "normal" | "weak" | "unknown";
+export type AuthenticationMethodSignInState =
+    | "notSupported"
+    | "notAllowedByPolicy"
+    | "notEnabled"
+    | "phoneNumberNotUnique"
+    | "ready"
+    | "notConfigured"
+    | "unknownFutureValue";
+export type AuthenticationPhoneType = "mobile" | "alternateMobile" | "office" | "unknownFutureValue";
 export type LifecycleEventType = "missed" | "subscriptionRemoved" | "reauthorizationRequired";
 export type CallRecordingStatus = "success" | "failure" | "initial" | "chunkFinished" | "unknownFutureValue";
 export type ChannelMembershipType = "standard" | "private" | "unknownFutureValue" | "shared";
@@ -2759,9 +2782,9 @@ export interface User extends DirectoryObject {
      */
     onPremisesSecurityIdentifier?: NullableOption<string>;
     /**
-     * true if this object is synced from an on-premises directory; false if this object was originally synced from an
-     * on-premises directory but is no longer synced; null if this object has never been synced from an on-premises directory
-     * (default). Read-only. Supports $filter (eq, ne, not, in, and eq on null values).
+     * true if this user object is currently being synced from an on-premises Active Directory (AD); otherwise the user isn't
+     * being synced and can be managed in Azure Active Directory (Azure AD). Read-only. Supports $filter (eq, ne, not, in, and
+     * eq on null values).
      */
     onPremisesSyncEnabled?: NullableOption<boolean>;
     /**
@@ -2893,7 +2916,7 @@ export interface User extends DirectoryObject {
     mySite?: NullableOption<string>;
     // A list for the user to enumerate their past projects. Returned only on $select.
     pastProjects?: NullableOption<string[]>;
-    // The preferred name for the user. Returned only on $select.
+    // The preferred name for the user. Not Supported. This attribute returns an empty string.Returned only on $select.
     preferredName?: NullableOption<string>;
     // A list for the user to enumerate their responsibilities. Returned only on $select.
     responsibilities?: NullableOption<string[]>;
@@ -3946,6 +3969,8 @@ export interface Presence extends Entity {
     availability?: NullableOption<string>;
 }
 export interface Authentication extends Entity {
+    // Represents the email addresses registered to a user for authentication.
+    emailMethods?: NullableOption<EmailAuthenticationMethod[]>;
     // Represents the FIDO2 security keys registered to a user for authentication.
     fido2Methods?: NullableOption<Fido2AuthenticationMethod[]>;
     // Represents all authentication methods registered to a user.
@@ -3955,6 +3980,9 @@ export interface Authentication extends Entity {
     operations?: NullableOption<LongRunningOperation[]>;
     // Represents the details of the password authentication method registered to a user for authentication.
     passwordMethods?: NullableOption<PasswordAuthenticationMethod[]>;
+    // Represents the phone registered to a user for authentication.
+    phoneMethods?: NullableOption<PhoneAuthenticationMethod[]>;
+    softwareOathMethods?: NullableOption<SoftwareOathAuthenticationMethod[]>;
     // Represents a Temporary Access Pass registered to a user for authentication through time-limited passcodes.
     temporaryAccessPassMethods?: NullableOption<TemporaryAccessPassAuthenticationMethod[]>;
     // Represents the Windows Hello for Business authentication method registered to a user for authentication.
@@ -4044,6 +4072,8 @@ export interface Team extends Entity {
     members?: NullableOption<ConversationMember[]>;
     // The async operations that ran or are running on this team.
     operations?: NullableOption<TeamsAsyncOperation[]>;
+    // The team photo.
+    photo?: NullableOption<ProfilePhoto>;
     // The general channel for the team.
     primaryChannel?: NullableOption<Channel>;
     // The template this team was created from. See available templates.
@@ -4070,7 +4100,7 @@ export interface Application extends DirectoryObject {
     addIns?: AddIn[];
     // Specifies settings for an application that implements a web API.
     api?: NullableOption<ApiApplication>;
-    // The unique identifier for the application that is assigned by Azure AD. Not nullable. Read-only.
+    // The unique identifier for the application that is assigned by Azure AD. Not nullable. Read-only. Supports $filter (eq).
     appId?: NullableOption<string>;
     // Unique identifier of the applicationTemplate. Supports $filter (eq, not, ne).
     applicationTemplateId?: NullableOption<string>;
@@ -4164,6 +4194,11 @@ export interface Application extends DirectoryObject {
      * not, ge, le).
      */
     requiredResourceAccess?: RequiredResourceAccess[];
+    /**
+     * The URL where the service exposes SAML metadata for federation. This property is valid only for single-tenant
+     * applications. Nullable.
+     */
+    samlMetadataUrl?: NullableOption<string>;
     // References application or service contact information from a Service or Asset Management database. Nullable.
     serviceManagementReference?: NullableOption<string>;
     /**
@@ -4196,7 +4231,10 @@ export interface Application extends DirectoryObject {
     // Specifies settings for a web application.
     web?: NullableOption<WebApplication>;
     createdOnBehalfOf?: NullableOption<DirectoryObject>;
-    // Read-only. Nullable. Supports $expand and $filter (eq when counting empty collections).
+    /**
+     * Read-only. Nullable. Supports $expand and $filter (eq and ne when counting empty collections and only with advanced
+     * query parameters).
+     */
     extensionProperties?: NullableOption<ExtensionProperty[]>;
     // Federated identities for applications. Supports $expand and $filter (eq when counting empty collections).
     federatedIdentityCredentials?: NullableOption<FederatedIdentityCredential[]>;
@@ -4419,7 +4457,7 @@ export interface ExtensionProperty extends DirectoryObject {
     isSyncedFromOnPremises?: NullableOption<boolean>;
     // Name of the extension property. Not nullable.
     name?: string;
-    // Following values are supported. Not nullable. UserGroupOrganizationDeviceApplication
+    // Following values are supported. Not nullable. UserGroupAdministrativeUnitApplicationDeviceOrganization
     targetObjects?: string[];
 }
 export interface FederatedIdentityCredential extends Entity {
@@ -7898,6 +7936,8 @@ export interface ListItem extends BaseItem {
     sharepointIds?: NullableOption<SharepointIds>;
     // Analytics about the view activities that took place on this item.
     analytics?: NullableOption<ItemAnalytics>;
+    // Version information for a document set version created by a user.
+    documentSetVersions?: NullableOption<DocumentSetVersion[]>;
     // For document libraries, the driveItem relationship exposes the listItem as a [driveItem][]
     driveItem?: NullableOption<DriveItem>;
     // The values of the columns set on this list item.
@@ -8808,6 +8848,25 @@ export interface ColumnLink extends Entity {
     // The name of the column in this content type.
     name?: NullableOption<string>;
 }
+export interface ListItemVersion extends BaseItemVersion {
+    // A collection of the fields and values for this version of the list item.
+    fields?: NullableOption<FieldValueSet>;
+}
+export interface DocumentSetVersion extends ListItemVersion {
+    // Comment about the captured version.
+    comment?: NullableOption<string>;
+    // User who captured the version.
+    createdBy?: NullableOption<IdentitySet>;
+    // Date and time when this version was created.
+    createdDateTime?: NullableOption<string>;
+    // Items within the document set that are captured as part of this version.
+    items?: NullableOption<DocumentSetVersionItem[]>;
+    /**
+     * If true, minor versions of items are also captured; otherwise, only major versions will be captured. Default value is
+     * false.
+     */
+    shouldCaptureMinorVersion?: NullableOption<boolean>;
+}
 // tslint:disable-next-line: no-empty-interface
 export interface FieldValueSet extends Entity {}
 // tslint:disable-next-line: interface-name
@@ -8843,10 +8902,6 @@ export interface ItemActivityStat extends Entity {
     startDateTime?: NullableOption<string>;
     // Exposes the itemActivities represented in this itemActivityStat resource.
     activities?: NullableOption<ItemActivity[]>;
-}
-export interface ListItemVersion extends BaseItemVersion {
-    // A collection of the fields and values for this version of the list item.
-    fields?: NullableOption<FieldValueSet>;
 }
 export interface SharedDriveItem extends BaseItem {
     // Information about the owner of the shared item being referenced.
@@ -9333,6 +9388,7 @@ export interface AccessPackageAssignmentPolicy extends Entity {
      * unknownFutureValue.
      */
     allowedTargetScope?: NullableOption<AllowedTargetScope>;
+    automaticRequestSettings?: NullableOption<AccessPackageAutomaticRequestSettings>;
     /**
      * The Timestamp type represents date and time information using ISO 8601 format and is always in UTC time. For example,
      * midnight UTC on Jan 1, 2014 is 2014-01-01T00:00:00Z
@@ -13590,6 +13646,57 @@ export interface DeviceEnrollmentWindowsHelloForBusinessConfiguration extends De
      */
     unlockWithBiometricsEnabled?: boolean;
 }
+export interface UserExperienceAnalyticsDevicePerformance extends Entity {
+    // Average (mean) number of Blue Screens per device in the last 14 days. Valid values 0 to 9999999
+    averageBlueScreens?: number;
+    // Average (mean) number of Restarts per device in the last 14 days. Valid values 0 to 9999999
+    averageRestarts?: number;
+    // Number of Blue Screens in the last 14 days. Valid values 0 to 9999999
+    blueScreenCount?: number;
+    // The user experience analytics device boot score.
+    bootScore?: number;
+    // The user experience analytics device core boot time in milliseconds.
+    coreBootTimeInMs?: number;
+    // The user experience analytics device core login time in milliseconds.
+    coreLoginTimeInMs?: number;
+    // User experience analytics summarized device count.
+    deviceCount?: number;
+    // The user experience analytics device name.
+    deviceName?: NullableOption<string>;
+    // The user experience analytics device disk type. Possible values are: unknown, hdd, ssd, unknownFutureValue.
+    diskType?: DiskType;
+    // The user experience analytics device group policy boot time in milliseconds.
+    groupPolicyBootTimeInMs?: number;
+    // The user experience analytics device group policy login time in milliseconds.
+    groupPolicyLoginTimeInMs?: number;
+    /**
+     * The health state of the user experience analytics device. Possible values are: unknown, insufficientData,
+     * needsAttention, meetingGoals, unknownFutureValue.
+     */
+    healthStatus?: UserExperienceAnalyticsHealthState;
+    // The user experience analytics device login score.
+    loginScore?: number;
+    // The user experience analytics device manufacturer.
+    manufacturer?: NullableOption<string>;
+    // The user experience analytics device model.
+    model?: NullableOption<string>;
+    /**
+     * The user experience analytics model level startup performance score. Valid values -1.79769313486232E+308 to
+     * 1.79769313486232E+308
+     */
+    modelStartupPerformanceScore?: number;
+    // The user experience analytics device Operating System version.
+    operatingSystemVersion?: NullableOption<string>;
+    // The user experience analytics responsive desktop time in milliseconds.
+    responsiveDesktopTimeInMs?: number;
+    // Number of Restarts in the last 14 days. Valid values 0 to 9999999
+    restartCount?: number;
+    /**
+     * The user experience analytics device startup performance score. Valid values -1.79769313486232E+308 to
+     * 1.79769313486232E+308
+     */
+    startupPerformanceScore?: number;
+}
 // tslint:disable-next-line: interface-name
 export interface ImportedWindowsAutopilotDeviceIdentityUpload extends Entity {
     // DateTime when the entity is created.
@@ -13671,7 +13778,7 @@ export interface DeviceManagementExportJob extends Entity {
     expirationDateTime?: string;
     // Filters applied on the report
     filter?: NullableOption<string>;
-    // Format of the exported report. Possible values are: csv, pdf.
+    // Format of the exported report. Possible values are: csv, json.
     format?: DeviceManagementReportFileFormat;
     /**
      * Configures how the requested export job is localized. Possible values are: localizedValuesAsAdditionalColumn,
@@ -14547,6 +14654,10 @@ export interface UnmuteParticipantOperation extends CommsOperation {}
 export interface UpdateRecordingStatusOperation extends CommsOperation {}
 // tslint:disable-next-line: no-empty-interface
 export interface AuthenticationMethod extends Entity {}
+export interface EmailAuthenticationMethod extends AuthenticationMethod {
+    // The email address registered to this user.
+    emailAddress?: NullableOption<string>;
+}
 export interface Fido2AuthenticationMethod extends AuthenticationMethod {
     // Authenticator Attestation GUID, an identifier that indicates the type (e.g. make and model) of the authenticator.
     aaGuid?: NullableOption<string>;
@@ -14583,6 +14694,25 @@ export interface PasswordAuthenticationMethod extends AuthenticationMethod {
     createdDateTime?: NullableOption<string>;
     // For security, the password is always returned as null from a LIST or GET operation.
     password?: NullableOption<string>;
+}
+export interface PhoneAuthenticationMethod extends AuthenticationMethod {
+    /**
+     * The phone number to text or call for authentication. Phone numbers use the format '+&amp;lt;country code&amp;gt;
+     * &amp;lt;number&amp;gt;x&amp;lt;extension&amp;gt;', with extension optional. For example, +1 5555551234 or +1
+     * 5555551234x123 are valid. Numbers are rejected when creating/updating if they do not match the required format.
+     */
+    phoneNumber?: NullableOption<string>;
+    // The type of this phone. Possible values are: mobile, alternateMobile, or office.
+    phoneType?: NullableOption<AuthenticationPhoneType>;
+    /**
+     * Whether a phone is ready to be used for SMS sign-in or not. Possible values are: notSupported, notAllowedByPolicy,
+     * notEnabled, phoneNumberNotUnique, ready, or notConfigured, unknownFutureValue.
+     */
+    smsSignInState?: NullableOption<AuthenticationMethodSignInState>;
+}
+export interface SoftwareOathAuthenticationMethod extends AuthenticationMethod {
+    // The secret key of the method. Always returns null.
+    secretKey?: NullableOption<string>;
 }
 export interface TemporaryAccessPassAuthenticationMethod extends AuthenticationMethod {
     // The date and time when the Temporary Access Pass was created.
@@ -14982,9 +15112,9 @@ export interface TodoTask extends Entity {
     // The task body that typically contains information about the task.
     body?: NullableOption<ItemBody>;
     /**
-     * The date and time when the task was last modified. By default, it is in UTC. You can provide a custom time zone in the
-     * request header. The property value uses ISO 8601 format and is always in UTC time. For example, midnight UTC on Jan 1,
-     * 2020 would look like this: '2020-01-01T00:00:00Z'.
+     * The date and time when the task body was last modified. By default, it is in UTC. You can provide a custom time zone in
+     * the request header. The property value uses ISO 8601 format and is always in UTC time. For example, midnight UTC on Jan
+     * 1, 2020 would look like this: '2020-01-01T00:00:00Z'.
      */
     bodyLastModifiedDateTime?: string;
     /**
@@ -15076,9 +15206,9 @@ export interface AuditActivityInitiator {
 // tslint:disable-next-line: interface-name
 export interface Identity {
     /**
-     * The identity's display name. Note that this may not always be available or up to date. For example, if a user changes
-     * their display name, the API may show the new value in a future response, but the items associated with the user won't
-     * show up as having changed when using delta.
+     * The display name of the identity. Note that this might not always be available or up to date. For example, if a user
+     * changes their display name, the API might show the new value in a future response, but the items associated with the
+     * user won't show up as having changed when using delta.
      */
     displayName?: NullableOption<string>;
     // Unique identifier for the identity.
@@ -15776,6 +15906,25 @@ export interface RegistrationEnforcement {
     // Run campaigns to remind users to setup targeted authentication methods.
     authenticationMethodsRegistrationCampaign?: NullableOption<AuthenticationMethodsRegistrationCampaign>;
 }
+export interface AvailabilityItem {
+    // The end time of the time slot.
+    endDateTime?: DateTimeTimeZone;
+    /**
+     * Indicates the service ID in case of 1:n appointments. If the appointment is of type 1:n, this field will be present,
+     * otherwise, null.
+     */
+    serviceId?: NullableOption<string>;
+    // The start time of the time slot.
+    startDateTime?: DateTimeTimeZone;
+    // The status of the staff member. Possible values are: available, busy, slotsAvailable, outOfOffice, unknownFutureValue.
+    status?: NullableOption<BookingsAvailabilityStatus>;
+}
+export interface DateTimeTimeZone {
+    // A single point of time in a combined date and time representation ({date}T{time}). For example, '2019-04-16T09:00:00'.
+    dateTime?: string;
+    // Represents a time zone, for example, 'Pacific Standard Time'. See below for possible values.
+    timeZone?: NullableOption<string>;
+}
 // tslint:disable-next-line: no-empty-interface
 export interface BookingCustomerInformationBase {}
 export interface BookingCustomerInformation extends BookingCustomerInformationBase {
@@ -15887,12 +16036,6 @@ export interface BookingWorkTimeSlot {
     // The time of the day when work starts. For example, 08:00:00.0000000.
     startTime?: string;
 }
-export interface DateTimeTimeZone {
-    // A single point of time in a combined date and time representation ({date}T{time}). For example, '2019-04-16T09:00:00'.
-    dateTime?: string;
-    // Represents a time zone, for example, 'Pacific Standard Time'. See below for possible values.
-    timeZone?: NullableOption<string>;
-}
 export interface PhysicalAddress {
     // The city.
     city?: NullableOption<string>;
@@ -15931,6 +16074,12 @@ export interface Phone {
      */
     type?: NullableOption<PhoneType>;
 }
+export interface StaffAvailabilityItem {
+    // Each item in this collection indicates a slot and the status of the staff member.
+    availabilityItems?: NullableOption<AvailabilityItem[]>;
+    // The ID of the staff member.
+    staffId?: NullableOption<string>;
+}
 export interface TimeSlot {
     // The date, time, and time zone that a period ends.
     end?: DateTimeTimeZone;
@@ -15967,19 +16116,9 @@ export interface ItemBody {
     contentType?: NullableOption<BodyType>;
 }
 export interface KeyValuePair {
-    /**
-     * Name for this key-value pair. Possible names are: AdditionalWSFedEndpointCheckResult,
-     * AllowedAuthenticationClassReferencesCheckResult, AlwaysRequireAuthenticationCheckResult, AutoUpdateEnabledCheckResult,
-     * ClaimsProviderNameCheckResult, EncryptClaimsCheckResult, EncryptedNameIdRequiredCheckResult,
-     * MonitoringEnabledCheckResult,NotBeforeSkewCheckResult, RequestMFAFromClaimsProvidersCheckResult,
-     * SignedSamlRequestsRequiredCheckResult, AdditionalAuthenticationRulesCheckResult, TokenLifetimeCheckResult,
-     * DelegationAuthorizationRulesCheckResult, IssuanceAuthorizationRulesCheckResult, IssuanceTransformRulesCheckResult.
-     */
+    // Name for this key-value pair
     name?: string;
-    /**
-     * Value for this key-value pair. Possible result values are 0 (when the validation check passed), 1 (when the validation
-     * check failed), or 2 (when the validation check is a warning).
-     */
+    // Value for this key-value pair
     value?: NullableOption<string>;
 }
 export interface PublicError {
@@ -17741,6 +17880,14 @@ export interface DocumentSetContent {
     // Folder name in which the file will be placed when a new document set is created in the library.
     folderName?: NullableOption<string>;
 }
+export interface DocumentSetVersionItem {
+    // The unique identifier for the item.
+    itemId?: NullableOption<string>;
+    // The title of the item.
+    title?: NullableOption<string>;
+    // The version ID of the item.
+    versionId?: NullableOption<string>;
+}
 export interface DriveItemUploadableProperties {
     // Provides a user-visible description of the item. Read-write. Only on OneDrive Personal.
     description?: NullableOption<string>;
@@ -18241,6 +18388,8 @@ export interface ConditionalAccessConditionSet {
     locations?: NullableOption<ConditionalAccessLocations>;
     // Platforms included in and excluded from the policy.
     platforms?: NullableOption<ConditionalAccessPlatforms>;
+    // Service principal risk levels included in the policy. Possible values are: low, medium, high, none, unknownFutureValue.
+    servicePrincipalRiskLevels?: RiskLevel[];
     /**
      * Sign-in risk levels included in the policy. Possible values are: low, medium, high, hidden, none, unknownFutureValue.
      * Required.
@@ -18335,6 +18484,10 @@ export interface PersistentBrowserSessionControl extends ConditionalAccessSessio
     mode?: NullableOption<PersistentBrowserSessionMode>;
 }
 export interface SignInFrequencySessionControl extends ConditionalAccessSessionControl {
+    // The possible values are primaryAndSecondaryAuthentication, secondaryAuthentication, unknownFutureValue.
+    authenticationType?: NullableOption<SignInFrequencyAuthenticationType>;
+    // The possible values are timeBased, everyTime, unknownFutureValue.
+    frequencyInterval?: NullableOption<SignInFrequencyInterval>;
     // Possible values are: days, hours, or null if frequencyInterval is everyTime .
     type?: NullableOption<SigninFrequencyType>;
     // The number of days or hours.
@@ -18468,6 +18621,15 @@ export interface AccessPackageAssignmentReviewSettings {
     primaryReviewers?: NullableOption<SubjectSet[]>;
     // When the first review should start and how often it should recur.
     schedule?: NullableOption<EntitlementManagementSchedule>;
+}
+export interface AccessPackageAutomaticRequestSettings {
+    gracePeriodBeforeAccessRemoval?: NullableOption<string>;
+    removeAccessWhenTargetLeavesAllowedTargets?: NullableOption<boolean>;
+    requestAccessForAllowedTargets?: NullableOption<boolean>;
+}
+export interface AttributeRuleMembers extends SubjectSet {
+    description?: NullableOption<string>;
+    membershipRule?: NullableOption<string>;
 }
 export interface ConnectedOrganizationMembers extends SubjectSet {
     // The ID of the connected organization in entitlement management.
@@ -19788,7 +19950,10 @@ export interface SearchAlterationOptions {
 export interface SearchHit {
     // The name of the content source which the externalItem is part of .
     contentSource?: NullableOption<string>;
-    // The internal identifier for the item.
+    /**
+     * The internal identifier for the item. The format of the identifier varies based on the entity type. For details, see
+     * hitId format.
+     */
     hitId?: NullableOption<string>;
     // The rank or the order of the result.
     rank?: NullableOption<number>;
@@ -21112,8 +21277,8 @@ export interface ParticipantInfo {
      */
     countryCode?: NullableOption<string>;
     /**
-     * The type of endpoint the participant is using. Possible values are: default, skypeForBusiness, or
-     * skypeForBusinessVoipPhone. Read-only.
+     * The type of endpoint the participant is using. Possible values are: default, voicemail, skypeForBusiness,
+     * skypeForBusinessVoipPhone and unknownFutureValue. Read-only.
      */
     endpointType?: NullableOption<EndpointType>;
     // The identitySet associated with this participant. Read-only.
@@ -21978,7 +22143,7 @@ export namespace SecurityNamespace {
         siteSources?: NullableOption<SiteSource[]>;
         // Data source entity for groups associated with the custodian.
         unifiedGroupSources?: NullableOption<UnifiedGroupSource[]>;
-        // Data source entity for a the custodian. This is the container for a custodian's mailbox and OneDrive for Business site.
+        // Data source entity for a custodian. This is the container for a custodian's mailbox and OneDrive for Business site.
         userSources?: NullableOption<UserSource[]>;
     }
     interface EdiscoveryNoncustodialDataSource extends DataSourceContainer {
@@ -22021,7 +22186,7 @@ export namespace SecurityNamespace {
     interface UnifiedGroupSource extends DataSource {
         // Specifies which sources are included in this group. Possible values are: mailbox, site.
         includedSources?: NullableOption<SourceType>;
-        // Represent a group.
+        // Represents a group.
         group?: microsoftgraph.Group;
     }
     interface UserSource extends DataSource {
@@ -22060,7 +22225,7 @@ export namespace SecurityNamespace {
         // Maximum image size that will be processed in KB).
         maxImageSize?: NullableOption<number>;
         /**
-         * The timeout duration for the OCR engine. A longer timeout may increase success of OCR, but may add to the total
+         * The timeout duration for the OCR engine. A longer timeout might increase success of OCR, but might add to the total
          * processing time.
          */
         timeout?: NullableOption<string>;
@@ -22087,13 +22252,22 @@ export namespace SecurityNamespace {
 // tslint:disable-next-line: no-empty-interface
     interface StringValueDictionary {}
     interface TopicModelingSettings {
-        // To learn more, see Adjust maximum number of themes dynamically.
+        /**
+         * Indicates whether the themes model should dynamically optimize the number of generated topics. To learn more, see
+         * Adjust maximum number of themes dynamically.
+         */
         dynamicallyAdjustTopicCount?: NullableOption<boolean>;
-        // To learn more, see Include numbers in themes.
+        /**
+         * Indicates whether the themes model should exclude numbers while parsing document texts. To learn more, see Include
+         * numbers in themes.
+         */
         ignoreNumbers?: NullableOption<boolean>;
-        // Indicates whether themes is enabled for the case.
+        // Indicates whether themes model is enabled for the case.
         isEnabled?: NullableOption<boolean>;
-        // To learn more, see Maximum number of themes.
+        /**
+         * The total number of topics that the themes model will generate for a review set. To learn more, see Maximum number of
+         * themes.
+         */
         topicCount?: NullableOption<number>;
     }
 }
