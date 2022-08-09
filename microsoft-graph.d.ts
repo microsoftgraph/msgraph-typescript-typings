@@ -4230,6 +4230,7 @@ export interface Application extends DirectoryObject {
     verifiedPublisher?: NullableOption<VerifiedPublisher>;
     // Specifies settings for a web application.
     web?: NullableOption<WebApplication>;
+    // Supports $filter (eq when counting empty collections). Read-only.
     createdOnBehalfOf?: NullableOption<DirectoryObject>;
     /**
      * Read-only. Nullable. Supports $expand and $filter (eq and ne when counting empty collections and only with advanced
@@ -4239,7 +4240,10 @@ export interface Application extends DirectoryObject {
     // Federated identities for applications. Supports $expand and $filter (eq when counting empty collections).
     federatedIdentityCredentials?: NullableOption<FederatedIdentityCredential[]>;
     homeRealmDiscoveryPolicies?: NullableOption<HomeRealmDiscoveryPolicy[]>;
-    // Directory objects that are owners of the application. Read-only. Nullable. Supports $expand.
+    /**
+     * Directory objects that are owners of the application. Read-only. Nullable. Supports $expand and $filter (eq when
+     * counting empty collections).
+     */
     owners?: NullableOption<DirectoryObject[]>;
     tokenIssuancePolicies?: NullableOption<TokenIssuancePolicy[]>;
     // The tokenLifetimePolicies assigned to this application. Supports $expand.
@@ -4421,6 +4425,10 @@ export interface ServicePrincipal extends DirectoryObject {
      * endpoints that other applications can discover and use in their experiences.
      */
     endpoints?: NullableOption<Endpoint[]>;
+    /**
+     * Federated identities for a specific type of service principal - managed identity. Supports $expand and $filter (eq when
+     * counting empty collections).
+     */
     federatedIdentityCredentials?: NullableOption<FederatedIdentityCredential[]>;
     // The homeRealmDiscoveryPolicies assigned to this service principal. Supports $expand.
     homeRealmDiscoveryPolicies?: NullableOption<HomeRealmDiscoveryPolicy[]>;
@@ -4455,37 +4463,41 @@ export interface ExtensionProperty extends DirectoryObject {
     dataType?: string;
     // Indicates if this extension property was synced from on-premises active directory using Azure AD Connect. Read-only.
     isSyncedFromOnPremises?: NullableOption<boolean>;
-    // Name of the extension property. Not nullable.
+    // Name of the extension property. Not nullable. Supports $filter (eq).
     name?: string;
     // Following values are supported. Not nullable. UserGroupAdministrativeUnitApplicationDeviceOrganization
     targetObjects?: string[];
 }
 export interface FederatedIdentityCredential extends Entity {
     /**
-     * Lists the audiences that can appear in the external token. This field is mandatory, and defaults to
-     * 'api://AzureADTokenExchange'. It says what Microsoft identity platform should accept in the aud claim in the incoming
-     * token. This value represents Azure AD in your external identity provider and has no fixed value across identity
-     * providers - you may need to create a new application registration in your identity provider to serve as the audience of
-     * this token. Required.
+     * The audience that can appear in the external token. This field is mandatory and should be set to
+     * api://AzureADTokenExchange for Azure AD. It says what Microsoft identity platform should accept in the aud claim in the
+     * incoming token. This value represents Azure AD in your external identity provider and has no fixed value across
+     * identity providers - you may need to create a new application registration in your identity provider to serve as the
+     * audience of this token. This field can only accept a single value and has a limit of 600 characters. Required.
      */
     audiences?: string[];
-    // The un-validated, user-provided description of the federated identity credential. Optional.
+    /**
+     * The un-validated, user-provided description of the federated identity credential. It has a limit of 600 characters.
+     * Optional.
+     */
     description?: NullableOption<string>;
     /**
      * The URL of the external identity provider and must match the issuer claim of the external token being exchanged. The
-     * combination of the values of issuer and subject must be unique on the app. Required.
+     * combination of the values of issuer and subject must be unique on the app. It has a limit of 600 characters. Required.
      */
     issuer?: string;
     /**
-     * is the unique identifier for the federated identity credential, which has a character limit of 120 characters and must
-     * be URL friendly. It is immutable once created. Required. Not nullable. Supports $filter (eq).
+     * is the unique identifier for the federated identity credential, which has a limit of 120 characters and must be URL
+     * friendly. It is immutable once created. Required. Not nullable. Supports $filter (eq).
      */
     name?: string;
     /**
      * Required. The identifier of the external software workload within the external identity provider. Like the audience
      * value, it has no fixed format, as each identity provider uses their own - sometimes a GUID, sometimes a colon delimited
      * identifier, sometimes arbitrary strings. The value here must match the sub claim within the token presented to Azure
-     * AD. The combination of issuer and subject must be unique on the app. Supports $filter (eq).
+     * AD. The combination of issuer and subject must be unique on the app. It has a limit of 600 characters. Supports $filter
+     * (eq).
      */
     subject?: string;
 }
@@ -15071,6 +15083,30 @@ export interface UrlAssessmentRequest extends ThreatAssessmentRequest {
     // The URL string.
     url?: string;
 }
+export interface AttachmentBase extends Entity {
+    // The MIME type.
+    contentType?: NullableOption<string>;
+    /**
+     * The Timestamp type represents date and time information using ISO 8601 format and is always in UTC time. For example,
+     * midnight UTC on Jan 1, 2014 is 2014-01-01T00:00:00Z.
+     */
+    lastModifiedDateTime?: NullableOption<string>;
+    // The display name of the attachment. This does not need to be the actual file name.
+    name?: NullableOption<string>;
+    // The length of the attachment in bytes.
+    size?: number;
+}
+export interface AttachmentSession extends Entity {
+    // The content streams that are uploaded.
+    content?: NullableOption<any>;
+    /**
+     * The date and time in UTC when the upload session will expire. The complete file must be uploaded before this expiration
+     * time is reached.
+     */
+    expirationDateTime?: NullableOption<string>;
+    // Indicates a single value {start} that represents the location in the file where the next upload should begin.
+    nextExpectedRanges?: NullableOption<string[]>;
+}
 export interface ChecklistItem extends Entity {
     // The date and time when the checklistItem was finished.
     checkedDateTime?: NullableOption<string>;
@@ -15090,6 +15126,10 @@ export interface LinkedResource extends Entity {
     externalId?: NullableOption<string>;
     // Deep link to the linkedResource.
     webUrl?: NullableOption<string>;
+}
+export interface TaskFileAttachment extends AttachmentBase {
+    // The base64-encoded contents of the file.
+    contentBytes?: number;
 }
 export interface TodoTaskList extends Entity {
     // The name of the task list.
@@ -15122,7 +15162,7 @@ export interface TodoTask extends Entity {
      * that the user has defined.
      */
     categories?: NullableOption<string[]>;
-    // The date in the specified time zone that the task was finished.
+    // The date and time in the specified time zone that the task was finished.
     completedDateTime?: NullableOption<DateTimeTimeZone>;
     /**
      * The date and time when the task was created. By default, it is in UTC. You can provide a custom time zone in the
@@ -15130,8 +15170,10 @@ export interface TodoTask extends Entity {
      * '2020-01-01T00:00:00Z'.
      */
     createdDateTime?: string;
-    // The date in the specified time zone that the task is to be finished.
+    // The date and time in the specified time zone that the task is to be finished.
     dueDateTime?: NullableOption<DateTimeTimeZone>;
+    // Indicates whether the task has attachments.
+    hasAttachments?: NullableOption<boolean>;
     // The importance of the task. Possible values are: low, normal, high.
     importance?: Importance;
     // Set to true if an alert is set to remind the user of the task.
@@ -15144,8 +15186,10 @@ export interface TodoTask extends Entity {
     lastModifiedDateTime?: string;
     // The recurrence pattern for the task.
     recurrence?: NullableOption<PatternedRecurrence>;
-    // The date and time for a reminder alert of the task to occur.
+    // The date and time in the specified time zone for a reminder alert of the task to occur.
     reminderDateTime?: NullableOption<DateTimeTimeZone>;
+    // The date and time in the specified time zone at which the task is scheduled to start.
+    startDateTime?: NullableOption<DateTimeTimeZone>;
     /**
      * Indicates the state or progress of the task. Possible values are: notStarted, inProgress, completed, waitingOnOthers,
      * deferred.
@@ -15153,6 +15197,9 @@ export interface TodoTask extends Entity {
     status?: TaskStatus;
     // A brief description of the task.
     title?: NullableOption<string>;
+    // A collection of file attachments for the task.
+    attachments?: NullableOption<AttachmentBase[]>;
+    attachmentSessions?: NullableOption<AttachmentSession[]>;
     // A collection of smaller subtasks linked to the more complex parent task.
     checklistItems?: NullableOption<ChecklistItem[]>;
     // The collection of open extensions defined for the task. Nullable.
@@ -21969,6 +22016,19 @@ export interface WorkforceIntegrationEncryption {
     protocol?: NullableOption<WorkforceIntegrationEncryptionProtocol>;
     // Encryption shared secret.
     secret?: NullableOption<string>;
+}
+export interface AttachmentInfo {
+    // The type of the attachment. The possible values are: file, item, reference. Required.
+    attachmentType?: NullableOption<AttachmentType>;
+    // The nature of the data in the attachment. Optional.
+    contentType?: NullableOption<string>;
+    /**
+     * The display name of the attachment. This can be a descriptive string and does not have to be the actual file name.
+     * Required.
+     */
+    name?: NullableOption<string>;
+    // The length of the attachment in bytes. Required.
+    size?: NullableOption<number>;
 }
 
 export namespace SecurityNamespace {
