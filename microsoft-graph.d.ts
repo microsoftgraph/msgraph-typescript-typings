@@ -621,6 +621,7 @@ export type AutomaticUpdateMode =
     | "autoInstallAndRebootAtMaintenanceTime"
     | "autoInstallAndRebootAtScheduledTime"
     | "autoInstallAndRebootWithoutEndUserControl";
+export type AutoRestartNotificationDismissalMethod = "notConfigured" | "automatic" | "user" | "unknownFutureValue";
 export type BitLockerEncryptionMethod = "aesCbc128" | "aesCbc256" | "xtsAes128" | "xtsAes256";
 export type DefenderCloudBlockLevelType = "notConfigured" | "high" | "highPlus" | "zeroTolerance";
 export type DefenderMonitorFileActivity =
@@ -657,6 +658,7 @@ export type DiagnosticDataSubmissionMode = "userDefined" | "none" | "basic" | "e
 export type EdgeCookiePolicy = "userDefined" | "allow" | "blockThirdParty" | "blockAll";
 export type EdgeSearchEngineType = "default" | "bing";
 export type EditionUpgradeLicenseType = "productKey" | "licenseFile";
+export type Enablement = "notConfigured" | "enabled" | "disabled";
 export type FirewallCertificateRevocationListCheckMethodType = "deviceDefault" | "none" | "attempt" | "require";
 export type FirewallPacketQueueingMethodType =
     | "deviceDefault"
@@ -905,6 +907,20 @@ export type WindowsDeliveryOptimizationMode =
 export type WindowsSpotlightEnablementSettings = "notConfigured" | "disabled" | "enabled";
 export type WindowsStartMenuAppListVisibilityType = "userDefined" | "collapse" | "remove" | "disableSettingsApp";
 export type WindowsStartMenuModeType = "userDefined" | "fullScreen" | "nonFullScreen";
+export type WindowsUpdateForBusinessUpdateWeeks =
+    | "userDefined"
+    | "firstWeek"
+    | "secondWeek"
+    | "thirdWeek"
+    | "fourthWeek"
+    | "everyWeek"
+    | "unknownFutureValue";
+export type WindowsUpdateNotificationDisplayOption =
+    | "notConfigured"
+    | "defaultNotifications"
+    | "restartWarningsOnly"
+    | "disableAllNotifications"
+    | "unknownFutureValue";
 export type WindowsUpdateType =
     | "userDefined"
     | "all"
@@ -929,7 +945,6 @@ export type DeviceManagementPartnerTenantState =
     | "terminated"
     | "rejected"
     | "unresponsive";
-export type Enablement = "notConfigured" | "enabled" | "disabled";
 export type MdmAuthority = "unknown" | "intune" | "sccm" | "office365";
 export type MobileThreatPartnerTenantState = "unavailable" | "available" | "enabled" | "unresponsive";
 export type VppTokenState = "unknown" | "valid" | "expired" | "invalid" | "assignedToExternalMDM";
@@ -944,6 +959,18 @@ export type ComplianceState =
     | "error"
     | "inGracePeriod"
     | "configManager";
+export type DetectedAppPlatformType =
+    | "unknown"
+    | "windows"
+    | "windowsMobile"
+    | "windowsHolographic"
+    | "ios"
+    | "macOS"
+    | "chromeOS"
+    | "androidOSP"
+    | "androidDeviceAdministrator"
+    | "androidWorkProfile"
+    | "androidDedicatedAndFullyManaged";
 export type DeviceEnrollmentType =
     | "unknown"
     | "userEnrollment"
@@ -1060,7 +1087,7 @@ export type NotificationTemplateBrandingOptions =
     | "includeDeviceDetails";
 export type RemoteAssistanceOnboardingStatus = "notOnboarded" | "onboarding" | "onboarded";
 export type DeviceManagementExportJobLocalizationType = "localizedValuesAsAdditionalColumn" | "replaceLocalizableValues";
-export type DeviceManagementReportFileFormat = "csv" | "pdf";
+export type DeviceManagementReportFileFormat = "csv" | "pdf" | "json" | "unknownFutureValue";
 export type DeviceManagementReportStatus = "unknown" | "notStarted" | "inProgress" | "completed" | "failed";
 export type DeviceEnrollmentFailureReason =
     | "unknown"
@@ -7117,7 +7144,10 @@ export interface UnifiedRoleAssignmentScheduleRequest extends Request {
     isValidationOnly?: NullableOption<boolean>;
     // A message provided by users and administrators when create they create the unifiedRoleAssignmentScheduleRequest object.
     justification?: NullableOption<string>;
-    // Identifier of the principal that has been granted the assignment. Supports $filter (eq, ne).
+    /**
+     * Identifier of the principal that has been granted the assignment. Can be a user, role-assignable group, or a service
+     * principal. Supports $filter (eq, ne).
+     */
     principalId?: NullableOption<string>;
     // Identifier of the unifiedRoleDefinition object that is being assigned to the principal. Supports $filter (eq, ne).
     roleDefinitionId?: NullableOption<string>;
@@ -7262,7 +7292,10 @@ export interface UnifiedRoleEligibilityScheduleRequest extends Request {
      * object.
      */
     justification?: NullableOption<string>;
-    // Identifier of the principal that has been granted the role eligibility. Supports $filter (eq, ne).
+    /**
+     * Identifier of the principal that has been granted the role eligibility. Can be a user or a role-assignable group. You
+     * can grant only active assignments service principals.Supports $filter (eq, ne).
+     */
     principalId?: NullableOption<string>;
     // Identifier of the unifiedRoleDefinition object that is being assigned to the principal. Supports $filter (eq, ne).
     roleDefinitionId?: NullableOption<string>;
@@ -11154,6 +11187,13 @@ export interface DetectedApp extends Entity {
     deviceCount?: number;
     // Name of the discovered application. Read-only
     displayName?: NullableOption<string>;
+    /**
+     * Indicates the operating system / platform of the discovered application. Some possible values are Windows, iOS, macOS.
+     * The default value is unknown (0).
+     */
+    platform?: DetectedAppPlatformType;
+    // Indicates the publisher of the discovered application. For example: 'Microsoft'. The default value is an empty string.
+    publisher?: NullableOption<string>;
     // Discovered application size in bytes. Read-only
     sizeInByte?: number;
     // Version of the discovered application. Read-only
@@ -13484,15 +13524,40 @@ export interface WindowsPhone81GeneralConfiguration extends DeviceConfiguration 
 }
 export interface WindowsUpdateForBusinessConfiguration extends DeviceConfiguration {
     /**
+     * When TRUE, allows eligible Windows 10 devices to upgrade to Windows 11. When FALSE, implies the device stays on the
+     * existing operating system. Returned by default. Query parameters are not supported.
+     */
+    allowWindows11Upgrade?: boolean;
+    /**
      * Automatic update mode. Possible values are: userDefined, notifyDownload, autoInstallAtMaintenanceTime,
      * autoInstallAndRebootAtMaintenanceTime, autoInstallAndRebootAtScheduledTime, autoInstallAndRebootWithoutEndUserControl.
      */
     automaticUpdateMode?: AutomaticUpdateMode;
     /**
+     * Specify the method by which the auto-restart required notification is dismissed. Possible values are: NotConfigured,
+     * Automatic, User. Returned by default. Query parameters are not supported.
+     */
+    autoRestartNotificationDismissal?: AutoRestartNotificationDismissalMethod;
+    /**
      * Determines which branch devices will receive their updates from. Possible values are: userDefined, all,
      * businessReadyOnly, windowsInsiderBuildFast, windowsInsiderBuildSlow, windowsInsiderBuildRelease.
      */
     businessReadyUpdatesOnly?: WindowsUpdateType;
+    /**
+     * Number of days before feature updates are installed automatically with valid range from 0 to 30 days. Returned by
+     * default. Query parameters are not supported.
+     */
+    deadlineForFeatureUpdatesInDays?: NullableOption<number>;
+    /**
+     * Number of days before quality updates are installed automatically with valid range from 0 to 30 days. Returned by
+     * default. Query parameters are not supported.
+     */
+    deadlineForQualityUpdatesInDays?: NullableOption<number>;
+    /**
+     * Number of days after deadline until restarts occur automatically with valid range from 0 to 7 days. Returned by
+     * default. Query parameters are not supported.
+     */
+    deadlineGracePeriodInDays?: NullableOption<number>;
     /**
      * Delivery Optimization Mode. Possible values are: userDefined, httpOnly, httpWithPeeringNat,
      * httpWithPeeringPrivateGroup, httpWithInternetPeering, simpleDownload, bypassMode.
@@ -13500,16 +13565,57 @@ export interface WindowsUpdateForBusinessConfiguration extends DeviceConfigurati
     deliveryOptimizationMode?: WindowsDeliveryOptimizationMode;
     // Exclude Windows update Drivers
     driversExcluded?: boolean;
+    /**
+     * Deadline in days before automatically scheduling and executing a pending restart outside of active hours, with valid
+     * range from 2 to 30 days. Returned by default. Query parameters are not supported.
+     */
+    engagedRestartDeadlineInDays?: NullableOption<number>;
+    /**
+     * Number of days a user can snooze Engaged Restart reminder notifications with valid range from 1 to 3 days. Returned by
+     * default. Query parameters are not supported.
+     */
+    engagedRestartSnoozeScheduleInDays?: NullableOption<number>;
+    /**
+     * Number of days before transitioning from Auto Restarts scheduled outside of active hours to Engaged Restart, which
+     * requires the user to schedule, with valid range from 0 to 30 days. Returned by default. Query parameters are not
+     * supported.
+     */
+    engagedRestartTransitionScheduleInDays?: NullableOption<number>;
     // Defer Feature Updates by these many days
     featureUpdatesDeferralPeriodInDays?: number;
     // Pause Feature Updates
     featureUpdatesPaused?: boolean;
     // Feature Updates Pause Expiry datetime
     featureUpdatesPauseExpiryDateTime?: string;
+    /**
+     * The Feature Updates Pause start date. This value is the time when the admin paused or extended the pause for the ring.
+     * Returned by default. Query parameters are not supported. This property is read-only.
+     */
+    featureUpdatesPauseStartDate?: NullableOption<string>;
+    /**
+     * The Feature Updates Rollback Start datetime.This value is the time when the admin rolled back the Feature update for
+     * the ring.Returned by default.Query parameters are not supported.
+     */
+    featureUpdatesRollbackStartDateTime?: string;
+    /**
+     * The number of days after a Feature Update for which a rollback is valid with valid range from 2 to 60 days. Returned by
+     * default. Query parameters are not supported.
+     */
+    featureUpdatesRollbackWindowInDays?: NullableOption<number>;
+    /**
+     * When TRUE, rollback Feature Updates on the next device check in. When FALSE, do not rollback Feature Updates on the
+     * next device check in. Returned by default.Query parameters are not supported.
+     */
+    featureUpdatesWillBeRolledBack?: NullableOption<boolean>;
     // Installation schedule
     installationSchedule?: NullableOption<WindowsUpdateInstallScheduleType>;
     // Allow Microsoft Update Service
     microsoftUpdateServiceAllowed?: boolean;
+    /**
+     * When TRUE the device should wait until deadline for rebooting outside of active hours. When FALSE the device should not
+     * wait until deadline for rebooting outside of active hours. Returned by default. Query parameters are not supported.
+     */
+    postponeRebootUntilAfterDeadline?: NullableOption<boolean>;
     // The pre-release features. Possible values are: userDefined, settingsOnly, settingsAndExperimentations, notAllowed.
     prereleaseFeatures?: PrereleaseFeatures;
     // Defer Quality Updates by these many days
@@ -13518,6 +13624,57 @@ export interface WindowsUpdateForBusinessConfiguration extends DeviceConfigurati
     qualityUpdatesPaused?: boolean;
     // Quality Updates Pause Expiry datetime
     qualityUpdatesPauseExpiryDateTime?: string;
+    /**
+     * The Quality Updates Pause start date. This value is the time when the admin paused or extended the pause for the ring.
+     * Returned by default. Query parameters are not supported. This property is read-only.
+     */
+    qualityUpdatesPauseStartDate?: NullableOption<string>;
+    /**
+     * The Quality Updates Rollback Start datetime. This value is the time when the admin rolled back the Quality update for
+     * the ring. Returned by default. Query parameters are not supported.
+     */
+    qualityUpdatesRollbackStartDateTime?: string;
+    /**
+     * When TRUE, rollback Quality Updates on the next device check in. When FALSE, do not rollback Quality Updates on the
+     * next device check in. Returned by default. Query parameters are not supported.
+     */
+    qualityUpdatesWillBeRolledBack?: NullableOption<boolean>;
+    /**
+     * Specify the period for auto-restart imminent warning notifications. Supported values: 15, 30 or 60 (minutes). Returned
+     * by default. Query parameters are not supported.
+     */
+    scheduleImminentRestartWarningInMinutes?: NullableOption<number>;
+    /**
+     * Specify the period for auto-restart warning reminder notifications. Supported values: 2, 4, 8, 12 or 24 (hours).
+     * Returned by default. Query parameters are not supported.
+     */
+    scheduleRestartWarningInHours?: NullableOption<number>;
+    /**
+     * When TRUE, skips all checks before restart: Battery level = 40%, User presence, Display Needed, Presentation mode, Full
+     * screen mode, phone call state, game mode etc. When FALSE, does not skip all checks before restart. Returned by default.
+     * Query parameters are not supported.
+     */
+    skipChecksBeforeRestart?: boolean;
+    /**
+     * Specifies what Windows Update notifications users see. Possible values are: NotConfigured, DefaultNotifications,
+     * RestartWarningsOnly, DisableAllNotifications. Returned by default. Query parameters are not supported.
+     */
+    updateNotificationLevel?: WindowsUpdateNotificationDisplayOption;
+    /**
+     * Schedule the update installation on the weeks of the month. Possible values are: UserDefined, FirstWeek, SecondWeek,
+     * ThirdWeek, FourthWeek, EveryWeek. Returned by default. Query parameters are not supported.
+     */
+    updateWeeks?: NullableOption<WindowsUpdateForBusinessUpdateWeeks>;
+    /**
+     * Specifies whether to enable end user’s access to pause software updates. Possible values are: NotConfigured, Enabled,
+     * Disabled. Returned by default. Query parameters are not supported.
+     */
+    userPauseAccess?: Enablement;
+    /**
+     * Specifies whether to disable user’s access to scan Windows Update. Possible values are: NotConfigured, Enabled,
+     * Disabled. Returned by default. Query parameters are not supported.
+     */
+    userWindowsUpdateScanAccess?: Enablement;
 }
 export interface EnrollmentConfigurationAssignment extends Entity {
     // Represents an assignment to managed devices in the tenant
@@ -21838,403 +21995,6 @@ export interface AttachmentInfo {
     size?: NullableOption<number>;
 }
 
-export namespace SecurityNamespace {
-    type AdditionalDataOptions = "allVersions" | "linkedFiles" | "unknownFutureValue";
-    type CaseAction =
-        | "contentExport"
-        | "applyTags"
-        | "convertToPdf"
-        | "index"
-        | "estimateStatistics"
-        | "addToReviewSet"
-        | "holdUpdate"
-        | "unknownFutureValue";
-    type CaseOperationStatus =
-        | "notStarted"
-        | "submissionFailed"
-        | "running"
-        | "succeeded"
-        | "partiallySucceeded"
-        | "failed"
-        | "unknownFutureValue";
-    type CaseStatus =
-        | "unknown"
-        | "active"
-        | "pendingDelete"
-        | "closing"
-        | "closed"
-        | "closedWithError"
-        | "unknownFutureValue";
-    type ChildSelectability = "One" | "Many" | "unknownFutureValue";
-    type DataSourceContainerStatus = "active" | "released" | "unknownFutureValue";
-    type DataSourceHoldStatus = "notApplied" | "applied" | "applying" | "removing" | "partial" | "unknownFutureValue";
-    type DataSourceScopes =
-        | "none"
-        | "allTenantMailboxes"
-        | "allTenantSites"
-        | "allCaseCustodians"
-        | "allCaseNoncustodialDataSources"
-        | "unknownFutureValue";
-    type SourceType = "mailbox" | "site" | "unknownFutureValue";
-    interface CasesRoot extends microsoftgraph.Entity {
-        ediscoveryCases?: NullableOption<EdiscoveryCase[]>;
-    }
-    interface Case extends microsoftgraph.Entity {
-        createdDateTime?: NullableOption<string>;
-        description?: NullableOption<string>;
-        displayName?: NullableOption<string>;
-        lastModifiedBy?: NullableOption<microsoftgraph.IdentitySet>;
-        lastModifiedDateTime?: NullableOption<string>;
-        status?: NullableOption<CaseStatus>;
-    }
-    interface CaseOperation extends microsoftgraph.Entity {
-        /**
-         * The type of action the operation represents. Possible values are:
-         * addToReviewSet,applyTags,contentExport,convertToPdf,estimateStatistics, purgeData
-         */
-        action?: NullableOption<CaseAction>;
-        // The date and time the operation was completed.
-        completedDateTime?: NullableOption<string>;
-        // The user that created the operation.
-        createdBy?: NullableOption<microsoftgraph.IdentitySet>;
-        // The date and time the operation was created.
-        createdDateTime?: NullableOption<string>;
-        // The progress of the operation.
-        percentProgress?: NullableOption<number>;
-        // Contains success and failure-specific result information.
-        resultInfo?: NullableOption<microsoftgraph.ResultInfo>;
-        /**
-         * The status of the case operation. Possible values are: notStarted, submissionFailed, running, succeeded,
-         * partiallySucceeded, failed.
-         */
-        status?: NullableOption<CaseOperationStatus>;
-    }
-    interface EdiscoveryCase extends Case {
-        // The user who closed the case.
-        closedBy?: NullableOption<microsoftgraph.IdentitySet>;
-        /**
-         * The date and time when the case was closed. The Timestamp type represents date and time information using ISO 8601
-         * format and is always in UTC time. For example, midnight UTC on Jan 1, 2014 is 2014-01-01T00:00:00Z
-         */
-        closedDateTime?: NullableOption<string>;
-        // The external case number for customer reference.
-        externalId?: NullableOption<string>;
-        // Returns a list of case ediscoveryCustodian objects for this case.
-        custodians?: NullableOption<EdiscoveryCustodian[]>;
-        // Returns a list of case ediscoveryNoncustodialDataSource objects for this case.
-        noncustodialDataSources?: NullableOption<EdiscoveryNoncustodialDataSource[]>;
-        // Returns a list of case caseOperation objects for this case.
-        operations?: NullableOption<CaseOperation[]>;
-        // Returns a list of eDiscoveryReviewSet objects in the case.
-        reviewSets?: NullableOption<EdiscoveryReviewSet[]>;
-        // Returns a list of eDiscoverySearch objects associated with this case.
-        searches?: NullableOption<EdiscoverySearch[]>;
-        // Returns a list of eDIscoverySettings objects in the case.
-        settings?: NullableOption<EdiscoveryCaseSettings>;
-        // Returns a list of ediscoveryReviewTag objects associated to this case.
-        tags?: NullableOption<EdiscoveryReviewTag[]>;
-    }
-    interface DataSet extends microsoftgraph.Entity {
-        createdBy?: NullableOption<microsoftgraph.IdentitySet>;
-        createdDateTime?: NullableOption<string>;
-        displayName?: NullableOption<string>;
-    }
-    interface DataSource extends microsoftgraph.Entity {
-        // The user who created the dataSource.
-        createdBy?: NullableOption<microsoftgraph.IdentitySet>;
-        // The date and time the dataSource was created.
-        createdDateTime?: NullableOption<string>;
-        // The display name of the dataSource. This will be the name of the SharePoint site.
-        displayName?: NullableOption<string>;
-        // The hold status of the dataSource.The possible values are: notApplied, applied, applying, removing, partial
-        holdStatus?: NullableOption<DataSourceHoldStatus>;
-    }
-    interface DataSourceContainer extends microsoftgraph.Entity {
-        // Created date and time of the dataSourceContainer entity.
-        createdDateTime?: NullableOption<string>;
-        // Display name of the dataSourceContainer entity.
-        displayName?: NullableOption<string>;
-        // The hold status of the dataSourceContainer. The possible values are: notApplied, applied, applying, removing, partial
-        holdStatus?: NullableOption<DataSourceHoldStatus>;
-        // Last modified date and time of the dataSourceContainer.
-        lastModifiedDateTime?: NullableOption<string>;
-        // Date and time that the dataSourceContainer was released from the case.
-        releasedDateTime?: NullableOption<string>;
-        // Latest status of the dataSourceContainer. Possible values are: Active, Released.
-        status?: NullableOption<DataSourceContainerStatus>;
-    }
-    interface EdiscoveryAddToReviewSetOperation extends CaseOperation {
-        // eDiscovery review set to which items matching source collection query gets added.
-        reviewSet?: NullableOption<EdiscoveryReviewSet>;
-        // eDiscovery search that gets added to review set.
-        search?: NullableOption<EdiscoverySearch>;
-    }
-    interface EdiscoveryReviewSet extends DataSet {
-        // Represents queries within the review set.
-        queries?: NullableOption<EdiscoveryReviewSetQuery[]>;
-    }
-    interface Search extends microsoftgraph.Entity {
-        contentQuery?: NullableOption<string>;
-        createdBy?: NullableOption<microsoftgraph.IdentitySet>;
-        createdDateTime?: NullableOption<string>;
-        description?: NullableOption<string>;
-        displayName?: NullableOption<string>;
-        lastModifiedBy?: NullableOption<microsoftgraph.IdentitySet>;
-        lastModifiedDateTime?: NullableOption<string>;
-    }
-    interface EdiscoverySearch extends Search {
-        /**
-         * When specified, the collection will span across a service for an entire workload. Possible values are: none,
-         * allTenantMailboxes, allTenantSites, allCaseCustodians, allCaseNoncustodialDataSources.
-         */
-        dataSourceScopes?: NullableOption<DataSourceScopes>;
-        // Adds an additional source to the eDiscovery search.
-        additionalSources?: NullableOption<DataSource[]>;
-        // Adds the results of the eDiscovery search to the specified reviewSet.
-        addToReviewSetOperation?: NullableOption<EdiscoveryAddToReviewSetOperation>;
-        // Custodian sources that are included in the eDiscovery search.
-        custodianSources?: NullableOption<DataSource[]>;
-        // The last estimate operation associated with the eDiscovery search.
-        lastEstimateStatisticsOperation?: NullableOption<EdiscoveryEstimateOperation>;
-        // noncustodialDataSource sources that are included in the eDiscovery search
-        noncustodialSources?: NullableOption<EdiscoveryNoncustodialDataSource[]>;
-    }
-    interface EdiscoveryCustodian extends DataSourceContainer {
-        // Date and time the custodian acknowledged a hold notification.
-        acknowledgedDateTime?: NullableOption<string>;
-        // Email address of the custodian.
-        email?: NullableOption<string>;
-        // Operation entity that represents the latest indexing for the custodian.
-        lastIndexOperation?: NullableOption<EdiscoveryIndexOperation>;
-        // Data source entity for SharePoint sites associated with the custodian.
-        siteSources?: NullableOption<SiteSource[]>;
-        // Data source entity for groups associated with the custodian.
-        unifiedGroupSources?: NullableOption<UnifiedGroupSource[]>;
-        // Data source entity for a the custodian. This is the container for a custodian's mailbox and OneDrive for Business site.
-        userSources?: NullableOption<UserSource[]>;
-    }
-    interface EdiscoveryNoncustodialDataSource extends DataSourceContainer {
-        // User source or SharePoint site data source as non-custodial data source.
-        dataSource?: NullableOption<DataSource>;
-        // Operation entity that represents the latest indexing for the non-custodial data source.
-        lastIndexOperation?: NullableOption<EdiscoveryIndexOperation>;
-    }
-    interface EdiscoveryCaseSettings extends microsoftgraph.Entity {
-        // The OCR (Optical Character Recognition) settings for the case.
-        ocr?: NullableOption<OcrSettings>;
-        // The redundancy (near duplicate and email threading) detection settings for the case.
-        redundancyDetection?: NullableOption<RedundancyDetectionSettings>;
-        // The Topic Modeling (Themes) settings for the case.
-        topicModeling?: NullableOption<TopicModelingSettings>;
-    }
-    interface Tag extends microsoftgraph.Entity {
-        createdBy?: NullableOption<microsoftgraph.IdentitySet>;
-        description?: NullableOption<string>;
-        displayName?: NullableOption<string>;
-        lastModifiedDateTime?: NullableOption<string>;
-    }
-    interface EdiscoveryReviewTag extends Tag {
-        /**
-         * Indicates whether a single or multiple child tags can be associated with a document. Possible values are: One, Many.
-         * This value controls whether the UX presents the tags as checkboxes or a radio button group.
-         */
-        childSelectability?: NullableOption<ChildSelectability>;
-        // Returns the tags that are a child of a tag.
-        childTags?: NullableOption<EdiscoveryReviewTag[]>;
-        // Returns the parent tag of the specified tag.
-        parent?: NullableOption<EdiscoveryReviewTag>;
-    }
-// tslint:disable-next-line: no-empty-interface
-    interface EdiscoveryIndexOperation extends CaseOperation {}
-    interface SiteSource extends DataSource {
-        // The SharePoint site associated with the siteSource.
-        site?: microsoftgraph.Site;
-    }
-    interface UnifiedGroupSource extends DataSource {
-        // Specifies which sources are included in this group. Possible values are: mailbox, site.
-        includedSources?: NullableOption<SourceType>;
-        // Represents a group.
-        group?: microsoftgraph.Group;
-    }
-    interface UserSource extends DataSource {
-        // Email address of the user's mailbox.
-        email?: string;
-        // Specifies which sources are included in this group. Possible values are: mailbox, site.
-        includedSources?: NullableOption<SourceType>;
-        // The URL of the user's OneDrive for Business site. Read-only.
-        siteWebUrl?: NullableOption<string>;
-    }
-    interface EdiscoveryEstimateOperation extends CaseOperation {
-        // The estimated count of items for the search that matched the content query.
-        indexedItemCount?: NullableOption<number>;
-        // The estimated size of items for the search that matched the content query.
-        indexedItemsSize?: NullableOption<number>;
-        // The number of mailboxes that had search hits.
-        mailboxCount?: NullableOption<number>;
-        // The number of mailboxes that had search hits.
-        siteCount?: NullableOption<number>;
-        // The estimated count of unindexed items for the collection.
-        unindexedItemCount?: NullableOption<number>;
-        // The estimated size of unindexed items for the collection.
-        unindexedItemsSize?: NullableOption<number>;
-        // eDiscovery search.
-        search?: NullableOption<EdiscoverySearch>;
-    }
-// tslint:disable-next-line: no-empty-interface
-    interface EdiscoveryHoldOperation extends CaseOperation {}
-// tslint:disable-next-line: no-empty-interface
-    interface EdiscoveryReviewSetQuery extends Search {}
-// tslint:disable-next-line: no-empty-interface
-    interface EdiscoveryTagOperation extends CaseOperation {}
-    interface OcrSettings {
-        // Indicates whether or not OCR is enabled for the case.
-        isEnabled?: NullableOption<boolean>;
-        // Maximum image size that will be processed in KB).
-        maxImageSize?: NullableOption<number>;
-        /**
-         * The timeout duration for the OCR engine. A longer timeout might increase success of OCR, but might add to the total
-         * processing time.
-         */
-        timeout?: NullableOption<string>;
-    }
-    interface RedundancyDetectionSettings {
-        // Indicates whether email threading and near duplicate detection are enabled.
-        isEnabled?: NullableOption<boolean>;
-        /**
-         * Specifies the maximum number of words used for email threading and near duplicate detection. To learn more, see
-         * Minimum/maximum number of words.
-         */
-        maxWords?: NullableOption<number>;
-        /**
-         * Specifies the minimum number of words used for email threading and near duplicate detection. To learn more, see
-         * Minimum/maximum number of words.
-         */
-        minWords?: NullableOption<number>;
-        /**
-         * Specifies the similarity level for documents to be put in the same near duplicate set. To learn more, see Document and
-         * email similarity threshold.
-         */
-        similarityThreshold?: NullableOption<number>;
-    }
-// tslint:disable-next-line: no-empty-interface
-    interface StringValueDictionary {}
-    interface TopicModelingSettings {
-        /**
-         * Indicates whether the themes model should dynamically optimize the number of generated topics. To learn more, see
-         * Adjust maximum number of themes dynamically.
-         */
-        dynamicallyAdjustTopicCount?: NullableOption<boolean>;
-        /**
-         * Indicates whether the themes model should exclude numbers while parsing document texts. To learn more, see Include
-         * numbers in themes.
-         */
-        ignoreNumbers?: NullableOption<boolean>;
-        // Indicates whether themes model is enabled for the case.
-        isEnabled?: NullableOption<boolean>;
-        /**
-         * The total number of topics that the themes model will generate for a review set. To learn more, see Maximum number of
-         * themes.
-         */
-        topicCount?: NullableOption<number>;
-    }
-}
-export namespace TermStore {
-    type RelationType = "pin" | "reuse" | "unknownFutureValue";
-    type TermGroupScope = "global" | "system" | "siteCollection" | "unknownFutureValue";
-    interface Store extends microsoftgraph.Entity {
-        // Default language of the term store.
-        defaultLanguageTag?: string;
-        // List of languages for the term store.
-        languageTags?: string[];
-        // Collection of all groups available in the term store.
-        groups?: NullableOption<Group[]>;
-        // Collection of all sets available in the term store.
-        sets?: NullableOption<Set[]>;
-    }
-    interface Group extends microsoftgraph.Entity {
-        // Date and time of the group creation. Read-only.
-        createdDateTime?: NullableOption<string>;
-        // Description that gives details on the term usage.
-        description?: NullableOption<string>;
-        // Name of the group.
-        displayName?: NullableOption<string>;
-        // ID of the parent site of this group.
-        parentSiteId?: NullableOption<string>;
-        // Returns the type of the group. Possible values are global, system, and siteCollection.
-        scope?: NullableOption<TermGroupScope>;
-        // All sets under the group in a term [store].
-        sets?: NullableOption<Set[]>;
-    }
-    interface Set extends microsoftgraph.Entity {
-        // Date and time of set creation. Read-only.
-        createdDateTime?: NullableOption<string>;
-        // Description that gives details on the term usage.
-        description?: NullableOption<string>;
-        // Name of the set for each languageTag.
-        localizedNames?: NullableOption<LocalizedName[]>;
-        // Custom properties for the set.
-        properties?: NullableOption<microsoftgraph.KeyValue[]>;
-        // Children terms of set in term [store].
-        children?: NullableOption<Term[]>;
-        // The parent [group] that contains the set.
-        parentGroup?: Group;
-        // Indicates which terms have been pinned or reused directly under the set.
-        relations?: NullableOption<Relation[]>;
-        // All the terms under the set.
-        terms?: NullableOption<Term[]>;
-    }
-    interface Relation extends microsoftgraph.Entity {
-        // The type of relation. Possible values are: pin, reuse.
-        relationship?: NullableOption<RelationType>;
-        /**
-         * The from [term] of the relation. The term from which the relationship is defined. A null value would indicate the
-         * relation is directly with the [set].
-         */
-        fromTerm?: NullableOption<Term>;
-        // The [set] in which the relation is relevant.
-        set?: NullableOption<Set>;
-        // The to [term] of the relation. The term to which the relationship is defined.
-        toTerm?: NullableOption<Term>;
-    }
-    interface Term extends microsoftgraph.Entity {
-        // Date and time of term creation. Read-only.
-        createdDateTime?: NullableOption<string>;
-        // Description about term that is dependent on the languageTag.
-        descriptions?: NullableOption<LocalizedDescription[]>;
-        // Label metadata for a term.
-        labels?: NullableOption<LocalizedLabel[]>;
-        // Last date and time of term modification. Read-only.
-        lastModifiedDateTime?: NullableOption<string>;
-        // Collection of properties on the term.
-        properties?: NullableOption<microsoftgraph.KeyValue[]>;
-        // Children of current term.
-        children?: NullableOption<Term[]>;
-        // To indicate which terms are related to the current term as either pinned or reused.
-        relations?: NullableOption<Relation[]>;
-        // The [set] in which the term is created.
-        set?: NullableOption<Set>;
-    }
-    interface LocalizedDescription {
-        // The description in the localized language.
-        description?: NullableOption<string>;
-        // The language tag for the label.
-        languageTag?: NullableOption<string>;
-    }
-    interface LocalizedLabel {
-        // Indicates whether the label is the default label.
-        isDefault?: NullableOption<boolean>;
-        // The language tag for the label.
-        languageTag?: NullableOption<string>;
-        // The name of the label.
-        name?: NullableOption<string>;
-    }
-    interface LocalizedName {
-        // The language tag for the label.
-        languageTag?: NullableOption<string>;
-        // The name in the localized language.
-        name?: NullableOption<string>;
-    }
-}
 export namespace CallRecords {
     type AudioCodec =
         | "unknown"
@@ -22425,6 +22185,13 @@ export namespace CallRecords {
         headerValue?: NullableOption<string>;
     }
     interface ClientUserAgent extends UserAgent {
+        // The unique identifier of the Azure AD application used by this endpoint.
+        azureADAppId?: NullableOption<string>;
+        /**
+         * Immutable resource identifier of the Azure Communication Service associated with this endpoint based on Communication
+         * Services APIs.
+         */
+        communicationServiceId?: NullableOption<string>;
         /**
          * Identifies the platform used by this endpoint. Possible values are: unknown, windows, macOS, iOS, android, web,
          * ipPhone, roomSystem, surfaceHub, holoLens, unknownFutureValue.
@@ -23049,5 +22816,402 @@ export namespace ExternalConnectors {
          * int64Collection, doubleCollection, dateTimeCollection, unknownFutureValue.
          */
         type?: PropertyType;
+    }
+}
+export namespace SecurityNamespace {
+    type AdditionalDataOptions = "allVersions" | "linkedFiles" | "unknownFutureValue";
+    type CaseAction =
+        | "contentExport"
+        | "applyTags"
+        | "convertToPdf"
+        | "index"
+        | "estimateStatistics"
+        | "addToReviewSet"
+        | "holdUpdate"
+        | "unknownFutureValue";
+    type CaseOperationStatus =
+        | "notStarted"
+        | "submissionFailed"
+        | "running"
+        | "succeeded"
+        | "partiallySucceeded"
+        | "failed"
+        | "unknownFutureValue";
+    type CaseStatus =
+        | "unknown"
+        | "active"
+        | "pendingDelete"
+        | "closing"
+        | "closed"
+        | "closedWithError"
+        | "unknownFutureValue";
+    type ChildSelectability = "One" | "Many" | "unknownFutureValue";
+    type DataSourceContainerStatus = "active" | "released" | "unknownFutureValue";
+    type DataSourceHoldStatus = "notApplied" | "applied" | "applying" | "removing" | "partial" | "unknownFutureValue";
+    type DataSourceScopes =
+        | "none"
+        | "allTenantMailboxes"
+        | "allTenantSites"
+        | "allCaseCustodians"
+        | "allCaseNoncustodialDataSources"
+        | "unknownFutureValue";
+    type SourceType = "mailbox" | "site" | "unknownFutureValue";
+    interface CasesRoot extends microsoftgraph.Entity {
+        ediscoveryCases?: NullableOption<EdiscoveryCase[]>;
+    }
+    interface Case extends microsoftgraph.Entity {
+        createdDateTime?: NullableOption<string>;
+        description?: NullableOption<string>;
+        displayName?: NullableOption<string>;
+        lastModifiedBy?: NullableOption<microsoftgraph.IdentitySet>;
+        lastModifiedDateTime?: NullableOption<string>;
+        status?: NullableOption<CaseStatus>;
+    }
+    interface CaseOperation extends microsoftgraph.Entity {
+        /**
+         * The type of action the operation represents. Possible values are:
+         * addToReviewSet,applyTags,contentExport,convertToPdf,estimateStatistics, purgeData
+         */
+        action?: NullableOption<CaseAction>;
+        // The date and time the operation was completed.
+        completedDateTime?: NullableOption<string>;
+        // The user that created the operation.
+        createdBy?: NullableOption<microsoftgraph.IdentitySet>;
+        // The date and time the operation was created.
+        createdDateTime?: NullableOption<string>;
+        // The progress of the operation.
+        percentProgress?: NullableOption<number>;
+        // Contains success and failure-specific result information.
+        resultInfo?: NullableOption<microsoftgraph.ResultInfo>;
+        /**
+         * The status of the case operation. Possible values are: notStarted, submissionFailed, running, succeeded,
+         * partiallySucceeded, failed.
+         */
+        status?: NullableOption<CaseOperationStatus>;
+    }
+    interface EdiscoveryCase extends Case {
+        // The user who closed the case.
+        closedBy?: NullableOption<microsoftgraph.IdentitySet>;
+        /**
+         * The date and time when the case was closed. The Timestamp type represents date and time information using ISO 8601
+         * format and is always in UTC time. For example, midnight UTC on Jan 1, 2014 is 2014-01-01T00:00:00Z
+         */
+        closedDateTime?: NullableOption<string>;
+        // The external case number for customer reference.
+        externalId?: NullableOption<string>;
+        // Returns a list of case ediscoveryCustodian objects for this case.
+        custodians?: NullableOption<EdiscoveryCustodian[]>;
+        // Returns a list of case ediscoveryNoncustodialDataSource objects for this case.
+        noncustodialDataSources?: NullableOption<EdiscoveryNoncustodialDataSource[]>;
+        // Returns a list of case caseOperation objects for this case.
+        operations?: NullableOption<CaseOperation[]>;
+        // Returns a list of eDiscoveryReviewSet objects in the case.
+        reviewSets?: NullableOption<EdiscoveryReviewSet[]>;
+        // Returns a list of eDiscoverySearch objects associated with this case.
+        searches?: NullableOption<EdiscoverySearch[]>;
+        // Returns a list of eDIscoverySettings objects in the case.
+        settings?: NullableOption<EdiscoveryCaseSettings>;
+        // Returns a list of ediscoveryReviewTag objects associated to this case.
+        tags?: NullableOption<EdiscoveryReviewTag[]>;
+    }
+    interface DataSet extends microsoftgraph.Entity {
+        createdBy?: NullableOption<microsoftgraph.IdentitySet>;
+        createdDateTime?: NullableOption<string>;
+        displayName?: NullableOption<string>;
+    }
+    interface DataSource extends microsoftgraph.Entity {
+        // The user who created the dataSource.
+        createdBy?: NullableOption<microsoftgraph.IdentitySet>;
+        // The date and time the dataSource was created.
+        createdDateTime?: NullableOption<string>;
+        // The display name of the dataSource. This will be the name of the SharePoint site.
+        displayName?: NullableOption<string>;
+        // The hold status of the dataSource.The possible values are: notApplied, applied, applying, removing, partial
+        holdStatus?: NullableOption<DataSourceHoldStatus>;
+    }
+    interface DataSourceContainer extends microsoftgraph.Entity {
+        // Created date and time of the dataSourceContainer entity.
+        createdDateTime?: NullableOption<string>;
+        // Display name of the dataSourceContainer entity.
+        displayName?: NullableOption<string>;
+        // The hold status of the dataSourceContainer. The possible values are: notApplied, applied, applying, removing, partial
+        holdStatus?: NullableOption<DataSourceHoldStatus>;
+        // Last modified date and time of the dataSourceContainer.
+        lastModifiedDateTime?: NullableOption<string>;
+        // Date and time that the dataSourceContainer was released from the case.
+        releasedDateTime?: NullableOption<string>;
+        // Latest status of the dataSourceContainer. Possible values are: Active, Released.
+        status?: NullableOption<DataSourceContainerStatus>;
+    }
+    interface EdiscoveryAddToReviewSetOperation extends CaseOperation {
+        // eDiscovery review set to which items matching source collection query gets added.
+        reviewSet?: NullableOption<EdiscoveryReviewSet>;
+        // eDiscovery search that gets added to review set.
+        search?: NullableOption<EdiscoverySearch>;
+    }
+    interface EdiscoveryReviewSet extends DataSet {
+        // Represents queries within the review set.
+        queries?: NullableOption<EdiscoveryReviewSetQuery[]>;
+    }
+    interface Search extends microsoftgraph.Entity {
+        contentQuery?: NullableOption<string>;
+        createdBy?: NullableOption<microsoftgraph.IdentitySet>;
+        createdDateTime?: NullableOption<string>;
+        description?: NullableOption<string>;
+        displayName?: NullableOption<string>;
+        lastModifiedBy?: NullableOption<microsoftgraph.IdentitySet>;
+        lastModifiedDateTime?: NullableOption<string>;
+    }
+    interface EdiscoverySearch extends Search {
+        /**
+         * When specified, the collection will span across a service for an entire workload. Possible values are: none,
+         * allTenantMailboxes, allTenantSites, allCaseCustodians, allCaseNoncustodialDataSources.
+         */
+        dataSourceScopes?: NullableOption<DataSourceScopes>;
+        // Adds an additional source to the eDiscovery search.
+        additionalSources?: NullableOption<DataSource[]>;
+        // Adds the results of the eDiscovery search to the specified reviewSet.
+        addToReviewSetOperation?: NullableOption<EdiscoveryAddToReviewSetOperation>;
+        // Custodian sources that are included in the eDiscovery search.
+        custodianSources?: NullableOption<DataSource[]>;
+        // The last estimate operation associated with the eDiscovery search.
+        lastEstimateStatisticsOperation?: NullableOption<EdiscoveryEstimateOperation>;
+        // noncustodialDataSource sources that are included in the eDiscovery search
+        noncustodialSources?: NullableOption<EdiscoveryNoncustodialDataSource[]>;
+    }
+    interface EdiscoveryCustodian extends DataSourceContainer {
+        // Date and time the custodian acknowledged a hold notification.
+        acknowledgedDateTime?: NullableOption<string>;
+        // Email address of the custodian.
+        email?: NullableOption<string>;
+        // Operation entity that represents the latest indexing for the custodian.
+        lastIndexOperation?: NullableOption<EdiscoveryIndexOperation>;
+        // Data source entity for SharePoint sites associated with the custodian.
+        siteSources?: NullableOption<SiteSource[]>;
+        // Data source entity for groups associated with the custodian.
+        unifiedGroupSources?: NullableOption<UnifiedGroupSource[]>;
+        // Data source entity for a the custodian. This is the container for a custodian's mailbox and OneDrive for Business site.
+        userSources?: NullableOption<UserSource[]>;
+    }
+    interface EdiscoveryNoncustodialDataSource extends DataSourceContainer {
+        // User source or SharePoint site data source as non-custodial data source.
+        dataSource?: NullableOption<DataSource>;
+        // Operation entity that represents the latest indexing for the non-custodial data source.
+        lastIndexOperation?: NullableOption<EdiscoveryIndexOperation>;
+    }
+    interface EdiscoveryCaseSettings extends microsoftgraph.Entity {
+        // The OCR (Optical Character Recognition) settings for the case.
+        ocr?: NullableOption<OcrSettings>;
+        // The redundancy (near duplicate and email threading) detection settings for the case.
+        redundancyDetection?: NullableOption<RedundancyDetectionSettings>;
+        // The Topic Modeling (Themes) settings for the case.
+        topicModeling?: NullableOption<TopicModelingSettings>;
+    }
+    interface Tag extends microsoftgraph.Entity {
+        createdBy?: NullableOption<microsoftgraph.IdentitySet>;
+        description?: NullableOption<string>;
+        displayName?: NullableOption<string>;
+        lastModifiedDateTime?: NullableOption<string>;
+    }
+    interface EdiscoveryReviewTag extends Tag {
+        /**
+         * Indicates whether a single or multiple child tags can be associated with a document. Possible values are: One, Many.
+         * This value controls whether the UX presents the tags as checkboxes or a radio button group.
+         */
+        childSelectability?: NullableOption<ChildSelectability>;
+        // Returns the tags that are a child of a tag.
+        childTags?: NullableOption<EdiscoveryReviewTag[]>;
+        // Returns the parent tag of the specified tag.
+        parent?: NullableOption<EdiscoveryReviewTag>;
+    }
+// tslint:disable-next-line: no-empty-interface
+    interface EdiscoveryIndexOperation extends CaseOperation {}
+    interface SiteSource extends DataSource {
+        // The SharePoint site associated with the siteSource.
+        site?: microsoftgraph.Site;
+    }
+    interface UnifiedGroupSource extends DataSource {
+        // Specifies which sources are included in this group. Possible values are: mailbox, site.
+        includedSources?: NullableOption<SourceType>;
+        // Represents a group.
+        group?: microsoftgraph.Group;
+    }
+    interface UserSource extends DataSource {
+        // Email address of the user's mailbox.
+        email?: string;
+        // Specifies which sources are included in this group. Possible values are: mailbox, site.
+        includedSources?: NullableOption<SourceType>;
+        // The URL of the user's OneDrive for Business site. Read-only.
+        siteWebUrl?: NullableOption<string>;
+    }
+    interface EdiscoveryEstimateOperation extends CaseOperation {
+        // The estimated count of items for the search that matched the content query.
+        indexedItemCount?: NullableOption<number>;
+        // The estimated size of items for the search that matched the content query.
+        indexedItemsSize?: NullableOption<number>;
+        // The number of mailboxes that had search hits.
+        mailboxCount?: NullableOption<number>;
+        // The number of mailboxes that had search hits.
+        siteCount?: NullableOption<number>;
+        // The estimated count of unindexed items for the collection.
+        unindexedItemCount?: NullableOption<number>;
+        // The estimated size of unindexed items for the collection.
+        unindexedItemsSize?: NullableOption<number>;
+        // eDiscovery search.
+        search?: NullableOption<EdiscoverySearch>;
+    }
+// tslint:disable-next-line: no-empty-interface
+    interface EdiscoveryHoldOperation extends CaseOperation {}
+// tslint:disable-next-line: no-empty-interface
+    interface EdiscoveryReviewSetQuery extends Search {}
+// tslint:disable-next-line: no-empty-interface
+    interface EdiscoveryTagOperation extends CaseOperation {}
+    interface OcrSettings {
+        // Indicates whether or not OCR is enabled for the case.
+        isEnabled?: NullableOption<boolean>;
+        // Maximum image size that will be processed in KB).
+        maxImageSize?: NullableOption<number>;
+        /**
+         * The timeout duration for the OCR engine. A longer timeout might increase success of OCR, but might add to the total
+         * processing time.
+         */
+        timeout?: NullableOption<string>;
+    }
+    interface RedundancyDetectionSettings {
+        // Indicates whether email threading and near duplicate detection are enabled.
+        isEnabled?: NullableOption<boolean>;
+        /**
+         * Specifies the maximum number of words used for email threading and near duplicate detection. To learn more, see
+         * Minimum/maximum number of words.
+         */
+        maxWords?: NullableOption<number>;
+        /**
+         * Specifies the minimum number of words used for email threading and near duplicate detection. To learn more, see
+         * Minimum/maximum number of words.
+         */
+        minWords?: NullableOption<number>;
+        /**
+         * Specifies the similarity level for documents to be put in the same near duplicate set. To learn more, see Document and
+         * email similarity threshold.
+         */
+        similarityThreshold?: NullableOption<number>;
+    }
+// tslint:disable-next-line: no-empty-interface
+    interface StringValueDictionary {}
+    interface TopicModelingSettings {
+        /**
+         * Indicates whether the themes model should dynamically optimize the number of generated topics. To learn more, see
+         * Adjust maximum number of themes dynamically.
+         */
+        dynamicallyAdjustTopicCount?: NullableOption<boolean>;
+        /**
+         * Indicates whether the themes model should exclude numbers while parsing document texts. To learn more, see Include
+         * numbers in themes.
+         */
+        ignoreNumbers?: NullableOption<boolean>;
+        // Indicates whether themes model is enabled for the case.
+        isEnabled?: NullableOption<boolean>;
+        /**
+         * The total number of topics that the themes model will generate for a review set. To learn more, see Maximum number of
+         * themes.
+         */
+        topicCount?: NullableOption<number>;
+    }
+}
+export namespace TermStore {
+    type RelationType = "pin" | "reuse" | "unknownFutureValue";
+    type TermGroupScope = "global" | "system" | "siteCollection" | "unknownFutureValue";
+    interface Store extends microsoftgraph.Entity {
+        // Default language of the term store.
+        defaultLanguageTag?: string;
+        // List of languages for the term store.
+        languageTags?: string[];
+        // Collection of all groups available in the term store.
+        groups?: NullableOption<Group[]>;
+        // Collection of all sets available in the term store.
+        sets?: NullableOption<Set[]>;
+    }
+    interface Group extends microsoftgraph.Entity {
+        // Date and time of the group creation. Read-only.
+        createdDateTime?: NullableOption<string>;
+        // Description that gives details on the term usage.
+        description?: NullableOption<string>;
+        // Name of the group.
+        displayName?: NullableOption<string>;
+        // ID of the parent site of this group.
+        parentSiteId?: NullableOption<string>;
+        // Returns the type of the group. Possible values are: global, system, and siteCollection.
+        scope?: NullableOption<TermGroupScope>;
+        // All sets under the group in a term [store].
+        sets?: NullableOption<Set[]>;
+    }
+    interface Set extends microsoftgraph.Entity {
+        // Date and time of set creation. Read-only.
+        createdDateTime?: NullableOption<string>;
+        // Description that gives details on the term usage.
+        description?: NullableOption<string>;
+        // Name of the set for each languageTag.
+        localizedNames?: NullableOption<LocalizedName[]>;
+        // Custom properties for the set.
+        properties?: NullableOption<microsoftgraph.KeyValue[]>;
+        // Children terms of set in term [store].
+        children?: NullableOption<Term[]>;
+        // The parent [group] that contains the set.
+        parentGroup?: Group;
+        // Indicates which terms have been pinned or reused directly under the set.
+        relations?: NullableOption<Relation[]>;
+        // All the terms under the set.
+        terms?: NullableOption<Term[]>;
+    }
+    interface Relation extends microsoftgraph.Entity {
+        // The type of relation. Possible values are: pin, reuse.
+        relationship?: NullableOption<RelationType>;
+        /**
+         * The from [term] of the relation. The term from which the relationship is defined. A null value would indicate the
+         * relation is directly with the [set].
+         */
+        fromTerm?: NullableOption<Term>;
+        // The [set] in which the relation is relevant.
+        set?: NullableOption<Set>;
+        // The to [term] of the relation. The term to which the relationship is defined.
+        toTerm?: NullableOption<Term>;
+    }
+    interface Term extends microsoftgraph.Entity {
+        // Date and time of term creation. Read-only.
+        createdDateTime?: NullableOption<string>;
+        // Description about term that is dependent on the languageTag.
+        descriptions?: NullableOption<LocalizedDescription[]>;
+        // Label metadata for a term.
+        labels?: NullableOption<LocalizedLabel[]>;
+        // Last date and time of term modification. Read-only.
+        lastModifiedDateTime?: NullableOption<string>;
+        // Collection of properties on the term.
+        properties?: NullableOption<microsoftgraph.KeyValue[]>;
+        // Children of current term.
+        children?: NullableOption<Term[]>;
+        // To indicate which terms are related to the current term as either pinned or reused.
+        relations?: NullableOption<Relation[]>;
+        // The [set] in which the term is created.
+        set?: NullableOption<Set>;
+    }
+    interface LocalizedDescription {
+        // The description in the localized language.
+        description?: NullableOption<string>;
+        // The language tag for the label.
+        languageTag?: NullableOption<string>;
+    }
+    interface LocalizedLabel {
+        // Indicates whether the label is the default label.
+        isDefault?: NullableOption<boolean>;
+        // The language tag for the label.
+        languageTag?: NullableOption<string>;
+        // The name of the label.
+        name?: NullableOption<string>;
+    }
+    interface LocalizedName {
+        // The language tag for the label.
+        languageTag?: NullableOption<string>;
+        // The name in the localized language.
+        name?: NullableOption<string>;
     }
 }
