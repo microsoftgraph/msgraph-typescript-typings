@@ -2286,6 +2286,7 @@ export type TeamworkApplicationIdentityType =
     | "unknownFutureValue";
 export type TeamworkCallEventType = "call" | "meeting" | "screenShare" | "unknownFutureValue";
 export type TeamworkConversationIdentityType = "team" | "channel" | "chat" | "unknownFutureValue";
+export type TeamworkTagType = "standard" | "unknownFutureValue";
 export type TeamworkUserIdentityType =
     | "aadUser"
     | "onPremiseAadUser"
@@ -2619,6 +2620,7 @@ export interface User extends DirectoryObject {
      * not).
      */
     assignedPlans?: AssignedPlan[];
+    authorizationInfo?: NullableOption<AuthorizationInfo>;
     /**
      * The telephone numbers for the user. NOTE: Although this is a string collection, only one number can be set for this
      * property. Read-only for users synced from on-premises directory. Returned by default. Supports $filter (eq, not, ge,
@@ -4047,6 +4049,7 @@ export interface Chat extends Entity {
     members?: NullableOption<ConversationMember[]>;
     // A collection of all the messages in the chat. Nullable.
     messages?: NullableOption<ChatMessage[]>;
+    // A collection of all the pinned messages in the chat. Nullable.
     pinnedMessages?: NullableOption<PinnedChatMessageInfo[]>;
     // A collection of all the tabs in the chat. Nullable.
     tabs?: NullableOption<TeamsTab[]>;
@@ -4111,6 +4114,7 @@ export interface Team extends Entity {
     photo?: NullableOption<ProfilePhoto>;
     // The general channel for the team.
     primaryChannel?: NullableOption<Channel>;
+    tags?: NullableOption<TeamworkTag[]>;
     // The template this team was created from. See available templates.
     template?: NullableOption<TeamsTemplate>;
     // The schedule of shifts for this team.
@@ -4143,7 +4147,7 @@ export interface Application extends DirectoryObject {
     // Unique identifier of the applicationTemplate. Supports $filter (eq, not, ne).
     applicationTemplateId?: NullableOption<string>;
     /**
-     * The collection of roles assigned to the application. With app role assignments, these roles can be assigned to users,
+     * The collection of roles defined for the application. With app role assignments, these roles can be assigned to users,
      * groups, or service principals associated with other applications. Not nullable.
      */
     appRoles?: AppRole[];
@@ -5623,6 +5627,14 @@ export interface TeamsAsyncOperation extends Entity {
      * an opaque value and not parsed into its component paths.
      */
     targetResourceLocation?: NullableOption<string>;
+}
+export interface TeamworkTag extends Entity {
+    description?: NullableOption<string>;
+    displayName?: NullableOption<string>;
+    memberCount?: NullableOption<number>;
+    tagType?: NullableOption<TeamworkTagType>;
+    teamId?: NullableOption<string>;
+    members?: NullableOption<TeamworkTagMember[]>;
 }
 // tslint:disable-next-line: no-empty-interface
 export interface TeamsTemplate extends Entity {}
@@ -14746,6 +14758,16 @@ export interface DataPolicyOperation extends Entity {
     // The id for the user on whom the operation is performed.
     userId?: string;
 }
+export interface CommsOperation extends Entity {
+    // Unique Client Context string. Max limit is 256 chars.
+    clientContext?: NullableOption<string>;
+    // The result information. Read-only.
+    resultInfo?: NullableOption<ResultInfo>;
+    // Possible values are: notStarted, running, completed, failed. Read-only.
+    status?: OperationStatus;
+}
+// tslint:disable-next-line: no-empty-interface
+export interface AddLargeGalleryViewOperation extends CommsOperation {}
 export interface AttendanceRecord extends Entity {
     // List of time periods between joining and leaving a meeting.
     attendanceIntervals?: NullableOption<AttendanceInterval[]>;
@@ -14765,14 +14787,6 @@ export interface AudioRoutingGroup extends Entity {
 }
 // tslint:disable-next-line: no-empty-interface
 export interface ContentSharingSession extends Entity {}
-export interface CommsOperation extends Entity {
-    // Unique Client Context string. Max limit is 256 chars.
-    clientContext?: NullableOption<string>;
-    // The result information. Read-only.
-    resultInfo?: NullableOption<ResultInfo>;
-    // Possible values are: notStarted, running, completed, failed. Read-only.
-    status?: OperationStatus;
-}
 export interface Participant extends Entity {
     // Information about the participant.
     info?: ParticipantInfo;
@@ -15060,6 +15074,7 @@ export interface TeamsTab extends Entity {
     teamsApp?: NullableOption<TeamsApp>;
 }
 export interface PinnedChatMessageInfo extends Entity {
+    // Represents details about the chat message that is pinned.
     message?: NullableOption<ChatMessage>;
 }
 export interface TeamworkHostedContent extends Entity {
@@ -15116,6 +15131,11 @@ export interface WorkforceIntegration extends ChangeTrackedEntity {
     supportedEntities?: NullableOption<WorkforceIntegrationSupportedEntities>;
     // Workforce Integration URL for callbacks from the Shifts service.
     url?: NullableOption<string>;
+}
+export interface TeamworkTagMember extends Entity {
+    displayName?: NullableOption<string>;
+    tenantId?: NullableOption<string>;
+    userId?: NullableOption<string>;
 }
 export interface UserScopeTeamsAppInstallation extends TeamsAppInstallation {
     // The chat between the user and Teams app.
@@ -15607,6 +15627,9 @@ export interface AssignedPlan {
      * Product names and service plan identifiers for licensing.
      */
     servicePlanId?: NullableOption<string>;
+}
+export interface AuthorizationInfo {
+    certificateUserIds?: NullableOption<string[]>;
 }
 export interface EmployeeOrgData {
     // The cost center associated with the user. Returned only on $select. Supports $filter.
@@ -21234,9 +21257,19 @@ export interface AudioConferencing {
     // List of toll numbers that are displayed in the meeting invite.
     tollNumbers?: NullableOption<string[]>;
 }
+export interface BroadcastMeetingCaptionSettings {
+    // Indicates whether captions are enabled for this Teams live event.
+    isCaptionEnabled?: NullableOption<boolean>;
+    // The spoken language.
+    spokenLanguage?: NullableOption<string>;
+    // The translation languages (choose up to 6).
+    translationLanguages?: NullableOption<string[]>;
+}
 export interface BroadcastMeetingSettings {
     // Defines who can join the Teams live event. Possible values are listed in the following table.
     allowedAudience?: NullableOption<BroadcastMeetingAudience>;
+    // Caption settings of a Teams live event.
+    captions?: NullableOption<BroadcastMeetingCaptionSettings>;
     // Indicates whether attendee report is enabled for this Teams live event. Default value is false.
     isAttendeeReportEnabled?: NullableOption<boolean>;
     // Indicates whether Q&amp;A is enabled for this Teams live event. Default value is false.
@@ -21874,11 +21907,15 @@ export interface MembersLeftEventMessageDetail extends EventMessageDetail {
     members?: NullableOption<TeamworkUserIdentity[]>;
 }
 export interface MessagePinnedEventMessageDetail extends EventMessageDetail {
+    // Date and time when the event occurred.
     eventDateTime?: NullableOption<string>;
+    // Initiator of the event.
     initiator?: NullableOption<IdentitySet>;
 }
 export interface MessageUnpinnedEventMessageDetail extends EventMessageDetail {
+    // Date and time when the event occurred.
     eventDateTime?: NullableOption<string>;
+    // Initiator of the event.
     initiator?: NullableOption<IdentitySet>;
 }
 export interface OperationError {
