@@ -105,7 +105,14 @@ export type BookingPriceType =
     | "unknownFutureValue";
 export type BookingReminderRecipients = "allAttendees" | "staff" | "customer" | "unknownFutureValue";
 export type BookingsAvailabilityStatus = "available" | "busy" | "slotsAvailable" | "outOfOffice" | "unknownFutureValue";
-export type BookingStaffRole = "guest" | "administrator" | "viewer" | "externalGuest" | "unknownFutureValue";
+export type BookingStaffRole =
+    | "guest"
+    | "administrator"
+    | "viewer"
+    | "externalGuest"
+    | "unknownFutureValue"
+    | "scheduler"
+    | "teamMember";
 export type DayOfWeek = "sunday" | "monday" | "tuesday" | "wednesday" | "thursday" | "friday" | "saturday";
 export type LocationType =
     | "default"
@@ -2076,6 +2083,41 @@ export type PrintScaling = "auto" | "shrinkToFit" | "fill" | "fit" | "none" | "u
 export type PrintTaskProcessingState = "pending" | "processing" | "completed" | "aborted" | "unknownFutureValue";
 export type Status = "active" | "updated" | "deleted" | "ignored" | "unknownFutureValue";
 export type DataPolicyOperationStatus = "notStarted" | "running" | "complete" | "failed" | "unknownFutureValue";
+export type PayloadDeliveryPlatform = "unknown" | "sms" | "email" | "teams" | "unknownFutureValue";
+export type SimulationAttackTechnique =
+    | "unknown"
+    | "credentialHarvesting"
+    | "attachmentMalware"
+    | "driveByUrl"
+    | "linkInAttachment"
+    | "linkToMalwareFile"
+    | "unknownFutureValue";
+export type SimulationAttackType = "unknown" | "social" | "cloud" | "endpoint" | "unknownFutureValue";
+export type SimulationAutomationRunStatus =
+    | "unknown"
+    | "running"
+    | "succeeded"
+    | "failed"
+    | "skipped"
+    | "unknownFutureValue";
+export type SimulationAutomationStatus =
+    | "unknown"
+    | "draft"
+    | "notRunning"
+    | "running"
+    | "completed"
+    | "unknownFutureValue";
+export type SimulationStatus =
+    | "unknown"
+    | "draft"
+    | "running"
+    | "scheduled"
+    | "succeeded"
+    | "failed"
+    | "cancelled"
+    | "excluded"
+    | "unknownFutureValue";
+export type TrainingStatus = "unknown" | "assigned" | "inProgress" | "completed" | "overdue" | "unknownFutureValue";
 export type AlertFeedback = "unknown" | "truePositive" | "falsePositive" | "benignPositive" | "unknownFutureValue";
 export type AlertSeverity = "unknown" | "informational" | "low" | "medium" | "high" | "unknownFutureValue";
 export type AlertStatus = "unknown" | "newAlert" | "inProgress" | "resolved" | "dismissed" | "unknownFutureValue";
@@ -2286,6 +2328,7 @@ export type TeamworkApplicationIdentityType =
     | "unknownFutureValue";
 export type TeamworkCallEventType = "call" | "meeting" | "screenShare" | "unknownFutureValue";
 export type TeamworkConversationIdentityType = "team" | "channel" | "chat" | "unknownFutureValue";
+export type TeamworkTagType = "standard" | "unknownFutureValue";
 export type TeamworkUserIdentityType =
     | "aadUser"
     | "onPremiseAadUser"
@@ -2371,6 +2414,7 @@ export type ThreatExpectedAssessment = "block" | "unblock";
 export type TaskStatus = "notStarted" | "inProgress" | "completed" | "waitingOnOthers" | "deferred";
 export type WellknownListName = "none" | "defaultList" | "flaggedEmails" | "unknownFutureValue";
 export interface Entity {
+    // The unique idenfier for an entity. Read-only.
     id?: string;
 }
 export interface AuditLogRoot extends Entity {
@@ -2392,8 +2436,8 @@ export interface DirectoryAudit extends Entity {
     // Indicates additional details on the activity.
     additionalDetails?: NullableOption<KeyValue[]>;
     /**
-     * Indicates which resource category that's targeted by the activity. (For example: User Management, Group Management
-     * etc..)
+     * Indicates which resource category that's targeted by the activity. For example: UserManagement, GroupManagement,
+     * ApplicationManagement, RoleManagement.
      */
     category?: string;
     /**
@@ -2619,6 +2663,7 @@ export interface User extends DirectoryObject {
      * not).
      */
     assignedPlans?: AssignedPlan[];
+    authorizationInfo?: NullableOption<AuthorizationInfo>;
     /**
      * The telephone numbers for the user. NOTE: Although this is a string collection, only one number can be set for this
      * property. Read-only for users synced from on-premises directory. Returned by default. Supports $filter (eq, not, ge,
@@ -3127,7 +3172,7 @@ export interface OAuth2PermissionGrant extends Entity {
      * A space-separated list of the claim values for delegated permissions which should be included in access tokens for the
      * resource application (the API). For example, openid User.Read GroupMember.Read.All. Each claim value should match the
      * value field of one of the delegated permissions defined by the API, listed in the oauth2PermissionScopes property of
-     * the resource service principal.
+     * the resource service principal. Must not exceed 3850 characters in length.
      */
     scope?: NullableOption<string>;
 }
@@ -3739,6 +3784,8 @@ export interface ManagedDevice extends Entity {
      * configurationManagerClientMdmEas, unknown, jamf, googleCloudDevicePolicyController.
      */
     managementAgent?: ManagementAgentType;
+    // Reports device management certificate expiration date. This property is read-only.
+    managementCertificateExpirationDate?: string;
     // Manufacturer of the device. This property is read-only.
     manufacturer?: NullableOption<string>;
     // MEID. This property is read-only.
@@ -3765,6 +3812,8 @@ export interface ManagedDevice extends Entity {
     remoteAssistanceSessionErrorDetails?: NullableOption<string>;
     // Url that allows a Remote Assistance session to be established with the device. This property is read-only.
     remoteAssistanceSessionUrl?: NullableOption<string>;
+    // Reports if the managed iOS device is user approval enrollment. This property is read-only.
+    requireUserEnrollmentApproval?: NullableOption<boolean>;
     // SerialNumber. This property is read-only.
     serialNumber?: NullableOption<string>;
     // Subscriber Carrier. This property is read-only.
@@ -3787,6 +3836,8 @@ export interface ManagedDevice extends Entity {
     deviceConfigurationStates?: NullableOption<DeviceConfigurationState[]>;
     // Device category
     deviceCategory?: NullableOption<DeviceCategory>;
+    // The primary users associated with the managed device.
+    users?: NullableOption<User[]>;
 }
 export interface ManagedAppRegistration extends Entity {
     // The app package Identifier
@@ -4047,6 +4098,7 @@ export interface Chat extends Entity {
     members?: NullableOption<ConversationMember[]>;
     // A collection of all the messages in the chat. Nullable.
     messages?: NullableOption<ChatMessage[]>;
+    // A collection of all the pinned messages in the chat. Nullable.
     pinnedMessages?: NullableOption<PinnedChatMessageInfo[]>;
     // A collection of all the tabs in the chat. Nullable.
     tabs?: NullableOption<TeamsTab[]>;
@@ -4111,6 +4163,8 @@ export interface Team extends Entity {
     photo?: NullableOption<ProfilePhoto>;
     // The general channel for the team.
     primaryChannel?: NullableOption<Channel>;
+    // The tags associated with the team.
+    tags?: NullableOption<TeamworkTag[]>;
     // The template this team was created from. See available templates.
     template?: NullableOption<TeamsTemplate>;
     // The schedule of shifts for this team.
@@ -4143,7 +4197,7 @@ export interface Application extends DirectoryObject {
     // Unique identifier of the applicationTemplate. Supports $filter (eq, not, ne).
     applicationTemplateId?: NullableOption<string>;
     /**
-     * The collection of roles assigned to the application. With app role assignments, these roles can be assigned to users,
+     * The collection of roles defined for the application. With app role assignments, these roles can be assigned to users,
      * groups, or service principals associated with other applications. Not nullable.
      */
     appRoles?: AppRole[];
@@ -4966,6 +5020,7 @@ export interface ThreatAssessmentRequest extends Entity {
 export interface BookingAppointment extends Entity {
     // Additional information that is sent to the customer when an appointment is confirmed.
     additionalInformation?: NullableOption<string>;
+    anonymousJoinWebUrl?: NullableOption<string>;
     /**
      * It lists down the customer properties for an appointment. An appointment will contain a list of customer information
      * and each unit will indicate the properties of a customer who is part of that appointment. Optional.
@@ -5059,6 +5114,7 @@ export interface BookingBusiness extends Entity {
      * property. Read-only.
      */
     isPublished?: NullableOption<boolean>;
+    languageTag?: NullableOption<string>;
     /**
      * The telephone number for the business. The phone property, together with address and webSiteUrl, appear in the footer
      * of a business scheduling page.
@@ -5118,10 +5174,12 @@ export interface BookingService extends Entity {
     description?: NullableOption<string>;
     // The display name is suitable for human-readable interfaces.
     displayName?: string;
+    isAnonymousJoinEnabled?: boolean;
     // True means this service is not available to customers for booking.
     isHiddenFromCustomers?: boolean;
     // True indicates that the appointments for the service will be held online. Default value is false.
     isLocationOnline?: boolean;
+    languageTag?: string;
     /**
      * The maximum number of customers allowed in a service. If maximumAttendeesCount of the service is greater than 1, pass
      * valid customer IDs while creating or updating an appointment. To create a customer, use the Create bookingCustomer
@@ -5179,6 +5237,7 @@ export interface BookingStaffMember extends BookingStaffMemberBase {
      * policy of the business. Required.
      */
     emailAddress?: NullableOption<string>;
+    isEmailNotificationEnabled?: boolean;
     /**
      * The role of the staff member in the business. Possible values are: guest, administrator, viewer, externalGuest and
      * unknownFutureValue. Required.
@@ -5365,7 +5424,7 @@ export interface Group extends DirectoryObject {
      * Indicates whether this group can be assigned to an Azure Active Directory role or not. Optional. This property can only
      * be set while creating the group and is immutable. If set to true, the securityEnabled property must also be set to true
      * and the group cannot be a dynamic group (that is, groupTypes cannot contain DynamicMembership). Only callers in Global
-     * administrator and Privileged role administrator roles can set this property. The caller must be assigned the
+     * Administrator and Privileged Role Administrator roles can set this property. The caller must also be assigned the
      * RoleManagement.ReadWrite.Directory permission to set this property or update the membership of such groups. For more,
      * see Using a group to manage Azure AD role assignmentsReturned by default. Supports $filter (eq, ne, not).
      */
@@ -5624,6 +5683,20 @@ export interface TeamsAsyncOperation extends Entity {
      */
     targetResourceLocation?: NullableOption<string>;
 }
+export interface TeamworkTag extends Entity {
+    // The description of the tag as it will appear to the user in Microsoft Teams.
+    description?: NullableOption<string>;
+    // The name of the tag as it will appear to the user in Microsoft Teams.
+    displayName?: NullableOption<string>;
+    // The number of users assigned to the tag.
+    memberCount?: NullableOption<number>;
+    // The type of the tag. Default is standard.
+    tagType?: NullableOption<TeamworkTagType>;
+    // ID of the team in which the tag is defined.
+    teamId?: NullableOption<string>;
+    // Users assigned to the tag.
+    members?: NullableOption<TeamworkTagMember[]>;
+}
 // tslint:disable-next-line: no-empty-interface
 export interface TeamsTemplate extends Entity {}
 export interface Schedule extends Entity {
@@ -5753,9 +5826,16 @@ export interface PlannerGroup extends Entity {
 }
 export interface Security extends Entity {
     cases?: NullableOption<SecurityNamespace.CasesRoot>;
+    attackSimulation?: NullableOption<AttackSimulationRoot>;
     alerts?: NullableOption<Alert[]>;
     secureScoreControlProfiles?: NullableOption<SecureScoreControlProfile[]>;
     secureScores?: NullableOption<SecureScore[]>;
+}
+export interface AttackSimulationRoot extends Entity {
+    // Represents simulation automation created to run on a tenant.
+    simulationAutomations?: NullableOption<SimulationAutomation[]>;
+    // Represents an attack simulation training campaign in a tenant.
+    simulations?: NullableOption<Simulation[]>;
 }
 export interface Alert extends Entity {
     // Name or alias of the activity group (attacker) this alert is attributed to.
@@ -6281,6 +6361,8 @@ export interface IdentityContainer extends Entity {
     conditionalAccess?: NullableOption<ConditionalAccessRoot>;
 }
 export interface ConditionalAccessRoot extends Entity {
+    // Read-only. Nullable. Returns a collection of the specified authentication context class references.
+    authenticationContextClassReferences?: NullableOption<AuthenticationContextClassReference[]>;
     // Read-only. Nullable. Returns a collection of the specified named locations.
     namedLocations?: NullableOption<NamedLocation[]>;
     // Read-only. Nullable. Returns a collection of the specified Conditional Access (CA) policies.
@@ -8948,6 +9030,7 @@ export interface Call extends Entity {
      * P2P call. This needs to be copied over from Microsoft.Graph.Call.CallChainId.
      */
     callChainId?: NullableOption<string>;
+    // Contains the optional features for the call.
     callOptions?: NullableOption<CallOptions>;
     // The routing information on how the call was retargeted. Read-only.
     callRoutes?: NullableOption<CallRoute[]>;
@@ -8955,6 +9038,7 @@ export interface Call extends Entity {
     chatInfo?: NullableOption<ChatInfo>;
     // The direction of the call. The possible value are incoming or outgoing. Read-only.
     direction?: NullableOption<CallDirection>;
+    // Call context associated with an incoming call.
     incomingContext?: NullableOption<IncomingContext>;
     // The media configuration. Required.
     mediaConfig?: NullableOption<MediaConfig>;
@@ -8963,14 +9047,24 @@ export interface Call extends Entity {
     // The meeting information that's required for joining a meeting.
     meetingInfo?: NullableOption<MeetingInfo>;
     myParticipantId?: NullableOption<string>;
+    // The list of requested modalities. Possible values are: unknown, audio, video, videoBasedScreenSharing, data.
     requestedModalities?: NullableOption<Modality[]>;
+    // The result information. For example can hold termination reason. Read-only.
     resultInfo?: NullableOption<ResultInfo>;
+    // The originator of the call.
     source?: NullableOption<ParticipantInfo>;
+    /**
+     * The call state. Possible values are: incoming, establishing, ringing, established, hold, transferring,
+     * transferAccepted, redirecting, terminating, terminated. Read-only.
+     */
     state?: NullableOption<CallState>;
+    // The subject of the conversation.
     subject?: NullableOption<string>;
+    // The targets of the call. Required information for creating peer to peer call.
     targets?: NullableOption<InvitationParticipantInfo[]>;
     tenantId?: NullableOption<string>;
     toneInfo?: NullableOption<ToneInfo>;
+    // The transcription information for the call. Read-only.
     transcription?: NullableOption<CallTranscriptionInfo>;
     audioRoutingGroups?: NullableOption<AudioRoutingGroup[]>;
     contentSharingSessions?: NullableOption<ContentSharingSession[]>;
@@ -9367,8 +9461,14 @@ export interface AccessPackage extends Entity {
      * midnight UTC on Jan 1, 2014 is 2014-01-01T00:00:00Z. Read-only.
      */
     modifiedDateTime?: NullableOption<string>;
+    // The access packages that are incompatible with this package. Read-only.
+    accessPackagesIncompatibleWith?: NullableOption<AccessPackage[]>;
     assignmentPolicies?: NullableOption<AccessPackageAssignmentPolicy[]>;
     catalog?: NullableOption<AccessPackageCatalog>;
+    // The access packages whose assigned users are ineligible to be assigned this access package.
+    incompatibleAccessPackages?: NullableOption<AccessPackage[]>;
+    // The groups whose members are ineligible to be assigned this access package.
+    incompatibleGroups?: NullableOption<Group[]>;
 }
 export interface AccessPackageAssignmentPolicy extends Entity {
     /**
@@ -9641,6 +9741,27 @@ export interface AgreementFileLocalization extends AgreementFileProperties {
 }
 // tslint:disable-next-line: no-empty-interface
 export interface AgreementFileVersion extends AgreementFileProperties {}
+export interface AuthenticationContextClassReference extends Entity {
+    /**
+     * A short explanation of the policies that are enforced by authenticationContextClassReference. This value should be used
+     * to provide secondary text to describe the authentication context class reference when building user-facing admin
+     * experiences. For example, a selection UX.
+     */
+    description?: NullableOption<string>;
+    /**
+     * The display name is the friendly name of the authenticationContextClassReference object. This value should be used to
+     * identify the authentication context class reference when building user-facing admin experiences. For example, a
+     * selection UX.
+     */
+    displayName?: NullableOption<string>;
+    /**
+     * Indicates whether the authenticationContextClassReference has been published by the security admin and is ready for use
+     * by apps. When it is set to false, it should not be shown in authentication context selection UX, or used to protect app
+     * resources. It will be shown and available for Conditional Access policy authoring. The default value is false. Supports
+     * $filter (eq).
+     */
+    isAvailable?: NullableOption<boolean>;
+}
 export interface NamedLocation extends Entity {
     /**
      * The Timestamp type represents creation date and time of the location using ISO 8601 format and is always in UTC time.
@@ -11195,6 +11316,10 @@ export interface ApplePushNotificationCertificate extends Entity {
     certificate?: NullableOption<string>;
     // Certificate serial number. This property is read-only.
     certificateSerialNumber?: NullableOption<string>;
+    // The reason the certificate upload failed.
+    certificateUploadFailureReason?: NullableOption<string>;
+    // The certificate upload status.
+    certificateUploadStatus?: NullableOption<string>;
     // The expiration date and time for Apple push notification certificate.
     expirationDateTime?: string;
     // Last modified date and time for Apple push notification certificate.
@@ -12486,6 +12611,7 @@ export interface ReportRoot extends Entity {
     dailyPrintUsageByUser?: NullableOption<PrintUsageByUser[]>;
     monthlyPrintUsageByPrinter?: NullableOption<PrintUsageByPrinter[]>;
     monthlyPrintUsageByUser?: NullableOption<PrintUsageByUser[]>;
+    security?: NullableOption<SecurityReportsRoot>;
 }
 export interface PrintUsage extends Entity {
     completedBlackAndWhiteJobCount?: number;
@@ -12500,6 +12626,8 @@ export interface PrintUsageByUser extends PrintUsage {
     // The UPN of the user represented by these statistics.
     userPrincipalName?: string;
 }
+// tslint:disable-next-line: no-empty-interface
+export interface SecurityReportsRoot extends Entity {}
 export interface SharedPCConfiguration extends DeviceConfiguration {
     // Specifies how accounts are managed on a shared PC. Only applies when disableAccountManager is false.
     accountManagerPolicy?: NullableOption<SharedPCAccountManagerPolicy>;
@@ -13833,11 +13961,11 @@ export interface DeviceEnrollmentWindowsHelloForBusinessConfiguration extends De
     unlockWithBiometricsEnabled?: boolean;
 }
 export interface UserExperienceAnalyticsDevicePerformance extends Entity {
-    // Average (mean) number of Blue Screens per device in the last 14 days. Valid values 0 to 9999999
+    // Average (mean) number of Blue Screens per device in the last 30 days. Valid values 0 to 9999999
     averageBlueScreens?: number;
-    // Average (mean) number of Restarts per device in the last 14 days. Valid values 0 to 9999999
+    // Average (mean) number of Restarts per device in the last 30 days. Valid values 0 to 9999999
     averageRestarts?: number;
-    // Number of Blue Screens in the last 14 days. Valid values 0 to 9999999
+    // Number of Blue Screens in the last 30 days. Valid values 0 to 9999999
     blueScreenCount?: number;
     // The user experience analytics device boot score.
     bootScore?: number;
@@ -13872,7 +14000,7 @@ export interface UserExperienceAnalyticsDevicePerformance extends Entity {
     operatingSystemVersion?: NullableOption<string>;
     // The user experience analytics responsive desktop time in milliseconds.
     responsiveDesktopTimeInMs?: number;
-    // Number of Restarts in the last 14 days. Valid values 0 to 9999999
+    // Number of Restarts in the last 30 days. Valid values 0 to 9999999
     restartCount?: number;
     /**
      * The user experience analytics device startup performance score. Valid values -1.79769313486232E+308 to
@@ -14746,6 +14874,102 @@ export interface DataPolicyOperation extends Entity {
     // The id for the user on whom the operation is performed.
     userId?: string;
 }
+export interface SimulationAutomation extends Entity {
+    // Identity of the user who created the attack simulation automation.
+    createdBy?: NullableOption<EmailIdentity>;
+    // Date and time when the attack simulation automation was created.
+    createdDateTime?: NullableOption<string>;
+    // Description of the attack simulation automation.
+    description?: NullableOption<string>;
+    // Display name of the attack simulation automation. Supports $filter and $orderby.
+    displayName?: NullableOption<string>;
+    // Identity of the user who most recently modified the attack simulation automation.
+    lastModifiedBy?: NullableOption<EmailIdentity>;
+    // Date and time when the attack simulation automation was most recently modified.
+    lastModifiedDateTime?: NullableOption<string>;
+    // Date and time of the latest run of the attack simulation automation.
+    lastRunDateTime?: NullableOption<string>;
+    // Date and time of the upcoming run of the attack simulation automation.
+    nextRunDateTime?: NullableOption<string>;
+    /**
+     * Status of the attack simulation automation. Supports $filter and $orderby. The possible values are: unknown, draft,
+     * notRunning, running, completed, unknownFutureValue.
+     */
+    status?: NullableOption<SimulationAutomationStatus>;
+    // A collection of simulation automation runs.
+    runs?: NullableOption<SimulationAutomationRun[]>;
+}
+export interface Simulation extends Entity {
+    /**
+     * The social engineering technique used in the attack simulation and training campaign. Supports $filter and $orderby.
+     * Possible values are: unknown, credentialHarvesting, attachmentMalware, driveByUrl, linkInAttachment, linkToMalwareFile,
+     * unknownFutureValue. For more information on the types of social engineering attack techniques, see simulations.
+     */
+    attackTechnique?: NullableOption<SimulationAttackTechnique>;
+    /**
+     * Attack type of the attack simulation and training campaign. Supports $filter and $orderby. Possible values are:
+     * unknown, social, cloud, endpoint, unknownFutureValue.
+     */
+    attackType?: NullableOption<SimulationAttackType>;
+    // Unique identifier for the attack simulation automation.
+    automationId?: NullableOption<string>;
+    // Date and time of completion of the attack simulation and training campaign. Supports $filter and $orderby.
+    completionDateTime?: NullableOption<string>;
+    // Identity of the user who created the attack simulation and training campaign.
+    createdBy?: NullableOption<EmailIdentity>;
+    // Date and time of creation of the attack simulation and training campaign.
+    createdDateTime?: NullableOption<string>;
+    // Description of the attack simulation and training campaign.
+    description?: NullableOption<string>;
+    // Display name of the attack simulation and training campaign. Supports $filter and $orderby.
+    displayName?: NullableOption<string>;
+    /**
+     * Flag that represents if the attack simulation and training campaign was created from a simulation automation flow.
+     * Supports $filter and $orderby.
+     */
+    isAutomated?: NullableOption<boolean>;
+    // Identity of the user who most recently modified the attack simulation and training campaign.
+    lastModifiedBy?: NullableOption<EmailIdentity>;
+    // Date and time of the most recent modification of the attack simulation and training campaign.
+    lastModifiedDateTime?: NullableOption<string>;
+    // Date and time of the launch/start of the attack simulation and training campaign. Supports $filter and $orderby.
+    launchDateTime?: NullableOption<string>;
+    /**
+     * Method of delivery of the phishing payload used in the attack simulation and training campaign. Possible values are:
+     * unknown, sms, email, teams, unknownFutureValue.
+     */
+    payloadDeliveryPlatform?: NullableOption<PayloadDeliveryPlatform>;
+    // Report of the attack simulation and training campaign.
+    report?: NullableOption<SimulationReport>;
+    /**
+     * Status of the attack simulation and training campaign. Supports $filter and $orderby. Possible values are: unknown,
+     * draft, running, scheduled, succeeded, failed, cancelled, excluded, unknownFutureValue.
+     */
+    status?: NullableOption<SimulationStatus>;
+}
+export interface SimulationAutomationRun extends Entity {
+    // Date and time when the run ends in an attack simulation automation.
+    endDateTime?: NullableOption<string>;
+    // Unique identifier for the attack simulation campaign initiated in the attack simulation automation run.
+    simulationId?: NullableOption<string>;
+    // Date and time when the run starts in an attack simulation automation.
+    startDateTime?: NullableOption<string>;
+    /**
+     * Status of the attack simulation automation run. The possible values are: unknown, running, succeeded, failed, skipped,
+     * unknownFutureValue.
+     */
+    status?: NullableOption<SimulationAutomationRunStatus>;
+}
+export interface CommsOperation extends Entity {
+    // Unique Client Context string. Max limit is 256 chars.
+    clientContext?: NullableOption<string>;
+    // The result information. Read-only.
+    resultInfo?: NullableOption<ResultInfo>;
+    // Possible values are: notStarted, running, completed, failed. Read-only.
+    status?: OperationStatus;
+}
+// tslint:disable-next-line: no-empty-interface
+export interface AddLargeGalleryViewOperation extends CommsOperation {}
 export interface AttendanceRecord extends Entity {
     // List of time periods between joining and leaving a meeting.
     attendanceIntervals?: NullableOption<AttendanceInterval[]>;
@@ -14765,14 +14989,6 @@ export interface AudioRoutingGroup extends Entity {
 }
 // tslint:disable-next-line: no-empty-interface
 export interface ContentSharingSession extends Entity {}
-export interface CommsOperation extends Entity {
-    // Unique Client Context string. Max limit is 256 chars.
-    clientContext?: NullableOption<string>;
-    // The result information. Read-only.
-    resultInfo?: NullableOption<ResultInfo>;
-    // Possible values are: notStarted, running, completed, failed. Read-only.
-    status?: OperationStatus;
-}
 export interface Participant extends Entity {
     // Information about the participant.
     info?: ParticipantInfo;
@@ -15060,6 +15276,7 @@ export interface TeamsTab extends Entity {
     teamsApp?: NullableOption<TeamsApp>;
 }
 export interface PinnedChatMessageInfo extends Entity {
+    // Represents details about the chat message that is pinned.
     message?: NullableOption<ChatMessage>;
 }
 export interface TeamworkHostedContent extends Entity {
@@ -15116,6 +15333,14 @@ export interface WorkforceIntegration extends ChangeTrackedEntity {
     supportedEntities?: NullableOption<WorkforceIntegrationSupportedEntities>;
     // Workforce Integration URL for callbacks from the Shifts service.
     url?: NullableOption<string>;
+}
+export interface TeamworkTagMember extends Entity {
+    // The member's display name.
+    displayName?: NullableOption<string>;
+    // The ID of the tenant that the tag member is a part of.
+    tenantId?: NullableOption<string>;
+    // The user ID of the member.
+    userId?: NullableOption<string>;
 }
 export interface UserScopeTeamsAppInstallation extends TeamsAppInstallation {
     // The chat between the user and Teams app.
@@ -15607,6 +15832,9 @@ export interface AssignedPlan {
      * Product names and service plan identifiers for licensing.
      */
     servicePlanId?: NullableOption<string>;
+}
+export interface AuthorizationInfo {
+    certificateUserIds?: NullableOption<string[]>;
 }
 export interface EmployeeOrgData {
     // The cost center associated with the user. Returned only on $select. Supports $filter.
@@ -18920,6 +19148,18 @@ export interface AndroidMinimumOperatingSystem {
     v5_0?: boolean;
     // Version 5.1 or later.
     v5_1?: boolean;
+    // Version 6.0 or later.
+    v6_0?: boolean;
+    // Version 7.0 or later.
+    v7_0?: boolean;
+    // Version 7.1 or later.
+    v7_1?: boolean;
+    // Version 8.0 or later.
+    v8_0?: boolean;
+    // Version 8.1 or later.
+    v8_1?: boolean;
+    // Version 9.0 or later.
+    v9_0?: boolean;
 }
 export interface AppConfigurationSettingItem {
     // app configuration key.
@@ -19810,8 +20050,23 @@ export interface DeviceGeoLocation {
     verticalAccuracy?: number;
 }
 export interface DeviceOperatingSystemSummary {
+    /**
+     * The count of Corporate work profile Android devices. Also known as Corporate Owned Personally Enabled (COPE). Valid
+     * values -1 to 2147483647
+     */
+    androidCorporateWorkProfileCount?: number;
     // Number of android device count.
     androidCount?: number;
+    // Number of dedicated Android devices.
+    androidDedicatedCount?: number;
+    // Number of device admin Android devices.
+    androidDeviceAdminCount?: number;
+    // Number of fully managed Android devices.
+    androidFullyManagedCount?: number;
+    // Number of work profile Android devices.
+    androidWorkProfileCount?: number;
+    // Number of ConfigMgr managed devices.
+    configMgrDeviceCount?: number;
     // Number of iOS device count.
     iosCount?: number;
     // Number of Mac OS X device count.
@@ -20869,6 +21124,173 @@ export interface VisualInfo {
      */
     displayText?: string;
 }
+export interface AssignedTrainingInfo {
+    // Number of users who were assigned the training in an attack simulation and training campaign.
+    assignedUserCount?: NullableOption<number>;
+    // Number of users who completed the training in an attack simulation and training campaign.
+    completedUserCount?: NullableOption<number>;
+    // Display name of the training in an attack simulation and training campaign.
+    displayName?: NullableOption<string>;
+}
+export interface AttackSimulationRepeatOffender {
+    // The user in an attack simulation and training campaign.
+    attackSimulationUser?: NullableOption<AttackSimulationUser>;
+    // Number of repeat offences of the user in attack simulation and training campaigns.
+    repeatOffenceCount?: NullableOption<number>;
+}
+export interface AttackSimulationUser {
+    // Display name of the user.
+    displayName?: NullableOption<string>;
+    // Email address of the user.
+    email?: NullableOption<string>;
+    // This is the id property value of the user resource that represents the user in the Azure Active Directory tenant.
+    userId?: NullableOption<string>;
+}
+export interface AttackSimulationSimulationUserCoverage {
+    // User in an attack simulation and training campaign.
+    attackSimulationUser?: NullableOption<AttackSimulationUser>;
+    // Number of link clicks in the received payloads by the user in attack simulation and training campaigns.
+    clickCount?: NullableOption<number>;
+    // Number of compromising actions by the user in attack simulation and training campaigns.
+    compromisedCount?: NullableOption<number>;
+    // Date and time of the latest attack simulation and training campaign that the user was included in.
+    latestSimulationDateTime?: NullableOption<string>;
+    // Number of attack simulation and training campaigns that the user was included in.
+    simulationCount?: NullableOption<number>;
+}
+export interface AttackSimulationTrainingUserCoverage {
+    // User in an attack simulation and training campaign.
+    attackSimulationUser?: NullableOption<AttackSimulationUser>;
+    // List of assigned trainings and their statuses for the user.
+    userTrainings?: NullableOption<UserTrainingStatusInfo[]>;
+}
+export interface UserTrainingStatusInfo {
+    // Date and time of assignment of the training to the user.
+    assignedDateTime?: NullableOption<string>;
+    // Date and time of completion of the training by the user.
+    completionDateTime?: NullableOption<string>;
+    // Display name of the assigned training.
+    displayName?: NullableOption<string>;
+    /**
+     * The status of the training assigned to the user. Possible values are: unknown, assigned, inProgress, completed,
+     * overdue, unknownFutureValue.
+     */
+    trainingStatus?: NullableOption<TrainingStatus>;
+}
+export interface EmailIdentity extends Identity {
+    // Email address of the user.
+    email?: NullableOption<string>;
+}
+export interface RecommendedAction {
+    // Web URL to the recommended action.
+    actionWebUrl?: NullableOption<string>;
+    // Potential improvement in the tenant security score from the recommended action.
+    potentialScoreImpact?: NullableOption<number>;
+    // Title of the recommended action.
+    title?: NullableOption<string>;
+}
+export interface SimulationEvent {
+    // Count of the simulation event occurrence in an attack simulation and training campaign.
+    count?: NullableOption<number>;
+    // Name of the simulation event in an attack simulation and training campaign.
+    eventName?: NullableOption<string>;
+}
+export interface SimulationEventsContent {
+    // Actual percentage of users who fell for the simulated attack in an attack simulation and training campaign.
+    compromisedRate?: NullableOption<number>;
+    // List of simulation events in an attack simulation and training campaign.
+    events?: NullableOption<SimulationEvent[]>;
+}
+export interface SimulationReport {
+    // Overview of an attack simulation and training campaign.
+    overview?: NullableOption<SimulationReportOverview>;
+    // The tenant users and their online actions in an attack simulation and training campaign.
+    simulationUsers?: NullableOption<UserSimulationDetails[]>;
+}
+export interface SimulationReportOverview {
+    /**
+     * List of recommended actions for a tenant to improve its security posture based on the attack simulation and training
+     * campaign attack type.
+     */
+    recommendedActions?: NullableOption<RecommendedAction[]>;
+    // Number of valid users in the attack simulation and training campaign.
+    resolvedTargetsCount?: NullableOption<number>;
+    // Summary of simulation events in the attack simulation and training campaign.
+    simulationEventsContent?: NullableOption<SimulationEventsContent>;
+    // Summary of assigned trainings in the attack simulation and training campaign.
+    trainingEventsContent?: NullableOption<TrainingEventsContent>;
+}
+export interface UserSimulationDetails {
+    // Number of trainings assigned to a user in an attack simulation and training campaign.
+    assignedTrainingsCount?: NullableOption<number>;
+    // Number of trainings completed by a user in an attack simulation and training campaign.
+    completedTrainingsCount?: NullableOption<number>;
+    // Date and time of the compromising online action by a user in an attack simulation and training campaign.
+    compromisedDateTime?: NullableOption<string>;
+    // Number of trainings in progress by a user in an attack simulation and training campaign.
+    inProgressTrainingsCount?: NullableOption<number>;
+    // Indicates whether a user was compromised in an attack simulation and training campaign.
+    isCompromised?: NullableOption<boolean>;
+    // Date and time when a user reported the delivered payload as phishing in the attack simulation and training campaign.
+    reportedPhishDateTime?: NullableOption<string>;
+    // List of simulation events of a user in the attack simulation and training campaign.
+    simulationEvents?: NullableOption<UserSimulationEventInfo[]>;
+    // User in an attack simulation and training campaign.
+    simulationUser?: NullableOption<AttackSimulationUser>;
+    // List of training events of a user in the attack simulation and training campaign.
+    trainingEvents?: NullableOption<UserTrainingEventInfo[]>;
+}
+export interface TrainingEventsContent {
+    // List of assigned trainings and their information in an attack simulation and training campaign.
+    assignedTrainingsInfos?: NullableOption<AssignedTrainingInfo[]>;
+    // Number of users who were assigned trainings in an attack simulation and training campaign.
+    trainingsAssignedUserCount?: NullableOption<number>;
+}
+export interface UserSimulationEventInfo {
+    /**
+     * Browser information from where the simulation event was initiated by a user in an attack simulation and training
+     * campaign.
+     */
+    browser?: NullableOption<string>;
+    // Date and time of the simulation event by a user in an attack simulation and training campaign.
+    eventDateTime?: NullableOption<string>;
+    // Name of the simulation event by a user in an attack simulation and training campaign.
+    eventName?: NullableOption<string>;
+    // IP address from where the simulation event was initiated by a user in an attack simulation and training campaign.
+    ipAddress?: NullableOption<string>;
+    /**
+     * The operating system, platform, and device details from where the simulation event was initiated by a user in an attack
+     * simulation and training campaign.
+     */
+    osPlatformDeviceDetails?: NullableOption<string>;
+}
+export interface UserTrainingEventInfo {
+    // Display name of the training.
+    displayName?: NullableOption<string>;
+    /**
+     * Latest status of the training assigned to the user. Possible values are: unknown, assigned, inProgress, completed,
+     * overdue, unknownFutureValue.
+     */
+    latestTrainingStatus?: NullableOption<TrainingStatus>;
+    // Event details of the training when it was assigned to the user.
+    trainingAssignedProperties?: NullableOption<UserTrainingContentEventInfo>;
+    // Event details of the training when it was completed by the user.
+    trainingCompletedProperties?: NullableOption<UserTrainingContentEventInfo>;
+    // Event details of the training when it was updated/in-progress by the user.
+    trainingUpdatedProperties?: NullableOption<UserTrainingContentEventInfo>;
+}
+export interface UserTrainingContentEventInfo {
+    // Browser of the user from where the training event was generated.
+    browser?: NullableOption<string>;
+    // Date and time of the training content playback by the user.
+    contentDateTime?: NullableOption<string>;
+    // IP address of the user for the training event.
+    ipAddress?: NullableOption<string>;
+    // The operating system, platform, and device details of the user for the training event.
+    osPlatformDeviceDetails?: NullableOption<string>;
+    // Potential improvement in the tenant security posture after completion of the training by the user.
+    potentialScoreImpact?: NullableOption<number>;
+}
 export interface AlertDetection {
     detectionType?: NullableOption<string>;
     method?: NullableOption<string>;
@@ -21234,9 +21656,19 @@ export interface AudioConferencing {
     // List of toll numbers that are displayed in the meeting invite.
     tollNumbers?: NullableOption<string[]>;
 }
+export interface BroadcastMeetingCaptionSettings {
+    // Indicates whether captions are enabled for this Teams live event.
+    isCaptionEnabled?: NullableOption<boolean>;
+    // The spoken language.
+    spokenLanguage?: NullableOption<string>;
+    // The translation languages (choose up to 6).
+    translationLanguages?: NullableOption<string[]>;
+}
 export interface BroadcastMeetingSettings {
     // Defines who can join the Teams live event. Possible values are listed in the following table.
     allowedAudience?: NullableOption<BroadcastMeetingAudience>;
+    // Caption settings of a Teams live event.
+    captions?: NullableOption<BroadcastMeetingCaptionSettings>;
     // Indicates whether attendee report is enabled for this Teams live event. Default value is false.
     isAttendeeReportEnabled?: NullableOption<boolean>;
     // Indicates whether Q&amp;A is enabled for this Teams live event. Default value is false.
@@ -21251,7 +21683,9 @@ export interface CallMediaState {
     audio?: NullableOption<MediaState>;
 }
 export interface CallOptions {
+    // Indicates whether to hide the app after the call is escalated.
     hideBotAfterEscalation?: NullableOption<boolean>;
+    // Indicates whether content sharing notifications should be enabled for the call.
     isContentSharingNotificationEnabled?: NullableOption<boolean>;
 }
 export interface CallRoute {
@@ -21874,11 +22308,15 @@ export interface MembersLeftEventMessageDetail extends EventMessageDetail {
     members?: NullableOption<TeamworkUserIdentity[]>;
 }
 export interface MessagePinnedEventMessageDetail extends EventMessageDetail {
+    // Date and time when the event occurred.
     eventDateTime?: NullableOption<string>;
+    // Initiator of the event.
     initiator?: NullableOption<IdentitySet>;
 }
 export interface MessageUnpinnedEventMessageDetail extends EventMessageDetail {
+    // Date and time when the event occurred.
     eventDateTime?: NullableOption<string>;
+    // Initiator of the event.
     initiator?: NullableOption<IdentitySet>;
 }
 export interface OperationError {
