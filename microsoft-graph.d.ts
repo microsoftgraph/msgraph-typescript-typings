@@ -84,6 +84,7 @@ export type AdvancedConfigState = "default" | "enabled" | "disabled" | "unknownF
 export type AuthenticationMethodState = "enabled" | "disabled";
 export type AuthenticationMethodTargetType = "user" | "group" | "unknownFutureValue";
 export type ExternalEmailOtpState = "default" | "enabled" | "disabled" | "unknownFutureValue";
+export type FeatureTargetType = "group" | "administrativeUnit" | "role" | "unknownFutureValue";
 export type Fido2RestrictionEnforcementType = "allow" | "block" | "unknownFutureValue";
 export type MicrosoftAuthenticatorAuthenticationMode = "deviceBasedPush" | "push" | "any";
 export type X509CertificateAuthenticationMode =
@@ -441,6 +442,14 @@ export type SignInFrequencyAuthenticationType =
     | "unknownFutureValue";
 export type SignInFrequencyInterval = "timeBased" | "everyTime" | "unknownFutureValue";
 export type SigninFrequencyType = "days" | "hours";
+export type TemplateScenarios =
+    | "new"
+    | "secureFoundation"
+    | "zeroTrust"
+    | "remoteWork"
+    | "protectAdmins"
+    | "emergingThreats"
+    | "unknownFutureValue";
 export type TokenIssuerType =
     | "AzureAD"
     | "ADFederationServices"
@@ -2631,6 +2640,7 @@ export interface Invitation extends Entity {
     inviteRedeemUrl?: NullableOption<string>;
     // The URL the user should be redirected to once the invitation is redeemed. Required.
     inviteRedirectUrl?: string;
+    resetRedemption?: NullableOption<boolean>;
     // Indicates whether an email should be sent to the user being invited. The default is false.
     sendInvitationMessage?: NullableOption<boolean>;
     // The status of the invitation. Possible values are: PendingAcceptance, Completed, InProgress, and Error.
@@ -4090,10 +4100,20 @@ export interface Chat extends Entity {
     tenantId?: NullableOption<string>;
     // (Optional) Subject or topic for the chat. Only available for group chats.
     topic?: NullableOption<string>;
+    /**
+     * Represents caller-specific information about the chat, such as last message read date and time. This property is
+     * populated only when the request is made in a delegated context.
+     */
+    viewpoint?: NullableOption<ChatViewpoint>;
     // The URL for the chat in Microsoft Teams. The URL should be treated as an opaque blob, and not parsed. Read-only.
     webUrl?: NullableOption<string>;
     // A collection of all the apps in the chat. Nullable.
     installedApps?: NullableOption<TeamsAppInstallation[]>;
+    /**
+     * Preview of the last message sent in the chat. Null if no messages have been sent in the chat. Currently, only the list
+     * chats operation supports this property.
+     */
+    lastMessagePreview?: NullableOption<ChatMessageInfo>;
     // A collection of all the members in the chat. Nullable.
     members?: NullableOption<ConversationMember[]>;
     // A collection of all the messages in the chat. Nullable.
@@ -4731,7 +4751,12 @@ export interface Fido2AuthenticationMethodConfiguration extends AuthenticationMe
     includeTargets?: NullableOption<AuthenticationMethodTarget[]>;
 }
 export interface MicrosoftAuthenticatorAuthenticationMethodConfiguration extends AuthenticationMethodConfiguration {
-    // A collection of users or groups who are enabled to use the authentication method.
+    /**
+     * A collection of Microsoft Authenticator settings such as application context and location context, and whether they are
+     * enabled for all users or specific users only.
+     */
+    featureSettings?: NullableOption<MicrosoftAuthenticatorFeatureSettings>;
+    // A collection of users or groups who are enabled to use the authentication method. Expanded by default.
     includeTargets?: NullableOption<MicrosoftAuthenticatorAuthenticationMethodTarget[]>;
 }
 export interface MicrosoftAuthenticatorAuthenticationMethodTarget extends AuthenticationMethodTarget {
@@ -4967,8 +4992,18 @@ export interface TemporaryAccessPassAuthenticationMethodConfiguration extends Au
     includeTargets?: NullableOption<AuthenticationMethodTarget[]>;
 }
 export interface X509CertificateAuthenticationMethodConfiguration extends AuthenticationMethodConfiguration {
+    /**
+     * Defines strong authentication configurations. This configuration includes the default authentication mode and the
+     * different rules for strong authentication bindings.
+     */
     authenticationModeConfiguration?: NullableOption<X509CertificateAuthenticationModeConfiguration>;
+    /**
+     * Defines fields in the X.509 certificate that map to attributes of the Azure AD user object in order to bind the
+     * certificate to the user. The priority of the object determines the order in which the binding is carried out. The first
+     * binding that matches will be used and the rest ignored.
+     */
     certificateUserBindings?: NullableOption<X509CertificateUserBinding[]>;
+    // A collection of users or groups who are enabled to use the authentication method.
     includeTargets?: NullableOption<AuthenticationMethodTarget[]>;
 }
 export interface Bitlocker extends Entity {
@@ -6367,6 +6402,8 @@ export interface ConditionalAccessRoot extends Entity {
     namedLocations?: NullableOption<NamedLocation[]>;
     // Read-only. Nullable. Returns a collection of the specified Conditional Access (CA) policies.
     policies?: NullableOption<ConditionalAccessPolicy[]>;
+    // Read-only. Nullable. Returns a collection of the specified Conditional Access templates.
+    templates?: NullableOption<ConditionalAccessTemplate[]>;
 }
 // tslint:disable-next-line: interface-name no-empty-interface
 export interface IdentityCustomUserFlowAttribute extends IdentityUserFlowAttribute {}
@@ -9776,6 +9813,23 @@ export interface NamedLocation extends Entity {
      */
     modifiedDateTime?: NullableOption<string>;
 }
+export interface ConditionalAccessTemplate extends Entity {
+    // The user-friendly name of the template.
+    description?: string;
+    /**
+     * Complete list of policy details specific to the template. This property contains the JSON of policy settings for
+     * configuring a Conditional Access policy.
+     */
+    details?: ConditionalAccessPolicyDetail;
+    // The user-friendly name of the template.
+    name?: string;
+    /**
+     * List of conditional access scenarios that the template is recommended for. The possible values are: new,
+     * secureFoundation, zeroTrust, remoteWork, protectAdmins, emergingThreats, unknownFutureValue. This is a multi-valued
+     * enum. Supports $filter (has).
+     */
+    scenarios?: TemplateScenarios;
+}
 export interface CountryNamedLocation extends NamedLocation {
     // List of countries and/or regions in two-letter format specified by ISO 3166-2. Required.
     countriesAndRegions?: string[];
@@ -9859,7 +9913,7 @@ export interface RiskDetection extends Entity {
      * unfamiliarFeatures, malwareInfectedIPAddress, suspiciousIPAddress, leakedCredentials, investigationsThreatIntelligence,
      * generic,adminConfirmedUserCompromised, passwordSpray, impossibleTravel, newCountry, anomalousToken,
      * tokenIssuerAnomaly,suspiciousBrowser, riskyIPAddress, mcasSuspiciousInboxManipulationRules, suspiciousInboxForwarding,
-     * and unknownFutureValue. If the risk detection is a premium detection, will show generic. For more information about
+     * and anomalousUserActivity. If the risk detection is a premium detection, will show generic. For more information about
      * each value, see riskEventType values.
      */
     riskEventType?: NullableOption<string>;
@@ -14219,7 +14273,7 @@ export interface ServiceUpdateMessage extends ServiceAnnouncementBase {
     actionRequiredByDateTime?: NullableOption<string>;
     // The zip file that contains all attachments for a message.
     attachmentsArchive?: NullableOption<any>;
-    // The content type and content of the service message body.
+    // The content type and content of the service message body. The supported value for the contentType property is html.
     body?: ItemBody;
     // The service message category. Possible values are: preventOrFixIssue, planForChange, stayInformed, unknownFutureValue.
     category?: ServiceUpdateCategory;
@@ -15275,6 +15329,26 @@ export interface TeamsTab extends Entity {
     // The application that is linked to the tab. This cannot be changed after tab creation.
     teamsApp?: NullableOption<TeamsApp>;
 }
+export interface ChatMessageInfo extends Entity {
+    /**
+     * Body of the chatMessage. This will still contain markers for @mentions and attachments even though the object does not
+     * return @mentions and attachments.
+     */
+    body?: NullableOption<ItemBody>;
+    // Date time object representing the time at which message was created.
+    createdDateTime?: NullableOption<string>;
+    /**
+     * Read-only. If present, represents details of an event that happened in a chat, a channel, or a team, for example,
+     * members were added, and so on. For event messages, the messageType property will be set to systemEventMessage.
+     */
+    eventDetail?: NullableOption<EventMessageDetail>;
+    // Information about the sender of the message.
+    from?: NullableOption<ChatMessageFromIdentitySet>;
+    // If set to true, the original message has been deleted.
+    isDeleted?: NullableOption<boolean>;
+    // The type of chat message. The possible values are: message, unknownFutureValue, systemEventMessage.
+    messageType?: ChatMessageType;
+}
 export interface PinnedChatMessageInfo extends Entity {
     // Represents details about the chat message that is pinned.
     message?: NullableOption<ChatMessage>;
@@ -16267,6 +16341,24 @@ export interface SamlSingleSignOnSettings {
     // The relative URI the service provider would redirect to after completion of the single sign-on flow.
     relayState?: NullableOption<string>;
 }
+export interface AuthenticationMethodFeatureConfiguration {
+    // A single entity that is excluded from this feature.
+    excludeTarget?: NullableOption<FeatureTarget>;
+    // A single entity that is included in this feature.
+    includeTarget?: NullableOption<FeatureTarget>;
+    /**
+     * Enable or disable the feature. Possible values are: default, enabled, disabled, unknownFutureValue. The default value
+     * is used when the configuration hasn't been explicitly set and uses the default behavior of Azure AD for the setting.
+     * The default value is disabled.
+     */
+    state?: NullableOption<AdvancedConfigState>;
+}
+export interface FeatureTarget {
+    // The ID of the entity that's targeted in the include or exclude rule, or all_users to target all users.
+    id?: NullableOption<string>;
+    // The kind of entity that's targeted. The possible values are: group, administrativeUnit, role, unknownFutureValue.
+    targetType?: NullableOption<FeatureTargetType>;
+}
 export interface AuthenticationMethodsRegistrationCampaign {
     // Users and groups of users that are excluded from being prompted to set up the authentication method.
     excludeTargets?: ExcludeTarget[];
@@ -16306,22 +16398,62 @@ export interface Fido2KeyRestrictions {
     // Determines if the configured key enforcement is enabled.
     isEnforced?: NullableOption<boolean>;
 }
+export interface MicrosoftAuthenticatorFeatureSettings {
+    // Determines whether the user's Authenticator app will show them the client app they are signing into.
+    displayAppInformationRequiredState?: NullableOption<AuthenticationMethodFeatureConfiguration>;
+    /**
+     * Determines whether the user's Authenticator app will show them the geographic location of where the authentication
+     * request originated from.
+     */
+    displayLocationInformationRequiredState?: NullableOption<AuthenticationMethodFeatureConfiguration>;
+}
 export interface RegistrationEnforcement {
     // Run campaigns to remind users to set up targeted authentication methods.
     authenticationMethodsRegistrationCampaign?: NullableOption<AuthenticationMethodsRegistrationCampaign>;
 }
 export interface X509CertificateAuthenticationModeConfiguration {
+    /**
+     * Rules are configured in addition to the authentication mode to bind a specific x509CertificateRuleType to an
+     * x509CertificateAuthenticationMode. For example, bind the policyOID with identifier 1.32.132.343 to
+     * x509CertificateMultiFactor authentication mode.
+     */
     rules?: NullableOption<X509CertificateRule[]>;
+    /**
+     * The type of strong authentication mode. The possible values are: x509CertificateSingleFactor,
+     * x509CertificateMultiFactor, unknownFutureValue.
+     */
     x509CertificateAuthenticationDefaultMode?: NullableOption<X509CertificateAuthenticationMode>;
 }
 export interface X509CertificateRule {
+    // The identifier of the X.509 certificate. Required.
     identifier?: NullableOption<string>;
+    /**
+     * The type of strong authentication mode. The possible values are: x509CertificateSingleFactor,
+     * x509CertificateMultiFactor, unknownFutureValue. Required.
+     */
     x509CertificateAuthenticationMode?: NullableOption<X509CertificateAuthenticationMode>;
+    /**
+     * The type of the X.509 certificate mode configuration rule. The possible values are: issuerSubject, policyOID,
+     * unknownFutureValue. Required.
+     */
     x509CertificateRuleType?: NullableOption<X509CertificateRuleType>;
 }
 export interface X509CertificateUserBinding {
+    /**
+     * The priority of the binding. Azure AD uses the binding with the highest priority. This value must be a non-negative
+     * integer and unique in the collection of objects in the certificateUserBindings property of an
+     * x509CertificateAuthenticationMethodConfiguration object. Required
+     */
     priority?: number;
+    /**
+     * Defines the Azure AD user property of the user object to use for the binding. The possible values are:
+     * userPrincipalName, onPremisesUserPrincipalName, certificateUserIds. Required.
+     */
     userProperty?: NullableOption<string>;
+    /**
+     * The field on the X.509 certificate to use for the binding. The possible values are: PrincipalName, RFC822Name,
+     * SubjectKeyIdentifier, SHA1PublicKey.
+     */
     x509CertificateField?: NullableOption<string>;
 }
 export interface AvailabilityItem {
@@ -18856,6 +18988,14 @@ export interface ConditionalAccessGrantControls {
     // List of terms of use IDs required by the policy.
     termsOfUse?: string[];
 }
+export interface ConditionalAccessPolicyDetail {
+    // Represents the type of conditions that govern when the policy applies.
+    conditions?: ConditionalAccessConditionSet;
+    // Represents grant controls that must be fulfilled for the policy.
+    grantControls?: NullableOption<ConditionalAccessGrantControls>;
+    // Represents a complex type of session controls that is enforced after sign-in.
+    sessionControls?: NullableOption<ConditionalAccessSessionControls>;
+}
 export interface ConditionalAccessSessionControls {
     /**
      * Session control to enforce application restrictions. Only Exchange Online and Sharepoint Online support this session
@@ -20244,7 +20384,7 @@ export interface RolePermission {
 export interface ServiceHealthIssuePost {
     // The published time of the post.
     createdDateTime?: string;
-    // The content of the service issue post.
+    // The content of the service issue post. The supported value for the contentType property is html.
     description?: NullableOption<ItemBody>;
     // The post type of the service issue historical post. Possible values are: regular, quick, strategic, unknownFutureValue.
     postType?: NullableOption<PostType>;
@@ -21735,11 +21875,13 @@ export interface IncomingContext {
 }
 // tslint:disable-next-line: interface-name
 export interface InvitationParticipantInfo {
+    // Optional. Whether to hide the participant from the roster.
     hidden?: NullableOption<boolean>;
     // The identitySet associated with this invitation.
     identity?: IdentitySet;
     // Optional. The ID of the target participant.
     participantId?: NullableOption<string>;
+    // Optional. Whether to remove them from the main mixer.
     removeFromDefaultAudioRoutingGroup?: NullableOption<boolean>;
     /**
      * Optional. The call which the target identity is currently a part of. For peer-to-peer case, the call will be dropped
@@ -22257,6 +22399,12 @@ export interface ChatRenamedEventMessageDetail extends EventMessageDetail {
     chatId?: NullableOption<string>;
     // Initiator of the event.
     initiator?: NullableOption<IdentitySet>;
+}
+export interface ChatViewpoint {
+    // Indicates whether the chat is hidden for the current user.
+    isHidden?: NullableOption<boolean>;
+    // Represents the dateTime up until which the current user has read chatMessages in a specific chat.
+    lastMessageReadDateTime?: NullableOption<string>;
 }
 export interface ConversationMemberRoleUpdatedEventMessageDetail extends EventMessageDetail {
     // Roles for the coversation member user.
