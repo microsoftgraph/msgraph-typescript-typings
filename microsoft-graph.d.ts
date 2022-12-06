@@ -2647,6 +2647,11 @@ export interface Invitation extends Entity {
     inviteRedeemUrl?: NullableOption<string>;
     // The URL the user should be redirected to once the invitation is redeemed. Required.
     inviteRedirectUrl?: string;
+    /**
+     * Reset the user's redemption status and reinvite a user while retaining their user identifier, group memberships, and
+     * app assignments. This property allows you to enable a user to sign-in using a different email address from the one in
+     * the previous invitation. For more information about using this property, see Reset redemption status for a guest user.
+     */
     resetRedemption?: NullableOption<boolean>;
     // Indicates whether an email should be sent to the user being invited. The default is false.
     sendInvitationMessage?: NullableOption<boolean>;
@@ -4361,7 +4366,9 @@ export interface Application extends DirectoryObject {
      * Specifies the Microsoft accounts that are supported for the current application. The possible values are: AzureADMyOrg,
      * AzureADMultipleOrgs, AzureADandPersonalMicrosoftAccount (default), and PersonalMicrosoftAccount. See more in the table.
      * The value of this object also limits the number of permissions an app can request. For more information, see Limits on
-     * requested permissions per app. Supports $filter (eq, ne, not).
+     * requested permissions per app. The value for this property has implications on other app object properties. As a
+     * result, if you change this property, you may need to change other properties first. For more information, see
+     * Validation differences for signInAudience.Supports $filter (eq, ne, not).
      */
     signInAudience?: NullableOption<string>;
     /**
@@ -7546,7 +7553,9 @@ export interface SubscribedSku extends Entity {
 export interface EducationAssignment extends Entity {
     /**
      * Optional field to control the assignment behavior for students who are added after the assignment is published. If not
-     * specified, defaults to none value. Currently supports only two values: none or assignIfOpen.
+     * specified, defaults to none. Supported values are: none, assignIfOpen. For example, a teacher can use assignIfOpen to
+     * indicate that an assignment should be assigned to any new student who joins the class while the assignment is still
+     * open, and none to indicate that an assignment should not be assigned to new students.
      */
     addedStudentAction?: NullableOption<EducationAddedStudentAction>;
     /**
@@ -9619,8 +9628,9 @@ export interface AccessPackageAssignmentRequest extends Entity {
     createdDateTime?: NullableOption<string>;
     /**
      * The type of the request. The possible values are: notSpecified, userAdd, UserExtend, userUpdate, userRemove, adminAdd,
-     * adminUpdate, adminRemove, systemAdd, systemUpdate, systemRemove, onBehalfAdd, unknownFutureValue. A request from the
-     * user themselves would have requestType of userAdd, userUpdate or userRemove. This property cannot be changed once set.
+     * adminUpdate, adminRemove, systemAdd, systemUpdate, systemRemove, onBehalfAdd (not supported), unknownFutureValue. A
+     * request from the user themselves would have requestType of userAdd, userUpdate or userRemove. This property cannot be
+     * changed once set.
      */
     requestType?: NullableOption<AccessPackageRequestType>;
     // The range of dates that access is to be assigned to the requestor. This property cannot be changed once set.
@@ -14554,7 +14564,10 @@ export interface PlannerAssignedToTaskBoardTaskFormat extends Entity {
     unassignedOrderHint?: NullableOption<string>;
 }
 export interface PlannerBucketTaskBoardTaskFormat extends Entity {
-    // Hint used to order tasks in the Bucket view of the Task Board. The format is defined as outlined here.
+    /**
+     * Hint used to order tasks in the bucket view of the task board. For details about the supported format, see Using order
+     * hints in Planner.
+     */
     orderHint?: NullableOption<string>;
 }
 export interface PlannerPlanDetails extends Entity {
@@ -19052,6 +19065,7 @@ export interface ConditionalAccessConditionSet {
     locations?: NullableOption<ConditionalAccessLocations>;
     // Platforms included in and excluded from the policy.
     platforms?: NullableOption<ConditionalAccessPlatforms>;
+    // Service principal risk levels included in the policy. Possible values are: low, medium, high, none, unknownFutureValue.
     servicePrincipalRiskLevels?: RiskLevel[];
     /**
      * Sign-in risk levels included in the policy. Possible values are: low, medium, high, hidden, none, unknownFutureValue.
@@ -19063,7 +19077,7 @@ export interface ConditionalAccessConditionSet {
      * Required.
      */
     userRiskLevels?: RiskLevel[];
-    // Users, groups, and roles included in and excluded from the policy. Required.
+    // Users, groups, and roles included in and excluded from the policy. Either users or clientApplications is required.
     users?: NullableOption<ConditionalAccessUsers>;
 }
 export interface ConditionalAccessDevices {
