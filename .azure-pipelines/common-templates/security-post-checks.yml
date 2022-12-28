@@ -12,7 +12,7 @@ steps:
       APIScan: false
       BinSkim: false
       BinSkimBreakOn: "WarningAbove"
-      CodesignValidation: true
+      CodesignValidation: false
       CodesignValidationBreakOn: "WarningAbove"
       CredScan: true
       FortifySCA: false
@@ -21,7 +21,7 @@ steps:
       MSRD: false
       PoliCheck: true
       PoliCheckBreakOn: "Severity1"
-      RoslynAnalyzers: true
+      RoslynAnalyzers: false
       RoslynAnalyzersBreakOn: "WarningAbove"
       SDLNativeRules: false
       Semmle: false
@@ -38,16 +38,16 @@ steps:
       AntiMalware: false
       APIScan: false
       BinSkim: false
-      CodesignValidation: true
+      CodesignValidation: false
       CredScan: true
       FortifySCA: false
       FxCop: false
       ModernCop: true
       MSRD: false
       PoliCheck: true
-      RoslynAnalyzers: true
+      RoslynAnalyzers: false
       SDLNativeRules: false
       Semmle: false
-      TSLint: false
+      TSLint: true
       WebScout: false
       ToolLogsNotFoundAction: "Standard"
