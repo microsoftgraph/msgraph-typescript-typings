@@ -54,6 +54,8 @@ export type RiskDetail =
     | "hidden"
     | "adminConfirmedUserCompromised"
     | "unknownFutureValue"
+    | "adminConfirmedServicePrincipalCompromised"
+    | "adminDismissedAllRiskForServicePrincipal"
     | "m365DAdminDismissedDetection";
 export type RiskEventType =
     | "unlikelyTravel"
@@ -405,7 +407,7 @@ export type AccessReviewStageFilterByCurrentUserOptions = "reviewer" | "unknownF
 export type ApprovalFilterByCurrentUserOptions = "target" | "createdBy" | "approver" | "unknownFutureValue";
 export type ConsentRequestFilterByCurrentUserOptions = "reviewer" | "unknownFutureValue";
 export type AgreementAcceptanceState = "accepted" | "declined" | "unknownFutureValue";
-export type ActivityType = "signin" | "user" | "unknownFutureValue";
+export type ActivityType = "signin" | "user" | "unknownFutureValue" | "servicePrincipal";
 export type CloudAppSecuritySessionControlType =
     | "mcasConfigured"
     | "monitorOnly"
@@ -2647,6 +2649,11 @@ export interface Invitation extends Entity {
     inviteRedeemUrl?: NullableOption<string>;
     // The URL the user should be redirected to once the invitation is redeemed. Required.
     inviteRedirectUrl?: string;
+    /**
+     * Reset the user's redemption status and reinvite a user while retaining their user identifier, group memberships, and
+     * app assignments. This property allows you to enable a user to sign-in using a different email address from the one in
+     * the previous invitation. For more information about using this property, see Reset redemption status for a guest user.
+     */
     resetRedemption?: NullableOption<boolean>;
     // Indicates whether an email should be sent to the user being invited. The default is false.
     sendInvitationMessage?: NullableOption<boolean>;
@@ -4361,7 +4368,9 @@ export interface Application extends DirectoryObject {
      * Specifies the Microsoft accounts that are supported for the current application. The possible values are: AzureADMyOrg,
      * AzureADMultipleOrgs, AzureADandPersonalMicrosoftAccount (default), and PersonalMicrosoftAccount. See more in the table.
      * The value of this object also limits the number of permissions an app can request. For more information, see Limits on
-     * requested permissions per app. Supports $filter (eq, ne, not).
+     * requested permissions per app. The value for this property has implications on other app object properties. As a
+     * result, if you change this property, you may need to change other properties first. For more information, see
+     * Validation differences for signInAudience.Supports $filter (eq, ne, not).
      */
     signInAudience?: NullableOption<string>;
     /**
@@ -4775,7 +4784,7 @@ export interface EmailAuthenticationMethodConfiguration extends AuthenticationMe
      * OTP enabled beginning in October 2021.
      */
     allowExternalIdToUseEmailOtp?: NullableOption<ExternalEmailOtpState>;
-    // A collection of users or groups who are enabled to use the authentication method.
+    // A collection of groups that are enabled to use the authentication method.
     includeTargets?: NullableOption<AuthenticationMethodTarget[]>;
 }
 export interface Fido2AuthenticationMethodConfiguration extends AuthenticationMethodConfiguration {
@@ -4789,7 +4798,7 @@ export interface Fido2AuthenticationMethodConfiguration extends AuthenticationMe
      * the authenticator.
      */
     keyRestrictions?: NullableOption<Fido2KeyRestrictions>;
-    // A collection of users or groups who are enabled to use the authentication method.
+    // A collection of groups that are enabled to use the authentication method.
     includeTargets?: NullableOption<AuthenticationMethodTarget[]>;
 }
 export interface MicrosoftAuthenticatorAuthenticationMethodConfiguration extends AuthenticationMethodConfiguration {
@@ -4798,7 +4807,7 @@ export interface MicrosoftAuthenticatorAuthenticationMethodConfiguration extends
      * enabled for all users or specific users only.
      */
     featureSettings?: NullableOption<MicrosoftAuthenticatorFeatureSettings>;
-    // A collection of users or groups who are enabled to use the authentication method. Expanded by default.
+    // A collection of groups that are enabled to use the authentication method. Expanded by default.
     includeTargets?: NullableOption<MicrosoftAuthenticatorAuthenticationMethodTarget[]>;
 }
 export interface MicrosoftAuthenticatorAuthenticationMethodTarget extends AuthenticationMethodTarget {
@@ -5031,7 +5040,7 @@ export interface TemporaryAccessPassAuthenticationMethodConfiguration extends Au
      * minutes (equivalent to 30 days).
      */
     minimumLifetimeInMinutes?: NullableOption<number>;
-    // A collection of users or groups who are enabled to use the authentication method.
+    // A collection of groups that are enabled to use the authentication method.
     includeTargets?: NullableOption<AuthenticationMethodTarget[]>;
 }
 export interface X509CertificateAuthenticationMethodConfiguration extends AuthenticationMethodConfiguration {
@@ -5046,7 +5055,7 @@ export interface X509CertificateAuthenticationMethodConfiguration extends Authen
      * binding that matches will be used and the rest ignored.
      */
     certificateUserBindings?: NullableOption<X509CertificateUserBinding[]>;
-    // A collection of users or groups who are enabled to use the authentication method.
+    // A collection of groups that are enabled to use the authentication method.
     includeTargets?: NullableOption<AuthenticationMethodTarget[]>;
 }
 export interface Bitlocker extends Entity {
@@ -5067,7 +5076,7 @@ export interface BitlockerRecoveryKey extends Entity {
     volumeType?: NullableOption<VolumeType>;
 }
 // tslint:disable-next-line: interface-name
-export interface InformationProtection extends Entity {
+export interface InformationProtection {
     bitlocker?: NullableOption<Bitlocker>;
     threatAssessmentRequests?: NullableOption<ThreatAssessmentRequest[]>;
 }
@@ -5098,10 +5107,11 @@ export interface ThreatAssessmentRequest extends Entity {
 export interface BookingAppointment extends Entity {
     // Additional information that is sent to the customer when an appointment is confirmed.
     additionalInformation?: NullableOption<string>;
+    // The URL of the meeting to join anonymously.
     anonymousJoinWebUrl?: NullableOption<string>;
     /**
-     * It lists down the customer properties for an appointment. An appointment will contain a list of customer information
-     * and each unit will indicate the properties of a customer who is part of that appointment. Optional.
+     * A collection of customer properties for an appointment. An appointment will contain a list of customer information and
+     * each unit will indicate the properties of a customer who is part of that appointment. Optional.
      */
     customers?: BookingCustomerInformationBase[];
     // The time zone of the customer. For a list of possible values, see dateTimeTimeZone.
@@ -5192,6 +5202,7 @@ export interface BookingBusiness extends Entity {
      * property. Read-only.
      */
     isPublished?: NullableOption<boolean>;
+    // The language of the self-service booking page.
     languageTag?: NullableOption<string>;
     /**
      * The telephone number for the business. The phone property, together with address and webSiteUrl, appear in the footer
@@ -5252,11 +5263,16 @@ export interface BookingService extends Entity {
     description?: NullableOption<string>;
     // The display name is suitable for human-readable interfaces.
     displayName?: string;
+    /**
+     * True if the URL to join the appointment anonymously (anonymousJoinWebUrl) will be generated for the appointment booked
+     * for this service.
+     */
     isAnonymousJoinEnabled?: boolean;
     // True means this service is not available to customers for booking.
     isHiddenFromCustomers?: boolean;
     // True indicates that the appointments for the service will be held online. Default value is false.
     isLocationOnline?: boolean;
+    // The language of the self-service booking page.
     languageTag?: string;
     /**
      * The maximum number of customers allowed in a service. If maximumAttendeesCount of the service is greater than 1, pass
@@ -5315,10 +5331,12 @@ export interface BookingStaffMember extends BookingStaffMemberBase {
      * policy of the business. Required.
      */
     emailAddress?: NullableOption<string>;
+    // True indicates that a staff member will be notified via email when a booking assigned to them is created or changed.
     isEmailNotificationEnabled?: boolean;
     /**
-     * The role of the staff member in the business. Possible values are: guest, administrator, viewer, externalGuest and
-     * unknownFutureValue. Required.
+     * The role of the staff member in the business. Possible values are: guest, administrator, viewer, externalGuest,
+     * unknownFutureValue, scheduler, teamMember. Note that you must use the Prefer: include-unknown-enum-members request
+     * header to get the following values from this evolvable enum: scheduler, teamMember. Required.
      */
     role?: BookingStaffRole;
     // The time zone of the staff member. For a list of possible values, see dateTimeTimeZone.
@@ -5449,7 +5467,7 @@ export interface Channel extends Entity {
 export interface Group extends DirectoryObject {
     /**
      * The list of sensitivity label pairs (label ID, label name) associated with a Microsoft 365 group. Returned only on
-     * $select. Read-only.
+     * $select.
      */
     assignedLabels?: NullableOption<AssignedLabel[]>;
     // The licenses that are assigned to the group. Returned only on $select. Supports $filter (eq).Read-only.
@@ -5500,11 +5518,12 @@ export interface Group extends DirectoryObject {
     hasMembersWithLicenseErrors?: NullableOption<boolean>;
     /**
      * Indicates whether this group can be assigned to an Azure Active Directory role or not. Optional. This property can only
-     * be set while creating the group and is immutable. If set to true, the securityEnabled property must also be set to true
-     * and the group cannot be a dynamic group (that is, groupTypes cannot contain DynamicMembership). Only callers in Global
-     * Administrator and Privileged Role Administrator roles can set this property. The caller must also be assigned the
-     * RoleManagement.ReadWrite.Directory permission to set this property or update the membership of such groups. For more,
-     * see Using a group to manage Azure AD role assignmentsReturned by default. Supports $filter (eq, ne, not).
+     * be set while creating the group and is immutable. If set to true, the securityEnabled property must also be set to
+     * true, visibility must be Hidden, and the group cannot be a dynamic group (that is, groupTypes cannot contain
+     * DynamicMembership). Only callers in Global Administrator and Privileged Role Administrator roles can set this property.
+     * The caller must also be assigned the RoleManagement.ReadWrite.Directory permission to set this property or update the
+     * membership of such groups. For more, see Using a group to manage Azure AD role assignmentsReturned by default. Supports
+     * $filter (eq, ne, not).
      */
     isAssignableToRole?: NullableOption<boolean>;
     /**
@@ -5903,6 +5922,13 @@ export interface PlannerGroup extends Entity {
 }
 export interface Security extends Entity {
     cases?: NullableOption<SecurityNamespace.CasesRoot>;
+    // A collection of alerts in Microsoft 365 Defender.
+    alerts_v2?: NullableOption<SecurityNamespace.Alert[]>;
+    /**
+     * A collection of incidents in Microsoft 365 Defender, each of which is a set of correlated alerts and associated
+     * metadata that reflects the story of an attack.
+     */
+    incidents?: NullableOption<SecurityNamespace.Incident[]>;
     attackSimulation?: NullableOption<AttackSimulationRoot>;
     alerts?: NullableOption<Alert[]>;
     secureScoreControlProfiles?: NullableOption<SecureScoreControlProfile[]>;
@@ -6608,8 +6634,8 @@ export interface Device extends DirectoryObject {
      */
     complianceExpirationDateTime?: NullableOption<string>;
     /**
-     * Unique identifier set by Azure Device Registration Service at the time of registration. Supports $filter (eq, ne, not,
-     * startsWith).
+     * Unique identifier set by Azure Device Registration Service at the time of registration. This is an alternate key that
+     * can be used to reference the device object. Supports $filter (eq, ne, not, startsWith).
      */
     deviceId?: NullableOption<string>;
     // For internal use only. Set to null.
@@ -7546,7 +7572,9 @@ export interface SubscribedSku extends Entity {
 export interface EducationAssignment extends Entity {
     /**
      * Optional field to control the assignment behavior for students who are added after the assignment is published. If not
-     * specified, defaults to none value. Currently supports only two values: none or assignIfOpen.
+     * specified, defaults to none. Supported values are: none, assignIfOpen. For example, a teacher can use assignIfOpen to
+     * indicate that an assignment should be assigned to any new student who joins the class while the assignment is still
+     * open, and none to indicate that an assignment should not be assigned to new students.
      */
     addedStudentAction?: NullableOption<EducationAddedStudentAction>;
     /**
@@ -8112,7 +8140,8 @@ export interface Subscription extends Entity {
      * Required. Indicates the type of change in the subscribed resource that will raise a change notification. The supported
      * values are: created, updated, deleted. Multiple values can be combined using a comma-separated list. Note: Drive root
      * item and list change notifications support only the updated changeType. User and group change notifications support
-     * updated and deleted changeType.
+     * updated and deleted changeType. Use updated to receive notifications when user or group is created, updated or soft
+     * deleted. Use deleted to receive notifications when user or group is permanently deleted.
      */
     changeType?: string;
     /**
@@ -8155,8 +8184,8 @@ export interface Subscription extends Entity {
      */
     latestSupportedTlsVersion?: NullableOption<string>;
     /**
-     * Optional. The URL of the endpoint that receives lifecycle notifications, including subscriptionRemoved and missed
-     * notifications. This URL must make use of the HTTPS protocol.
+     * Optional. The URL of the endpoint that receives lifecycle notifications, including subscriptionRemoved,
+     * reauthorizationRequired, and missed notifications. This URL must make use of the HTTPS protocol.
      */
     lifecycleNotificationUrl?: NullableOption<string>;
     /**
@@ -8164,7 +8193,8 @@ export interface Subscription extends Entity {
      * resource reaches the state matching the query options provided here. With this new property in the subscription
      * creation payload along with all existing properties, Webhooks will deliver notifications whenever a resource reaches
      * the desired state mentioned in the notificationQueryOptions property. For example, when the print job is completed or
-     * when a print job resource isFetchable property value becomes true etc.
+     * when a print job resource isFetchable property value becomes true etc. Supported only for Universal Print Service. For
+     * more information, see Subscribe to change notifications from cloud printing APIs using Microsoft Graph.
      */
     notificationQueryOptions?: NullableOption<string>;
     /**
@@ -9619,8 +9649,9 @@ export interface AccessPackageAssignmentRequest extends Entity {
     createdDateTime?: NullableOption<string>;
     /**
      * The type of the request. The possible values are: notSpecified, userAdd, UserExtend, userUpdate, userRemove, adminAdd,
-     * adminUpdate, adminRemove, systemAdd, systemUpdate, systemRemove, onBehalfAdd, unknownFutureValue. A request from the
-     * user themselves would have requestType of userAdd, userUpdate or userRemove. This property cannot be changed once set.
+     * adminUpdate, adminRemove, systemAdd, systemUpdate, systemRemove, onBehalfAdd (not supported), unknownFutureValue. A
+     * request from the user themselves would have requestType of userAdd, userUpdate or userRemove. This property cannot be
+     * changed once set.
      */
     requestType?: NullableOption<AccessPackageRequestType>;
     // The range of dates that access is to be assigned to the requestor. This property cannot be changed once set.
@@ -9902,8 +9933,12 @@ export interface CountryNamedLocation extends NamedLocation {
 export interface IdentityProtectionRoot {
     // Risk detection in Azure AD Identity Protection and the associated information about the detection.
     riskDetections?: NullableOption<RiskDetection[]>;
+    // Azure AD service principals that are at risk.
+    riskyServicePrincipals?: NullableOption<RiskyServicePrincipal[]>;
     // Users that are flagged as at-risk by Azure AD Identity Protection.
     riskyUsers?: NullableOption<RiskyUser[]>;
+    // Represents information about detected at-risk service principals in an Azure AD tenant.
+    servicePrincipalRiskDetections?: NullableOption<ServicePrincipalRiskDetection[]>;
 }
 export interface RiskDetection extends Entity {
     // Indicates the activity type the detected risk is linked to. Possible values are: signin, user, unknownFutureValue.
@@ -9991,6 +10026,47 @@ export interface RiskDetection extends Entity {
     // The user principal name (UPN) of the user.
     userPrincipalName?: NullableOption<string>;
 }
+export interface RiskyServicePrincipal extends Entity {
+    // The globally unique identifier for the associated application (its appId property), if any.
+    appId?: NullableOption<string>;
+    // The display name for the service principal.
+    displayName?: NullableOption<string>;
+    // true if the service principal account is enabled; otherwise, false.
+    isEnabled?: NullableOption<boolean>;
+    // Indicates whether Azure AD is currently processing the service principal's risky state.
+    isProcessing?: NullableOption<boolean>;
+    /**
+     * Details of the detected risk. Note: Details for this property are only available for Workload Identities Premium
+     * customers. Events in tenants without this license will be returned hidden. The possible values are: none, hidden,
+     * unknownFutureValue, adminConfirmedServicePrincipalCompromised, adminDismissedAllRiskForServicePrincipal. Note that you
+     * must use the Prefer: include-unknown-enum-members request header to get the following value(s) in this evolvable enum:
+     * adminConfirmedServicePrincipalCompromised , adminDismissedAllRiskForServicePrincipal.
+     */
+    riskDetail?: NullableOption<RiskDetail>;
+    /**
+     * The date and time that the risk state was last updated. The DateTimeOffset type represents date and time information
+     * using ISO 8601 format and is always in UTC time. For example, midnight UTC on Jan 1, 2021 is 2021-01-01T00:00:00Z.
+     * Supports $filter (eq).
+     */
+    riskLastUpdatedDateTime?: NullableOption<string>;
+    /**
+     * Level of the detected risky workload identity. The possible values are: low, medium, high, hidden, none,
+     * unknownFutureValue. Supports $filter (eq).
+     */
+    riskLevel?: NullableOption<RiskLevel>;
+    /**
+     * State of the service principal's risk. The possible values are: none, confirmedSafe, remediated, dismissed, atRisk,
+     * confirmedCompromised, unknownFutureValue.
+     */
+    riskState?: NullableOption<RiskState>;
+    /**
+     * Identifies whether the service principal represents an Application, a ManagedIdentity, or a legacy application
+     * (socialIdp). This is set by Azure AD internally and is inherited from servicePrincipal.
+     */
+    servicePrincipalType?: NullableOption<string>;
+    // Represents the risk history of Azure AD service principals.
+    history?: NullableOption<RiskyServicePrincipalHistoryItem[]>;
+}
 export interface RiskyUser extends Entity {
     // Indicates whether the user is deleted. Possible values are: true, false.
     isDeleted?: NullableOption<boolean>;
@@ -10022,6 +10098,87 @@ export interface RiskyUser extends Entity {
     // The activity related to user risk level change
     history?: NullableOption<RiskyUserHistoryItem[]>;
 }
+export interface ServicePrincipalRiskDetection extends Entity {
+    /**
+     * Indicates the activity type the detected risk is linked to. The possible values are: signin, servicePrincipal. Note
+     * that you must use the Prefer: include-unknown-enum-members request header to get the following value(s) in this
+     * evolvable enum: servicePrincipal.
+     */
+    activity?: NullableOption<ActivityType>;
+    /**
+     * Date and time when the risky activity occurred. The DateTimeOffset type represents date and time information using ISO
+     * 8601 format and is always in UTC time. For example, midnight UTC on Jan 1, 2014 is 2014-01-01T00:00:00Z
+     */
+    activityDateTime?: NullableOption<string>;
+    /**
+     * Additional information associated with the risk detection. This string value is represented as a JSON object with the
+     * quotations escaped.
+     */
+    additionalInfo?: NullableOption<string>;
+    // The unique identifier for the associated application.
+    appId?: NullableOption<string>;
+    /**
+     * Correlation ID of the sign-in activity associated with the risk detection. This property is null if the risk detection
+     * is not associated with a sign-in activity.
+     */
+    correlationId?: NullableOption<string>;
+    /**
+     * Date and time when the risk was detected. The DateTimeOffset type represents date and time information using ISO 8601
+     * format and is always in UTC time. For example, midnight UTC on Jan 1, 2014 is 2014-01-01T00:00:00Z.
+     */
+    detectedDateTime?: NullableOption<string>;
+    /**
+     * Timing of the detected risk , whether real-time or offline. The possible values are: notDefined, realtime,
+     * nearRealtime, offline, unknownFutureValue.
+     */
+    detectionTimingType?: NullableOption<RiskDetectionTimingType>;
+    // Provides the IP address of the client from where the risk occurred.
+    ipAddress?: NullableOption<string>;
+    // The unique identifier for the key credential associated with the risk detection.
+    keyIds?: NullableOption<string[]>;
+    // Date and time when the risk detection was last updated.
+    lastUpdatedDateTime?: NullableOption<string>;
+    // Location from where the sign-in was initiated.
+    location?: NullableOption<SignInLocation>;
+    /**
+     * Request identifier of the sign-in activity associated with the risk detection. This property is null if the risk
+     * detection is not associated with a sign-in activity. Supports $filter (eq).
+     */
+    requestId?: NullableOption<string>;
+    /**
+     * Details of the detected risk. Note: Details for this property are only available for Workload Identities Premium
+     * customers. Events in tenants without this license will be returned hidden. The possible values are: none, hidden,
+     * adminConfirmedServicePrincipalCompromised, adminDismissedAllRiskForServicePrincipal. Note that you must use the Prefer:
+     * include-unknown-enum-members request header to get the following value(s) in this evolvable enum:
+     * adminConfirmedServicePrincipalCompromised , adminDismissedAllRiskForServicePrincipal.
+     */
+    riskDetail?: NullableOption<RiskDetail>;
+    /**
+     * The type of risk event detected. The possible values are: investigationsThreatIntelligence, generic,
+     * adminConfirmedServicePrincipalCompromised, suspiciousSignins, leakedCredentials, anomalousServicePrincipalActivity,
+     * maliciousApplication, suspiciousApplication.
+     */
+    riskEventType?: NullableOption<string>;
+    /**
+     * Level of the detected risk. Note: Details for this property are only available for Workload Identities Premium
+     * customers. Events in tenants without this license will be returned hidden. The possible values are: low, medium, high,
+     * hidden, none.
+     */
+    riskLevel?: NullableOption<RiskLevel>;
+    /**
+     * The state of a detected risky service principal or sign-in activity. The possible values are: none, dismissed, atRisk,
+     * confirmedCompromised.
+     */
+    riskState?: NullableOption<RiskState>;
+    // The display name for the service principal.
+    servicePrincipalDisplayName?: NullableOption<string>;
+    // The unique identifier for the service principal. Supports $filter (eq).
+    servicePrincipalId?: NullableOption<string>;
+    // Source of the risk detection. For example, identityProtection.
+    source?: NullableOption<string>;
+    // Indicates the type of token issuer for the detected sign-in risk. The possible values are: AzureAD.
+    tokenIssuerType?: NullableOption<TokenIssuerType>;
+}
 // tslint:disable-next-line: interface-name
 export interface IpNamedLocation extends NamedLocation {
     /**
@@ -10031,6 +10188,12 @@ export interface IpNamedLocation extends NamedLocation {
     ipRanges?: IpRange[];
     // true if this location is explicitly trusted. Optional. Default value is false.
     isTrusted?: boolean;
+}
+export interface RiskyServicePrincipalHistoryItem extends RiskyServicePrincipal {
+    // The activity related to service principal risk level change.
+    activity?: NullableOption<RiskServicePrincipalActivity>;
+    // The identifier of the actor of the operation.
+    initiatedBy?: NullableOption<string>;
 }
 export interface RiskyUserHistoryItem extends RiskyUser {
     // The activity related to user risk level change.
@@ -14445,7 +14608,10 @@ export interface PlannerBucket extends Entity {
     tasks?: NullableOption<PlannerTask[]>;
 }
 export interface PlannerPlan extends Entity {
-    // Identifies the container of the plan. After it is set, this property can’t be updated. Required.
+    /**
+     * Identifies the container of the plan. Specify only the url, the containerId and type, or all properties. After it is
+     * set, this property can’t be updated. Required.
+     */
     container?: NullableOption<PlannerPlanContainer>;
     // Read-only. The user who created the plan.
     createdBy?: NullableOption<IdentitySet>;
@@ -14554,7 +14720,10 @@ export interface PlannerAssignedToTaskBoardTaskFormat extends Entity {
     unassignedOrderHint?: NullableOption<string>;
 }
 export interface PlannerBucketTaskBoardTaskFormat extends Entity {
-    // Hint used to order tasks in the Bucket view of the Task Board. The format is defined as outlined here.
+    /**
+     * Hint used to order tasks in the bucket view of the task board. For details about the supported format, see Using order
+     * hints in Planner.
+     */
     orderHint?: NullableOption<string>;
 }
 export interface PlannerPlanDetails extends Entity {
@@ -17390,9 +17559,13 @@ export interface EducationSubmissionIndividualRecipient extends EducationSubmiss
     userId?: NullableOption<string>;
 }
 export interface EducationTeamsAppResource extends EducationResource {
+    // URL that points to the icon of the app.
     appIconWebUrl?: NullableOption<string>;
+    // Teams app ID of the application.
     appId?: NullableOption<string>;
+    // URL for the app resource that will be opened by Teams.
     teamsEmbeddedContentUrl?: NullableOption<string>;
+    // URL for the app resource that can be opened in the browser.
     webUrl?: NullableOption<string>;
 }
 export interface EducationWordResource extends EducationResource {
@@ -19052,6 +19225,7 @@ export interface ConditionalAccessConditionSet {
     locations?: NullableOption<ConditionalAccessLocations>;
     // Platforms included in and excluded from the policy.
     platforms?: NullableOption<ConditionalAccessPlatforms>;
+    // Service principal risk levels included in the policy. Possible values are: low, medium, high, none, unknownFutureValue.
     servicePrincipalRiskLevels?: RiskLevel[];
     /**
      * Sign-in risk levels included in the policy. Possible values are: low, medium, high, hidden, none, unknownFutureValue.
@@ -19063,7 +19237,7 @@ export interface ConditionalAccessConditionSet {
      * Required.
      */
     userRiskLevels?: RiskLevel[];
-    // Users, groups, and roles included in and excluded from the policy. Required.
+    // Users, groups, and roles included in and excluded from the policy. Either users or clientApplications is required.
     users?: NullableOption<ConditionalAccessUsers>;
 }
 export interface ConditionalAccessDevices {
@@ -19175,6 +19349,17 @@ export interface IPv4CidrRange extends IpRange {
 export interface IPv6CidrRange extends IpRange {
     // IPv6 address in CIDR notation. Not nullable.
     cidrAddress?: string;
+}
+export interface RiskServicePrincipalActivity {
+    /**
+     * Details of the detected risk. Note: Details for this property are only available for Workload Identities Premium
+     * customers. Events in tenants without this license will be returned hidden. The possible values are: none, hidden,
+     * adminConfirmedServicePrincipalCompromised, adminDismissedAllRiskForServicePrincipal. Note that you must use the Prefer:
+     * include-unknown-enum-members request header to get the following value(s) in this evolvable enum:
+     * adminConfirmedServicePrincipalCompromised , adminDismissedAllRiskForServicePrincipal.
+     */
+    detail?: NullableOption<RiskDetail>;
+    riskEventTypes?: NullableOption<string[]>;
 }
 export interface RiskUserActivity {
     /**
@@ -19378,6 +19563,11 @@ export interface AzureActiveDirectoryTenant extends IdentitySource {
     // The name of the Azure Active Directory tenant. Read only.
     displayName?: NullableOption<string>;
     // The ID of the Azure Active Directory tenant. Read only.
+    tenantId?: NullableOption<string>;
+}
+export interface CrossCloudAzureActiveDirectoryTenant extends IdentitySource {
+    cloudInstance?: string;
+    displayName?: NullableOption<string>;
     tenantId?: NullableOption<string>;
 }
 export interface DomainIdentitySource extends IdentitySource {
@@ -20951,15 +21141,15 @@ export interface PlannerExternalReferences {}
 // tslint:disable-next-line: no-empty-interface
 export interface PlannerOrderHintsByAssignee {}
 export interface PlannerPlanContainer {
-    // The identifier of the resource that contains the plan.
+    // The identifier of the resource that contains the plan. Optional.
     containerId?: NullableOption<string>;
     /**
      * The type of the resource that contains the plan. For supported types, see the previous table. Possible values are:
      * group, unknownFutureValue, roster. Note that you must use the Prefer: include-unknown-enum-members request header to
-     * get the following value in this evolvable enum: roster.
+     * get the following value in this evolvable enum: roster. Optional.
      */
     type?: NullableOption<PlannerContainerType>;
-    // The full canonical URL of the container.
+    // The full canonical URL of the container. Optional.
     url?: NullableOption<string>;
 }
 // tslint:disable-next-line: no-empty-interface
@@ -21062,7 +21252,7 @@ export interface Diagnostic {
     url?: NullableOption<string>;
 }
 export interface ExternalLink {
-    // The url of the link.
+    // The URL of the link.
     href?: NullableOption<string>;
 }
 export interface OnenoteOperationError {
@@ -23813,8 +24003,222 @@ export namespace SecurityNamespace {
     type PurgeAreas = "mailboxes" | "teamsMessages" | "unknownFutureValue";
     type PurgeType = "recoverable" | "permanentlyDeleted" | "unknownFutureValue";
     type SourceType = "mailbox" | "site" | "unknownFutureValue";
+    type AlertClassification =
+        | "unknown"
+        | "falsePositive"
+        | "truePositive"
+        | "informationalExpectedActivity"
+        | "unknownFutureValue";
+    type AlertDetermination =
+        | "unknown"
+        | "apt"
+        | "malware"
+        | "securityPersonnel"
+        | "securityTesting"
+        | "unwantedSoftware"
+        | "other"
+        | "multiStagedAttack"
+        | "compromisedAccount"
+        | "phishing"
+        | "maliciousUserActivity"
+        | "notMalicious"
+        | "notEnoughDataToValidate"
+        | "confirmedActivity"
+        | "lineOfBusinessApplication"
+        | "unknownFutureValue";
+    type AlertSeverity = "unknown" | "informational" | "low" | "medium" | "high" | "unknownFutureValue";
+    type AlertStatus = "unknown" | "new" | "inProgress" | "resolved" | "unknownFutureValue";
+    type DefenderAvStatus =
+        | "notReporting"
+        | "disabled"
+        | "notUpdated"
+        | "updated"
+        | "unknown"
+        | "notSupported"
+        | "unknownFutureValue";
+    type DetectionSource =
+        | "unknown"
+        | "microsoftDefenderForEndpoint"
+        | "antivirus"
+        | "smartScreen"
+        | "customTi"
+        | "microsoftDefenderForOffice365"
+        | "automatedInvestigation"
+        | "microsoftThreatExperts"
+        | "customDetection"
+        | "microsoftDefenderForIdentity"
+        | "cloudAppSecurity"
+        | "microsoft365Defender"
+        | "azureAdIdentityProtection"
+        | "manual"
+        | "microsoftDataLossPrevention"
+        | "appGovernancePolicy"
+        | "appGovernanceDetection"
+        | "unknownFutureValue";
+    type DetectionStatus = "detected" | "blocked" | "prevented" | "unknownFutureValue";
+    type DeviceHealthStatus =
+        | "active"
+        | "inactive"
+        | "impairedCommunication"
+        | "noSensorData"
+        | "noSensorDataImpairedCommunication"
+        | "unknown"
+        | "unknownFutureValue";
+    type DeviceRiskScore = "none" | "informational" | "low" | "medium" | "high" | "unknownFutureValue";
+    type EvidenceRemediationStatus = "none" | "remediated" | "prevented" | "blocked" | "notFound" | "unknownFutureValue";
+    type EvidenceRole =
+        | "unknown"
+        | "contextual"
+        | "scanned"
+        | "source"
+        | "destination"
+        | "created"
+        | "added"
+        | "compromised"
+        | "edited"
+        | "attacked"
+        | "attacker"
+        | "commandAndControl"
+        | "loaded"
+        | "suspicious"
+        | "policyViolator"
+        | "unknownFutureValue";
+    type EvidenceVerdict = "unknown" | "suspicious" | "malicious" | "noThreatsFound" | "unknownFutureValue";
+    type IncidentStatus = "active" | "resolved" | "redirected" | "unknownFutureValue";
+    type OnboardingStatus = "insufficientInfo" | "onboarded" | "canBeOnboarded" | "unsupported" | "unknownFutureValue";
+    type ServiceSource =
+        | "unknown"
+        | "microsoftDefenderForEndpoint"
+        | "microsoftDefenderForIdentity"
+        | "microsoftDefenderForCloudApps"
+        | "microsoftDefenderForOffice365"
+        | "microsoft365Defender"
+        | "azureAdIdentityProtection"
+        | "microsoftAppGovernance"
+        | "dataLossPrevention"
+        | "unknownFutureValue";
+    type VmCloudProvider = "unknown" | "azure" | "unknownFutureValue";
     interface CasesRoot extends microsoftgraph.Entity {
         ediscoveryCases?: NullableOption<EdiscoveryCase[]>;
+    }
+    interface Alert extends microsoftgraph.Entity {
+        // The adversary or activity group that is associated with this alert.
+        actorDisplayName?: NullableOption<string>;
+        // URL for the alert page in the Microsoft 365 Defender portal.
+        alertWebUrl?: NullableOption<string>;
+        // Owner of the alert, or null if no owner is assigned.
+        assignedTo?: NullableOption<string>;
+        // The attack kill-chain category that the alert belongs to. Aligned with the MITRE ATT&amp;CK framework.
+        category?: NullableOption<string>;
+        /**
+         * Specifies whether the alert represents a true threat. Possible values are: unknown, falsePositive, truePositive,
+         * benignPositive, unknownFutureValue.
+         */
+        classification?: NullableOption<AlertClassification>;
+        // Array of comments created by the Security Operations (SecOps) team during the alert management process.
+        comments?: NullableOption<AlertComment[]>;
+        // Time when Microsoft 365 Defender created the alert.
+        createdDateTime?: NullableOption<string>;
+        // String value describing each alert.
+        description?: NullableOption<string>;
+        // Detection technology or sensor that identified the notable component or activity.
+        detectionSource?: NullableOption<DetectionSource>;
+        // The ID of the detector that triggered the alert.
+        detectorId?: NullableOption<string>;
+        /**
+         * Specifies the result of the investigation, whether the alert represents a true attack and if so, the nature of the
+         * attack. Possible values are: unknown, apt, malware, securityPersonnel, securityTesting, unwantedSoftware, other,
+         * multiStagedAttack, compromisedUser, phishing, maliciousUserActivity, clean, insufficientData, confirmedUserActivity,
+         * lineOfBusinessApplication, unknownFutureValue.
+         */
+        determination?: NullableOption<AlertDetermination>;
+        // Collection of evidence related to the alert.
+        evidence?: NullableOption<AlertEvidence[]>;
+        // The earliest activity associated with the alert.
+        firstActivityDateTime?: NullableOption<string>;
+        // Unique identifier to represent the incident this alert resource is associated with.
+        incidentId?: NullableOption<string>;
+        // URL for the incident page in the Microsoft 365 Defender portal.
+        incidentWebUrl?: NullableOption<string>;
+        // The oldest activity associated with the alert.
+        lastActivityDateTime?: NullableOption<string>;
+        // Time when the alert was last updated at Microsoft 365 Defender.
+        lastUpdateDateTime?: NullableOption<string>;
+        // The attack techniques, as aligned with the MITRE ATT&amp;CK framework.
+        mitreTechniques?: NullableOption<string[]>;
+        // The ID of the alert as it appears in the security provider product that generated the alert.
+        providerAlertId?: NullableOption<string>;
+        // Recommended response and remediation actions to take in the event this alert was generated.
+        recommendedActions?: NullableOption<string>;
+        // Time when the alert was resolved.
+        resolvedDateTime?: NullableOption<string>;
+        /**
+         * The service or product that created this alert. Possible values are: microsoftDefenderForEndpoint,
+         * microsoftDefenderForIdentity, microsoftCloudAppSecurity, microsoftDefenderForOffice365, microsoft365Defender,
+         * aadIdentityProtection, appGovernance, dataLossPrevention.
+         */
+        serviceSource?: ServiceSource;
+        /**
+         * Indicates the possible impact on assets. The higher the severity the bigger the impact. Typically higher severity items
+         * require the most immediate attention. Possible values are: unknown, informational, low, medium, high,
+         * unknownFutureValue.
+         */
+        severity?: AlertSeverity;
+        // The status of the alert. Possible values are: new, inProgress, resolved, unknownFutureValue.
+        status?: AlertStatus;
+        // The Azure Active Directory tenant the alert was created in.
+        tenantId?: NullableOption<string>;
+        // The threat associated with this alert.
+        threatDisplayName?: NullableOption<string>;
+        // Threat family associated with this alert.
+        threatFamilyName?: NullableOption<string>;
+        // Brief identifying string value describing the alert.
+        title?: NullableOption<string>;
+    }
+// tslint:disable-next-line: interface-name
+    interface Incident extends microsoftgraph.Entity {
+        // Owner of the incident, or null if no owner is assigned. Free editable text.
+        assignedTo?: NullableOption<string>;
+        /**
+         * The specification for the incident. Possible values are: unknown, falsePositive, truePositive,
+         * informationalExpectedActivity, unknownFutureValue.
+         */
+        classification?: NullableOption<AlertClassification>;
+        // Array of comments created by the Security Operations (SecOps) team when the incident is managed.
+        comments?: NullableOption<AlertComment[]>;
+        // Time when the incident was first created.
+        createdDateTime?: string;
+        // Array of custom tags associated with an incident.
+        customTags?: NullableOption<string[]>;
+        /**
+         * Specifies the determination of the incident. Possible values are: unknown, apt, malware, securityPersonnel,
+         * securityTesting, unwantedSoftware, other, multiStagedAttack, compromisedUser, phishing, maliciousUserActivity, clean,
+         * insufficientData, confirmedUserActivity, lineOfBusinessApplication, unknownFutureValue.
+         */
+        determination?: NullableOption<AlertDetermination>;
+        // The incident name.
+        displayName?: NullableOption<string>;
+        // The URL for the incident page in the Microsoft 365 Defender portal.
+        incidentWebUrl?: NullableOption<string>;
+        // Time when the incident was last updated.
+        lastUpdateDateTime?: string;
+        /**
+         * Only populated in case an incident is grouped together with another incident, as part of the logic that processes
+         * incidents. In such a case, the status property is redirected.
+         */
+        redirectIncidentId?: NullableOption<string>;
+        /**
+         * Indicates the possible impact on assets. The higher the severity, the bigger the impact. Typically higher severity
+         * items require the most immediate attention. Possible values are: unknown, informational, low, medium, high,
+         * unknownFutureValue.
+         */
+        severity?: AlertSeverity;
+        // The status of the incident. Possible values are: active, resolved, redirected, unknownFutureValue.
+        status?: IncidentStatus;
+        // The Azure Active Directory tenant in which the alert was created.
+        tenantId?: NullableOption<string>;
+        // The list of related alerts. Supports $expand.
+        alerts?: NullableOption<Alert[]>;
     }
     interface Case extends microsoftgraph.Entity {
         createdDateTime?: NullableOption<string>;
@@ -24075,6 +24479,306 @@ export namespace SecurityNamespace {
          * themes.
          */
         topicCount?: NullableOption<number>;
+    }
+    interface AlertComment {
+        // The comment text.
+        comment?: NullableOption<string>;
+        // The person or app name that submitted the comment.
+        createdByDisplayName?: NullableOption<string>;
+        // The time when the comment was submitted.
+        createdDateTime?: string;
+    }
+    interface AlertEvidence {
+        // The time the evidence was created and added to the alert.
+        createdDateTime?: string;
+        /**
+         * Status of the remediation action taken. The possible values are: none, remediated, prevented, blocked, notFound,
+         * unknownFutureValue.
+         */
+        remediationStatus?: EvidenceRemediationStatus;
+        // Details about the remediation status.
+        remediationStatusDetails?: NullableOption<string>;
+        /**
+         * The role/s that an evidence entity represents in an alert, e.g., an IP address that is associated with an attacker will
+         * have the evidence role 'Attacker'.
+         */
+        roles?: EvidenceRole[];
+        /**
+         * Array of custom tags associated with an evidence instance, for example to denote a group of devices, high value assets,
+         * etc.
+         */
+        tags?: NullableOption<string[]>;
+        /**
+         * The decision reached by automated investigation. The possible values are: unknown, suspicious, malicious,
+         * noThreatsFound, unknownFutureValue.
+         */
+        verdict?: EvidenceVerdict;
+    }
+    interface AnalyzedMessageEvidence extends AlertEvidence {
+        // Direction of the email relative to your network. The possible values are: inbound, outbound or intraorg.
+        antiSpamDirection?: NullableOption<string>;
+        // Number of attachments in the email.
+        attachmentsCount?: NullableOption<number>;
+        // Delivery action of the email. The possible values are: delivered, deliveredAsSpam, junked, blocked, or replaced.
+        deliveryAction?: NullableOption<string>;
+        /**
+         * Location where the email was delivered. The possible values are: inbox, external, junkFolder, quarantine, failed,
+         * dropped, deletedFolder or forwarded.
+         */
+        deliveryLocation?: NullableOption<string>;
+        // Public-facing identifier for the email that is set by the sending email system.
+        internetMessageId?: NullableOption<string>;
+        // Detected language of the email content.
+        language?: NullableOption<string>;
+        // Unique identifier for the email, generated by Microsoft 365.
+        networkMessageId?: NullableOption<string>;
+        // The P1 sender.
+        p1Sender?: NullableOption<EmailSender>;
+        // The P2 sender.
+        p2Sender?: NullableOption<EmailSender>;
+        // Date and time when the email was received.
+        receivedDateTime?: NullableOption<string>;
+        // Email address of the recipient, or email address of the recipient after distribution list expansion.
+        recipientEmailAddress?: NullableOption<string>;
+        // IP address of the last detected mail server that relayed the message.
+        senderIp?: NullableOption<string>;
+        // Subject of the email.
+        subject?: NullableOption<string>;
+        // Collection of methods used to detect malware, phishing, or other threats found in the email.
+        threatDetectionMethods?: NullableOption<string[]>;
+        // Collection of detection names for malware or other threats found.
+        threats?: NullableOption<string[]>;
+        // Number of embedded URLs in the email.
+        urlCount?: NullableOption<number>;
+        // Collection of the URLs contained in this email.
+        urls?: NullableOption<string[]>;
+        // Uniform resource name (URN) of the automated investigation where the cluster was identified.
+        urn?: NullableOption<string>;
+    }
+    interface EmailSender {
+        // The name of the sender.
+        displayName?: NullableOption<string>;
+        // Sender domain.
+        domainName?: NullableOption<string>;
+        // Sender email address.
+        emailAddress?: NullableOption<string>;
+    }
+    interface CloudApplicationEvidence extends AlertEvidence {
+        // Unique identifier of the application.
+        appId?: NullableOption<number>;
+        // Name of the application.
+        displayName?: NullableOption<string>;
+        // Identifier of the instance of the Software as a Service (SaaS) application.
+        instanceId?: NullableOption<number>;
+        // Name of the instance of the SaaS application.
+        instanceName?: NullableOption<string>;
+        // The identifier of the SaaS application.
+        saasAppId?: NullableOption<number>;
+    }
+    interface DeviceEvidence extends AlertEvidence {
+        // A unique identifier assigned to a device by Azure Active Directory (Azure AD) when device is Azure AD-joined.
+        azureAdDeviceId?: NullableOption<string>;
+        /**
+         * State of the Defender AntiMalware engine. The possible values are: notReporting, disabled, notUpdated, updated,
+         * unknown, notSupported, unknownFutureValue.
+         */
+        defenderAvStatus?: NullableOption<DefenderAvStatus>;
+        // The fully qualified domain name (FQDN) for the device.
+        deviceDnsName?: NullableOption<string>;
+        // The date and time when the device was first seen.
+        firstSeenDateTime?: NullableOption<string>;
+        /**
+         * The health state of the device.The possible values are: active, inactive, impairedCommunication, noSensorData,
+         * noSensorDataImpairedCommunication, unknown, unknownFutureValue.
+         */
+        healthStatus?: NullableOption<DeviceHealthStatus>;
+        // Users that were logged on the machine during the time of the alert.
+        loggedOnUsers?: NullableOption<LoggedOnUser[]>;
+        // A unique identifier assigned to a device by Microsoft Defender for Endpoint.
+        mdeDeviceId?: NullableOption<string>;
+        /**
+         * The status of the machine onboarding to Microsoft Defender for Endpoint.The possible values are: insufficientInfo,
+         * onboarded, canBeOnboarded, unsupported, unknownFutureValue.
+         */
+        onboardingStatus?: NullableOption<OnboardingStatus>;
+        // The build version for the operating system the device is running.
+        osBuild?: NullableOption<number>;
+        // The operating system platform the device is running.
+        osPlatform?: NullableOption<string>;
+        // The ID of the role-based access control (RBAC) device group.
+        rbacGroupId?: NullableOption<number>;
+        // The name of the RBAC device group.
+        rbacGroupName?: NullableOption<string>;
+        /**
+         * Risk score as evaluated by Microsoft Defender for Endpoint. The possible values are: none, informational, low, medium,
+         * high, unknownFutureValue.
+         */
+        riskScore?: NullableOption<DeviceRiskScore>;
+        // The version of the operating system platform.
+        version?: NullableOption<string>;
+        // Metadata of the virtual machine (VM) on which Microsoft Defender for Endpoint is running.
+        vmMetadata?: NullableOption<VmMetadata>;
+    }
+    interface LoggedOnUser {
+        // User account name of the logged-on user.
+        accountName?: NullableOption<string>;
+        // User account domain of the logged-on user.
+        domainName?: NullableOption<string>;
+    }
+    interface VmMetadata {
+        // The cloud provider hosting the virtual machine. The possible values are: unknown, azure, unknownFutureValue.
+        cloudProvider?: VmCloudProvider;
+        // Unique identifier of the Azure resource.
+        resourceId?: NullableOption<string>;
+        // Unique identifier of the Azure subscription the customer tenant belongs to.
+        subscriptionId?: NullableOption<string>;
+        // Unique identifier of the virtual machine instance.
+        vmId?: NullableOption<string>;
+    }
+    interface FileDetails {
+        // The name of the file.
+        fileName?: NullableOption<string>;
+        // The file path (location) of the file instance.
+        filePath?: NullableOption<string>;
+        // The publisher of the file.
+        filePublisher?: NullableOption<string>;
+        // The size of the file in bytes.
+        fileSize?: NullableOption<number>;
+        // The certificate authority (CA) that issued the certificate.
+        issuer?: NullableOption<string>;
+        // The Sha1 cryptographic hash of the file content.
+        sha1?: NullableOption<string>;
+        // The Sha256 cryptographic hash of the file content.
+        sha256?: NullableOption<string>;
+        // The signer of the signed file.
+        signer?: NullableOption<string>;
+    }
+    interface FileEvidence extends AlertEvidence {
+        // The status of the detection.The possible values are: detected, blocked, prevented, unknownFutureValue.
+        detectionStatus?: NullableOption<DetectionStatus>;
+        // The file details.
+        fileDetails?: NullableOption<FileDetails>;
+        // A unique identifier assigned to a device by Microsoft Defender for Endpoint.
+        mdeDeviceId?: NullableOption<string>;
+    }
+    interface HuntingQueryResults {
+        // The results of the hunting query.
+        results?: NullableOption<HuntingRowResult[]>;
+        // The schema for the response.
+        schema?: NullableOption<SinglePropertySchema[]>;
+    }
+// tslint:disable-next-line: no-empty-interface
+    interface HuntingRowResult {}
+    interface SinglePropertySchema {
+        // The name of the property.
+        name?: NullableOption<string>;
+        // The type of the property.
+        type?: NullableOption<string>;
+    }
+// tslint:disable-next-line: interface-name
+    interface IpEvidence extends AlertEvidence {
+        // The two-letter country code according to ISO 3166 format, for example: US, UK, CA, etc..).
+        countryLetterCode?: NullableOption<string>;
+        // The value of the IP Address, can be either in V4 address or V6 address format.
+        ipAddress?: NullableOption<string>;
+    }
+    interface MailboxEvidence extends AlertEvidence {
+        // The name associated with the mailbox.
+        displayName?: NullableOption<string>;
+        // The primary email address of the mailbox.
+        primaryAddress?: NullableOption<string>;
+        // The user account of the mailbox.
+        userAccount?: NullableOption<UserAccount>;
+    }
+    interface UserAccount {
+        // The user account's displayed name.
+        accountName?: NullableOption<string>;
+        // The user object identifier in Azure AD.
+        azureAdUserId?: NullableOption<string>;
+        // The name of the Active Directory domain of which the user is a member.
+        domainName?: NullableOption<string>;
+        // The user principal name of the account in Azure AD.
+        userPrincipalName?: NullableOption<string>;
+        // The local security identifier of the user account.
+        userSid?: NullableOption<string>;
+    }
+    interface MailClusterEvidence extends AlertEvidence {
+        // The clustering logic of the emails inside the cluster.
+        clusterBy?: NullableOption<string>;
+        // The value utilized to cluster the similar emails.
+        clusterByValue?: NullableOption<string>;
+        // Count of emails in the email cluster.
+        emailCount?: NullableOption<number>;
+        // Unique identifiers for the emails in the cluster, generated by Microsoft 365.
+        networkMessageIds?: NullableOption<string[]>;
+        // The query used to identify the email cluster.
+        query?: NullableOption<string>;
+        // Uniform resource name (URN) of the automated investigation where the cluster was identified.
+        urn?: NullableOption<string>;
+    }
+    interface OauthApplicationEvidence extends AlertEvidence {
+        // Unique identifier of the application.
+        appId?: NullableOption<string>;
+        // Name of the application.
+        displayName?: NullableOption<string>;
+        // The unique identifier of the application object in Azure AD.
+        objectId?: NullableOption<string>;
+        // The name of the application publisher.
+        publisher?: NullableOption<string>;
+    }
+    interface ProcessEvidence extends AlertEvidence {
+        // The status of the detection.The possible values are: detected, blocked, prevented, unknownFutureValue.
+        detectionStatus?: NullableOption<DetectionStatus>;
+        // Image file details.
+        imageFile?: NullableOption<FileDetails>;
+        // A unique identifier assigned to a device by Microsoft Defender for Endpoint.
+        mdeDeviceId?: NullableOption<string>;
+        // Date and time when the parent of the process was created.
+        parentProcessCreationDateTime?: NullableOption<string>;
+        // Process ID (PID) of the parent process that spawned the process.
+        parentProcessId?: NullableOption<number>;
+        // Parent process image file details.
+        parentProcessImageFile?: NullableOption<FileDetails>;
+        // Command line used to create the new process.
+        processCommandLine?: NullableOption<string>;
+        // Date and time the process was created.
+        processCreationDateTime?: NullableOption<string>;
+        // Process ID (PID) of the newly created process.
+        processId?: NullableOption<number>;
+        // User details of the user that ran the process.
+        userAccount?: NullableOption<UserAccount>;
+    }
+    interface RegistryKeyEvidence extends AlertEvidence {
+        // Registry hive of the key that the recorded action was applied to.
+        registryHive?: NullableOption<string>;
+        // Registry key that the recorded action was applied to.
+        registryKey?: NullableOption<string>;
+    }
+    interface RegistryValueEvidence extends AlertEvidence {
+        // Registry hive of the key that the recorded action was applied to.
+        registryHive?: NullableOption<string>;
+        // Registry key that the recorded action was applied to.
+        registryKey?: NullableOption<string>;
+        // Data of the registry value that the recorded action was applied to.
+        registryValue?: NullableOption<string>;
+        // Name of the registry value that the recorded action was applied to.
+        registryValueName?: NullableOption<string>;
+        // Data type, such as binary or string, of the registry value that the recorded action was applied to.
+        registryValueType?: NullableOption<string>;
+    }
+    interface SecurityGroupEvidence extends AlertEvidence {
+        // The name of the security group.
+        displayName?: NullableOption<string>;
+        // Unique identifier of the security group.
+        securityGroupId?: NullableOption<string>;
+    }
+    interface UrlEvidence extends AlertEvidence {
+        // The Unique Resource Locator (URL).
+        url?: NullableOption<string>;
+    }
+    interface UserEvidence extends AlertEvidence {
+        // The user account details.
+        userAccount?: NullableOption<UserAccount>;
     }
 }
 export namespace TermStore {
