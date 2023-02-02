@@ -1,0 +1,38 @@
+# Typescript Typings V1 npm build and release pipeline
+name: $(BuildDefinitionName)_$(SourceBranchName)_$(Date:yyyyMMdd)$(Rev:.r)
+
+trigger:
+  branches:
+    include:
+      - main
+  paths:
+    include:
+      - microsoft-graph.d.ts
+
+pr: none
+
+pool:
+  vmImage: windows-latest
+
+steps:
+
+- script: git checkout main
+- template: ./common-templates/security-pre-checks.yml
+- task: CopyFiles@2
+  displayName: 'Copy Files to staging directory'
+  inputs:
+    SourceFolder: '$(System.DefaultWorkingDirectory)'
+    Contents: |
+     **/*
+     !spec/**
+     !.azure-pipelines/**
+     !.github/**
+     !.git/**
+     !.vscode/**
+     !typings-demo.gif
+    TargetFolder: '$(Build.ArtifactStagingDirectory)'
+
+- task: PublishBuildArtifacts@1
+  displayName: 'Publish Artifact: drop'
+
+- template: ./common-templates/security-post-checks.yml
