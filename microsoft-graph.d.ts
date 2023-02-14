@@ -974,9 +974,19 @@ export type WindowsUserAccountControlSettings =
     | "notifyOnAppChanges"
     | "notifyOnAppChangesWithoutDimming"
     | "neverNotify";
-export type DeviceManagementExchangeConnectorStatus = "none" | "connectionPending" | "connected" | "disconnected";
+export type DeviceManagementExchangeConnectorStatus =
+    | "none"
+    | "connectionPending"
+    | "connected"
+    | "disconnected"
+    | "unknownFutureValue";
 export type DeviceManagementExchangeConnectorSyncType = "fullSync" | "deltaSync";
-export type DeviceManagementExchangeConnectorType = "onPremises" | "hosted" | "serviceToService" | "dedicated";
+export type DeviceManagementExchangeConnectorType =
+    | "onPremises"
+    | "hosted"
+    | "serviceToService"
+    | "dedicated"
+    | "unknownFutureValue";
 export type DeviceManagementPartnerAppType = "unknown" | "singleTenantApp" | "multiTenantApp";
 export type DeviceManagementPartnerTenantState =
     | "unknown"
@@ -1125,7 +1135,8 @@ export type NotificationTemplateBrandingOptions =
     | "includeCompanyName"
     | "includeContactInformation"
     | "includeCompanyPortalLink"
-    | "includeDeviceDetails";
+    | "includeDeviceDetails"
+    | "unknownFutureValue";
 export type RemoteAssistanceOnboardingStatus = "notOnboarded" | "onboarding" | "onboarded";
 export type DeviceManagementExportJobLocalizationType = "localizedValuesAsAdditionalColumn" | "replaceLocalizableValues";
 export type DeviceManagementReportFileFormat = "csv" | "pdf" | "json" | "unknownFutureValue";
@@ -1178,8 +1189,10 @@ export type EntityType =
     | "list"
     | "listItem"
     | "drive"
-    | "unknownFutureValue";
+    | "unknownFutureValue"
+    | "chatMessage";
 export type SearchAlterationType = "suggestion" | "modification" | "unknownFutureValue";
+export type SearchContent = "sharedContent" | "privateContent" | "unknownFutureValue";
 export type PlannerContainerType = "group" | "unknownFutureValue" | "roster";
 export type PlannerPreviewType = "automatic" | "noPreview" | "checklist" | "description" | "reference";
 export type OnenotePatchActionType = "Replace" | "Append" | "Delete" | "Insert" | "Prepend";
@@ -2296,7 +2309,7 @@ export type OnlineMeetingPresenters =
     | "roleIsPresenter"
     | "organizer"
     | "unknownFutureValue";
-export type OnlineMeetingRole = "attendee" | "presenter" | "unknownFutureValue" | "producer";
+export type OnlineMeetingRole = "attendee" | "presenter" | "unknownFutureValue" | "producer" | "coorganizer";
 export type RecordingStatus = "unknown" | "notRecording" | "recording" | "failed" | "unknownFutureValue";
 export type RejectReason = "none" | "busy" | "forbidden" | "unknownFutureValue";
 export type RoutingMode = "oneToOne" | "multicast" | "unknownFutureValue";
@@ -2795,6 +2808,7 @@ export interface User extends DirectoryObject {
      * $select. Supports $filter (eq, ne, not , ge, le, in, startsWith, and eq on null values).
      */
     employeeId?: NullableOption<string>;
+    employeeLeaveDateTime?: NullableOption<string>;
     /**
      * Represents organization data (e.g. division and costCenter) associated with a user. Returned only on $select. Supports
      * $filter (eq, ne, not , ge, le, in).
@@ -3829,10 +3843,10 @@ export interface ManagedDevice extends Entity {
     // Enrollment time of the device. This property is read-only.
     enrolledDateTime?: string;
     /**
-     * Ethernet MAC. Default, is Null (Non-Default property) for this property when returned as part of managedDevice entity.
-     * Individual get call with select query options is needed to retrieve actual values. Example:
-     * deviceManagement/managedDevices({managedDeviceId})?$select=ethernetMacAddress Supports: $select. $Search is not
-     * supported. Read-only. This property is read-only.
+     * Indicates Ethernet MAC Address of the device. Default, is Null (Non-Default property) for this property when returned
+     * as part of managedDevice entity. Individual get call with select query options is needed to retrieve actual values.
+     * Example: deviceManagement/managedDevices({managedDeviceId})?$select=ethernetMacAddress Supports: $select. $Search is
+     * not supported. Read-only. This property is read-only.
      */
     ethernetMacAddress?: NullableOption<string>;
     /**
@@ -9713,8 +9727,11 @@ export interface AccessPackageAssignmentPolicy extends Entity {
     accessPackage?: NullableOption<AccessPackage>;
     // Catalog of the access package containing this policy. Read-only.
     catalog?: NullableOption<AccessPackageCatalog>;
+    questions?: NullableOption<AccessPackageQuestion[]>;
 }
 export interface AccessPackageAssignmentRequest extends Entity {
+    // Answers provided by the requestor to accessPackageQuestions asked of them at the time of request.
+    answers?: NullableOption<AccessPackageAnswer[]>;
     /**
      * The date of the end of processing, either successful or failure, of a request. The Timestamp type represents date and
      * time information using ISO 8601 format and is always in UTC time. For example, midnight UTC on Jan 1, 2014 is
@@ -10261,7 +10278,7 @@ export interface ServicePrincipalRiskDetection extends Entity {
 // tslint:disable-next-line: interface-name
 export interface IpNamedLocation extends NamedLocation {
     /**
-     * List of IP address ranges in IPv4 CIDR format (e.g. 1.2.3.4/32) or any allowable IPv6 format from IETF RFC596.
+     * List of IP address ranges in IPv4 CIDR format (e.g. 1.2.3.4/32) or any allowable IPv6 format from IETF RFC5969.
      * Required.
      */
     ipRanges?: IpRange[];
@@ -10282,6 +10299,21 @@ export interface RiskyUserHistoryItem extends RiskyUser {
     // The ID of the user.
     userId?: NullableOption<string>;
 }
+export interface AccessPackageQuestion extends Entity {
+    /**
+     * Specifies whether the requestor is allowed to edit answers to questions for an assignment by posting an update to
+     * accessPackageAssignmentRequest.
+     */
+    isAnswerEditable?: NullableOption<boolean>;
+    // Whether the requestor is required to supply an answer or not.
+    isRequired?: NullableOption<boolean>;
+    // The text of the question represented in a format for a specific locale.
+    localizations?: NullableOption<AccessPackageLocalizedText[]>;
+    // Relative position of this question when displaying a list of questions to the requestor.
+    sequence?: NullableOption<number>;
+    // The text of the question to show to the requestor.
+    text?: NullableOption<string>;
+}
 export interface AccessPackageSubject extends Entity {
     // The display name of the subject.
     displayName?: NullableOption<string>;
@@ -10300,6 +10332,18 @@ export interface AccessPackageSubject extends Entity {
     subjectType?: NullableOption<AccessPackageSubjectType>;
     // The connected organization of the subject. Read-only. Nullable.
     connectedOrganization?: NullableOption<ConnectedOrganization>;
+}
+export interface AccessPackageMultipleChoiceQuestion extends AccessPackageQuestion {
+    // List of answer choices.
+    choices?: NullableOption<AccessPackageAnswerChoice[]>;
+    // Indicates whether requestor can select multiple choices as their answer.
+    isMultipleSelectionAllowed?: NullableOption<boolean>;
+}
+export interface AccessPackageTextInputQuestion extends AccessPackageQuestion {
+    // Indicates whether the answer will be in single or multiple line format.
+    isSingleLineQuestion?: NullableOption<boolean>;
+    // The regular expression pattern which any answer to this question must match.
+    regexPattern?: NullableOption<string>;
 }
 export interface MobileApp extends Entity {
     // The date and time the app was created.
@@ -10858,6 +10902,16 @@ export interface WindowsInformationProtectionPolicy extends WindowsInformationPr
     windowsHelloForBusinessBlocked?: boolean;
 }
 // tslint:disable-next-line: interface-name
+export interface IosiPadOSWebClip extends MobileApp {
+    // Indicates iOS/iPadOS web clip app URL. Example: 'https://www.contoso.com'
+    appUrl?: NullableOption<string>;
+    /**
+     * Whether or not to use managed browser. When TRUE, the app will be required to be opened in Microsoft Edge. When FALSE,
+     * the app will not be required to be opened in Microsoft Edge. By default, this property is set to FALSE.
+     */
+    useManagedBrowser?: boolean;
+}
+// tslint:disable-next-line: interface-name
 export interface IosLobApp extends MobileLobApp {
     // The iOS architecture for which this app can run on.
     applicableDeviceType?: IosDeviceType;
@@ -11222,6 +11276,10 @@ export interface WindowsUniversalAppX extends MobileLobApp {
 export interface WindowsUniversalAppXContainedApp extends MobileContainedApp {
     // The app user model ID of the contained app of a WindowsUniversalAppX app.
     appUserModelId?: NullableOption<string>;
+}
+export interface WindowsWebApp extends MobileApp {
+    // Indicates the Windows web app URL. Example: 'https://www.contoso.com'
+    appUrl?: NullableOption<string>;
 }
 export interface AuditEvent extends Entity {
     // Friendly name of the activity.
@@ -11610,6 +11668,8 @@ export interface DeviceEnrollmentConfiguration extends Entity {
 export interface DeviceManagementPartner extends Entity {
     // Partner display name
     displayName?: NullableOption<string>;
+    // User groups that specifies whether enrollment is through partner.
+    groupsRequiringPartnerEnrollment?: NullableOption<DeviceManagementPartnerAssignment[]>;
     // Whether device management partner is configured or not
     isConfigured?: boolean;
     // Timestamp of last heartbeat after admin enabled option Connect to Device management Partner
@@ -11630,7 +11690,10 @@ export interface DeviceManagementExchangeConnector extends Entity {
     connectorServerName?: NullableOption<string>;
     // An alias assigned to the Exchange server
     exchangeAlias?: NullableOption<string>;
-    // The type of Exchange Connector Configured. Possible values are: onPremises, hosted, serviceToService, dedicated.
+    /**
+     * The type of Exchange Connector Configured. Possible values are: onPremises, hosted, serviceToService, dedicated,
+     * unknownFutureValue.
+     */
     exchangeConnectorType?: DeviceManagementExchangeConnectorType;
     // Exchange Organization to the Exchange server
     exchangeOrganization?: NullableOption<string>;
@@ -11640,22 +11703,54 @@ export interface DeviceManagementExchangeConnector extends Entity {
     primarySmtpAddress?: NullableOption<string>;
     // The name of the Exchange server.
     serverName?: NullableOption<string>;
-    // Exchange Connector Status. Possible values are: none, connectionPending, connected, disconnected.
+    // Exchange Connector Status. Possible values are: none, connectionPending, connected, disconnected, unknownFutureValue.
     status?: DeviceManagementExchangeConnectorStatus;
     // The version of the ExchangeConnectorAgent
     version?: NullableOption<string>;
 }
 export interface MobileThreatDefenseConnector extends Entity {
+    /**
+     * When TRUE, indicates the data sync partner may collect metadata about installed applications from Intune for IOS
+     * devices. When FALSE, indicates the data sync partner may not collect metadata about installed applications from Intune
+     * for IOS devices. Default value is FALSE.
+     */
+    allowPartnerToCollectIOSApplicationMetadata?: boolean;
+    /**
+     * When TRUE, indicates the data sync partner may collect metadata about personally installed applications from Intune for
+     * IOS devices. When FALSE, indicates the data sync partner may not collect metadata about personally installed
+     * applications from Intune for IOS devices. Default value is FALSE.
+     */
+    allowPartnerToCollectIOSPersonalApplicationMetadata?: boolean;
     // For Android, set whether Intune must receive data from the data sync partner prior to marking a device compliant
     androidDeviceBlockedOnMissingPartnerData?: boolean;
     // For Android, set whether data from the data sync partner should be used during compliance evaluations
     androidEnabled?: boolean;
+    /**
+     * When TRUE, inidicates that data from the data sync partner can be used during Mobile Application Management (MAM)
+     * evaluations for Android devices. When FALSE, inidicates that data from the data sync partner should not be used during
+     * Mobile Application Management (MAM) evaluations for Android devices. Only one partner per platform may be enabled for
+     * Mobile Application Management (MAM) evaluation. Default value is FALSE.
+     */
+    androidMobileApplicationManagementEnabled?: boolean;
     // For IOS, set whether Intune must receive data from the data sync partner prior to marking a device compliant
     iosDeviceBlockedOnMissingPartnerData?: boolean;
     // For IOS, get or set whether data from the data sync partner should be used during compliance evaluations
     iosEnabled?: boolean;
+    /**
+     * When TRUE, inidicates that data from the data sync partner can be used during Mobile Application Management (MAM)
+     * evaluations for IOS devices. When FALSE, inidicates that data from the data sync partner should not be used during
+     * Mobile Application Management (MAM) evaluations for IOS devices. Only one partner per platform may be enabled for
+     * Mobile Application Management (MAM) evaluation. Default value is FALSE.
+     */
+    iosMobileApplicationManagementEnabled?: boolean;
     // DateTime of last Heartbeat recieved from the Data Sync Partner
     lastHeartbeatDateTime?: string;
+    /**
+     * When TRUE, inidicates that configuration profile management via Microsoft Defender for Endpoint is enabled. When FALSE,
+     * inidicates that configuration profile management via Microsoft Defender for Endpoint is disabled. Default value is
+     * FALSE.
+     */
+    microsoftDefenderForEndpointAttachEnabled?: boolean;
     // Data Sync Partner state for this account. Possible values are: unavailable, available, enabled, unresponsive.
     partnerState?: MobileThreatPartnerTenantState;
     // Get or Set days the per tenant tolerance to unresponsiveness for this partner integration
@@ -11665,6 +11760,18 @@ export interface MobileThreatDefenseConnector extends Entity {
      * Data Sync Partner
      */
     partnerUnsupportedOsVersionBlocked?: boolean;
+    /**
+     * When TRUE, inidicates that Intune must receive data from the data sync partner prior to marking a device compliant for
+     * Windows. When FALSE, inidicates that Intune may make a device compliant without receiving data from the data sync
+     * partner for Windows. Default value is FALSE.
+     */
+    windowsDeviceBlockedOnMissingPartnerData?: boolean;
+    /**
+     * When TRUE, inidicates that data from the data sync partner can be used during compliance evaluations for Windows. When
+     * FALSE, inidicates that data from the data sync partner should not be used during compliance evaluations for Windows.
+     * Default value is FALSE.
+     */
+    windowsEnabled?: boolean;
 }
 export interface ApplePushNotificationCertificate extends Entity {
     // Apple Id of the account used to create the MDM push certificate.
@@ -11774,7 +11881,8 @@ export interface WindowsAutopilotDeviceIdentity extends Entity {
 export interface NotificationMessageTemplate extends Entity {
     /**
      * The Message Template Branding Options. Branding is defined in the Intune Admin Console. Possible values are: none,
-     * includeCompanyLogo, includeCompanyName, includeContactInformation, includeCompanyPortalLink, includeDeviceDetails.
+     * includeCompanyLogo, includeCompanyName, includeContactInformation, includeCompanyPortalLink, includeDeviceDetails,
+     * unknownFutureValue.
      */
     brandingOptions?: NotificationTemplateBrandingOptions;
     // The default locale to fallback onto when the requested locale is not available.
@@ -11783,6 +11891,8 @@ export interface NotificationMessageTemplate extends Entity {
     displayName?: string;
     // DateTime the object was last modified.
     lastModifiedDateTime?: string;
+    // List of Scope Tags for this Entity instance.
+    roleScopeTagIds?: NullableOption<string[]>;
     // The list of localized messages for this Notification Message Template.
     localizedNotificationMessages?: NullableOption<LocalizedNotificationMessage[]>;
 }
@@ -15056,50 +15166,115 @@ export interface OnenoteResource extends OnenoteEntityBaseModel {
     contentUrl?: NullableOption<string>;
 }
 export interface DelegatedAdminAccessAssignment extends Entity {
+    // The access container through which members are assigned access. For example, a security group.
     accessContainer?: DelegatedAdminAccessContainer;
+    /**
+     * The access details containing the identifiers of the administrative roles that the partner is assigned in the customer
+     * tenant.
+     */
     accessDetails?: DelegatedAdminAccessDetails;
+    // The date and time in ISO 8601 format and in UTC time when the access assignment was created. Read-only.
     createdDateTime?: NullableOption<string>;
+    // The date and time in ISO 8601 and in UTC time when this access assignment was last modified. Read-only.
     lastModifiedDateTime?: NullableOption<string>;
+    /**
+     * The status of the access assignment. Read-only. The possible values are: pending, active, deleting, deleted, error,
+     * unknownFutureValue.
+     */
     status?: NullableOption<DelegatedAdminAccessAssignmentStatus>;
 }
 export interface DelegatedAdminCustomer extends Entity {
+    // The Azure AD display name of the customer tenant. Read-only. Supports $orderBy.
     displayName?: NullableOption<string>;
+    // The Azure AD-assigned tenant ID of the customer. Read-only.
     tenantId?: string;
+    // Contains the management details of a service in the customer tenant that's managed by delegated administration.
     serviceManagementDetails?: NullableOption<DelegatedAdminServiceManagementDetail[]>;
 }
 export interface DelegatedAdminServiceManagementDetail extends Entity {
+    // The URL of the management portal for the managed service. Read-only.
     serviceManagementUrl?: string;
+    // The name of a managed service. Read-only.
     serviceName?: string;
 }
 export interface DelegatedAdminRelationship extends Entity {
+    /**
+     * The access details containing the identifiers of the administrative roles that the partner admin is requesting in the
+     * customer tenant.
+     */
     accessDetails?: DelegatedAdminAccessDetails;
+    // The date and time in ISO 8601 format and in UTC time when the relationship became active. Read-only.
     activatedDateTime?: NullableOption<string>;
+    // The date and time in ISO 8601 format and in UTC time when the relationship was created. Read-only.
     createdDateTime?: NullableOption<string>;
+    /**
+     * The display name and unique identifier of the customer of the relationship. This is configured either by the partner at
+     * the time the relationship is created or by the system after the customer approves the relationship. Cannot be changed
+     * by the customer.
+     */
     customer?: NullableOption<DelegatedAdminRelationshipCustomerParticipant>;
+    /**
+     * The display name of the relationship used for ease of identification. Must be unique across all delegated admin
+     * relationships of the partner. This is set by the partner only when the relationship is in the created status and cannot
+     * be changed by the customer.
+     */
     displayName?: string;
+    /**
+     * The duration of the relationship in ISO 8601 format. Must be a value between P1D and P2Y inclusive. This is set by the
+     * partner only when the relationship is in the created status and cannot be changed by the customer.
+     */
     duration?: string;
+    /**
+     * The date and time in ISO 8601 format and in UTC time when the status of relationship changes to either terminated or
+     * expired. Calculated as endDateTime = activatedDateTime + duration. Read-only.
+     */
     endDateTime?: NullableOption<string>;
+    // The date and time in ISO 8601 format and in UTC time when the relationship was last modified. Read-only.
     lastModifiedDateTime?: NullableOption<string>;
+    /**
+     * The status of the relationship. Read Only. The possible values are: activating, active, approvalPending, approved,
+     * created, expired, expiring, terminated, terminating, terminationRequested, unknownFutureValue. Supports $orderBy.
+     */
     status?: NullableOption<DelegatedAdminRelationshipStatus>;
+    // The access assignments associated with the delegated admin relationship.
     accessAssignments?: NullableOption<DelegatedAdminAccessAssignment[]>;
+    // The long running operations associated with the delegated admin relationship.
     operations?: NullableOption<DelegatedAdminRelationshipOperation[]>;
+    // The requests associated with the delegated admin relationship.
     requests?: NullableOption<DelegatedAdminRelationshipRequest[]>;
 }
 export interface DelegatedAdminRelationshipOperation extends Entity {
+    // The time in ISO 8601 format and in UTC time when the long-running operation was created. Read-only.
     createdDateTime?: string;
+    // The data (payload) for the operation. Read-only.
     data?: string;
+    // The time in ISO 8601 format and in UTC time when the long-running operation was last modified. Read-only.
     lastModifiedDateTime?: string;
+    /**
+     * The type of long-running operation. The possible values are: delegatedAdminAccessAssignmentUpdate, unknownFutureValue.
+     * Read-only.
+     */
     operationType?: DelegatedAdminRelationshipOperationType;
+    /**
+     * The status of the operation. Read-only. The possible values are: notStarted, running, succeeded, failed,
+     * unknownFutureValue. Read-only. Supports $orderBy.
+     */
     status?: LongRunningOperationStatus;
 }
 export interface DelegatedAdminRelationshipRequest extends Entity {
+    // The action to be performed on the delegated admin relationship.
     action?: DelegatedAdminRelationshipRequestAction;
+    // The date and time in ISO 8601 format and in UTC time when the relationship request was created. Read-only.
     createdDateTime?: NullableOption<string>;
+    // The date and time in ISO 8601 format and UTC time when this relationship request was last modified. Read-only.
     lastModifiedDateTime?: NullableOption<string>;
+    // The status of the request. Read-only. The possible values are: created, pending, succeeded, failed, unknownFutureValue.
     status?: NullableOption<DelegatedAdminRelationshipRequestStatus>;
 }
 export interface TenantRelationship {
+    // The customer who has a delegated admin relationship with a Microsoft partner.
     delegatedAdminCustomers?: NullableOption<DelegatedAdminCustomer[]>;
+    // The details of the delegated administrative privileges that a Microsoft partner has in a customer tenant.
     delegatedAdminRelationships?: NullableOption<DelegatedAdminRelationship[]>;
 }
 export interface UnifiedRoleManagementPolicyRule extends Entity {
@@ -15659,6 +15834,10 @@ export interface AadUserConversationMember extends ConversationMember {
     user?: NullableOption<User>;
 }
 export interface AnonymousGuestConversationMember extends ConversationMember {
+    /**
+     * Unique ID that represents the user. Note: This ID can change if the user leaves and rejoins the meeting, or joins from
+     * a different device.
+     */
     anonymousGuestId?: NullableOption<string>;
 }
 export interface AppCatalogs extends Entity {
@@ -15802,13 +15981,17 @@ export interface TeamworkHostedContent extends Entity {
 // tslint:disable-next-line: no-empty-interface
 export interface ChatMessageHostedContent extends TeamworkHostedContent {}
 export interface MicrosoftAccountUserConversationMember extends ConversationMember {
+    // Microsoft Account ID of the user.
     userId?: NullableOption<string>;
 }
 export interface SkypeForBusinessUserConversationMember extends ConversationMember {
+    // ID of the tenant that the user belongs to.
     tenantId?: NullableOption<string>;
+    // Azure Active Directory ID of the user.
     userId?: NullableOption<string>;
 }
 export interface SkypeUserConversationMember extends ConversationMember {
+    // Skype ID of the user.
     skypeId?: NullableOption<string>;
 }
 export interface TeamsAppDefinition extends Entity {
@@ -16006,14 +16189,27 @@ export interface UrlAssessmentRequest extends ThreatAssessmentRequest {
     url?: string;
 }
 export interface AttachmentBase extends Entity {
+    // The MIME type.
     contentType?: NullableOption<string>;
+    /**
+     * The Timestamp type represents date and time information using ISO 8601 format and is always in UTC time. For example,
+     * midnight UTC on Jan 1, 2014 is 2014-01-01T00:00:00Z.
+     */
     lastModifiedDateTime?: NullableOption<string>;
+    // The display name of the attachment. This does not need to be the actual file name.
     name?: NullableOption<string>;
+    // The length of the attachment in bytes.
     size?: number;
 }
 export interface AttachmentSession extends Entity {
+    // The content streams that are uploaded.
     content?: NullableOption<any>;
+    /**
+     * The date and time in UTC when the upload session will expire. The complete file must be uploaded before this expiration
+     * time is reached.
+     */
     expirationDateTime?: NullableOption<string>;
+    // Indicates a single value {start} that represents the location in the file where the next upload should begin.
     nextExpectedRanges?: NullableOption<string[]>;
 }
 export interface ChecklistItem extends Entity {
@@ -16037,6 +16233,7 @@ export interface LinkedResource extends Entity {
     webUrl?: NullableOption<string>;
 }
 export interface TaskFileAttachment extends AttachmentBase {
+    // The base64-encoded contents of the file.
     contentBytes?: string;
 }
 export interface TodoTaskList extends Entity {
@@ -16080,6 +16277,7 @@ export interface TodoTask extends Entity {
     createdDateTime?: string;
     // The date and time in the specified time zone that the task is to be finished.
     dueDateTime?: NullableOption<DateTimeTimeZone>;
+    // Indicates whether the task has attachments.
     hasAttachments?: NullableOption<boolean>;
     // The importance of the task. Possible values are: low, normal, high.
     importance?: Importance;
@@ -16095,6 +16293,7 @@ export interface TodoTask extends Entity {
     recurrence?: NullableOption<PatternedRecurrence>;
     // The date and time in the specified time zone for a reminder alert of the task to occur.
     reminderDateTime?: NullableOption<DateTimeTimeZone>;
+    // The date and time in the specified time zone at which the task is scheduled to start.
     startDateTime?: NullableOption<DateTimeTimeZone>;
     /**
      * Indicates the state or progress of the task. Possible values are: notStarted, inProgress, completed, waitingOnOthers,
@@ -16103,6 +16302,7 @@ export interface TodoTask extends Entity {
     status?: TaskStatus;
     // A brief description of the task.
     title?: NullableOption<string>;
+    // A collection of file attachments for the task.
     attachments?: NullableOption<AttachmentBase[]>;
     attachmentSessions?: NullableOption<AttachmentSession[]>;
     // A collection of checklistItems linked to a task.
@@ -18953,11 +19153,14 @@ export interface ItemPreviewInfo {
 }
 // tslint:disable-next-line: interface-name
 export interface ItemReference {
-    // Unique identifier of the drive instance that contains the item. Read-only.
+    /**
+     * Unique identifier of the drive instance that contains the driveItem. Only returned if the item is located in a
+     * [drive][]. Read-only.
+     */
     driveId?: NullableOption<string>;
-    // Identifies the type of drive. See [drive][] resource for values.
+    // Identifies the type of drive. Only returned if the item is located in a [drive][]. See [drive][] resource for values.
     driveType?: NullableOption<string>;
-    // Unique identifier of the item in the drive. Read-only.
+    // Unique identifier of the driveItem in the drive or a listItem in a list. Read-only.
     id?: NullableOption<string>;
     // The name of the item being referenced. Read-only.
     name?: NullableOption<string>;
@@ -18969,8 +19172,9 @@ export interface ItemReference {
     sharepointIds?: NullableOption<SharepointIds>;
     /**
      * For OneDrive for Business and SharePoint, this property represents the ID of the site that contains the parent document
-     * library of the driveItem resource. The value is the same as the id property of that [site][] resource. It is an opaque
-     * string that consists of three identifiers of the site. For OneDrive, this property is not populated.
+     * library of the driveItem resource or the parent list of the listItem resource. The value is the same as the id property
+     * of that [site][] resource. It is an opaque string that consists of three identifiers of the site. For OneDrive, this
+     * property is not populated.
      */
     siteId?: NullableOption<string>;
 }
@@ -19527,6 +19731,34 @@ export interface RiskUserActivity {
     // The type of risk event detected.
     riskEventTypes?: NullableOption<string[]>;
 }
+export interface AccessPackageAnswer {
+    // The localized display value shown to the requestor and approvers.
+    displayValue?: NullableOption<string>;
+    answeredQuestion?: NullableOption<AccessPackageQuestion>;
+}
+export interface AccessPackageAnswerChoice {
+    /**
+     * The actual value of the selected choice. This is typically a string value which is understandable by applications.
+     * Required.
+     */
+    actualValue?: NullableOption<string>;
+    // The text of the answer choice represented in a format for a specific locale.
+    localizations?: NullableOption<AccessPackageLocalizedText[]>;
+    text?: NullableOption<string>;
+}
+export interface AccessPackageLocalizedText {
+    /**
+     * The language code that text is in. For example, 'en-us'. The language component follows 2-letter codes as defined in
+     * ISO 639-1, and the country component follows 2-letter codes as defined in ISO 3166-1 alpha-2. Required.
+     */
+    languageCode?: string;
+    // The question in the specific language. Required.
+    text?: NullableOption<string>;
+}
+export interface AccessPackageAnswerString extends AccessPackageAnswer {
+    // The value stored on the requestor's user profile, if this answer is configured to be stored as a specific attribute.
+    value?: NullableOption<string>;
+}
 export interface AccessPackageApprovalStage {
     // The number of days that a request can be pending a response before it is automatically denied.
     durationBeforeAutomaticDenial?: NullableOption<string>;
@@ -19600,6 +19832,7 @@ export interface AccessPackageAssignmentRequestRequirements {
     policyId?: NullableOption<string>;
     // Schedule restrictions enforced, if any.
     schedule?: NullableOption<EntitlementManagementSchedule>;
+    questions?: NullableOption<AccessPackageQuestion[]>;
 }
 export interface EntitlementManagementSchedule {
     // When the access should expire.
@@ -20190,6 +20423,13 @@ export interface WindowsMinimumOperatingSystem {
     v8_0?: boolean;
     // Windows version 8.1 or later.
     v8_1?: boolean;
+}
+export interface WindowsUniversalAppXAppAssignmentSettings extends MobileAppAssignmentSettings {
+    /**
+     * If true, uses device execution context for Windows Universal AppX mobile app. Device-context install is not allowed
+     * when this type of app is targeted with Available intent. Defaults to false.
+     */
+    useDeviceContext?: boolean;
 }
 export interface AuditActor {
     // Name of the Application.
@@ -20826,6 +21066,10 @@ export interface ComplianceManagementPartnerAssignment {
     // Group assignment target.
     target?: NullableOption<DeviceAndAppManagementAssignmentTarget>;
 }
+export interface DeviceAndAppManagementData {
+    // Not yet documented
+    content?: NullableOption<any>;
+}
 export interface DeviceEnrollmentPlatformRestriction {
     // Max OS version supported
     osMaximumVersion?: NullableOption<string>;
@@ -20835,6 +21079,10 @@ export interface DeviceEnrollmentPlatformRestriction {
     personalDeviceEnrollmentBlocked?: boolean;
     // Block the platform from enrolling
     platformBlocked?: boolean;
+}
+export interface DeviceManagementPartnerAssignment {
+    // User groups targeting for devices to be enrolled through partner.
+    target?: NullableOption<DeviceAndAppManagementAssignmentTarget>;
 }
 export interface RgbColor {
     // Blue value
@@ -21256,9 +21504,14 @@ export interface SearchRequest {
     from?: number;
     query?: SearchQuery;
     queryAlterationOptions?: NullableOption<SearchAlterationOptions>;
+    region?: NullableOption<string>;
     resultTemplateOptions?: NullableOption<ResultTemplateOption>;
+    sharePointOneDriveOptions?: NullableOption<SharePointOneDriveOptions>;
     size?: number;
     sortProperties?: NullableOption<SortProperty[]>;
+}
+export interface SharePointOneDriveOptions {
+    includeContent?: NullableOption<SearchContent>;
 }
 export interface SortProperty {
     // True if the sort order is descending. Default is false, with the sort order as ascending. Optional.
@@ -21564,17 +21817,29 @@ export interface SectionLinks {
     oneNoteWebUrl?: NullableOption<ExternalLink>;
 }
 export interface DelegatedAdminAccessContainer {
+    /**
+     * The identifier of the access container (for example, a security group). For 'securityGroup' access containers, this
+     * must be a valid ID of an Azure AD security group in the Microsoft partner's tenant.
+     */
     accessContainerId?: string;
+    /**
+     * The type of access container (for example, security group) that will be assigned one or more roles through a delegated
+     * admin relationship. The possible values are: securityGroup, unknownFutureValue.
+     */
     accessContainerType?: DelegatedAdminAccessContainerType;
 }
 export interface DelegatedAdminAccessDetails {
+    // The directory roles that the Microsoft partner is assigned in the customer tenant.
     unifiedRoles?: UnifiedRole[];
 }
 export interface UnifiedRole {
+    // The unified role definition ID of the directory role. Refer to unifiedRoleDefinition resource.
     roleDefinitionId?: string;
 }
 export interface DelegatedAdminRelationshipCustomerParticipant {
+    // The display name of the customer tenant as set by Azure AD. Read-only
     displayName?: NullableOption<string>;
+    // The Azure AD-assigned tenant ID of the customer tenant.
     tenantId?: string;
 }
 export interface ApprovalSettings {
@@ -22632,10 +22897,7 @@ export interface MediaStream {
 export interface MeetingParticipantInfo {
     // Identity information of the participant.
     identity?: NullableOption<IdentitySet>;
-    /**
-     * Specifies the participant's role in the meeting. Possible values are attendee, presenter, producer, and
-     * unknownFutureValue.
-     */
+    // Specifies the participant's role in the meeting.
     role?: NullableOption<OnlineMeetingRole>;
     // User principal name of the participant.
     upn?: NullableOption<string>;
@@ -23388,9 +23650,16 @@ export interface WorkforceIntegrationEncryption {
     secret?: NullableOption<string>;
 }
 export interface AttachmentInfo {
+    // The type of the attachment. The possible values are: file, item, reference. Required.
     attachmentType?: NullableOption<AttachmentType>;
+    // The nature of the data in the attachment. Optional.
     contentType?: NullableOption<string>;
+    /**
+     * The display name of the attachment. This can be a descriptive string and does not have to be the actual file name.
+     * Required.
+     */
     name?: NullableOption<string>;
+    // The length of the attachment in bytes. Required.
     size?: NullableOption<number>;
 }
 
@@ -23981,7 +24250,7 @@ export namespace CallRecords {
         conferenceId?: NullableOption<string>;
         // Connection fee price.
         connectionCharge?: NullableOption<number>;
-        // Type of currency used to calculate the cost of the call (ISO 4217).
+        // Type of currency used to calculate the cost of the call. For details, see (ISO 4217.
         currency?: NullableOption<string>;
         /**
          * Whether the call was domestic (within a country or region) or international (outside a country or region) based on the
@@ -24007,17 +24276,17 @@ export namespace CallRecords {
         operator?: NullableOption<string>;
         // Call start time.
         startDateTime?: NullableOption<string>;
-        // Country code of the tenant, ISO 3166-1 alpha-2.
+        // Country code of the tenant. For details, see ISO 3166-1 alpha-2.
         tenantCountryCode?: NullableOption<string>;
-        // Country code of the user, ISO 3166-1 alpha-2.
+        // Country code of the user. For details, see ISO 3166-1 alpha-2.
         usageCountryCode?: NullableOption<string>;
         // Display name of the user.
         userDisplayName?: NullableOption<string>;
         // Calling user's ID in Graph. GUID. This and other user info will be null/empty for bot call types (ucap_in, ucap_out).
         userId?: NullableOption<string>;
         /**
-         * UserPrincipalName (sign-in name) in Azure Active Directory. This is usually the same as user's SIP Address, and can be
-         * same as user's e-mail address.
+         * The user principal name (sign-in name) in Azure Active Directory. This is usually the same as the user's SIP address,
+         * and can be same as the user's e-mail address.
          */
         userPrincipalName?: NullableOption<string>;
     }
