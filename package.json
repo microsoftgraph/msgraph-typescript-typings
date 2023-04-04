@@ -15,7 +15,7 @@
     "url": "https://github.com/microsoftgraph/msgraph-typescript-typings.git"
   },
   "devDependencies": {
-    "@microsoft/microsoft-graph-client": "^2.0.0",
+    "@microsoft/microsoft-graph-client": "^3.0.5",
     "@types/chai": "^4.2.11",
     "@types/node": "^12.12.47",
     "chai": "^4.2.0",
