@@ -249,6 +249,38 @@ export type PromptLoginBehavior =
     | "disabled"
     | "unknownFutureValue";
 export type WeakAlgorithms = "rsaSha1" | "unknownFutureValue";
+export type BrowserSharedCookieSourceEnvironment =
+    | "microsoftEdge"
+    | "internetExplorer11"
+    | "both"
+    | "unknownFutureValue";
+export type BrowserSharedCookieStatus =
+    | "published"
+    | "pendingAdd"
+    | "pendingEdit"
+    | "pendingDelete"
+    | "unknownFutureValue";
+export type BrowserSiteCompatibilityMode =
+    | "default"
+    | "internetExplorer8Enterprise"
+    | "internetExplorer7Enterprise"
+    | "internetExplorer11"
+    | "internetExplorer10"
+    | "internetExplorer9"
+    | "internetExplorer8"
+    | "internetExplorer7"
+    | "internetExplorer5"
+    | "unknownFutureValue";
+export type BrowserSiteListStatus = "draft" | "published" | "pending" | "unknownFutureValue";
+export type BrowserSiteMergeType = "noMerge" | "default" | "unknownFutureValue";
+export type BrowserSiteStatus = "published" | "pendingAdd" | "pendingEdit" | "pendingDelete" | "unknownFutureValue";
+export type BrowserSiteTargetEnvironment =
+    | "internetExplorerMode"
+    | "internetExplorer11"
+    | "microsoftEdge"
+    | "configurable"
+    | "none"
+    | "unknownFutureValue";
 export type EducationAddedStudentAction = "none" | "assignIfOpen" | "unknownFutureValue";
 export type EducationAddToCalendarOptions =
     | "none"
@@ -405,6 +437,14 @@ export type TimeZoneStandard = "windows" | "iana";
 export type UserPurpose = "user" | "linked" | "shared" | "room" | "equipment" | "others" | "unknownFutureValue";
 export type WebsiteType = "other" | "home" | "work" | "blog" | "profile";
 export type WeekIndex = "first" | "second" | "third" | "fourth" | "last";
+export type ImageTaggingChoice = "disabled" | "basic" | "enhanced" | "unknownFutureValue";
+export type SharingCapabilities =
+    | "disabled"
+    | "externalUserSharingOnly"
+    | "externalUserAndGuestSharing"
+    | "existingExternalUserSharingOnly"
+    | "unknownFutureValue";
+export type SharingDomainRestrictionMode = "none" | "allowList" | "blockList" | "unknownFutureValue";
 export type ColumnTypes =
     | "note"
     | "text"
@@ -2712,8 +2752,10 @@ export interface User extends DirectoryObject {
     /**
      * Get the last signed-in date and request ID of the sign-in for a given user. Read-only.Returned only on $select.
      * Supports $filter (eq, ne, not, ge, le) but not with any other filterable properties. Note: Details for this property
-     * require an Azure AD Premium P1/P2 license and the AuditLog.Read.All permission.There's a known issue with retrieving
-     * this property.This property is not returned for a user who has never signed in or last signed in before April 2020.
+     * require an Azure AD Premium P1/P2 license and the AuditLog.Read.All permission.When you specify $select=signInActivity
+     * or $filter=signInActivity while listing users, the maximum page size is 120 users. Requests with $top set higher than
+     * 120 will fail. Requests with $top set higher than 120 will fail.This property is not returned for a user who has never
+     * signed in or last signed in before April 2020.
      */
     signInActivity?: NullableOption<SignInActivity>;
     /**
@@ -4162,6 +4204,8 @@ export interface OnlineMeeting extends Entity {
     subject?: NullableOption<string>;
     // The video teleconferencing ID. Read-only.
     videoTeleconferenceId?: NullableOption<string>;
+    // Specifies whether a watermark should be applied to a content type by the client application.
+    watermarkProtection?: NullableOption<WatermarkProtectionValues>;
     // The attendance reports of an online meeting. Read-only.
     attendanceReports?: NullableOption<MeetingAttendanceReport[]>;
 }
@@ -7796,6 +7840,138 @@ export interface UnifiedRbacResourceAction extends Entity {
     name?: string;
     resourceScopeId?: NullableOption<string>;
 }
+export interface Admin {
+    // A container for Microsoft Edge resources. Read-only.
+    edge?: NullableOption<Edge>;
+    sharepoint?: NullableOption<Sharepoint>;
+    // A container for service communications resources. Read-only.
+    serviceAnnouncement?: NullableOption<ServiceAnnouncement>;
+}
+export interface Edge extends Entity {
+    // A container for Internet Explorer mode resources.
+    internetExplorerMode?: NullableOption<InternetExplorerMode>;
+}
+export interface Sharepoint extends Entity {
+    settings?: NullableOption<SharepointSettings>;
+}
+export interface ServiceAnnouncement extends Entity {
+    /**
+     * A collection of service health information for tenant. This property is a contained navigation property, it is nullable
+     * and readonly.
+     */
+    healthOverviews?: NullableOption<ServiceHealth[]>;
+    /**
+     * A collection of service issues for tenant. This property is a contained navigation property, it is nullable and
+     * readonly.
+     */
+    issues?: NullableOption<ServiceHealthIssue[]>;
+    /**
+     * A collection of service messages for tenant. This property is a contained navigation property, it is nullable and
+     * readonly.
+     */
+    messages?: NullableOption<ServiceUpdateMessage[]>;
+}
+export interface BrowserSharedCookie extends Entity {
+    // The comment for the shared cookie.
+    comment?: string;
+    // The date and time when the shared cookie was created.
+    createdDateTime?: string;
+    // The date and time when the shared cookie was deleted.
+    deletedDateTime?: NullableOption<string>;
+    // The name of the cookie.
+    displayName?: string;
+    // The history of modifications applied to the cookie.
+    history?: BrowserSharedCookieHistory[];
+    // Controls whether a cookie is a host-only or domain cookie.
+    hostOnly?: boolean;
+    // The URL of the cookie.
+    hostOrDomain?: string;
+    // The user who last modified the cookie.
+    lastModifiedBy?: NullableOption<IdentitySet>;
+    // The date and time when the cookie was last modified.
+    lastModifiedDateTime?: string;
+    // The path of the cookie.
+    path?: string;
+    /**
+     * Specifies how the cookies are shared between Microsoft Edge and Internet Explorer. The possible values are:
+     * microsoftEdge, internetExplorer11, both, unknownFutureValue.
+     */
+    sourceEnvironment?: BrowserSharedCookieSourceEnvironment;
+    /**
+     * The status of the cookie. The possible values are: published, pendingAdd, pendingEdit, pendingDelete,
+     * unknownFutureValue.
+     */
+    status?: BrowserSharedCookieStatus;
+}
+export interface BrowserSite extends Entity {
+    /**
+     * Controls the behavior of redirected sites. If true, indicates that the site will open in Internet Explorer 11 or
+     * Microsoft Edge even if the site is navigated to as part of a HTTP or meta refresh redirection chain.
+     */
+    allowRedirect?: boolean;
+    // The comment for the site.
+    comment?: string;
+    /**
+     * Controls what compatibility setting is used for specific sites or domains. The possible values are: default,
+     * internetExplorer8Enterprise, internetExplorer7Enterprise, internetExplorer11, internetExplorer10, internetExplorer9,
+     * internetExplorer8, internetExplorer7, internetExplorer5, unknownFutureValue.
+     */
+    compatibilityMode?: BrowserSiteCompatibilityMode;
+    // The date and time when the site was created.
+    createdDateTime?: string;
+    // The date and time when the site was deleted.
+    deletedDateTime?: NullableOption<string>;
+    // The history of modifications applied to the site.
+    history?: BrowserSiteHistory[];
+    // The user who last modified the site.
+    lastModifiedBy?: NullableOption<IdentitySet>;
+    // The date and time when the site was last modified.
+    lastModifiedDateTime?: string;
+    // The merge type of the site. The possible values are: noMerge, default, unknownFutureValue.
+    mergeType?: BrowserSiteMergeType;
+    /**
+     * Indicates the status of the site. The possible values are: published, pendingAdd, pendingEdit, pendingDelete,
+     * unknownFutureValue.
+     */
+    status?: BrowserSiteStatus;
+    /**
+     * The target environment that the site should open in. The possible values are: internetExplorerMode, internetExplorer11,
+     * microsoftEdge, configurable, none, unknownFutureValue.Prior to June 15, 2022, the internetExplorer11 option would allow
+     * opening a site in the Internet Explorer 11 (IE11) desktop application. Following the retirement of IE11 on June 15,
+     * 2022, the internetExplorer11 option will no longer open an IE11 window and will instead behave the same as the
+     * internetExplorerMode option.
+     */
+    targetEnvironment?: BrowserSiteTargetEnvironment;
+    // The URL of the site.
+    webUrl?: string;
+}
+export interface BrowserSiteList extends Entity {
+    // The description of the site list.
+    description?: string;
+    // The name of the site list.
+    displayName?: string;
+    // The user who last modified the site list.
+    lastModifiedBy?: NullableOption<IdentitySet>;
+    // The date and time when the site list was last modified.
+    lastModifiedDateTime?: string;
+    // The user who published the site list.
+    publishedBy?: NullableOption<IdentitySet>;
+    // The date and time when the site list was published.
+    publishedDateTime?: NullableOption<string>;
+    // The current revision of the site list.
+    revision?: string;
+    // The current status of the site list. The possible values are: draft, published, pending, unknownFutureValue.
+    status?: BrowserSiteListStatus;
+    // A collection of shared cookies defined for the site list.
+    sharedCookies?: NullableOption<BrowserSharedCookie[]>;
+    // A collection of sites defined for the site list.
+    sites?: NullableOption<BrowserSite[]>;
+}
+// tslint:disable-next-line: interface-name
+export interface InternetExplorerMode extends Entity {
+    // A collection of site lists to support Internet Explorer mode.
+    siteLists?: NullableOption<BrowserSiteList[]>;
+}
 export interface EducationAssignment extends Entity {
     /**
      * Optional field to control the assignment behavior for students who are added after the assignment is published. If not
@@ -9261,6 +9437,37 @@ export interface OutlookCategory extends Entity {
 }
 // tslint:disable-next-line: no-empty-interface
 export interface ReferenceAttachment extends Attachment {}
+export interface SharepointSettings extends Entity {
+    allowedDomainGuidsForSyncApp?: NullableOption<string[]>;
+    availableManagedPathsForSiteCreation?: string[];
+    deletedUserPersonalSiteRetentionPeriodInDays?: NullableOption<number>;
+    excludedFileExtensionsForSyncApp?: NullableOption<string[]>;
+    idleSessionSignOut?: NullableOption<IdleSessionSignOut>;
+    imageTaggingOption?: NullableOption<ImageTaggingChoice>;
+    isCommentingOnSitePagesEnabled?: NullableOption<boolean>;
+    isFileActivityNotificationEnabled?: NullableOption<boolean>;
+    isLegacyAuthProtocolsEnabled?: NullableOption<boolean>;
+    isLoopEnabled?: NullableOption<boolean>;
+    isMacSyncAppEnabled?: NullableOption<boolean>;
+    isRequireAcceptingUserToMatchInvitedUserEnabled?: NullableOption<boolean>;
+    isResharingByExternalUsersEnabled?: NullableOption<boolean>;
+    isSharePointMobileNotificationEnabled?: NullableOption<boolean>;
+    isSharePointNewsfeedEnabled?: NullableOption<boolean>;
+    isSiteCreationEnabled?: NullableOption<boolean>;
+    isSiteCreationUIEnabled?: NullableOption<boolean>;
+    isSitePagesCreationEnabled?: NullableOption<boolean>;
+    isSitesStorageLimitAutomatic?: NullableOption<boolean>;
+    isSyncButtonHiddenOnPersonalSite?: NullableOption<boolean>;
+    isUnmanagedSyncAppForTenantRestricted?: NullableOption<boolean>;
+    personalSiteDefaultStorageLimitInMB?: NullableOption<number>;
+    sharingAllowedDomainList?: NullableOption<string[]>;
+    sharingBlockedDomainList?: NullableOption<string[]>;
+    sharingCapability?: NullableOption<SharingCapabilities>;
+    sharingDomainRestrictionMode?: NullableOption<SharingDomainRestrictionMode>;
+    siteCreationDefaultManagedPath?: string;
+    siteCreationDefaultStorageLimitInMB?: NullableOption<number>;
+    tenantDefaultTimezone?: NullableOption<string>;
+}
 export interface ColumnLink extends Entity {
     // The name of the column in this content type.
     name?: NullableOption<string>;
@@ -9366,9 +9573,9 @@ export interface SchemaExtension extends Entity {
      */
     targetTypes?: string[];
 }
-export interface CloudCommunications extends Entity {
-    calls?: NullableOption<Call[]>;
+export interface CloudCommunications {
     callRecords?: NullableOption<CallRecords.CallRecord[]>;
+    calls?: NullableOption<Call[]>;
     onlineMeetings?: NullableOption<OnlineMeeting[]>;
     presences?: NullableOption<Presence[]>;
 }
@@ -14916,27 +15123,6 @@ export interface EnrollmentTroubleshootingEvent extends DeviceManagementTroubles
     // Identifier for the user that tried to enroll the device.
     userId?: NullableOption<string>;
 }
-export interface Admin {
-    // A container for service communications resources. Read-only.
-    serviceAnnouncement?: NullableOption<ServiceAnnouncement>;
-}
-export interface ServiceAnnouncement extends Entity {
-    /**
-     * A collection of service health information for tenant. This property is a contained navigation property, it is nullable
-     * and readonly.
-     */
-    healthOverviews?: NullableOption<ServiceHealth[]>;
-    /**
-     * A collection of service issues for tenant. This property is a contained navigation property, it is nullable and
-     * readonly.
-     */
-    issues?: NullableOption<ServiceHealthIssue[]>;
-    /**
-     * A collection of service messages for tenant. This property is a contained navigation property, it is nullable and
-     * readonly.
-     */
-    messages?: NullableOption<ServiceUpdateMessage[]>;
-}
 export interface ServiceHealth extends Entity {
     /**
      * The service name. Use the list healthOverviews operation to get exact string names for services subscribed by the
@@ -17927,6 +18113,12 @@ export interface LobbyBypassSettings {
     // Specifies the type of participants that are automatically admitted into a meeting, bypassing the lobby. Optional.
     scope?: NullableOption<LobbyBypassScope>;
 }
+export interface WatermarkProtectionValues {
+    // Indicates whether to apply a watermark to any shared content.
+    isEnabledForContentSharing?: NullableOption<boolean>;
+    // Indicates whether to apply a watermark to everyone's video feed.
+    isEnabledForVideo?: NullableOption<boolean>;
+}
 export interface AlternativeSecurityId {
     // For internal use only
     identityProvider?: NullableOption<string>;
@@ -18287,6 +18479,56 @@ export interface VerifiedDomain {
     name?: NullableOption<string>;
     // For example, Managed.
     type?: NullableOption<string>;
+}
+export interface BrowserSharedCookieHistory {
+    // The comment for the shared cookie.
+    comment?: NullableOption<string>;
+    // The name of the cookie.
+    displayName?: string;
+    // Controls whether a cookie is a host-only or domain cookie.
+    hostOnly?: boolean;
+    // The URL of the cookie.
+    hostOrDomain?: NullableOption<string>;
+    // The user who last modified the cookie.
+    lastModifiedBy?: IdentitySet;
+    // The path of the cookie.
+    path?: NullableOption<string>;
+    // The date and time when the cookie was last published.
+    publishedDateTime?: string;
+    /**
+     * Specifies how the cookies are shared between Microsoft Edge and Internet Explorer. The possible values are:
+     * microsoftEdge, internetExplorer11, both, unknownFutureValue.
+     */
+    sourceEnvironment?: NullableOption<BrowserSharedCookieSourceEnvironment>;
+}
+export interface BrowserSiteHistory {
+    /**
+     * Controls the behavior of redirected sites. If true, indicates that the site will open in Internet Explorer 11 or
+     * Microsoft Edge even if the site is navigated to as part of a HTTP or meta refresh redirection chain.
+     */
+    allowRedirect?: NullableOption<boolean>;
+    // The comment for the site.
+    comment?: string;
+    /**
+     * Controls what compatibility setting is used for specific sites or domains. The possible values are: default,
+     * internetExplorer8Enterprise, internetExplorer7Enterprise, internetExplorer11, internetExplorer10, internetExplorer9,
+     * internetExplorer8, internetExplorer7, internetExplorer5, unknownFutureValue.
+     */
+    compatibilityMode?: NullableOption<BrowserSiteCompatibilityMode>;
+    // The user who last modified the site.
+    lastModifiedBy?: NullableOption<IdentitySet>;
+    // The merge type of the site. The possible values are: noMerge, default, unknownFutureValue.
+    mergeType?: NullableOption<BrowserSiteMergeType>;
+    // The date and time when the site was last published.
+    publishedDateTime?: string;
+    /**
+     * The target environment that the site should open in. The possible values are: internetExplorerMode, internetExplorer11,
+     * microsoftEdge, configurable, none, unknownFutureValue.Prior to June 15, 2022, the internetExplorer11 option would allow
+     * opening a site in the Internet Explorer 11 (IE11) desktop application. Following the retirement of IE11 on June 15,
+     * 2022, the internetExplorer11 option will no longer open an IE11 window and will instead behave the same as the
+     * internetExplorerMode option.
+     */
+    targetEnvironment?: NullableOption<BrowserSiteTargetEnvironment>;
 }
 // tslint:disable-next-line: no-empty-interface
 export interface EducationAssignmentRecipient {}
@@ -19446,6 +19688,12 @@ export interface Website {
     displayName?: NullableOption<string>;
     // The possible values are: other, home, work, blog, profile.
     type?: NullableOption<WebsiteType>;
+}
+// tslint:disable-next-line: interface-name
+export interface IdleSessionSignOut {
+    isEnabled?: NullableOption<boolean>;
+    signOutAfterInSeconds?: NullableOption<number>;
+    warnAfterInSeconds?: NullableOption<number>;
 }
 // tslint:disable-next-line: no-empty-interface
 export interface AccessAction {}
@@ -21985,6 +22233,7 @@ export interface SearchHitsContainer {
 export interface SearchQuery {
     // The search query containing the search terms. Required.
     queryString?: string;
+    queryTemplate?: NullableOption<string>;
 }
 export interface SearchRequest {
     aggregationFilters?: NullableOption<string[]>;
@@ -25757,6 +26006,7 @@ export namespace SecurityNamespace {
         accountName?: NullableOption<string>;
         // The user object identifier in Azure AD.
         azureAdUserId?: NullableOption<string>;
+        displayName?: NullableOption<string>;
         // The name of the Active Directory domain of which the user is a member.
         domainName?: NullableOption<string>;
         // The user principal name of the account in Azure AD.
