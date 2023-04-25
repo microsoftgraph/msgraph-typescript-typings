@@ -83,6 +83,24 @@ export type RiskState =
     | "confirmedCompromised"
     | "unknownFutureValue";
 export type AdvancedConfigState = "default" | "enabled" | "disabled" | "unknownFutureValue";
+export type AuthenticationMethodModes =
+    | "password"
+    | "voice"
+    | "hardwareOath"
+    | "softwareOath"
+    | "sms"
+    | "fido2"
+    | "windowsHelloForBusiness"
+    | "microsoftAuthenticatorPush"
+    | "deviceBasedPush"
+    | "temporaryAccessPassOneTime"
+    | "temporaryAccessPassMultiUse"
+    | "email"
+    | "x509CertificateSingleFactor"
+    | "x509CertificateMultiFactor"
+    | "federatedSingleFactor"
+    | "federatedMultiFactor"
+    | "unknownFutureValue";
 export type AuthenticationMethodsPolicyMigrationState =
     | "preMigration"
     | "migrationInProgress"
@@ -90,6 +108,22 @@ export type AuthenticationMethodsPolicyMigrationState =
     | "unknownFutureValue";
 export type AuthenticationMethodState = "enabled" | "disabled";
 export type AuthenticationMethodTargetType = "user" | "group" | "unknownFutureValue";
+export type AuthenticationStrengthPolicyType = "builtIn" | "custom" | "unknownFutureValue";
+export type AuthenticationStrengthRequirements = "none" | "mfa" | "unknownFutureValue";
+export type BaseAuthenticationMethod =
+    | "password"
+    | "voice"
+    | "hardwareOath"
+    | "softwareOath"
+    | "sms"
+    | "fido2"
+    | "windowsHelloForBusiness"
+    | "microsoftAuthenticator"
+    | "temporaryAccessPass"
+    | "email"
+    | "x509Certificate"
+    | "federation"
+    | "unknownFutureValue";
 export type ExternalEmailOtpState = "default" | "enabled" | "disabled" | "unknownFutureValue";
 export type FeatureTargetType = "group" | "administrativeUnit" | "role" | "unknownFutureValue";
 export type Fido2RestrictionEnforcementType = "allow" | "block" | "unknownFutureValue";
@@ -2417,6 +2451,7 @@ export type AuthenticationPhoneType = "mobile" | "alternateMobile" | "office" | 
 export type LifecycleEventType = "missed" | "subscriptionRemoved" | "reauthorizationRequired";
 export type CallRecordingStatus = "success" | "failure" | "initial" | "chunkFinished" | "unknownFutureValue";
 export type ChannelMembershipType = "standard" | "private" | "unknownFutureValue" | "shared";
+export type ChatMessageActions = "reactionAdded" | "reactionRemoved" | "actionUndefined" | "unknownFutureValue";
 export type ChatMessageImportance = "normal" | "high" | "urgent" | "unknownFutureValue";
 export type ChatMessagePolicyViolationDlpActionTypes = "none" | "notifySender" | "blockAccess" | "blockAccessExternal";
 export type ChatMessagePolicyViolationUserActionTypes = "none" | "override" | "reportFalsePositive";
@@ -2754,8 +2789,8 @@ export interface User extends DirectoryObject {
      * Supports $filter (eq, ne, not, ge, le) but not with any other filterable properties. Note: Details for this property
      * require an Azure AD Premium P1/P2 license and the AuditLog.Read.All permission.When you specify $select=signInActivity
      * or $filter=signInActivity while listing users, the maximum page size is 120 users. Requests with $top set higher than
-     * 120 will fail. Requests with $top set higher than 120 will fail.This property is not returned for a user who has never
-     * signed in or last signed in before April 2020.
+     * 120 will return pages with up to 120 users. This property is not returned for a user who has never signed in or last
+     * signed in before April 2020.
      */
     signInActivity?: NullableOption<SignInActivity>;
     /**
@@ -4539,7 +4574,8 @@ export interface Application extends DirectoryObject {
     spa?: NullableOption<SpaApplication>;
     /**
      * Custom strings that can be used to categorize and identify the application. Not nullable. Strings added here will also
-     * appear in the tags property of any associated service principals.Supports $filter (eq, not, ge, le, startsWith).
+     * appear in the tags property of any associated service principals.Supports $filter (eq, not, ge, le, startsWith) and
+     * $search.
      */
     tags?: string[];
     /**
@@ -4686,7 +4722,11 @@ export interface ServicePrincipal extends DirectoryObject {
      * notSupported, and oidc.
      */
     preferredSingleSignOnMode?: NullableOption<string>;
-    // Reserved for internal use only. Do not write or otherwise rely on this property. May be removed in future versions.
+    /**
+     * This property can be used on SAML applications (apps that have preferredSingleSignOnMode set to saml) to control which
+     * certificate is used to sign the SAML responses. For applications that are not SAML, do not write or otherwise rely on
+     * this property.
+     */
     preferredTokenSigningKeyThumbprint?: NullableOption<string>;
     /**
      * The URLs that user tokens are sent to for sign in with the associated application, or the redirect URIs that OAuth 2.0
@@ -4724,10 +4764,10 @@ export interface ServicePrincipal extends DirectoryObject {
     servicePrincipalType?: NullableOption<string>;
     /**
      * Specifies the Microsoft accounts that are supported for the current application. Read-only. Supported values
-     * are:AzureADMyOrg: Users with a Microsoft work or school account in my organization’s Azure AD tenant
-     * (single-tenant).AzureADMultipleOrgs: Users with a Microsoft work or school account in any organization’s Azure AD
+     * are:AzureADMyOrg: Users with a Microsoft work or school account in my organization's Azure AD tenant
+     * (single-tenant).AzureADMultipleOrgs: Users with a Microsoft work or school account in any organization's Azure AD
      * tenant (multi-tenant).AzureADandPersonalMicrosoftAccount: Users with a personal Microsoft account, or a work or school
-     * account in any organization’s Azure AD tenant.PersonalMicrosoftAccount: Users with a personal Microsoft account only.
+     * account in any organization's Azure AD tenant.PersonalMicrosoftAccount: Users with a personal Microsoft account only.
      */
     signInAudience?: NullableOption<string>;
     /**
@@ -4794,8 +4834,11 @@ export interface PolicyBase extends DirectoryObject {
     displayName?: NullableOption<string>;
 }
 export interface AppManagementPolicy extends PolicyBase {
+    // Denotes whether the policy is enabled.
     isEnabled?: boolean;
+    // Restrictions that apply to an application or service principal object.
     restrictions?: NullableOption<AppManagementConfiguration>;
+    // Collection of applications and service principals to which the policy is applied.
     appliesTo?: NullableOption<DirectoryObject[]>;
 }
 export interface ExtensionProperty extends DirectoryObject {
@@ -4915,11 +4958,28 @@ export interface Endpoint extends DirectoryObject {
     providerResourceId?: NullableOption<string>;
     uri?: string;
 }
+export interface AuthenticationCombinationConfiguration extends Entity {
+    /**
+     * Which authentication method combinations this configuration applies to. Must be an allowedCombinations object that's
+     * defined for the authenticationStrengthPolicy. The only possible value for fido2combinationConfigurations is 'fido2'.
+     */
+    appliesToCombinations?: AuthenticationMethodModes[];
+}
 export interface AuthenticationMethodConfiguration extends Entity {
     // Groups of users that are excluded from a policy.
     excludeTargets?: NullableOption<ExcludeTarget[]>;
     // The state of the policy. Possible values are: enabled, disabled.
     state?: NullableOption<AuthenticationMethodState>;
+}
+export interface AuthenticationMethodModeDetail extends Entity {
+    /**
+     * The authentication method that this mode modifies. The possible values are: password, voice, hardwareOath,
+     * softwareOath, sms, fido2, windowsHelloForBusiness, microsoftAuthenticator, temporaryAccessPass, email, x509Certificate,
+     * federation, unknownFutureValue.
+     */
+    authenticationMethod?: BaseAuthenticationMethod;
+    // The display name of this mode
+    displayName?: string;
 }
 export interface AuthenticationMethodsPolicy extends Entity {
     // A description of the policy. Read-only.
@@ -4957,6 +5017,132 @@ export interface AuthenticationMethodTarget extends Entity {
     // Possible values are: user, group.
     targetType?: AuthenticationMethodTargetType;
 }
+export interface AuthenticationStrengthPolicy extends Entity {
+    // A collection of authentication method modes that are required be used to satify this authentication strength.
+    allowedCombinations?: AuthenticationMethodModes[];
+    // The datetime when this policy was created.
+    createdDateTime?: string;
+    // The human-readable description of this policy.
+    description?: NullableOption<string>;
+    // The human-readable display name of this policy. Supports $filter (eq, ne, not , and in).
+    displayName?: string;
+    // The datetime when this policy was last modified.
+    modifiedDateTime?: string;
+    /**
+     * A descriptor of whether this policy is built into Azure AD or created by an admin for the tenant. The possible values
+     * are: builtIn, custom, unknownFutureValue. Supports $filter (eq, ne, not , and in).
+     */
+    policyType?: AuthenticationStrengthPolicyType;
+    /**
+     * A descriptor of whether this authentication strength grants the MFA claim upon successful satisfaction. The possible
+     * values are: none, mfa, unknownFutureValue.
+     */
+    requirementsSatisfied?: AuthenticationStrengthRequirements;
+    /**
+     * Settings that may be used to require specific types or instances of an authentication method to be used when
+     * authenticating with a specified combination of authentication methods.
+     */
+    combinationConfigurations?: NullableOption<AuthenticationCombinationConfiguration[]>;
+}
+export interface AuthenticationStrengthRoot extends Entity {
+    combinations?: AuthenticationMethodModes[];
+    // Names and descriptions of all valid authentication method modes in the system.
+    authenticationMethodModes?: NullableOption<AuthenticationMethodModeDetail[]>;
+    /**
+     * A collection of authentication strength policies that exist for this tenant, including both built-in and custom
+     * policies.
+     */
+    policies?: NullableOption<AuthenticationStrengthPolicy[]>;
+}
+export interface ConditionalAccessRoot extends Entity {
+    authenticationStrength?: NullableOption<AuthenticationStrengthRoot>;
+    // Read-only. Nullable. Returns a collection of the specified authentication context class references.
+    authenticationContextClassReferences?: NullableOption<AuthenticationContextClassReference[]>;
+    // Read-only. Nullable. Returns a collection of the specified named locations.
+    namedLocations?: NullableOption<NamedLocation[]>;
+    // Read-only. Nullable. Returns a collection of the specified Conditional Access (CA) policies.
+    policies?: NullableOption<ConditionalAccessPolicy[]>;
+    // Read-only. Nullable. Returns a collection of the specified Conditional Access templates.
+    templates?: NullableOption<ConditionalAccessTemplate[]>;
+}
+export interface AuthenticationContextClassReference extends Entity {
+    /**
+     * A short explanation of the policies that are enforced by authenticationContextClassReference. This value should be used
+     * to provide secondary text to describe the authentication context class reference when building user-facing admin
+     * experiences. For example, a selection UX.
+     */
+    description?: NullableOption<string>;
+    /**
+     * The display name is the friendly name of the authenticationContextClassReference object. This value should be used to
+     * identify the authentication context class reference when building user-facing admin experiences. For example, a
+     * selection UX.
+     */
+    displayName?: NullableOption<string>;
+    /**
+     * Indicates whether the authenticationContextClassReference has been published by the security admin and is ready for use
+     * by apps. When it is set to false, it should not be shown in authentication context selection UX, or used to protect app
+     * resources. It will be shown and available for Conditional Access policy authoring. The default value is false. Supports
+     * $filter (eq).
+     */
+    isAvailable?: NullableOption<boolean>;
+}
+export interface NamedLocation extends Entity {
+    /**
+     * The Timestamp type represents creation date and time of the location using ISO 8601 format and is always in UTC time.
+     * For example, midnight UTC on Jan 1, 2014 is 2014-01-01T00:00:00Z. Read-only.
+     */
+    createdDateTime?: NullableOption<string>;
+    // Human-readable name of the location.
+    displayName?: string;
+    /**
+     * The Timestamp type represents last modified date and time of the location using ISO 8601 format and is always in UTC
+     * time. For example, midnight UTC on Jan 1, 2014 is 2014-01-01T00:00:00Z. Read-only.
+     */
+    modifiedDateTime?: NullableOption<string>;
+}
+export interface ConditionalAccessPolicy extends Entity {
+    // Specifies the rules that must be met for the policy to apply. Required.
+    conditions?: ConditionalAccessConditionSet;
+    /**
+     * The Timestamp type represents date and time information using ISO 8601 format and is always in UTC time. For example,
+     * midnight UTC on Jan 1, 2014 is 2014-01-01T00:00:00Z. Readonly.
+     */
+    createdDateTime?: NullableOption<string>;
+    description?: NullableOption<string>;
+    // Specifies a display name for the conditionalAccessPolicy object.
+    displayName?: string;
+    // Specifies the grant controls that must be fulfilled to pass the policy.
+    grantControls?: NullableOption<ConditionalAccessGrantControls>;
+    /**
+     * The Timestamp type represents date and time information using ISO 8601 format and is always in UTC time. For example,
+     * midnight UTC on Jan 1, 2014 is 2014-01-01T00:00:00Z. Readonly.
+     */
+    modifiedDateTime?: NullableOption<string>;
+    // Specifies the session controls that are enforced after sign-in.
+    sessionControls?: NullableOption<ConditionalAccessSessionControls>;
+    /**
+     * Specifies the state of the conditionalAccessPolicy object. Possible values are: enabled, disabled,
+     * enabledForReportingButNotEnforced. Required.
+     */
+    state?: ConditionalAccessPolicyState;
+}
+export interface ConditionalAccessTemplate extends Entity {
+    // The user-friendly name of the template.
+    description?: string;
+    /**
+     * Complete list of policy details specific to the template. This property contains the JSON of policy settings for
+     * configuring a Conditional Access policy.
+     */
+    details?: ConditionalAccessPolicyDetail;
+    // The user-friendly name of the template.
+    name?: string;
+    /**
+     * List of conditional access scenarios that the template is recommended for. The possible values are: new,
+     * secureFoundation, zeroTrust, remoteWork, protectAdmins, emergingThreats, unknownFutureValue. This is a multi-valued
+     * enum. Supports $filter (has).
+     */
+    scenarios?: TemplateScenarios;
+}
 export interface EmailAuthenticationMethodConfiguration extends AuthenticationMethodConfiguration {
     /**
      * Determines whether email OTP is usable by external users for authentication. Possible values are: default, enabled,
@@ -4981,6 +5167,10 @@ export interface Fido2AuthenticationMethodConfiguration extends AuthenticationMe
     // A collection of groups that are enabled to use the authentication method.
     includeTargets?: NullableOption<AuthenticationMethodTarget[]>;
 }
+export interface Fido2CombinationConfiguration extends AuthenticationCombinationConfiguration {
+    // A list of AAGUIDs allowed to be used as part of the specified authentication method combinations.
+    allowedAAGUIDs?: string[];
+}
 export interface MicrosoftAuthenticatorAuthenticationMethodConfiguration extends AuthenticationMethodConfiguration {
     /**
      * A collection of Microsoft Authenticator settings such as application context and location context, and whether they are
@@ -5000,10 +5190,12 @@ export interface MicrosoftAuthenticatorAuthenticationMethodTarget extends Authen
 }
 export interface PolicyRoot extends Entity {
     /**
-     * The authentication methods and the users that are allowed to use them to sign in and perform multi-factor
-     * authentication (MFA) in Azure Active Directory (Azure AD).
+     * The authentication methods and the users that are allowed to use them to sign in and perform multifactor authentication
+     * (MFA) in Azure Active Directory (Azure AD).
      */
     authenticationMethodsPolicy?: NullableOption<AuthenticationMethodsPolicy>;
+    // The authentication method combinations that are to be used in scenarios defined by Azure AD Conditional Access.
+    authenticationStrengthPolicies?: NullableOption<AuthenticationStrengthPolicy[]>;
     // The policy configuration of the self-service sign-up experience of external users.
     authenticationFlowsPolicy?: NullableOption<AuthenticationFlowsPolicy>;
     // The policy that controls the idle time out for web sessions for applications.
@@ -5141,32 +5333,6 @@ export interface AdminConsentRequestPolicy extends Entity {
     reviewers?: NullableOption<AccessReviewReviewerScope[]>;
     // Specifies the version of this policy. When the policy is updated, this version is updated. Read-only.
     version?: number;
-}
-export interface ConditionalAccessPolicy extends Entity {
-    // Specifies the rules that must be met for the policy to apply. Required.
-    conditions?: ConditionalAccessConditionSet;
-    /**
-     * The Timestamp type represents date and time information using ISO 8601 format and is always in UTC time. For example,
-     * midnight UTC on Jan 1, 2014 is 2014-01-01T00:00:00Z. Readonly.
-     */
-    createdDateTime?: NullableOption<string>;
-    description?: NullableOption<string>;
-    // Specifies a display name for the conditionalAccessPolicy object.
-    displayName?: string;
-    // Specifies the grant controls that must be fulfilled to pass the policy.
-    grantControls?: NullableOption<ConditionalAccessGrantControls>;
-    /**
-     * The Timestamp type represents date and time information using ISO 8601 format and is always in UTC time. For example,
-     * midnight UTC on Jan 1, 2014 is 2014-01-01T00:00:00Z. Readonly.
-     */
-    modifiedDateTime?: NullableOption<string>;
-    // Specifies the session controls that are enforced after sign-in.
-    sessionControls?: NullableOption<ConditionalAccessSessionControls>;
-    /**
-     * Specifies the state of the conditionalAccessPolicy object. Possible values are: enabled, disabled,
-     * enabledForReportingButNotEnforced. Required.
-     */
-    state?: ConditionalAccessPolicyState;
 }
 // tslint:disable-next-line: interface-name
 export interface IdentitySecurityDefaultsEnforcementPolicy extends PolicyBase {
@@ -6040,7 +6206,9 @@ export interface Schedule extends Entity {
     timeZone?: NullableOption<string>;
     workforceIntegrationIds?: NullableOption<string[]>;
     offerShiftRequests?: NullableOption<OfferShiftRequest[]>;
+    // The open shift requests in the schedule.
     openShiftChangeRequests?: NullableOption<OpenShiftChangeRequest[]>;
+    // The set of open shifts in a scheduling group in the schedule.
     openShifts?: NullableOption<OpenShift[]>;
     // The logical grouping of users in the schedule (usually by role).
     schedulingGroups?: NullableOption<SchedulingGroup[]>;
@@ -6696,16 +6864,6 @@ export interface IdentityContainer extends Entity {
     // the entry point for the Conditional Access (CA) object model.
     conditionalAccess?: NullableOption<ConditionalAccessRoot>;
 }
-export interface ConditionalAccessRoot extends Entity {
-    // Read-only. Nullable. Returns a collection of the specified authentication context class references.
-    authenticationContextClassReferences?: NullableOption<AuthenticationContextClassReference[]>;
-    // Read-only. Nullable. Returns a collection of the specified named locations.
-    namedLocations?: NullableOption<NamedLocation[]>;
-    // Read-only. Nullable. Returns a collection of the specified Conditional Access (CA) policies.
-    policies?: NullableOption<ConditionalAccessPolicy[]>;
-    // Read-only. Nullable. Returns a collection of the specified Conditional Access templates.
-    templates?: NullableOption<ConditionalAccessTemplate[]>;
-}
 // tslint:disable-next-line: interface-name no-empty-interface
 export interface IdentityCustomUserFlowAttribute extends IdentityUserFlowAttribute {}
 export interface SocialIdentityProvider extends IdentityProviderBase {
@@ -6748,6 +6906,9 @@ export interface AdministrativeUnit extends DirectoryObject {
     // The collection of open extensions defined for this administrative unit. Nullable.
     extensions?: NullableOption<Extension[]>;
 }
+export interface AllowedValue extends Entity {
+    isActive?: NullableOption<boolean>;
+}
 export interface AppScope extends Entity {
     /**
      * Provides the display name of the app-specific resource represented by the app scope. Provided for display purposes
@@ -6759,6 +6920,10 @@ export interface AppScope extends Entity {
      * interface can convey to the user the kind of app specific resource represented by the app scope. Read-only.
      */
     type?: NullableOption<string>;
+}
+export interface AttributeSet extends Entity {
+    description?: NullableOption<string>;
+    maxAttributesPerSet?: NullableOption<number>;
 }
 export interface CertificateBasedAuthConfiguration extends Entity {
     // Collection of certificate authorities which creates a trusted certificate chain.
@@ -6846,6 +7011,17 @@ export interface CrossTenantAccessPolicyConfigurationPartner {
     // The tenant identifier for the partner Azure AD organization. Read-only. Key.
     tenantId?: string;
 }
+export interface CustomSecurityAttributeDefinition extends Entity {
+    attributeSet?: string;
+    description?: NullableOption<string>;
+    isCollection?: boolean;
+    isSearchable?: NullableOption<boolean>;
+    name?: string;
+    status?: string;
+    type?: string;
+    usePreDefinedValuesOnly?: NullableOption<boolean>;
+    allowedValues?: NullableOption<AllowedValue[]>;
+}
 export interface Device extends DirectoryObject {
     /**
      * true if the account is enabled; otherwise, false. Required. Default is true. Supports $filter (eq, ne, not, in). Only
@@ -6931,7 +7107,7 @@ export interface Device extends DirectoryObject {
     memberOf?: NullableOption<DirectoryObject[]>;
     /**
      * The user that cloud joined the device or registered their personal device. The registered owner is set at the time of
-     * registration. Currently, there can be only one owner. Read-only. Nullable. Supports $expand.
+     * registration. Read-only. Nullable. Supports $expand.
      */
     registeredOwners?: NullableOption<DirectoryObject[]>;
     /**
@@ -6948,6 +7124,8 @@ export interface Device extends DirectoryObject {
 export interface Directory extends Entity {
     // Conceptual container for user and group directory objects.
     administrativeUnits?: NullableOption<AdministrativeUnit[]>;
+    attributeSets?: NullableOption<AttributeSet[]>;
+    customSecurityAttributeDefinitions?: NullableOption<CustomSecurityAttributeDefinition[]>;
     // Recently deleted items. Read-only. Nullable.
     deletedItems?: NullableOption<DirectoryObject[]>;
     /**
@@ -8602,7 +8780,8 @@ export interface Subscription extends Entity {
     notificationQueryOptions?: NullableOption<string>;
     /**
      * Required. The URL of the endpoint that will receive the change notifications. This URL must make use of the HTTPS
-     * protocol.
+     * protocol. Any query string parameter included in the notificationUrl property will be included in the HTTP POST request
+     * when Microsoft Graph sends the change notifications.
      */
     notificationUrl?: string;
     /**
@@ -10303,58 +10482,6 @@ export interface AgreementFileLocalization extends AgreementFileProperties {
 }
 // tslint:disable-next-line: no-empty-interface
 export interface AgreementFileVersion extends AgreementFileProperties {}
-export interface AuthenticationContextClassReference extends Entity {
-    /**
-     * A short explanation of the policies that are enforced by authenticationContextClassReference. This value should be used
-     * to provide secondary text to describe the authentication context class reference when building user-facing admin
-     * experiences. For example, a selection UX.
-     */
-    description?: NullableOption<string>;
-    /**
-     * The display name is the friendly name of the authenticationContextClassReference object. This value should be used to
-     * identify the authentication context class reference when building user-facing admin experiences. For example, a
-     * selection UX.
-     */
-    displayName?: NullableOption<string>;
-    /**
-     * Indicates whether the authenticationContextClassReference has been published by the security admin and is ready for use
-     * by apps. When it is set to false, it should not be shown in authentication context selection UX, or used to protect app
-     * resources. It will be shown and available for Conditional Access policy authoring. The default value is false. Supports
-     * $filter (eq).
-     */
-    isAvailable?: NullableOption<boolean>;
-}
-export interface NamedLocation extends Entity {
-    /**
-     * The Timestamp type represents creation date and time of the location using ISO 8601 format and is always in UTC time.
-     * For example, midnight UTC on Jan 1, 2014 is 2014-01-01T00:00:00Z. Read-only.
-     */
-    createdDateTime?: NullableOption<string>;
-    // Human-readable name of the location.
-    displayName?: string;
-    /**
-     * The Timestamp type represents last modified date and time of the location using ISO 8601 format and is always in UTC
-     * time. For example, midnight UTC on Jan 1, 2014 is 2014-01-01T00:00:00Z. Read-only.
-     */
-    modifiedDateTime?: NullableOption<string>;
-}
-export interface ConditionalAccessTemplate extends Entity {
-    // The user-friendly name of the template.
-    description?: string;
-    /**
-     * Complete list of policy details specific to the template. This property contains the JSON of policy settings for
-     * configuring a Conditional Access policy.
-     */
-    details?: ConditionalAccessPolicyDetail;
-    // The user-friendly name of the template.
-    name?: string;
-    /**
-     * List of conditional access scenarios that the template is recommended for. The possible values are: new,
-     * secureFoundation, zeroTrust, remoteWork, protectAdmins, emergingThreats, unknownFutureValue. This is a multi-valued
-     * enum. Supports $filter (has).
-     */
-    scenarios?: TemplateScenarios;
-}
 export interface CountryNamedLocation extends NamedLocation {
     // List of countries and/or regions in two-letter format specified by ISO 3166-2. Required.
     countriesAndRegions?: string[];
@@ -16327,6 +16454,7 @@ export interface ChatMessage extends Entity {
     locale?: string;
     // List of entities mentioned in the chat message. Supported entities are: user, bot, team, and channel.
     mentions?: NullableOption<ChatMessageMention[]>;
+    messageHistory?: NullableOption<ChatMessageHistoryItem[]>;
     /**
      * The type of chat message. The possible values are: message, chatEvent, typing, unknownFutureValue, systemEventMessage.
      * Note that you must use the Prefer: include-unknown-enum-members request header to get the following value in this
@@ -17609,6 +17737,19 @@ export interface RegistrationEnforcement {
     // Run campaigns to remind users to set up targeted authentication methods.
     authenticationMethodsRegistrationCampaign?: NullableOption<AuthenticationMethodsRegistrationCampaign>;
 }
+export interface UpdateAllowedCombinationsResult {
+    // Information about why the updateAllowedCombinations action was successful or failed.
+    additionalInformation?: NullableOption<string>;
+    // References to existing Conditional Access policies that use this authentication strength.
+    conditionalAccessReferences?: NullableOption<string[]>;
+    // The list of current authentication method combinations allowed by the authentication strength.
+    currentCombinations?: AuthenticationMethodModes[];
+    /**
+     * The list of former authentication method combinations allowed by the authentication strength before they were updated
+     * through the updateAllowedCombinations action.
+     */
+    previousCombinations?: AuthenticationMethodModes[];
+}
 export interface X509CertificateAuthenticationModeConfiguration {
     /**
      * Rules are configured in addition to the authentication mode to bind a specific x509CertificateRuleType to an
@@ -18223,6 +18364,7 @@ export interface DefaultUserRolePermissions {
     allowedToCreateApps?: boolean;
     // Indicates whether the default user role can create security groups.
     allowedToCreateSecurityGroups?: boolean;
+    // Indicates whether the registered owners of a device can read their own BitLocker recovery keys with default user role.
     allowedToReadBitlockerKeysForOwnedDevice?: NullableOption<boolean>;
     // Indicates whether the default user role can read other users.
     allowedToReadOtherUsers?: boolean;
@@ -20258,6 +20400,10 @@ export interface ConditionalAccessSessionControl {
 }
 // tslint:disable-next-line: no-empty-interface
 export interface ApplicationEnforcedRestrictionsSessionControl extends ConditionalAccessSessionControl {}
+export interface AuthenticationStrengthUsage {
+    mfa?: NullableOption<ConditionalAccessPolicy[]>;
+    none?: NullableOption<ConditionalAccessPolicy[]>;
+}
 export interface CloudAppSecuritySessionControl extends ConditionalAccessSessionControl {
     /**
      * Possible values are: mcasConfigured, monitorOnly, blockDownloads, unknownFutureValue. For more information, see Deploy
@@ -20385,6 +20531,7 @@ export interface ConditionalAccessGrantControls {
     operator?: NullableOption<string>;
     // List of terms of use IDs required by the policy.
     termsOfUse?: string[];
+    authenticationStrength?: NullableOption<AuthenticationStrengthPolicy>;
 }
 export interface ConditionalAccessGuestsOrExternalUsers {
     externalTenants?: NullableOption<ConditionalAccessExternalTenants>;
@@ -22233,6 +22380,7 @@ export interface SearchHitsContainer {
 export interface SearchQuery {
     // The search query containing the search terms. Required.
     queryString?: string;
+    // Provides a way to decorate the query string. Supports both KQL and query variables. Optional.
     queryTemplate?: NullableOption<string>;
 }
 export interface SearchRequest {
@@ -24026,6 +24174,22 @@ export interface ChatMessageAttachment {
 }
 // tslint:disable-next-line: no-empty-interface
 export interface ChatMessageFromIdentitySet extends IdentitySet {}
+export interface ChatMessageHistoryItem {
+    actions?: ChatMessageActions;
+    modifiedDateTime?: string;
+    reaction?: NullableOption<ChatMessageReaction>;
+}
+export interface ChatMessageReaction {
+    /**
+     * The Timestamp type represents date and time information using ISO 8601 format and is always in UTC time. For example,
+     * midnight UTC on Jan 1, 2014 is 2014-01-01T00:00:00Z
+     */
+    createdDateTime?: string;
+    // Supported values are like, angry, sad, laugh, heart, surprised.
+    reactionType?: string;
+    // The user who reacted to the message.
+    user?: ChatMessageReactionIdentitySet;
+}
 export interface ChatMessageMention {
     /**
      * Index of an entity being mentioned in the specified chatMessage. Matches the {index} value in the corresponding
@@ -24088,17 +24252,6 @@ export interface ChatMessagePolicyViolationPolicyTip {
      * own conditions, examples include 'Credit Card Number' and 'Social Security Number'.
      */
     matchedConditionDescriptions?: NullableOption<string[]>;
-}
-export interface ChatMessageReaction {
-    /**
-     * The Timestamp type represents date and time information using ISO 8601 format and is always in UTC time. For example,
-     * midnight UTC on Jan 1, 2014 is 2014-01-01T00:00:00Z
-     */
-    createdDateTime?: string;
-    // Supported values are like, angry, sad, laugh, heart, surprised.
-    reactionType?: string;
-    // The user who reacted to the message.
-    user?: ChatMessageReactionIdentitySet;
 }
 // tslint:disable-next-line: no-empty-interface
 export interface ChatMessageReactionIdentitySet extends IdentitySet {}
