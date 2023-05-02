@@ -1,4 +1,3 @@
-// Type definitions for non-npm package microsoft-graph 2.29
 // Project: https://github.com/microsoftgraph/msgraph-typescript-typings
 // Definitions by: Microsoft Graph Team <https://github.com/microsoftgraph>
 //                 Michael Mainer <https://github.com/MIchaelMainer>
@@ -7,7 +6,7 @@
 //                 DeVere Dyett <https://github.com/ddyett>
 //                 Nikitha Udaykumar Chettiar <https://github.com/nikithauc>
 // Definitions: https://github.com/DefinitelyTyped/DefinitelyTyped
-// TypeScript Version: 5.0.3
+// TypeScript Version: 2.1
 
 export as namespace microsoftgraph;
 
@@ -6953,6 +6952,7 @@ export interface Contract extends DirectoryObject {
     displayName?: NullableOption<string>;
 }
 export interface CrossTenantAccessPolicyConfigurationDefault extends Entity {
+    automaticUserConsentSettings?: NullableOption<InboundOutboundPolicyConfiguration>;
     /**
      * Defines your default configuration for users from other organizations accessing your resources via Azure AD B2B
      * collaboration.
@@ -6982,6 +6982,7 @@ export interface CrossTenantAccessPolicyConfigurationDefault extends Entity {
     isServiceDefault?: NullableOption<boolean>;
 }
 export interface CrossTenantAccessPolicyConfigurationPartner {
+    automaticUserConsentSettings?: NullableOption<InboundOutboundPolicyConfiguration>;
     /**
      * Defines your partner-specific configuration for users from other organizations accessing your resources via Azure AD
      * B2B collaboration.
@@ -17104,23 +17105,23 @@ export interface ProvisioningSystem extends Identity {
 export interface SignInActivity {
     /**
      * The last non-interactive sign-in date for a specific user. You can use this field to calculate the last time a client
-     * signed in to the directory on behalf of a user. Because some users may use clients to access tenant resources rather
-     * than signing into your tenant directly, you can use the non-interactive sign-in date to along with lastSignInDateTime
-     * to identify inactive users. The timestamp represents date and time information using ISO 8601 format and is always in
-     * UTC time. For example, midnight UTC on Jan 1, 2014 is: '2014-01-01T00:00:00Z'. Azure AD maintains non-interactive
-     * sign-ins going back to May 2020. For more information about using the value of this property, see Manage inactive user
-     * accounts in Azure AD.
+     * attempted to sign into the directory on behalf of a user. Because some users may use clients to access tenant resources
+     * rather than signing into your tenant directly, you can use the non-interactive sign-in date to along with
+     * lastSignInDateTime to identify inactive users. The timestamp represents date and time information using ISO 8601 format
+     * and is always in UTC time. For example, midnight UTC on Jan 1, 2014 is: '2014-01-01T00:00:00Z'. Azure AD maintains
+     * non-interactive sign-ins going back to May 2020. For more information about using the value of this property, see
+     * Manage inactive user accounts in Azure AD.
      */
     lastNonInteractiveSignInDateTime?: NullableOption<string>;
     // Request identifier of the last non-interactive sign-in performed by this user.
     lastNonInteractiveSignInRequestId?: NullableOption<string>;
     /**
      * The last interactive sign-in date and time for a specific user. You can use this field to calculate the last time a
-     * user signed in to the directory with an interactive authentication method. This field can be used to build reports,
-     * such as inactive users. The timestamp represents date and time information using ISO 8601 format and is always in UTC
-     * time. For example, midnight UTC on Jan 1, 2014 is: '2014-01-01T00:00:00Z'. Azure AD maintains interactive sign-ins
-     * going back to April 2020. For more information about using the value of this property, see Manage inactive user
-     * accounts in Azure AD.
+     * user attempted to sign into the directory with an interactive authentication method. This field can be used to build
+     * reports, such as inactive users. The timestamp represents date and time information using ISO 8601 format and is always
+     * in UTC time. For example, midnight UTC on Jan 1, 2014 is: '2014-01-01T00:00:00Z'. Azure AD maintains interactive
+     * sign-ins going back to April 2020. For more information about using the value of this property, see Manage inactive
+     * user accounts in Azure AD.
      */
     lastSignInDateTime?: NullableOption<string>;
     // Request identifier of the last interactive sign-in performed by this user.
@@ -18397,6 +18398,11 @@ export interface ImplicitGrantSettings {
     enableAccessTokenIssuance?: NullableOption<boolean>;
     // Specifies whether this web application can request an ID token using the OAuth 2.0 implicit flow.
     enableIdTokenIssuance?: NullableOption<boolean>;
+}
+// tslint:disable-next-line: interface-name
+export interface InboundOutboundPolicyConfiguration {
+    inboundAllowed?: NullableOption<boolean>;
+    outboundAllowed?: NullableOption<boolean>;
 }
 // tslint:disable-next-line: interface-name
 export interface InstanceResourceAccess {
@@ -20681,19 +20687,19 @@ export interface AccessPackageAssignmentApprovalSettings {
     stages?: NullableOption<AccessPackageApprovalStage[]>;
 }
 export interface AccessPackageAssignmentRequestorSettings {
-    // If false, the requestor is not permitted to include a schedule in their request.
+    // False indicates that the requestor is not permitted to include a schedule in their request.
     allowCustomAssignmentSchedule?: NullableOption<boolean>;
-    // If true, allows on-behalf-of requestors to create a request to add access for another principal.
+    // True allows on-behalf-of requestors to create a request to add access for another principal.
     enableOnBehalfRequestorsToAddAccess?: NullableOption<boolean>;
-    // If true, allows on-behalf-of requestors to create a request to remove access for another principal.
+    // True allows on-behalf-of requestors to create a request to remove access for another principal.
     enableOnBehalfRequestorsToRemoveAccess?: NullableOption<boolean>;
-    // If true, allows on-behalf-of requestors to create a request to update access for another principal.
+    // True allows on-behalf-of requestors to create a request to update access for another principal.
     enableOnBehalfRequestorsToUpdateAccess?: NullableOption<boolean>;
-    // If true, allows requestors to create a request to add access for themselves.
+    // True allows requestors to create a request to add access for themselves.
     enableTargetsToSelfAddAccess?: NullableOption<boolean>;
-    // If true, allows requestors to create a request to remove their access.
+    // True allows requestors to create a request to remove their access.
     enableTargetsToSelfRemoveAccess?: NullableOption<boolean>;
-    // If true, allows requestors to create a request to update their access.
+    // True allows requestors to create a request to update their access.
     enableTargetsToSelfUpdateAccess?: NullableOption<boolean>;
     // The principals who can request on-behalf-of others.
     onBehalfRequestors?: NullableOption<SubjectSet[]>;
