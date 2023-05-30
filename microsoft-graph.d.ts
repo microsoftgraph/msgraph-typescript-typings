@@ -6265,10 +6265,10 @@ export interface ConversationMember extends Entity {
     // The display name of the user.
     displayName?: NullableOption<string>;
     /**
-     * The roles for that user. This property only contains additional qualifiers when relevant - for example, if the member
-     * has owner privileges, the roles property contains owner as one of the values. Similarly, if the member is a guest, the
-     * roles property contains guest as one of the values. A basic member should not have any values specified in the roles
-     * property.
+     * The roles for that user. This property contains additional qualifiers only when relevant - for example, if the member
+     * has owner privileges, the roles property contains owner as one of the values. Similarly, if the member is an in-tenant
+     * guest, the roles property contains guest as one of the values. A basic member should not have any values specified in
+     * the roles property. An Out-of-tenant external member is assigned the owner role.
      */
     roles?: NullableOption<string[]>;
     /**
@@ -6605,7 +6605,7 @@ export interface SecureScoreControlProfile extends Entity {
     remediationImpact?: NullableOption<string>;
     // Service that owns the control (Exchange, Sharepoint, Azure AD).
     service?: NullableOption<string>;
-    // List of threats the control mitigates (accountBreach,dataDeletion,dataExfiltration,dataSpillage,
+    // List of threats the control mitigates (accountBreach, dataDeletion, dataExfiltration, dataSpillage,
     threats?: NullableOption<string[]>;
     tier?: NullableOption<string>;
     title?: NullableOption<string>;
@@ -17806,7 +17806,8 @@ export interface KeyCredential {
     /**
      * The certificate's raw data in byte array converted to Base64 string. Returned only on $select for a single object, that
      * is, GET applications/{applicationId}?$select=keyCredentials or GET
-     * servicePrincipals/{servicePrincipalId}?$select=keyCredentials; otherwise, it is always null.
+     * servicePrincipals/{servicePrincipalId}?$select=keyCredentials; otherwise, it is always null. From a .cer certificate,
+     * you can read the key using the Convert.ToBase64String() method. For more information, see Get the certificate key.
      */
     key?: NullableOption<string>;
     // The unique identifier (GUID) for the key.
@@ -18687,14 +18688,22 @@ export interface CrossTenantUserSyncInbound {
     isSyncAllowed?: NullableOption<boolean>;
 }
 export interface DefaultUserRolePermissions {
-    // Indicates whether the default user role can create applications.
+    /**
+     * Indicates whether the default user role can create applications. This setting corresponds to the Users can register
+     * applications setting in the User settings menu in the Azure portal.
+     */
     allowedToCreateApps?: boolean;
     /**
-     * Indicates whether the default user role can create security groups. This setting corresponds to the The Users can
-     * create security groups in Azure portals, API or PowerShell setting in the group settings menu in the Azure portal.
+     * Indicates whether the default user role can create security groups. This setting corresponds to the following menus in
+     * the Azure portal: The Users can create security groups in Azure portals, API or PowerShell setting in the Group
+     * settings menu. Users can create security groups setting in the User settings menu.
      */
     allowedToCreateSecurityGroups?: boolean;
-    // Indicates whether the default user role can create tenants.
+    /**
+     * Indicates whether the default user role can create tenants. This setting corresponds to the Restrict non-admin users
+     * from creating tenants setting in the User settings menu in the Azure portal. When this setting is false, users assigned
+     * the Tenant Creator role can still create tenants.
+     */
     allowedToCreateTenants?: NullableOption<boolean>;
     // Indicates whether the registered owners of a device can read their own BitLocker recovery keys with default user role.
     allowedToReadBitlockerKeysForOwnedDevice?: NullableOption<boolean>;
