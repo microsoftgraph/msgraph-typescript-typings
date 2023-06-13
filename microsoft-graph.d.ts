@@ -3100,7 +3100,7 @@ export interface User extends DirectoryObject {
     /**
      * The primary cellular telephone number for the user. Read-only for users synced from on-premises directory. Maximum
      * length is 64 characters. Returned by default. Supports $filter (eq, ne, not, ge, le, in, startsWith, and eq on null
-     * values).
+     * values) and $search.
      */
     mobilePhone?: NullableOption<string>;
     /**
@@ -17266,6 +17266,11 @@ export interface EmployeeExperience {
 export interface LearningProvider extends Entity {
     // The display name that appears in Viva Learning. Required.
     displayName?: string;
+    /**
+     * Indicates whether a provider can ingest learning course activity records. The default value is false. Set to true to
+     * make learningCourseActivities available for this provider.
+     */
+    isCourseActivitySyncEnabled?: NullableOption<boolean>;
     // Authentication URL to access the courses for the provider. Optional.
     loginWebUrl?: NullableOption<string>;
     /**
@@ -17466,6 +17471,7 @@ export interface ProvisioningErrorInfo {
 // tslint:disable-next-line: no-empty-interface
 export interface ProvisioningServicePrincipal extends Identity {}
 export interface ProvisioningStatusInfo {
+    // If status is not success/ skipped details for the error are contained in this.
     errorInformation?: NullableOption<ProvisioningErrorInfo>;
     // Possible values are: success, warning, failure, skipped, unknownFutureValue.
     status?: NullableOption<ProvisioningResult>;
@@ -18827,6 +18833,7 @@ export interface ResourcePermission {
 export interface LicenseUnitsDetail {
     // The number of units that are enabled for the active subscription of the service SKU.
     enabled?: NullableOption<number>;
+    lockedOut?: NullableOption<number>;
     /**
      * The number of units that are suspended because the subscription of the service SKU has been cancelled. The units cannot
      * be assigned but can still be reactivated before they are deleted.
