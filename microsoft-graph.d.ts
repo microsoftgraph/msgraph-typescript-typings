@@ -3100,7 +3100,7 @@ export interface User extends DirectoryObject {
     /**
      * The primary cellular telephone number for the user. Read-only for users synced from on-premises directory. Maximum
      * length is 64 characters. Returned by default. Supports $filter (eq, ne, not, ge, le, in, startsWith, and eq on null
-     * values).
+     * values) and $search.
      */
     mobilePhone?: NullableOption<string>;
     /**
@@ -10504,7 +10504,10 @@ export interface AccessReviewSet extends Entity {
     historyDefinitions?: NullableOption<AccessReviewHistoryDefinition[]>;
 }
 export interface AppConsentApprovalRoute extends Entity {
-    // A collection of userConsentRequest objects for a specific application.
+    /**
+     * A collection of appConsentRequest objects representing apps for which admin consent has been requested by one or more
+     * users.
+     */
     appConsentRequests?: NullableOption<AppConsentRequest[]>;
 }
 export interface AppConsentRequest extends Entity {
@@ -17266,6 +17269,11 @@ export interface EmployeeExperience {
 export interface LearningProvider extends Entity {
     // The display name that appears in Viva Learning. Required.
     displayName?: string;
+    /**
+     * Indicates whether a provider can ingest learning course activity records. The default value is false. Set to true to
+     * make learningCourseActivities available for this provider.
+     */
+    isCourseActivitySyncEnabled?: NullableOption<boolean>;
     // Authentication URL to access the courses for the provider. Optional.
     loginWebUrl?: NullableOption<string>;
     /**
@@ -17466,6 +17474,7 @@ export interface ProvisioningErrorInfo {
 // tslint:disable-next-line: no-empty-interface
 export interface ProvisioningServicePrincipal extends Identity {}
 export interface ProvisioningStatusInfo {
+    // If status is not success/ skipped details for the error are contained in this.
     errorInformation?: NullableOption<ProvisioningErrorInfo>;
     // Possible values are: success, warning, failure, skipped, unknownFutureValue.
     status?: NullableOption<ProvisioningResult>;
@@ -18827,6 +18836,7 @@ export interface ResourcePermission {
 export interface LicenseUnitsDetail {
     // The number of units that are enabled for the active subscription of the service SKU.
     enabled?: NullableOption<number>;
+    lockedOut?: NullableOption<number>;
     /**
      * The number of units that are suspended because the subscription of the service SKU has been cancelled. The units cannot
      * be assigned but can still be reactivated before they are deleted.
@@ -25402,6 +25412,8 @@ export namespace CallRecords {
         endDateTime?: string;
         // Failure information associated with the session if the session failed.
         failureInfo?: NullableOption<FailureInfo>;
+        // Specifies whether the session is a test.
+        isTest?: NullableOption<boolean>;
         /**
          * List of modalities present in the session. Possible values are: unknown, audio, video, videoBasedScreenSharing, data,
          * screenSharing, unknownFutureValue.
@@ -25701,6 +25713,8 @@ export namespace CallRecords {
         averageAudioNetworkJitter?: NullableOption<string>;
         // Average estimated bandwidth available between two endpoints in bits per second.
         averageBandwidthEstimate?: NullableOption<number>;
+        // Average duration of the received freezing time in the video stream.
+        averageFreezeDuration?: NullableOption<string>;
         /**
          * Average jitter for the stream computed as specified in [RFC 3550][], denoted in [ISO 8601][] format. For example, 1
          * second is denoted as 'PT1S', where 'P' is the duration designator, 'T' is the time designator, and 'S' is the second
@@ -25733,6 +25747,11 @@ export namespace CallRecords {
          * is always in UTC time. For example, midnight UTC on Jan 1, 2014 is 2014-01-01T00:00:00Z
          */
         endDateTime?: NullableOption<string>;
+        /**
+         * Indicates whether the forward error correction (FEC) was used at some point during the session. The default value is
+         * null.
+         */
+        isAudioForwardErrorCorrectionUsed?: NullableOption<boolean>;
         // Fraction of the call where frame rate is less than 7.5 frames per second.
         lowFrameRateRatio?: NullableOption<number>;
         // Fraction of the call that the client is running less than 70% expected video processing capability.
@@ -25763,6 +25782,8 @@ export namespace CallRecords {
         packetUtilization?: NullableOption<number>;
         // Packet loss rate after FEC has been applied aggregated across all video streams and codecs.
         postForwardErrorCorrectionPacketLossRate?: NullableOption<number>;
+        // Average duration of the received freezing time in the video stream represented in root mean square.
+        rmsFreezeDuration?: NullableOption<string>;
         /**
          * UTC time when the stream started. The DateTimeOffset type represents date and time information using ISO 8601 format
          * and is always in UTC time. For example, midnight UTC on Jan 1, 2014 is 2014-01-01T00:00:00Z
@@ -25796,10 +25817,18 @@ export namespace CallRecords {
         roundTripTime?: NullableOption<string>;
     }
     interface ParticipantEndpoint extends Endpoint {
+        // CPU number of cores used by the media endpoint.
+        cpuCoresCount?: NullableOption<number>;
+        // CPU name used by the media endpoint.
+        cpuName?: NullableOption<string>;
+        // CPU processor speed used by the media endpoint.
+        cpuProcessorSpeedInMhz?: NullableOption<number>;
         // The feedback provided by the user of this endpoint about the quality of the session.
         feedback?: NullableOption<UserFeedback>;
         // Identity associated with the endpoint.
         identity?: NullableOption<microsoftgraph.IdentitySet>;
+        // Name of the device used by the media endpoint.
+        name?: NullableOption<string>;
     }
     interface UserFeedback {
         /**
