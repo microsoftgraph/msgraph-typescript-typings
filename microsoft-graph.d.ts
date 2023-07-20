@@ -4919,15 +4919,16 @@ export interface DirectoryAudit extends Entity {
      */
     activityDateTime?: string;
     /**
-     * Indicates the activity name or the operation name (examples: 'Create User' and 'Add member to group'). For full list,
-     * see Azure AD activity list.
+     * Indicates the activity name or the operation name (examples: 'Create User' and 'Add member to group'). For a list of
+     * activities logged, refer to Azure AD audit log categories and activities.
      */
     activityDisplayName?: string;
     // Indicates additional details on the activity.
     additionalDetails?: NullableOption<KeyValue[]>;
     /**
      * Indicates which resource category that's targeted by the activity. For example: UserManagement, GroupManagement,
-     * ApplicationManagement, RoleManagement.
+     * ApplicationManagement, RoleManagement. For a list of categories for activities logged, refer to Azure AD audit log
+     * categories and activities.
      */
     category?: string;
     /**
@@ -7864,7 +7865,7 @@ export interface Domain extends Entity {
      * Indicates the configured authentication type for the domain. The value is either Managed or Federated. Managed
      * indicates a cloud managed domain where Azure AD performs user authentication. Federated indicates authentication is
      * federated with an identity provider such as the tenant's on-premises Active Directory via Active Directory Federation
-     * Services. This property is read-only and is not nullable.
+     * Services. Not nullable.
      */
     authenticationType?: string;
     /**
@@ -8778,6 +8779,66 @@ export interface SubscribedSku extends Entity {
      */
     skuPartNumber?: NullableOption<string>;
     subscriptionIds?: NullableOption<string[]>;
+}
+export interface TenantRelationship {
+    // The customer who has a delegated admin relationship with a Microsoft partner.
+    delegatedAdminCustomers?: NullableOption<DelegatedAdminCustomer[]>;
+    // The details of the delegated administrative privileges that a Microsoft partner has in a customer tenant.
+    delegatedAdminRelationships?: NullableOption<DelegatedAdminRelationship[]>;
+}
+export interface DelegatedAdminCustomer extends Entity {
+    // The Azure AD display name of the customer tenant. Read-only. Supports $orderBy.
+    displayName?: NullableOption<string>;
+    // The Azure AD-assigned tenant ID of the customer. Read-only.
+    tenantId?: string;
+    // Contains the management details of a service in the customer tenant that's managed by delegated administration.
+    serviceManagementDetails?: NullableOption<DelegatedAdminServiceManagementDetail[]>;
+}
+export interface DelegatedAdminRelationship extends Entity {
+    /**
+     * The access details that contain the identifiers of the administrative roles that the partner admin is requesting in the
+     * customer tenant.
+     */
+    accessDetails?: DelegatedAdminAccessDetails;
+    // The date and time in ISO 8601 format and in UTC time when the relationship became active. Read-only.
+    activatedDateTime?: NullableOption<string>;
+    // The date and time in ISO 8601 format and in UTC time when the relationship was created. Read-only.
+    createdDateTime?: NullableOption<string>;
+    /**
+     * The display name and unique identifier of the customer of the relationship. This is configured either by the partner at
+     * the time the relationship is created or by the system after the customer approves the relationship. Cannot be changed
+     * by the customer.
+     */
+    customer?: NullableOption<DelegatedAdminRelationshipCustomerParticipant>;
+    /**
+     * The display name of the relationship used for ease of identification. Must be unique across all delegated admin
+     * relationships of the partner. This is set by the partner only when the relationship is in the created status and cannot
+     * be changed by the customer.
+     */
+    displayName?: string;
+    /**
+     * The duration of the relationship in ISO 8601 format. Must be a value between P1D and P2Y inclusive. This is set by the
+     * partner only when the relationship is in the created status and cannot be changed by the customer.
+     */
+    duration?: string;
+    /**
+     * The date and time in ISO 8601 format and in UTC time when the status of relationship changes to either terminated or
+     * expired. Calculated as endDateTime = activatedDateTime + duration. Read-only.
+     */
+    endDateTime?: NullableOption<string>;
+    // The date and time in ISO 8601 format and in UTC time when the relationship was last modified. Read-only.
+    lastModifiedDateTime?: NullableOption<string>;
+    /**
+     * The status of the relationship. Read Only. The possible values are: activating, active, approvalPending, approved,
+     * created, expired, expiring, terminated, terminating, terminationRequested, unknownFutureValue. Supports $orderBy.
+     */
+    status?: NullableOption<DelegatedAdminRelationshipStatus>;
+    // The access assignments associated with the delegated admin relationship.
+    accessAssignments?: NullableOption<DelegatedAdminAccessAssignment[]>;
+    // The long running operations associated with the delegated admin relationship.
+    operations?: NullableOption<DelegatedAdminRelationshipOperation[]>;
+    // The requests associated with the delegated admin relationship.
+    requests?: NullableOption<DelegatedAdminRelationshipRequest[]>;
 }
 export interface UnifiedRbacResourceAction extends Entity {
     actionVerb?: NullableOption<string>;
@@ -17628,65 +17689,11 @@ export interface DelegatedAdminAccessAssignment extends Entity {
      */
     status?: NullableOption<DelegatedAdminAccessAssignmentStatus>;
 }
-export interface DelegatedAdminCustomer extends Entity {
-    // The Azure AD display name of the customer tenant. Read-only. Supports $orderBy.
-    displayName?: NullableOption<string>;
-    // The Azure AD-assigned tenant ID of the customer. Read-only.
-    tenantId?: string;
-    // Contains the management details of a service in the customer tenant that's managed by delegated administration.
-    serviceManagementDetails?: NullableOption<DelegatedAdminServiceManagementDetail[]>;
-}
 export interface DelegatedAdminServiceManagementDetail extends Entity {
     // The URL of the management portal for the managed service. Read-only.
     serviceManagementUrl?: string;
     // The name of a managed service. Read-only.
     serviceName?: string;
-}
-export interface DelegatedAdminRelationship extends Entity {
-    /**
-     * The access details that contain the identifiers of the administrative roles that the partner admin is requesting in the
-     * customer tenant.
-     */
-    accessDetails?: DelegatedAdminAccessDetails;
-    // The date and time in ISO 8601 format and in UTC time when the relationship became active. Read-only.
-    activatedDateTime?: NullableOption<string>;
-    // The date and time in ISO 8601 format and in UTC time when the relationship was created. Read-only.
-    createdDateTime?: NullableOption<string>;
-    /**
-     * The display name and unique identifier of the customer of the relationship. This is configured either by the partner at
-     * the time the relationship is created or by the system after the customer approves the relationship. Cannot be changed
-     * by the customer.
-     */
-    customer?: NullableOption<DelegatedAdminRelationshipCustomerParticipant>;
-    /**
-     * The display name of the relationship used for ease of identification. Must be unique across all delegated admin
-     * relationships of the partner. This is set by the partner only when the relationship is in the created status and cannot
-     * be changed by the customer.
-     */
-    displayName?: string;
-    /**
-     * The duration of the relationship in ISO 8601 format. Must be a value between P1D and P2Y inclusive. This is set by the
-     * partner only when the relationship is in the created status and cannot be changed by the customer.
-     */
-    duration?: string;
-    /**
-     * The date and time in ISO 8601 format and in UTC time when the status of relationship changes to either terminated or
-     * expired. Calculated as endDateTime = activatedDateTime + duration. Read-only.
-     */
-    endDateTime?: NullableOption<string>;
-    // The date and time in ISO 8601 format and in UTC time when the relationship was last modified. Read-only.
-    lastModifiedDateTime?: NullableOption<string>;
-    /**
-     * The status of the relationship. Read Only. The possible values are: activating, active, approvalPending, approved,
-     * created, expired, expiring, terminated, terminating, terminationRequested, unknownFutureValue. Supports $orderBy.
-     */
-    status?: NullableOption<DelegatedAdminRelationshipStatus>;
-    // The access assignments associated with the delegated admin relationship.
-    accessAssignments?: NullableOption<DelegatedAdminAccessAssignment[]>;
-    // The long running operations associated with the delegated admin relationship.
-    operations?: NullableOption<DelegatedAdminRelationshipOperation[]>;
-    // The requests associated with the delegated admin relationship.
-    requests?: NullableOption<DelegatedAdminRelationshipRequest[]>;
 }
 export interface DelegatedAdminRelationshipOperation extends Entity {
     // The time in ISO 8601 format and in UTC time when the long-running operation was created. Read-only.
@@ -17715,12 +17722,6 @@ export interface DelegatedAdminRelationshipRequest extends Entity {
     lastModifiedDateTime?: NullableOption<string>;
     // The status of the request. Read-only. The possible values are: created, pending, succeeded, failed, unknownFutureValue.
     status?: NullableOption<DelegatedAdminRelationshipRequestStatus>;
-}
-export interface TenantRelationship {
-    // The customer who has a delegated admin relationship with a Microsoft partner.
-    delegatedAdminCustomers?: NullableOption<DelegatedAdminCustomer[]>;
-    // The details of the delegated administrative privileges that a Microsoft partner has in a customer tenant.
-    delegatedAdminRelationships?: NullableOption<DelegatedAdminRelationship[]>;
 }
 export interface UnifiedRoleManagementPolicyRule extends Entity {
     /**
@@ -20694,6 +20695,12 @@ export interface SigningCertificateUpdateStatus {
     certificateUpdateResult?: NullableOption<string>;
     // Date and time in ISO 8601 format and in UTC time when the certificate was last updated. Read-only.
     lastRunDateTime?: NullableOption<string>;
+}
+export interface TenantInformation {
+    defaultDomainName?: NullableOption<string>;
+    displayName?: NullableOption<string>;
+    federationBrandName?: NullableOption<string>;
+    tenantId?: string;
 }
 export interface UnifiedRolePermission {
     // Set of tasks that can be performed on a resource. Required.
@@ -26378,9 +26385,9 @@ export interface CloudAppSecurityState {
     riskScore?: NullableOption<string>;
 }
 export interface ComplianceInformation {
-    // Collection of the certification controls associated with certification
+    // Collection of the certification controls associated with the certification.
     certificationControls?: NullableOption<CertificationControl[]>;
-    // Compliance certification name (for example, ISO 27018:2014, GDPR, FedRAMP, NIST 800-171)
+    // The name of the compliance certification, for example, ISO 27018:2014, GDPR, FedRAMP, and NIST 800-171.
     certificationName?: NullableOption<string>;
 }
 export interface ControlScore {
