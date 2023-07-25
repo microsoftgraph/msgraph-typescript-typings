@@ -8756,20 +8756,22 @@ export interface SamlOrWsFedExternalDomainFederation extends SamlOrWsFedProvider
     domains?: NullableOption<ExternalDomainName[]>;
 }
 export interface SubscribedSku extends Entity {
+    // The unique ID of the account this SKU belongs to.
     accountId?: NullableOption<string>;
+    // The name of the account this SKU belongs to.
     accountName?: NullableOption<string>;
-    // For example, 'User' or 'Company'.
+    // The target class for this SKU. Only SKUs with target class User are assignable. Possible values are: 'User', 'Company'.
     appliesTo?: NullableOption<string>;
     /**
-     * Possible values are: Enabled, Warning, Suspended, Deleted, LockedOut. The capabilityStatus is Enabled if the
-     * prepaidUnits property has at least 1 unit that is enabled, and LockedOut if the customer cancelled their subscription.
+     * Enabled indicates that the prepaidUnits property has at least one unit that is enabled. LockedOut indicates that the
+     * customer cancelled their subscription. Possible values are: Enabled, Warning, Suspended, Deleted, LockedOut.
      */
     capabilityStatus?: NullableOption<string>;
     // The number of licenses that have been assigned.
     consumedUnits?: NullableOption<number>;
     // Information about the number and status of prepaid licenses.
     prepaidUnits?: NullableOption<LicenseUnitsDetail>;
-    // Information about the service plans that are available with the SKU. Not nullable
+    // Information about the service plans that are available with the SKU. Not nullable.
     servicePlans?: ServicePlanInfo[];
     // The unique identifier (GUID) for the service SKU.
     skuId?: NullableOption<string>;
@@ -18474,10 +18476,14 @@ export interface TeamsAppDefinition extends Entity {
 }
 // tslint:disable-next-line: no-empty-interface
 export interface TeamworkBot extends Entity {}
+export interface TeamsAppSettings extends Entity {
+    allowUserRequestsForAppAccess?: NullableOption<boolean>;
+}
 export interface Teamwork extends Entity {
     workforceIntegrations?: NullableOption<WorkforceIntegration[]>;
     // The deleted team.
     deletedTeams?: NullableOption<DeletedTeam[]>;
+    teamsAppSettings?: NullableOption<TeamsAppSettings>;
 }
 export interface WorkforceIntegration extends ChangeTrackedEntity {
     // API version for the call back URL. Start with 1.
@@ -19012,8 +19018,8 @@ export interface ApiApplication {
      * the client and only impacts the version of id_tokens. Resources need to explicitly configure
      * requestedAccessTokenVersion to indicate the supported access token format. Possible values for
      * requestedAccessTokenVersion are 1, 2, or null. If the value is null, this defaults to 1, which corresponds to the v1.0
-     * endpoint. If signInAudience on the application is configured as AzureADandPersonalMicrosoftAccount, the value for this
-     * property must be 2
+     * endpoint. If signInAudience on the application is configured as AzureADandPersonalMicrosoftAccount or
+     * PersonalMicrosoftAccount, the value for this property must be 2.
      */
     requestedAccessTokenVersion?: NullableOption<number>;
 }
@@ -20489,6 +20495,7 @@ export interface ResourcePermission {
 export interface LicenseUnitsDetail {
     // The number of units that are enabled for the active subscription of the service SKU.
     enabled?: NullableOption<number>;
+    // The number of units that are locked out because the customer cancelled their subscription of the service SKU.
     lockedOut?: NullableOption<number>;
     /**
      * The number of units that are suspended because the subscription of the service SKU has been cancelled. The units cannot
@@ -23150,6 +23157,7 @@ export interface ConditionalAccessExternalTenants {
 // tslint:disable-next-line: no-empty-interface
 export interface ConditionalAccessAllExternalTenants extends ConditionalAccessExternalTenants {}
 export interface ConditionalAccessApplications {
+    applicationFilter?: NullableOption<ConditionalAccessFilter>;
     /**
      * Can be one of the following: The list of client IDs (appId) explicitly excluded from the policy. Office365 - For the
      * list of apps included in Office365, see Conditional Access target apps: Office 365
@@ -23165,11 +23173,21 @@ export interface ConditionalAccessApplications {
     // User actions to include. Supported values are urn:user:registersecurityinfo and urn:user:registerdevice
     includeUserActions?: string[];
 }
+export interface ConditionalAccessFilter {
+    // Mode to use for the filter. Possible values are include or exclude.
+    mode?: FilterMode;
+    /**
+     * Rule syntax is similar to that used for membership rules for groups in Azure Active Directory (Azure AD). For details,
+     * see rules with multiple expressions
+     */
+    rule?: string;
+}
 export interface ConditionalAccessClientApplications {
     // Service principal IDs excluded from the policy scope.
     excludeServicePrincipals?: string[];
     // Service principal IDs included in the policy scope, or ServicePrincipalsInMyTenant.
     includeServicePrincipals?: string[];
+    servicePrincipalFilter?: NullableOption<ConditionalAccessFilter>;
 }
 export interface ConditionalAccessConditionSet {
     // Applications and user actions included in and excluded from the policy. Required.
@@ -23241,15 +23259,6 @@ export interface ConditionalAccessUsers {
     includeRoles?: string[];
     // User IDs in scope of policy unless explicitly excluded, None, All, or GuestsOrExternalUsers.
     includeUsers?: string[];
-}
-export interface ConditionalAccessFilter {
-    // Mode to use for the filter. Possible values are include or exclude.
-    mode?: FilterMode;
-    /**
-     * Rule syntax is similar to that used for membership rules for groups in Azure Active Directory (Azure AD). For details,
-     * see rules with multiple expressions
-     */
-    rule?: string;
 }
 export interface ConditionalAccessEnumeratedExternalTenants extends ConditionalAccessExternalTenants {
     /**
@@ -29069,6 +29078,7 @@ export namespace SecurityNamespace {
         | "unknownFutureValue";
     type AlertSeverity = "unknown" | "informational" | "low" | "medium" | "high" | "unknownFutureValue";
     type AlertStatus = "unknown" | "new" | "inProgress" | "resolved" | "unknownFutureValue";
+    type ContainerPortProtocol = "udp" | "tcp" | "sctp" | "unknownFutureValue";
     type DefenderAvStatus =
         | "notReporting"
         | "disabled"
@@ -29126,8 +29136,17 @@ export namespace SecurityNamespace {
         | "policyViolator"
         | "unknownFutureValue";
     type EvidenceVerdict = "unknown" | "suspicious" | "malicious" | "noThreatsFound" | "unknownFutureValue";
+    type FileHashAlgorithm = "unknown" | "md5" | "sha1" | "sha256" | "sha256ac" | "unknownFutureValue";
     type GoogleCloudLocationType = "unknown" | "regional" | "zonal" | "global" | "unknownFutureValue";
     type IncidentStatus = "active" | "resolved" | "inProgress" | "redirected" | "unknownFutureValue" | "awaitingAction";
+    type KubernetesPlatform = "unknown" | "aks" | "eks" | "gke" | "arc" | "unknownFutureValue";
+    type KubernetesServiceType =
+        | "unknown"
+        | "clusterIP"
+        | "externalName"
+        | "nodePort"
+        | "loadBalancer"
+        | "unknownFutureValue";
     type OnboardingStatus = "insufficientInfo" | "onboarded" | "canBeOnboarded" | "unsupported" | "unknownFutureValue";
     type ServiceSource =
         | "unknown"
@@ -30046,6 +30065,22 @@ export namespace SecurityNamespace {
         // The type of the resource.
         resourceType?: NullableOption<string>;
     }
+    interface BlobContainerEvidence extends AlertEvidence {
+        name?: NullableOption<string>;
+        storageResource?: NullableOption<AzureResourceEvidence>;
+        url?: NullableOption<string>;
+    }
+    interface BlobEvidence extends AlertEvidence {
+        blobContainer?: NullableOption<BlobContainerEvidence>;
+        etag?: NullableOption<string>;
+        fileHashes?: NullableOption<FileHash[]>;
+        name?: NullableOption<string>;
+        url?: NullableOption<string>;
+    }
+    interface FileHash {
+        algorithm?: FileHashAlgorithm;
+        value?: NullableOption<string>;
+    }
     interface CloudApplicationEvidence extends AlertEvidence {
         // Unique identifier of the application.
         appId?: NullableOption<number>;
@@ -30057,6 +30092,34 @@ export namespace SecurityNamespace {
         instanceName?: NullableOption<string>;
         // The identifier of the SaaS application.
         saasAppId?: NullableOption<number>;
+    }
+    interface ContainerEvidence extends AlertEvidence {
+        args?: NullableOption<string[]>;
+        command?: NullableOption<string[]>;
+        containerId?: NullableOption<string>;
+        image?: NullableOption<ContainerImageEvidence>;
+        isPrivileged?: boolean;
+        name?: NullableOption<string>;
+        pod?: NullableOption<KubernetesPodEvidence>;
+    }
+    interface ContainerImageEvidence extends AlertEvidence {
+        digestImage?: NullableOption<ContainerImageEvidence>;
+        imageId?: NullableOption<string>;
+        registry?: NullableOption<ContainerRegistryEvidence>;
+    }
+    interface KubernetesPodEvidence extends AlertEvidence {
+        containers?: NullableOption<ContainerEvidence[]>;
+        controller?: NullableOption<KubernetesControllerEvidence>;
+        ephemeralContainers?: NullableOption<ContainerEvidence[]>;
+        initContainers?: NullableOption<ContainerEvidence[]>;
+        labels?: NullableOption<Dictionary>;
+        name?: NullableOption<string>;
+        namespace?: NullableOption<KubernetesNamespaceEvidence>;
+        podIp?: NullableOption<IpEvidence>;
+        serviceAccount?: NullableOption<KubernetesServiceAccountEvidence>;
+    }
+    interface ContainerRegistryEvidence extends AlertEvidence {
+        registry?: NullableOption<string>;
     }
     interface DeviceEvidence extends AlertEvidence {
         // A unique identifier assigned to a device by Azure Active Directory (Azure AD) when device is Azure AD-joined.
@@ -30120,6 +30183,8 @@ export namespace SecurityNamespace {
         vmId?: NullableOption<string>;
     }
 // tslint:disable-next-line: no-empty-interface
+    interface Dictionary {}
+// tslint:disable-next-line: no-empty-interface
     interface DynamicColumnValue {}
     interface FileDetails {
         // The name of the file.
@@ -30181,6 +30246,51 @@ export namespace SecurityNamespace {
         countryLetterCode?: NullableOption<string>;
         // The value of the IP Address, can be either in V4 address or V6 address format.
         ipAddress?: NullableOption<string>;
+    }
+    interface KubernetesClusterEvidence extends AlertEvidence {
+        cloudResource?: NullableOption<AlertEvidence>;
+        distribution?: NullableOption<string>;
+        name?: NullableOption<string>;
+        platform?: NullableOption<KubernetesPlatform>;
+        version?: NullableOption<string>;
+    }
+    interface KubernetesControllerEvidence extends AlertEvidence {
+        labels?: NullableOption<Dictionary>;
+        name?: NullableOption<string>;
+        namespace?: NullableOption<KubernetesNamespaceEvidence>;
+        type?: NullableOption<string>;
+    }
+    interface KubernetesNamespaceEvidence extends AlertEvidence {
+        cluster?: NullableOption<KubernetesClusterEvidence>;
+        labels?: NullableOption<Dictionary>;
+        name?: NullableOption<string>;
+    }
+    interface KubernetesServiceAccountEvidence extends AlertEvidence {
+        name?: NullableOption<string>;
+        namespace?: NullableOption<KubernetesNamespaceEvidence>;
+    }
+    interface KubernetesSecretEvidence extends AlertEvidence {
+        name?: NullableOption<string>;
+        namespace?: NullableOption<KubernetesNamespaceEvidence>;
+        secretType?: NullableOption<string>;
+    }
+    interface KubernetesServiceEvidence extends AlertEvidence {
+        clusterIP?: NullableOption<IpEvidence>;
+        externalIPs?: NullableOption<IpEvidence[]>;
+        labels?: NullableOption<Dictionary>;
+        name?: NullableOption<string>;
+        namespace?: NullableOption<KubernetesNamespaceEvidence>;
+        selector?: NullableOption<Dictionary>;
+        servicePorts?: NullableOption<KubernetesServicePort[]>;
+        serviceType?: KubernetesServiceType;
+    }
+    interface KubernetesServicePort {
+        appProtocol?: NullableOption<string>;
+        name?: NullableOption<string>;
+        nodePort?: number;
+        port?: number;
+        protocol?: NullableOption<ContainerPortProtocol>;
+        targetPort?: NullableOption<string>;
     }
     interface MailboxEvidence extends AlertEvidence {
         // The name associated with the mailbox.
