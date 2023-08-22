@@ -3336,6 +3336,10 @@ export interface User extends DirectoryObject {
      * Read-only.Returned only on $select. Supports $filter (eq, ne, not, in).
      */
     creationType?: NullableOption<string>;
+    /**
+     * An open complex type that holds the value of a custom security attribute that is assigned to a directory object.
+     * Nullable. Returned only on $select. Supports $filter (eq, ne, not, startsWith). Filter value is case sensitive.
+     */
     customSecurityAttributes?: NullableOption<CustomSecurityAttributeValue>;
     /**
      * The name for the department in which the user works. Maximum length is 64 characters. Returned only on $select.
@@ -3576,6 +3580,7 @@ export interface User extends DirectoryObject {
      * $filter (eq, not, ge, le, startsWith).
      */
     securityIdentifier?: NullableOption<string>;
+    serviceProvisioningErrors?: NullableOption<ServiceProvisioningError[]>;
     /**
      * Do not use in Microsoft Graph. Manage this property through the Microsoft 365 admin center instead. Represents whether
      * the user should be included in the Outlook global address list. See Known issue.
@@ -3682,7 +3687,10 @@ export interface User extends DirectoryObject {
      * /$count eq 1, /$count ne 1).
      */
     ownedDevices?: NullableOption<DirectoryObject[]>;
-    // Directory objects that are owned by the user. Read-only. Nullable. Supports $expand.
+    /**
+     * Directory objects that are owned by the user. Read-only. Nullable. Supports $expand, $select nested in $expand, and
+     * $filter (/$count eq 0, /$count ne 0, /$count eq 1, /$count ne 1).
+     */
     ownedObjects?: NullableOption<DirectoryObject[]>;
     // Devices that are registered for the user. Read-only. Nullable. Supports $expand.
     registeredDevices?: NullableOption<DirectoryObject[]>;
@@ -5335,6 +5343,10 @@ export interface ServicePrincipal extends DirectoryObject {
      * property definition on the application entity. Not nullable.
      */
     appRoles?: AppRole[];
+    /**
+     * An open complex type that holds the value of a custom security attribute that is assigned to a directory object.
+     * Nullable. Returned only on $select. Supports $filter (eq, ne, not, startsWith). Filter value is case sensitive.
+     */
     customSecurityAttributes?: NullableOption<CustomSecurityAttributeValue>;
     /**
      * Free text field to provide an internal end-user facing description of the service principal. End-user portals such
@@ -5492,8 +5504,8 @@ export interface ServicePrincipal extends DirectoryObject {
      */
     oauth2PermissionGrants?: NullableOption<OAuth2PermissionGrant[]>;
     /**
-     * Directory objects that are owned by this service principal. Read-only. Nullable. Supports $expand and $filter (/$count
-     * eq 0, /$count ne 0, /$count eq 1, /$count ne 1).
+     * Directory objects that are owned by this service principal. Read-only. Nullable. Supports $expand, $select nested in
+     * $expand, and $filter (/$count eq 0, /$count ne 0, /$count eq 1, /$count ne 1).
      */
     ownedObjects?: NullableOption<DirectoryObject[]>;
     /**
@@ -5729,6 +5741,7 @@ export interface ConditionalAccessPolicy extends Entity {
      * enabledForReportingButNotEnforced. Required.
      */
     state?: ConditionalAccessPolicyState;
+    templateId?: NullableOption<string>;
 }
 export interface ConditionalAccessTemplate extends Entity {
     // The user-friendly name of the template.
@@ -6607,6 +6620,7 @@ export interface Group extends DirectoryObject {
     securityEnabled?: NullableOption<boolean>;
     // Security identifier of the group, used in Windows scenarios. Returned by default.
     securityIdentifier?: NullableOption<string>;
+    serviceProvisioningErrors?: NullableOption<ServiceProvisioningError[]>;
     /**
      * Specifies a Microsoft 365 group's color theme. Possible values are Teal, Purple, Green, Blue, Pink, Orange or Red.
      * Returned by default.
@@ -6617,8 +6631,8 @@ export interface Group extends DirectoryObject {
      * HiddenMembership. HiddenMembership can be set only for Microsoft 365 groups, when the groups are created. It can't be
      * updated later. Other values of visibility can be updated after group creation. If visibility value is not specified
      * during group creation on Microsoft Graph, a security group is created as Private by default and Microsoft 365 group is
-     * Public. Groups assignable to roles are always Private. See group visibility options to learn more. Returned by default.
-     * Nullable.
+     * Public. Groups assignable to roles are always Private. To learn more, see group visibility options. Returned by
+     * default. Nullable.
      */
     visibility?: NullableOption<string>;
     /**
@@ -8377,6 +8391,7 @@ export interface OrgContact extends DirectoryObject {
      * expressions on multi-valued properties. Supports $filter (eq, not, ge, le, startsWith, /$count eq 0, /$count ne 0).
      */
     proxyAddresses?: string[];
+    serviceProvisioningErrors?: NullableOption<ServiceProvisioningError[]>;
     /**
      * Last name for this organizational contact. Supports $filter (eq, ne, not, ge, le, in, startsWith, and eq for null
      * values).
@@ -19568,6 +19583,11 @@ export interface ProvisionedPlan {
     // The name of the service; for example, 'AccessControlS2S'
     service?: NullableOption<string>;
 }
+export interface ServiceProvisioningError {
+    createdDateTime?: NullableOption<string>;
+    isResolved?: NullableOption<boolean>;
+    serviceInstance?: NullableOption<string>;
+}
 export interface MailboxSettings {
     // Folder ID of an archive folder for the user.
     archiveFolder?: NullableOption<string>;
@@ -20878,6 +20898,9 @@ export interface ServicePlanInfo {
     servicePlanId?: NullableOption<string>;
     // The name of the service plan.
     servicePlanName?: NullableOption<string>;
+}
+export interface ServiceProvisioningXmlError extends ServiceProvisioningError {
+    errorDetail?: NullableOption<string>;
 }
 export interface SettingTemplateValue {
     // Default value for the setting.
@@ -29412,7 +29435,7 @@ export namespace SecurityNamespace {
         category?: NullableOption<string>;
         /**
          * Specifies whether the alert represents a true threat. Possible values are: unknown, falsePositive, truePositive,
-         * benignPositive, unknownFutureValue.
+         * informationalExpectedActivity, unknownFutureValue.
          */
         classification?: NullableOption<AlertClassification>;
         // Array of comments created by the Security Operations (SecOps) team during the alert management process.
