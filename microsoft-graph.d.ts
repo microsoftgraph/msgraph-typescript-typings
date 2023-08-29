@@ -2907,7 +2907,7 @@ export type WellknownListName = "none" | "defaultList" | "flaggedEmails" | "unkn
 export type AssignmentType = "required" | "recommended" | "unknownFutureValue";
 export type CourseStatus = "notStarted" | "inProgress" | "completed" | "unknownFutureValue";
 export interface Entity {
-    // The unique idenfier for an entity. Read-only.
+    // The unique identifier for an entity. Read-only.
     id?: string;
 }
 export interface DirectoryObject extends Entity {
@@ -3033,6 +3033,11 @@ export interface Application extends DirectoryObject {
     samlMetadataUrl?: NullableOption<string>;
     // References application or service contact information from a Service or Asset Management database. Nullable.
     serviceManagementReference?: NullableOption<string>;
+    /**
+     * Specifies whether sensitive properties of a multi-tenant application should be locked for editing after the application
+     * is provisioned in a tenant. Nullable. null by default.
+     */
+    servicePrincipalLockConfiguration?: NullableOption<ServicePrincipalLockConfiguration>;
     /**
      * Specifies the Microsoft accounts that are supported for the current application. The possible values are: AzureADMyOrg,
      * AzureADMultipleOrgs, AzureADandPersonalMicrosoftAccount (default), and PersonalMicrosoftAccount. See more in the table.
@@ -3336,6 +3341,10 @@ export interface User extends DirectoryObject {
      * Read-only.Returned only on $select. Supports $filter (eq, ne, not, in).
      */
     creationType?: NullableOption<string>;
+    /**
+     * An open complex type that holds the value of a custom security attribute that is assigned to a directory object.
+     * Nullable. Returned only on $select. Supports $filter (eq, ne, not, startsWith). Filter value is case sensitive.
+     */
     customSecurityAttributes?: NullableOption<CustomSecurityAttributeValue>;
     /**
      * The name for the department in which the user works. Maximum length is 64 characters. Returned only on $select.
@@ -3576,6 +3585,7 @@ export interface User extends DirectoryObject {
      * $filter (eq, not, ge, le, startsWith).
      */
     securityIdentifier?: NullableOption<string>;
+    serviceProvisioningErrors?: NullableOption<ServiceProvisioningError[]>;
     /**
      * Do not use in Microsoft Graph. Manage this property through the Microsoft 365 admin center instead. Represents whether
      * the user should be included in the Outlook global address list. See Known issue.
@@ -3682,7 +3692,10 @@ export interface User extends DirectoryObject {
      * /$count eq 1, /$count ne 1).
      */
     ownedDevices?: NullableOption<DirectoryObject[]>;
-    // Directory objects that are owned by the user. Read-only. Nullable. Supports $expand.
+    /**
+     * Directory objects that are owned by the user. Read-only. Nullable. Supports $expand, $select nested in $expand, and
+     * $filter (/$count eq 0, /$count ne 0, /$count eq 1, /$count ne 1).
+     */
     ownedObjects?: NullableOption<DirectoryObject[]>;
     // Devices that are registered for the user. Read-only. Nullable. Supports $expand.
     registeredDevices?: NullableOption<DirectoryObject[]>;
@@ -4228,7 +4241,7 @@ export interface Person extends Entity {
     yomiCompany?: NullableOption<string>;
 }
 export interface BaseItem extends Entity {
-    // Identity of the user, device, or application which created the item. Read-only.
+    // Identity of the user, device, or application that created the item. Read-only.
     createdBy?: NullableOption<IdentitySet>;
     // Date and time of item creation. Read-only.
     createdDateTime?: string;
@@ -4236,7 +4249,7 @@ export interface BaseItem extends Entity {
     description?: NullableOption<string>;
     // ETag for the item. Read-only.
     eTag?: NullableOption<string>;
-    // Identity of the user, device, and application which last modified the item. Read-only.
+    // Identity of the user, device, and application that last modified the item. Read-only.
     lastModifiedBy?: NullableOption<IdentitySet>;
     // Date and time the item was last modified. Read-only.
     lastModifiedDateTime?: string;
@@ -4244,7 +4257,10 @@ export interface BaseItem extends Entity {
     name?: NullableOption<string>;
     // Parent information, if the item has a parent. Read-write.
     parentReference?: NullableOption<ItemReference>;
-    // URL that displays the resource in the browser. Read-only.
+    /**
+     * URL that either displays the resource in the browser (for Office file formats), or is a direct link to the file (for
+     * other formats). Read-only.
+     */
     webUrl?: NullableOption<string>;
     // Identity of the user who created the item. Read-only.
     createdByUser?: NullableOption<User>;
@@ -4830,6 +4846,7 @@ export interface Chat extends Entity {
     members?: NullableOption<ConversationMember[]>;
     // A collection of all the messages in the chat. Nullable.
     messages?: NullableOption<ChatMessage[]>;
+    // A collection of permissions granted to apps for the chat.
     permissionGrants?: NullableOption<ResourceSpecificPermissionGrant[]>;
     // A collection of all the pinned messages in the chat. Nullable.
     pinnedMessages?: NullableOption<PinnedChatMessageInfo[]>;
@@ -4893,6 +4910,7 @@ export interface Team extends Entity {
     members?: NullableOption<ConversationMember[]>;
     // The async operations that ran or are running on this team.
     operations?: NullableOption<TeamsAsyncOperation[]>;
+    // A collection of permissions granted to apps to access the team.
     permissionGrants?: NullableOption<ResourceSpecificPermissionGrant[]>;
     // The profile photo for the team.
     photo?: NullableOption<ProfilePhoto>;
@@ -5335,6 +5353,10 @@ export interface ServicePrincipal extends DirectoryObject {
      * property definition on the application entity. Not nullable.
      */
     appRoles?: AppRole[];
+    /**
+     * An open complex type that holds the value of a custom security attribute that is assigned to a directory object.
+     * Nullable. Returned only on $select. Supports $filter (eq, ne, not, startsWith). Filter value is case sensitive.
+     */
     customSecurityAttributes?: NullableOption<CustomSecurityAttributeValue>;
     /**
      * Free text field to provide an internal end-user facing description of the service principal. End-user portals such
@@ -5492,8 +5514,8 @@ export interface ServicePrincipal extends DirectoryObject {
      */
     oauth2PermissionGrants?: NullableOption<OAuth2PermissionGrant[]>;
     /**
-     * Directory objects that are owned by this service principal. Read-only. Nullable. Supports $expand and $filter (/$count
-     * eq 0, /$count ne 0, /$count eq 1, /$count ne 1).
+     * Directory objects that are owned by this service principal. Read-only. Nullable. Supports $expand, $select nested in
+     * $expand, and $filter (/$count eq 0, /$count ne 0, /$count eq 1, /$count ne 1).
      */
     ownedObjects?: NullableOption<DirectoryObject[]>;
     /**
@@ -5729,6 +5751,7 @@ export interface ConditionalAccessPolicy extends Entity {
      * enabledForReportingButNotEnforced. Required.
      */
     state?: ConditionalAccessPolicyState;
+    templateId?: NullableOption<string>;
 }
 export interface ConditionalAccessTemplate extends Entity {
     // The user-friendly name of the template.
@@ -6607,6 +6630,7 @@ export interface Group extends DirectoryObject {
     securityEnabled?: NullableOption<boolean>;
     // Security identifier of the group, used in Windows scenarios. Returned by default.
     securityIdentifier?: NullableOption<string>;
+    serviceProvisioningErrors?: NullableOption<ServiceProvisioningError[]>;
     /**
      * Specifies a Microsoft 365 group's color theme. Possible values are Teal, Purple, Green, Blue, Pink, Orange or Red.
      * Returned by default.
@@ -6617,8 +6641,8 @@ export interface Group extends DirectoryObject {
      * HiddenMembership. HiddenMembership can be set only for Microsoft 365 groups, when the groups are created. It can't be
      * updated later. Other values of visibility can be updated after group creation. If visibility value is not specified
      * during group creation on Microsoft Graph, a security group is created as Private by default and Microsoft 365 group is
-     * Public. Groups assignable to roles are always Private. See group visibility options to learn more. Returned by default.
-     * Nullable.
+     * Public. Groups assignable to roles are always Private. To learn more, see group visibility options. Returned by
+     * default. Nullable.
      */
     visibility?: NullableOption<string>;
     /**
@@ -6683,7 +6707,6 @@ export interface Group extends DirectoryObject {
      * /groups?$filter=startsWith(displayName,'Role')&amp;$select=id,displayName&amp;$expand=owners($select=id,userPrincipalName,displayName).
      */
     owners?: NullableOption<DirectoryObject[]>;
-    // The permission that has been granted for a group to a specific application. Supports $expand.
     permissionGrants?: NullableOption<ResourceSpecificPermissionGrant[]>;
     // Settings that can govern this group's behavior, like whether members can invite guest users to the group. Nullable.
     settings?: NullableOption<GroupSetting[]>;
@@ -8377,6 +8400,7 @@ export interface OrgContact extends DirectoryObject {
      * expressions on multi-valued properties. Supports $filter (eq, not, ge, le, startsWith, /$count eq 0, /$count ne 0).
      */
     proxyAddresses?: string[];
+    serviceProvisioningErrors?: NullableOption<ServiceProvisioningError[]>;
     /**
      * Last name for this organizational contact. Supports $filter (eq, ne, not, ge, le, in, startsWith, and eq for null
      * values).
@@ -19369,6 +19393,27 @@ export interface RequiredResourceAccess {
      */
     resourceAppId?: string;
 }
+export interface ServicePrincipalLockConfiguration {
+    /**
+     * Enables locking all sensitive properties. The sensitive properties are keyCredentials, passwordCredentials, and
+     * tokenEncryptionKeyId.
+     */
+    allProperties?: NullableOption<boolean>;
+    // Locks the keyCredentials and passwordCredentials properties for modification where credential usage type is Sign.
+    credentialsWithUsageSign?: NullableOption<boolean>;
+    /**
+     * Locks the keyCredentials and passwordCredentials properties for modification where credential usage type is Verify.
+     * This locks OAuth service principals.
+     */
+    credentialsWithUsageVerify?: NullableOption<boolean>;
+    /**
+     * Enables or disables service principal lock configuration. To allow the sensitive properties to be updated, update this
+     * property to false to disable the lock on the service principal.
+     */
+    isEnabled?: boolean;
+    // Locks the tokenEncryptionKeyId property for modification on the service principal.
+    tokenEncryptionKeyId?: NullableOption<boolean>;
+}
 export interface SpaApplication {
     /**
      * Specifies the URLs where user tokens are sent for sign-in, or the redirect URIs where OAuth 2.0 authorization codes and
@@ -19567,6 +19612,11 @@ export interface ProvisionedPlan {
     provisioningStatus?: NullableOption<string>;
     // The name of the service; for example, 'AccessControlS2S'
     service?: NullableOption<string>;
+}
+export interface ServiceProvisioningError {
+    createdDateTime?: NullableOption<string>;
+    isResolved?: NullableOption<boolean>;
+    serviceInstance?: NullableOption<string>;
 }
 export interface MailboxSettings {
     // Folder ID of an archive folder for the user.
@@ -20878,6 +20928,9 @@ export interface ServicePlanInfo {
     servicePlanId?: NullableOption<string>;
     // The name of the service plan.
     servicePlanName?: NullableOption<string>;
+}
+export interface ServiceProvisioningXmlError extends ServiceProvisioningError {
+    errorDetail?: NullableOption<string>;
 }
 export interface SettingTemplateValue {
     // Default value for the setting.
@@ -22203,6 +22256,14 @@ export interface DisplayNameLocalization {
     // Provides the language culture-code and friendly name of the language that the displayName field has been provided in.
     languageTag?: NullableOption<string>;
 }
+export interface CommentAction {
+    // If true, this activity was a reply to an existing comment thread.
+    isReply?: NullableOption<boolean>;
+    // The identity of the user who started the comment thread.
+    parentAuthor?: NullableOption<IdentitySet>;
+    // The identities of the users participating in this comment thread.
+    participants?: NullableOption<IdentitySet[]>;
+}
 // tslint:disable-next-line: no-empty-interface
 export interface ContentApprovalStatusColumn {}
 export interface ContentTypeInfo {
@@ -22217,6 +22278,8 @@ export interface ContentTypeOrder {
     // Specifies the position in which the content type appears in the selection UI.
     position?: NullableOption<number>;
 }
+// tslint:disable-next-line: no-empty-interface
+export interface CreateAction {}
 export interface CurrencyColumn {
     // Specifies the locale from which to infer the currency symbol.
     locale?: NullableOption<string>;
@@ -22235,6 +22298,12 @@ export interface DefaultColumnValue {
     formula?: NullableOption<string>;
     // The direct value to use as the default value for the column.
     value?: NullableOption<string>;
+}
+export interface DeleteAction {
+    // The name of the item that was deleted.
+    name?: NullableOption<string>;
+    // File or Folder, depending on the type of the deleted item.
+    objectType?: NullableOption<string>;
 }
 export interface DocumentSet {
     // Content types allowed in document set.
@@ -22284,6 +22353,8 @@ export interface DriveRecipient {
     // The unique identifier for the recipient in the directory.
     objectId?: NullableOption<string>;
 }
+// tslint:disable-next-line: no-empty-interface
+export interface EditAction {}
 export interface ExtractSensitivityLabelsResult {
     // List of sensitivity labels assigned to a file.
     labels?: NullableOption<SensitivityLabelAssignment[]>;
@@ -22388,6 +22459,16 @@ export interface LookupColumn {
      */
     primaryLookupColumnId?: NullableOption<string>;
 }
+export interface MentionAction {
+    // The identities of the users mentioned in this action.
+    mentionees?: NullableOption<IdentitySet[]>;
+}
+export interface MoveAction {
+    // The name of the location the item was moved from.
+    from?: NullableOption<string>;
+    // The name of the location the item was moved to.
+    to?: NullableOption<string>;
+}
 export interface NumberColumn {
     // How many decimal places to display. See below for information about the possible values.
     decimalPlaces?: NullableOption<string>;
@@ -22413,6 +22494,18 @@ export interface PersonOrGroupColumn {
 export interface StoragePlanInformation {
     // Indicates whether there are higher storage quota plans available. Read-only.
     upgradeAvailable?: NullableOption<boolean>;
+}
+export interface RenameAction {
+    // The new name of the item.
+    newName?: NullableOption<string>;
+    // The previous name of the item.
+    oldName?: NullableOption<string>;
+}
+// tslint:disable-next-line: no-empty-interface
+export interface RestoreAction {}
+export interface ShareAction {
+    // The identities the item was shared with in this action.
+    recipients?: NullableOption<IdentitySet[]>;
 }
 export interface SharePointIdentity extends Identity {
     // The sign in name of the SharePoint identity.
@@ -22498,6 +22591,10 @@ export interface Thumbnail {
 }
 // tslint:disable-next-line: no-empty-interface
 export interface ThumbnailColumn {}
+export interface VersionAction {
+    // The name of the new version that was created by this action.
+    newVersion?: NullableOption<string>;
+}
 export interface AudioConferencing {
     // The conference id of the online meeting.
     conferenceId?: NullableOption<string>;
@@ -29412,7 +29509,7 @@ export namespace SecurityNamespace {
         category?: NullableOption<string>;
         /**
          * Specifies whether the alert represents a true threat. Possible values are: unknown, falsePositive, truePositive,
-         * benignPositive, unknownFutureValue.
+         * informationalExpectedActivity, unknownFutureValue.
          */
         classification?: NullableOption<AlertClassification>;
         // Array of comments created by the Security Operations (SecOps) team during the alert management process.
