@@ -2904,6 +2904,7 @@ export type EndpointType =
     | "unknownFutureValue";
 export type MediaDirection = "inactive" | "sendOnly" | "receiveOnly" | "sendReceive";
 export type MediaState = "active" | "inactive" | "unknownFutureValue";
+export type MeetingAudience = "everyone" | "organization" | "unknownFutureValue";
 export type MeetingChatHistoryDefaultMode = "none" | "all" | "unknownFutureValue";
 export type Modality = "audio" | "video" | "videoBasedScreenSharing" | "data" | "unknownFutureValue";
 export type OnlineMeetingContentSharingDisabledReason = "watermarkProtection" | "unknownFutureValue";
@@ -2932,6 +2933,14 @@ export type Tone =
     | "c"
     | "d"
     | "flash";
+export type VirtualEventAttendeeRegistrationStatus =
+    | "registered"
+    | "canceled"
+    | "waitlisted"
+    | "pendingApproval"
+    | "rejectedByOrganizer"
+    | "unknownFutureValue";
+export type VirtualEventStatus = "draft" | "published" | "canceled" | "unknownFutureValue";
 export type AttestationLevel = "attested" | "notAttested" | "unknownFutureValue";
 export type AuthenticationMethodKeyStrength = "normal" | "weak" | "unknown";
 export type AuthenticationMethodSignInState =
@@ -3293,6 +3302,11 @@ export interface ExtensionProperty extends DirectoryObject {
      * 32-bit value.LargeInteger - 64-bit value.String - 256 characters maximum
      */
     dataType?: string;
+    /**
+     * Defines the directory extension as a multi-valued property. When true, the directory extension property can store a
+     * collection of objects of the dataType; for example, a collection of integers. The default value is false. Supports
+     * $filter (eq).
+     */
     isMultiValued?: boolean;
     /**
      * Indicates if this extension property was synced from on-premises active directory using Microsoft Entra Connect.
@@ -4903,64 +4917,41 @@ export interface UserActivity extends Entity {
     // Optional. NavigationProperty/Containment; navigation property to the activity's historyItems.
     historyItems?: NullableOption<ActivityHistoryItem[]>;
 }
-export interface OnlineMeeting extends Entity {
-    // Indicates whether attendees can turn on their camera.
+export interface OnlineMeetingBase extends Entity {
     allowAttendeeToEnableCamera?: NullableOption<boolean>;
-    // Indicates whether attendees can turn on their microphone.
     allowAttendeeToEnableMic?: NullableOption<boolean>;
-    // Specifies who can be a presenter in a meeting. Possible values are listed in the following table.
     allowedPresenters?: NullableOption<OnlineMeetingPresenters>;
-    // Specifies the mode of meeting chat.
     allowMeetingChat?: NullableOption<MeetingChatMode>;
-    // Specifies if participants are allowed to rename themselves in an instance of the meeting.
     allowParticipantsToChangeName?: NullableOption<boolean>;
-    // Indicates whether Teams reactions are enabled for the meeting.
     allowTeamworkReactions?: NullableOption<boolean>;
-    attendeeReport?: NullableOption<any>;
-    // The phone access (dial-in) information for an online meeting. Read-only.
     audioConferencing?: NullableOption<AudioConferencing>;
-    broadcastSettings?: NullableOption<BroadcastMeetingSettings>;
-    // The chat information associated with this online meeting.
     chatInfo?: NullableOption<ChatInfo>;
+    isEntryExitAnnounced?: NullableOption<boolean>;
+    joinInformation?: NullableOption<ItemBody>;
+    joinMeetingIdSettings?: NullableOption<JoinMeetingIdSettings>;
+    joinWebUrl?: NullableOption<string>;
+    lobbyBypassSettings?: NullableOption<LobbyBypassSettings>;
+    recordAutomatically?: NullableOption<boolean>;
+    shareMeetingChatHistoryDefault?: NullableOption<MeetingChatHistoryDefaultMode>;
+    subject?: NullableOption<string>;
+    videoTeleconferenceId?: NullableOption<string>;
+    watermarkProtection?: NullableOption<WatermarkProtectionValues>;
+    attendanceReports?: NullableOption<MeetingAttendanceReport[]>;
+}
+export interface OnlineMeeting extends OnlineMeetingBase {
+    attendeeReport?: NullableOption<any>;
+    broadcastSettings?: NullableOption<BroadcastMeetingSettings>;
     // The meeting creation time in UTC. Read-only.
     creationDateTime?: NullableOption<string>;
     // The meeting end time in UTC.
     endDateTime?: NullableOption<string>;
     externalId?: NullableOption<string>;
     isBroadcast?: NullableOption<boolean>;
-    // Indicates whether to announce when callers join or leave.
-    isEntryExitAnnounced?: NullableOption<boolean>;
-    /**
-     * The join information in the language and locale variant specified in the Accept-Language request HTTP header.
-     * Read-only.
-     */
-    joinInformation?: NullableOption<ItemBody>;
-    /**
-     * Specifies the joinMeetingId, the meeting passcode, and the requirement for the passcode. Once an onlineMeeting is
-     * created, the joinMeetingIdSettings cannot be modified. To make any changes to this property, the meeting needs to be
-     * canceled and a new one needs to be created.
-     */
-    joinMeetingIdSettings?: NullableOption<JoinMeetingIdSettings>;
-    // The join URL of the online meeting. Read-only.
-    joinWebUrl?: NullableOption<string>;
-    // Specifies which participants can bypass the meeting lobby.
-    lobbyBypassSettings?: NullableOption<LobbyBypassSettings>;
     // The participants associated with the online meeting. This includes the organizer and the attendees.
     participants?: NullableOption<MeetingParticipants>;
-    // Indicates whether to record the meeting automatically.
-    recordAutomatically?: NullableOption<boolean>;
-    // Specifies whether meeting chat history is shared with participants. Possible values are: all, none, unknownFutureValue.
-    shareMeetingChatHistoryDefault?: NullableOption<MeetingChatHistoryDefaultMode>;
     // The meeting start time in UTC.
     startDateTime?: NullableOption<string>;
-    // The subject of the online meeting.
-    subject?: NullableOption<string>;
-    // The video teleconferencing ID. Read-only.
-    videoTeleconferenceId?: NullableOption<string>;
-    // Specifies whether a watermark should be applied to a content type by the client application.
-    watermarkProtection?: NullableOption<WatermarkProtectionValues>;
-    // The attendance reports of an online meeting. Read-only.
-    attendanceReports?: NullableOption<MeetingAttendanceReport[]>;
+    // The recordings of an online meeting. Read-only.
     recordings?: NullableOption<CallRecording[]>;
     // The transcripts of an online meeting. Read-only.
     transcripts?: NullableOption<CallTranscript[]>;
@@ -6583,6 +6574,11 @@ export interface BookingStaffMember extends BookingStaffMemberBase {
 export interface SolutionsRoot {
     bookingBusinesses?: NullableOption<BookingBusiness[]>;
     bookingCurrencies?: NullableOption<BookingCurrency[]>;
+    virtualEvents?: NullableOption<VirtualEventsRoot>;
+}
+export interface VirtualEventsRoot extends Entity {
+    events?: NullableOption<VirtualEvent[]>;
+    webinars?: NullableOption<VirtualEventWebinar[]>;
 }
 export interface AuthoredNote extends Entity {
     // Identity information about the note's author.
@@ -8304,16 +8300,16 @@ export interface InternalDomainFederation extends SamlOrWsFedProvider {
     /**
      * If true, when SAML authentication requests are sent to the federated SAML IdP, Microsoft Entra ID will sign those
      * requests using the OrgID signing key. If false (default), the SAML authentication requests sent to the federated IdP
-     * are not signed.
+     * aren't signed.
      */
     isSignedAuthenticationRequestRequired?: NullableOption<boolean>;
     /**
-     * Fallback token signing certificate that is used to sign tokens when the primary signing certificate expires. Formatted
-     * as Base64 encoded strings of the public portion of the federated IdP's token signing certificate. Needs to be
-     * compatible with the X509Certificate2 class. Much like the signingCertificate, the nextSigningCertificate property is
-     * used if a rollover is required outside of the auto-rollover update, a new federation service is being set up, or if the
-     * new token signing certificate is not present in the federation properties after the federation service certificate has
-     * been updated.
+     * Fallback token signing certificate that can also be used to sign tokens, for example when the primary signing
+     * certificate expires. Formatted as Base64 encoded strings of the public portion of the federated IdP's token signing
+     * certificate. Needs to be compatible with the X509Certificate2 class. Much like the signingCertificate, the
+     * nextSigningCertificate property is used if a rollover is required outside of the auto-rollover update, a new federation
+     * service is being set up, or if the new token signing certificate isn't present in the federation properties after the
+     * federation service certificate has been updated.
      */
     nextSigningCertificate?: NullableOption<string>;
     /**
@@ -9918,6 +9914,8 @@ export interface DriveItem extends BaseItem {
     listItem?: NullableOption<ListItem>;
     // The set of permissions for the item. Read-only. Nullable.
     permissions?: NullableOption<Permission[]>;
+    // Information about retention label and settings enforced on the driveItem. Read-write.
+    retentionLabel?: NullableOption<ItemRetentionLabel>;
     // The set of subscriptions on the item. Only supported on the root of a drive.
     subscriptions?: NullableOption<Subscription[]>;
     /**
@@ -9960,6 +9958,25 @@ export interface ListItem extends BaseItem {
     fields?: NullableOption<FieldValueSet>;
     // The list of previous versions of the list item.
     versions?: NullableOption<ListItemVersion[]>;
+}
+// tslint:disable-next-line: interface-name
+export interface ItemRetentionLabel extends Entity {
+    /**
+     * Specifies whether the label is applied explicitly on the item. True indicates that the label is applied explicitly;
+     * otherwise, the label is inherited from its parent. Read-only.
+     */
+    isLabelAppliedExplicitly?: NullableOption<boolean>;
+    // Identity of the user who applied the label. Read-only.
+    labelAppliedBy?: NullableOption<IdentitySet>;
+    /**
+     * The date and time when the label was applied on the item. The timestamp type represents date and time information using
+     * ISO 8601 format and is always in UTC. For example, midnight UTC on Jan 1, 2014 is 2014-01-01T00:00:00Z. Read-only.
+     */
+    labelAppliedDateTime?: NullableOption<string>;
+    // The retention label on the document. Read-write.
+    name?: NullableOption<string>;
+    // The retention settings enforced on the item. Read-write.
+    retentionSettings?: NullableOption<RetentionLabelSettings>;
 }
 export interface Subscription extends Entity {
     // Optional. Identifier of the application used to create the subscription. Read-only.
@@ -11011,21 +11028,19 @@ export interface SharedDriveItem extends BaseItem {
     // Used to access the underlying site
     site?: NullableOption<Site>;
 }
-export interface MeetingAttendanceReport extends Entity {
-    // UTC time when the meeting ended. Read-only.
-    meetingEndDateTime?: NullableOption<string>;
-    // UTC time when the meeting started. Read-only.
-    meetingStartDateTime?: NullableOption<string>;
-    // Total number of participants. Read-only.
-    totalParticipantCount?: NullableOption<number>;
-    // List of attendance records of an attendance report. Read-only.
-    attendanceRecords?: NullableOption<AttendanceRecord[]>;
-}
 export interface CallRecording extends Entity {
+    // The content of the recording. Read-only.
     content?: NullableOption<any>;
+    /**
+     * Date and time at which the recording was created. The timestamp type represents date and time information using ISO
+     * 8601 format and is always in UTC. For example, midnight UTC on Jan 1, 2014 is 2014-01-01T00:00:00Z. Read-only.
+     */
     createdDateTime?: NullableOption<string>;
+    // The unique identifier of the onlineMeeting related to this recording. Read-only.
     meetingId?: NullableOption<string>;
+    // The identity information of the organizer of the onlineMeeting related to this recording. Read-only.
     meetingOrganizer?: NullableOption<IdentitySet>;
+    // The URL that can be used to access the content of the recording. Read-only.
     recordingContentUrl?: NullableOption<string>;
 }
 export interface CallTranscript extends Entity {
@@ -19335,6 +19350,16 @@ export interface InviteParticipantsOperation extends CommsOperation {
     // The participants to invite.
     participants?: InvitationParticipantInfo[];
 }
+export interface MeetingAttendanceReport extends Entity {
+    // UTC time when the meeting ended. Read-only.
+    meetingEndDateTime?: NullableOption<string>;
+    // UTC time when the meeting started. Read-only.
+    meetingStartDateTime?: NullableOption<string>;
+    // Total number of participants. Read-only.
+    totalParticipantCount?: NullableOption<number>;
+    // List of attendance records of an attendance report. Read-only.
+    attendanceRecords?: NullableOption<AttendanceRecord[]>;
+}
 // tslint:disable-next-line: no-empty-interface
 export interface MuteParticipantOperation extends CommsOperation {}
 export interface ParticipantJoiningNotification extends Entity {
@@ -19363,6 +19388,34 @@ export interface SubscribeToToneOperation extends CommsOperation {}
 export interface UnmuteParticipantOperation extends CommsOperation {}
 // tslint:disable-next-line: no-empty-interface
 export interface UpdateRecordingStatusOperation extends CommsOperation {}
+export interface VirtualEvent extends Entity {
+    createdBy?: NullableOption<CommunicationsIdentitySet>;
+    description?: NullableOption<ItemBody>;
+    displayName?: NullableOption<string>;
+    endDateTime?: NullableOption<DateTimeTimeZone>;
+    startDateTime?: NullableOption<DateTimeTimeZone>;
+    status?: NullableOption<VirtualEventStatus>;
+    sessions?: NullableOption<VirtualEventSession[]>;
+}
+export interface VirtualEventSession extends OnlineMeetingBase {
+    endDateTime?: NullableOption<DateTimeTimeZone>;
+    startDateTime?: NullableOption<DateTimeTimeZone>;
+}
+export interface VirtualEventRegistration extends Entity {
+    cancelationDateTime?: NullableOption<string>;
+    email?: NullableOption<string>;
+    firstName?: NullableOption<string>;
+    lastName?: NullableOption<string>;
+    registrationDateTime?: NullableOption<string>;
+    registrationQuestionAnswers?: NullableOption<VirtualEventRegistrationQuestionAnswer[]>;
+    status?: NullableOption<VirtualEventAttendeeRegistrationStatus>;
+    userId?: NullableOption<string>;
+}
+export interface VirtualEventWebinar extends VirtualEvent {
+    audience?: NullableOption<MeetingAudience>;
+    coOrganizers?: NullableOption<CommunicationsUserIdentity[]>;
+    registrations?: NullableOption<VirtualEventRegistration[]>;
+}
 // tslint:disable-next-line: no-empty-interface
 export interface AuthenticationMethod extends Entity {}
 export interface EmailAuthenticationMethod extends AuthenticationMethod {
@@ -23541,6 +23594,23 @@ export interface RenameAction {
 }
 // tslint:disable-next-line: no-empty-interface
 export interface RestoreAction {}
+export interface RetentionLabelSettings {
+    /**
+     * Describes the item behavior during retention period. Possible values are: doNotRetain, retain, retainAsRecord,
+     * retainAsRegulatoryRecord, unknownFutureValue. Read-only.
+     */
+    behaviorDuringRetentionPeriod?: NullableOption<SecurityNamespace.BehaviorDuringRetentionPeriod>;
+    // Specifies whether updates to document content are allowed. Read-only.
+    isContentUpdateAllowed?: NullableOption<boolean>;
+    // Specifies whether the document deletion is allowed. Read-only.
+    isDeleteAllowed?: NullableOption<boolean>;
+    // Specifies whether you're allowed to change the retention label on the document. Read-only.
+    isLabelUpdateAllowed?: NullableOption<boolean>;
+    // Specifies whether updates to the item metadata (for example, the Title field) are blocked. Read-only.
+    isMetadataUpdateAllowed?: NullableOption<boolean>;
+    // Specifies whether the item is locked. Read-write.
+    isRecordLocked?: NullableOption<boolean>;
+}
 export interface ShareAction {
     // The identities the item was shared with in this action.
     recipients?: NullableOption<IdentitySet[]>;
@@ -23633,18 +23703,6 @@ export interface VersionAction {
     // The name of the new version that was created by this action.
     newVersion?: NullableOption<string>;
 }
-export interface AudioConferencing {
-    // The conference id of the online meeting.
-    conferenceId?: NullableOption<string>;
-    // A URL to the externally-accessible web page that contains dial-in information.
-    dialinUrl?: NullableOption<string>;
-    tollFreeNumber?: NullableOption<string>;
-    // List of toll-free numbers that are displayed in the meeting invite.
-    tollFreeNumbers?: NullableOption<string[]>;
-    tollNumber?: NullableOption<string>;
-    // List of toll numbers that are displayed in the meeting invite.
-    tollNumbers?: NullableOption<string[]>;
-}
 export interface BroadcastMeetingSettings {
     // Defines who can join the Teams live event. Possible values are listed in the following table.
     allowedAudience?: NullableOption<BroadcastMeetingAudience>;
@@ -23658,22 +23716,6 @@ export interface BroadcastMeetingSettings {
     isRecordingEnabled?: NullableOption<boolean>;
     // Indicates whether video on demand is enabled for this Teams live event. Default value is false.
     isVideoOnDemandEnabled?: NullableOption<boolean>;
-}
-export interface ChatInfo {
-    // The unique identifier of a message in a Microsoft Teams channel.
-    messageId?: NullableOption<string>;
-    // The ID of the reply message.
-    replyChainMessageId?: NullableOption<string>;
-    // The unique identifier for a thread in Microsoft Teams.
-    threadId?: NullableOption<string>;
-}
-export interface JoinMeetingIdSettings {
-    // Indicates whether a passcode is required to join a meeting when using joinMeetingId. Optional.
-    isPasscodeRequired?: NullableOption<boolean>;
-    // The meeting ID to be used to join a meeting. Optional. Read-only.
-    joinMeetingId?: NullableOption<string>;
-    // The passcode to join a meeting. Optional. Read-only.
-    passcode?: NullableOption<string>;
 }
 export interface MeetingParticipants {
     attendees?: NullableOption<MeetingParticipantInfo[]>;
@@ -28243,6 +28285,18 @@ export interface AttendanceInterval {
     // The time the attendee left in UTC.
     leaveDateTime?: NullableOption<string>;
 }
+export interface AudioConferencing {
+    // The conference id of the online meeting.
+    conferenceId?: NullableOption<string>;
+    // A URL to the externally-accessible web page that contains dial-in information.
+    dialinUrl?: NullableOption<string>;
+    tollFreeNumber?: NullableOption<string>;
+    // List of toll-free numbers that are displayed in the meeting invite.
+    tollFreeNumbers?: NullableOption<string[]>;
+    tollNumber?: NullableOption<string>;
+    // List of toll numbers that are displayed in the meeting invite.
+    tollNumbers?: NullableOption<string[]>;
+}
 export interface AzureCommunicationServicesUserIdentity extends Identity {
     // The Azure Communication Services resource ID associated with the user.
     azureCommunicationServicesResourceId?: NullableOption<string>;
@@ -28278,6 +28332,14 @@ export interface CallTranscriptionInfo {
     lastModifiedDateTime?: NullableOption<string>;
     // Possible values are: notStarted, active, inactive.
     state?: CallTranscriptionState;
+}
+export interface ChatInfo {
+    // The unique identifier of a message in a Microsoft Teams channel.
+    messageId?: NullableOption<string>;
+    // The ID of the reply message.
+    replyChainMessageId?: NullableOption<string>;
+    // The unique identifier for a thread in Microsoft Teams.
+    threadId?: NullableOption<string>;
 }
 export interface CommsNotification {
     // Possible values are: created, updated, deleted.
@@ -28372,6 +28434,14 @@ export interface JoinMeetingIdMeetingInfo extends MeetingInfo {
     // The ID used to join the meeting.
     joinMeetingId?: string;
     // The passcode used to join the meeting. Optional.
+    passcode?: NullableOption<string>;
+}
+export interface JoinMeetingIdSettings {
+    // Indicates whether a passcode is required to join a meeting when using joinMeetingId. Optional.
+    isPasscodeRequired?: NullableOption<boolean>;
+    // The meeting ID to be used to join a meeting. Optional. Read-only.
+    joinMeetingId?: NullableOption<string>;
+    // The passcode to join a meeting. Optional. Read-only.
     passcode?: NullableOption<string>;
 }
 export interface MediaInfo {
@@ -28588,6 +28658,13 @@ export interface ToneInfo {
      * flash.
      */
     tone?: Tone;
+}
+export interface VirtualEventRegistrationQuestionAnswer {
+    booleanValue?: NullableOption<boolean>;
+    displayName?: NullableOption<string>;
+    multiChoiceValues?: NullableOption<string[]>;
+    questionId?: NullableOption<string>;
+    value?: NullableOption<string>;
 }
 export interface PasswordResetResponse {
     // The Microsoft Entra ID-generated password.
@@ -30677,6 +30754,12 @@ export namespace SecurityNamespace {
     type PurgeAreas = "mailboxes" | "teamsMessages" | "unknownFutureValue";
     type PurgeType = "recoverable" | "permanentlyDeleted" | "unknownFutureValue";
     type SourceType = "mailbox" | "site" | "unknownFutureValue";
+    type BehaviorDuringRetentionPeriod =
+        | "doNotRetain"
+        | "retain"
+        | "retainAsRecord"
+        | "retainAsRegulatoryRecord"
+        | "unknownFutureValue";
     type AlertClassification =
         | "unknown"
         | "falsePositive"
@@ -30851,8 +30934,15 @@ export namespace SecurityNamespace {
          * microsoftDefenderForEndpoint, antivirus, smartScreen, customTi, microsoftDefenderForOffice365, automatedInvestigation,
          * microsoftThreatExperts, customDetection, microsoftDefenderForIdentity, cloudAppSecurity, microsoft365Defender,
          * azureAdIdentityProtection, manual, microsoftDataLossPrevention, appGovernancePolicy, appGovernanceDetection,
-         * unknownFutureValue, microsoftDefenderForCloud. You must use the Prefer: include-unknown-enum-members request header to
-         * get the following value(s) in this evolvable enum: microsoftDefenderForCloud.
+         * unknownFutureValue, microsoftDefenderForCloud, microsoftDefenderForIoT, microsoftDefenderForServers,
+         * microsoftDefenderForStorage, microsoftDefenderForDNS, microsoftDefenderForDatabases, microsoftDefenderForContainers,
+         * microsoftDefenderForNetwork, microsoftDefenderForAppService, microsoftDefenderForKeyVault,
+         * microsoftDefenderForResourceManager, microsoftDefenderForApiManagement. You must use the Prefer:
+         * include-unknown-enum-members request header to get the following value(s) in this evolvable enum:
+         * microsoftDefenderForCloud, microsoftDefenderForIoT, microsoftDefenderForServers, microsoftDefenderForStorage,
+         * microsoftDefenderForDNS, microsoftDefenderForDatabases, microsoftDefenderForContainers, microsoftDefenderForNetwork,
+         * microsoftDefenderForAppService, microsoftDefenderForKeyVault, microsoftDefenderForResourceManager,
+         * microsoftDefenderForApiManagement.
          */
         detectionSource?: NullableOption<DetectionSource>;
         // The ID of the detector that triggered the alert.
