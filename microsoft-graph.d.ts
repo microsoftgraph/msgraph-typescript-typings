@@ -19340,11 +19340,17 @@ export interface Participant extends Entity {
     metadata?: NullableOption<string>;
     // Information about whether the participant has recording capability.
     recordingInfo?: NullableOption<RecordingInfo>;
+    removedState?: NullableOption<RemovedState>;
     // Indicates the reason or reasons media content from this participant is restricted.
     restrictedExperience?: NullableOption<OnlineMeetingRestricted>;
+    rosterSequenceNumber?: NullableOption<number>;
 }
 // tslint:disable-next-line: no-empty-interface
 export interface CancelMediaProcessingOperation extends CommsOperation {}
+export interface DeltaParticipants extends Entity {
+    sequenceNumber?: NullableOption<number>;
+    participants?: NullableOption<Participant[]>;
+}
 // tslint:disable-next-line: interface-name
 export interface InviteParticipantsOperation extends CommsOperation {
     // The participants to invite.
@@ -22011,10 +22017,10 @@ export interface ServicePlanInfo {
     appliesTo?: NullableOption<string>;
     /**
      * The provisioning status of the service plan. The possible values are:Success - Service is fully provisioned.Disabled -
-     * Service has been disabled.ErrorStatus - The service plan has not been provisioned and is in an error state.PendingInput
-     * - Service is not yet provisioned; awaiting service confirmation.PendingActivation - Service is provisioned but requires
-     * explicit activation by administrator (for example, Intune_O365 service plan)PendingProvisioning - Microsoft has added a
-     * new service to the product SKU and it has not been activated in the tenant, yet.
+     * Service is disabled.Error - The service plan isn't provisioned and is in an error state.PendingInput - The service
+     * isn't provisioned and is awaiting service confirmation.PendingActivation - The service is provisioned but requires
+     * explicit activation by an administrator (for example, Intune_O365 service plan)PendingProvisioning - Microsoft has
+     * added a new service to the product SKU and it isn't activated in the tenant.
      */
     provisioningStatus?: NullableOption<string>;
     // The unique identifier of the service plan.
@@ -28543,6 +28549,9 @@ export interface RecordingInfo {
 export interface RejectJoinResponse extends ParticipantJoiningResponse {
     // The rejection reason. Possible values are None, Busy, and Forbidden.
     reason?: RejectReason;
+}
+export interface RemovedState {
+    reason?: NullableOption<string>;
 }
 export interface ServiceHostedMediaConfig extends MediaConfig {
     // The list of media to pre-fetch.
