@@ -5372,7 +5372,10 @@ export interface UserRegistrationDetails extends Entity {
      * using ISO 8601 format and is always in UTC time. For example, midnight UTC on Jan 1, 2014 is 2014-01-01T00:00:00Z.
      */
     lastUpdatedDateTime?: string;
-    // Collection of authentication methods registered, such as mobilePhone, email, fido2. Supports $filter (any with eq).
+    /**
+     * Collection of authentication methods registered, such as mobilePhone, email, passKeyDeviceBound. Supports $filter (any
+     * with eq).
+     */
     methodsRegistered?: NullableOption<string[]>;
     /**
      * Collection of authentication methods that the system determined to be the most secure authentication methods among the
