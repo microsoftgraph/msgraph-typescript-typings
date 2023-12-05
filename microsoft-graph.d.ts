@@ -8781,23 +8781,27 @@ export interface UnifiedRbacResourceNamespace extends Entity {
 }
 export interface UnifiedRoleAssignment extends Entity {
     /**
-     * Identifier of the app-specific scope when the assignment scope is app-specific. Either this property or
-     * directoryScopeId is required. App scopes are scopes that are defined and understood by this application only. Use / for
-     * tenant-wide app scopes. Use directoryScopeId to limit the scope to particular directory objects, for example,
-     * administrative units. Supports $filter (eq, in).
+     * Identifier of the app specific scope when the assignment scope is app specific. The scope of an assignment determines
+     * the set of resources for which the principal has been granted access. App scopes are scopes that are defined and
+     * understood by a resource application only. For the entitlement management provider, use this property to specify a
+     * catalog, for example /AccessPackageCatalog/beedadfe-01d5-4025-910b-84abb9369997. Supports $filter (eq, in). For example
+     * /roleManagement/entitlementManagement/roleAssignments?$filter=appScopeId eq '/AccessPackageCatalog/{catalog id}'.
      */
     appScopeId?: NullableOption<string>;
     condition?: NullableOption<string>;
     /**
-     * Identifier of the directory object representing the scope of the assignment. Either this property or appScopeId is
-     * required. The scope of an assignment determines the set of resources for which the principal has been granted access.
-     * Directory scopes are shared scopes stored in the directory that are understood by multiple applications. Use / for
-     * tenant-wide scope. Use appScopeId to limit the scope to an application only. Supports $filter (eq, in).
+     * Identifier of the directory object representing the scope of the assignment. The scope of an assignment determines the
+     * set of resources for which the principal has been granted access. Directory scopes are shared scopes stored in the
+     * directory that are understood by multiple applications, unlike app scopes that are defined and understood by a resource
+     * application only. Supports $filter (eq, in).
      */
     directoryScopeId?: NullableOption<string>;
-    // Identifier of the principal to which the assignment is granted. Supports $filter (eq, in).
+    /**
+     * Identifier of the principal to which the assignment is granted. Supported principals are users, role-assignable groups,
+     * and service principals. Supports $filter (eq, in).
+     */
     principalId?: NullableOption<string>;
-    // Identifier of the role definition the assignment is for. Read only. Supports $filter (eq, in).
+    // Identifier of the unifiedRoleDefinition the assignment is for. Read-only. Supports $filter (eq, in).
     roleDefinitionId?: NullableOption<string>;
     /**
      * Read-only property with details of the app specific scope when the assignment scope is app specific. Containment
@@ -8808,7 +8812,7 @@ export interface UnifiedRoleAssignment extends Entity {
     directoryScope?: NullableOption<DirectoryObject>;
     // Referencing the assigned principal. Read-only. Supports $expand.
     principal?: NullableOption<DirectoryObject>;
-    // The roleDefinition the assignment is for. Supports $expand. roleDefinition.Id will be auto expanded.
+    // The roleDefinition the assignment is for. Supports $expand.
     roleDefinition?: NullableOption<UnifiedRoleDefinition>;
 }
 export interface UnifiedRoleDefinition extends Entity {
@@ -11766,8 +11770,9 @@ export interface ConnectedOrganization extends Entity {
     // The display name of the connected organization. Supports $filter (eq).
     displayName?: NullableOption<string>;
     /**
-     * The identity sources in this connected organization, one of azureActiveDirectoryTenant, domainIdentitySource,
-     * externalDomainFederation or crossCloudAzureActiveDirectoryTenant. Nullable.
+     * The identity sources in this connected organization, one of azureActiveDirectoryTenant,
+     * crossCloudAzureActiveDirectoryTenant, domainIdentitySource, externalDomainFederation, or socialIdentitySource.
+     * Nullable.
      */
     identitySources?: NullableOption<IdentitySource[]>;
     /**
