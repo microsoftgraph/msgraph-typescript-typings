@@ -3901,7 +3901,7 @@ export interface User extends DirectoryObject {
     directReports?: NullableOption<DirectoryObject[]>;
     // A collection of this user's license details. Read-only.
     licenseDetails?: NullableOption<LicenseDetails[]>;
-    // The user or contact that is this user's manager. Read-only. (HTTP Methods: GET, PUT, DELETE.). Supports $expand.
+    // The user or contact that is this user's manager. Read-only. Supports $expand.
     manager?: NullableOption<DirectoryObject>;
     // The groups and directory roles that the user is a member of. Read-only. Nullable. Supports $expand.
     memberOf?: NullableOption<DirectoryObject[]>;
@@ -11077,6 +11077,7 @@ export interface EducationSubmission extends Entity {
      * 2014-01-01T00:00:00Z
      */
     unsubmittedDateTime?: NullableOption<string>;
+    webUrl?: NullableOption<string>;
     outcomes?: NullableOption<EducationOutcome[]>;
     resources?: NullableOption<EducationSubmissionResource[]>;
     submittedResources?: NullableOption<EducationSubmissionResource[]>;
@@ -13346,6 +13347,7 @@ export interface AccessPackageResourceRoleScope extends Entity {
     scope?: NullableOption<AccessPackageResourceScope>;
 }
 export interface AccessPackageResource extends Entity {
+    // Contains information about the attributes to be collected from the requestor and sent to the resource application.
     attributes?: NullableOption<AccessPackageResourceAttribute[]>;
     /**
      * The Timestamp type represents date and time information using ISO 8601 format and is always in UTC time. For example,
@@ -19956,11 +19958,17 @@ export interface SchedulingGroup extends ChangeTrackedEntity {
     userIds?: NullableOption<string[]>;
 }
 export interface Shift extends ChangeTrackedEntity {
-    // The draft version of this shift that is viewable by managers. Required.
+    /**
+     * Draft changes in the shift. Draft changes are only visible to managers. The changes are visible to employees when they
+     * are shared, which copies the changes from the draftShift to the sharedShift property.
+     */
     draftShift?: NullableOption<ShiftItem>;
     // ID of the scheduling group the shift is part of. Required.
     schedulingGroupId?: NullableOption<string>;
-    // The shared version of this shift that is viewable by both employees and managers. Required.
+    /**
+     * The shared version of this shift that is viewable by both employees and managers. Updates to the sharedShift property
+     * send notifications to users in the Teams client.
+     */
     sharedShift?: NullableOption<ShiftItem>;
     // ID of the user assigned to the shift. Required.
     userId?: NullableOption<string>;
@@ -19995,9 +20003,15 @@ export interface TimeOffRequest extends ScheduleChangeRequest {
     timeOffReasonId?: NullableOption<string>;
 }
 export interface TimeOff extends ChangeTrackedEntity {
-    // The draft version of this timeOff that is viewable by managers. Required.
+    /**
+     * The draft version of this timeOff item that is viewable by managers. It must be shared before it is visible to team
+     * members. Required.
+     */
     draftTimeOff?: NullableOption<TimeOffItem>;
-    // The shared version of this timeOff that is viewable by both employees and managers. Required.
+    /**
+     * The shared version of this timeOff that is viewable by both employees and managers. Updates to the sharedTimeOff
+     * property send notifications to users in the Teams client. Required.
+     */
     sharedTimeOff?: NullableOption<TimeOffItem>;
     // ID of the user assigned to the timeOff. Required.
     userId?: NullableOption<string>;
@@ -20713,8 +20727,8 @@ export interface ObjectIdentity {
      * be unique within the organization. Represents the sign-in name for the user, when signInType is set to emailAddress or
      * userName (also known as local accounts).When signInType is set to: emailAddress, (or a custom string that starts with
      * emailAddress like emailAddress1) issuerAssignedId must be a valid email addressuserName, issuerAssignedId must begin
-     * with alphabetical character or number, and can only contain alphanumeric characters and the following symbols: - or
-     * Supports $filter. 64 character limit.
+     * with alphabetical character or number, and can only contain alphanumeric characters and the following symbols: - or .
+     * 64 character limit.Supports $filter.
      */
     issuerAssignedId?: NullableOption<string>;
     /**
@@ -25142,8 +25156,18 @@ export interface AccessPackageAutomaticRequestSettings {
     requestAccessForAllowedTargets?: NullableOption<boolean>;
 }
 export interface AccessPackageResourceAttribute {
+    // Information about how to set the attribute, currently a accessPackageUserDirectoryAttributeStore type.
     destination?: NullableOption<AccessPackageResourceAttributeDestination>;
+    /**
+     * The name of the attribute in the end system. If the destination is accessPackageUserDirectoryAttributeStore, then a
+     * user property such as jobTitle or a directory schema extension for the user object type, such as
+     * extension2b676109c7c74ae2b41549205f1947edpersonalTitle.
+     */
     name?: NullableOption<string>;
+    /**
+     * Information about how to populate the attribute value when an accessPackageAssignmentRequest is being fulfilled,
+     * currently a accessPackageResourceAttributeQuestion type.
+     */
     source?: NullableOption<AccessPackageResourceAttributeSource>;
 }
 // tslint:disable-next-line: no-empty-interface
