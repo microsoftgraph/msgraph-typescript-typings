@@ -6,6 +6,6 @@
 		"gulp": "^4.0.0",
 		"gulp-json-modify": "^1.0.2",
 		"gulp-replace": "^1.1.4",
-		"yargs": "^13.2.2"
+		"yargs": "^17.7.2"
 	}
 }
