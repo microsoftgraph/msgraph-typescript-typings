@@ -1,10 +1,10 @@
-id: 
+id:
 name: GitOps.PullRequestIssueManagement
 description: GitOps.PullRequestIssueManagement primitive
-owner: 
+owner:
 resource: repository
 disabled: false
-where: 
+where:
 configuration:
   resourceManagementConfiguration:
     scheduledSearches: []
@@ -16,13 +16,13 @@ configuration:
       - isActivitySender:
           issueAuthor: True
       - hasLabel:
-          label: 'Needs: Author Feedback'
+          label: 'status:waiting-for-author-feedback'
       then:
       - addLabel:
           label: 'Needs: Attention :wave:'
       - removeLabel:
-          label: 'Needs: Author Feedback'
-      description: 
+          label: 'status:waiting-for-author-feedback'
+      description:
     - if:
       - payloadType: Issues
       - not:
@@ -33,13 +33,13 @@ configuration:
       then:
       - removeLabel:
           label: no-recent-activity
-      description: 
+      description:
     - if:
       - payloadType: Issues
       - labelAdded:
           label: service bug
       then: []
-      description: 
+      description:
     - if:
       - payloadType: Issue_Comment
       - activitySenderHasAssociation:
@@ -52,8 +52,8 @@ configuration:
           isRegex: False
       then:
       - addLabel:
-          label: 'Needs: Author Feedback'
-      description: 
+          label: 'status:waiting-for-author-feedback'
+      description:
     - if:
       - payloadType: Issues
       - or:
@@ -63,6 +63,6 @@ configuration:
       then:
       - removeLabel:
           label: ToTriage
-      description: 
-onFailure: 
-onSuccess: 
+      description:
+onFailure:
+onSuccess:
