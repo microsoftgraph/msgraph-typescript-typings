@@ -10,6 +10,16 @@ configuration:
     scheduledSearches: []
     eventResponderTasks:
     - if:
+      - payloadType: Issues
+      - isAction:
+          action: Closed
+      - hasLabel:
+          label: 'status:waiting-for-author-feedback'
+      then:
+      - removeLabel:
+          label: 'status:waiting-for-author-feedback'
+      description:
+    - if:
       - payloadType: Issue_Comment
       - isAction:
           action: Created
