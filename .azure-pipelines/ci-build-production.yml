@@ -32,9 +32,10 @@ extends:
       - job: job
         templateContext:
           outputs:
-          - output: build-drop
-            displayName: 'Publish Artifact: drop'
+          - output: pipelineArtifact
+            displayName: 'Publish Artifact drop'
             targetPath: '$(Build.ArtifactStagingDirectory)'
+            artifactName: build-drop
         steps:
         - checkout: self
           displayName: checkout main
