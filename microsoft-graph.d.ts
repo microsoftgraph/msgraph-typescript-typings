@@ -4217,6 +4217,10 @@ export interface AdministrativeUnit extends DirectoryObject {
      * values), $search, and $orderby.
      */
     displayName?: NullableOption<string>;
+    isMemberManagementRestricted?: NullableOption<boolean>;
+    membershipRule?: NullableOption<string>;
+    membershipRuleProcessingState?: NullableOption<string>;
+    membershipType?: NullableOption<string>;
     /**
      * Controls whether the administrative unit and its members are hidden or public. Can be set to HiddenMembership. If not
      * set (value is null), the default behavior is public. When set to HiddenMembership, only members of the administrative
@@ -7919,6 +7923,7 @@ export interface Device extends DirectoryObject {
      * Intune for any device OS type or by an approved MDM app for Windows OS devices. Supports $filter (eq, ne, not).
      */
     isManaged?: NullableOption<boolean>;
+    isManagementRestricted?: NullableOption<boolean>;
     // true if the device is rooted or jail-broken. This property can only be updated by Intune.
     isRooted?: NullableOption<boolean>;
     /**
@@ -8985,6 +8990,7 @@ export interface Domain extends Entity {
     domainNameReferences?: NullableOption<DirectoryObject[]>;
     // Domain settings configured by a customer when federated with Microsoft Entra ID. Supports $expand.
     federationConfiguration?: NullableOption<InternalDomainFederation[]>;
+    rootDomain?: NullableOption<Domain>;
     /**
      * DNS records the customer adds to the DNS zone file of the domain before the domain can be used by Microsoft Online
      * services. Read-only, Nullable. Supports $expand.
@@ -10461,6 +10467,7 @@ export interface Group extends DirectoryObject {
      * license. Returned by default. Supports $filter (eq, ne, not).
      */
     isAssignableToRole?: NullableOption<boolean>;
+    isManagementRestricted?: NullableOption<boolean>;
     /**
      * Indicates whether the signed-in user is subscribed to receive email conversations. The default value is true. Returned
      * only on $select. Supported only on the Get group API (GET /groups/{ID}).
@@ -10635,9 +10642,12 @@ export interface Group extends DirectoryObject {
     membersWithLicenseErrors?: NullableOption<DirectoryObject[]>;
     onenote?: NullableOption<Onenote>;
     /**
-     * The owners of the group. Limited to 100 owners. Nullable. If this property isn't specified when creating a Microsoft
-     * 365 group, the calling user is automatically assigned as the group owner. Supports $filter (/$count eq 0, /$count ne 0,
-     * /$count eq 1, /$count ne 1). Supports $expand including nested $select. For example,
+     * The owners of the group who can be users or service principals. Limited to 100 owners. Nullable. If this property isn't
+     * specified when creating a Microsoft 365 group the calling user (admin or non-admin) is automatically assigned as the
+     * group owner. A non-admin user can't explicitly add themselves to this collection when they're creating the group. For
+     * more information, see the related known issue. For security groups, the admin user isn't automatically added to this
+     * collection. For more information, see the related known issue. Supports $filter (/$count eq 0, /$count ne 0, /$count eq
+     * 1, /$count ne 1); Supports $expand including nested $select. For example,
      * /groups?$filter=startsWith(displayName,'Role')&amp;$select=id,displayName&amp;$expand=owners($select=id,userPrincipalName,displayName).
      */
     owners?: NullableOption<DirectoryObject[]>;
@@ -15933,6 +15943,7 @@ export interface Security extends Entity {
     alerts_v2?: NullableOption<SecurityNamespace.Alert[]>;
     attackSimulation?: NullableOption<AttackSimulationRoot>;
     cases?: NullableOption<SecurityNamespace.CasesRoot>;
+    // A container for security identities APIs.
     identities?: NullableOption<SecurityNamespace.IdentityContainer>;
     /**
      * A collection of incidents in Microsoft 365 Defender, each of which is a set of correlated alerts and associated
@@ -18588,6 +18599,7 @@ export interface User extends DirectoryObject {
     imAddresses?: NullableOption<string[]>;
     // A list for the user to describe their interests. Returned only on $select.
     interests?: NullableOption<string[]>;
+    isManagementRestricted?: NullableOption<boolean>;
     // Don't use – reserved for future use.
     isResourceAccount?: NullableOption<boolean>;
     /**
@@ -18929,6 +18941,7 @@ export interface User extends DirectoryObject {
     registeredDevices?: NullableOption<DirectoryObject[]>;
     scopedRoleMemberOf?: NullableOption<ScopedRoleMembership[]>;
     settings?: NullableOption<UserSettings>;
+    // The identifier that relates the user to the working time schedule triggers. Read-Only. Nullable
     solutions?: NullableOption<UserSolutionRoot>;
     /**
      * The users and groups responsible for this guest's privileges in the tenant and keeping the guest's information and
@@ -19925,6 +19938,7 @@ export interface UserSignInInsight extends GovernanceInsight {
     lastSignInDateTime?: NullableOption<string>;
 }
 export interface UserSolutionRoot extends Entity {
+    // The working time schedule entity associated with the solution.
     workingTimeSchedule?: NullableOption<WorkingTimeSchedule>;
 }
 export interface UserStorage extends Entity {
@@ -29881,7 +29895,8 @@ export interface ScheduleInformation {
     /**
      * Represents a merged view of availability of all the items in scheduleItems. The view consists of time slots.
      * Availability during each time slot is indicated with: 0= free or working elswhere, 1= tentative, 2= busy, 3= out of
-     * office.Note: Working elsewhere is set to 0 instead of 4 for backward compatibility. For details, see the Q&amp;A.
+     * office.Note: Working elsewhere is set to 0 instead of 4 for backward compatibility. For details, see the Q&amp;A and
+     * Exchange 2007 and Exchange 2010 do not use the WorkingElsewhere value.
      */
     availabilityView?: NullableOption<string>;
     // Error information from attempting to get the availability of the user, distribution list, or resource.
@@ -35064,18 +35079,50 @@ export namespace SecurityNamespace {
 // tslint:disable-next-line: no-empty-interface
     interface FilePlanReferenceTemplate extends FilePlanDescriptorTemplate {}
     interface HealthIssue extends microsoftgraph.Entity {
+        // Contains additional information about the issue, such as a list of items to fix.
         additionalInformation?: string[];
+        /**
+         * The date and time when the health issue was generated. The timestamp type represents date and time information using
+         * ISO 8601 format and is always in UTC. For example, midnight UTC on Jan 1, 2014 is 2014-01-01T00:00:00Z.
+         */
         createdDateTime?: string;
+        // Contains more detailed information about the health issue.
         description?: string;
+        // The display name of the health issue.
         displayName?: NullableOption<string>;
+        // A list of the fully qualified domain names of the domains or the sensors the health issue is related to.
         domainNames?: NullableOption<string[]>;
+        /**
+         * The type of the health issue. The possible values are: sensor, global, unknownFutureValue. For a list of all health
+         * issues and their identifiers, see Microsoft Defender for Identity health issues.
+         */
         healthIssueType?: NullableOption<HealthIssueType>;
+        /**
+         * The type identifier of the health issue. For a list of all health issues and their identifiers, see Microsoft Defender
+         * for Identity health issues.
+         */
         issueTypeId?: NullableOption<string>;
+        /**
+         * The date and time when the health issue was last updated. The timestamp type represents date and time information using
+         * ISO 8601 format and is always in UTC. For example, midnight UTC on Jan 1, 2014 is 2014-01-01T00:00:00Z.
+         */
         lastModifiedDateTime?: string;
+        /**
+         * A list of recommended actions that can be taken to resolve the issue effectively and efficiently. These actions might
+         * include instructions for further investigation and aren't limited to prewritten responses.
+         */
         recommendations?: string[];
+        /**
+         * A list of commands from the PowerShell module for the product that can be used to resolve the issue, if available. If
+         * no commands can be used to solve the issue, this property is empty. The commands, if present, provide a quick and
+         * efficient way to address the issue. These commands run in sequence for the single recommended fix.
+         */
         recommendedActionCommands?: string[];
+        // A list of the DNS names of the sensors the health issue is related to.
         sensorDNSNames?: NullableOption<string[]>;
+        // The severity of the health issue. The possible values are: low, medium, high, unknownFutureValue.
         severity?: NullableOption<HealthIssueSeverity>;
+        // The status of the health issue. The possible values are: open, closed, suppressed, unknownFutureValue.
         status?: NullableOption<HealthIssueStatus>;
     }
     interface Host extends Artifact {
@@ -35291,6 +35338,10 @@ export namespace SecurityNamespace {
     }
 // tslint:disable-next-line: interface-name
     interface IdentityContainer extends microsoftgraph.Entity {
+        /**
+         * Represents potential issues identified by Microsoft Defender for Identity within a customer's Microsoft Defender for
+         * Identity configuration.
+         */
         healthIssues?: NullableOption<HealthIssue[]>;
     }
 // tslint:disable-next-line: interface-name
