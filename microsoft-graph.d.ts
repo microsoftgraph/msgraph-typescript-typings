@@ -4223,8 +4223,8 @@ export interface AdministrativeUnit extends DirectoryObject {
     // An optional description for the administrative unit. Supports $filter (eq, ne, in, startsWith), $search.
     description?: NullableOption<string>;
     /**
-     * Display name for the administrative unit. Supports $filter (eq, ne, not, ge, le, in, startsWith, and eq on null
-     * values), $search, and $orderby.
+     * Display name for the administrative unit. Maximum length is 256 characters. Supports $filter (eq, ne, not, ge, le, in,
+     * startsWith, and eq on null values), $search, and $orderby.
      */
     displayName?: NullableOption<string>;
     isMemberManagementRestricted?: NullableOption<boolean>;
@@ -4948,8 +4948,8 @@ export interface Application extends DirectoryObject {
      */
     disabledByMicrosoftStatus?: NullableOption<string>;
     /**
-     * The display name for the application. Supports $filter (eq, ne, not, ge, le, in, startsWith, and eq on null values),
-     * $search, and $orderby.
+     * The display name for the application. Maximum length is 256 characters. Supports $filter (eq, ne, not, ge, le, in,
+     * startsWith, and eq on null values), $search, and $orderby.
      */
     displayName?: NullableOption<string>;
     /**
@@ -5150,8 +5150,8 @@ export interface AppRoleAssignment extends DirectoryObject {
      */
     createdDateTime?: NullableOption<string>;
     /**
-     * The display name of the user, group, or service principal that was granted the app role assignment. Read-only. Supports
-     * $filter (eq and startswith).
+     * The display name of the user, group, or service principal that was granted the app role assignment. Maximum length is
+     * 256 characters. Read-only. Supports $filter (eq and startswith).
      */
     principalDisplayName?: NullableOption<string>;
     /**
@@ -5161,7 +5161,10 @@ export interface AppRoleAssignment extends DirectoryObject {
     principalId?: NullableOption<string>;
     // The type of the assigned principal. This can either be User, Group, or ServicePrincipal. Read-only.
     principalType?: NullableOption<string>;
-    // The display name of the resource app's service principal to which the assignment is made.
+    /**
+     * The display name of the resource app's service principal to which the assignment is made. Maximum length is 256
+     * characters.
+     */
     resourceDisplayName?: NullableOption<string>;
     /**
      * The unique identifier (id) for the resource service principal for which the assignment is made. Required on create.
@@ -7917,8 +7920,8 @@ export interface Device extends DirectoryObject {
     // For internal use only.
     deviceVersion?: NullableOption<number>;
     /**
-     * The display name for the device. Required. Supports $filter (eq, ne, not, ge, le, in, startsWith, and eq on null
-     * values), $search, and $orderby.
+     * The display name for the device. Maximum length is 256 characters. Required. Supports $filter (eq, ne, not, ge, le, in,
+     * startsWith, and eq on null values), $search, and $orderby.
      */
     displayName?: NullableOption<string>;
     /**
@@ -13964,8 +13967,8 @@ export interface OrgContact extends DirectoryObject {
      */
     department?: NullableOption<string>;
     /**
-     * Display name for this organizational contact. Supports $filter (eq, ne, not, ge, le, in, startsWith, and eq for null
-     * values), $search, and $orderby.
+     * Display name for this organizational contact. Maximum length is 256 characters. Supports $filter (eq, ne, not, ge, le,
+     * in, startsWith, and eq for null values), $search, and $orderby.
      */
     displayName?: NullableOption<string>;
     /**
@@ -16110,7 +16113,7 @@ export interface ServicePrincipal extends DirectoryObject {
     alternativeNames?: string[];
     // The description exposed by the associated application.
     appDescription?: NullableOption<string>;
-    // The display name exposed by the associated application.
+    // The display name exposed by the associated application. Maximum length is 256 characters.
     appDisplayName?: NullableOption<string>;
     /**
      * The unique identifier for the associated application (its appId property). Alternate key. Supports $filter (eq, ne,
@@ -18650,7 +18653,7 @@ export interface User extends DirectoryObject {
     lastPasswordChangeDateTime?: NullableOption<string>;
     /**
      * Used by enterprise applications to determine the legal age group of the user. This property is read-only and calculated
-     * based on ageGroup and consentProvidedForMinor properties. Allowed values: null, MinorWithOutParentalConsent,
+     * based on ageGroup and consentProvidedForMinor properties. Allowed values: null, Undefined, MinorWithOutParentalConsent,
      * MinorWithParentalConsent, MinorNoParentalConsentRequired, NotAdult, and Adult. For more information, see legal age
      * group property definitions. Returned only on $select.
      */
@@ -25050,6 +25053,10 @@ export interface ConditionalAccessClientApplications {
     excludeServicePrincipals?: string[];
     // Service principal IDs included in the policy scope, or ServicePrincipalsInMyTenant.
     includeServicePrincipals?: string[];
+    /**
+     * Filter that defines the dynamic-servicePrincipal-syntax rule to include/exclude service principals. A filter can use
+     * custom security attributes to include/exclude service principals.
+     */
     servicePrincipalFilter?: NullableOption<ConditionalAccessFilter>;
 }
 export interface ConditionalAccessConditionSet {
@@ -26365,6 +26372,7 @@ export interface FileStorageContainerCustomPropertyValue {
     value?: string;
 }
 export interface FileStorageContainerSettings {
+    isItemVersioningEnabled?: NullableOption<boolean>;
     /**
      * Indicates whether Optical Character Recognition (OCR) is enabled for the container. The default value is false. When
      * set to true, OCR extraction is performed for new and updated documents of supported document types, and the extracted
@@ -26372,6 +26380,7 @@ export interface FileStorageContainerSettings {
      * OCR metadata is not impacted. Optional. Read-write.
      */
     isOcrEnabled?: NullableOption<boolean>;
+    itemMajorVersionLimit?: NullableOption<number>;
 }
 export interface FileStorageContainerViewpoint {
     // The current user's effective role. Read-only.
@@ -27084,8 +27093,8 @@ export interface KeyCredentialConfiguration {
      */
     restrictionType?: NullableOption<AppKeyCredentialRestrictionType>;
     /**
-     * String value that indicates if the restriction is evaluated. The possible values are: enabled, disabled, and
-     * unknownFutureValue. If enabled, the restriction is evaluated. If disabled, the restriction isn't evaluated or enforced.
+     * Indicates whether the restriction is evaluated. The possible values are: enabled, disabled, unknownFutureValue. If
+     * enabled, the restriction is evaluated. If disabled, the restriction isn't evaluated or enforced.
      */
     state?: AppManagementRestrictionState;
 }
@@ -28604,8 +28613,8 @@ export interface PasswordCredentialConfiguration {
      */
     restrictionType?: NullableOption<AppCredentialRestrictionType>;
     /**
-     * String value that indicates if the restriction is evaluated. The possible values are: enabled, disabled, and
-     * unknownFutureValue. If enabled, the restriction is evaluated. If disabled, the restriction isn't evaluated or enforced.
+     * Indicates whether the restriction is evaluated. The possible values are: enabled, disabled, unknownFutureValue. If
+     * enabled, the restriction is evaluated. If disabled, the restriction isn't evaluated or enforced.
      */
     state?: AppManagementRestrictionState;
 }
@@ -32696,27 +32705,27 @@ export interface WorkbookSortField {
     sortOn?: string;
 }
 export interface WorkbookWorksheetProtectionOptions {
-    // Indicates whether the worksheet protection option to allow the use of the autofilter feature is enabled.
+    // Represents the worksheet protection option of allowing using auto filter feature.
     allowAutoFilter?: boolean;
-    // Indicates whether the worksheet protection option to allow deleting columns is enabled.
+    // Represents the worksheet protection option of allowing deleting columns.
     allowDeleteColumns?: boolean;
-    // Indicates whether the worksheet protection option to allow deleting rows is enabled.
+    // Represents the worksheet protection option of allowing deleting rows.
     allowDeleteRows?: boolean;
-    // Indicates whether the worksheet protection option to allow formatting cells is enabled.
+    // Represents the worksheet protection option of allowing formatting cells.
     allowFormatCells?: boolean;
-    // Indicates whether the worksheet protection option to allow formatting columns is enabled.
+    // Represents the worksheet protection option of allowing formatting columns.
     allowFormatColumns?: boolean;
-    // Indicates whether the worksheet protection option to allow formatting rows is enabled.
+    // Represents the worksheet protection option of allowing formatting rows.
     allowFormatRows?: boolean;
-    // Indicates whether the worksheet protection option to allow inserting columns is enabled.
+    // Represents the worksheet protection option of allowing inserting columns.
     allowInsertColumns?: boolean;
-    // Indicates whether the worksheet protection option to allow inserting hyperlinks is enabled.
+    // Represents the worksheet protection option of allowing inserting hyperlinks.
     allowInsertHyperlinks?: boolean;
-    // Indicates whether the worksheet protection option to allow inserting rows is enabled.
+    // Represents the worksheet protection option of allowing inserting rows.
     allowInsertRows?: boolean;
-    // Indicates whether the worksheet protection option to allow the use of the pivot table feature is enabled.
+    // Represents the worksheet protection option of allowing using pivot table feature.
     allowPivotTables?: boolean;
-    // Indicates whether the worksheet protection option to allow the use of the sort feature is enabled.
+    // Represents the worksheet protection option of allowing using sort feature.
     allowSort?: boolean;
 }
 export interface WorkforceIntegrationEncryption {
@@ -35016,6 +35025,7 @@ export namespace SecurityNamespace {
     interface DataSet extends microsoftgraph.Entity {
         createdBy?: NullableOption<microsoftgraph.IdentitySet>;
         createdDateTime?: NullableOption<string>;
+        description?: NullableOption<string>;
         displayName?: NullableOption<string>;
     }
     interface DataSource extends microsoftgraph.Entity {
