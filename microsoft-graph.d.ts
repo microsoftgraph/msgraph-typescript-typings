@@ -943,6 +943,12 @@ export type EducationSubmissionStatus =
     | "reassigned"
     | "excused";
 export type EducationUserRole = "student" | "teacher" | "none" | "unknownFutureValue";
+export type EligibilityFilteringEnabledEntities =
+    | "none"
+    | "swapRequest"
+    | "offerShiftRequest"
+    | "unknownFutureValue"
+    | "timeOffReason";
 export type EligibilityScheduleFilterByCurrentUserOptions = "principal" | "unknownFutureValue";
 export type EligibilityScheduleInstanceFilterByCurrentUserOptions = "principal" | "unknownFutureValue";
 export type EligibilityScheduleRequestFilterByCurrentUserOptions =
@@ -2866,6 +2872,12 @@ export type SimulationStatus =
     | "excluded"
     | "unknownFutureValue";
 export type SiteArchiveStatus = "recentlyArchived" | "fullyArchived" | "reactivating" | "unknownFutureValue";
+export type SiteLockState =
+    | "unlocked"
+    | "lockedReadOnly"
+    | "lockedNoAccess"
+    | "lockedNoAdditions"
+    | "unknownFutureValue";
 export type SiteSecurityLevel = "userDefined" | "low" | "mediumLow" | "medium" | "mediumHigh" | "high";
 export type SocialIdentitySourceType = "facebook" | "unknownFutureValue";
 export type StagedFeatureName =
@@ -3456,12 +3468,16 @@ export type WorkforceIntegrationSupportedEntities =
     | "openShift"
     | "openShiftRequest"
     | "offerShiftRequest"
-    | "unknownFutureValue";
+    | "unknownFutureValue"
+    | "timeOffReason"
+    | "timeOff"
+    | "timeOffRequest";
 export type X509CertificateAffinityLevel = "low" | "high" | "unknownFutureValue";
 export type X509CertificateAuthenticationMode =
     | "x509CertificateSingleFactor"
     | "x509CertificateMultiFactor"
     | "unknownFutureValue";
+export type X509CertificateCRLValidationConfigurationState = "disabled" | "enabled" | "unknownFutureValue";
 export type X509CertificateRuleType = "issuerSubject" | "policyOID" | "unknownFutureValue" | "issuerSubjectAndPolicyOID";
 export interface AadUserConversationMember extends ConversationMember {
     // The email address of the user.
@@ -4223,8 +4239,8 @@ export interface AdministrativeUnit extends DirectoryObject {
     // An optional description for the administrative unit. Supports $filter (eq, ne, in, startsWith), $search.
     description?: NullableOption<string>;
     /**
-     * Display name for the administrative unit. Supports $filter (eq, ne, not, ge, le, in, startsWith, and eq on null
-     * values), $search, and $orderby.
+     * Display name for the administrative unit. Maximum length is 256 characters. Supports $filter (eq, ne, not, ge, le, in,
+     * startsWith, and eq on null values), $search, and $orderby.
      */
     displayName?: NullableOption<string>;
     isMemberManagementRestricted?: NullableOption<boolean>;
@@ -4948,8 +4964,8 @@ export interface Application extends DirectoryObject {
      */
     disabledByMicrosoftStatus?: NullableOption<string>;
     /**
-     * The display name for the application. Supports $filter (eq, ne, not, ge, le, in, startsWith, and eq on null values),
-     * $search, and $orderby.
+     * The display name for the application. Maximum length is 256 characters. Supports $filter (eq, ne, not, ge, le, in,
+     * startsWith, and eq on null values), $search, and $orderby.
      */
     displayName?: NullableOption<string>;
     /**
@@ -5150,8 +5166,8 @@ export interface AppRoleAssignment extends DirectoryObject {
      */
     createdDateTime?: NullableOption<string>;
     /**
-     * The display name of the user, group, or service principal that was granted the app role assignment. Read-only. Supports
-     * $filter (eq and startswith).
+     * The display name of the user, group, or service principal that was granted the app role assignment. Maximum length is
+     * 256 characters. Read-only. Supports $filter (eq and startswith).
      */
     principalDisplayName?: NullableOption<string>;
     /**
@@ -5161,7 +5177,10 @@ export interface AppRoleAssignment extends DirectoryObject {
     principalId?: NullableOption<string>;
     // The type of the assigned principal. This can either be User, Group, or ServicePrincipal. Read-only.
     principalType?: NullableOption<string>;
-    // The display name of the resource app's service principal to which the assignment is made.
+    /**
+     * The display name of the resource app's service principal to which the assignment is made. Maximum length is 256
+     * characters.
+     */
     resourceDisplayName?: NullableOption<string>;
     /**
      * The unique identifier (id) for the resource service principal for which the assignment is made. Required on create.
@@ -7414,9 +7433,9 @@ export interface ConversationMember extends Entity {
     // The display name of the user.
     displayName?: NullableOption<string>;
     /**
-     * The roles for that user. This property contains additional qualifiers only when relevant - for example, if the member
-     * has owner privileges, the roles property contains owner as one of the values. Similarly, if the member is an in-tenant
-     * guest, the roles property contains guest as one of the values. A basic member should not have any values specified in
+     * The roles for that user. This property contains more qualifiers only when relevant - for example, if the member has
+     * owner privileges, the roles property contains owner as one of the values. Similarly, if the member is an in-tenant
+     * guest, the roles property contains guest as one of the values. A basic member shouldn't have any values specified in
      * the roles property. An Out-of-tenant external member is assigned the owner role.
      */
     roles?: NullableOption<string[]>;
@@ -7917,8 +7936,8 @@ export interface Device extends DirectoryObject {
     // For internal use only.
     deviceVersion?: NullableOption<number>;
     /**
-     * The display name for the device. Required. Supports $filter (eq, ne, not, ge, le, in, startsWith, and eq on null
-     * values), $search, and $orderby.
+     * The display name for the device. Maximum length is 256 characters. Required. Supports $filter (eq, ne, not, ge, le, in,
+     * startsWith, and eq on null values), $search, and $orderby.
      */
     displayName?: NullableOption<string>;
     /**
@@ -10353,6 +10372,7 @@ export interface FileAttachment extends Attachment {
 }
 export interface FileStorage extends Entity {
     containers?: NullableOption<FileStorageContainer[]>;
+    deletedContainers?: NullableOption<FileStorageContainer[]>;
 }
 export interface FileStorageContainer extends Entity {
     /**
@@ -10368,6 +10388,8 @@ export interface FileStorageContainer extends Entity {
     description?: NullableOption<string>;
     // The display name of the fileStorageContainer. Read-write.
     displayName?: string;
+    // Indicates the lock state of the fileStorageContainer. The possible values are unlocked and lockedReadOnly. Read-only.
+    lockState?: NullableOption<SiteLockState>;
     // Settings associated with a fileStorageContainer. Read-write.
     settings?: FileStorageContainerSettings;
     /**
@@ -10384,6 +10406,8 @@ export interface FileStorageContainer extends Entity {
      * The possible values are: reader, writer, manager, and owner. Read-write.
      */
     permissions?: NullableOption<Permission[]>;
+    // Recycle bin of the fileStorageContainer. Read-only.
+    recycleBin?: NullableOption<RecycleBin>;
 }
 export interface FilterOperatorSchema extends Entity {
     // Arity of the operator. Possible values are: Binary, Unary. The default is Binary.
@@ -10998,6 +11022,7 @@ export interface InternalDomainFederation extends SamlOrWsFedProvider {
      * federation service certificate has been updated.
      */
     nextSigningCertificate?: NullableOption<string>;
+    passwordResetUri?: NullableOption<string>;
     /**
      * Sets the preferred behavior for the sign-in prompt. The possible values are: translateToFreshPasswordAuthentication,
      * nativeSupport, disabled, unknownFutureValue.
@@ -13694,11 +13719,13 @@ export interface OnUserCreateStartListener extends AuthenticationEventListener {
     handler?: NullableOption<OnUserCreateStartHandler>;
 }
 export interface OpenShift extends ChangeTrackedEntity {
-    // An unpublished open shift.
+    // Draft changes in the openShift are only visible to managers until they're shared.
     draftOpenShift?: NullableOption<OpenShiftItem>;
-    // ID for the scheduling group that the open shift belongs to.
+    // The openShift is marked for deletion, a process that is finalized when the schedule is shared.
+    isStagedForDeletion?: NullableOption<boolean>;
+    // The ID of the schedulingGroup that contains the openShift.
     schedulingGroupId?: NullableOption<string>;
-    // A published open shift.
+    // The shared version of this openShift that is viewable by both employees and managers.
     sharedOpenShift?: NullableOption<OpenShiftItem>;
 }
 export interface OpenShiftChangeRequest extends ScheduleChangeRequest {
@@ -13964,8 +13991,8 @@ export interface OrgContact extends DirectoryObject {
      */
     department?: NullableOption<string>;
     /**
-     * Display name for this organizational contact. Supports $filter (eq, ne, not, ge, le, in, startsWith, and eq for null
-     * values), $search, and $orderby.
+     * Display name for this organizational contact. Maximum length is 256 characters. Supports $filter (eq, ne, not, ge, le,
+     * in, startsWith, and eq for null values), $search, and $orderby.
      */
     displayName?: NullableOption<string>;
     /**
@@ -15322,6 +15349,22 @@ export interface RecordOperation extends CommsOperation {
     // The location where the recording is located.
     recordingLocation?: NullableOption<string>;
 }
+export interface RecycleBin extends BaseItem {
+    settings?: NullableOption<RecycleBinSettings>;
+    // List of the recycleBinItems deleted by a user.
+    items?: NullableOption<RecycleBinItem[]>;
+}
+export interface RecycleBinItem extends BaseItem {
+    /**
+     * Date and time when the item was deleted. The timestamp type represents date and time information using ISO 8601 format
+     * and is always in UTC. For example, midnight UTC on Jan 1, 2014 is 2014-01-01T00:00:00Z.
+     */
+    deletedDateTime?: NullableOption<string>;
+    // Relative URL of the list or folder that originally contained the item.
+    deletedFromLocation?: NullableOption<string>;
+    // Size of the item in bytes.
+    size?: NullableOption<number>;
+}
 // tslint:disable-next-line: no-empty-interface
 export interface ReferenceAttachment extends Attachment {}
 export interface RelyingPartyDetailedSummary extends Entity {
@@ -16110,7 +16153,7 @@ export interface ServicePrincipal extends DirectoryObject {
     alternativeNames?: string[];
     // The description exposed by the associated application.
     appDescription?: NullableOption<string>;
-    // The display name exposed by the associated application.
+    // The display name exposed by the associated application. Maximum length is 256 characters.
     appDisplayName?: NullableOption<string>;
     /**
      * The unique identifier for the associated application (its appId property). Alternate key. Supports $filter (eq, ne,
@@ -16623,6 +16666,8 @@ export interface Shift extends ChangeTrackedEntity {
      * are shared, which copies the changes from the draftShift to the sharedShift property.
      */
     draftShift?: NullableOption<ShiftItem>;
+    // The shift is marked for deletion, a process that is finalized when the schedule is shared.
+    isStagedForDeletion?: NullableOption<boolean>;
     // ID of the scheduling group the shift is part of. Required.
     schedulingGroupId?: NullableOption<string>;
     /**
@@ -17361,13 +17406,13 @@ export interface TaskFileAttachment extends AttachmentBase {
 }
 export interface Team extends Entity {
     /**
-     * An optional label. Typically describes the data or business sensitivity of the team. Must match one of a pre-configured
+     * An optional label. Typically describes the data or business sensitivity of the team. Must match one of a preconfigured
      * set in the tenant's directory.
      */
     classification?: NullableOption<string>;
     // Timestamp at which the team was created.
     createdDateTime?: NullableOption<string>;
-    // An optional description for the team. Maximum length: 1024 characters.
+    // An optional description for the team. Maximum length: 1,024 characters.
     description?: NullableOption<string>;
     // The name of the team.
     displayName?: NullableOption<string>;
@@ -17375,7 +17420,7 @@ export interface Team extends Entity {
     funSettings?: NullableOption<TeamFunSettings>;
     // Settings to configure whether guests can create, update, or delete channels in the team.
     guestSettings?: NullableOption<TeamGuestSettings>;
-    // A unique ID for the team that has been used in a few places such as the audit log/Office 365 Management Activity API.
+    // A unique ID for the team that was used in a few places such as the audit log/Office 365 Management Activity API.
     internalId?: NullableOption<string>;
     // Whether this team is in read-only mode.
     isArchived?: NullableOption<boolean>;
@@ -17398,9 +17443,8 @@ export interface Team extends Entity {
     // The visibility of the group and team. Defaults to Public.
     visibility?: NullableOption<TeamVisibilityType>;
     /**
-     * A hyperlink that will go to the team in the Microsoft Teams client. This is the URL that you get when you right-click a
-     * team in the Microsoft Teams client and select Get link to team. This URL should be treated as an opaque blob, and not
-     * parsed.
+     * A hyperlink that goes to the team in the Microsoft Teams client. You get this URL when you right-click a team in the
+     * Microsoft Teams client and select Get link to team. This URL should be treated as an opaque blob, and not parsed.
      */
     webUrl?: NullableOption<string>;
     // List of channels either hosted in or shared with the team (incoming channels).
@@ -17772,10 +17816,12 @@ export interface ThumbnailSet extends Entity {
 }
 export interface TimeOff extends ChangeTrackedEntity {
     /**
-     * The draft version of this timeOff item that is viewable by managers. It must be shared before it is visible to team
+     * The draft version of this timeOff item that is viewable by managers. It must be shared before it's visible to team
      * members. Required.
      */
     draftTimeOff?: NullableOption<TimeOffItem>;
+    // The timeOff is marked for deletion, a process that is finalized when the schedule is shared.
+    isStagedForDeletion?: NullableOption<boolean>;
     /**
      * The shared version of this timeOff that is viewable by both employees and managers. Updates to the sharedTimeOff
      * property send notifications to users in the Teams client. Required.
@@ -18650,7 +18696,7 @@ export interface User extends DirectoryObject {
     lastPasswordChangeDateTime?: NullableOption<string>;
     /**
      * Used by enterprise applications to determine the legal age group of the user. This property is read-only and calculated
-     * based on ageGroup and consentProvidedForMinor properties. Allowed values: null, MinorWithOutParentalConsent,
+     * based on ageGroup and consentProvidedForMinor properties. Allowed values: null, Undefined, MinorWithOutParentalConsent,
      * MinorWithParentalConsent, MinorNoParentalConsentRequired, NotAdult, and Adult. For more information, see legal age
      * group property definitions. Returned only on $select.
      */
@@ -18772,10 +18818,12 @@ export interface User extends DirectoryObject {
      * Specifies the password profile for the user. The profile contains the user's password. This property is required when a
      * user is created. The password in the profile must satisfy minimum requirements as specified by the passwordPolicies
      * property. By default, a strong password is required. Returned only on $select. Supports $filter (eq, ne, not, in, and
-     * eq on null values). To update this property: In delegated access, the calling app must be assigned the
-     * User-PasswordProfile.ReadWrite.All delegated permission on behalf of the signed-in user. In application-only access,
-     * the calling app must be assigned the User-PasswordProfile.ReadWrite.All application permission and at least the User
-     * Administrator Microsoft Entra role.
+     * eq on null values). To update this property: User-PasswordProfile.ReadWrite.All is the least privileged permission to
+     * update this property. In delegated scenarios, the User Administrator Microsoft Entra role is the least privileged admin
+     * role supported to update this property for nonadmin users. Privileged Authentication Administrator is the least
+     * privileged role that's allowed to update this property for all administrators in the tenant. In general, the signed-in
+     * user must have a higher privileged administrator role as indicated in Who can reset passwords. In app-only scenarios,
+     * the calling app must be assigned a supported permission and at least the User Administrator Microsoft Entra role.
      */
     passwordProfile?: NullableOption<PasswordProfile>;
     // A list for the user to enumerate their past projects. Returned only on $select.
@@ -22624,15 +22672,23 @@ export interface WorkforceIntegration extends ChangeTrackedEntity {
     apiVersion?: NullableOption<number>;
     // Name of the workforce integration.
     displayName?: NullableOption<string>;
+    /**
+     * Support to view eligibility-filtered results. Possible values are: none, swapRequest, offerShiftRequest,
+     * unknownFutureValue, timeOffReason. You must use the Prefer: include-unknown-enum-members request header to get the
+     * following value in this evolvable enum: timeOffReason.
+     */
+    eligibilityFilteringEnabledEntities?: NullableOption<EligibilityFilteringEnabledEntities>;
     // The workforce integration encryption resource.
     encryption?: NullableOption<WorkforceIntegrationEncryption>;
     // Indicates whether this workforce integration is currently active and available.
     isActive?: NullableOption<boolean>;
     /**
-     * The Shifts entities supported for synchronous change notifications. Shifts will make a call back to the url provided on
-     * client changes on those entities added here. By default, no entities are supported for change notifications. Possible
-     * values are: none, shift, swapRequest, userShiftPreferences, openshift, openShiftRequest, offerShiftRequest,
-     * unknownFutureValue.
+     * The Shifts entities supported for synchronous change notifications. Shifts call back to the provided URL when client
+     * changes occur to the entities specified in this property. By default, no entities are supported for change
+     * notifications. Possible values are: none, shift, swapRequest, userShiftPreferences, openShift, openShiftRequest,
+     * offerShiftRequest, unknownFutureValue, timeOffReason, timeOff, timeOffRequest. You must use the Prefer:
+     * include-unknown-enum-members request header to get the following values in this evolvable enum: timeOffReason, timeOff,
+     * timeOffRequest.
      */
     supportedEntities?: NullableOption<WorkforceIntegrationSupportedEntities>;
     // Workforce Integration URL for callbacks from the Shifts service.
@@ -22652,6 +22708,7 @@ export interface X509CertificateAuthenticationMethodConfiguration extends Authen
      * binding that matches will be used and the rest ignored.
      */
     certificateUserBindings?: NullableOption<X509CertificateUserBinding[]>;
+    crlValidationConfiguration?: X509CertificateCRLValidationConfiguration;
     // A collection of groups that are enabled to use the authentication method.
     includeTargets?: NullableOption<AuthenticationMethodTarget[]>;
 }
@@ -23066,7 +23123,7 @@ export interface AccountTargetContent {
     type?: NullableOption<AccountTargetContentType>;
 }
 export interface ActionResultPart {
-    // The error that occurred, if any, during the course of the bulk operation.
+    // The error that occurred, if any, during the bulk operation.
     error?: NullableOption<PublicError>;
 }
 export interface AddIn {
@@ -25043,6 +25100,10 @@ export interface ConditionalAccessApplications {
     includeUserActions?: string[];
 }
 export interface ConditionalAccessAuthenticationFlows {
+    /**
+     * Represents the transfer methods in scope for the policy. The possible values are: none, deviceCodeFlow,
+     * authenticationTransfer, unknownFutureValue.
+     */
     transferMethods?: ConditionalAccessTransferMethods;
 }
 export interface ConditionalAccessClientApplications {
@@ -25050,11 +25111,16 @@ export interface ConditionalAccessClientApplications {
     excludeServicePrincipals?: string[];
     // Service principal IDs included in the policy scope, or ServicePrincipalsInMyTenant.
     includeServicePrincipals?: string[];
+    /**
+     * Filter that defines the dynamic-servicePrincipal-syntax rule to include/exclude service principals. A filter can use
+     * custom security attributes to include/exclude service principals.
+     */
     servicePrincipalFilter?: NullableOption<ConditionalAccessFilter>;
 }
 export interface ConditionalAccessConditionSet {
     // Applications and user actions included in and excluded from the policy. Required.
     applications?: NullableOption<ConditionalAccessApplications>;
+    // Authentication flows included in the policy scope.
     authenticationFlows?: NullableOption<ConditionalAccessAuthenticationFlows>;
     /**
      * Client applications (service principals and workload identities) included in and excluded from the policy. Either users
@@ -25064,7 +25130,7 @@ export interface ConditionalAccessConditionSet {
     /**
      * Client application types included in the policy. Possible values are: all, browser, mobileAppsAndDesktopClients,
      * exchangeActiveSync, easSupported, other. Required. The easUnsupported enumeration member will be deprecated in favor of
-     * exchangeActiveSync which includes EAS supported and unsupported platforms.
+     * exchangeActiveSync, which includes EAS supported and unsupported platforms.
      */
     clientAppTypes?: ConditionalAccessClientApp[];
     // Devices in the policy.
@@ -26365,6 +26431,8 @@ export interface FileStorageContainerCustomPropertyValue {
     value?: string;
 }
 export interface FileStorageContainerSettings {
+    // Indicates whether versioning is enabled for items in the container. Optional. Read-write.
+    isItemVersioningEnabled?: NullableOption<boolean>;
     /**
      * Indicates whether Optical Character Recognition (OCR) is enabled for the container. The default value is false. When
      * set to true, OCR extraction is performed for new and updated documents of supported document types, and the extracted
@@ -26372,6 +26440,8 @@ export interface FileStorageContainerSettings {
      * OCR metadata is not impacted. Optional. Read-write.
      */
     isOcrEnabled?: NullableOption<boolean>;
+    // The maximum major versions allowed for items in the container. Optional. Read-write.
+    itemMajorVersionLimit?: NullableOption<number>;
 }
 export interface FileStorageContainerViewpoint {
     // The current user's effective role. Read-only.
@@ -27084,8 +27154,8 @@ export interface KeyCredentialConfiguration {
      */
     restrictionType?: NullableOption<AppKeyCredentialRestrictionType>;
     /**
-     * String value that indicates if the restriction is evaluated. The possible values are: enabled, disabled, and
-     * unknownFutureValue. If enabled, the restriction is evaluated. If disabled, the restriction isn't evaluated or enforced.
+     * Indicates whether the restriction is evaluated. The possible values are: enabled, disabled, unknownFutureValue. If
+     * enabled, the restriction is evaluated. If disabled, the restriction isn't evaluated or enforced.
      */
     state?: AppManagementRestrictionState;
 }
@@ -28604,8 +28674,8 @@ export interface PasswordCredentialConfiguration {
      */
     restrictionType?: NullableOption<AppCredentialRestrictionType>;
     /**
-     * String value that indicates if the restriction is evaluated. The possible values are: enabled, disabled, and
-     * unknownFutureValue. If enabled, the restriction is evaluated. If disabled, the restriction isn't evaluated or enforced.
+     * Indicates whether the restriction is evaluated. The possible values are: enabled, disabled, unknownFutureValue. If
+     * enabled, the restriction is evaluated. If disabled, the restriction isn't evaluated or enforced.
      */
     state?: AppManagementRestrictionState;
 }
@@ -29422,7 +29492,7 @@ export interface PublicInnerError {
 export interface Quota {
     // Total space consumed by files in the recycle bin, in bytes. Read-only.
     deleted?: NullableOption<number>;
-    // Total space remaining before reaching the quota limit, in bytes. Read-only.
+    // Total space remaining before reaching the capacity limit, in bytes. Read-only.
     remaining?: NullableOption<number>;
     // Enumeration value that indicates the state of the storage space. Read-only.
     state?: NullableOption<string>;
@@ -29533,6 +29603,14 @@ export interface RecurrenceRange {
     startDate?: NullableOption<string>;
     // The recurrence range. The possible values are: endDate, noEnd, numbered. Required.
     type?: NullableOption<RecurrenceRangeType>;
+}
+export interface RecycleBinSettings {
+    /**
+     * Recycle bin retention period override in days for deleted content. The default value is 93; the value range is 7 to
+     * 180. The setting applies to newly deleted content only. Setting this property to null reverts to its default value.
+     * Read-write.
+     */
+    retentionPeriodOverrideDays?: NullableOption<number>;
 }
 export interface RedirectUriSettings {
     index?: NullableOption<number>;
@@ -30544,14 +30622,14 @@ export interface ShiftActivity {
     displayName?: NullableOption<string>;
     /**
      * The end date and time for the shiftActivity. The Timestamp type represents date and time information using ISO 8601
-     * format and is always in UTC time. For example, midnight UTC on Jan 1, 2014 is 2014-01-01T00:00:00Z. Required.
+     * format and is always in UTC. For example, midnight UTC on Jan 1, 2014 is 2014-01-01T00:00:00Z. Required.
      */
     endDateTime?: NullableOption<string>;
     // Indicates whether the microsoft.graph.user should be paid for the activity during their shift. Required.
     isPaid?: NullableOption<boolean>;
     /**
      * The start date and time for the shiftActivity. The Timestamp type represents date and time information using ISO 8601
-     * format and is always in UTC time. For example, midnight UTC on Jan 1, 2014 is 2014-01-01T00:00:00Z. Required.
+     * format and is always in UTC. For example, midnight UTC on Jan 1, 2014 is 2014-01-01T00:00:00Z. Required.
      */
     startDateTime?: NullableOption<string>;
     theme?: ScheduleEntityTheme;
@@ -32696,27 +32774,27 @@ export interface WorkbookSortField {
     sortOn?: string;
 }
 export interface WorkbookWorksheetProtectionOptions {
-    // Indicates whether the worksheet protection option to allow the use of the autofilter feature is enabled.
+    // Represents the worksheet protection option of allowing using auto filter feature.
     allowAutoFilter?: boolean;
-    // Indicates whether the worksheet protection option to allow deleting columns is enabled.
+    // Represents the worksheet protection option of allowing deleting columns.
     allowDeleteColumns?: boolean;
-    // Indicates whether the worksheet protection option to allow deleting rows is enabled.
+    // Represents the worksheet protection option of allowing deleting rows.
     allowDeleteRows?: boolean;
-    // Indicates whether the worksheet protection option to allow formatting cells is enabled.
+    // Represents the worksheet protection option of allowing formatting cells.
     allowFormatCells?: boolean;
-    // Indicates whether the worksheet protection option to allow formatting columns is enabled.
+    // Represents the worksheet protection option of allowing formatting columns.
     allowFormatColumns?: boolean;
-    // Indicates whether the worksheet protection option to allow formatting rows is enabled.
+    // Represents the worksheet protection option of allowing formatting rows.
     allowFormatRows?: boolean;
-    // Indicates whether the worksheet protection option to allow inserting columns is enabled.
+    // Represents the worksheet protection option of allowing inserting columns.
     allowInsertColumns?: boolean;
-    // Indicates whether the worksheet protection option to allow inserting hyperlinks is enabled.
+    // Represents the worksheet protection option of allowing inserting hyperlinks.
     allowInsertHyperlinks?: boolean;
-    // Indicates whether the worksheet protection option to allow inserting rows is enabled.
+    // Represents the worksheet protection option of allowing inserting rows.
     allowInsertRows?: boolean;
-    // Indicates whether the worksheet protection option to allow the use of the pivot table feature is enabled.
+    // Represents the worksheet protection option of allowing using pivot table feature.
     allowPivotTables?: boolean;
-    // Indicates whether the worksheet protection option to allow the use of the sort feature is enabled.
+    // Represents the worksheet protection option of allowing using sort feature.
     allowSort?: boolean;
 }
 export interface WorkforceIntegrationEncryption {
@@ -32748,6 +32826,10 @@ export interface X509CertificateAuthenticationModeConfiguration {
      */
     x509CertificateAuthenticationDefaultMode?: NullableOption<X509CertificateAuthenticationMode>;
     x509CertificateDefaultRequiredAffinityLevel?: NullableOption<X509CertificateAffinityLevel>;
+}
+export interface X509CertificateCRLValidationConfiguration {
+    exemptedCertificateAuthoritiesSubjectKeyIdentifiers?: NullableOption<string[]>;
+    state?: X509CertificateCRLValidationConfigurationState;
 }
 export interface X509CertificateRule {
     // The identifier of the X.509 certificate. Required.
@@ -35016,6 +35098,7 @@ export namespace SecurityNamespace {
     interface DataSet extends microsoftgraph.Entity {
         createdBy?: NullableOption<microsoftgraph.IdentitySet>;
         createdDateTime?: NullableOption<string>;
+        description?: NullableOption<string>;
         displayName?: NullableOption<string>;
     }
     interface DataSource extends microsoftgraph.Entity {
