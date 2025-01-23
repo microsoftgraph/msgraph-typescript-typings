@@ -943,6 +943,12 @@ export type EducationSubmissionStatus =
     | "reassigned"
     | "excused";
 export type EducationUserRole = "student" | "teacher" | "none" | "unknownFutureValue";
+export type EligibilityFilteringEnabledEntities =
+    | "none"
+    | "swapRequest"
+    | "offerShiftRequest"
+    | "unknownFutureValue"
+    | "timeOffReason";
 export type EligibilityScheduleFilterByCurrentUserOptions = "principal" | "unknownFutureValue";
 export type EligibilityScheduleInstanceFilterByCurrentUserOptions = "principal" | "unknownFutureValue";
 export type EligibilityScheduleRequestFilterByCurrentUserOptions =
@@ -2866,6 +2872,12 @@ export type SimulationStatus =
     | "excluded"
     | "unknownFutureValue";
 export type SiteArchiveStatus = "recentlyArchived" | "fullyArchived" | "reactivating" | "unknownFutureValue";
+export type SiteLockState =
+    | "unlocked"
+    | "lockedReadOnly"
+    | "lockedNoAccess"
+    | "lockedNoAdditions"
+    | "unknownFutureValue";
 export type SiteSecurityLevel = "userDefined" | "low" | "mediumLow" | "medium" | "mediumHigh" | "high";
 export type SocialIdentitySourceType = "facebook" | "unknownFutureValue";
 export type StagedFeatureName =
@@ -3456,12 +3468,16 @@ export type WorkforceIntegrationSupportedEntities =
     | "openShift"
     | "openShiftRequest"
     | "offerShiftRequest"
-    | "unknownFutureValue";
+    | "unknownFutureValue"
+    | "timeOffReason"
+    | "timeOff"
+    | "timeOffRequest";
 export type X509CertificateAffinityLevel = "low" | "high" | "unknownFutureValue";
 export type X509CertificateAuthenticationMode =
     | "x509CertificateSingleFactor"
     | "x509CertificateMultiFactor"
     | "unknownFutureValue";
+export type X509CertificateCRLValidationConfigurationState = "disabled" | "enabled" | "unknownFutureValue";
 export type X509CertificateRuleType = "issuerSubject" | "policyOID" | "unknownFutureValue" | "issuerSubjectAndPolicyOID";
 export interface AadUserConversationMember extends ConversationMember {
     // The email address of the user.
@@ -4223,8 +4239,8 @@ export interface AdministrativeUnit extends DirectoryObject {
     // An optional description for the administrative unit. Supports $filter (eq, ne, in, startsWith), $search.
     description?: NullableOption<string>;
     /**
-     * Display name for the administrative unit. Supports $filter (eq, ne, not, ge, le, in, startsWith, and eq on null
-     * values), $search, and $orderby.
+     * Display name for the administrative unit. Maximum length is 256 characters. Supports $filter (eq, ne, not, ge, le, in,
+     * startsWith, and eq on null values), $search, and $orderby.
      */
     displayName?: NullableOption<string>;
     isMemberManagementRestricted?: NullableOption<boolean>;
@@ -4948,8 +4964,8 @@ export interface Application extends DirectoryObject {
      */
     disabledByMicrosoftStatus?: NullableOption<string>;
     /**
-     * The display name for the application. Supports $filter (eq, ne, not, ge, le, in, startsWith, and eq on null values),
-     * $search, and $orderby.
+     * The display name for the application. Maximum length is 256 characters. Supports $filter (eq, ne, not, ge, le, in,
+     * startsWith, and eq on null values), $search, and $orderby.
      */
     displayName?: NullableOption<string>;
     /**
@@ -5150,8 +5166,8 @@ export interface AppRoleAssignment extends DirectoryObject {
      */
     createdDateTime?: NullableOption<string>;
     /**
-     * The display name of the user, group, or service principal that was granted the app role assignment. Read-only. Supports
-     * $filter (eq and startswith).
+     * The display name of the user, group, or service principal that was granted the app role assignment. Maximum length is
+     * 256 characters. Read-only. Supports $filter (eq and startswith).
      */
     principalDisplayName?: NullableOption<string>;
     /**
@@ -5161,7 +5177,10 @@ export interface AppRoleAssignment extends DirectoryObject {
     principalId?: NullableOption<string>;
     // The type of the assigned principal. This can either be User, Group, or ServicePrincipal. Read-only.
     principalType?: NullableOption<string>;
-    // The display name of the resource app's service principal to which the assignment is made.
+    /**
+     * The display name of the resource app's service principal to which the assignment is made. Maximum length is 256
+     * characters.
+     */
     resourceDisplayName?: NullableOption<string>;
     /**
      * The unique identifier (id) for the resource service principal for which the assignment is made. Required on create.
@@ -6384,8 +6403,8 @@ export interface Channel extends Entity {
     isFavoriteByDefault?: NullableOption<boolean>;
     /**
      * The type of the channel. Can be set during creation and can't be changed. The possible values are: standard, private,
-     * unknownFutureValue, shared. The default value is standard. Note that you must use the Prefer:
-     * include-unknown-enum-members request header to get the following value in this evolvable enum: shared.
+     * unknownFutureValue, shared. The default value is standard. Use the Prefer: include-unknown-enum-members request header
+     * to get the following value in this evolvable enum: shared.
      */
     membershipType?: NullableOption<ChannelMembershipType>;
     /**
@@ -6418,6 +6437,8 @@ export interface Chat extends Entity {
     chatType?: ChatType;
     // Date and time at which the chat was created. Read-only.
     createdDateTime?: NullableOption<string>;
+    // Indicates whether the chat is hidden for all its members. Read-only.
+    isHiddenForAllMembers?: NullableOption<boolean>;
     // Date and time at which the chat was renamed or the list of members was last changed. Read-only.
     lastUpdatedDateTime?: NullableOption<string>;
     /**
@@ -6493,7 +6514,7 @@ export interface ChatMessage extends Entity {
     lastModifiedDateTime?: NullableOption<string>;
     // Locale of the chat message set by the client. Always set to en-us.
     locale?: string;
-    // List of entities mentioned in the chat message. Supported entities are: user, bot, team, and channel.
+    // List of entities mentioned in the chat message. Supported entities are: user, bot, team, channel, chat, and tag.
     mentions?: NullableOption<ChatMessageMention[]>;
     /**
      * List of activity history of a message item, including modification time and actions, such as reactionAdded,
@@ -6502,8 +6523,8 @@ export interface ChatMessage extends Entity {
     messageHistory?: NullableOption<ChatMessageHistoryItem[]>;
     /**
      * The type of chat message. The possible values are: message, chatEvent, typing, unknownFutureValue, systemEventMessage.
-     * Note that you must use the Prefer: include-unknown-enum-members request header to get the following value in this
-     * evolvable enum: systemEventMessage.
+     * Use the Prefer: include-unknown-enum-members request header to get the following value in this evolvable enum:
+     * systemEventMessage.
      */
     messageType?: ChatMessageType;
     // Defines the properties of a policy violation set by a data loss prevention (DLP) application.
@@ -6695,8 +6716,8 @@ export interface CloudPcDeviceImage extends Entity {
      * The error code of the status of the image that indicates why the upload failed, if applicable. Possible values are:
      * internalServerError, sourceImageNotFound, osVersionNotSupported, sourceImageInvalid, sourceImageNotGeneralized,
      * unknownFutureValue, vmAlreadyAzureAdJoined, paidSourceImageNotSupport, sourceImageNotSupportCustomizeVMName,
-     * sourceImageSizeExceedsLimitation. Note that you must use the Prefer: include-unknown-enum-members request header to get
-     * the following values from this evolvable enum: vmAlreadyAzureAdJoined, paidSourceImageNotSupport,
+     * sourceImageSizeExceedsLimitation. Use the Prefer: include-unknown-enum-members request header to get the following
+     * values from this evolvable enum: vmAlreadyAzureAdJoined, paidSourceImageNotSupport,
      * sourceImageNotSupportCustomizeVMName, sourceImageSizeExceedsLimitation. Read-only.
      */
     errorCode?: NullableOption<CloudPcDeviceImageErrorCode>;
@@ -7414,9 +7435,9 @@ export interface ConversationMember extends Entity {
     // The display name of the user.
     displayName?: NullableOption<string>;
     /**
-     * The roles for that user. This property contains additional qualifiers only when relevant - for example, if the member
-     * has owner privileges, the roles property contains owner as one of the values. Similarly, if the member is an in-tenant
-     * guest, the roles property contains guest as one of the values. A basic member should not have any values specified in
+     * The roles for that user. This property contains more qualifiers only when relevant - for example, if the member has
+     * owner privileges, the roles property contains owner as one of the values. Similarly, if the member is an in-tenant
+     * guest, the roles property contains guest as one of the values. A basic member shouldn't have any values specified in
      * the roles property. An Out-of-tenant external member is assigned the owner role.
      */
     roles?: NullableOption<string[]>;
@@ -7798,8 +7819,8 @@ export interface DelegatedAdminRelationshipOperation extends Entity {
     lastModifiedDateTime?: string;
     /**
      * The type of long-running operation. The possible values are: delegatedAdminAccessAssignmentUpdate,
-     * unknownFutureValue,delegatedAdminRelationshipUpdate. Read-only. You must use the Prefer: include-unknown-enum-members
-     * request header to get the following value from this evolvable enum: delegatedAdminRelationshipUpdate.
+     * unknownFutureValue,delegatedAdminRelationshipUpdate. Read-only. Use the Prefer: include-unknown-enum-members request
+     * header to get the following value from this evolvable enum: delegatedAdminRelationshipUpdate.
      */
     operationType?: DelegatedAdminRelationshipOperationType;
     /**
@@ -7811,12 +7832,12 @@ export interface DelegatedAdminRelationshipOperation extends Entity {
 export interface DelegatedAdminRelationshipRequest extends Entity {
     /**
      * The action to be performed on the delegated admin relationship. The possible values are: lockForApproval, approve,
-     * terminate, unknownFutureValue, reject. Note that you must use the Prefer: include-unknown-enum-members request header
-     * to get the following value(s) in this evolvable enum: reject. For a partner to finalize a relationship in the created
-     * status, set the action to lockForApproval. For a partner to terminate a relationship in the active status, set the
-     * action to terminate. For an indirect reseller to approve a relationship created by an indirect provider in the
-     * approvalPending status, set the action to approve. For an indirect reseller to reject a relationship created by an
-     * indirect provider in the approvalPending status, set the action to reject.
+     * terminate, unknownFutureValue, reject. Use the Prefer: include-unknown-enum-members request header to get the following
+     * value(s) in this evolvable enum: reject. For a partner to finalize a relationship in the created status, set the action
+     * to lockForApproval. For a partner to terminate a relationship in the active status, set the action to terminate. For an
+     * indirect reseller to approve a relationship created by an indirect provider in the approvalPending status, set the
+     * action to approve. For an indirect reseller to reject a relationship created by an indirect provider in the
+     * approvalPending status, set the action to reject.
      */
     action?: DelegatedAdminRelationshipRequestAction;
     // The date and time in ISO 8601 format and in UTC time when the relationship request was created. Read-only.
@@ -7917,8 +7938,8 @@ export interface Device extends DirectoryObject {
     // For internal use only.
     deviceVersion?: NullableOption<number>;
     /**
-     * The display name for the device. Required. Supports $filter (eq, ne, not, ge, le, in, startsWith, and eq on null
-     * values), $search, and $orderby.
+     * The display name for the device. Maximum length is 256 characters. Required. Supports $filter (eq, ne, not, ge, le, in,
+     * startsWith, and eq on null values), $search, and $orderby.
      */
     displayName?: NullableOption<string>;
     /**
@@ -9262,8 +9283,8 @@ export interface EducationAssignment extends Entity {
     /**
      * Optional field to control the assignment behavior for adding assignments to students' and teachers' calendars when the
      * assignment is published. The possible values are: none, studentsAndPublisher, studentsAndTeamOwners,
-     * unknownFutureValue, and studentsOnly. You must use the Prefer: include-unknown-enum-members request header to get the
-     * following values in this evolvable enum: studentsOnly. The default value is none.
+     * unknownFutureValue, and studentsOnly. Use the Prefer: include-unknown-enum-members request header to get the following
+     * values in this evolvable enum: studentsOnly. The default value is none.
      */
     addToCalendarAction?: NullableOption<EducationAddToCalendarOptions>;
     /**
@@ -9339,8 +9360,8 @@ export interface EducationAssignment extends Entity {
     resourcesFolderUrl?: NullableOption<string>;
     /**
      * Status of the assignment. You can't PATCH this value. Possible values are: draft, scheduled, published, assigned,
-     * unknownFutureValue, inactive. Note that you must use the Prefer: include-unknown-enum-members request header to get the
-     * following value(s) in this evolvable enum: inactive.
+     * unknownFutureValue, inactive. Use the Prefer: include-unknown-enum-members request header to get the following value(s)
+     * in this evolvable enum: inactive.
      */
     status?: NullableOption<EducationAssignmentStatus>;
     // The deep link URL for the given assignment.
@@ -9364,9 +9385,9 @@ export interface EducationAssignmentDefaults extends Entity {
     addedStudentAction?: NullableOption<EducationAddedStudentAction>;
     /**
      * Optional field to control adding assignments to students' and teachers' calendars when the assignment is published. The
-     * possible values are: none, studentsAndPublisher, studentsAndTeamOwners, unknownFutureValue, and studentsOnly. You must
-     * use the Prefer: include-unknown-enum-members request header to get the following value in this evolvable enum:
-     * studentsOnly. The default value is none.
+     * possible values are: none, studentsAndPublisher, studentsAndTeamOwners, unknownFutureValue, and studentsOnly. Use the
+     * Prefer: include-unknown-enum-members request header to get the following value in this evolvable enum: studentsOnly.
+     * The default value is none.
      */
     addToCalendarAction?: NullableOption<EducationAddToCalendarOptions>;
     // Class-level default value for due time field. Default value is 23:59:00.
@@ -9615,7 +9636,7 @@ export interface EducationSubmission extends Entity {
      */
     returnedDateTime?: NullableOption<string>;
     /**
-     * Read-only. Possible values are: excused, reassigned, returned, submitted and working. You must use the Prefer:
+     * Read-only. Possible values are: excused, reassigned, returned, submitted and working. Use the Prefer:
      * include-unknown-enum-members request header to get the following values in this evolvable enum: excused and reassigned.
      */
     status?: NullableOption<EducationSubmissionStatus>;
@@ -10255,10 +10276,9 @@ export interface FeatureRolloutPolicy extends Entity {
     displayName?: string;
     /**
      * Possible values are: passthroughAuthentication, seamlessSso, passwordHashSync, emailAsAlternateId, unknownFutureValue,
-     * certificateBasedAuthentication, multiFactorAuthentication. You must use the Prefer: include-unknown-enum-members
-     * request header to get the following value or values in this evolvable enum: certificateBasedAuthentication,
-     * multiFactorAuthentication. For more information about the prerequisites for the enabled features, see Prerequisites for
-     * enabled features.
+     * certificateBasedAuthentication, multiFactorAuthentication. Use the Prefer: include-unknown-enum-members request header
+     * to get the following value or values in this evolvable enum: certificateBasedAuthentication, multiFactorAuthentication.
+     * For more information about the prerequisites for the enabled features, see Prerequisites for enabled features.
      */
     feature?: StagedFeatureName;
     // Indicates whether this feature rollout policy should be applied to the entire organization.
@@ -10353,6 +10373,7 @@ export interface FileAttachment extends Attachment {
 }
 export interface FileStorage extends Entity {
     containers?: NullableOption<FileStorageContainer[]>;
+    deletedContainers?: NullableOption<FileStorageContainer[]>;
 }
 export interface FileStorageContainer extends Entity {
     /**
@@ -10368,6 +10389,8 @@ export interface FileStorageContainer extends Entity {
     description?: NullableOption<string>;
     // The display name of the fileStorageContainer. Read-write.
     displayName?: string;
+    // Indicates the lock state of the fileStorageContainer. The possible values are unlocked and lockedReadOnly. Read-only.
+    lockState?: NullableOption<SiteLockState>;
     // Settings associated with a fileStorageContainer. Read-write.
     settings?: FileStorageContainerSettings;
     /**
@@ -10384,6 +10407,8 @@ export interface FileStorageContainer extends Entity {
      * The possible values are: reader, writer, manager, and owner. Read-write.
      */
     permissions?: NullableOption<Permission[]>;
+    // Recycle bin of the fileStorageContainer. Read-only.
+    recycleBin?: NullableOption<RecycleBin>;
 }
 export interface FilterOperatorSchema extends Entity {
     // Arity of the operator. Possible values are: Binary, Unary. The default is Binary.
@@ -10998,6 +11023,7 @@ export interface InternalDomainFederation extends SamlOrWsFedProvider {
      * federation service certificate has been updated.
      */
     nextSigningCertificate?: NullableOption<string>;
+    passwordResetUri?: NullableOption<string>;
     /**
      * Sets the preferred behavior for the sign-in prompt. The possible values are: translateToFreshPasswordAuthentication,
      * nativeSupport, disabled, unknownFutureValue.
@@ -11782,8 +11808,8 @@ export interface LearningAssignment extends LearningCourseActivity {
     assignerUserId?: NullableOption<string>;
     /**
      * The assignment type for the course activity. Possible values are: required, recommended, unknownFutureValue,
-     * peerRecommended. You must use the Prefer: include-unknown-enum-members request header to get the following value or
-     * values in this evolvable enum: peerRecommended. Required.
+     * peerRecommended. Use the Prefer: include-unknown-enum-members request header to get the following value or values in
+     * this evolvable enum: peerRecommended. Required.
      */
     assignmentType?: AssignmentType;
     // Due date for the course activity. Optional.
@@ -13597,6 +13623,8 @@ export interface OnlineMeeting extends OnlineMeetingBase {
     externalId?: NullableOption<string>;
     // Indicates whether this meeting is a Teams live event.
     isBroadcast?: NullableOption<boolean>;
+    // The ID of the meeting template.
+    meetingTemplateId?: NullableOption<string>;
     // The participants associated with the online meeting, including the organizer and the attendees.
     participants?: NullableOption<MeetingParticipants>;
     // The meeting start time in UTC.
@@ -13617,12 +13645,17 @@ export interface OnlineMeetingBase extends Entity {
     allowMeetingChat?: NullableOption<MeetingChatMode>;
     // Specifies if participants are allowed to rename themselves in an instance of the meeting.
     allowParticipantsToChangeName?: NullableOption<boolean>;
+    // Indicates whether recording is enabled for the meeting.
+    allowRecording?: NullableOption<boolean>;
     // Indicates if Teams reactions are enabled for the meeting.
     allowTeamworkReactions?: NullableOption<boolean>;
+    // Indicates whether transcription is enabled for the meeting.
+    allowTranscription?: NullableOption<boolean>;
     // The phone access (dial-in) information for an online meeting. Read-only.
     audioConferencing?: NullableOption<AudioConferencing>;
     // The chat information associated with this online meeting.
     chatInfo?: NullableOption<ChatInfo>;
+    chatRestrictions?: NullableOption<ChatRestrictions>;
     // Indicates whether to announce when callers join or leave.
     isEntryExitAnnounced?: NullableOption<boolean>;
     // The join information in the language and locale variant specified in 'Accept-Language' request HTTP header. Read-only.
@@ -13694,11 +13727,13 @@ export interface OnUserCreateStartListener extends AuthenticationEventListener {
     handler?: NullableOption<OnUserCreateStartHandler>;
 }
 export interface OpenShift extends ChangeTrackedEntity {
-    // An unpublished open shift.
+    // Draft changes in the openShift are only visible to managers until they're shared.
     draftOpenShift?: NullableOption<OpenShiftItem>;
-    // ID for the scheduling group that the open shift belongs to.
+    // The openShift is marked for deletion, a process that is finalized when the schedule is shared.
+    isStagedForDeletion?: NullableOption<boolean>;
+    // The ID of the schedulingGroup that contains the openShift.
     schedulingGroupId?: NullableOption<string>;
-    // A published open shift.
+    // The shared version of this openShift that is viewable by both employees and managers.
     sharedOpenShift?: NullableOption<OpenShiftItem>;
 }
 export interface OpenShiftChangeRequest extends ScheduleChangeRequest {
@@ -13964,8 +13999,8 @@ export interface OrgContact extends DirectoryObject {
      */
     department?: NullableOption<string>;
     /**
-     * Display name for this organizational contact. Supports $filter (eq, ne, not, ge, le, in, startsWith, and eq for null
-     * values), $search, and $orderby.
+     * Display name for this organizational contact. Maximum length is 256 characters. Supports $filter (eq, ne, not, ge, le,
+     * in, startsWith, and eq for null values), $search, and $orderby.
      */
     displayName?: NullableOption<string>;
     /**
@@ -14186,9 +14221,9 @@ export interface Payload extends Entity {
     /**
      * The social engineering technique used in the attack simulation and training campaign. Supports $filter and $orderby.
      * Possible values are: unknown, credentialHarvesting, attachmentMalware, driveByUrl, linkInAttachment, linkToMalwareFile,
-     * unknownFutureValue, oAuthConsentGrant. Note that you must use the Prefer: include-unknown-enum-members request header
-     * to get the following values from this evolvable enum: oAuthConsentGrant. For more information on the types of social
-     * engineering attack techniques, see simulations.
+     * unknownFutureValue, oAuthConsentGrant. Use the Prefer: include-unknown-enum-members request header to get the following
+     * values from this evolvable enum: oAuthConsentGrant. For more information on the types of social engineering attack
+     * techniques, see simulations.
      */
     technique?: NullableOption<SimulationAttackTechnique>;
     /**
@@ -15322,6 +15357,22 @@ export interface RecordOperation extends CommsOperation {
     // The location where the recording is located.
     recordingLocation?: NullableOption<string>;
 }
+export interface RecycleBin extends BaseItem {
+    settings?: NullableOption<RecycleBinSettings>;
+    // List of the recycleBinItems deleted by a user.
+    items?: NullableOption<RecycleBinItem[]>;
+}
+export interface RecycleBinItem extends BaseItem {
+    /**
+     * Date and time when the item was deleted. The timestamp type represents date and time information using ISO 8601 format
+     * and is always in UTC. For example, midnight UTC on Jan 1, 2014 is 2014-01-01T00:00:00Z.
+     */
+    deletedDateTime?: NullableOption<string>;
+    // Relative URL of the list or folder that originally contained the item.
+    deletedFromLocation?: NullableOption<string>;
+    // Size of the item in bytes.
+    size?: NullableOption<number>;
+}
 // tslint:disable-next-line: no-empty-interface
 export interface ReferenceAttachment extends Attachment {}
 export interface RelyingPartyDetailedSummary extends Entity {
@@ -15493,7 +15544,7 @@ export interface RestoreSessionBase extends Entity {
     lastModifiedDateTime?: NullableOption<string>;
     /**
      * Status of the restore session. The value is an aggregated status of the restored artifacts. The possible values are:
-     * draft, activating, active, completedWithError, completed, unknownFutureValue, failed. You must use the Prefer:
+     * draft, activating, active, completedWithError, completed, unknownFutureValue, failed. Use the Prefer:
      * include-unknown-enum-members request header to get the following value in this evolvable enum: failed.
      */
     status?: NullableOption<RestoreSessionStatus>;
@@ -15560,8 +15611,8 @@ export interface RiskDetection extends Entity {
      * userChangedPasswordOnPremises, userPerformedSecuredPasswordChange, userPerformedSecuredPasswordReset,
      * adminConfirmedSigninSafe, aiConfirmedSigninSafe, userPassedMFADrivenByRiskBasedPolicy, adminDismissedAllRiskForUser,
      * adminConfirmedSigninCompromised, hidden, adminConfirmedUserCompromised, unknownFutureValue,
-     * m365DAdminDismissedDetection. Note that you must use the Prefer: include - unknown -enum-members request header to get
-     * the following value(s) in this evolvable enum: m365DAdminDismissedDetection.
+     * m365DAdminDismissedDetection. Use the Prefer: include - unknown -enum-members request header to get the following
+     * value(s) in this evolvable enum: m365DAdminDismissedDetection.
      */
     riskDetail?: NullableOption<RiskDetail>;
     /**
@@ -15607,8 +15658,8 @@ export interface RiskyServicePrincipal extends Entity {
     /**
      * Details of the detected risk. Note: Details for this property are only available for Workload Identities Premium
      * customers. Events in tenants without this license will be returned hidden. The possible values are: none, hidden,
-     * unknownFutureValue, adminConfirmedServicePrincipalCompromised, adminDismissedAllRiskForServicePrincipal. Note that you
-     * must use the Prefer: include-unknown-enum-members request header to get the following value(s) in this evolvable enum:
+     * unknownFutureValue, adminConfirmedServicePrincipalCompromised, adminDismissedAllRiskForServicePrincipal. Use the
+     * Prefer: include-unknown-enum-members request header to get the following value(s) in this evolvable enum:
      * adminConfirmedServicePrincipalCompromised , adminDismissedAllRiskForServicePrincipal.
      */
     riskDetail?: NullableOption<RiskDetail>;
@@ -15653,8 +15704,8 @@ export interface RiskyUser extends Entity {
      * userPassedMFADrivenByRiskBasedPolicy, adminDismissedAllRiskForUser, adminConfirmedSigninCompromised, hidden,
      * adminConfirmedUserCompromised, unknownFutureValue, adminConfirmedServicePrincipalCompromised,
      * adminDismissedAllRiskForServicePrincipal, m365DAdminDismissedDetection, userChangedPasswordOnPremises,
-     * adminDismissedRiskForSignIn, adminConfirmedAccountSafe. You must use the Prefer: include-unknown-enum-members request
-     * header to get the following value or values in this evolvable enum: adminConfirmedServicePrincipalCompromised,
+     * adminDismissedRiskForSignIn, adminConfirmedAccountSafe. Use the Prefer: include-unknown-enum-members request header to
+     * get the following value or values in this evolvable enum: adminConfirmedServicePrincipalCompromised,
      * adminDismissedAllRiskForServicePrincipal, m365DAdminDismissedDetection, userChangedPasswordOnPremises,
      * adminDismissedRiskForSignIn, adminConfirmedAccountSafe.
      */
@@ -16110,7 +16161,7 @@ export interface ServicePrincipal extends DirectoryObject {
     alternativeNames?: string[];
     // The description exposed by the associated application.
     appDescription?: NullableOption<string>;
-    // The display name exposed by the associated application.
+    // The display name exposed by the associated application. Maximum length is 256 characters.
     appDisplayName?: NullableOption<string>;
     /**
      * The unique identifier for the associated application (its appId property). Alternate key. Supports $filter (eq, ne,
@@ -16329,9 +16380,9 @@ export interface ServicePrincipal extends DirectoryObject {
 }
 export interface ServicePrincipalRiskDetection extends Entity {
     /**
-     * Indicates the activity type the detected risk is linked to. The possible values are: signin, servicePrincipal. Note
-     * that you must use the Prefer: include-unknown-enum-members request header to get the following value(s) in this
-     * evolvable enum: servicePrincipal.
+     * Indicates the activity type the detected risk is linked to. The possible values are: signin, servicePrincipal. Use the
+     * Prefer: include-unknown-enum-members request header to get the following value(s) in this evolvable enum:
+     * servicePrincipal.
      */
     activity?: NullableOption<ActivityType>;
     /**
@@ -16377,7 +16428,7 @@ export interface ServicePrincipalRiskDetection extends Entity {
     /**
      * Details of the detected risk. Note: Details for this property are only available for Workload Identities Premium
      * customers. Events in tenants without this license will be returned hidden. The possible values are: none, hidden,
-     * adminConfirmedServicePrincipalCompromised, adminDismissedAllRiskForServicePrincipal. Note that you must use the Prefer:
+     * adminConfirmedServicePrincipalCompromised, adminDismissedAllRiskForServicePrincipal. Use the Prefer:
      * include-unknown-enum-members request header to get the following value(s) in this evolvable enum:
      * adminConfirmedServicePrincipalCompromised , adminDismissedAllRiskForServicePrincipal.
      */
@@ -16623,6 +16674,8 @@ export interface Shift extends ChangeTrackedEntity {
      * are shared, which copies the changes from the draftShift to the sharedShift property.
      */
     draftShift?: NullableOption<ShiftItem>;
+    // The shift is marked for deletion, a process that is finalized when the schedule is shared.
+    isStagedForDeletion?: NullableOption<boolean>;
     // ID of the scheduling group the shift is part of. Required.
     schedulingGroupId?: NullableOption<string>;
     /**
@@ -16693,7 +16746,7 @@ export interface SignIn extends Entity {
      * adminConfirmedSigninSafe, aiConfirmedSigninSafe, userPassedMFADrivenByRiskBasedPolicy, adminDismissedAllRiskForUser,
      * adminConfirmedSigninCompromised, hidden, adminConfirmedUserCompromised, unknownFutureValue,
      * adminConfirmedServicePrincipalCompromised, adminDismissedAllRiskForServicePrincipal, m365DAdminDismissedDetection,
-     * userChangedPasswordOnPremises, adminDismissedRiskForSignIn, adminConfirmedAccountSafe. You must use the Prefer:
+     * userChangedPasswordOnPremises, adminDismissedRiskForSignIn, adminConfirmedAccountSafe. Use the Prefer:
      * include-unknown-enum-members request header to get the following value or values in this evolvable enum:
      * adminConfirmedServicePrincipalCompromised, adminDismissedAllRiskForServicePrincipal, m365DAdminDismissedDetection,
      * userChangedPasswordOnPremises, adminDismissedRiskForSignIn, adminConfirmedAccountSafe.The value none means that
@@ -16747,9 +16800,9 @@ export interface Simulation extends Entity {
     /**
      * The social engineering technique used in the attack simulation and training campaign. Supports $filter and $orderby.
      * Possible values are: unknown, credentialHarvesting, attachmentMalware, driveByUrl, linkInAttachment, linkToMalwareFile,
-     * unknownFutureValue, oAuthConsentGrant. Note that you must use the Prefer: include-unknown-enum-members request header
-     * to get the following values from this evolvable enum: oAuthConsentGrant. For more information on the types of social
-     * engineering attack techniques, see simulations.
+     * unknownFutureValue, oAuthConsentGrant. Use the Prefer: include-unknown-enum-members request header to get the following
+     * values from this evolvable enum: oAuthConsentGrant. For more information on the types of social engineering attack
+     * techniques, see simulations.
      */
     attackTechnique?: NullableOption<SimulationAttackTechnique>;
     /**
@@ -17361,13 +17414,13 @@ export interface TaskFileAttachment extends AttachmentBase {
 }
 export interface Team extends Entity {
     /**
-     * An optional label. Typically describes the data or business sensitivity of the team. Must match one of a pre-configured
+     * An optional label. Typically describes the data or business sensitivity of the team. Must match one of a preconfigured
      * set in the tenant's directory.
      */
     classification?: NullableOption<string>;
     // Timestamp at which the team was created.
     createdDateTime?: NullableOption<string>;
-    // An optional description for the team. Maximum length: 1024 characters.
+    // An optional description for the team. Maximum length: 1,024 characters.
     description?: NullableOption<string>;
     // The name of the team.
     displayName?: NullableOption<string>;
@@ -17375,7 +17428,7 @@ export interface Team extends Entity {
     funSettings?: NullableOption<TeamFunSettings>;
     // Settings to configure whether guests can create, update, or delete channels in the team.
     guestSettings?: NullableOption<TeamGuestSettings>;
-    // A unique ID for the team that has been used in a few places such as the audit log/Office 365 Management Activity API.
+    // A unique ID for the team that was used in a few places such as the audit log/Office 365 Management Activity API.
     internalId?: NullableOption<string>;
     // Whether this team is in read-only mode.
     isArchived?: NullableOption<boolean>;
@@ -17398,9 +17451,8 @@ export interface Team extends Entity {
     // The visibility of the group and team. Defaults to Public.
     visibility?: NullableOption<TeamVisibilityType>;
     /**
-     * A hyperlink that will go to the team in the Microsoft Teams client. This is the URL that you get when you right-click a
-     * team in the Microsoft Teams client and select Get link to team. This URL should be treated as an opaque blob, and not
-     * parsed.
+     * A hyperlink that goes to the team in the Microsoft Teams client. You get this URL when you right-click a team in the
+     * Microsoft Teams client and select Get link to team. This URL should be treated as an opaque blob, and not parsed.
      */
     webUrl?: NullableOption<string>;
     // List of channels either hosted in or shared with the team (incoming channels).
@@ -17501,7 +17553,7 @@ export interface TeamsAsyncOperation extends Entity {
     lastActionDateTime?: string;
     /**
      * Denotes the type of operation described. Possible values are: invalid, cloneTeam, archiveTeam, unarchiveTeam,
-     * createTeam, unknownFutureValue, teamifyGroup, createChannel, archiveChannel, unarchiveChannel. You must use the Prefer:
+     * createTeam, unknownFutureValue, teamifyGroup, createChannel, archiveChannel, unarchiveChannel. Use the Prefer:
      * include-unknown-enum-members request header to get the following values in this evolvable enum: teamifyGroup,
      * createChannel, archiveChannel, unarchiveChannel.
      */
@@ -17772,10 +17824,12 @@ export interface ThumbnailSet extends Entity {
 }
 export interface TimeOff extends ChangeTrackedEntity {
     /**
-     * The draft version of this timeOff item that is viewable by managers. It must be shared before it is visible to team
+     * The draft version of this timeOff item that is viewable by managers. It must be shared before it's visible to team
      * members. Required.
      */
     draftTimeOff?: NullableOption<TimeOffItem>;
+    // The timeOff is marked for deletion, a process that is finalized when the schedule is shared.
+    isStagedForDeletion?: NullableOption<boolean>;
     /**
      * The shared version of this timeOff that is viewable by both employees and managers. Updates to the sharedTimeOff
      * property send notifications to users in the Teams client. Required.
@@ -18650,7 +18704,7 @@ export interface User extends DirectoryObject {
     lastPasswordChangeDateTime?: NullableOption<string>;
     /**
      * Used by enterprise applications to determine the legal age group of the user. This property is read-only and calculated
-     * based on ageGroup and consentProvidedForMinor properties. Allowed values: null, MinorWithOutParentalConsent,
+     * based on ageGroup and consentProvidedForMinor properties. Allowed values: null, Undefined, MinorWithOutParentalConsent,
      * MinorWithParentalConsent, MinorNoParentalConsentRequired, NotAdult, and Adult. For more information, see legal age
      * group property definitions. Returned only on $select.
      */
@@ -18772,10 +18826,12 @@ export interface User extends DirectoryObject {
      * Specifies the password profile for the user. The profile contains the user's password. This property is required when a
      * user is created. The password in the profile must satisfy minimum requirements as specified by the passwordPolicies
      * property. By default, a strong password is required. Returned only on $select. Supports $filter (eq, ne, not, in, and
-     * eq on null values). To update this property: In delegated access, the calling app must be assigned the
-     * User-PasswordProfile.ReadWrite.All delegated permission on behalf of the signed-in user. In application-only access,
-     * the calling app must be assigned the User-PasswordProfile.ReadWrite.All application permission and at least the User
-     * Administrator Microsoft Entra role.
+     * eq on null values). To update this property: User-PasswordProfile.ReadWrite.All is the least privileged permission to
+     * update this property. In delegated scenarios, the User Administrator Microsoft Entra role is the least privileged admin
+     * role supported to update this property for nonadmin users. Privileged Authentication Administrator is the least
+     * privileged role that's allowed to update this property for all administrators in the tenant. In general, the signed-in
+     * user must have a higher privileged administrator role as indicated in Who can reset passwords. In app-only scenarios,
+     * the calling app must be assigned a supported permission and at least the User Administrator Microsoft Entra role.
      */
     passwordProfile?: NullableOption<PasswordProfile>;
     // A list for the user to enumerate their past projects. Returned only on $select.
@@ -20045,6 +20101,8 @@ export interface VirtualEvent extends Entity {
      * Windows. For details on how to get all available time zones using PowerShell, see Get-TimeZone.
      */
     endDateTime?: NullableOption<DateTimeTimeZone>;
+    // The external information of a virtual event. Returned only for event organizers or coorganizers; otherwise, null.
+    externalEventInformation?: NullableOption<VirtualEventExternalInformation[]>;
     // The virtual event settings.
     settings?: NullableOption<VirtualEventSettings>;
     /**
@@ -20079,6 +20137,8 @@ export interface VirtualEventRegistration extends Entity {
     cancelationDateTime?: NullableOption<string>;
     // Email address of the registrant.
     email?: NullableOption<string>;
+    // The external information for a virtual event registration.
+    externalRegistrationInformation?: NullableOption<VirtualEventExternalRegistrationInformation>;
     // First name of the registrant.
     firstName?: NullableOption<string>;
     // Last name of the registrant.
@@ -22624,15 +22684,23 @@ export interface WorkforceIntegration extends ChangeTrackedEntity {
     apiVersion?: NullableOption<number>;
     // Name of the workforce integration.
     displayName?: NullableOption<string>;
+    /**
+     * Support to view eligibility-filtered results. Possible values are: none, swapRequest, offerShiftRequest,
+     * unknownFutureValue, timeOffReason. Use the Prefer: include-unknown-enum-members request header to get the following
+     * value in this evolvable enum: timeOffReason.
+     */
+    eligibilityFilteringEnabledEntities?: NullableOption<EligibilityFilteringEnabledEntities>;
     // The workforce integration encryption resource.
     encryption?: NullableOption<WorkforceIntegrationEncryption>;
     // Indicates whether this workforce integration is currently active and available.
     isActive?: NullableOption<boolean>;
     /**
-     * The Shifts entities supported for synchronous change notifications. Shifts will make a call back to the url provided on
-     * client changes on those entities added here. By default, no entities are supported for change notifications. Possible
-     * values are: none, shift, swapRequest, userShiftPreferences, openshift, openShiftRequest, offerShiftRequest,
-     * unknownFutureValue.
+     * The Shifts entities supported for synchronous change notifications. Shifts call back to the provided URL when client
+     * changes occur to the entities specified in this property. By default, no entities are supported for change
+     * notifications. Possible values are: none, shift, swapRequest, userShiftPreferences, openShift, openShiftRequest,
+     * offerShiftRequest, unknownFutureValue, timeOffReason, timeOff, timeOffRequest. Use the Prefer:
+     * include-unknown-enum-members request header to get the following values in this evolvable enum: timeOffReason, timeOff,
+     * timeOffRequest.
      */
     supportedEntities?: NullableOption<WorkforceIntegrationSupportedEntities>;
     // Workforce Integration URL for callbacks from the Shifts service.
@@ -22652,6 +22720,7 @@ export interface X509CertificateAuthenticationMethodConfiguration extends Authen
      * binding that matches will be used and the rest ignored.
      */
     certificateUserBindings?: NullableOption<X509CertificateUserBinding[]>;
+    crlValidationConfiguration?: X509CertificateCRLValidationConfiguration;
     // A collection of groups that are enabled to use the authentication method.
     includeTargets?: NullableOption<AuthenticationMethodTarget[]>;
 }
@@ -23066,7 +23135,7 @@ export interface AccountTargetContent {
     type?: NullableOption<AccountTargetContentType>;
 }
 export interface ActionResultPart {
-    // The error that occurred, if any, during the course of the bulk operation.
+    // The error that occurred, if any, during the bulk operation.
     error?: NullableOption<PublicError>;
 }
 export interface AddIn {
@@ -23321,8 +23390,8 @@ export interface AppliedConditionalAccessPolicy {
     /**
      * Indicates the result of the CA policy that was triggered. Possible values are: success, failure, notApplied (policy
      * isn't applied because policy conditions weren't met), notEnabled (This is due to the policy in a disabled state),
-     * unknown, unknownFutureValue, reportOnlySuccess, reportOnlyFailure, reportOnlyNotApplied, reportOnlyInterrupted. You
-     * must use the Prefer: include-unknown-enum-members request header to get the following values in this evolvable enum:
+     * unknown, unknownFutureValue, reportOnlySuccess, reportOnlyFailure, reportOnlyNotApplied, reportOnlyInterrupted. Use the
+     * Prefer: include-unknown-enum-members request header to get the following values in this evolvable enum:
      * reportOnlySuccess, reportOnlyFailure, reportOnlyNotApplied, reportOnlyInterrupted.
      */
     result?: NullableOption<AppliedConditionalAccessPolicyResult>;
@@ -24577,15 +24646,16 @@ export interface ChatMessageAttachment {
      */
     content?: NullableOption<string>;
     /**
-     * The media type of the content attachment. It can have the following values: reference: Attachment is a link to another
-     * file. Populate the contentURL with the link to the object.Any contentType that is supported by the Bot Framework's
-     * Attachment objectapplication/vnd.microsoft.card.codesnippet: A code snippet.
+     * The media type of the content attachment. The possible values are: reference: The attachment is a link to another file.
+     * Populate the contentURL with the link to the object.forwardedMessageReference: The attachment is a reference to a
+     * forwarded message. Populate the content with the original message context.Any contentType that is supported by the Bot
+     * Framework's Attachment object.application/vnd.microsoft.card.codesnippet: A code snippet.
      * application/vnd.microsoft.card.announcement: An announcement header.
      */
     contentType?: NullableOption<string>;
     // The URL for the content of the attachment.
     contentUrl?: NullableOption<string>;
-    // Read-only. The unique id of the attachment.
+    // Read-only. The unique ID of the attachment.
     id?: NullableOption<string>;
     // The name of the attachment.
     name?: NullableOption<string>;
@@ -24621,13 +24691,13 @@ export interface ChatMessageMention {
      * &amp;lt;at id='{index}'&amp;gt; tag in the message body.
      */
     id?: NullableOption<number>;
-    // The entity (user, application, team, or channel) that was @mentioned.
+    // The entity (user, application, team, channel, or chat) that was @mentioned.
     mentioned?: NullableOption<ChatMessageMentionedIdentitySet>;
     // String used to represent the mention. For example, a user's display name, a team name.
     mentionText?: NullableOption<string>;
 }
 export interface ChatMessageMentionedIdentitySet extends IdentitySet {
-    // If present, represents a conversation (for example, team or channel) @mentioned in a message.
+    // If present, represents a conversation (for example, team, channel, or chat) @mentioned in a message.
     conversation?: NullableOption<TeamworkConversationIdentity>;
 }
 export interface ChatMessagePolicyViolation {
@@ -24700,6 +24770,9 @@ export interface ChatRenamedEventMessageDetail extends EventMessageDetail {
     chatId?: NullableOption<string>;
     // Initiator of the event.
     initiator?: NullableOption<IdentitySet>;
+}
+export interface ChatRestrictions {
+    allowTextOnly?: NullableOption<boolean>;
 }
 export interface ChatViewpoint {
     // Indicates whether the chat is hidden for the current user.
@@ -24801,8 +24874,8 @@ export interface CloudPcDomainJoinConfiguration {
      * on resource status. For example, the Europe region group contains the Northern Europe and Western Europe regions.
      * Possible values are: default, australia, canada, usCentral, usEast, usWest, france, germany, europeUnion,
      * unitedKingdom, japan, asia, india, southAmerica, euap, usGovernment, usGovernmentDOD, unknownFutureValue, norway,
-     * switzerland, southKorea. Note that you must use the Prefer: include-unknown-enum-members request header to get the
-     * following values in this evolvable enum: norway, switzerland, southKorea. Read-only.
+     * switzerland, southKorea. Use the Prefer: include-unknown-enum-members request header to get the following values in
+     * this evolvable enum: norway, switzerland, southKorea. Read-only.
      */
     regionGroup?: NullableOption<CloudPcRegionGroup>;
     /**
@@ -25043,6 +25116,10 @@ export interface ConditionalAccessApplications {
     includeUserActions?: string[];
 }
 export interface ConditionalAccessAuthenticationFlows {
+    /**
+     * Represents the transfer methods in scope for the policy. The possible values are: none, deviceCodeFlow,
+     * authenticationTransfer, unknownFutureValue.
+     */
     transferMethods?: ConditionalAccessTransferMethods;
 }
 export interface ConditionalAccessClientApplications {
@@ -25050,11 +25127,16 @@ export interface ConditionalAccessClientApplications {
     excludeServicePrincipals?: string[];
     // Service principal IDs included in the policy scope, or ServicePrincipalsInMyTenant.
     includeServicePrincipals?: string[];
+    /**
+     * Filter that defines the dynamic-servicePrincipal-syntax rule to include/exclude service principals. A filter can use
+     * custom security attributes to include/exclude service principals.
+     */
     servicePrincipalFilter?: NullableOption<ConditionalAccessFilter>;
 }
 export interface ConditionalAccessConditionSet {
     // Applications and user actions included in and excluded from the policy. Required.
     applications?: NullableOption<ConditionalAccessApplications>;
+    // Authentication flows included in the policy scope.
     authenticationFlows?: NullableOption<ConditionalAccessAuthenticationFlows>;
     /**
      * Client applications (service principals and workload identities) included in and excluded from the policy. Either users
@@ -25064,7 +25146,7 @@ export interface ConditionalAccessConditionSet {
     /**
      * Client application types included in the policy. Possible values are: all, browser, mobileAppsAndDesktopClients,
      * exchangeActiveSync, easSupported, other. Required. The easUnsupported enumeration member will be deprecated in favor of
-     * exchangeActiveSync which includes EAS supported and unsupported platforms.
+     * exchangeActiveSync, which includes EAS supported and unsupported platforms.
      */
     clientAppTypes?: ConditionalAccessClientApp[];
     // Devices in the policy.
@@ -26365,6 +26447,8 @@ export interface FileStorageContainerCustomPropertyValue {
     value?: string;
 }
 export interface FileStorageContainerSettings {
+    // Indicates whether versioning is enabled for items in the container. Optional. Read-write.
+    isItemVersioningEnabled?: NullableOption<boolean>;
     /**
      * Indicates whether Optical Character Recognition (OCR) is enabled for the container. The default value is false. When
      * set to true, OCR extraction is performed for new and updated documents of supported document types, and the extracted
@@ -26372,6 +26456,8 @@ export interface FileStorageContainerSettings {
      * OCR metadata is not impacted. Optional. Read-write.
      */
     isOcrEnabled?: NullableOption<boolean>;
+    // The maximum major versions allowed for items in the container. Optional. Read-write.
+    itemMajorVersionLimit?: NullableOption<number>;
 }
 export interface FileStorageContainerViewpoint {
     // The current user's effective role. Read-only.
@@ -26768,7 +26854,7 @@ export interface InvitationRedemptionIdentityProviderConfiguration {
 export interface InvitedUserMessageInfo {
     // Additional recipients the invitation message should be sent to. Currently only one additional recipient is supported.
     ccRecipients?: NullableOption<Recipient[]>;
-    // Customized message body you want to send if you don't want the default message.
+    // Customized message body you want to send if you don't want the default message. Only plain text is allowed.
     customizedMessageBody?: NullableOption<string>;
     /**
      * The language you want to send the default message in. If the customizedMessageBody is specified, this property is
@@ -27084,8 +27170,8 @@ export interface KeyCredentialConfiguration {
      */
     restrictionType?: NullableOption<AppKeyCredentialRestrictionType>;
     /**
-     * String value that indicates if the restriction is evaluated. The possible values are: enabled, disabled, and
-     * unknownFutureValue. If enabled, the restriction is evaluated. If disabled, the restriction isn't evaluated or enforced.
+     * Indicates whether the restriction is evaluated. The possible values are: enabled, disabled, unknownFutureValue. If
+     * enabled, the restriction is evaluated. If disabled, the restriction isn't evaluated or enforced.
      */
     state?: AppManagementRestrictionState;
 }
@@ -28604,8 +28690,8 @@ export interface PasswordCredentialConfiguration {
      */
     restrictionType?: NullableOption<AppCredentialRestrictionType>;
     /**
-     * String value that indicates if the restriction is evaluated. The possible values are: enabled, disabled, and
-     * unknownFutureValue. If enabled, the restriction is evaluated. If disabled, the restriction isn't evaluated or enforced.
+     * Indicates whether the restriction is evaluated. The possible values are: enabled, disabled, unknownFutureValue. If
+     * enabled, the restriction is evaluated. If disabled, the restriction isn't evaluated or enforced.
      */
     state?: AppManagementRestrictionState;
 }
@@ -28925,8 +29011,8 @@ export interface PlannerPlanContainer {
     containerId?: NullableOption<string>;
     /**
      * The type of the resource that contains the plan. For supported types, see the previous table. Possible values are:
-     * group, unknownFutureValue, roster. Note that you must use the Prefer: include-unknown-enum-members request header to
-     * get the following value in this evolvable enum: roster. Optional.
+     * group, unknownFutureValue, roster. Use the Prefer: include-unknown-enum-members request header to get the following
+     * value in this evolvable enum: roster. Optional.
      */
     type?: NullableOption<PlannerContainerType>;
     // The full canonical URL of the container. Optional.
@@ -29422,7 +29508,7 @@ export interface PublicInnerError {
 export interface Quota {
     // Total space consumed by files in the recycle bin, in bytes. Read-only.
     deleted?: NullableOption<number>;
-    // Total space remaining before reaching the quota limit, in bytes. Read-only.
+    // Total space remaining before reaching the capacity limit, in bytes. Read-only.
     remaining?: NullableOption<number>;
     // Enumeration value that indicates the state of the storage space. Read-only.
     state?: NullableOption<string>;
@@ -29533,6 +29619,14 @@ export interface RecurrenceRange {
     startDate?: NullableOption<string>;
     // The recurrence range. The possible values are: endDate, noEnd, numbered. Required.
     type?: NullableOption<RecurrenceRangeType>;
+}
+export interface RecycleBinSettings {
+    /**
+     * Recycle bin retention period override in days for deleted content. The default value is 93; the value range is 7 to
+     * 180. The setting applies to newly deleted content only. Setting this property to null reverts to its default value.
+     * Read-write.
+     */
+    retentionPeriodOverrideDays?: NullableOption<number>;
 }
 export interface RedirectUriSettings {
     index?: NullableOption<number>;
@@ -29895,7 +29989,7 @@ export interface RiskServicePrincipalActivity {
     /**
      * Details of the detected risk. Note: Details for this property are only available for Workload Identities Premium
      * customers. Events in tenants without this license will be returned hidden. The possible values are: none, hidden,
-     * adminConfirmedServicePrincipalCompromised, adminDismissedAllRiskForServicePrincipal. Note that you must use the Prefer:
+     * adminConfirmedServicePrincipalCompromised, adminDismissedAllRiskForServicePrincipal. Use the Prefer:
      * include-unknown-enum-members request header to get the following value(s) in this evolvable enum:
      * adminConfirmedServicePrincipalCompromised , adminDismissedAllRiskForServicePrincipal.
      */
@@ -30137,10 +30231,9 @@ export interface SearchRequest {
     enableTopResults?: NullableOption<boolean>;
     /**
      * One or more types of resources expected in the response. Possible values are: event, message, driveItem, externalItem,
-     * site, list, listItem, drive, chatMessage, person, acronym, bookmark. Note that you must use the Prefer:
-     * include-unknown-enum-members request header to get the following value(s) in this evolvable enum: chatMessage, person,
-     * acronym, bookmark. See known limitations for those combinations of two or more entity types that are supported in the
-     * same search request. Required.
+     * site, list, listItem, drive, chatMessage, person, acronym, bookmark. Use the Prefer: include-unknown-enum-members
+     * request header to get the following value(s) in this evolvable enum: chatMessage, person, acronym, bookmark. See known
+     * limitations for those combinations of two or more entity types that are supported in the same search request. Required.
      */
     entityTypes?: NullableOption<EntityType[]>;
     /**
@@ -30544,14 +30637,14 @@ export interface ShiftActivity {
     displayName?: NullableOption<string>;
     /**
      * The end date and time for the shiftActivity. The Timestamp type represents date and time information using ISO 8601
-     * format and is always in UTC time. For example, midnight UTC on Jan 1, 2014 is 2014-01-01T00:00:00Z. Required.
+     * format and is always in UTC. For example, midnight UTC on Jan 1, 2014 is 2014-01-01T00:00:00Z. Required.
      */
     endDateTime?: NullableOption<string>;
     // Indicates whether the microsoft.graph.user should be paid for the activity during their shift. Required.
     isPaid?: NullableOption<boolean>;
     /**
      * The start date and time for the shiftActivity. The Timestamp type represents date and time information using ISO 8601
-     * format and is always in UTC time. For example, midnight UTC on Jan 1, 2014 is 2014-01-01T00:00:00Z. Required.
+     * format and is always in UTC. For example, midnight UTC on Jan 1, 2014 is 2014-01-01T00:00:00Z. Required.
      */
     startDateTime?: NullableOption<string>;
     theme?: ScheduleEntityTheme;
@@ -30848,8 +30941,8 @@ export interface SubjectRightsRequestHistory {
     eventDateTime?: NullableOption<string>;
     /**
      * The stage when the entity was changed. Possible values are: contentRetrieval, contentReview, generateReport,
-     * contentDeletion, caseResolved, unknownFutureValue, approval. Note that you must use the Prefer:
-     * include-unknown-enum-members request header to get the following value(s) in this evolvable enum: approval.
+     * contentDeletion, caseResolved, unknownFutureValue, approval. Use the Prefer: include-unknown-enum-members request
+     * header to get the following value(s) in this evolvable enum: approval.
      */
     stage?: NullableOption<SubjectRightsRequestStage>;
     /**
@@ -30869,8 +30962,8 @@ export interface SubjectRightsRequestStageDetail {
     error?: NullableOption<PublicError>;
     /**
      * The stage of the subject rights request. Possible values are: contentRetrieval, contentReview, generateReport,
-     * contentDeletion, caseResolved, unknownFutureValue, approval. You must use the Prefer: include-unknown-enum-members
-     * request header to get the following value in this evolvable enum: approval.
+     * contentDeletion, caseResolved, unknownFutureValue, approval. Use the Prefer: include-unknown-enum-members request
+     * header to get the following value in this evolvable enum: approval.
      */
     stage?: NullableOption<SubjectRightsRequestStage>;
     // Status of the current stage. Possible values are: notStarted, current, completed, failed, unknownFutureValue.
@@ -32063,6 +32156,25 @@ export interface Video {
     // Width of the video, in pixels.
     width?: NullableOption<number>;
 }
+export interface VirtualEventExternalInformation {
+    // Identifier of the application that hosts the externalEventId. Read-only.
+    applicationId?: NullableOption<string>;
+    /**
+     * The identifier for a virtualEventExternalInformation object that associates the virtual event with an event ID in an
+     * external application. This association bundles all the information (both supported and not supported in virtualEvent)
+     * into one virtual event object. Optional. If set, the maximum supported length is 256 characters.
+     */
+    externalEventId?: NullableOption<string>;
+}
+export interface VirtualEventExternalRegistrationInformation {
+    // A URL or string that represents the location from which the registrant registered. Optional.
+    referrer?: NullableOption<string>;
+    /**
+     * The identifier for a virtualEventExternalRegistrationInformation object. Optional. If set, the maximum supported length
+     * is 256 characters.
+     */
+    registrationId?: NullableOption<string>;
+}
 export interface VirtualEventPresenterDetails {
     // Bio of the presenter.
     bio?: NullableOption<ItemBody>;
@@ -32696,27 +32808,27 @@ export interface WorkbookSortField {
     sortOn?: string;
 }
 export interface WorkbookWorksheetProtectionOptions {
-    // Indicates whether the worksheet protection option to allow the use of the autofilter feature is enabled.
+    // Represents the worksheet protection option of allowing using auto filter feature.
     allowAutoFilter?: boolean;
-    // Indicates whether the worksheet protection option to allow deleting columns is enabled.
+    // Represents the worksheet protection option of allowing deleting columns.
     allowDeleteColumns?: boolean;
-    // Indicates whether the worksheet protection option to allow deleting rows is enabled.
+    // Represents the worksheet protection option of allowing deleting rows.
     allowDeleteRows?: boolean;
-    // Indicates whether the worksheet protection option to allow formatting cells is enabled.
+    // Represents the worksheet protection option of allowing formatting cells.
     allowFormatCells?: boolean;
-    // Indicates whether the worksheet protection option to allow formatting columns is enabled.
+    // Represents the worksheet protection option of allowing formatting columns.
     allowFormatColumns?: boolean;
-    // Indicates whether the worksheet protection option to allow formatting rows is enabled.
+    // Represents the worksheet protection option of allowing formatting rows.
     allowFormatRows?: boolean;
-    // Indicates whether the worksheet protection option to allow inserting columns is enabled.
+    // Represents the worksheet protection option of allowing inserting columns.
     allowInsertColumns?: boolean;
-    // Indicates whether the worksheet protection option to allow inserting hyperlinks is enabled.
+    // Represents the worksheet protection option of allowing inserting hyperlinks.
     allowInsertHyperlinks?: boolean;
-    // Indicates whether the worksheet protection option to allow inserting rows is enabled.
+    // Represents the worksheet protection option of allowing inserting rows.
     allowInsertRows?: boolean;
-    // Indicates whether the worksheet protection option to allow the use of the pivot table feature is enabled.
+    // Represents the worksheet protection option of allowing using pivot table feature.
     allowPivotTables?: boolean;
-    // Indicates whether the worksheet protection option to allow the use of the sort feature is enabled.
+    // Represents the worksheet protection option of allowing using sort feature.
     allowSort?: boolean;
 }
 export interface WorkforceIntegrationEncryption {
@@ -32748,6 +32860,10 @@ export interface X509CertificateAuthenticationModeConfiguration {
      */
     x509CertificateAuthenticationDefaultMode?: NullableOption<X509CertificateAuthenticationMode>;
     x509CertificateDefaultRequiredAffinityLevel?: NullableOption<X509CertificateAffinityLevel>;
+}
+export interface X509CertificateCRLValidationConfiguration {
+    exemptedCertificateAuthoritiesSubjectKeyIdentifiers?: NullableOption<string[]>;
+    state?: X509CertificateCRLValidationConfigurationState;
 }
 export interface X509CertificateRule {
     // The identifier of the X.509 certificate. Required.
@@ -33010,9 +33126,8 @@ export namespace CallRecords {
         platform?: ClientPlatform;
         /**
          * Identifies the family of application software used by this endpoint. Possible values are: unknown, teams,
-         * skypeForBusiness, lync, unknownFutureValue, azureCommunicationServices. Note that you must use the Prefer:
-         * include-unknown-enum-members request header to get the following value(s) in this evolvable enum:
-         * azureCommunicationServices.
+         * skypeForBusiness, lync, unknownFutureValue, azureCommunicationServices. Use the Prefer: include-unknown-enum-members
+         * request header to get the following value(s) in this evolvable enum: azureCommunicationServices.
          */
         productFamily?: ProductFamily;
     }
@@ -33721,7 +33836,7 @@ export namespace ExternalConnectors {
          * Specifies one or more well-known tags added against a property. Labels help Microsoft Search understand the semantics
          * of the data in the connection. Adding appropriate labels would result in an enhanced search experience (for example,
          * better relevance). Optional.The possible values are: title, url, createdBy, lastModifiedBy, authors, createdDateTime,
-         * lastModifiedDateTime, fileName, fileExtension, unknownFutureValue, iconUrl. You must use the Prefer:
+         * lastModifiedDateTime, fileName, fileExtension, unknownFutureValue, iconUrl. Use the Prefer:
          * include-unknown-enum-members request header to get the following value in this evolvable enum: iconUrl.
          */
         labels?: NullableOption<Label[]>;
@@ -34246,9 +34361,8 @@ export namespace IdentityGovernanceNamespace {
         // Total number of users processed by the workflow.
         totalUsers?: number;
         /**
-         * The category of the workflow. The possible values are: joiner, leaver, unknownFutureValue, mover. Note that you must
-         * use the Prefer: include-unknown-enum-members request header to get the following value(s) in this evolvable enum:
-         * mover.
+         * The category of the workflow. The possible values are: joiner, leaver, unknownFutureValue, mover. Use the Prefer:
+         * include-unknown-enum-members request header to get the following value(s) in this evolvable enum: mover.
          */
         workflowCategory?: LifecycleWorkflowCategory;
         // The name of the workflow.
@@ -34870,8 +34984,8 @@ export namespace SecurityNamespace {
          * microsoftDefenderForStorage, microsoftDefenderForDNS, microsoftDefenderForDatabases, microsoftDefenderForContainers,
          * microsoftDefenderForNetwork, microsoftDefenderForAppService, microsoftDefenderForKeyVault,
          * microsoftDefenderForResourceManager, microsoftDefenderForApiManagement, microsoftSentinel, nrtAlerts, scheduledAlerts,
-         * microsoftDefenderThreatIntelligenceAnalytics, builtInMl. You must use the Prefer: include-unknown-enum-members request
-         * header to get the following value(s) in this evolvable enum: microsoftDefenderForCloud, microsoftDefenderForIoT,
+         * microsoftDefenderThreatIntelligenceAnalytics, builtInMl. Use the Prefer: include-unknown-enum-members request header to
+         * get the following value(s) in this evolvable enum: microsoftDefenderForCloud, microsoftDefenderForIoT,
          * microsoftDefenderForServers, microsoftDefenderForStorage, microsoftDefenderForDNS, microsoftDefenderForDatabases,
          * microsoftDefenderForContainers, microsoftDefenderForNetwork, microsoftDefenderForAppService,
          * microsoftDefenderForKeyVault, microsoftDefenderForResourceManager, microsoftDefenderForApiManagement,
@@ -34913,8 +35027,8 @@ export namespace SecurityNamespace {
          * The service or product that created this alert. Possible values are: unknown, microsoftDefenderForEndpoint,
          * microsoftDefenderForIdentity, microsoftDefenderForCloudApps, microsoftDefenderForOffice365, microsoft365Defender,
          * azureAdIdentityProtection, microsoftAppGovernance, dataLossPrevention, unknownFutureValue, microsoftDefenderForCloud,
-         * microsoftSentinel. You must use the Prefer: include-unknown-enum-members request header to get the following value(s)
-         * in this evolvable enum: microsoftDefenderForCloud, microsoftSentinel.
+         * microsoftSentinel. Use the Prefer: include-unknown-enum-members request header to get the following value(s) in this
+         * evolvable enum: microsoftDefenderForCloud, microsoftSentinel.
          */
         serviceSource?: ServiceSource;
         /**
@@ -34979,9 +35093,9 @@ export namespace SecurityNamespace {
     interface CaseOperation extends microsoftgraph.Entity {
         /**
          * The type of action the operation represents. Possible values are: contentExport, applyTags, convertToPdf, index,
-         * estimateStatistics, addToReviewSet, holdUpdate, unknownFutureValue, purgeData, exportReport, exportResult. You must use
-         * the Prefer: include-unknown-enum-members request header to get the following values from this evolvable enum:
-         * purgeData, exportReport, exportResult.
+         * estimateStatistics, addToReviewSet, holdUpdate, unknownFutureValue, purgeData, exportReport, exportResult. Use the
+         * Prefer: include-unknown-enum-members request header to get the following values from this evolvable enum: purgeData,
+         * exportReport, exportResult.
          */
         action?: NullableOption<CaseAction>;
         // The date and time the operation was completed.
@@ -35016,6 +35130,7 @@ export namespace SecurityNamespace {
     interface DataSet extends microsoftgraph.Entity {
         createdBy?: NullableOption<microsoftgraph.IdentitySet>;
         createdDateTime?: NullableOption<string>;
+        description?: NullableOption<string>;
         displayName?: NullableOption<string>;
     }
     interface DataSource extends microsoftgraph.Entity {
@@ -36094,9 +36209,9 @@ export namespace SecurityNamespace {
         detailedRoles?: NullableOption<string[]>;
         /**
          * Status of the remediation action taken. The possible values are: none, remediated, prevented, blocked, notFound,
-         * unknownFutureValue, active, pendingApproval, declined, unremediated, running, partiallyRemediated. Note that you must
-         * use the Prefer: include-unknown-enum-members request header to get the following values from this evolvable enum:
-         * active, pendingApproval, declined, unremediated, running, partiallyRemediated.
+         * unknownFutureValue, active, pendingApproval, declined, unremediated, running, partiallyRemediated. Use the Prefer:
+         * include-unknown-enum-members request header to get the following values from this evolvable enum: active,
+         * pendingApproval, declined, unremediated, running, partiallyRemediated.
          */
         remediationStatus?: EvidenceRemediationStatus;
         // Details about the remediation status.
