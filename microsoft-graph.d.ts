@@ -1165,7 +1165,7 @@ export type ManagedAppDataTransferLevel = "allApps" | "managedApps" | "none";
 export type ManagedAppFlaggedReason = "none" | "rootedDevice";
 export type ManagedAppPinCharacterSet = "numeric" | "alphanumericAndSymbol";
 export type ManagedBrowserType = "notConfigured" | "microsoftEdge";
-export type ManagedDeviceOwnerType = "unknown" | "company" | "personal";
+export type ManagedDeviceOwnerType = "unknown" | "company" | "personal" | "unknownFutureValue";
 export type ManagedDevicePartnerReportedHealthState =
     | "unknown"
     | "activated"
@@ -6869,6 +6869,7 @@ export interface CloudPcOnPremisesConnection extends Entity {
 export interface CloudPcProvisioningPolicy extends Entity {
     // The URL of the alternate resource that links to this provisioning policy. Read-only.
     alternateResourceUrl?: NullableOption<string>;
+    autopatch?: NullableOption<CloudPcProvisioningPolicyAutopatch>;
     // The display name of the Cloud PC group that the Cloud PCs reside in. Read-only.
     cloudPcGroupDisplayName?: NullableOption<string>;
     /**
@@ -13655,6 +13656,7 @@ export interface OnlineMeetingBase extends Entity {
     audioConferencing?: NullableOption<AudioConferencing>;
     // The chat information associated with this online meeting.
     chatInfo?: NullableOption<ChatInfo>;
+    // Specifies the configuration settings for meeting chat restrictions.
     chatRestrictions?: NullableOption<ChatRestrictions>;
     // Indicates whether to announce when callers join or leave.
     isEntryExitAnnounced?: NullableOption<boolean>;
@@ -24772,6 +24774,7 @@ export interface ChatRenamedEventMessageDetail extends EventMessageDetail {
     initiator?: NullableOption<IdentitySet>;
 }
 export interface ChatRestrictions {
+    // Indicates whether only text is allowed in the meeting chat. Optional.
     allowTextOnly?: NullableOption<boolean>;
 }
 export interface ChatViewpoint {
@@ -24949,6 +24952,9 @@ export interface CloudPcOnPremisesConnectionStatusDetail {
      * example, midnight UTC on Jan 1, 2014 appear as 2014-01-01T00:00:00Z. Read-Only.
      */
     startDateTime?: string;
+}
+export interface CloudPcProvisioningPolicyAutopatch {
+    autopatchGroupId?: NullableOption<string>;
 }
 export interface CloudPcRestorePointSetting {
     /**
