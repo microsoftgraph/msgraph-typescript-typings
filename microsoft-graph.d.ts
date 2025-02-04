@@ -1165,7 +1165,7 @@ export type ManagedAppDataTransferLevel = "allApps" | "managedApps" | "none";
 export type ManagedAppFlaggedReason = "none" | "rootedDevice";
 export type ManagedAppPinCharacterSet = "numeric" | "alphanumericAndSymbol";
 export type ManagedBrowserType = "notConfigured" | "microsoftEdge";
-export type ManagedDeviceOwnerType = "unknown" | "company" | "personal";
+export type ManagedDeviceOwnerType = "unknown" | "company" | "personal" | "unknownFutureValue";
 export type ManagedDevicePartnerReportedHealthState =
     | "unknown"
     | "activated"
@@ -6869,6 +6869,7 @@ export interface CloudPcOnPremisesConnection extends Entity {
 export interface CloudPcProvisioningPolicy extends Entity {
     // The URL of the alternate resource that links to this provisioning policy. Read-only.
     alternateResourceUrl?: NullableOption<string>;
+    autopatch?: NullableOption<CloudPcProvisioningPolicyAutopatch>;
     // The display name of the Cloud PC group that the Cloud PCs reside in. Read-only.
     cloudPcGroupDisplayName?: NullableOption<string>;
     /**
@@ -13655,6 +13656,7 @@ export interface OnlineMeetingBase extends Entity {
     audioConferencing?: NullableOption<AudioConferencing>;
     // The chat information associated with this online meeting.
     chatInfo?: NullableOption<ChatInfo>;
+    // Specifies the configuration settings for meeting chat restrictions.
     chatRestrictions?: NullableOption<ChatRestrictions>;
     // Indicates whether to announce when callers join or leave.
     isEntryExitAnnounced?: NullableOption<boolean>;
@@ -15844,6 +15846,7 @@ export interface Schedule extends Entity {
     timeOffRequestsEnabled?: NullableOption<boolean>;
     // Indicates the time zone of the schedule team using tz database format. Required.
     timeZone?: NullableOption<string>;
+    // The IDs for the workforce integrations associated with this schedule.
     workforceIntegrationIds?: NullableOption<string[]>;
     // The offer requests for shifts in the schedule.
     offerShiftRequests?: NullableOption<OfferShiftRequest[]>;
@@ -16670,8 +16673,8 @@ export interface SharepointSettings extends Entity {
 }
 export interface Shift extends ChangeTrackedEntity {
     /**
-     * Draft changes in the shift. Draft changes are only visible to managers. The changes are visible to employees when they
-     * are shared, which copies the changes from the draftShift to the sharedShift property.
+     * Draft changes in the shift. Draft changes are only visible to managers. The changes are visible to employees when
+     * they're shared, which copies the changes from the draftShift to the sharedShift property.
      */
     draftShift?: NullableOption<ShiftItem>;
     // The shift is marked for deletion, a process that is finalized when the schedule is shared.
@@ -18809,9 +18812,9 @@ export interface User extends DirectoryObject {
      */
     onPremisesUserPrincipalName?: NullableOption<string>;
     /**
-     * A list of other email addresses for the user; for example: ['bob@contoso.com', 'Robert@fabrikam.com']. NOTE: This
-     * property can't contain accent characters. Returned only on $select. Supports $filter (eq, not, ge, le, in, startsWith,
-     * endsWith, /$count eq 0, /$count ne 0).
+     * A list of other email addresses for the user; for example: ['bob@contoso.com', 'Robert@fabrikam.com']. Can store up to
+     * 250 values, each with a limit of 250 characters. NOTE: This property can't contain accent characters. Returned only on
+     * $select. Supports $filter (eq, not, ge, le, in, startsWith, endsWith, /$count eq 0, /$count ne 0).
      */
     otherMails?: string[];
     /**
@@ -20042,7 +20045,7 @@ export interface UserStorage extends Entity {
 export interface UserTeamwork extends Entity {
     /**
      * Represents the location that a user selected in Microsoft Teams and doesn't follow the Office's locale setting. A
-     * user’s locale is represented by their preferred language and country or region. For example, en-us. The language
+     * user's locale is represented by their preferred language and country or region. For example, en-us. The language
      * component follows two-letter codes as defined in ISO 639-1, and the country component follows two-letter codes as
      * defined in ISO 3166-1 alpha-2.
      */
@@ -22680,7 +22683,7 @@ export interface WorkbookWorksheetProtection extends Entity {
     protected?: boolean;
 }
 export interface WorkforceIntegration extends ChangeTrackedEntity {
-    // API version for the call back URL. Start with 1.
+    // API version for the callback URL. Start with 1.
     apiVersion?: NullableOption<number>;
     // Name of the workforce integration.
     displayName?: NullableOption<string>;
@@ -22698,9 +22701,9 @@ export interface WorkforceIntegration extends ChangeTrackedEntity {
      * The Shifts entities supported for synchronous change notifications. Shifts call back to the provided URL when client
      * changes occur to the entities specified in this property. By default, no entities are supported for change
      * notifications. Possible values are: none, shift, swapRequest, userShiftPreferences, openShift, openShiftRequest,
-     * offerShiftRequest, unknownFutureValue, timeOffReason, timeOff, timeOffRequest. Use the Prefer:
-     * include-unknown-enum-members request header to get the following values in this evolvable enum: timeOffReason, timeOff,
-     * timeOffRequest.
+     * offerShiftRequest, unknownFutureValue, timeCard, timeOffReason, timeOff, timeOffRequest. Use the Prefer:
+     * include-unknown-enum-members request header to get the following values in this evolvable enum: timeCard ,
+     * timeOffReason , timeOff , timeOffRequest.
      */
     supportedEntities?: NullableOption<WorkforceIntegrationSupportedEntities>;
     // Workforce Integration URL for callbacks from the Shifts service.
@@ -24483,7 +24486,7 @@ export interface Certification {
     certificationExpirationDateTime?: NullableOption<string>;
     // Indicates whether the application is certified by Microsoft.
     isCertifiedByMicrosoft?: NullableOption<boolean>;
-    // Indicates whether the application has been self-attested by the application developer or the publisher.
+    // Indicates whether the application developer or publisher completed Publisher Attestation.
     isPublisherAttested?: NullableOption<boolean>;
     // The timestamp when the certification for the application was most recently added or updated.
     lastCertificationDateTime?: NullableOption<string>;
@@ -24772,6 +24775,7 @@ export interface ChatRenamedEventMessageDetail extends EventMessageDetail {
     initiator?: NullableOption<IdentitySet>;
 }
 export interface ChatRestrictions {
+    // Indicates whether only text is allowed in the meeting chat. Optional.
     allowTextOnly?: NullableOption<boolean>;
 }
 export interface ChatViewpoint {
@@ -24949,6 +24953,9 @@ export interface CloudPcOnPremisesConnectionStatusDetail {
      * example, midnight UTC on Jan 1, 2014 appear as 2014-01-01T00:00:00Z. Read-Only.
      */
     startDateTime?: string;
+}
+export interface CloudPcProvisioningPolicyAutopatch {
+    autopatchGroupId?: NullableOption<string>;
 }
 export interface CloudPcRestorePointSetting {
     /**
