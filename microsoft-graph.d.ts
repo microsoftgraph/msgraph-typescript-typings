@@ -92,6 +92,10 @@ export type AgreementAcceptanceState = "accepted" | "declined" | "unknownFutureV
 export type AlertFeedback = "unknown" | "truePositive" | "falsePositive" | "benignPositive" | "unknownFutureValue";
 export type AlertSeverity = "unknown" | "informational" | "low" | "medium" | "high" | "unknownFutureValue";
 export type AlertStatus = "unknown" | "newAlert" | "inProgress" | "resolved" | "dismissed" | "unknownFutureValue";
+export type AllowedLobbyAdmitterRoles =
+    | "organizerAndCoOrganizersAndPresenters"
+    | "organizerAndCoOrganizers"
+    | "unknownFutureValue";
 export type AllowedTargetScope =
     | "notSpecified"
     | "specificDirectoryUsers"
@@ -670,6 +674,7 @@ export type ConditionalAccessTransferMethods =
     | "deviceCodeFlow"
     | "authenticationTransfer"
     | "unknownFutureValue";
+export type ConfirmedBy = "none" | "user" | "manager" | "unknownFutureValue";
 export type ConnectedOrganizationState = "configured" | "proposed" | "unknownFutureValue";
 export type ConnectionDirection = "unknown" | "inbound" | "outbound" | "unknownFutureValue";
 export type ConnectionStatus = "unknown" | "attempted" | "succeeded" | "blocked" | "failed" | "unknownFutureValue";
@@ -1209,6 +1214,7 @@ export type MediaState = "active" | "inactive" | "unknownFutureValue";
 export type MeetingAudience = "everyone" | "organization" | "unknownFutureValue";
 export type MeetingChatHistoryDefaultMode = "none" | "all" | "unknownFutureValue";
 export type MeetingChatMode = "enabled" | "disabled" | "limited" | "unknownFutureValue";
+export type MeetingLiveShareOptions = "enabled" | "disabled" | "unknownFutureValue";
 export type MeetingMessageType =
     | "none"
     | "meetingRequest"
@@ -3040,6 +3046,7 @@ export type ThreatAssessmentResultType = "checkPolicy" | "rescan" | "unknownFutu
 export type ThreatAssessmentStatus = "pending" | "completed";
 export type ThreatCategory = "undefined" | "spam" | "phishing" | "malware" | "unknownFutureValue";
 export type ThreatExpectedAssessment = "block" | "unblock";
+export type TimeCardState = "clockedIn" | "onBreak" | "clockedOut" | "unknownFutureValue";
 export type TimeOffReasonIconType =
     | "none"
     | "car"
@@ -3469,6 +3476,7 @@ export type WorkforceIntegrationSupportedEntities =
     | "openShiftRequest"
     | "offerShiftRequest"
     | "unknownFutureValue"
+    | "timeCard"
     | "timeOffReason"
     | "timeOff"
     | "timeOffRequest";
@@ -5096,8 +5104,9 @@ export interface Application extends DirectoryObject {
     federatedIdentityCredentials?: NullableOption<FederatedIdentityCredential[]>;
     homeRealmDiscoveryPolicies?: NullableOption<HomeRealmDiscoveryPolicy[]>;
     /**
-     * Directory objects that are owners of the application. Read-only. Nullable. Supports $expand, $filter (/$count eq 0,
-     * /$count ne 0, /$count eq 1, /$count ne 1), and $select nested in $expand.
+     * Directory objects that are owners of this application. The owners are a set of nonadmin users or servicePrincipals who
+     * are allowed to modify this object. Supports $expand, $filter (/$count eq 0, /$count ne 0, /$count eq 1, /$count ne 1),
+     * and $select nested in $expand.
      */
     owners?: NullableOption<DirectoryObject[]>;
     // Represents the capability for Microsoft Entra identity synchronization through the Microsoft Graph API.
@@ -6371,6 +6380,8 @@ export interface CertificateBasedAuthConfiguration extends Entity {
     certificateAuthorities?: CertificateAuthority[];
 }
 export interface ChangeTrackedEntity extends Entity {
+    // Identity of the creator of the entity.
+    createdBy?: NullableOption<IdentitySet>;
     /**
      * The Timestamp type represents date and time information using ISO 8601 format and is always in UTC time. For example,
      * midnight UTC on Jan 1, 2014 is 2014-01-01T00:00:00Z
@@ -7700,6 +7711,17 @@ export interface DataPolicyOperation extends Entity {
     submittedDateTime?: string;
     // The id for the user on whom the operation is performed.
     userId?: string;
+}
+export interface DayNote extends ChangeTrackedEntity {
+    // The date of the day note.
+    dayNoteDate?: NullableOption<string>;
+    // The draft version of this day note that is viewable by managers. Only contentType text is supported.
+    draftDayNote?: NullableOption<ItemBody>;
+    /**
+     * The shared version of this day note that is viewable by both employees and managers. Only contentType text is
+     * supported.
+     */
+    sharedDayNote?: NullableOption<ItemBody>;
 }
 export interface DefaultManagedAppProtection extends ManagedAppProtection {
     /**
@@ -13640,18 +13662,31 @@ export interface OnlineMeetingBase extends Entity {
     allowAttendeeToEnableCamera?: NullableOption<boolean>;
     // Indicates whether attendees can turn on their microphone.
     allowAttendeeToEnableMic?: NullableOption<boolean>;
+    // Indicates whether breakout rooms are enabled for the meeting.
+    allowBreakoutRooms?: NullableOption<boolean>;
+    /**
+     * Specifies the users who can admit from the lobby. Possible values are: organizerAndCoOrganizersAndPresenters,
+     * organizerAndCoOrganizers, unknownFutureValue.
+     */
+    allowedLobbyAdmitters?: NullableOption<AllowedLobbyAdmitterRoles>;
     // Specifies who can be a presenter in a meeting.
     allowedPresenters?: NullableOption<OnlineMeetingPresenters>;
+    // Indicates whether live share is enabled for the meeting. Possible values are: enabled, disabled, unknownFutureValue.
+    allowLiveShare?: NullableOption<MeetingLiveShareOptions>;
     // Specifies the mode of the meeting chat.
     allowMeetingChat?: NullableOption<MeetingChatMode>;
     // Specifies if participants are allowed to rename themselves in an instance of the meeting.
     allowParticipantsToChangeName?: NullableOption<boolean>;
+    // Indicates whether PowerPoint live is enabled for the meeting.
+    allowPowerPointSharing?: NullableOption<boolean>;
     // Indicates whether recording is enabled for the meeting.
     allowRecording?: NullableOption<boolean>;
     // Indicates if Teams reactions are enabled for the meeting.
     allowTeamworkReactions?: NullableOption<boolean>;
     // Indicates whether transcription is enabled for the meeting.
     allowTranscription?: NullableOption<boolean>;
+    // Indicates whether whiteboard is enabled for the meeting.
+    allowWhiteboard?: NullableOption<boolean>;
     // The phone access (dial-in) information for an online meeting. Read-only.
     audioConferencing?: NullableOption<AudioConferencing>;
     // The chat information associated with this online meeting.
@@ -15830,6 +15865,8 @@ export interface SamlOrWsFedProvider extends IdentityProviderBase {
 export interface Schedule extends Entity {
     // Indicates whether the schedule is enabled for the team. Required.
     enabled?: NullableOption<boolean>;
+    // Indicates whether copied shifts include activities from the original shift.
+    isActivitiesIncludedWhenCopyingShiftsEnabled?: NullableOption<boolean>;
     // Indicates whether offer shift requests are enabled for the schedule.
     offerShiftRequestsEnabled?: NullableOption<boolean>;
     // Indicates whether open shifts are enabled for the schedule.
@@ -15838,16 +15875,25 @@ export interface Schedule extends Entity {
     provisionStatus?: NullableOption<OperationStatus>;
     // Additional information about why schedule provisioning failed.
     provisionStatusCode?: NullableOption<string>;
+    /**
+     * Indicates the start day of the week. The possible values are: sunday, monday, tuesday, wednesday, thursday, friday,
+     * saturday.
+     */
+    startDayOfWeek?: NullableOption<DayOfWeek>;
     // Indicates whether swap shifts requests are enabled for the schedule.
     swapShiftsRequestsEnabled?: NullableOption<boolean>;
     // Indicates whether time clock is enabled for the schedule.
     timeClockEnabled?: NullableOption<boolean>;
+    // The time clock location settings for this schedule.
+    timeClockSettings?: NullableOption<TimeClockSettings>;
     // Indicates whether time off requests are enabled for the schedule.
     timeOffRequestsEnabled?: NullableOption<boolean>;
     // Indicates the time zone of the schedule team using tz database format. Required.
     timeZone?: NullableOption<string>;
     // The IDs for the workforce integrations associated with this schedule.
     workforceIntegrationIds?: NullableOption<string[]>;
+    // The day notes in the schedule.
+    dayNotes?: NullableOption<DayNote[]>;
     // The offer requests for shifts in the schedule.
     offerShiftRequests?: NullableOption<OfferShiftRequest[]>;
     // The open shift requests in the schedule.
@@ -15860,6 +15906,8 @@ export interface Schedule extends Entity {
     shifts?: NullableOption<Shift[]>;
     // The swap requests for shifts in the schedule.
     swapShiftsChangeRequests?: NullableOption<SwapShiftsChangeRequest[]>;
+    // The time cards in the schedule.
+    timeCards?: NullableOption<TimeCard[]>;
     // The set of reasons for a time off in the schedule.
     timeOffReasons?: NullableOption<TimeOffReason[]>;
     // The time off requests in the schedule.
@@ -15878,6 +15926,11 @@ export interface ScheduleChangeRequest extends ChangeTrackedEntity {
     state?: NullableOption<ScheduleChangeState>;
 }
 export interface SchedulingGroup extends ChangeTrackedEntity {
+    /**
+     * The code for the schedulingGroup to represent an external identifier. This field must be unique within the team in
+     * Microsoft Teams and uses an alphanumeric format, with a maximum of 100 characters.
+     */
+    code?: NullableOption<string>;
     // The display name for the schedulingGroup. Required.
     displayName?: NullableOption<string>;
     // Indicates whether the schedulingGroup can be used when creating new entities or updating existing ones. Required.
@@ -16364,8 +16417,8 @@ export interface ServicePrincipal extends DirectoryObject {
     ownedObjects?: NullableOption<DirectoryObject[]>;
     /**
      * Directory objects that are owners of this servicePrincipal. The owners are a set of nonadmin users or servicePrincipals
-     * who are allowed to modify this object. Read-only. Nullable. Supports $expand, $filter (/$count eq 0, /$count ne 0,
-     * /$count eq 1, /$count ne 1), and $select nested in $expand.
+     * who are allowed to modify this object. Supports $expand, $filter (/$count eq 0, /$count ne 0, /$count eq 1, /$count ne
+     * 1), and $select nested in $expand.
      */
     owners?: NullableOption<DirectoryObject[]>;
     /**
@@ -17825,6 +17878,27 @@ export interface ThumbnailSet extends Entity {
     // A custom thumbnail image or the original image used to generate other thumbnails.
     source?: NullableOption<Thumbnail>;
 }
+export interface TimeCard extends ChangeTrackedEntity {
+    // The list of breaks associated with the timeCard.
+    breaks?: NullableOption<TimeCardBreak[]>;
+    // The clock-in event of the timeCard.
+    clockInEvent?: NullableOption<TimeCardEvent>;
+    // The clock-out event of the timeCard.
+    clockOutEvent?: NullableOption<TimeCardEvent>;
+    // Indicates whether this timeCard entry is confirmed. Possible values are: none, user, manager, unknownFutureValue.
+    confirmedBy?: NullableOption<ConfirmedBy>;
+    // Notes about the timeCard.
+    notes?: NullableOption<ItemBody>;
+    // The original timeCardEntry of the timeCard before it was edited.
+    originalEntry?: NullableOption<TimeCardEntry>;
+    /**
+     * The current state of the timeCard during its life cycle. The possible values are: clockedIn, onBreak, clockedOut,
+     * unknownFutureValue.
+     */
+    state?: NullableOption<TimeCardState>;
+    // User ID to which the timeCard belongs.
+    userId?: NullableOption<string>;
+}
 export interface TimeOff extends ChangeTrackedEntity {
     /**
      * The draft version of this timeOff item that is viewable by managers. It must be shared before it's visible to team
@@ -17842,6 +17916,11 @@ export interface TimeOff extends ChangeTrackedEntity {
     userId?: NullableOption<string>;
 }
 export interface TimeOffReason extends ChangeTrackedEntity {
+    /**
+     * The code of the timeOffReason to represent an external identifier. This field must be unique within the team in
+     * Microsoft Teams and uses an alphanumeric format, with a maximum of 100 characters.
+     */
+    code?: NullableOption<string>;
     // The name of the timeOffReason. Required.
     displayName?: NullableOption<string>;
     /**
@@ -31635,6 +31714,36 @@ export interface TicketInfo {
     // The description of the ticket system.
     ticketSystem?: NullableOption<string>;
 }
+export interface TimeCardBreak {
+    // ID of the timeCardBreak.
+    breakId?: NullableOption<string>;
+    // The start event of the timeCardBreak.
+    end?: NullableOption<TimeCardEvent>;
+    // Notes about the timeCardBreak.
+    notes?: NullableOption<ItemBody>;
+    // The start event of the timeCardBreak.
+    start?: TimeCardEvent;
+}
+export interface TimeCardEntry {
+    // The clock-in event of the timeCard.
+    breaks?: NullableOption<TimeCardBreak[]>;
+    // The clock-out event of the timeCard.
+    clockInEvent?: NullableOption<TimeCardEvent>;
+    // The list of breaks associated with the timeCard.
+    clockOutEvent?: NullableOption<TimeCardEvent>;
+}
+export interface TimeCardEvent {
+    // The time the entry is recorded.
+    dateTime?: string;
+    // Indicates whether this action happens at an approved location.
+    isAtApprovedLocation?: NullableOption<boolean>;
+    // Notes about the timeCardEvent.
+    notes?: NullableOption<ItemBody>;
+}
+export interface TimeClockSettings {
+    // The approved location of the timeClock.
+    approvedLocation?: NullableOption<GeoCoordinates>;
+}
 export interface TimeConstraint {
     // The nature of the activity, optional. The possible values are: work, personal, unrestricted, or unknown.
     activityDomain?: NullableOption<ActivityDomain>;
@@ -32815,27 +32924,27 @@ export interface WorkbookSortField {
     sortOn?: string;
 }
 export interface WorkbookWorksheetProtectionOptions {
-    // Represents the worksheet protection option of allowing using auto filter feature.
+    // Indicates whether the worksheet protection option to allow the use of the autofilter feature is enabled.
     allowAutoFilter?: boolean;
-    // Represents the worksheet protection option of allowing deleting columns.
+    // Indicates whether the worksheet protection option to allow deleting columns is enabled.
     allowDeleteColumns?: boolean;
-    // Represents the worksheet protection option of allowing deleting rows.
+    // Indicates whether the worksheet protection option to allow deleting rows is enabled.
     allowDeleteRows?: boolean;
-    // Represents the worksheet protection option of allowing formatting cells.
+    // Indicates whether the worksheet protection option to allow formatting cells is enabled.
     allowFormatCells?: boolean;
-    // Represents the worksheet protection option of allowing formatting columns.
+    // Indicates whether the worksheet protection option to allow formatting columns is enabled.
     allowFormatColumns?: boolean;
-    // Represents the worksheet protection option of allowing formatting rows.
+    // Indicates whether the worksheet protection option to allow formatting rows is enabled.
     allowFormatRows?: boolean;
-    // Represents the worksheet protection option of allowing inserting columns.
+    // Indicates whether the worksheet protection option to allow inserting columns is enabled.
     allowInsertColumns?: boolean;
-    // Represents the worksheet protection option of allowing inserting hyperlinks.
+    // Indicates whether the worksheet protection option to allow inserting hyperlinks is enabled.
     allowInsertHyperlinks?: boolean;
-    // Represents the worksheet protection option of allowing inserting rows.
+    // Indicates whether the worksheet protection option to allow inserting rows is enabled.
     allowInsertRows?: boolean;
-    // Represents the worksheet protection option of allowing using pivot table feature.
+    // Indicates whether the worksheet protection option to allow the use of the pivot table feature is enabled.
     allowPivotTables?: boolean;
-    // Represents the worksheet protection option of allowing using sort feature.
+    // Indicates whether the worksheet protection option to allow the use of the sort feature is enabled.
     allowSort?: boolean;
 }
 export interface WorkforceIntegrationEncryption {
