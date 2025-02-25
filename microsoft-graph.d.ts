@@ -4951,6 +4951,7 @@ export interface Application extends DirectoryObject {
      * groups, or service principals associated with other applications. Not nullable.
      */
     appRoles?: AppRole[];
+    authenticationBehaviors?: NullableOption<AuthenticationBehaviors>;
     // Specifies the certification status of the application.
     certification?: NullableOption<Certification>;
     /**
@@ -6168,15 +6169,15 @@ export interface Calendar extends Entity {
     allowedOnlineMeetingProviders?: NullableOption<OnlineMeetingProviderType[]>;
     /**
      * true if the user can write to the calendar, false otherwise. This property is true for the user who created the
-     * calendar. This property is also true for a user who has been shared a calendar and granted write access.
+     * calendar. This property is also true for a user who shared a calendar and granted write access.
      */
     canEdit?: NullableOption<boolean>;
     /**
-     * true if the user has the permission to share the calendar, false otherwise. Only the user who created the calendar can
+     * true if the user has permission to share the calendar, false otherwise. Only the user who created the calendar can
      * share it.
      */
     canShare?: NullableOption<boolean>;
-    // true if the user can read calendar items that have been marked private, false otherwise.
+    // If true, the user can read calendar items that have been marked private, false otherwise.
     canViewPrivateItems?: NullableOption<boolean>;
     /**
      * Identifies the version of the calendar object. Every time the calendar is changed, changeKey changes as well. This
@@ -10041,22 +10042,22 @@ export interface Entity {
 }
 export interface Event extends OutlookItem {
     /**
-     * true if the meeting organizer allows invitees to propose a new time when responding; otherwise, false. Optional.
-     * Default is true.
+     * true if the meeting organizer allows invitees to propose a new time when responding; otherwise, false. Optional. The
+     * default is true.
      */
     allowNewTimeProposals?: NullableOption<boolean>;
     // The collection of attendees for the event.
     attendees?: NullableOption<Attendee[]>;
     // The body of the message associated with the event. It can be in HTML or text format.
     body?: NullableOption<ItemBody>;
-    // The preview of the message associated with the event. It is in text format.
+    // The preview of the message associated with the event. It's in text format.
     bodyPreview?: NullableOption<string>;
     // The date, time, and time zone that the event ends. By default, the end time is in UTC.
     end?: NullableOption<DateTimeTimeZone>;
     // Set to true if the event has attachments.
     hasAttachments?: NullableOption<boolean>;
     /**
-     * When set to true, each attendee only sees themselves in the meeting request and meeting Tracking list. Default is
+     * When set to true, each attendee only sees themselves in the meeting request and meeting Tracking list. The default is
      * false.
      */
     hideAttendees?: NullableOption<boolean>;
@@ -10068,28 +10069,28 @@ export interface Event extends OutlookItem {
     // The importance of the event. The possible values are: low, normal, high.
     importance?: NullableOption<Importance>;
     /**
-     * Set to true if the event lasts all day. If true, regardless of whether it's a single-day or multi-day event, start and
-     * end time must be set to midnight and be in the same time zone.
+     * Set to true if the event lasts all day. If true, regardless of whether it's a single-day or multi-day event, start, and
+     * endtime must be set to midnight and be in the same time zone.
      */
     isAllDay?: NullableOption<boolean>;
     // Set to true if the event has been canceled.
     isCancelled?: NullableOption<boolean>;
     /**
-     * Set to true if the user has updated the meeting in Outlook but has not sent the updates to attendees. Set to false if
-     * all changes have been sent, or if the event is an appointment without any attendees.
+     * Set to true if the user has updated the meeting in Outlook but hasn't sent the updates to attendees. Set to false if
+     * all changes are sent, or if the event is an appointment without any attendees.
      */
     isDraft?: NullableOption<boolean>;
     /**
      * True if this event has online meeting information (that is, onlineMeeting points to an onlineMeetingInfo resource),
      * false otherwise. Default is false (onlineMeeting is null). Optional. After you set isOnlineMeeting to true, Microsoft
-     * Graph initializes onlineMeeting. Subsequently Outlook ignores any further changes to isOnlineMeeting, and the meeting
+     * Graph initializes onlineMeeting. Subsequently, Outlook ignores any further changes to isOnlineMeeting, and the meeting
      * remains available online.
      */
     isOnlineMeeting?: NullableOption<boolean>;
     /**
      * Set to true if the calendar owner (specified by the owner property of the calendar) is the organizer of the event
-     * (specified by the organizer property of the event). This also applies if a delegate organized the event on behalf of
-     * the owner.
+     * (specified by the organizer property of the event). It also applies if a delegate organized the event on behalf of the
+     * owner.
      */
     isOrganizer?: NullableOption<boolean>;
     // Set to true if an alert is set to remind the user of the event.
@@ -10098,21 +10099,21 @@ export interface Event extends OutlookItem {
     location?: NullableOption<Location>;
     /**
      * The locations where the event is held or attended from. The location and locations properties always correspond with
-     * each other. If you update the location property, any prior locations in the locations collection would be removed and
+     * each other. If you update the location property, any prior locations in the locations collection are removed and
      * replaced by the new location value.
      */
     locations?: NullableOption<Location[]>;
     /**
-     * Details for an attendee to join the meeting online. Default is null. Read-only. After you set the isOnlineMeeting and
-     * onlineMeetingProvider properties to enable a meeting online, Microsoft Graph initializes onlineMeeting. When set, the
-     * meeting remains available online, and you cannot change the isOnlineMeeting, onlineMeetingProvider, and onlneMeeting
+     * Details for an attendee to join the meeting online. The default is null. Read-only. After you set the isOnlineMeeting
+     * and onlineMeetingProvider properties to enable a meeting online, Microsoft Graph initializes onlineMeeting. When set,
+     * the meeting remains available online, and you can't change the isOnlineMeeting, onlineMeetingProvider, and onlneMeeting
      * properties again.
      */
     onlineMeeting?: NullableOption<OnlineMeetingInfo>;
     /**
      * Represents the online meeting service provider. By default, onlineMeetingProvider is unknown. The possible values are
      * unknown, teamsForBusiness, skypeForBusiness, and skypeForConsumer. Optional. After you set onlineMeetingProvider,
-     * Microsoft Graph initializes onlineMeeting. Subsequently you cannot change onlineMeetingProvider again, and the meeting
+     * Microsoft Graph initializes onlineMeeting. Subsequently, you can't change onlineMeetingProvider again, and the meeting
      * remains available online.
      */
     onlineMeetingProvider?: NullableOption<OnlineMeetingProviderType>;
@@ -10130,7 +10131,7 @@ export interface Event extends OutlookItem {
      */
     originalEndTimeZone?: NullableOption<string>;
     /**
-     * Represents the start time of an event when it is initially created as an occurrence or exception in a recurring series.
+     * Represents the start time of an event when it's initially created as an occurrence or exception in a recurring series.
      * This property is not returned for events that are single instances. Its date and time information is expressed in ISO
      * 8601 format and is always in UTC. For example, midnight UTC on Jan 1, 2014 is 2014-01-01T00:00:00Z
      */
@@ -10148,7 +10149,7 @@ export interface Event extends OutlookItem {
     responseRequested?: NullableOption<boolean>;
     // Indicates the type of response sent in response to an event message.
     responseStatus?: NullableOption<ResponseStatus>;
-    // Possible values are: normal, personal, private, confidential.
+    // Possible values are: normal, personal, private, and confidential.
     sensitivity?: NullableOption<Sensitivity>;
     // The ID for the recurring series master item, if this event is part of a recurring series.
     seriesMasterId?: NullableOption<string>;
@@ -10160,9 +10161,9 @@ export interface Event extends OutlookItem {
     subject?: NullableOption<string>;
     /**
      * A custom identifier specified by a client app for the server to avoid redundant POST operations in case of client
-     * retries to create the same event. This is useful when low network connectivity causes the client to time out before
+     * retries to create the same event. It's useful when low network connectivity causes the client to time out before
      * receiving a response from the server for the client's prior create-event request. After you set transactionId when
-     * creating an event, you cannot change transactionId in a subsequent update. This property is only returned in a response
+     * creating an event, you can't change transactionId in a subsequent update. This property is only returned in a response
      * payload if an app has set it. Optional.
      */
     transactionId?: NullableOption<string>;
@@ -10170,8 +10171,7 @@ export interface Event extends OutlookItem {
     type?: NullableOption<EventType>;
     /**
      * The URL to open the event in Outlook on the web.Outlook on the web opens the event in the browser if you are signed in
-     * to your mailbox. Otherwise, Outlook on the web prompts you to sign in.This URL cannot be accessed from within an
-     * iFrame.
+     * to your mailbox. Otherwise, Outlook on the web prompts you to sign in.This URL can't be accessed from within an iFrame.
      */
     webLink?: NullableOption<string>;
     /**
@@ -10185,8 +10185,8 @@ export interface Event extends OutlookItem {
     extensions?: NullableOption<Extension[]>;
     /**
      * The occurrences of a recurring series, if the event is a series master. This property includes occurrences that are
-     * part of the recurrence pattern, and exceptions that have been modified, but does not include occurrences that have been
-     * cancelled from the series. Navigation property. Read-only. Nullable.
+     * part of the recurrence pattern, and exceptions modified, but doesn't include occurrences cancelled from the series.
+     * Navigation property. Read-only. Nullable.
      */
     instances?: NullableOption<Event[]>;
     // The collection of multi-value extended properties defined for the event. Read-only. Nullable.
@@ -10197,7 +10197,7 @@ export interface Event extends OutlookItem {
 export interface EventMessage extends Message {
     endDateTime?: NullableOption<DateTimeTimeZone>;
     isAllDay?: NullableOption<boolean>;
-    // True if this meeting request is accessible to a delegate, false otherwise. Default is false.
+    // True if this meeting request is accessible to a delegate, false otherwise. The default is false.
     isDelegated?: NullableOption<boolean>;
     isOutOfDate?: NullableOption<boolean>;
     location?: NullableOption<Location>;
@@ -12921,7 +12921,7 @@ export interface Message extends OutlookItem {
     conversationId?: NullableOption<string>;
     // Indicates the position of the message within the conversation.
     conversationIndex?: NullableOption<string>;
-    // The flag value that indicates the status, start date, due date, or completion date for the message.
+    // Indicates the status, start date, due date, or completion date for the message.
     flag?: NullableOption<FollowupFlag>;
     /**
      * The owner of the mailbox from which the message is sent. In most cases, this value is the same as the sender property,
@@ -12968,10 +12968,10 @@ export interface Message extends OutlookItem {
     // The email addresses to use when replying.
     replyTo?: NullableOption<Recipient[]>;
     /**
-     * The account that is actually used to generate the message. In most cases, this value is the same as the from property.
-     * You can set this property to a different value when sending a message from a shared mailbox, for a shared calendar, or
-     * as a delegate. In any case, the value must correspond to the actual mailbox used. Find out more about setting the from
-     * and sender properties of a message.
+     * The account that is used to generate the message. In most cases, this value is the same as the from property. You can
+     * set this property to a different value when sending a message from a shared mailbox, for a shared calendar, or as a
+     * delegate. In any case, the value must correspond to the actual mailbox used. Find out more about setting the from and
+     * sender properties of a message.
      */
     sender?: NullableOption<Recipient>;
     /**
@@ -24044,6 +24044,11 @@ export interface AuthenticationAttributeCollectionPageViewConfiguration {
     // The title of the attribute collection page.
     title?: NullableOption<string>;
 }
+export interface AuthenticationBehaviors {
+    blockAzureADGraphAccess?: NullableOption<boolean>;
+    removeUnverifiedEmailClaim?: NullableOption<boolean>;
+    requireClientServicePrincipal?: NullableOption<boolean>;
+}
 export interface AuthenticationConditions {
     // Applications which trigger a custom authentication extension.
     applications?: NullableOption<AuthenticationConditionsApplications>;
@@ -30773,20 +30778,21 @@ export interface SignInActivity {
     // Request identifier of the last non-interactive sign-in performed by this user.
     lastNonInteractiveSignInRequestId?: NullableOption<string>;
     /**
-     * The last interactive sign-in date and time for a specific user. You can use this field to calculate the last time a
-     * user attempted (either successfully or unsuccessfully) to sign in to the directory with an interactive authentication
-     * method. This field can be used to build reports, such as inactive users. The timestamp type represents date and time
-     * information using ISO 8601 format and is always in UTC. For example, midnight UTC on Jan 1, 2014 is
-     * 2014-01-01T00:00:00Z. Microsoft Entra ID maintains interactive sign-ins going back to April 2020. For more information
-     * about using the value of this property, see Manage inactive user accounts in Microsoft Entra ID.
+     * The last interactive sign-in date and time for a specific user. This property records the last time a user attempted an
+     * interactive sign-in to the directory—whether the attempt was successful or not. Note: Since unsuccessful attempts are
+     * also logged, this value might not accurately reflect actual system usage. For tracking actual account access, please
+     * use the lastSuccessfulSignInDateTime property. The timestamp type represents date and time information using ISO 8601
+     * format and is always in UTC. For example, midnight UTC on Jan 1, 2014 is 2014-01-01T00:00:00Z.
      */
     lastSignInDateTime?: NullableOption<string>;
     // Request identifier of the last interactive sign-in performed by this user.
     lastSignInRequestId?: NullableOption<string>;
     /**
-     * The date and time of the user's most recent successful sign-in activity. The timestamp type represents date and time
-     * information using ISO 8601 format and is always in UTC. For example, midnight UTC on Jan 1, 2014 is
-     * 2014-01-01T00:00:00Z.
+     * The date and time of the user's most recent successful interactive sign-in. Use this property if you need to determine
+     * when the account was truly accessed. This field can be used to build reports, such as inactive users. The timestamp
+     * type represents date and time information using ISO 8601 format and is always in UTC. For example, midnight UTC on Jan
+     * 1, 2014 is 2014-01-01T00:00:00Z. Microsoft Entra ID maintains interactive sign-ins going back to April 2020. For more
+     * information about using the value of this property, see Manage inactive user accounts in Microsoft Entra ID.
      */
     lastSuccessfulSignInDateTime?: NullableOption<string>;
     // The request ID of the last successful sign-in.
@@ -32929,27 +32935,27 @@ export interface WorkbookSortField {
     sortOn?: string;
 }
 export interface WorkbookWorksheetProtectionOptions {
-    // Indicates whether the worksheet protection option to allow the use of the autofilter feature is enabled.
+    // Represents the worksheet protection option of allowing using auto filter feature.
     allowAutoFilter?: boolean;
-    // Indicates whether the worksheet protection option to allow deleting columns is enabled.
+    // Represents the worksheet protection option of allowing deleting columns.
     allowDeleteColumns?: boolean;
-    // Indicates whether the worksheet protection option to allow deleting rows is enabled.
+    // Represents the worksheet protection option of allowing deleting rows.
     allowDeleteRows?: boolean;
-    // Indicates whether the worksheet protection option to allow formatting cells is enabled.
+    // Represents the worksheet protection option of allowing formatting cells.
     allowFormatCells?: boolean;
-    // Indicates whether the worksheet protection option to allow formatting columns is enabled.
+    // Represents the worksheet protection option of allowing formatting columns.
     allowFormatColumns?: boolean;
-    // Indicates whether the worksheet protection option to allow formatting rows is enabled.
+    // Represents the worksheet protection option of allowing formatting rows.
     allowFormatRows?: boolean;
-    // Indicates whether the worksheet protection option to allow inserting columns is enabled.
+    // Represents the worksheet protection option of allowing inserting columns.
     allowInsertColumns?: boolean;
-    // Indicates whether the worksheet protection option to allow inserting hyperlinks is enabled.
+    // Represents the worksheet protection option of allowing inserting hyperlinks.
     allowInsertHyperlinks?: boolean;
-    // Indicates whether the worksheet protection option to allow inserting rows is enabled.
+    // Represents the worksheet protection option of allowing inserting rows.
     allowInsertRows?: boolean;
-    // Indicates whether the worksheet protection option to allow the use of the pivot table feature is enabled.
+    // Represents the worksheet protection option of allowing using pivot table feature.
     allowPivotTables?: boolean;
-    // Indicates whether the worksheet protection option to allow the use of the sort feature is enabled.
+    // Represents the worksheet protection option of allowing using sort feature.
     allowSort?: boolean;
 }
 export interface WorkforceIntegrationEncryption {
