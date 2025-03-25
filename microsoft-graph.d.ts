@@ -5106,7 +5106,7 @@ export interface Application extends DirectoryObject {
     federatedIdentityCredentials?: NullableOption<FederatedIdentityCredential[]>;
     homeRealmDiscoveryPolicies?: NullableOption<HomeRealmDiscoveryPolicy[]>;
     /**
-     * Directory objects that are owners of this application. The owners are a set of nonadmin users or servicePrincipals who
+     * Directory objects that are owners of this application. The owners are a set of nonadmin users or service principals who
      * are allowed to modify this object. Supports $expand, $filter (/$count eq 0, /$count ne 0, /$count eq 1, /$count ne 1),
      * and $select nested in $expand.
      */
@@ -25225,6 +25225,10 @@ export interface ComplianceManagementPartnerAssignment {
 // tslint:disable-next-line: no-empty-interface
 export interface ConditionalAccessAllExternalTenants extends ConditionalAccessExternalTenants {}
 export interface ConditionalAccessApplications {
+    /**
+     * Filter that defines the dynamic-application-syntax rule to include/exclude cloud applications. A filter can use custom
+     * security attributes to include/exclude applications.
+     */
     applicationFilter?: NullableOption<ConditionalAccessFilter>;
     /**
      * Can be one of the following: The list of client IDs (appId) explicitly excluded from the policy. Office365 - For the
@@ -32977,27 +32981,27 @@ export interface WorkbookSortField {
     sortOn?: string;
 }
 export interface WorkbookWorksheetProtectionOptions {
-    // Indicates whether the worksheet protection option to allow the use of the autofilter feature is enabled.
+    // Represents the worksheet protection option of allowing using auto filter feature.
     allowAutoFilter?: boolean;
-    // Indicates whether the worksheet protection option to allow deleting columns is enabled.
+    // Represents the worksheet protection option of allowing deleting columns.
     allowDeleteColumns?: boolean;
-    // Indicates whether the worksheet protection option to allow deleting rows is enabled.
+    // Represents the worksheet protection option of allowing deleting rows.
     allowDeleteRows?: boolean;
-    // Indicates whether the worksheet protection option to allow formatting cells is enabled.
+    // Represents the worksheet protection option of allowing formatting cells.
     allowFormatCells?: boolean;
-    // Indicates whether the worksheet protection option to allow formatting columns is enabled.
+    // Represents the worksheet protection option of allowing formatting columns.
     allowFormatColumns?: boolean;
-    // Indicates whether the worksheet protection option to allow formatting rows is enabled.
+    // Represents the worksheet protection option of allowing formatting rows.
     allowFormatRows?: boolean;
-    // Indicates whether the worksheet protection option to allow inserting columns is enabled.
+    // Represents the worksheet protection option of allowing inserting columns.
     allowInsertColumns?: boolean;
-    // Indicates whether the worksheet protection option to allow inserting hyperlinks is enabled.
+    // Represents the worksheet protection option of allowing inserting hyperlinks.
     allowInsertHyperlinks?: boolean;
-    // Indicates whether the worksheet protection option to allow inserting rows is enabled.
+    // Represents the worksheet protection option of allowing inserting rows.
     allowInsertRows?: boolean;
-    // Indicates whether the worksheet protection option to allow the use of the pivot table feature is enabled.
+    // Represents the worksheet protection option of allowing using pivot table feature.
     allowPivotTables?: boolean;
-    // Indicates whether the worksheet protection option to allow the use of the sort feature is enabled.
+    // Represents the worksheet protection option of allowing using sort feature.
     allowSort?: boolean;
 }
 export interface WorkforceIntegrationEncryption {
