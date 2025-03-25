@@ -5106,7 +5106,7 @@ export interface Application extends DirectoryObject {
     federatedIdentityCredentials?: NullableOption<FederatedIdentityCredential[]>;
     homeRealmDiscoveryPolicies?: NullableOption<HomeRealmDiscoveryPolicy[]>;
     /**
-     * Directory objects that are owners of this application. The owners are a set of nonadmin users or servicePrincipals who
+     * Directory objects that are owners of this application. The owners are a set of nonadmin users or service principals who
      * are allowed to modify this object. Supports $expand, $filter (/$count eq 0, /$count ne 0, /$count eq 1, /$count ne 1),
      * and $select nested in $expand.
      */
@@ -25225,6 +25225,10 @@ export interface ComplianceManagementPartnerAssignment {
 // tslint:disable-next-line: no-empty-interface
 export interface ConditionalAccessAllExternalTenants extends ConditionalAccessExternalTenants {}
 export interface ConditionalAccessApplications {
+    /**
+     * Filter that defines the dynamic-application-syntax rule to include/exclude cloud applications. A filter can use custom
+     * security attributes to include/exclude applications.
+     */
     applicationFilter?: NullableOption<ConditionalAccessFilter>;
     /**
      * Can be one of the following: The list of client IDs (appId) explicitly excluded from the policy. Office365 - For the
