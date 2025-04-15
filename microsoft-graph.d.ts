@@ -3580,6 +3580,7 @@ export interface AccessPackageAssignmentPolicy extends Entity {
      * midnight UTC on Jan 1, 2014 is 2014-01-01T00:00:00Z.
      */
     modifiedDateTime?: NullableOption<string>;
+    notificationSettings?: NullableOption<AccessPackageNotificationSettings>;
     /**
      * Specifies the settings for approval of requests for an access package assignment through this policy. For example, if
      * approval is required for new requests.
@@ -3619,6 +3620,7 @@ export interface AccessPackageAssignmentRequest extends Entity {
     createdDateTime?: NullableOption<string>;
     // Information about all the custom extension calls that were made during the access package assignment workflow.
     customExtensionCalloutInstances?: NullableOption<CustomExtensionCalloutInstance[]>;
+    justification?: NullableOption<string>;
     /**
      * The type of the request. The possible values are: notSpecified, userAdd, UserExtend, userUpdate, userRemove, adminAdd,
      * adminUpdate, adminRemove, systemAdd, systemUpdate, systemRemove, onBehalfAdd (not supported), unknownFutureValue.
@@ -11031,8 +11033,8 @@ export interface InsightsSettings extends Entity {
 export interface InternalDomainFederation extends SamlOrWsFedProvider {
     /**
      * URL of the endpoint used by active clients when authenticating with federated domains set up for single sign-on in
-     * Microsoft Entra ID. Corresponds to the ActiveLogOnUri property of the Set-MsolDomainFederationSettings MSOnline v1
-     * PowerShell cmdlet.
+     * Microsoft Entra ID. Corresponds to the ActiveLogOnUri property of the Set-EntraDomainFederationSettings PowerShell
+     * cmdlet.
      */
     activeSignInUri?: NullableOption<string>;
     /**
@@ -11067,7 +11069,7 @@ export interface InternalDomainFederation extends SamlOrWsFedProvider {
     signingCertificateUpdateStatus?: NullableOption<SigningCertificateUpdateStatus>;
     /**
      * URI that clients are redirected to when they sign out of Microsoft Entra services. Corresponds to the LogOffUri
-     * property of the Set-MsolDomainFederationSettings MSOnline v1 PowerShell cmdlet.
+     * property of the Set-EntraDomainFederationSettings PowerShell cmdlet.
      */
     signOutUri?: NullableOption<string>;
 }
@@ -15958,7 +15960,7 @@ export interface SchedulingGroup extends ChangeTrackedEntity {
     userIds?: NullableOption<string[]>;
 }
 export interface SchemaExtension extends Entity {
-    // Description for the schema extension. Supports $filter (eq).
+    // Description for the schema extension.
     description?: NullableOption<string>;
     /**
      * The appId of the application that is the owner of the schema extension. The owner of the schema definition must be
@@ -22826,6 +22828,10 @@ export interface X509CertificateAuthenticationMethodConfiguration extends Authen
      * binding that matches will be used and the rest ignored.
      */
     certificateUserBindings?: NullableOption<X509CertificateUserBinding[]>;
+    /**
+     * Determines whether certificate based authentication should fail if the issuing CA doesn't have a valid certificate
+     * revocation list configured.
+     */
     crlValidationConfiguration?: X509CertificateCRLValidationConfiguration;
     // A collection of groups that are enabled to use the authentication method.
     includeTargets?: NullableOption<AuthenticationMethodTarget[]>;
@@ -22900,6 +22906,7 @@ export interface AccessPackageAssignmentApprovalSettings {
     isApprovalRequiredForAdd?: NullableOption<boolean>;
     // If false, then approval isn't required for updates to requests in this policy.
     isApprovalRequiredForUpdate?: NullableOption<boolean>;
+    isRequestorJustificationRequired?: NullableOption<boolean>;
     /**
      * If approval is required, the one, two or three elements of this collection define each of the stages of approval. An
      * empty array is present if no approval is required.
@@ -22948,6 +22955,7 @@ export interface AccessPackageAssignmentRequestRequirements {
     isApprovalRequiredForAdd?: NullableOption<boolean>;
     // Indicates whether a request to update must be approved by an approver.
     isApprovalRequiredForUpdate?: NullableOption<boolean>;
+    isRequestorJustificationRequired?: NullableOption<boolean>;
     // The description of the policy that the user is trying to request access using.
     policyDescription?: NullableOption<string>;
     // The display name of the policy that the user is trying to request access using.
@@ -23001,6 +23009,9 @@ export interface AccessPackageLocalizedText {
     languageCode?: string;
     // The question in the specific language. Required.
     text?: NullableOption<string>;
+}
+export interface AccessPackageNotificationSettings {
+    isAssignmentNotificationDisabled?: boolean;
 }
 export interface AccessPackageResourceAttribute {
     // Information about how to set the attribute, currently a accessPackageUserDirectoryAttributeStore type.
@@ -26717,16 +26728,16 @@ export interface GroupMembers extends SubjectSet {
 // tslint:disable-next-line: no-empty-interface
 export interface GroupPeerOutlierRecommendationInsightSettings extends AccessReviewRecommendationInsightSetting {}
 export interface Hashes {
-    // The CRC32 value of the file in little endian (if available). Read-only.
+    // The CRC32 value of the file (if available). Read-only.
     crc32Hash?: NullableOption<string>;
     /**
-     * A proprietary hash of the file that can be used to determine if the contents of the file have changed (if available).
+     * A proprietary hash of the file that can be used to determine if the contents of the file change (if available).
      * Read-only.
      */
     quickXorHash?: NullableOption<string>;
     // SHA1 hash for the contents of the file (if available). Read-only.
     sha1Hash?: NullableOption<string>;
-    // SHA256 hash for the contents of the file (if available). Read-only.
+    // This property isn't supported. Don't use.
     sha256Hash?: NullableOption<string>;
 }
 export interface HostSecurityState {
@@ -33035,7 +33046,15 @@ export interface X509CertificateAuthenticationModeConfiguration {
     x509CertificateDefaultRequiredAffinityLevel?: NullableOption<X509CertificateAffinityLevel>;
 }
 export interface X509CertificateCRLValidationConfiguration {
+    /**
+     * Represents the SKIs of CAs that should be excluded from the valid CRL distribution point check. SKI is represented as a
+     * hexadecimal string.
+     */
     exemptedCertificateAuthoritiesSubjectKeyIdentifiers?: NullableOption<string[]>;
+    /**
+     * Describes whether valid CRLDistributionPoint is required from CAs for CBA to be successful. The possible values are:
+     * disabled, enabled, unknownFutureValue.
+     */
     state?: X509CertificateCRLValidationConfigurationState;
 }
 export interface X509CertificateRule {
@@ -33564,7 +33583,10 @@ export namespace CallRecords {
          * cause poor quality of the audio sent.
          */
         bandwidthLowEventRatio?: NullableOption<number>;
-        // The wireless LAN basic service set identifier of the media endpoint used to connect to the network.
+        /**
+         * The wireless LAN basic service set identifier of the media endpoint used to connect to the network. This property isn't
+         * available if the user disables precise location sharing in their operating system or Microsoft Teams app settings.
+         */
         basicServiceSetIdentifier?: NullableOption<string>;
         /**
          * Type of network used by the media endpoint. Possible values are: unknown, wired, wifi, mobile, tunnel,
@@ -34866,7 +34888,16 @@ export namespace Search {
 }
 export namespace SecurityNamespace {
     type ActionAfterRetentionPeriod = "none" | "delete" | "startDispositionReview" | "relabel" | "unknownFutureValue";
-    type AdditionalDataOptions = "allVersions" | "linkedFiles" | "unknownFutureValue";
+    type AdditionalDataOptions =
+        | "allVersions"
+        | "linkedFiles"
+        | "unknownFutureValue"
+        | "advancedIndexing"
+        | "listAttachments"
+        | "htmlTranscripts"
+        | "messageConversationExpansion"
+        | "locationsWithoutHits"
+        | "allItemsInFolder";
     type AdditionalOptions =
         | "none"
         | "teamsAndYammerConversations"
@@ -34874,7 +34905,16 @@ export namespace SecurityNamespace {
         | "allDocumentVersions"
         | "subfolderContents"
         | "listAttachments"
-        | "unknownFutureValue";
+        | "unknownFutureValue"
+        | "htmlTranscripts"
+        | "advancedIndexing"
+        | "allItemsInFolder"
+        | "includeFolderAndPath"
+        | "condensePaths"
+        | "friendlyName"
+        | "splitSource"
+        | "optimizedPartitionSize"
+        | "includeReport";
     type AlertClassification =
         | "unknown"
         | "falsePositive"
@@ -34936,6 +34976,7 @@ export namespace SecurityNamespace {
         | "closedWithError"
         | "unknownFutureValue";
     type ChildSelectability = "One" | "Many" | "unknownFutureValue";
+    type CloudAttachmentVersion = "latest" | "recent10" | "recent100" | "all" | "unknownFutureValue";
     type ContainerPortProtocol = "udp" | "tcp" | "sctp" | "unknownFutureValue";
     type ContentFormat = "text" | "html" | "markdown" | "unknownFutureValue";
     type DataSourceContainerStatus = "active" | "released" | "unknownFutureValue";
@@ -35014,6 +35055,7 @@ export namespace SecurityNamespace {
         | "unknown"
         | "unknownFutureValue";
     type DeviceRiskScore = "none" | "informational" | "low" | "medium" | "high" | "unknownFutureValue";
+    type DocumentVersion = "latest" | "recent10" | "recent100" | "all" | "unknownFutureValue";
     type EventPropagationStatus = "none" | "inProcessing" | "failed" | "success" | "unknownFutureValue";
     type EventStatusType = "pending" | "error" | "success" | "notAvaliable" | "unknownFutureValue";
     type EvidenceRemediationStatus =
@@ -35048,10 +35090,20 @@ export namespace SecurityNamespace {
         | "unknownFutureValue";
     type EvidenceVerdict = "unknown" | "suspicious" | "malicious" | "noThreatsFound" | "unknownFutureValue";
     type ExportCriteria = "searchHits" | "partiallyIndexed" | "unknownFutureValue";
-    type ExportFileStructure = "none" | "directory" | "pst" | "unknownFutureValue";
+    type ExportFileStructure = "none" | "directory" | "pst" | "unknownFutureValue" | "msg";
     type ExportFormat = "pst" | "msg" | "eml" | "unknownFutureValue";
     type ExportLocation = "responsiveLocations" | "nonresponsiveLocations" | "unknownFutureValue";
-    type ExportOptions = "originalFiles" | "text" | "pdfReplacement" | "tags" | "unknownFutureValue";
+    type ExportOptions =
+        | "originalFiles"
+        | "text"
+        | "pdfReplacement"
+        | "tags"
+        | "unknownFutureValue"
+        | "splitSource"
+        | "includeFolderAndPath"
+        | "friendlyName"
+        | "condensePaths"
+        | "optimizedPartitionSize";
     type FileHashAlgorithm = "unknown" | "md5" | "sha1" | "sha256" | "sha256ac" | "unknownFutureValue";
     type GoogleCloudLocationType = "unknown" | "regional" | "zonal" | "global" | "unknownFutureValue";
     type HealthIssueSeverity = "low" | "medium" | "high" | "unknownFutureValue";
@@ -35065,6 +35117,7 @@ export namespace SecurityNamespace {
     type IndicatorSource = "microsoft" | "osint" | "public" | "unknownFutureValue";
     type IntelligenceProfileKind = "actor" | "tool" | "unknownFutureValue";
     type IoTDeviceImportanceType = "unknown" | "low" | "normal" | "high" | "unknownFutureValue";
+    type ItemsToInclude = "searchHits" | "partiallyIndexed" | "unknownFutureValue";
     type KubernetesPlatform = "unknown" | "aks" | "eks" | "gke" | "arc" | "unknownFutureValue";
     type KubernetesServiceType =
         | "unknown"
@@ -35110,6 +35163,13 @@ export namespace SecurityNamespace {
         | "microsoftSentinel"
         | "microsoftInsiderRiskManagement";
     type SourceType = "mailbox" | "site" | "unknownFutureValue";
+    type StatisticsOptions =
+        | "includeRefiners"
+        | "includeQueryStats"
+        | "includeUnindexedStats"
+        | "advancedIndexing"
+        | "locationsWithoutHits"
+        | "unknownFutureValue";
     type TeamsDeliveryLocation = "unknown" | "teams" | "quarantine" | "failed" | "unknownFutureValue";
     type TeamsMessageDeliveryAction =
         | "unknown"
@@ -35155,6 +35215,7 @@ export namespace SecurityNamespace {
         comments?: NullableOption<AlertComment[]>;
         // Time when Microsoft 365 Defender created the alert.
         createdDateTime?: NullableOption<string>;
+        customDetails?: NullableOption<Dictionary>;
         // String value describing each alert.
         description?: NullableOption<string>;
         /**
@@ -35350,6 +35411,10 @@ export namespace SecurityNamespace {
         stageNumber?: string;
     }
     interface EdiscoveryAddToReviewSetOperation extends CaseOperation {
+        additionalDataOptions?: AdditionalDataOptions;
+        cloudAttachmentVersion?: CloudAttachmentVersion;
+        documentVersion?: DocumentVersion;
+        itemsToInclude?: ItemsToInclude;
         // eDiscovery review set to which items matching source collection query gets added.
         reviewSet?: NullableOption<EdiscoveryReviewSet>;
         // eDiscovery search that gets added to review set.
@@ -35411,6 +35476,7 @@ export namespace SecurityNamespace {
         mailboxCount?: NullableOption<number>;
         // The number of mailboxes that had search hits.
         siteCount?: NullableOption<number>;
+        statisticsOptions?: StatisticsOptions;
         // The estimated count of unindexed items for the collection.
         unindexedItemCount?: NullableOption<number>;
         // The estimated size of unindexed items for the collection.
@@ -35492,10 +35558,12 @@ export namespace SecurityNamespace {
          * cloudAttachments, allDocumentVersions, subfolderContents, listAttachments, unknownFutureValue.
          */
         additionalOptions?: NullableOption<AdditionalOptions>;
+        cloudAttachmentVersion?: CloudAttachmentVersion;
         // The description of the export by the user.
         description?: NullableOption<string>;
         // The name of export provided by the user.
         displayName?: NullableOption<string>;
+        documentVersion?: DocumentVersion;
         // Items to be included in the export. The possible values are: searchHits, partiallyIndexed, unknownFutureValue.
         exportCriteria?: NullableOption<ExportCriteria>;
         // Contains the properties for an export file metadata, including downloadUrl, fileName, and size.
@@ -36696,10 +36764,13 @@ export namespace SecurityNamespace {
         fileSize?: NullableOption<number>;
         // The certificate authority (CA) that issued the certificate.
         issuer?: NullableOption<string>;
+        // The Md5 cryptographic hash of the file content.
+        md5?: NullableOption<string>;
         // The Sha1 cryptographic hash of the file content.
         sha1?: NullableOption<string>;
         // The Sha256 cryptographic hash of the file content.
         sha256?: NullableOption<string>;
+        sha256Ac?: NullableOption<string>;
         // The signer of the signed file.
         signer?: NullableOption<string>;
     }
