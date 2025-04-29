@@ -5468,7 +5468,9 @@ export interface AuthenticationMethodModeDetail extends Entity {
     /**
      * The authentication method that this mode modifies. The possible values are: password, voice, hardwareOath,
      * softwareOath, sms, fido2, windowsHelloForBusiness, microsoftAuthenticator, temporaryAccessPass, email, x509Certificate,
-     * federation, unknownFutureValue.
+     * federation, unknownFutureValue, qrCodePin. Use the Prefer: include-unknown-enum-members request header to get the
+     * following values from this {evolvable
+     * enum}(/graph/best-practices-concept#handling-future-members-in-evolvable-enumerations): qrCodePin.
      */
     authenticationMethod?: BaseAuthenticationMethod;
     // The display name of this mode
@@ -34888,16 +34890,7 @@ export namespace Search {
 }
 export namespace SecurityNamespace {
     type ActionAfterRetentionPeriod = "none" | "delete" | "startDispositionReview" | "relabel" | "unknownFutureValue";
-    type AdditionalDataOptions =
-        | "allVersions"
-        | "linkedFiles"
-        | "unknownFutureValue"
-        | "advancedIndexing"
-        | "listAttachments"
-        | "htmlTranscripts"
-        | "messageConversationExpansion"
-        | "locationsWithoutHits"
-        | "allItemsInFolder";
+    type AdditionalDataOptions = "allVersions" | "linkedFiles" | "unknownFutureValue";
     type AdditionalOptions =
         | "none"
         | "teamsAndYammerConversations"
@@ -34905,16 +34898,7 @@ export namespace SecurityNamespace {
         | "allDocumentVersions"
         | "subfolderContents"
         | "listAttachments"
-        | "unknownFutureValue"
-        | "htmlTranscripts"
-        | "advancedIndexing"
-        | "allItemsInFolder"
-        | "includeFolderAndPath"
-        | "condensePaths"
-        | "friendlyName"
-        | "splitSource"
-        | "optimizedPartitionSize"
-        | "includeReport";
+        | "unknownFutureValue";
     type AlertClassification =
         | "unknown"
         | "falsePositive"
@@ -34976,7 +34960,6 @@ export namespace SecurityNamespace {
         | "closedWithError"
         | "unknownFutureValue";
     type ChildSelectability = "One" | "Many" | "unknownFutureValue";
-    type CloudAttachmentVersion = "latest" | "recent10" | "recent100" | "all" | "unknownFutureValue";
     type ContainerPortProtocol = "udp" | "tcp" | "sctp" | "unknownFutureValue";
     type ContentFormat = "text" | "html" | "markdown" | "unknownFutureValue";
     type DataSourceContainerStatus = "active" | "released" | "unknownFutureValue";
@@ -35055,7 +35038,6 @@ export namespace SecurityNamespace {
         | "unknown"
         | "unknownFutureValue";
     type DeviceRiskScore = "none" | "informational" | "low" | "medium" | "high" | "unknownFutureValue";
-    type DocumentVersion = "latest" | "recent10" | "recent100" | "all" | "unknownFutureValue";
     type EventPropagationStatus = "none" | "inProcessing" | "failed" | "success" | "unknownFutureValue";
     type EventStatusType = "pending" | "error" | "success" | "notAvaliable" | "unknownFutureValue";
     type EvidenceRemediationStatus =
@@ -35090,20 +35072,10 @@ export namespace SecurityNamespace {
         | "unknownFutureValue";
     type EvidenceVerdict = "unknown" | "suspicious" | "malicious" | "noThreatsFound" | "unknownFutureValue";
     type ExportCriteria = "searchHits" | "partiallyIndexed" | "unknownFutureValue";
-    type ExportFileStructure = "none" | "directory" | "pst" | "unknownFutureValue" | "msg";
+    type ExportFileStructure = "none" | "directory" | "pst" | "unknownFutureValue";
     type ExportFormat = "pst" | "msg" | "eml" | "unknownFutureValue";
     type ExportLocation = "responsiveLocations" | "nonresponsiveLocations" | "unknownFutureValue";
-    type ExportOptions =
-        | "originalFiles"
-        | "text"
-        | "pdfReplacement"
-        | "tags"
-        | "unknownFutureValue"
-        | "splitSource"
-        | "includeFolderAndPath"
-        | "friendlyName"
-        | "condensePaths"
-        | "optimizedPartitionSize";
+    type ExportOptions = "originalFiles" | "text" | "pdfReplacement" | "tags" | "unknownFutureValue";
     type FileHashAlgorithm = "unknown" | "md5" | "sha1" | "sha256" | "sha256ac" | "unknownFutureValue";
     type GoogleCloudLocationType = "unknown" | "regional" | "zonal" | "global" | "unknownFutureValue";
     type HealthIssueSeverity = "low" | "medium" | "high" | "unknownFutureValue";
@@ -35117,7 +35089,6 @@ export namespace SecurityNamespace {
     type IndicatorSource = "microsoft" | "osint" | "public" | "unknownFutureValue";
     type IntelligenceProfileKind = "actor" | "tool" | "unknownFutureValue";
     type IoTDeviceImportanceType = "unknown" | "low" | "normal" | "high" | "unknownFutureValue";
-    type ItemsToInclude = "searchHits" | "partiallyIndexed" | "unknownFutureValue";
     type KubernetesPlatform = "unknown" | "aks" | "eks" | "gke" | "arc" | "unknownFutureValue";
     type KubernetesServiceType =
         | "unknown"
@@ -35163,13 +35134,6 @@ export namespace SecurityNamespace {
         | "microsoftSentinel"
         | "microsoftInsiderRiskManagement";
     type SourceType = "mailbox" | "site" | "unknownFutureValue";
-    type StatisticsOptions =
-        | "includeRefiners"
-        | "includeQueryStats"
-        | "includeUnindexedStats"
-        | "advancedIndexing"
-        | "locationsWithoutHits"
-        | "unknownFutureValue";
     type TeamsDeliveryLocation = "unknown" | "teams" | "quarantine" | "failed" | "unknownFutureValue";
     type TeamsMessageDeliveryAction =
         | "unknown"
@@ -35411,10 +35375,6 @@ export namespace SecurityNamespace {
         stageNumber?: string;
     }
     interface EdiscoveryAddToReviewSetOperation extends CaseOperation {
-        additionalDataOptions?: AdditionalDataOptions;
-        cloudAttachmentVersion?: CloudAttachmentVersion;
-        documentVersion?: DocumentVersion;
-        itemsToInclude?: ItemsToInclude;
         // eDiscovery review set to which items matching source collection query gets added.
         reviewSet?: NullableOption<EdiscoveryReviewSet>;
         // eDiscovery search that gets added to review set.
@@ -35476,7 +35436,6 @@ export namespace SecurityNamespace {
         mailboxCount?: NullableOption<number>;
         // The number of mailboxes that had search hits.
         siteCount?: NullableOption<number>;
-        statisticsOptions?: StatisticsOptions;
         // The estimated count of unindexed items for the collection.
         unindexedItemCount?: NullableOption<number>;
         // The estimated size of unindexed items for the collection.
@@ -35558,12 +35517,10 @@ export namespace SecurityNamespace {
          * cloudAttachments, allDocumentVersions, subfolderContents, listAttachments, unknownFutureValue.
          */
         additionalOptions?: NullableOption<AdditionalOptions>;
-        cloudAttachmentVersion?: CloudAttachmentVersion;
         // The description of the export by the user.
         description?: NullableOption<string>;
         // The name of export provided by the user.
         displayName?: NullableOption<string>;
-        documentVersion?: DocumentVersion;
         // Items to be included in the export. The possible values are: searchHits, partiallyIndexed, unknownFutureValue.
         exportCriteria?: NullableOption<ExportCriteria>;
         // Contains the properties for an export file metadata, including downloadUrl, fileName, and size.
