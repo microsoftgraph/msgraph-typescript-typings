@@ -5009,10 +5009,9 @@ export interface Application extends DirectoryObject {
     groupMembershipClaims?: NullableOption<string>;
     /**
      * Also known as App ID URI, this value is set when an application is used as a resource app. The identifierUris acts as
-     * the prefix for the scopes you reference in your API's code, and it must be globally unique. You can use the default
-     * value provided, which is in the form api://&amp;lt;appId&amp;gt;, or specify a more readable URI like
-     * https://contoso.com/api. For more information on valid identifierUris patterns and best practices, see Microsoft Entra
-     * application registration security best practices. Not nullable. Supports $filter (eq, ne, ge, le, startsWith).
+     * the prefix for the scopes you reference in your API's code, and it must be globally unique. For more information on
+     * valid identifierUris patterns and best practices, see Microsoft Entra application registration security best practices.
+     * Not nullable. Supports $filter (eq, ne, ge, le, startsWith).
      */
     identifierUris?: string[];
     /**
@@ -5331,9 +5330,17 @@ export interface AttendanceRecord extends Entity {
     attendanceIntervals?: NullableOption<AttendanceInterval[]>;
     // Email address of the user associated with this attendance record.
     emailAddress?: NullableOption<string>;
+    // The external information for a virtualEventRegistration.
     externalRegistrationInformation?: NullableOption<VirtualEventExternalRegistrationInformation>;
-    // Identity of the user associated with this attendance record.
+    /**
+     * The identity of the user associated with this attendance record. The specific type is one of the following derived
+     * types of identity, depending on the user type: communicationsUserIdentity, azureCommunicationServicesUserIdentity.
+     */
     identity?: NullableOption<Identity>;
+    /**
+     * Unique identifier of a virtualEventRegistration that is available to all participants registered for the
+     * virtualEventWebinar.
+     */
     registrationId?: NullableOption<string>;
     // Role of the attendee. Possible values are: None, Attendee, Presenter, and Organizer.
     role?: NullableOption<string>;
@@ -7528,16 +7535,33 @@ export interface ConversationThread extends Entity {
     posts?: NullableOption<Post[]>;
 }
 export interface CopilotAdmin extends Entity {
+    // Set of Microsoft 365 Copilot settings that can be added or modified. Read-only. Nullable.
     settings?: NullableOption<CopilotAdminSetting>;
 }
 export interface CopilotAdminLimitedMode extends Entity {
+    /**
+     * The ID of a Microsoft Entra group, for which the value of isEnabledForGroup is applied. The default value is null. If
+     * isEnabledForGroup is set to true, the groupId value must be provided for the Copilot limited mode in Teams meetings to
+     * be enabled for the members of the group. Optional.
+     */
     groupId?: NullableOption<string>;
+    /**
+     * Enables the user to be in limited mode for Copilot in Teams meetings. When copilotAdminLimitedMode=true, users in this
+     * mode can ask any questions, but Copilot doesn't respond to certain questions related to inferring emotions, behavior,
+     * or judgments. When copilotAdminLimitedMode=false, it responds to all types of questions grounded to the meeting
+     * conversation. The default value is false.
+     */
     isEnabledForGroup?: NullableOption<boolean>;
 }
 export interface CopilotAdminSetting extends Entity {
+    /**
+     * Represents a setting that controls whether users of Microsoft 365 Copilot in Teams meetings can receive responses to
+     * sentiment-related prompts. Read-only. Nullable.
+     */
     limitedMode?: NullableOption<CopilotAdminLimitedMode>;
 }
 export interface CopilotRoot {
+    // The Microsoft 365 Copilot admin who can add or modify Copilot settings. Read-only. Nullable.
     admin?: NullableOption<CopilotAdmin>;
 }
 export interface CountryNamedLocation extends NamedLocation {
@@ -12966,6 +12990,7 @@ export interface ManagedMobileLobApp extends ManagedApp {
 // tslint:disable-next-line: no-empty-interface
 export interface MdmWindowsInformationProtectionPolicy extends WindowsInformationProtection {}
 export interface MeetingAttendanceReport extends Entity {
+    // The external information of a virtual event. Returned only for event organizers or coorganizers. Read-only.
     externalEventInformation?: NullableOption<VirtualEventExternalInformation[]>;
     // UTC time when the meeting ended. Read-only.
     meetingEndDateTime?: NullableOption<string>;
@@ -24019,7 +24044,8 @@ export interface AttributeMapping {
      * Defines when this attribute should be updated in the target directory. Possible values are: Always (default)
      * ObjectAddOnly - only when new object is created MultiValueAddOnly - only when the change is adding new values to a
      * multi-valued attribute ValueAddOnly - If there is a current value, only flows 'Add' operations; will not flow 'Remove'
-     * operations AttributeAddOnly - Only propagates changes if no current value exists at all
+     * operations AttributeAddOnly - Only propagates changes if no current value exists at all Note: AD2AAD provisioning jobs
+     * don't respect the flowType property value.
      */
     flowType?: AttributeFlowType;
     /**
