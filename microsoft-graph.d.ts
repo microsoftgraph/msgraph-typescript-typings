@@ -89,6 +89,7 @@ export type ActivityDomain = "unknown" | "work" | "personal" | "unrestricted";
 export type ActivityType = "signin" | "user" | "unknownFutureValue" | "servicePrincipal";
 export type AdvancedConfigState = "default" | "enabled" | "disabled" | "unknownFutureValue";
 export type AgreementAcceptanceState = "accepted" | "declined" | "unknownFutureValue";
+export type AiInteractionType = "userPrompt" | "aiResponse" | "unknownFutureValue";
 export type AlertFeedback = "unknown" | "truePositive" | "falsePositive" | "benignPositive" | "unknownFutureValue";
 export type AlertSeverity = "unknown" | "informational" | "low" | "medium" | "high" | "unknownFutureValue";
 export type AlertStatus = "unknown" | "newAlert" | "inProgress" | "resolved" | "dismissed" | "unknownFutureValue";
@@ -443,6 +444,7 @@ export type CategoryColor =
     | "preset22"
     | "preset23"
     | "preset24";
+export type CertificateAuthorityType = "root" | "intermediate" | "unknownFutureValue";
 export type CertificateStatus = "notProvisioned" | "provisioned";
 export type ChangeType = "created" | "updated" | "deleted";
 export type ChannelMembershipType = "standard" | "private" | "unknownFutureValue" | "shared";
@@ -3640,6 +3642,7 @@ export interface AccessPackageAssignmentRequest extends Entity {
     createdDateTime?: NullableOption<string>;
     // Information about all the custom extension calls that were made during the access package assignment workflow.
     customExtensionCalloutInstances?: NullableOption<CustomExtensionCalloutInstance[]>;
+    // The requestor's supplied justification.
     justification?: NullableOption<string>;
     /**
      * The type of the request. The possible values are: notSpecified, userAdd, UserExtend, userUpdate, userRemove, adminAdd,
@@ -4422,6 +4425,27 @@ export interface AgreementFileProperties extends Entity {
 }
 // tslint:disable-next-line: no-empty-interface
 export interface AgreementFileVersion extends AgreementFileProperties {}
+export interface AiInteraction extends Entity {
+    appClass?: string;
+    attachments?: NullableOption<AiInteractionAttachment[]>;
+    body?: NullableOption<ItemBody>;
+    contexts?: NullableOption<AiInteractionContext[]>;
+    conversationType?: NullableOption<string>;
+    createdDateTime?: NullableOption<string>;
+    etag?: NullableOption<string>;
+    from?: IdentitySet;
+    interactionType?: AiInteractionType;
+    links?: NullableOption<AiInteractionLink[]>;
+    locale?: string;
+    mentions?: NullableOption<AiInteractionMention[]>;
+    requestId?: string;
+    sessionId?: string;
+}
+// tslint:disable-next-line: no-empty-interface
+export interface AiInteractionHistory extends Entity {}
+export interface AiUser extends Entity {
+    interactionHistory?: NullableOption<AiInteractionHistory>;
+}
 export interface Alert extends Entity {
     // Name or alias of the activity group (attacker) this alert is attributed to.
     activityGroupName?: NullableOption<string>;
@@ -5009,10 +5033,9 @@ export interface Application extends DirectoryObject {
     groupMembershipClaims?: NullableOption<string>;
     /**
      * Also known as App ID URI, this value is set when an application is used as a resource app. The identifierUris acts as
-     * the prefix for the scopes you reference in your API's code, and it must be globally unique. You can use the default
-     * value provided, which is in the form api://&amp;lt;appId&amp;gt;, or specify a more readable URI like
-     * https://contoso.com/api. For more information on valid identifierUris patterns and best practices, see Microsoft Entra
-     * application registration security best practices. Not nullable. Supports $filter (eq, ne, ge, le, startsWith).
+     * the prefix for the scopes you reference in your API's code, and it must be globally unique across Microsoft Entra ID.
+     * For more information on valid identifierUris patterns and best practices, see Microsoft Entra application registration
+     * security best practices. Not nullable. Supports $filter (eq, ne, ge, le, startsWith).
      */
     identifierUris?: string[];
     /**
@@ -5248,15 +5271,9 @@ export interface ApprovalStage extends Entity {
     status?: NullableOption<string>;
 }
 export interface AppScope extends Entity {
-    /**
-     * Provides the display name of the app-specific resource represented by the app scope. Provided for display purposes
-     * since appScopeId is often an immutable, non-human-readable id. Read-only.
-     */
+    // Provides the display name of the app-specific resource represented by the app scope. Read only.
     displayName?: NullableOption<string>;
-    /**
-     * Describes the type of app-specific resource represented by the app scope and is provided for display purposes, so a
-     * user interface can convey to the user the kind of app specific resource represented by the app scope. Read-only.
-     */
+    // Describes the type of app-specific resource represented by the app scope. Read-only.
     type?: NullableOption<string>;
 }
 // tslint:disable-next-line: no-empty-interface
@@ -5331,9 +5348,17 @@ export interface AttendanceRecord extends Entity {
     attendanceIntervals?: NullableOption<AttendanceInterval[]>;
     // Email address of the user associated with this attendance record.
     emailAddress?: NullableOption<string>;
+    // The external information for a virtualEventRegistration.
     externalRegistrationInformation?: NullableOption<VirtualEventExternalRegistrationInformation>;
-    // Identity of the user associated with this attendance record.
+    /**
+     * The identity of the user associated with this attendance record. The specific type is one of the following derived
+     * types of identity, depending on the user type: communicationsUserIdentity, azureCommunicationServicesUserIdentity.
+     */
     identity?: NullableOption<Identity>;
+    /**
+     * Unique identifier of a virtualEventRegistration that is available to all participants registered for the
+     * virtualEventWebinar.
+     */
     registrationId?: NullableOption<string>;
     // Role of the attendee. Possible values are: None, Attendee, Presenter, and Organizer.
     role?: NullableOption<string>;
@@ -6408,9 +6433,29 @@ export interface CanvasLayout extends Entity {
     // Vertical section on the SharePoint page.
     verticalSection?: NullableOption<VerticalSection>;
 }
+export interface CertificateAuthorityDetail extends DirectoryObject {
+    certificate?: string;
+    certificateAuthorityType?: NullableOption<CertificateAuthorityType>;
+    certificateRevocationListUrl?: NullableOption<string>;
+    createdDateTime?: NullableOption<string>;
+    deltaCertificateRevocationListUrl?: NullableOption<string>;
+    displayName?: NullableOption<string>;
+    expirationDateTime?: string;
+    isIssuerHintEnabled?: NullableOption<boolean>;
+    issuer?: NullableOption<string>;
+    issuerSubjectKeyIdentifier?: NullableOption<string>;
+    thumbprint?: string;
+}
 export interface CertificateBasedAuthConfiguration extends Entity {
     // Collection of certificate authorities which creates a trusted certificate chain.
     certificateAuthorities?: CertificateAuthority[];
+}
+export interface CertificateBasedAuthPki extends DirectoryObject {
+    displayName?: NullableOption<string>;
+    lastModifiedDateTime?: string;
+    status?: NullableOption<string>;
+    statusDetails?: NullableOption<string>;
+    certificateAuthorities?: NullableOption<CertificateAuthorityDetail[]>;
 }
 export interface ChangeTrackedEntity extends Entity {
     // Identity of the creator of the entity.
@@ -7528,17 +7573,36 @@ export interface ConversationThread extends Entity {
     posts?: NullableOption<Post[]>;
 }
 export interface CopilotAdmin extends Entity {
+    // Set of Microsoft 365 Copilot settings that can be added or modified. Read-only. Nullable.
     settings?: NullableOption<CopilotAdminSetting>;
 }
 export interface CopilotAdminLimitedMode extends Entity {
+    /**
+     * The ID of a Microsoft Entra group, for which the value of isEnabledForGroup is applied. The default value is null. If
+     * isEnabledForGroup is set to true, the groupId value must be provided for the Copilot limited mode in Teams meetings to
+     * be enabled for the members of the group. Optional.
+     */
     groupId?: NullableOption<string>;
+    /**
+     * Enables the user to be in limited mode for Copilot in Teams meetings. When copilotAdminLimitedMode=true, users in this
+     * mode can ask any questions, but Copilot doesn't respond to certain questions related to inferring emotions, behavior,
+     * or judgments. When copilotAdminLimitedMode=false, it responds to all types of questions grounded to the meeting
+     * conversation. The default value is false.
+     */
     isEnabledForGroup?: NullableOption<boolean>;
 }
 export interface CopilotAdminSetting extends Entity {
+    /**
+     * Represents a setting that controls whether users of Microsoft 365 Copilot in Teams meetings can receive responses to
+     * sentiment-related prompts. Read-only. Nullable.
+     */
     limitedMode?: NullableOption<CopilotAdminLimitedMode>;
 }
 export interface CopilotRoot {
+    // The Microsoft 365 Copilot admin who can add or modify Copilot settings. Read-only. Nullable.
     admin?: NullableOption<CopilotAdmin>;
+    interactionHistory?: NullableOption<AiInteractionHistory>;
+    users?: NullableOption<AiUser[]>;
 }
 export interface CountryNamedLocation extends NamedLocation {
     // List of countries and/or regions in two-letter format specified by ISO 3166-2. Required.
@@ -8924,6 +8988,7 @@ export interface Directory extends Entity {
     federationConfigurations?: NullableOption<IdentityProviderBase[]>;
     // A container for on-premises directory synchronization functionalities that are available for the organization.
     onPremisesSynchronization?: NullableOption<OnPremisesDirectorySynchronization[]>;
+    publicKeyInfrastructure?: NullableOption<PublicKeyInfrastructureRoot>;
     // List of commercial subscriptions that an organization acquired.
     subscriptions?: NullableOption<CompanySubscription[]>;
 }
@@ -9323,7 +9388,15 @@ export interface DriveRestoreArtifact extends RestoreArtifactBase {
     restoredSiteWebUrl?: NullableOption<string>;
 }
 export interface DriveRestoreArtifactsBulkAdditionRequest extends RestoreArtifactsBulkRequestBase {
+    /**
+     * The list of directory object IDs that are added to the corresponding OneDrive for work or school restore session in a
+     * bulk operation.
+     */
     directoryObjectIds?: NullableOption<string[]>;
+    /**
+     * The list of email addresses that are added to the corresponding OneDrive for work or school restore session in a bulk
+     * operation.
+     */
     drives?: NullableOption<string[]>;
 }
 export interface EBookInstallSummary extends Entity {
@@ -10119,6 +10192,11 @@ export interface Event extends OutlookItem {
     body?: NullableOption<ItemBody>;
     // The preview of the message associated with the event. It's in text format.
     bodyPreview?: NullableOption<string>;
+    /**
+     * Contains occurrenceId property values of canceled instances in a recurring series, if the event is the series master.
+     * Instances in a recurring series that are canceled are called canceled occurences.Returned only on $select in a Get
+     * operation which specifies the ID (seriesMasterId property value) of a series master event.
+     */
     cancelledOccurrences?: string[];
     // The date, time, and time zone that the event ends. By default, the end time is in UTC.
     end?: NullableOption<DateTimeTimeZone>;
@@ -10249,12 +10327,18 @@ export interface Event extends OutlookItem {
     attachments?: NullableOption<Attachment[]>;
     // The calendar that contains the event. Navigation property. Read-only.
     calendar?: NullableOption<Calendar>;
+    /**
+     * Contains the id property values of the event instances that are exceptions in a recurring series.Exceptions can differ
+     * from other occurrences in a recurring series, such as the subject, start or end times, or attendees. Exceptions don't
+     * include canceled occurrences.Returned only on $select and $expand in a GET operation that specifies the ID
+     * (seriesMasterId property value) of a series master event.
+     */
     exceptionOccurrences?: NullableOption<Event[]>;
     // The collection of open extensions defined for the event. Nullable.
     extensions?: NullableOption<Extension[]>;
     /**
      * The occurrences of a recurring series, if the event is a series master. This property includes occurrences that are
-     * part of the recurrence pattern, and exceptions modified, but doesn't include occurrences cancelled from the series.
+     * part of the recurrence pattern, and exceptions modified, but doesn't include occurrences canceled from the series.
      * Navigation property. Read-only. Nullable.
      */
     instances?: NullableOption<Event[]>;
@@ -10321,6 +10405,7 @@ export interface ExchangeRestoreSession extends RestoreSessionBase {
     granularMailboxRestoreArtifacts?: NullableOption<GranularMailboxRestoreArtifact[]>;
     // A collection of restore points and destination details that can be used to restore Exchange mailboxes.
     mailboxRestoreArtifacts?: NullableOption<MailboxRestoreArtifact[]>;
+    // A collection of user mailboxes and destination details that can be used to restore Exchange mailboxes.
     mailboxRestoreArtifactsBulkAdditionRequests?: NullableOption<MailboxRestoreArtifactsBulkAdditionRequest[]>;
 }
 // tslint:disable-next-line: no-empty-interface
@@ -10546,7 +10631,7 @@ export interface Group extends DirectoryObject {
      * permission and a supported administrator role.
      */
     assignedLabels?: NullableOption<AssignedLabel[]>;
-    // The licenses that are assigned to the group. Returned only on $select. Supports $filter (eq).Read-only.
+    // The licenses that are assigned to the group. Returned only on $select. Supports $filter (eq). Read-only.
     assignedLicenses?: NullableOption<AssignedLicense[]>;
     /**
      * Indicates if new members added to the group are autosubscribed to receive email notifications. You can set this
@@ -12348,7 +12433,9 @@ export interface MailboxRestoreArtifact extends RestoreArtifactBase {
     restoredFolderName?: NullableOption<string>;
 }
 export interface MailboxRestoreArtifactsBulkAdditionRequest extends RestoreArtifactsBulkRequestBase {
+    // The list of directory object IDs that are added to the corresponding Exchange restore session in a bulk operation.
     directoryObjectIds?: NullableOption<string[]>;
+    // The list of email addresses that are added to the corresponding Exchange restore session in a bulk operation.
     mailboxes?: NullableOption<string[]>;
 }
 export interface MailFolder extends Entity {
@@ -12966,6 +13053,7 @@ export interface ManagedMobileLobApp extends ManagedApp {
 // tslint:disable-next-line: no-empty-interface
 export interface MdmWindowsInformationProtectionPolicy extends WindowsInformationProtection {}
 export interface MeetingAttendanceReport extends Entity {
+    // The external information of a virtual event. Returned only for event organizers or coorganizers. Read-only.
     externalEventInformation?: NullableOption<VirtualEventExternalInformation[]>;
     // UTC time when the meeting ended. Read-only.
     meetingEndDateTime?: NullableOption<string>;
@@ -13620,8 +13708,9 @@ export interface OneDriveForBusinessProtectionPolicy extends ProtectionPolicyBas
     driveProtectionUnitsBulkAdditionJobs?: NullableOption<DriveProtectionUnitsBulkAdditionJob[]>;
 }
 export interface OneDriveForBusinessRestoreSession extends RestoreSessionBase {
-    // A collection of restore points and destination details that can be used to restore a OneDrive for Business drive.
+    // A collection of restore points and destination details that can be used to restore a OneDrive for work or school drive.
     driveRestoreArtifacts?: NullableOption<DriveRestoreArtifact[]>;
+    // A collection of user mailboxes and destination details that can be used to restore a OneDrive for work or school drive.
     driveRestoreArtifactsBulkAdditionRequests?: NullableOption<DriveRestoreArtifactsBulkAdditionRequest[]>;
 }
 export interface Onenote extends Entity {
@@ -15509,6 +15598,9 @@ export interface ProvisioningObjectSummary extends Entity {
     // Unique Microsoft Entra tenant ID. Supports $filter (eq, contains).
     tenantId?: NullableOption<string>;
 }
+export interface PublicKeyInfrastructureRoot extends Entity {
+    certificateBasedAuthConfigurations?: NullableOption<CertificateBasedAuthPki[]>;
+}
 export interface RbacApplication extends Entity {
     resourceNamespaces?: NullableOption<UnifiedRbacResourceNamespace[]>;
     // Resource to grant access to users or groups.
@@ -15697,17 +15789,32 @@ export interface RestoreArtifactBase extends Entity {
     restorePoint?: NullableOption<RestorePoint>;
 }
 export interface RestoreArtifactsBulkRequestBase extends Entity {
+    // The identity of the person who created the bulk request.
     createdBy?: NullableOption<IdentitySet>;
+    // The time when the bulk request was created.
     createdDateTime?: NullableOption<string>;
+    // Indicates the restoration destination. The possible values are: new, inPlace, unknownFutureValue.
     destinationType?: NullableOption<DestinationType>;
+    // Name of the addition request.
     displayName?: NullableOption<string>;
+    // Error details are populated for resource resolution failures.
     error?: NullableOption<PublicError>;
+    // Identity of the person who last modified this entity.
     lastModifiedBy?: NullableOption<IdentitySet>;
+    // Timestamp when this entity was last modified.
     lastModifiedDateTime?: NullableOption<string>;
+    // The start and end date and time of the protection period.
     protectionTimePeriod?: NullableOption<TimePeriod>;
+    // Indicates which protection units to restore. This property isn't implemented yet. Future value; don't use.
     protectionUnitIds?: NullableOption<string[]>;
+    // Indicates which restore point to return. The possible values are: oldest, latest, unknownFutureValue.
     restorePointPreference?: NullableOption<RestorePointPreference>;
+    /**
+     * Determines the status of the long-running operation. The possible values area: unknown, active, completed,
+     * completedWithErrors, unknownFutureValue.
+     */
     status?: RestoreArtifactsBulkRequestStatus;
+    // The type of the restore point. The possible values are: none, fastRestore, unknownFutureValue.
     tags?: NullableOption<RestorePointTags>;
 }
 export interface RestorePoint extends Entity {
@@ -16188,7 +16295,7 @@ export interface SecureScoreControlProfile extends Entity {
     actionUrl?: NullableOption<string>;
     // GUID string for tenant ID.
     azureTenantId?: string;
-    // The collection of compliance information associated with secure score control
+    // The collection of compliance information associated with secure score control. Not implemented. Currently returns null.
     complianceInformation?: NullableOption<ComplianceInformation[]>;
     // Control action category (Identity, Data, Device, Apps, Infrastructure).
     controlCategory?: NullableOption<string>;
@@ -16809,6 +16916,7 @@ export interface SharePointProtectionPolicy extends ProtectionPolicyBase {
 export interface SharePointRestoreSession extends RestoreSessionBase {
     // A collection of restore points and destination details that can be used to restore SharePoint sites.
     siteRestoreArtifacts?: NullableOption<SiteRestoreArtifact[]>;
+    // A collection of SharePoint site URLs and destination details that can be used to restore SharePoint sites.
     siteRestoreArtifactsBulkAdditionRequests?: NullableOption<SiteRestoreArtifactsBulkAdditionRequest[]>;
 }
 export interface SharepointSettings extends Entity {
@@ -17209,7 +17317,9 @@ export interface SiteRestoreArtifact extends RestoreArtifactBase {
     restoredSiteWebUrl?: NullableOption<string>;
 }
 export interface SiteRestoreArtifactsBulkAdditionRequest extends RestoreArtifactsBulkRequestBase {
+    // The list of SharePoint site IDs that are added to the corresponding SharePoint restore session in a bulk operation.
     siteIds?: NullableOption<string[]>;
+    // The list of SharePoint site URLs that are added to the corresponding SharePoint restore session in a bulk operation.
     siteWebUrls?: NullableOption<string[]>;
 }
 export interface SkypeForBusinessUserConversationMember extends ConversationMember {
@@ -20496,11 +20606,11 @@ export interface VoiceAuthenticationMethodConfiguration extends AuthenticationMe
     includeTargets?: NullableOption<AuthenticationMethodTarget[]>;
 }
 export interface VppToken extends Entity {
-    // The apple Id associated with the given Apple Volume Purchase Program Token.
+    // The Apple ID associated with the given Apple Volume Purchase Program Token.
     appleId?: NullableOption<string>;
     // Whether or not apps for the VPP token will be automatically updated.
     automaticallyUpdateApps?: boolean;
-    // Whether or not apps for the VPP token will be automatically updated.
+    // The country or region associated with the Apple Volume Purchase Program Token.
     countryOrRegion?: NullableOption<string>;
     // The expiration date time of the Apple Volume Purchase Program Token.
     expirationDateTime?: string;
@@ -20513,14 +20623,14 @@ export interface VppToken extends Entity {
     lastSyncDateTime?: string;
     /**
      * Current sync status of the last application sync which was triggered using the Apple Volume Purchase Program Token.
-     * Possible values are: none, inProgress, completed, failed. Possible values are: none, inProgress, completed, failed.
+     * Possible values are: none, inProgress, completed, failed.
      */
     lastSyncStatus?: VppTokenSyncStatus;
     // The organization associated with the Apple Volume Purchase Program Token
     organizationName?: NullableOption<string>;
     /**
      * Current state of the Apple Volume Purchase Program Token. Possible values are: unknown, valid, expired, invalid,
-     * assignedToExternalMDM. Possible values are: unknown, valid, expired, invalid, assignedToExternalMDM.
+     * assignedToExternalMDM.
      */
     state?: VppTokenState;
     // The Apple Volume Purchase Program Token string downloaded from the Apple Volume Purchase Program.
@@ -23049,6 +23159,7 @@ export interface AccessPackageAssignmentApprovalSettings {
     isApprovalRequiredForAdd?: NullableOption<boolean>;
     // If false, then approval isn't required for updates to requests in this policy.
     isApprovalRequiredForUpdate?: NullableOption<boolean>;
+    // If false, then requestor justification isn't required for updates to requests in this policy.
     isRequestorJustificationRequired?: NullableOption<boolean>;
     /**
      * If approval is required, the one, two or three elements of this collection define each of the stages of approval. An
@@ -23098,6 +23209,7 @@ export interface AccessPackageAssignmentRequestRequirements {
     isApprovalRequiredForAdd?: NullableOption<boolean>;
     // Indicates whether a request to update must be approved by an approver.
     isApprovalRequiredForUpdate?: NullableOption<boolean>;
+    // Indicates whether requestors must justify requesting access to an access package.
     isRequestorJustificationRequired?: NullableOption<boolean>;
     // The description of the policy that the user is trying to request access using.
     policyDescription?: NullableOption<string>;
@@ -23154,6 +23266,7 @@ export interface AccessPackageLocalizedText {
     text?: NullableOption<string>;
 }
 export interface AccessPackageNotificationSettings {
+    // Indicates if notification emails for an access package are disabled within an access package assignment policy.
     isAssignmentNotificationDisabled?: boolean;
 }
 export interface AccessPackageResourceAttribute {
@@ -23427,6 +23540,32 @@ export interface AggregationOption {
 export interface AgreementFileData {
     // Data that represents the terms of use PDF document. Read-only.
     data?: NullableOption<string>;
+}
+export interface AiInteractionAttachment {
+    attachmentId?: NullableOption<string>;
+    content?: NullableOption<string>;
+    contentType?: NullableOption<string>;
+    contentUrl?: NullableOption<string>;
+    name?: NullableOption<string>;
+}
+export interface AiInteractionContext {
+    contextReference?: NullableOption<string>;
+    contextType?: NullableOption<string>;
+    displayName?: NullableOption<string>;
+}
+export interface AiInteractionLink {
+    displayName?: NullableOption<string>;
+    linkType?: NullableOption<string>;
+    linkUrl?: NullableOption<string>;
+}
+export interface AiInteractionMention {
+    mentioned?: NullableOption<AiInteractionMentionedIdentitySet>;
+    mentionId?: NullableOption<number>;
+    mentionText?: NullableOption<string>;
+}
+export interface AiInteractionMentionedIdentitySet extends IdentitySet {
+    conversation?: NullableOption<TeamworkConversationIdentity>;
+    tag?: NullableOption<TeamworkTagIdentity>;
 }
 export interface AirPrintSettings {
     /**
@@ -24019,7 +24158,8 @@ export interface AttributeMapping {
      * Defines when this attribute should be updated in the target directory. Possible values are: Always (default)
      * ObjectAddOnly - only when new object is created MultiValueAddOnly - only when the change is adding new values to a
      * multi-valued attribute ValueAddOnly - If there is a current value, only flows 'Add' operations; will not flow 'Remove'
-     * operations AttributeAddOnly - Only propagates changes if no current value exists at all
+     * operations AttributeAddOnly - Only propagates changes if no current value exists at all Note: AD2AAD provisioning jobs
+     * don't respect the flowType property value.
      */
     flowType?: AttributeFlowType;
     /**
@@ -30548,9 +30688,9 @@ export interface SearchRequest {
     /**
      * Contains the fields to be returned for each resource object specified in entityTypes, allowing customization of the
      * fields returned by default; otherwise, including additional fields such as custom managed properties from SharePoint
-     * and OneDrive, or custom fields in externalItem from the content that Microsoft Graph connectors bring in. The fields
-     * property can use the semantic labels applied to properties. For example, if a property is labeled as title, you can
-     * retrieve it using the following syntax: label_title. Optional.
+     * and OneDrive, or custom fields in externalItem from the content that Microsoft 365 Copilot connectors bring in. The
+     * fields property can use the semantic labels applied to properties. For example, if a property is labeled as title, you
+     * can retrieve it using the following syntax: label_title. Optional.
      */
     fields?: NullableOption<string[]>;
     // Specifies the offset for the search results. Offset 0 returns the very first result. Optional.
@@ -35334,6 +35474,7 @@ export namespace SecurityNamespace {
         comments?: NullableOption<AlertComment[]>;
         // Time when Microsoft 365 Defender created the alert.
         createdDateTime?: NullableOption<string>;
+        // User defined custom fields with string values.
         customDetails?: NullableOption<Dictionary>;
         // String value describing each alert.
         description?: NullableOption<string>;
@@ -35346,12 +35487,13 @@ export namespace SecurityNamespace {
          * microsoftDefenderForStorage, microsoftDefenderForDNS, microsoftDefenderForDatabases, microsoftDefenderForContainers,
          * microsoftDefenderForNetwork, microsoftDefenderForAppService, microsoftDefenderForKeyVault,
          * microsoftDefenderForResourceManager, microsoftDefenderForApiManagement, microsoftSentinel, nrtAlerts, scheduledAlerts,
-         * microsoftDefenderThreatIntelligenceAnalytics, builtInMl. Use the Prefer: include-unknown-enum-members request header to
-         * get the following value(s) in this evolvable enum: microsoftDefenderForCloud, microsoftDefenderForIoT,
-         * microsoftDefenderForServers, microsoftDefenderForStorage, microsoftDefenderForDNS, microsoftDefenderForDatabases,
-         * microsoftDefenderForContainers, microsoftDefenderForNetwork, microsoftDefenderForAppService,
-         * microsoftDefenderForKeyVault, microsoftDefenderForResourceManager, microsoftDefenderForApiManagement,
-         * microsoftSentinel, nrtAlerts, scheduledAlerts, microsoftDefenderThreatIntelligenceAnalytics, builtInMl.
+         * microsoftDefenderThreatIntelligenceAnalytics, builtInMl, microsoftThreatIntelligence. Use the Prefer:
+         * include-unknown-enum-members request header to get the following values in this evolvable enum:
+         * microsoftDefenderForCloud, microsoftDefenderForIoT, microsoftDefenderForServers, microsoftDefenderForStorage,
+         * microsoftDefenderForDNS, microsoftDefenderForDatabases, microsoftDefenderForContainers, microsoftDefenderForNetwork,
+         * microsoftDefenderForAppService, microsoftDefenderForKeyVault, microsoftDefenderForResourceManager,
+         * microsoftDefenderForApiManagement, microsoftSentinel, nrtAlerts, scheduledAlerts,
+         * microsoftDefenderThreatIntelligenceAnalytics, builtInMl, microsoftThreatIntelligence.
          */
         detectionSource?: NullableOption<DetectionSource>;
         // The ID of the detector that triggered the alert.
@@ -35389,8 +35531,8 @@ export namespace SecurityNamespace {
          * The service or product that created this alert. Possible values are: unknown, microsoftDefenderForEndpoint,
          * microsoftDefenderForIdentity, microsoftDefenderForCloudApps, microsoftDefenderForOffice365, microsoft365Defender,
          * azureAdIdentityProtection, microsoftAppGovernance, dataLossPrevention, unknownFutureValue, microsoftDefenderForCloud,
-         * microsoftSentinel. Use the Prefer: include-unknown-enum-members request header to get the following value(s) in this
-         * evolvable enum: microsoftDefenderForCloud, microsoftSentinel.
+         * microsoftSentinel, microsoftThreatIntelligence. Use the Prefer: include-unknown-enum-members request header to get the
+         * following values in this evolvable enum: microsoftDefenderForCloud, microsoftSentinel, microsoftThreatIntelligence.
          */
         serviceSource?: ServiceSource;
         /**
