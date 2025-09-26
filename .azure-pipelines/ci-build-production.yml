@@ -64,22 +64,34 @@ extends:
             image: windows-latest
           dependsOn: []
           environment: msgraph-npm-org
+
+          templateContext:
+              type: releaseJob
+              isProduction: true
+              inputs:
+                - input: pipelineArtifact
+                  artifactName: build-drop
+                  targetPath: '$(Build.ArtifactStagingDirectory)/npm'          
+
           strategy:
             runOnce:
               deploy:
                 steps:
-                - download: current
-                  artifact: build-drop
-                - task: EsrpRelease@5
+                - task: EsrpRelease@9
+                  displayName: 'Publish Beta NPM package via ESRP Release'
                   inputs:
-                    ConnectedServiceName: 'MsGraph-ESRP-Publisher-Service-Connection'
-                    Intent: 'PackageDistribution'
-                    ContentType: 'npm'
-                    ContentSource: 'Folder'
-                    FolderLocation: $(Pipeline.Workspace)/build-drop/
-                    WaitForReleaseCompletion: true
-                    Owners: '3PMSGraphDevxTeam@microsoft.com'
-                    Approvers: 'anomondi@microsoft.com,ronaldkudoyi@microsoft.com,pgichuhi@microsoft.com,shemogumbe@microsoft.com'
-                    ServiceEndpointUrl: 'https://api.esrp.microsoft.com'
-                    MainPublisher: 'ESRPRELPACMAN'
-                    DomainTenantId: 'cdc5aeea-15c5-4db6-b079-fcadd2505dc2'
+                    connectedservicename: "Federated DevX ESRP Managed Identity Connection"
+                    usemanagedidentity: false
+                    keyvaultname: 'akv-prod-eastus'
+                    authcertname: 'ReferenceLibraryPrivateCert'
+                    signcertname: 'ReferencePackagePublisherCertificate'
+                    clientid: '65035b7f-7357-4f29-bf25-c5ee5c3949f8'
+                    intent: 'PackageDistribution'
+                    contenttype: 'npm'
+                    contentsource: 'Folder'
+                    folderlocation: '$(Build.ArtifactStagingDirectory)/npm'
+                    owners: 'mmainer@microsoft.com,mowen@microsoft.com,gavinbarron@microsoft.com'
+                    approvers: 'mmainer@microsoft.com,christiano@microsoft.com,mowen@microsoft.com,lramosvea@microsoft.com,gavinbarron@microsoft.com'
+                    serviceendpointurl: 'https://api.esrp.microsoft.com'
+                    mainpublisher: 'ESRPRELPACMAN'
+                    domaintenantid: 'cdc5aeea-15c5-4db6-b079-fcadd2505dc2'
