@@ -15234,19 +15234,18 @@ export interface Post extends OutlookItem {
 }
 export interface Presence extends Entity {
     /**
-     * The supplemental information to a user's availability. Possible values are Available, Away, BeRightBack, Busy,
-     * DoNotDisturb, InACall, InAConferenceCall, Inactive, InAMeeting, Offline, OffWork, OutOfOffice, PresenceUnknown,
-     * Presenting, UrgentInterruptionsOnly.
+     * The supplemental information to a user's availability. Possible values are available, away, beRightBack, busy,
+     * doNotDisturb, offline, outOfOffice, presenceUnknown.
      */
     activity?: NullableOption<string>;
     /**
-     * The base presence information for a user. Possible values are Available, availableIdle, Away, beRightBack, Busy,
-     * busyIdle, DoNotDisturb, Offline, presenceUnknown.
+     * The base presence information for a user. Possible values are available, away, beRightBack, busy, doNotDisturb,
+     * focusing, inACall, inAMeeting, offline, presenting, presenceUnknown.
      */
     availability?: NullableOption<string>;
-    // The user's out-of-office settings.
+    // The out of office settings for a user.
     outOfOfficeSettings?: NullableOption<OutOfOfficeSettings>;
-    // The lexicographically sortable string stamp that represents the version of a presence object.
+    // The lexicographically sortable String stamp that represents the version of a presence object.
     sequenceNumber?: NullableOption<string>;
     // The presence status message of a user.
     statusMessage?: NullableOption<PresenceStatusMessage>;
@@ -15823,21 +15822,29 @@ export interface ProtectionRuleBase extends Entity {
     status?: NullableOption<ProtectionRuleStatus>;
 }
 export interface ProtectionUnitBase extends Entity {
-    // The identity of person who created the protection unit.
+    // The identity of the person who created the protection unit.
     createdBy?: NullableOption<IdentitySet>;
-    // The time of creation of the protection unit.
+    /**
+     * The time of creation of the protection unit. The timestamp type represents date and time information using ISO 8601
+     * format and is always in UTC. For example, midnight UTC on Jan 1, 2014 is 2014-01-01T00:00:00Z.
+     */
     createdDateTime?: NullableOption<string>;
     // Contains error details if an error occurred while creating a protection unit.
     error?: NullableOption<PublicError>;
     // The identity of person who last modified the protection unit.
     lastModifiedBy?: NullableOption<IdentitySet>;
-    // Timestamp of the last modification of this protection unit.
+    /**
+     * Timestamp of the last modification of this protection unit. The timestamp type represents date and time information
+     * using ISO 8601 format and is always in UTC. For example, midnight UTC on Jan 1, 2014 is 2014-01-01T00:00:00Z.
+     */
     lastModifiedDateTime?: NullableOption<string>;
     // The unique identifier of the protection policy based on which protection unit was created.
     policyId?: NullableOption<string>;
     /**
      * The status of the protection unit. The possible values are: protectRequested, protected, unprotectRequested,
-     * unprotected, removeRequested, unknownFutureValue.
+     * unprotected, removeRequested, unknownFutureValue, offboardRequested, offboarded, cancelOffboardRequested. Use the
+     * Prefer: include-unknown-enum-members request header to get the following values from this evolvable enum:
+     * offboardRequested, offboarded, cancelOffboardRequested.
      */
     status?: NullableOption<ProtectionUnitStatus>;
 }
@@ -16113,7 +16120,9 @@ export interface ReportRoot {
     security?: NullableOption<SecurityReportsRoot>;
 }
 export interface ReportsRoot extends Entity {
+    // Details of submitted reading assignments.
     readingAssignmentSubmissions?: NullableOption<ReadingAssignmentSubmission[]>;
+    // Details of check-in responses.
     reflectCheckInResponses?: NullableOption<ReflectCheckInResponse[]>;
 }
 export interface Request extends Entity {
