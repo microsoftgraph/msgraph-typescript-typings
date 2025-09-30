@@ -1,0 +1,11 @@
+{
+  "$schema": "https://raw.githubusercontent.com/googleapis/release-please/main/schemas/config.json",
+  "pull-request-header": ":rocket: A new MSGraph v1.0 typings release is coming up!",  
+  "bump-patch-for-minor-pre-major" : false,
+  "include-component-in-tag": false,
+  "packages": {
+    ".": {
+      "release-type": "node"
+    }
+  }
+}
