@@ -2,6 +2,8 @@
 # Please make sure to check all the converted content, it is your team's responsibility to make sure that the pipeline is still valid and functions as expected.
 # This pipeline will be extended to the OneESPT template
 # The pool section has been filled with placeholder values, replace the pool section with your hosted pool, os, and image name. If you are using a Linux image, you must specify an additional windows image for SDL: https://eng.ms/docs/cloud-ai-platform/devdiv/one-engineering-system-1es/1es-docs/1es-pipeline-templates/features/sdlanalysis/overview#how-to-specify-a-windows-pool-for-the-sdl-source-analysis-stage
+# This publishes to https://www.npmjs.com/package/@microsoft/microsoft-graph-types
+
 name: $(BuildDefinitionName)_$(SourceBranchName)_$(Date:yyyyMMdd)$(Rev:.r)
 trigger:
   branches:
@@ -10,13 +12,22 @@ trigger:
   paths:
     include:
     - microsoft-graph.d.ts
+  tags:
+    include:
+      - '*'
+
 pr: none
+
+variables:
+  package_name_v1_0: 'microsoft-graph-types'
+
 resources:
   repositories:
   - repository: 1ESPipelineTemplates
     type: git
     name: 1ESPipelineTemplates/1ESPipelineTemplates
     ref: refs/tags/release
+
 extends:
   template: v1/1ES.Official.PipelineTemplate.yml@1ESPipelineTemplates
   parameters:
@@ -29,7 +40,8 @@ extends:
     stages:
     - stage: build
       jobs:
-      - job: job
+      - job: build_v1_0_typings
+        displayName: Pack v1.0 typings
         templateContext:
           outputs:
           - output: pipelineArtifact
@@ -39,23 +51,28 @@ extends:
         steps:
         - checkout: self
           displayName: checkout main
-        - task: CopyFiles@2
-          displayName: 'Copy Files to staging directory'
+
+        - task: UseNode@1
+          displayName: 'Install Node.js'
           inputs:
-            SourceFolder: '$(System.DefaultWorkingDirectory)'
-            Contents: |
-              **/*
-              !spec/**
-              !.azure-pipelines/**
-              !.github/**
-              !.git/**
-              !.vscode/**
-              !typings-demo.gif
-            TargetFolder: '$(Build.ArtifactStagingDirectory)'
+            version: '22.x'
+
+        - script: npm ci
+          displayName: 'Install npm dependencies'
+          workingDirectory: '$(Build.SourcesDirectory)'
+
+        # Pack and stage Beta TypeScript package
+        - script: npm pack --pack-destination=$(Build.ArtifactStagingDirectory)
+          displayName: 'Generate npm package $(package_name_v1_0)'
+          workingDirectory: '$(Build.SourcesDirectory)' 
 
 
     - stage: deploy
-      condition: and(contains(variables['build.sourceBranch'], 'refs/heads/main'), succeeded())
+      displayName: 'Deploy v1.0 Typings'
+      # This condition deploys on successful CI runs for success builds and also allows for manual deployments from an arbitrary branch
+      condition: succeeded()
+      dependsOn: 
+        - build
       jobs:
         - deployment: deploy_npm
           pool:
@@ -78,7 +95,7 @@ extends:
               deploy:
                 steps:
                 - task: EsrpRelease@9
-                  displayName: 'Publish Beta NPM package via ESRP Release'
+                  displayName: 'Publish V1.0 NPM package via ESRP Release'
                   inputs:
                     connectedservicename: "Federated DevX ESRP Managed Identity Connection"
                     usemanagedidentity: false
