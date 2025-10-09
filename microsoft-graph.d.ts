@@ -967,6 +967,7 @@ export type EducationFeedbackResourceOutcomeStatus =
     | "unknownFutureValue";
 export type EducationGender = "female" | "male" | "other" | "unknownFutureValue";
 export type EducationModuleStatus = "draft" | "published" | "unknownFutureValue";
+export type EducationSpeechType = "informative" | "personal" | "persuasive" | "unknownFutureValue";
 export type EducationSubmissionStatus =
     | "working"
     | "submitted"
@@ -1012,6 +1013,40 @@ export type EndUserNotificationType =
     | "trainingReminder"
     | "unknownFutureValue";
 export type EngagementAsyncOperationType = "createCommunity" | "unknownFutureValue";
+export type EngagementConversationMessageReactionType =
+    | "like"
+    | "love"
+    | "celebrate"
+    | "thank"
+    | "laugh"
+    | "sad"
+    | "happy"
+    | "excited"
+    | "smile"
+    | "silly"
+    | "intenseLaugh"
+    | "starStruck"
+    | "goofy"
+    | "thinking"
+    | "surprised"
+    | "mindBlown"
+    | "scared"
+    | "crying"
+    | "shocked"
+    | "angry"
+    | "agree"
+    | "praise"
+    | "takingNotes"
+    | "heartBroken"
+    | "support"
+    | "confirmed"
+    | "watching"
+    | "brain"
+    | "medal"
+    | "bullseye"
+    | "unknownFutureValue";
+export type EngagementConversationModerationState = "published" | "pendingReview" | "dismissed" | "unknownFutureValue";
+export type EngagementCreationMode = "none" | "migration" | "unknownFutureValue";
 export type EnrollmentState = "unknown" | "enrolled" | "pendingReset" | "failed" | "notContacted";
 export type EntityType =
     | "event"
@@ -1228,6 +1263,20 @@ export type ManagementAgentType =
     | "googleCloudDevicePolicyController"
     | "microsoft365ManagedMdm"
     | "msSense";
+export type ManagementState =
+    | "managed"
+    | "retirePending"
+    | "retireFailed"
+    | "wipePending"
+    | "wipeFailed"
+    | "unhealthy"
+    | "deletePending"
+    | "retireIssued"
+    | "wipeIssued"
+    | "wipeCanceled"
+    | "retireCanceled"
+    | "discovered"
+    | "unknownFutureValue";
 export type MdmAppConfigKeyType = "stringType" | "integerType" | "realType" | "booleanType" | "tokenType";
 export type MdmAuthority = "unknown" | "intune" | "sccm" | "office365";
 export type MediaDirection = "inactive" | "sendOnly" | "receiveOnly" | "sendReceive";
@@ -2657,6 +2706,7 @@ export type RatingUnitedStatesTelevisionType =
     | "parentalGuidance"
     | "childrenAbove14"
     | "adults";
+export type ReadingCoachStoryType = "aiGenerated" | "readWorks" | "userProvided" | "unknownFutureValue";
 export type RecipientScopeType = "none" | "internal" | "external" | "externalPartner" | "externalNonPartner";
 export type RecordingStatus = "unknown" | "notRecording" | "recording" | "failed" | "unknownFutureValue";
 export type RecurrencePatternType =
@@ -6885,6 +6935,8 @@ export interface CloudClipboardRoot extends Entity {
 export interface CloudCommunications {
     callRecords?: NullableOption<CallRecords.CallRecord[]>;
     calls?: NullableOption<Call[]>;
+    // A collection of structured question-and-answer (Q&amp;A) threads in Teams directly associated with online meetings.
+    onlineMeetingConversations?: NullableOption<OnlineMeetingEngagementConversation[]>;
     onlineMeetings?: NullableOption<OnlineMeeting[]>;
     presences?: NullableOption<Presence[]>;
 }
@@ -9005,8 +9057,6 @@ export interface DeviceManagement extends Entity {
     roleDefinitions?: NullableOption<RoleDefinition[]>;
     // The software update status summary.
     softwareUpdateStatusSummary?: NullableOption<SoftwareUpdateStatusSummary>;
-    // The telecom expense management partners.
-    telecomExpenseManagementPartners?: NullableOption<TelecomExpenseManagementPartner[]>;
     // The terms and conditions associated with device management of the company.
     termsAndConditions?: NullableOption<TermsAndConditions[]>;
     // The list of troubleshooting events for the tenant.
@@ -10253,6 +10303,70 @@ export interface EngagementAsyncOperation extends LongRunningOperation {
     // The ID of the object created or modified as a result of this async operation.
     resourceId?: NullableOption<string>;
 }
+export interface EngagementConversation extends Entity {
+    // Don't use. This property is managed at engagementConversationMessage level.
+    creationMode?: EngagementCreationMode;
+    // The unique ID of the first message in a Viva Engage conversation.
+    starterId?: string;
+    // The messages in a Viva Engage conversation.
+    messages?: NullableOption<EngagementConversationMessage[]>;
+    // The first message in a Viva Engage conversation.
+    starter?: EngagementConversationMessage;
+}
+// tslint:disable-next-line: no-empty-interface
+export interface EngagementConversationDiscussionMessage extends EngagementConversationMessage {}
+export interface EngagementConversationMessage extends Entity {
+    // The main content of the message.
+    body?: ItemBody;
+    /**
+     * The date and time when the message was created. The timestamp type represents date and time information using ISO 8601
+     * format and is always in UTC. For example, midnight UTC on Jan 1, 2014 is 2014-01-01T00:00:00Z.
+     */
+    createdDateTime?: string;
+    // Indicates how the message was created. The possible values are: none, migration, unknownFutureValue.
+    creationMode?: EngagementCreationMode;
+    // Identity of the sender of the message.
+    from?: NullableOption<EngagementIdentitySet>;
+    /**
+     * The date and time when message was last modified. The timestamp type represents date and time information using ISO
+     * 8601 format and is always in UTC. For example, midnight UTC on Jan 1, 2014 is 2014-01-01T00:00:00Z.
+     */
+    lastModifiedDateTime?: string;
+    // The ID of the parent message to which this message is a reply, if applicable.
+    replyToId?: NullableOption<string>;
+    /**
+     * The Viva Engage conversation to which this message belongs. This relationship establishes the thread context for the
+     * message.
+     */
+    conversation?: EngagementConversation;
+    // A collection of reactions (such as like and smile) that users have applied to this message.
+    reactions?: NullableOption<EngagementConversationMessageReaction[]>;
+    // A collection of messages that are replies to this message and form a threaded discussion.
+    replies?: NullableOption<EngagementConversationMessage[]>;
+    // The parent message to which this message is a reply, if it is part of a reply chain.
+    replyTo?: NullableOption<EngagementConversationMessage>;
+}
+export interface EngagementConversationMessageReaction extends Entity {
+    /**
+     * Date and time when the reaction was added. The timestamp type represents date and time information using ISO 8601
+     * format and is always in UTC. For example, midnight UTC on Jan 1, 2014 is 2014-01-01T00:00:00Z.
+     */
+    createdDateTime?: string;
+    // Identity of the user who added the reaction.
+    reactionBy?: EngagementIdentitySet;
+    /**
+     * The type of the reaction. The possible values are: like, love, celebrate, thank, laugh, sad, happy, excited, smile,
+     * silly, intenseLaugh, starStruck, goofy, thinking, surprised, mindBlown, scared, crying, shocked, angry, agree, praise,
+     * takingNotes, heartBroken, support, confirmed, watching, brain, medal, bullseye, unknownFutureValue.
+     */
+    reactionType?: EngagementConversationMessageReactionType;
+}
+export interface EngagementConversationQuestionMessage extends EngagementConversationMessage {
+    // The title of the question post message on Viva Engage. Inherited from engagementConversationMessage.
+    title?: string;
+}
+// tslint:disable-next-line: no-empty-interface
+export interface EngagementConversationSystemMessage extends EngagementConversationMessage {}
 export interface EnrollmentConfigurationAssignment extends Entity {
     // Represents an assignment to managed devices in the tenant
     target?: NullableOption<DeviceAndAppManagementAssignmentTarget>;
@@ -11094,6 +11208,7 @@ export interface Group extends DirectoryObject {
     // A list of group members with license errors from this group-based license assignment. Read-only.
     membersWithLicenseErrors?: NullableOption<DirectoryObject[]>;
     onenote?: NullableOption<Onenote>;
+    onPremisesSyncBehavior?: NullableOption<OnPremisesSyncBehavior>;
     /**
      * The owners of the group who can be users or service principals. Limited to 100 owners. Nullable. If this property isn't
      * specified when creating a Microsoft 365 group the calling user (admin or non-admin) is automatically assigned as the
@@ -13024,6 +13139,11 @@ export interface ManagedDevice extends Entity {
     managementAgent?: ManagementAgentType;
     // Reports device management certificate expiration date. This property is read-only.
     managementCertificateExpirationDate?: string;
+    /**
+     * Management state of the device. Examples: Managed, RetirePending, etc. Default is managed. Supports $filter operator
+     * 'eq' and 'or'. This property is read-only.
+     */
+    managementState?: ManagementState;
     // Manufacturer of the device. This property is read-only.
     manufacturer?: NullableOption<string>;
     // MEID. This property is read-only.
@@ -14197,6 +14317,24 @@ export interface OnlineMeetingBase extends Entity {
     // The attendance reports of an online meeting. Read-only.
     attendanceReports?: NullableOption<MeetingAttendanceReport[]>;
 }
+export interface OnlineMeetingEngagementConversation extends EngagementConversation {
+    /**
+     * The moderation status of the conversation. The possible values are: published, pendingReview, dismissed,
+     * unknownFutureValue.
+     */
+    moderationState?: EngagementConversationModerationState;
+    /**
+     * The unique identifier of the online meeting associated with this conversation. The online meeting ID links the
+     * conversation to a specific meeting instance.
+     */
+    onlineMeetingId?: string;
+    // Unique identifier of the online meeting organizer.
+    organizer?: EngagementIdentitySet;
+    // The number of upvotes the conversation received.
+    upvoteCount?: number;
+    // The online meeting associated with the conversation.
+    onlineMeeting?: OnlineMeeting;
+}
 // tslint:disable-next-line: no-empty-interface
 export interface OnOtpSendCustomExtension extends CustomAuthenticationExtension {}
 export interface OnPremisesConditionalAccessSettings extends Entity {
@@ -14223,6 +14361,9 @@ export interface OnPremisesDirectorySynchronization extends Entity {
     configuration?: NullableOption<OnPremisesDirectorySynchronizationConfiguration>;
     // Consists of directory synchronization features that can be enabled or disabled. Not nullable.
     features?: OnPremisesDirectorySynchronizationFeature;
+}
+export interface OnPremisesSyncBehavior extends Entity {
+    isCloudManaged?: boolean;
 }
 export interface OnTokenIssuanceStartCustomExtension extends CustomAuthenticationExtension {
     /**
@@ -14585,6 +14726,7 @@ export interface OrgContact extends DirectoryObject {
     manager?: NullableOption<DirectoryObject>;
     // Groups that this contact is a member of. Read-only. Nullable. Supports $expand.
     memberOf?: NullableOption<DirectoryObject[]>;
+    onPremisesSyncBehavior?: NullableOption<OnPremisesSyncBehavior>;
     // Groups that this contact is a member of, including groups that the contact is nested under. Read-only. Nullable.
     transitiveMemberOf?: NullableOption<DirectoryObject[]>;
 }
@@ -15810,6 +15952,7 @@ export interface ProtectionRuleBase extends Entity {
     createdDateTime?: NullableOption<string>;
     // Contains error details if an operation on a rule fails.
     error?: NullableOption<PublicError>;
+    // true indicates that the protection rule is dynamic; false that it's static.
     isAutoApplyEnabled?: NullableOption<boolean>;
     // The identity of the person who last modified the rule.
     lastModifiedBy?: NullableOption<IdentitySet>;
@@ -15817,7 +15960,9 @@ export interface ProtectionRuleBase extends Entity {
     lastModifiedDateTime?: NullableOption<string>;
     /**
      * The status of the protection rule. The possible values are: draft, active, completed, completedWithErrors,
-     * unknownFutureValue. The draft member is currently unsupported.
+     * unknownFutureValue, updateRequested, deleteRequested. Use the Prefer: include-unknown-enum-members request header to
+     * get the following values in this evolvable enum: updateRequested , deleteRequested. The draft member is currently
+     * unsupported.
      */
     status?: NullableOption<ProtectionRuleStatus>;
 }
@@ -15982,6 +16127,32 @@ export interface ReadingAssignmentSubmission extends Entity {
     // Words per minute of the reading progress.
     wordsPerMinute?: number;
 }
+export interface ReadingCoachPassage extends Entity {
+    // Indicates if the reading passage was completed.
+    isReadingCompleted?: boolean;
+    // The language of the reading passage.
+    languageTag?: string;
+    /**
+     * The date and time when the Reading Coach passage was practiced. The timestamp type represents date and time information
+     * using ISO 8601 format and is always in UTC. For example, midnight UTC on Jan 1, 2014 is 2014-01-01T00:00:00Z.
+     */
+    practicedAtDateTime?: string;
+    // The list of challenging words for the student that they can practice further.
+    practiceWords?: string[];
+    /**
+     * The story type for the reading passage. The possible values are: aiGenerated, readWorks, userProvided,
+     * unknownFutureValue.
+     */
+    storyType?: ReadingCoachStoryType;
+    // ID of the student that practiced the reading passage.
+    studentId?: NullableOption<string>;
+    // The time the student spent reading in seconds.
+    timeSpentReadingInSeconds?: number;
+    // The percentage of words that the student read correctly.
+    wordsAccuracyPercentage?: number;
+    // The rate the student read at in words per minute.
+    wordsPerMinute?: number;
+}
 export interface RecordOperation extends CommsOperation {
     // The access token required to retrieve the recording.
     recordingAccessToken?: NullableOption<string>;
@@ -16122,8 +16293,12 @@ export interface ReportRoot {
 export interface ReportsRoot extends Entity {
     // Details of submitted reading assignments.
     readingAssignmentSubmissions?: NullableOption<ReadingAssignmentSubmission[]>;
+    // Details of practiced Reading Coach passages.
+    readingCoachPassages?: NullableOption<ReadingCoachPassage[]>;
     // Details of check-in responses.
     reflectCheckInResponses?: NullableOption<ReflectCheckInResponse[]>;
+    // Details of submitted speaker assignments.
+    speakerAssignmentSubmissions?: NullableOption<SpeakerAssignmentSubmission[]>;
 }
 export interface Request extends Entity {
     // The identifier of the approval of the request.
@@ -17851,6 +18026,53 @@ export interface SolutionsRoot {
     bookingCurrencies?: NullableOption<BookingCurrency[]>;
     virtualEvents?: NullableOption<VirtualEventsRoot>;
 }
+export interface SpeakerAssignmentSubmission extends Entity {
+    // ID of the assignment with which this submission is associated.
+    assignmentId?: string;
+    // The average speaking pace of the student, measured in words per minute.
+    averageWordsPerMinutePace?: NullableOption<number>;
+    // ID of the class this speaker progress is associated with.
+    classId?: NullableOption<string>;
+    // The number of times the student was flagged by Speaker Coach for using a filler word.
+    fillerWordsOccurrencesCount?: NullableOption<number>;
+    /**
+     * The number of times the student was flagged by Speaker Coach for being either too close or too far away from the
+     * camera.
+     */
+    incorrectCameraDistanceOccurrencesCount?: NullableOption<number>;
+    // The length of the student submission in seconds.
+    lengthOfSubmissionInSeconds?: number;
+    // The number of times the student was flagged by Speaker Coach for losing eye contact with the camera.
+    lostEyeContactOccurrencesCount?: NullableOption<number>;
+    // The number of times the student was flagged by Speaker Coach for speaking in monotone.
+    monotoneOccurrencesCount?: NullableOption<number>;
+    // The number of times the student was flagged by Speaker Coach for using non-inclusive or sensitive language.
+    nonInclusiveLanguageOccurrencesCount?: NullableOption<number>;
+    // The number of times the student was flagged by Speaker Coach for obstructing the view of their face.
+    obstructedViewOccurrencesCount?: NullableOption<number>;
+    // The number of times the student was flagged by Speaker Coach for using repetitive language.
+    repetitiveLanguageOccurrencesCount?: NullableOption<number>;
+    // ID of the user this speaker progress is associated with.
+    studentId?: NullableOption<string>;
+    /**
+     * Date and time of the submission this speaker progress is associated with. The timestamp type represents date and time
+     * information using ISO 8601 format and is always in UTC. For example, midnight UTC on Jan 1, 2014 is
+     * 2014-01-01T00:00:00Z.
+     */
+    submissionDateTime?: string;
+    // ID of the submission this speaker progress is associated with.
+    submissionId?: NullableOption<string>;
+    // The filler words used most by the student.
+    topFillerWords?: string[];
+    // The words mispronounced most by the student.
+    topMispronouncedWords?: string[];
+    // The non-inclusive or sensitive words and phrases most used by the student.
+    topNonInclusiveWordsAndPhrases?: string[];
+    // The words and phrases most repeated by the student.
+    topRepetitiveWordsAndPhrases?: string[];
+    // Total number of words spoken by the student in the submission.
+    wordsSpokenCount?: number;
+}
 export interface StandardWebPart extends WebPart {
     // The instance identifier of the container text webPart. It only works for inline standard webPart in rich text webParts.
     containerTextWebPartId?: NullableOption<string>;
@@ -18412,18 +18634,6 @@ export interface TeamworkTagMember extends Entity {
     tenantId?: NullableOption<string>;
     // The user ID of the member.
     userId?: NullableOption<string>;
-}
-export interface TelecomExpenseManagementPartner extends Entity {
-    // Whether the partner's AAD app has been authorized to access Intune.
-    appAuthorized?: boolean;
-    // Display name of the TEM partner.
-    displayName?: NullableOption<string>;
-    // Whether Intune's connection to the TEM service is currently enabled or disabled.
-    enabled?: boolean;
-    // Timestamp of the last request sent to Intune by the TEM partner.
-    lastConnectionDateTime?: string;
-    // URL of the TEM partner's administrative control panel, where an administrator can configure their TEM service.
-    url?: NullableOption<string>;
 }
 export interface TemporaryAccessPassAuthenticationMethod extends AuthenticationMethod {
     // The date and time when the Temporary Access Pass was created.
@@ -27161,6 +27371,44 @@ export interface EdgeSearchEngineCustom extends EdgeSearchEngineBase {
 }
 // tslint:disable-next-line: no-empty-interface
 export interface EditAction {}
+export interface EducationAiFeedbackAudienceEngagementSettings {
+    // Indicates whether the student should receive feedback on their engagement strategies from the AI feedback.
+    areEngagementStrategiesEnabled?: boolean;
+    // Indicates whether the student should receive feedback on their call to action from the AI feedback.
+    isCallToActionEnabled?: boolean;
+    // Indicates whether the student should receive feedback on their emotional and intellectual appeal from the AI feedback.
+    isEmotionalAndIntellectualAppealEnabled?: boolean;
+}
+export interface EducationAiFeedbackContentSettings {
+    // Indicates whether the student should receive feedback on their message clarity from the AI feedback.
+    isMessageClarityEnabled?: boolean;
+    // Indicates whether the student should receive feedback on their quality of information from the AI feedback.
+    isQualityOfInformationEnabled?: boolean;
+    // Indicates whether the student should receive feedback on their speech organization from the AI feedback.
+    isSpeechOrganizationEnabled?: boolean;
+}
+export interface EducationAiFeedbackCriteria {
+    // The feedback types that students should receive from AI feedback.
+    aiFeedbackSettings?: EducationAiFeedbackSettings;
+    // The type of speech the student provides. Possible values are: informative, personal, persuasive, unknownFutureValue.
+    speechType?: EducationSpeechType;
+}
+export interface EducationAiFeedbackDeliverySettings {
+    // Indicates whether the student should receive feedback on their rhetorical techniques from the AI feedback.
+    areRhetoricalTechniquesEnabled?: boolean;
+    // Indicates whether the student should receive feedback on their language use from the AI feedback.
+    isLanguageUseEnabled?: boolean;
+    // Indicates whether the student should receive feedback on their style from the AI feedback.
+    isStyleEnabled?: boolean;
+}
+export interface EducationAiFeedbackSettings {
+    // The audience engagement related feedback types that students should receive from the AI feedback.
+    audienceEngagementSettings?: NullableOption<EducationAiFeedbackAudienceEngagementSettings>;
+    // The content related feedback types that students should receive from the AI feedback.
+    contentSettings?: NullableOption<EducationAiFeedbackContentSettings>;
+    // The delivery related feedback types that students should receive from the AI feedback.
+    deliverySettings?: NullableOption<EducationAiFeedbackDeliverySettings>;
+}
 // tslint:disable-next-line: no-empty-interface
 export interface EducationAssignmentClassRecipient extends EducationAssignmentRecipient {}
 export interface EducationAssignmentGrade {
@@ -27272,6 +27520,61 @@ export interface EducationResource {
      */
     lastModifiedDateTime?: NullableOption<string>;
 }
+export interface EducationSpeakerCoachAudienceEngagementSettings {
+    // Indicates whether the student should receive feedback on their body language from the Speaker Coach.
+    isBodyLanguageEnabled?: boolean;
+}
+export interface EducationSpeakerCoachContentSettings {
+    // Indicates whether the student should receive feedback on their inclusiveness from the Speaker Coach.
+    isInclusivenessEnabled?: boolean;
+    // Indicates whether the student should receive feedback on their repetitive language from the Speaker Coach.
+    isRepetitiveLanguageEnabled?: boolean;
+}
+export interface EducationSpeakerCoachDeliverySettings {
+    // Indicates whether the student should receive feedback on their filler words from the Speaker Coach.
+    areFillerWordsEnabled?: boolean;
+    // Indicates whether the student should receive feedback on their pace from the Speaker Coach.
+    isPaceEnabled?: boolean;
+    // Indicates whether the student should receive feedback on their pitch from the Speaker Coach.
+    isPitchEnabled?: boolean;
+    /**
+     * Indicates whether the student should receive feedback on their pronunciation from the Speaker Coach. This is
+     * automatically enabled if isAiFeedbackEnabled is set to true on the educationSpeakerProgressResource, or if
+     * spokenLanguageLocale is set to a value besides en-US on the educationSpeakerProgressResource.
+     */
+    isPronunciationEnabled?: boolean;
+}
+export interface EducationSpeakerCoachSettings {
+    // The audience engagement related feedback types that students should receive from the Speaker Coach.
+    audienceEngagementSettings?: NullableOption<EducationSpeakerCoachAudienceEngagementSettings>;
+    // The content related feedback types that students should receive from the Speaker Coach.
+    contentSettings?: NullableOption<EducationSpeakerCoachContentSettings>;
+    // The delivery related feedback types that students should receive from the Speaker Coach.
+    deliverySettings?: NullableOption<EducationSpeakerCoachDeliverySettings>;
+}
+export interface EducationSpeakerProgressResource extends EducationResource {
+    /**
+     * The feedback types that students should receive from AI feedback. This property should only be provided if
+     * isAiFeedbackEnabled is true.
+     */
+    aiFeedbackCriteria?: NullableOption<EducationAiFeedbackCriteria>;
+    // Indicates whether AI feedback is enabled for the student submissions.
+    isAiFeedbackEnabled?: boolean;
+    // Indicates whether video is required for the student recording.
+    isVideoRequired?: boolean;
+    // The maximum number of recording attempts available to the student. Specify 0 to set unlimited recording attempts.
+    maxRecordingAttempts?: number;
+    // The title of the speaker progress resource visible to students.
+    presentationTitle?: string;
+    // The time limit is in minutes for the student recording.
+    recordingTimeLimitInMinutes?: number;
+    // Allows students to view their rehearsal report before the assignment is graded.
+    showRehearsalReportToStudentBeforeMediaUpload?: boolean;
+    // The feedback types that students should receive from the Speaker Coach.
+    speakerCoachSettings?: NullableOption<EducationSpeakerCoachSettings>;
+    // The spoken language for the student recording. For example, en-US.
+    spokenLanguageLocale?: string;
+}
 export interface EducationStudent {
     // Birth date of the student.
     birthDate?: NullableOption<string>;
@@ -27380,6 +27683,12 @@ export interface EndUserNotificationSetting {
      * unknownFutureValue.
      */
     settingType?: NullableOption<EndUserNotificationSettingType>;
+}
+export interface EngagementIdentitySet extends IdentitySet {
+    // Optional. The audience associated with this action.
+    audience?: NullableOption<Identity>;
+    // Optional. The group associated with this action.
+    group?: NullableOption<Identity>;
 }
 export interface EntitlementManagementSchedule {
     // When the access should expire.
@@ -36233,7 +36542,8 @@ export namespace SecurityNamespace {
         | "unknownFutureValue"
         | "purgeData"
         | "exportReport"
-        | "exportResult";
+        | "exportResult"
+        | "holdPolicySync";
     type CaseOperationStatus =
         | "notStarted"
         | "submissionFailed"
@@ -36321,6 +36631,8 @@ export namespace SecurityNamespace {
         | "builtInMl"
         | "microsoftInsiderRiskManagement"
         | "microsoftThreatIntelligence"
+        | "microsoftDefenderForAIServices"
+        | "securityCopilot"
         | "microsoftSentinel";
     type DetectionStatus = "detected" | "blocked" | "prevented" | "unknownFutureValue";
     type DeviceHealthStatus =
@@ -36828,6 +37140,9 @@ export namespace SecurityNamespace {
     }
 // tslint:disable-next-line: no-empty-interface
     interface EdiscoveryHoldOperation extends CaseOperation {}
+    interface EdiscoveryHoldPolicySyncOperation extends CaseOperation {
+        reportFileMetadata?: NullableOption<ReportFileMetadata[]>;
+    }
 // tslint:disable-next-line: no-empty-interface
     interface EdiscoveryIndexOperation extends CaseOperation {}
     interface EdiscoveryNoncustodialDataSource extends DataSourceContainer {
