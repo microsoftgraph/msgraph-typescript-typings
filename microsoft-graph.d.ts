@@ -2532,8 +2532,16 @@ export type PromptLoginBehavior =
     | "disabled"
     | "unknownFutureValue";
 export type ProtectionPolicyStatus = "inactive" | "activeWithErrors" | "updating" | "active" | "unknownFutureValue";
-export type ProtectionRuleStatus = "draft" | "active" | "completed" | "completedWithErrors" | "unknownFutureValue";
+export type ProtectionRuleStatus =
+    | "draft"
+    | "active"
+    | "completed"
+    | "completedWithErrors"
+    | "unknownFutureValue"
+    | "updateRequested"
+    | "deleteRequested";
 export type ProtectionScopeState = "notModified" | "modified" | "unknownFutureValue";
+export type ProtectionSource = "none" | "manual" | "dynamicRule" | "unknownFutureValue";
 export type ProtectionUnitsBulkJobStatus =
     | "unknown"
     | "active"
@@ -2546,7 +2554,10 @@ export type ProtectionUnitStatus =
     | "unprotectRequested"
     | "unprotected"
     | "removeRequested"
-    | "unknownFutureValue";
+    | "unknownFutureValue"
+    | "offboardRequested"
+    | "offboarded"
+    | "cancelOffboardRequested";
 export type ProvisioningAction =
     | "other"
     | "create"
@@ -4801,7 +4812,11 @@ export interface AndroidCompliancePolicy extends DeviceCompliancePolicy {
      * lowSecurityBiometric, numeric, numericComplex, any.
      */
     passwordRequiredType?: AndroidRequiredPasswordType;
-    // Devices must not be jailbroken or rooted.
+    /**
+     * Indicates the device should not be rooted. When TRUE, if the device is detected as rooted it will be reported
+     * non-compliant. When FALSE, the device is not reported as non-compliant regardless of device rooted state. Default is
+     * FALSE.
+     */
     securityBlockJailbrokenDevices?: boolean;
     // Disable USB debugging on Android devices.
     securityDisableUsbDebugging?: boolean;
@@ -4987,7 +5002,7 @@ export interface AndroidStoreApp extends MobileApp {
     appStoreUrl?: NullableOption<string>;
     // The value for the minimum applicable operating system.
     minimumSupportedOperatingSystem?: NullableOption<AndroidMinimumOperatingSystem>;
-    // The package identifier.
+    // The package identifier. This property is read-only.
     packageId?: NullableOption<string>;
 }
 export interface AndroidWorkProfileCompliancePolicy extends DeviceCompliancePolicy {
@@ -5019,7 +5034,11 @@ export interface AndroidWorkProfileCompliancePolicy extends DeviceCompliancePoli
      * lowSecurityBiometric, numeric, numericComplex, any.
      */
     passwordRequiredType?: AndroidRequiredPasswordType;
-    // Devices must not be jailbroken or rooted.
+    /**
+     * Indicates the device should not be rooted. When TRUE, if the device is detected as rooted it will be reported
+     * non-compliant. When FALSE, the device is not reported as non-compliant regardless of device rooted state. Default is
+     * FALSE.
+     */
     securityBlockJailbrokenDevices?: boolean;
     // Disable USB debugging on Android devices.
     securityDisableUsbDebugging?: boolean;
@@ -5029,9 +5048,9 @@ export interface AndroidWorkProfileCompliancePolicy extends DeviceCompliancePoli
     securityRequireCompanyPortalAppIntegrity?: boolean;
     // Require Google Play Services to be installed and enabled on the device.
     securityRequireGooglePlayServices?: boolean;
-    // Require the device to pass the SafetyNet basic integrity check.
+    // Require the device to pass the Play Integrity basic integrity check.
     securityRequireSafetyNetAttestationBasicIntegrity?: boolean;
-    // Require the device to pass the SafetyNet certified device check.
+    // Require the device to pass the Play Integrity device integrity check.
     securityRequireSafetyNetAttestationCertifiedDevice?: boolean;
     /**
      * Require the device to have up to date security providers. The device will require Google Play Services to be enabled
@@ -5168,7 +5187,6 @@ export interface AppleManagedIdentityProvider extends IdentityProviderBase {
 export interface ApplePushNotificationCertificate extends Entity {
     // Apple Id of the account used to create the MDM push certificate.
     appleIdentifier?: NullableOption<string>;
-    // Not yet documented
     certificate?: NullableOption<string>;
     // Certificate serial number. This property is read-only.
     certificateSerialNumber?: NullableOption<string>;
@@ -6584,8 +6602,18 @@ export interface Call extends Entity {
     participants?: NullableOption<Participant[]>;
 }
 export interface CallEvent extends Entity {
+    /**
+     * The event type of the call. Possible values are: callStarted, callEnded, unknownFutureValue, rosterUpdated. You must
+     * use the Prefer: include-unknown-enum-members request header to get the following value in this evolvable enum:
+     * rosterUpdated.
+     */
     callEventType?: CallEventType;
+    /**
+     * The date and time when the event occurred. The timestamp type represents date and time information using ISO 8601
+     * format and is always in UTC. For example, midnight UTC on Jan 1, 2014 is 2014-01-01T00:00:00Z.
+     */
     eventDateTime?: NullableOption<string>;
+    // Participants collection for the call event.
     participants?: NullableOption<Participant[]>;
 }
 export interface CallRecording extends Entity {
@@ -8426,7 +8454,7 @@ export interface Device extends DirectoryObject {
     transitiveMemberOf?: NullableOption<DirectoryObject[]>;
 }
 export interface DeviceAndAppManagementRoleAssignment extends RoleAssignment {
-    // The list of ids of role member security groups. These are IDs from Azure Active Directory.
+    // Indicates the list of role member security group Entra IDs. For example: {dec942f4-6777-4998-96b4-522e383b08e2}.
     members?: NullableOption<string[]>;
 }
 // tslint:disable-next-line: no-empty-interface
@@ -8600,7 +8628,7 @@ export interface DeviceCompliancePolicySettingStateSummary extends Entity {
     notApplicableDeviceCount?: number;
     /**
      * Setting platform. Possible values are: android, iOS, macOS, windowsPhone81, windows81AndLater, windows10AndLater,
-     * androidWorkProfile, all.
+     * androidWorkProfile, linux, all.
      */
     platformType?: PolicyPlatformType;
     // Number of remediated devices
@@ -8611,7 +8639,6 @@ export interface DeviceCompliancePolicySettingStateSummary extends Entity {
     settingName?: NullableOption<string>;
     // Number of unknown devices
     unknownDeviceCount?: number;
-    // Not yet documented
     deviceComplianceSettingStates?: NullableOption<DeviceComplianceSettingState[]>;
 }
 export interface DeviceCompliancePolicyState extends Entity {
@@ -8844,15 +8871,15 @@ export interface DeviceEnrollmentLimitConfiguration extends DeviceEnrollmentConf
     limit?: number;
 }
 export interface DeviceEnrollmentPlatformRestrictionsConfiguration extends DeviceEnrollmentConfiguration {
-    // Android restrictions based on platform, platform operating system version, and device ownership
+    // Indicates restrictions for Android platform.
     androidRestriction?: NullableOption<DeviceEnrollmentPlatformRestriction>;
-    // Ios restrictions based on platform, platform operating system version, and device ownership
+    // Indicates restrictions for IOS platform.
     iosRestriction?: NullableOption<DeviceEnrollmentPlatformRestriction>;
-    // Mac restrictions based on platform, platform operating system version, and device ownership
+    // Indicates restrictions for MacOS platform.
     macOSRestriction?: NullableOption<DeviceEnrollmentPlatformRestriction>;
-    // Windows mobile restrictions based on platform, platform operating system version, and device ownership
+    // Indicates restrictions for Windows Mobile platform.
     windowsMobileRestriction?: NullableOption<DeviceEnrollmentPlatformRestriction>;
-    // Windows restrictions based on platform, platform operating system version, and device ownership
+    // Indicates restrictions for Windows platform.
     windowsRestriction?: NullableOption<DeviceEnrollmentPlatformRestriction>;
 }
 export interface DeviceEnrollmentWindowsHelloForBusinessConfiguration extends DeviceEnrollmentConfiguration {
@@ -8991,10 +9018,7 @@ export interface DeviceManagement extends Entity {
     intuneBrand?: NullableOption<IntuneBrand>;
     // Account level settings.
     settings?: NullableOption<DeviceManagementSettings>;
-    /**
-     * Tenant mobile device management subscription state. Possible values are: pending, active, warning, disabled, deleted,
-     * blocked, lockedOut.
-     */
+    // Tenant mobile device management subscription state.
     subscriptionState?: DeviceManagementSubscriptionState;
     // User experience analytics device settings
     userExperienceAnalyticsSettings?: NullableOption<UserExperienceAnalyticsSettings>;
@@ -9047,7 +9071,6 @@ export interface DeviceManagement extends Entity {
     notificationMessageTemplates?: NullableOption<NotificationMessageTemplate[]>;
     // The remote assist partners.
     remoteAssistancePartners?: NullableOption<RemoteAssistancePartner[]>;
-    // Reports singleton
     reports?: NullableOption<DeviceManagementReports>;
     // The Resource Operations.
     resourceOperations?: NullableOption<ResourceOperation[]>;
@@ -9107,7 +9130,6 @@ export interface DeviceManagement extends Entity {
     userExperienceAnalyticsWorkFromAnywhereMetrics?: NullableOption<UserExperienceAnalyticsWorkFromAnywhereMetric[]>;
     // The user experience analytics work from anywhere model performance
     userExperienceAnalyticsWorkFromAnywhereModelPerformance?: NullableOption<UserExperienceAnalyticsWorkFromAnywhereModelPerformance[]>;
-    // Virtual endpoint
     virtualEndpoint?: NullableOption<VirtualEndpoint>;
     // The Windows autopilot device identities contained collection.
     windowsAutopilotDeviceIdentities?: NullableOption<WindowsAutopilotDeviceIdentity[]>;
@@ -9144,33 +9166,42 @@ export interface DeviceManagementExchangeConnector extends Entity {
     version?: NullableOption<string>;
 }
 export interface DeviceManagementExportJob extends Entity {
-    // Time that the exported report expires
+    // Time that the exported report expires.
     expirationDateTime?: string;
-    // Filters applied on the report
+    // Filters applied on the report. The maximum length allowed for this property is 2000 characters.
     filter?: NullableOption<string>;
-    // Format of the exported report. Possible values are: csv, pdf, json, unknownFutureValue.
+    /**
+     * Format of the exported report. Possible values are csv and json. Possible values are: csv, pdf, json,
+     * unknownFutureValue.
+     */
     format?: DeviceManagementReportFileFormat;
     /**
-     * Configures how the requested export job is localized. Possible values are: localizedValuesAsAdditionalColumn,
-     * replaceLocalizableValues.
+     * Configures how the requested export job is localized. Possible values are replaceLocalizableValues and
+     * localizedValuesAsAdditionalColumn. Possible values are: localizedValuesAsAdditionalColumn, replaceLocalizableValues.
      */
     localizationType?: DeviceManagementExportJobLocalizationType;
-    // Name of the report
+    // Name of the report. The maximum length allowed for this property is 2000 characters.
     reportName?: string;
-    // Time that the exported report was requested
+    // Time that the exported report was requested.
     requestDateTime?: string;
-    // Columns selected from the report
+    /**
+     * Columns selected from the report. The maximum number of allowed columns names is 256. The maximum length allowed for
+     * each column name in this property is 1000 characters.
+     */
     select?: NullableOption<string[]>;
     /**
      * A snapshot is an identifiable subset of the dataset represented by the ReportName. A sessionId or
      * CachedReportConfiguration id can be used here. If a sessionId is specified, Filter, Select, and OrderBy are applied to
      * the data represented by the sessionId. Filter, Select, and OrderBy cannot be specified together with a
-     * CachedReportConfiguration id.
+     * CachedReportConfiguration id. The maximum length allowed for this property is 128 characters.
      */
     snapshotId?: NullableOption<string>;
-    // Status of the export job. Possible values are: unknown, notStarted, inProgress, completed, failed.
+    /**
+     * Status of the export job. Possible values are unknown, notStarted, inProgress, completed and failed. Possible values
+     * are: unknown, notStarted, inProgress, completed, failed.
+     */
     status?: DeviceManagementReportStatus;
-    // Temporary location of the exported report
+    // Temporary location of the exported report.
     url?: NullableOption<string>;
 }
 export interface DeviceManagementPartner extends Entity {
@@ -9194,7 +9225,7 @@ export interface DeviceManagementPartner extends Entity {
     whenPartnerDevicesWillBeRemovedDateTime?: NullableOption<string>;
 }
 export interface DeviceManagementReports extends Entity {
-    // Entity representing a job to export a report
+    // Entity representing a job to export a report.
     exportJobs?: NullableOption<DeviceManagementExportJob[]>;
 }
 export interface DeviceManagementTroubleshootingEvent extends Entity {
@@ -9366,7 +9397,7 @@ export interface Domain extends Entity {
      * indicates a cloud managed domain where Microsoft Entra ID performs user authentication. Federated indicates
      * authentication is federated with an identity provider such as the tenant's on-premises Active Directory via Active
      * Directory Federation Services. Not nullable. To update this property in delegated scenarios, the calling app must be
-     * assigned the Directory.AccessAsUser.All delegated permission.
+     * assigned the Domain-InternalFederation.ReadWrite.All permission.
      */
     authenticationType?: string;
     /**
@@ -9808,6 +9839,8 @@ export interface EducationAssignmentResource extends Entity {
     distributeForStudentWork?: NullableOption<boolean>;
     // Resource object that has been associated with this assignment.
     resource?: NullableOption<EducationResource>;
+    // A collection of assignment resources that depend on the parent educationAssignmentResource.
+    dependentResources?: NullableOption<EducationAssignmentResource[]>;
 }
 export interface EducationAssignmentSettings extends Entity {
     /**
@@ -10081,10 +10114,12 @@ export interface EducationSubmission extends Entity {
     submittedResources?: NullableOption<EducationSubmissionResource[]>;
 }
 export interface EducationSubmissionResource extends Entity {
-    // Pointer to the assignment from which the resource was copied, and if null, the student uploaded the resource.
+    // Pointer to the assignment from which the resource was copied. If the value is null, the student uploaded the resource.
     assignmentResourceUrl?: NullableOption<string>;
     // Resource object.
     resource?: NullableOption<EducationResource>;
+    // A collection of submission resources that depend on the parent educationSubmissionResource.
+    dependentResources?: NullableOption<EducationSubmissionResource[]>;
 }
 export interface EducationUser extends Entity {
     // True if the account is enabled; otherwise, false. This property is required when a user is created. Supports $filter.
@@ -10228,8 +10263,11 @@ export interface EmailFileAssessmentRequest extends ThreatAssessmentRequest {
     recipientEmail?: string;
 }
 export interface EmergencyCallEvent extends CallEvent {
+    // The information of the emergency caller.
     callerInfo?: NullableOption<EmergencyCallerInfo>;
+    // The emergency number dialed.
     emergencyNumberDialed?: NullableOption<string>;
+    // The policy name for the emergency call event.
     policyName?: NullableOption<string>;
 }
 export interface EmployeeExperience {
@@ -10377,7 +10415,7 @@ export interface EnrollmentTroubleshootingEvent extends DeviceManagementTroubles
     /**
      * Type of the enrollment. Possible values are: unknown, userEnrollment, deviceEnrollmentManager, appleBulkWithUser,
      * appleBulkWithoutUser, windowsAzureADJoin, windowsBulkUserless, windowsAutoEnrollment, windowsBulkAzureDomainJoin,
-     * windowsCoManagement, windowsAzureADJoinUsingDeviceAuth, appleUserEnrollment, appleUserEnrollmentWithServiceAccount.
+     * windowsCoManagement.
      */
     enrollmentType?: DeviceEnrollmentType;
     /**
@@ -11643,7 +11681,11 @@ export interface IosCompliancePolicy extends DeviceCompliancePolicy {
     passcodeRequired?: boolean;
     // The required passcode type. Possible values are: deviceDefault, alphanumeric, numeric.
     passcodeRequiredType?: RequiredPasswordType;
-    // Devices must not be jailbroken or rooted.
+    /**
+     * Indicates the device should not be jailbroken. When TRUE, if the device is detected as jailbroken it will be reported
+     * non-compliant. When FALSE, the device is not reported as non-compliant regardless of device jailbroken state. Default
+     * is FALSE.
+     */
     securityBlockJailbrokenDevices?: boolean;
 }
 // tslint:disable-next-line: interface-name
@@ -12702,12 +12744,12 @@ export interface MacOSLobApp extends MobileLobApp {
     /**
      * When TRUE, indicates that the app's version will NOT be used to detect if the app is installed on a device. When FALSE,
      * indicates that the app's version will be used to detect if the app is installed on a device. Set this to true for apps
-     * that use a self update feature.
+     * that use a self update feature. The default value is FALSE.
      */
     ignoreVersionDetection?: boolean;
     /**
      * When TRUE, indicates that the app will be installed as managed (requires macOS 11.0 and other managed package
-     * restrictions). When FALSE, indicates that the app will be installed as unmanaged.
+     * restrictions). When FALSE, indicates that the app will be installed as unmanaged. The default value is FALSE.
      */
     installAsManaged?: boolean;
     /**
@@ -12860,7 +12902,7 @@ export interface ManagedAndroidStoreApp extends ManagedApp {
     packageId?: NullableOption<string>;
 }
 export interface ManagedApp extends MobileApp {
-    // The Application's availability. Possible values are: global, lineOfBusiness.
+    // The Application's availability. This property is read-only. Possible values are: global, lineOfBusiness.
     appAvailability?: ManagedAppAvailability;
     // The Application's version.
     version?: NullableOption<string>;
@@ -12895,13 +12937,9 @@ export interface ManagedAppPolicy extends Entity {
     version?: NullableOption<string>;
 }
 export interface ManagedAppPolicyDeploymentSummary extends Entity {
-    // Not yet documented
     configurationDeployedUserCount?: number;
-    // Not yet documented
     configurationDeploymentSummaryPerApp?: NullableOption<ManagedAppPolicyDeploymentSummaryPerApp[]>;
-    // Not yet documented
     displayName?: NullableOption<string>;
-    // Not yet documented
     lastRefreshTime?: string;
     // Version of the entity.
     version?: NullableOption<string>;
@@ -12938,7 +12976,10 @@ export interface ManagedAppProtection extends ManagedAppPolicy {
      * CustomBrowserProtocol (for iOS) or CustomBrowserPackageId/CustomBrowserDisplayName (for Android)
      */
     managedBrowserToOpenLinksRequired?: boolean;
-    // Maximum number of incorrect pin retry attempts before the managed app is either blocked or wiped.
+    /**
+     * Maximum number of incorrect pin retry attempts before the managed app is either blocked or wiped. Valid values 1 to
+     * 65535
+     */
     maximumPinRetries?: number;
     // Minimum pin length required for an app-level pin if PinRequired is set to True
     minimumPinLength?: number;
@@ -13389,9 +13430,9 @@ export interface ManagedMobileLobApp extends ManagedApp {
     committedContentVersion?: NullableOption<string>;
     // The name of the main Lob application file.
     fileName?: NullableOption<string>;
-    // The total size, including all uploaded files.
+    // The total size, including all uploaded files. This property is read-only.
     size?: number;
-    // The list of content versions for this app.
+    // The list of content versions for this app. This property is read-only.
     contentVersions?: NullableOption<MobileAppContent[]>;
 }
 // tslint:disable-next-line: no-empty-interface
@@ -13591,7 +13632,7 @@ export interface MicrosoftStoreForBusinessApp extends MobileApp {
     usedLicenseCount?: number;
 }
 export interface MobileApp extends Entity {
-    // The date and time the app was created.
+    // The date and time the app was created. This property is read-only.
     createdDateTime?: string;
     // The description of the app.
     description?: NullableOption<string>;
@@ -13605,7 +13646,7 @@ export interface MobileApp extends Entity {
     isFeatured?: boolean;
     // The large icon, to be displayed in the app details and used for upload of the icon.
     largeIcon?: NullableOption<MimeContent>;
-    // The date and time the app was last modified.
+    // The date and time the app was last modified. This property is read-only.
     lastModifiedDateTime?: string;
     // Notes for the app.
     notes?: NullableOption<string>;
@@ -13616,8 +13657,8 @@ export interface MobileApp extends Entity {
     // The publisher of the app.
     publisher?: NullableOption<string>;
     /**
-     * The publishing state for the app. The app cannot be assigned unless the app is published. Possible values are:
-     * notPublished, processing, published.
+     * The publishing state for the app. The app cannot be assigned unless the app is published. This property is read-only.
+     * Possible values are: notPublished, processing, published.
      */
     publishingState?: MobileAppPublishingState;
     // The list of group assignments for this mobile app.
@@ -13639,7 +13680,7 @@ export interface MobileAppAssignment extends Entity {
 export interface MobileAppCategory extends Entity {
     // The name of the app category.
     displayName?: NullableOption<string>;
-    // The date and time the mobileAppCategory was last modified.
+    // The date and time the mobileAppCategory was last modified. This property is read-only.
     lastModifiedDateTime?: string;
 }
 export interface MobileAppContent extends Entity {
@@ -13649,30 +13690,47 @@ export interface MobileAppContent extends Entity {
     files?: NullableOption<MobileAppContentFile[]>;
 }
 export interface MobileAppContentFile extends Entity {
-    // The Azure Storage URI.
+    /**
+     * Indicates the Azure Storage URI that the file is uploaded to. Created by the service upon receiving a valid
+     * mobileAppContentFile. Read-only. This property is read-only.
+     */
     azureStorageUri?: NullableOption<string>;
-    // The time the Azure storage Uri expires.
+    /**
+     * Indicates the date and time when the Azure storage URI expires, in ISO 8601 format. For example, midnight UTC on Jan 1,
+     * 2014 would look like this: '2014-01-01T00:00:00Z'. Read-only. This property is read-only.
+     */
     azureStorageUriExpirationDateTime?: NullableOption<string>;
-    // The time the file was created.
+    /**
+     * Indicates created date and time associated with app content file, in ISO 8601 format. For example, midnight UTC on Jan
+     * 1, 2014 would look like this: '2014-01-01T00:00:00Z'. Read-only. This property is read-only.
+     */
     createdDateTime?: string;
-    // A value indicating whether the file is committed.
+    /**
+     * A value indicating whether the file is committed. A committed app content file has been fully uploaded and validated by
+     * the Intune service. TRUE means that app content file is committed, FALSE means that app content file is not committed.
+     * Defaults to FALSE. Read-only. This property is read-only.
+     */
     isCommitted?: boolean;
     /**
      * Indicates whether this content file is a dependency for the main content file. TRUE means that the content file is a
      * dependency, FALSE means that the content file is not a dependency and is the main content file. Defaults to FALSE.
      */
     isDependency?: boolean;
-    // The manifest information.
+    // Indicates the manifest information, containing file metadata.
     manifest?: NullableOption<string>;
-    // the file name.
+    // Indicates the name of the file.
     name?: NullableOption<string>;
-    // The size of the file prior to encryption.
+    // Indicates the original size of the file, in bytes.
     size?: number;
-    // The size of the file after encryption.
+    // Indicates the size of the file after encryption, in bytes.
     sizeEncrypted?: number;
     /**
-     * The state of the current upload request. Possible values are: success, transientError, error, unknown,
+     * Indicates the state of the current upload request. Possible values are: success, transientError, error, unknown,
      * azureStorageUriRequestSuccess, azureStorageUriRequestPending, azureStorageUriRequestFailed,
+     * azureStorageUriRequestTimedOut, azureStorageUriRenewalSuccess, azureStorageUriRenewalPending,
+     * azureStorageUriRenewalFailed, azureStorageUriRenewalTimedOut, commitFileSuccess, commitFilePending, commitFileFailed,
+     * commitFileTimedOut. Default value is success. This property is read-only. Possible values are: success, transientError,
+     * error, unknown, azureStorageUriRequestSuccess, azureStorageUriRequestPending, azureStorageUriRequestFailed,
      * azureStorageUriRequestTimedOut, azureStorageUriRenewalSuccess, azureStorageUriRenewalPending,
      * azureStorageUriRenewalFailed, azureStorageUriRenewalTimedOut, commitFileSuccess, commitFilePending, commitFileFailed,
      * commitFileTimedOut.
@@ -13739,30 +13797,35 @@ export interface MobileLobApp extends MobileApp {
     committedContentVersion?: NullableOption<string>;
     // The name of the main Lob application file.
     fileName?: NullableOption<string>;
-    // The total size, including all uploaded files.
+    // The total size, including all uploaded files. This property is read-only.
     size?: number;
-    // The list of content versions for this app.
+    // The list of content versions for this app. This property is read-only.
     contentVersions?: NullableOption<MobileAppContent[]>;
 }
 export interface MobileThreatDefenseConnector extends Entity {
     /**
      * When TRUE, indicates the Mobile Threat Defense partner may collect metadata about installed applications from Intune
-     * for IOS devices. When FALSE, indicates the Mobile Threat Defense partner may not collect metadata about installed
-     * applications from Intune for IOS devices. Default value is FALSE.
+     * for iOS devices. When FALSE, indicates the Mobile Threat Defense partner may not collect metadata about installed
+     * applications from Intune for iOS devices. Default value is FALSE.
      */
     allowPartnerToCollectIOSApplicationMetadata?: boolean;
     /**
      * When TRUE, indicates the Mobile Threat Defense partner may collect metadata about personally installed applications
-     * from Intune for IOS devices. When FALSE, indicates the Mobile Threat Defense partner may not collect metadata about
-     * personally installed applications from Intune for IOS devices. Default value is FALSE.
+     * from Intune for iOS devices. When FALSE, indicates the Mobile Threat Defense partner may not collect metadata about
+     * personally installed applications from Intune for iOS devices. Default value is FALSE.
      */
     allowPartnerToCollectIOSPersonalApplicationMetadata?: boolean;
     /**
-     * For Android, set whether Intune must receive data from the Mobile Threat Defense partner prior to marking a device
-     * compliant
+     * When TRUE, indicates that Intune must receive data from the Mobile Threat Defense partner prior to marking an Android
+     * device compliant. When FALSE, indicates that Intune may mark an Android device compliant before receiving data from the
+     * Mobile Threat Defense partner.
      */
     androidDeviceBlockedOnMissingPartnerData?: boolean;
-    // For Android, set whether data from the Mobile Threat Defense partner should be used during compliance evaluations
+    /**
+     * When TRUE, indicates that data from the Mobile Threat Defense partner will be used during compliance evaluations for
+     * Android devices. When FALSE, indicates that data from the Mobile Threat Defense partner will not be used during
+     * compliance evaluations for Android devices. Default value is FALSE.
+     */
     androidEnabled?: boolean;
     /**
      * When TRUE, inidicates that data from the Mobile Threat Defense partner can be used during Mobile Application Management
@@ -13772,16 +13835,21 @@ export interface MobileThreatDefenseConnector extends Entity {
      */
     androidMobileApplicationManagementEnabled?: boolean;
     /**
-     * For IOS, set whether Intune must receive data from the Mobile Threat Defense partner prior to marking a device
-     * compliant
+     * When TRUE, indicates that Intune must receive data from the Mobile Threat Defense partner prior to marking a device
+     * compliant. When FALSE, indicates that Intune may not recieve data from Mobile Threat Defense partner prior to making
+     * device compliant. Default value is FALSE.
      */
     iosDeviceBlockedOnMissingPartnerData?: boolean;
-    // For IOS, get or set whether data from the Mobile Threat Defense partner should be used during compliance evaluations
+    /**
+     * When TRUE, indicates that data from the Mobile Threat Defense partner will be used during compliance evaluations for
+     * iOS devices. When FALSE, indicates that data from the Mobile Threat Defense partner will not be used during compliance
+     * evaluations for iOS devices. Default value is FALSE.
+     */
     iosEnabled?: boolean;
     /**
      * When TRUE, inidicates that data from the Mobile Threat Defense partner can be used during Mobile Application Management
-     * (MAM) evaluations for IOS devices. When FALSE, inidicates that data from the Mobile Threat Defense partner should not
-     * be used during Mobile Application Management (MAM) evaluations for IOS devices. Only one partner per platform may be
+     * (MAM) evaluations for iOS devices. When FALSE, inidicates that data from the Mobile Threat Defense partner should not
+     * be used during Mobile Application Management (MAM) evaluations for iOS devices. Only one partner per platform may be
      * enabled for Mobile Application Management (MAM) evaluation. Default value is FALSE.
      */
     iosMobileApplicationManagementEnabled?: boolean;
@@ -13795,25 +13863,31 @@ export interface MobileThreatDefenseConnector extends Entity {
     microsoftDefenderForEndpointAttachEnabled?: boolean;
     /**
      * Mobile Threat Defense partner state for this account. Possible values are: unavailable, available, enabled,
-     * unresponsive.
+     * unresponsive, notSetUp, error, unknownFutureValue.
      */
     partnerState?: MobileThreatPartnerTenantState;
-    // Get or Set days the per tenant tolerance to unresponsiveness for this partner integration
+    /**
+     * Indicates the number of days without receiving a heartbeat from a Mobile Threat Defense partner before the partner is
+     * marked as unresponsive. Intune will the ignore the data from this Mobile Threat Defense Partner for next compliance
+     * calculation.
+     */
     partnerUnresponsivenessThresholdInDays?: number;
     /**
-     * Get or set whether to block devices on the enabled platforms that do not meet the minimum version requirements of the
-     * Mobile Threat Defense partner
+     * When TRUE, indicates that Intune will mark devices noncompliant on enabled platforms that do not meet the minimum
+     * version requirements of the Mobile Threat Defense partner. When FALSE, indicates that Intune will not mark devices
+     * noncompliant on enabled platforms that do not meet the minimum version requirements of the Mobile Threat Defense
+     * partner. Default value is FALSE.
      */
     partnerUnsupportedOsVersionBlocked?: boolean;
     /**
-     * When TRUE, inidicates that Intune must receive data from the Mobile Threat Defense partner prior to marking a device
-     * compliant for Windows. When FALSE, inidicates that Intune may make a device compliant without receiving data from the
-     * Mobile Threat Defense partner for Windows. Default value is FALSE.
+     * When TRUE, indicates that Intune must receive data from the data sync partner prior to marking a device compliant for
+     * Windows. When FALSE, indicates that Intune may mark a device compliant without receiving data from the data sync
+     * partner for Windows. Default value is FALSE.
      */
     windowsDeviceBlockedOnMissingPartnerData?: boolean;
     /**
-     * When TRUE, inidicates that data from the Mobile Threat Defense partner can be used during compliance evaluations for
-     * Windows. When FALSE, inidicates that data from the Mobile Threat Defense partner should not be used during compliance
+     * When TRUE, indicates that data from the Mobile Threat Defense partner will be used during compliance evaluations for
+     * Windows. When FALSE, indicates that data from the Mobile Threat Defense partner will not be used during compliance
      * evaluations for Windows. Default value is FALSE.
      */
     windowsEnabled?: boolean;
@@ -15983,8 +16057,18 @@ export interface ProtectionUnitBase extends Entity {
      * using ISO 8601 format and is always in UTC. For example, midnight UTC on Jan 1, 2014 is 2014-01-01T00:00:00Z.
      */
     lastModifiedDateTime?: NullableOption<string>;
+    /**
+     * The date and time when protection unit offboard was requested. The timestamp type represents date and time information
+     * using ISO 8601 format and is always in UTC. For example, midnight UTC on Jan 1, 2014 is 2014-01-01T00:00:00Z.
+     */
+    offboardRequestedDateTime?: NullableOption<string>;
     // The unique identifier of the protection policy based on which protection unit was created.
     policyId?: NullableOption<string>;
+    /**
+     * Indicates the sources by which a protection unit is currently protected. A protection unit protected by multiple
+     * sources is indicated by comma-separated values. The possible values are: none, manual, dynamicRule, unknownFutureValue.
+     */
+    protectionSources?: ProtectionSource;
     /**
      * The status of the protection unit. The possible values are: protectRequested, protected, unprotectRequested,
      * unprotected, removeRequested, unknownFutureValue, offboardRequested, offboarded, cancelOffboardRequested. Use the
@@ -16622,13 +16706,19 @@ export interface RiskyUserHistoryItem extends RiskyUser {
     userId?: NullableOption<string>;
 }
 export interface RoleAssignment extends Entity {
-    // Description of the Role Assignment.
+    /**
+     * Indicates the description of the role assignment. For example: 'All administrators, employees and scope tags associated
+     * with the Houston office.' Max length is 1024 characters.
+     */
     description?: NullableOption<string>;
-    // The display or friendly name of the role Assignment.
+    /**
+     * Indicates the display name of the role assignment. For example: 'Houston administrators and users'. Max length is 128
+     * characters.
+     */
     displayName?: NullableOption<string>;
-    // List of ids of role scope member security groups. These are IDs from Azure Active Directory.
+    // Indicates the list of resource scope security group Entra IDs. For example: {dec942f4-6777-4998-96b4-522e383b08e2}.
     resourceScopes?: NullableOption<string[]>;
-    // Role definition this assignment is part of.
+    // Indicates the role definition for this role assignment.
     roleDefinition?: NullableOption<RoleDefinition>;
 }
 export interface RoleDefinition extends Entity {
@@ -21290,11 +21380,11 @@ export interface VoiceAuthenticationMethodConfiguration extends AuthenticationMe
     includeTargets?: NullableOption<AuthenticationMethodTarget[]>;
 }
 export interface VppToken extends Entity {
-    // The Apple ID associated with the given Apple Volume Purchase Program Token.
+    // The apple Id associated with the given Apple Volume Purchase Program Token.
     appleId?: NullableOption<string>;
     // Whether or not apps for the VPP token will be automatically updated.
     automaticallyUpdateApps?: boolean;
-    // The country or region associated with the Apple Volume Purchase Program Token.
+    // Whether or not apps for the VPP token will be automatically updated.
     countryOrRegion?: NullableOption<string>;
     // The expiration date time of the Apple Volume Purchase Program Token.
     expirationDateTime?: string;
@@ -21307,14 +21397,14 @@ export interface VppToken extends Entity {
     lastSyncDateTime?: string;
     /**
      * Current sync status of the last application sync which was triggered using the Apple Volume Purchase Program Token.
-     * Possible values are: none, inProgress, completed, failed.
+     * Possible values are: none, inProgress, completed, failed. Possible values are: none, inProgress, completed, failed.
      */
     lastSyncStatus?: VppTokenSyncStatus;
     // The organization associated with the Apple Volume Purchase Program Token
     organizationName?: NullableOption<string>;
     /**
      * Current state of the Apple Volume Purchase Program Token. Possible values are: unknown, valid, expired, invalid,
-     * assignedToExternalMDM.
+     * assignedToExternalMDM. Possible values are: unknown, valid, expired, invalid, assignedToExternalMDM.
      */
     state?: VppTokenState;
     // The Apple Volume Purchase Program Token string downloaded from the Apple Volume Purchase Program.
@@ -21353,35 +21443,58 @@ export interface Win32LobApp extends MobileLobApp {
     /**
      * Indicates the Windows architecture(s) this app should be installed on. The app will be treated as not applicable for
      * devices with architectures not matching the selected value. When a non-null value is provided for the
-     * `allowedArchitectures` property, the value of the `applicableArchitectures` property is set to `none`. Possible values
-     * are: `null`, `x86`, `x64`, `arm64`.
+     * allowedArchitectures property, the value of the applicableArchitectures property is set to none. Possible values are:
+     * null, x86, x64, arm64. Possible values are: none, x86, x64, arm, neutral.
      */
     allowedArchitectures?: NullableOption<WindowsArchitecture>;
-    // The Windows architecture(s) for which this app can run on. Possible values are: none, x86, x64, arm, neutral.
+    /**
+     * Indicates the Windows architecture(s) this app should be installed on. The app will be treated as not applicable for
+     * devices with architectures not matching the selected value. When a non-null value is provided for the
+     * allowedArchitectures property, the value of the applicableArchitectures property is set to none. Default value is none.
+     * Possible values are: none, x86, x64. Possible values are: none, x86, x64, arm, neutral.
+     */
     applicableArchitectures?: WindowsArchitecture;
-    // The command line to install this app
+    // Indicates the command line to install this app. Used to install the Win32 app. Example: msiexec /i 'Orca.Msi' /qn.
     installCommandLine?: NullableOption<string>;
-    // The install experience for this app.
+    // Indicates the install experience for this app.
     installExperience?: NullableOption<Win32LobAppInstallExperience>;
-    // The value for the minimum CPU speed which is required to install this app.
+    /**
+     * Indicates the value for the minimum CPU speed which is required to install this app. Allowed range from 0 to clock
+     * speed from WMI helper.
+     */
     minimumCpuSpeedInMHz?: NullableOption<number>;
-    // The value for the minimum free disk space which is required to install this app.
+    /**
+     * Indicates the value for the minimum free disk space which is required to install this app. Allowed range from 0 to
+     * driver's maximum available free space.
+     */
     minimumFreeDiskSpaceInMB?: NullableOption<number>;
-    // The value for the minimum physical memory which is required to install this app.
+    /**
+     * Indicates the value for the minimum physical memory which is required to install this app. Allowed range from 0 to
+     * total physical memory from WMI helper.
+     */
     minimumMemoryInMB?: NullableOption<number>;
-    // The value for the minimum number of processors which is required to install this app.
+    // Indicates the value for the minimum number of processors which is required to install this app. Minimum value is 0.
     minimumNumberOfProcessors?: NullableOption<number>;
-    // The value for the minimum supported windows release.
+    // Indicates the value for the minimum supported windows release. Example: Windows11_23H2.
     minimumSupportedWindowsRelease?: NullableOption<string>;
-    // The MSI details if this Win32 app is an MSI app.
+    // Indicates the MSI details if this Win32 app is an MSI app.
     msiInformation?: NullableOption<Win32LobAppMsiInformation>;
-    // The return codes for post installation behavior.
+    // Indicates the return codes for post installation behavior.
     returnCodes?: NullableOption<Win32LobAppReturnCode[]>;
-    // The detection and requirement rules for this app.
+    /**
+     * Indicates the detection and requirement rules for this app. Possible values are: Win32LobAppFileSystemRule,
+     * Win32LobAppPowerShellScriptRule, Win32LobAppProductCodeRule, Win32LobAppRegistryRule.
+     */
     rules?: NullableOption<Win32LobAppRule[]>;
-    // The relative path of the setup file in the encrypted Win32LobApp package.
+    /**
+     * Indicates the relative path of the setup file in the encrypted Win32LobApp package. Example: Intel-SA-00075 Detection
+     * and Mitigation Tool.msi.
+     */
     setupFilePath?: NullableOption<string>;
-    // The command line to uninstall this app
+    /**
+     * Indicates the command line to uninstall this app. Used to uninstall the app. Example: msiexec /x
+     * '{85F4CBCB-9BBC-4B50-A7D8-E1106771498D}' /qn.
+     */
     uninstallCommandLine?: NullableOption<string>;
 }
 export interface Windows10CompliancePolicy extends DeviceCompliancePolicy {
@@ -22630,33 +22743,33 @@ export interface WindowsInformationProtectionNetworkLearningSummary extends Enti
     url?: NullableOption<string>;
 }
 export interface WindowsInformationProtectionPolicy extends WindowsInformationProtection {
-    // Offline interval before app data is wiped (days)
+    // Offline interval before app data is wiped (days) . Valid values 0 to 999
     daysWithoutContactBeforeUnenroll?: number;
     // Enrollment url for the MDM
     mdmEnrollmentUrl?: NullableOption<string>;
     /**
      * Specifies the maximum amount of time (in minutes) allowed after the device is idle that will cause the device to become
-     * PIN or password locked. Range is an integer X where 0 &amp;lt;= X &amp;lt;= 999.
+     * PIN or password locked. Range is an integer X where 0 &amp;lt;= X &amp;lt;= 999. Valid values 0 to 999
      */
     minutesOfInactivityBeforeDeviceLock?: number;
     /**
      * Integer value that specifies the number of past PINs that can be associated to a user account that can't be reused. The
      * largest number you can configure for this policy setting is 50. The lowest number you can configure for this policy
      * setting is 0. If this policy is set to 0, then storage of previous PINs is not required. This node was added in Windows
-     * 10, version 1511. Default is 0.
+     * 10, version 1511. Default is 0. Valid values 0 to 50
      */
     numberOfPastPinsRemembered?: number;
     /**
      * The number of authentication failures allowed before the device will be wiped. A value of 0 disables device wipe
      * functionality. Range is an integer X where 4 &amp;lt;= X &amp;lt;= 16 for desktop and 0 &amp;lt;= X &amp;lt;= 999 for
-     * mobile devices.
+     * mobile devices. Valid values 0 to 999
      */
     passwordMaximumAttemptCount?: number;
     /**
      * Integer value specifies the period of time (in days) that a PIN can be used before the system requires the user to
      * change it. The largest number you can configure for this policy setting is 730. The lowest number you can configure for
      * this policy setting is 0. If this policy is set to 0, then the user's PIN will never expire. This node was added in
-     * Windows 10, version 1511. Default is 0.
+     * Windows 10, version 1511. Default is 0. Valid values 0 to 730
      */
     pinExpirationDays?: number;
     /**
@@ -22667,7 +22780,7 @@ export interface WindowsInformationProtectionPolicy extends WindowsInformationPr
     /**
      * Integer value that sets the minimum number of characters required for the PIN. Default value is 4. The lowest number
      * you can configure for this policy setting is 4. The largest number you can configure must be less than the number
-     * configured in the Maximum PIN length policy setting or the number 127, whichever is the lowest.
+     * configured in the Maximum PIN length policy setting or the number 127, whichever is the lowest. Valid values 0 to 127
      */
     pinMinimumLength?: number;
     /**
@@ -22948,26 +23061,44 @@ export interface WindowsSettingInstance extends Entity {
     payload?: string;
 }
 export interface WindowsUniversalAppX extends MobileLobApp {
-    // The Windows architecture(s) for which this app can run on. Possible values are: none, x86, x64, arm, neutral.
+    /**
+     * The Windows architecture(s) for which this app can run on. Possible values are: none, x86, x64, arm, neutral; default
+     * value is none. Possible values are: none, x86, x64, arm, neutral.
+     */
     applicableArchitectures?: WindowsArchitecture;
     /**
      * The Windows device type(s) for which this app can run on. Possible values are: none, desktop, mobile, holographic,
-     * team.
+     * team; default value is none. Possible values are: none, desktop, mobile, holographic, team, unknownFutureValue.
      */
     applicableDeviceTypes?: WindowsDeviceType;
-    // The Identity Name.
+    /**
+     * The Identity Name of the app, parsed from the appx file when it is uploaded through the Intune MEM console. For
+     * example: 'Contoso.DemoApp'.
+     */
     identityName?: NullableOption<string>;
-    // The Identity Publisher Hash.
+    /**
+     * The Identity Publisher Hash of the app, parsed from the appx file when it is uploaded through the Intune MEM console.
+     * For example: 'AB82CD0XYZ'.
+     */
     identityPublisherHash?: string;
-    // The Identity Resource Identifier.
+    /**
+     * The Identity Resource Identifier of the app, parsed from the appx file when it is uploaded through the Intune MEM
+     * console. For example: 'TestResourceId'.
+     */
     identityResourceIdentifier?: NullableOption<string>;
-    // The identity version.
+    /**
+     * The Identity Version of the app, parsed from the appx file when it is uploaded through the Intune MEM console. For
+     * example: '1.0.0.0'.
+     */
     identityVersion?: NullableOption<string>;
-    // Whether or not the app is a bundle.
+    // Whether or not the app is a bundle. If TRUE, app is a bundle; if FALSE, app is not a bundle.
     isBundle?: boolean;
-    // The value for the minimum applicable operating system.
+    // The value for the minimum applicable Windows operating system.
     minimumSupportedOperatingSystem?: WindowsMinimumOperatingSystem;
-    // The collection of contained apps in the committed mobileAppContent of a windowsUniversalAppX app.
+    /**
+     * The collection of contained apps in the committed mobileAppContent of a windowsUniversalAppX app. This property is
+     * read-only.
+     */
     committedContainedApps?: NullableOption<MobileContainedApp[]>;
 }
 export interface WindowsUniversalAppXContainedApp extends MobileContainedApp {
@@ -23963,6 +24094,8 @@ export interface AccessPackageAutomaticRequestSettings {
     // If set to true, automatic assignments will be created for targets in the allowed target scope.
     requestAccessForAllowedTargets?: NullableOption<boolean>;
 }
+// tslint:disable-next-line: no-empty-interface
+export interface AccessPackageDynamicApprovalStage extends AccessPackageApprovalStage {}
 export interface AccessPackageLocalizedText {
     /**
      * The language code that text is in. For example, 'en-us'. The language component follows 2-letter codes as defined in
@@ -23976,6 +24109,8 @@ export interface AccessPackageNotificationSettings {
     // Indicates if notification emails for an access package are disabled within an access package assignment policy.
     isAssignmentNotificationDisabled?: boolean;
 }
+// tslint:disable-next-line: no-empty-interface
+export interface AccessPackageRequestApprovalStageCallbackConfiguration extends CustomExtensionCallbackConfiguration {}
 export interface AccessPackageResourceAttribute {
     // Information about how to set the attribute, currently a accessPackageUserDirectoryAttributeStore type.
     destination?: NullableOption<AccessPackageResourceAttributeDestination>;
@@ -24711,6 +24846,10 @@ export interface AssignmentOrder {
      * within a user flow.
      */
     order?: NullableOption<string[]>;
+}
+export interface AssignmentRequestApprovalStageCallbackData extends AccessPackageAssignmentRequestCallbackData {
+    // The stage in the approval decision.
+    approvalStage?: NullableOption<AccessPackageApprovalStage>;
 }
 export interface AttachmentInfo {
     // The type of the attachment. The possible values are: file, item, reference. Required.
@@ -26908,7 +27047,6 @@ export interface DeviceActionResult {
 // tslint:disable-next-line: no-empty-interface
 export interface DeviceAndAppManagementAssignmentTarget {}
 export interface DeviceAndAppManagementData {
-    // Not yet documented
     content?: NullableOption<any>;
 }
 export interface DeviceCompliancePolicySettingState {
@@ -27092,7 +27230,15 @@ export interface DeviceHealthAttestationState {
     testSigning?: NullableOption<string>;
     // The security version number of the Boot Application
     tpmVersion?: NullableOption<string>;
-    // VSM is a container that protects high value assets from a compromised kernel
+    /**
+     * Indicates whether the device has Virtual Secure Mode (VSM) enabled. Virtual Secure Mode (VSM) is a container that
+     * protects high value assets from a compromised kernel. This property will be deprecated in beta from August 2023.
+     * Support for this property will end in August 2025 for v1.0 API. A new property virtualizationBasedSecurity is added and
+     * used instead. The value used for virtualSecureMode will be passed by virtualizationBasedSecurity during the deprecation
+     * process. Possible values are 'enabled', 'disabled' and 'notApplicable'. 'enabled' indicates Virtual Secure Mode (VSM)
+     * is enabled. 'disabled' indicates Virtual Secure Mode (VSM) is disabled. 'notApplicable' indicates the device is not a
+     * Windows 11 device. Default value is 'notApplicable'.
+     */
     virtualSecureMode?: NullableOption<string>;
     // Operating system running with limited services that is used to prepare a computer for Windows
     windowsPE?: NullableOption<string>;
@@ -27661,10 +27807,15 @@ export interface EmailSettings {
     useCompanyBranding?: boolean;
 }
 export interface EmergencyCallerInfo {
+    // The display name of the emergency caller.
     displayName?: NullableOption<string>;
+    // The location of the emergency caller.
     location?: NullableOption<Location>;
+    // The phone number of the emergency caller.
     phoneNumber?: NullableOption<string>;
+    // The tenant ID of the emergency caller.
     tenantId?: NullableOption<string>;
+    // The user principal name of the emergency caller.
     upn?: NullableOption<string>;
 }
 export interface EmployeeOrgData {
@@ -28352,43 +28503,51 @@ export interface IosLobAppAssignmentSettings extends MobileAppAssignmentSettings
 // tslint:disable-next-line: interface-name
 export interface IosMinimumOperatingSystem {
     /**
-     * When TRUE, only Version 10.0 or later is supported. Default value is FALSE. Exactly one of the minimum operating system
-     * boolean values will be TRUE.
+     * Indicates the minimum iOS version support required for the managed device. When 'True', iOS with OS Version 10.0 or
+     * later is required to install the app. If 'False', iOS Version 10.0 is not the minimum version. Default value is False.
+     * Exactly one of the minimum operating system boolean values will be TRUE.
      */
     v10_0?: boolean;
     /**
-     * When TRUE, only Version 11.0 or later is supported. Default value is FALSE. Exactly one of the minimum operating system
-     * boolean values will be TRUE.
+     * Indicates the minimum iOS version support required for the managed device. When 'True', iOS with OS Version 11.0 or
+     * later is required to install the app. If 'False', iOS Version 11.0 is not the minimum version. Default value is False.
+     * Exactly one of the minimum operating system boolean values will be TRUE.
      */
     v11_0?: boolean;
     /**
-     * When TRUE, only Version 12.0 or later is supported. Default value is FALSE. Exactly one of the minimum operating system
-     * boolean values will be TRUE.
+     * Indicates the minimum iOS version support required for the managed device. When 'True', iOS with OS Version 12.0 or
+     * later is required to install the app. If 'False', iOS Version 12.0 is not the minimum version. Default value is False.
+     * Exactly one of the minimum operating system boolean values will be TRUE.
      */
     v12_0?: boolean;
     /**
-     * When TRUE, only Version 13.0 or later is supported. Default value is FALSE. Exactly one of the minimum operating system
-     * boolean values will be TRUE.
+     * Indicates the minimum iOS version support required for the managed device. When 'True', iOS with OS Version 13.0 or
+     * later is required to install the app. If 'False', iOS Version 13.0 is not the minimum version. Default value is False.
+     * Exactly one of the minimum operating system boolean values will be TRUE.
      */
     v13_0?: boolean;
     /**
-     * When TRUE, only Version 14.0 or later is supported. Default value is FALSE. Exactly one of the minimum operating system
-     * boolean values will be TRUE.
+     * Indicates the minimum iOS version support required for the managed device. When 'True', iOS with OS Version 14.0 or
+     * later is required to install the app. If 'False', iOS Version 14.0 is not the minimum version. Default value is False.
+     * Exactly one of the minimum operating system boolean values will be TRUE.
      */
     v14_0?: boolean;
     /**
-     * When TRUE, only Version 15.0 or later is supported. Default value is FALSE. Exactly one of the minimum operating system
-     * boolean values will be TRUE.
+     * Indicates the minimum iOS version support required for the managed device. When 'True', iOS with OS Version 15.0 or
+     * later is required to install the app. If 'False', iOS Version 15.0 is not the minimum version. Default value is False.
+     * Exactly one of the minimum operating system boolean values will be TRUE.
      */
     v15_0?: boolean;
     /**
-     * When TRUE, only Version 8.0 or later is supported. Default value is FALSE. Exactly one of the minimum operating system
-     * boolean values will be TRUE.
+     * Indicates the minimum iOS version support required for the managed device. When 'True', iOS with OS Version 8.0 or
+     * later is required to install the app. If 'False', iOS Version 8.0 is not the minimum version. Default value is False.
+     * Exactly one of the minimum operating system boolean values will be TRUE.
      */
     v8_0?: boolean;
     /**
-     * When TRUE, only Version 9.0 or later is supported. Default value is FALSE. Exactly one of the minimum operating system
-     * boolean values will be TRUE.
+     * Indicates the minimum iOS version support required for the managed device. When 'True', iOS with OS Version 9.0 or
+     * later is required to install the app. If 'False', iOS Version 9.0 is not the minimum version. Default value is False.
+     * Exactly one of the minimum operating system boolean values will be TRUE.
      */
     v9_0?: boolean;
 }
@@ -28793,63 +28952,75 @@ export interface MacOSLobChildApp {
 }
 export interface MacOSMinimumOperatingSystem {
     /**
-     * When TRUE, indicates OS X 10.10 or later is required to install the app. When FALSE, indicates some other OS version is
-     * the minimum OS to install the app. Default value is FALSE.
+     * Indicates the minimum OS X version support required for the managed device. When 'True', macOS with OS X 10.10 or later
+     * is required to install the app. If 'False', OS X Version 10.10 is not the minimum version. Default value is False.
+     * Exactly one of the minimum operating system boolean values will be TRUE.
      */
     v10_10?: boolean;
     /**
-     * When TRUE, indicates OS X 10.11 or later is required to install the app. When FALSE, indicates some other OS version is
-     * the minimum OS to install the app. Default value is FALSE.
+     * Indicates the minimum OS X version support required for the managed device. When 'True', macOS with OS X 10.11 or later
+     * is required to install the app. If 'False', OS X Version 10.11 is not the minimum version. Default value is False.
+     * Exactly one of the minimum operating system boolean values will be TRUE.
      */
     v10_11?: boolean;
     /**
-     * When TRUE, indicates macOS 10.12 or later is required to install the app. When FALSE, indicates some other OS version
-     * is the minimum OS to install the app. Default value is FALSE.
+     * Indicates the minimum OS X version support required for the managed device. When 'True', macOS with OS X 10.12 or later
+     * is required to install the app. If 'False', OS X Version 10.12 is not the minimum version. Default value is False.
+     * Exactly one of the minimum operating system boolean values will be TRUE.
      */
     v10_12?: boolean;
     /**
-     * When TRUE, indicates macOS 10.13 or later is required to install the app. When FALSE, indicates some other OS version
-     * is the minimum OS to install the app. Default value is FALSE.
+     * Indicates the minimum OS X version support required for the managed device. When 'True', macOS with OS X 10.13 or later
+     * is required to install the app. If 'False', OS X Version 10.13 is not the minimum version. Default value is False.
+     * Exactly one of the minimum operating system boolean values will be TRUE.
      */
     v10_13?: boolean;
     /**
-     * When TRUE, indicates macOS 10.14 or later is required to install the app. When FALSE, indicates some other OS version
-     * is the minimum OS to install the app. Default value is FALSE.
+     * Indicates the minimum OS X version support required for the managed device. When 'True', macOS with OS X 10.14 or later
+     * is required to install the app. If 'False', OS X Version 10.14 is not the minimum version. Default value is False.
+     * Exactly one of the minimum operating system boolean values will be TRUE.
      */
     v10_14?: boolean;
     /**
-     * When TRUE, indicates macOS 10.15 or later is required to install the app. When FALSE, indicates some other OS version
-     * is the minimum OS to install the app. Default value is FALSE.
+     * Indicates the minimum OS X version support required for the managed device. When 'True', macOS with OS X 10.15 or later
+     * is required to install the app. If 'False', OS X Version 10.15 is not the minimum version. Default value is False.
+     * Exactly one of the minimum operating system boolean values will be TRUE.
      */
     v10_15?: boolean;
     /**
-     * When TRUE, indicates Mac OS X 10.7 or later is required to install the app. When FALSE, indicates some other OS version
-     * is the minimum OS to install the app. Default value is FALSE.
+     * Indicates the minimum OS X version support required for the managed device. When 'True', macOS with OS X 10.7 or later
+     * is required to install the app. If 'False', OS X Version 10.7 is not the minimum version. Default value is False.
+     * Exactly one of the minimum operating system boolean values will be TRUE.
      */
     v10_7?: boolean;
     /**
-     * When TRUE, indicates OS X 10.8 or later is required to install the app. When FALSE, indicates some other OS version is
-     * the minimum OS to install the app. Default value is FALSE.
+     * Indicates the minimum OS X version support required for the managed device. When 'True', macOS with OS X 10.8 or later
+     * is required to install the app. If 'False', OS X Version 10.8 is not the minimum version. Default value is False.
+     * Exactly one of the minimum operating system boolean values will be TRUE.
      */
     v10_8?: boolean;
     /**
-     * When TRUE, indicates OS X 10.9 or later is required to install the app. When FALSE, indicates some other OS version is
-     * the minimum OS to install the app. Default value is FALSE.
+     * Indicates the minimum OS X version support required for the managed device. When 'True', macOS with OS X 10.9 or later
+     * is required to install the app. If 'False', OS X Version 10.9 is not the minimum version. Default value is False.
+     * Exactly one of the minimum operating system boolean values will be TRUE.
      */
     v10_9?: boolean;
     /**
-     * When TRUE, indicates macOS 11.0 or later is required to install the app. When FALSE, indicates some other OS version is
-     * the minimum OS to install the app. Default value is FALSE.
+     * Indicates the minimum OS X version support required for the managed device. When 'True', macOS with OS X 11.0 or later
+     * is required to install the app. If 'False', OS X Version 11.0 is not the minimum version. Default value is False.
+     * Exactly one of the minimum operating system boolean values will be TRUE.
      */
     v11_0?: boolean;
     /**
-     * When TRUE, indicates macOS 12.0 or later is required to install the app. When FALSE, indicates some other OS version is
-     * the minimum OS to install the app. Default value is FALSE.
+     * Indicates the minimum OS X version support required for the managed device. When 'True', macOS with OS X 12.0 or later
+     * is required to install the app. If 'False', OS X Version 12.0 is not the minimum version. Default value is False.
+     * Exactly one of the minimum operating system boolean values will be TRUE.
      */
     v12_0?: boolean;
     /**
-     * When TRUE, indicates macOS 13.0 or later is required to install the app. When FALSE, indicates some other OS version is
-     * the minimum OS to install the app. Default value is FALSE.
+     * Indicates the minimum OS X version support required for the managed device. When 'True', macOS with OS X 13.0 or later
+     * is required to install the app. If 'False', OS X Version 13.0 is not the minimum version. Default value is False.
+     * Exactly one of the minimum operating system boolean values will be TRUE.
      */
     v13_0?: boolean;
 }
@@ -30029,7 +30200,6 @@ export interface OutOfBoxExperienceSetting {
      */
     privacySettingsHidden?: boolean;
     // The type of user. Possible values are administrator and standard. Default value is administrator. Yes No
-///
     userType?: WindowsUserType;
 }
 export interface OutOfOfficeSettings {
@@ -31422,7 +31592,7 @@ export interface RenameAction {
     oldName?: NullableOption<string>;
 }
 export interface Report {
-    // Not yet documented
+    // The http content that has the data
     content?: NullableOption<any>;
 }
 export interface RequestorManager extends SubjectSet {
@@ -32149,11 +32319,9 @@ export interface ServiceUpdateMessageViewpoint {
     isRead?: NullableOption<boolean>;
 }
 export interface SettingSource {
-    // Not yet documented
     displayName?: NullableOption<string>;
-    // Not yet documented
     id?: NullableOption<string>;
-    // Not yet documented. Possible values are: deviceConfiguration, deviceIntent.
+    // . Possible values are: deviceConfiguration, deviceIntent.
     sourceType?: SettingSourceType;
 }
 export interface SettingTemplateValue {
@@ -33536,17 +33704,11 @@ export interface UpdateAllowedCombinationsResult {
     previousCombinations?: AuthenticationMethodModes[];
 }
 export interface UpdateWindowsDeviceAccountActionParameter {
-    // Not yet documented
     calendarSyncEnabled?: NullableOption<boolean>;
-    // Not yet documented
     deviceAccount?: NullableOption<WindowsDeviceAccount>;
-    // Not yet documented
     deviceAccountEmail?: NullableOption<string>;
-    // Not yet documented
     exchangeServer?: NullableOption<string>;
-    // Not yet documented
     passwordRotationEnabled?: NullableOption<boolean>;
-    // Not yet documented
     sessionInitiationProtocalAddress?: NullableOption<string>;
 }
 export interface UploadSession {
@@ -34093,7 +34255,7 @@ export interface Win32LobAppAssignmentSettings extends MobileAppAssignmentSettin
 export interface Win32LobAppAutoUpdateSettings {
     /**
      * The auto-update superseded apps state setting for the app assignment. Possible values are notConfigured and enabled.
-     * Default value is notConfigured.
+     * Default value is notConfigured. Possible values are: notConfigured, enabled, unknownFutureValue.
      */
     autoUpdateSupersededAppsState?: Win32LobAutoUpdateSupersededAppsState;
 }
@@ -34236,17 +34398,13 @@ export interface WindowsDefenderScanActionResult extends DeviceActionResult {
     scanType?: NullableOption<string>;
 }
 export interface WindowsDeviceAccount {
-    // Not yet documented
     password?: NullableOption<string>;
 }
 export interface WindowsDeviceADAccount extends WindowsDeviceAccount {
-    // Not yet documented
     domainName?: NullableOption<string>;
-    // Not yet documented
     userName?: NullableOption<string>;
 }
 export interface WindowsDeviceAzureADAccount extends WindowsDeviceAccount {
-    // Not yet documented
     userPrincipalName?: NullableOption<string>;
 }
 export interface WindowsFirewallNetworkProfile {
@@ -35958,7 +36116,7 @@ export namespace IdentityGovernanceNamespace {
          * ge, eq, ne) and $orderby.
          */
         version?: NullableOption<number>;
-        // The unique identifier of the Microsoft Entra identity that last modified the workflow object.
+        // The list of users that meet the workflowExecutionConditions of a workflow.
         executionScope?: NullableOption<UserProcessingResult[]>;
         // Workflow runs.
         runs?: NullableOption<Run[]>;
@@ -36929,9 +37087,9 @@ export namespace SecurityNamespace {
     interface CaseOperation extends microsoftgraph.Entity {
         /**
          * The type of action the operation represents. Possible values are: contentExport, applyTags, convertToPdf, index,
-         * estimateStatistics, addToReviewSet, holdUpdate, unknownFutureValue, purgeData, exportReport, exportResult. Use the
-         * Prefer: include-unknown-enum-members request header to get the following values from this evolvable enum: purgeData,
-         * exportReport, exportResult.
+         * estimateStatistics, addToReviewSet, holdUpdate, unknownFutureValue, purgeData, exportReport, exportResult,
+         * holdPolicySync. Use the Prefer: include-unknown-enum-members request header to get the following values from this
+         * evolvable enum: purgeData, exportReport, exportResult, holdPolicySync.
          */
         action?: NullableOption<CaseAction>;
         // The date and time the operation was completed.
@@ -36946,7 +37104,7 @@ export namespace SecurityNamespace {
         resultInfo?: NullableOption<microsoftgraph.ResultInfo>;
         /**
          * The status of the case operation. Possible values are: notStarted, submissionFailed, running, succeeded,
-         * partiallySucceeded, failed.
+         * partiallySucceeded, failed, unknownFutureValue.
          */
         status?: NullableOption<CaseOperationStatus>;
     }
@@ -37141,6 +37299,7 @@ export namespace SecurityNamespace {
 // tslint:disable-next-line: no-empty-interface
     interface EdiscoveryHoldOperation extends CaseOperation {}
     interface EdiscoveryHoldPolicySyncOperation extends CaseOperation {
+        // Contains the properties for report file metadata, including downloadUrl, fileName, and size.
         reportFileMetadata?: NullableOption<ReportFileMetadata[]>;
     }
 // tslint:disable-next-line: no-empty-interface
