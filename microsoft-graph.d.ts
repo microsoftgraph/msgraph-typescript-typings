@@ -20079,6 +20079,8 @@ export interface User extends DirectoryObject {
     calendarView?: NullableOption<Event[]>;
     chats?: NullableOption<Chat[]>;
     cloudClipboard?: NullableOption<CloudClipboardRoot>;
+    // The user's Cloud PCs. Read-only. Nullable.
+    cloudPCs?: NullableOption<CloudPC[]>;
     // The user's contacts folders. Read-only. Nullable.
     contactFolders?: NullableOption<ContactFolder[]>;
     // The user's contacts. Read-only. Nullable.
