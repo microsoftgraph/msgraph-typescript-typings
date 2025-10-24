@@ -5393,12 +5393,12 @@ export interface ApplicationTemplate extends Entity {
      * The list of categories for the application. Supported values can be: Collaboration, Business Management, Consumer,
      * Content management, CRM, Data services, Developer services, E-commerce, Education, ERP, Finance, Health, Human
      * resources, IT infrastructure, Mail, Management, Marketing, Media, Productivity, Project management, Telecommunications,
-     * Tools, Travel, and Web design &amp; hosting.
+     * Tools, Travel, and Web design &amp; hosting. Supports $filter (contains).
      */
     categories?: NullableOption<string[]>;
     // A description of the application.
     description?: NullableOption<string>;
-    // The name of the application.
+    // The name of the application. Supports $filter (contains).
     displayName?: NullableOption<string>;
     // The home page URL of the application.
     homePageUrl?: NullableOption<string>;
@@ -13550,7 +13550,10 @@ export interface Message extends OutlookItem {
      * how the message is displayed. If ispopout is not present or if it is set to 1, then the message is shown in a popout
      * window. If ispopout is set to 0, the browser shows the message in the Outlook on the web review pane.The message opens
      * in the browser if you are signed in to your mailbox via Outlook on the web. You are prompted to sign in if you are not
-     * already signed in with the browser.This URL cannot be accessed from within an iFrame.
+     * already signed in with the browser.This URL cannot be accessed from within an iFrame.NOTE: When using this URL to
+     * access a message from a mailbox with delegate permissions, both the signed-in user and the target mailbox must be in
+     * the same database region. For example, an error is returned when a user with a mailbox in the EUR (Europe) region
+     * attempts to access messages from a mailbox in the NAM (North America) region.
      */
     webLink?: NullableOption<string>;
     // The fileAttachment and itemAttachment attachments for the message.
@@ -20079,6 +20082,8 @@ export interface User extends DirectoryObject {
     calendarView?: NullableOption<Event[]>;
     chats?: NullableOption<Chat[]>;
     cloudClipboard?: NullableOption<CloudClipboardRoot>;
+    // The user's Cloud PCs. Read-only. Nullable.
+    cloudPCs?: NullableOption<CloudPC[]>;
     // The user's contacts folders. Read-only. Nullable.
     contactFolders?: NullableOption<ContactFolder[]>;
     // The user's contacts. Read-only. Nullable.
